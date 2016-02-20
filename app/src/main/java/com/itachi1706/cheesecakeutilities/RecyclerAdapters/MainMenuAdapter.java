@@ -66,8 +66,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
         @Override
         public void onClick(View v) {
             switch (title.getText().toString()) {
-                case "Hello World!": Toast.makeText(v.getContext(), title.getText() + " (0)", Toast.LENGTH_SHORT).show(); break;
-                case "Bye World :(": Toast.makeText(v.getContext(), title.getText() + " (1)", Toast.LENGTH_SHORT).show(); break;
+                default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
 
