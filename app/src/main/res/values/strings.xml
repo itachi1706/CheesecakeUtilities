@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">Cheesecake Utilities</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
+
+    <!-- App Update Strings -->
+    <string name="notification_title_exception_download">Exception Occurred (Download)</string>
+    <string name="notification_ticker_download_fail">Download failed</string>
+    <string name="notification_content_download_fail_exception">An exception occurred while downloading the update file. (%1$s)</string>
+    <string name="notification_content_download_fail_exception_expanded">An exception occurred while downloading the update file. (%1$s)\n Click to manually download the file</string>
+    <string name="notification_content_download_fail">The update is unable to download automatically</string>
+    <string name="notification_content_download_fail_expanded">The update is unable to download automatically.\n Click to manually download the file</string>
+    <string name="notification_title_download_success">Download Complete</string>
+    <string name="notification_ticker_download_success">Download Complete!</string>
+    <string name="notification_content_download_success">Update has been successfully downloaded</string>
+    <string name="notification_title_starting_download">Downloading new update</string>
+    <string name="notification_content_starting_download">Downloading new update…</string>
+    <string name="notification_ticker_starting_download">Downloading new update to the app</string>
+    <string name="dialog_title_latest_update">Check for New Update</string>
+    <string name="dialog_message_latest_update">You are on the latest release! No update is required.</string>
+    <string name="dialog_action_positive_close">Close</string>
+    <string name="toast_message_latest_update">No update is required</string>
+    <string name="snackbar_action_dismiss">DISMISS</string>
+    <string name="toast_cannot_contact_update_server">Unable to contact update server to check for updates</string>
+    <string name="toast_cannot_check_update">Unable to do app update check</string>
 </resources>
