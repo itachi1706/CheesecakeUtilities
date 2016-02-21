@@ -3,6 +3,8 @@
     package="com.itachi1706.cheesecakeutilities">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -23,7 +25,10 @@
         <activity
             android:name=".StringToHexBin"
             android:label="@string/title_string_to_bin_or_hex_full"
-            android:theme="@style/DarkTheme"/>
+            android:theme="@style/DarkTheme" />
+        <activity android:name=".SpamMessages"
+            android:theme="@style/DarkTheme"
+            android:label="@string/message_spammer" />
     </application>
 
 </manifest>

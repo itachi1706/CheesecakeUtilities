@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.SpamMessages;
 import com.itachi1706.cheesecakeutilities.StringToHexBin;
 
 import java.util.Arrays;
@@ -73,6 +74,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
         public void onClick(View v) {
             switch (title.getText().toString()) {
                 case "String to Binary/Hex Converter": mActivity.startActivity(new Intent(mActivity, StringToHexBin.class)); break;
+                case "Message Spam": mActivity.startActivity(new Intent(mActivity, SpamMessages.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
