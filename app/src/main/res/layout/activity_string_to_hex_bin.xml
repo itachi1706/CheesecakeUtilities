@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.itachi1706.cheesecakeutilities.StringToHexBin">
+    <ScrollView
+        android:id="@+id/svBinHex"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:isScrollContainer="false"
+        android:background="@drawable/matrix">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10.0dip">
+
+            <TextView
+                android:id="@+id/tv_binhex_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="10.0dip"
+                android:shadowColor="#ff33ff33"
+                android:shadowDx="3.0"
+                android:shadowDy="3.0"
+                android:shadowRadius="10.0"
+                android:text="@string/title_string_to_bin_or_hex"
+                android:textColor="#ff00ff00"
+                android:textColorHighlight="#ff33ff33"
+                android:textSize="30.0dip"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/label_binhex_enter_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_enter_message"
+                android:textColor="#ff00ff00"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <EditText
+                android:id="@+id/input_binhex_string"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ff000000"
+                android:hint="@string/hint_click_paste"
+                android:imeOptions="actionNone"
+                android:inputType="textCapSentences"
+                android:padding="5.0dip"
+                android:text=""
+                android:textColor="#ff00ff00"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/label_binhex_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10.0dip"
+                android:text="@string/header_choose_options"
+                android:textColor="#ff00ff00"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <TableLayout
+                android:id="@+id/tl_binhex_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TableRow
+                    android:id="@+id/tr_binhex_01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioGroup
+                        android:id="@+id/radio_binhex_option_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rb_binhex_bin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/option_bin" />
+
+                        <RadioButton
+                            android:id="@+id/rb_binhex_hex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/option_hex" />
+                    </RadioGroup>
+
+                    <CheckBox
+                        android:id="@+id/checkbox_binhex_delimit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/option_delimiter" />
+
+                    <RadioGroup
+                        android:id="@+id/radio_binhex_action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rb_binhex_encode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/option_encode" />
+
+                        <RadioButton
+                            android:id="@+id/rb_binhex_decode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/option_decode" />
+                    </RadioGroup>
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/btn_binhex_translate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="@string/btn_translate" />
+
+            <TextView
+                android:id="@+id/label_binhex_translation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_translation"
+                android:textColor="#ff00ff00"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <EditText
+                android:id="@+id/tv_binhex_results"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ff000000"
+                android:inputType="none"
+                android:focusable="false"
+                android:padding="5.0dip"
+                android:text=""
+                android:textColor="#ff00ff00"
+                android:typeface="monospace" />
+
+            <TableLayout
+                android:id="@+id/table_binhex_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TableRow
+                    android:id="@+id/tr_binhex_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btn_binhex_copy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingLeft="20.0dip"
+                        android:paddingRight="20.0dip"
+                        android:text="@string/btn_copy" />
+
+                    <Button
+                        android:id="@+id/btn_binhex_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingLeft="20.0dip"
+                        android:paddingRight="20.0dip"
+                        android:text="@string/btn_send" />
+
+                    <Button
+                        android:id="@+id/btn_binhex_clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingLeft="20.0dip"
+                        android:paddingRight="20.0dip"
+                        android:text="@string/btn_clear" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
