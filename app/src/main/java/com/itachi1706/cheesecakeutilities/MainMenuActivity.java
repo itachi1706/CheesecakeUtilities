@@ -38,7 +38,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         // Set up layout
         String[] menuitems = getResources().getStringArray(R.array.mainmenu);
-        MainMenuAdapter adapter = new MainMenuAdapter(menuitems);
+        MainMenuAdapter adapter = new MainMenuAdapter(this, menuitems);
         recyclerView.setAdapter(adapter);
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);

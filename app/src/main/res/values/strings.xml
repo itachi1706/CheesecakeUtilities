@@ -22,4 +22,23 @@
     <string name="snackbar_action_dismiss">DISMISS</string>
     <string name="toast_cannot_contact_update_server">Unable to contact update server to check for updates</string>
     <string name="toast_cannot_check_update">Unable to do app update check</string>
+
+***REMOVED*** String to Binary/Hex Converter -->
+    <string name="title_string_to_bin_or_hex">BIN/HEX CONVERTER</string>
+    <string name="title_string_to_bin_or_hex_full">Binary/Hex Converter</string>
+    <string name="hint_enter_message">ENTER MESSAGE:</string>
+    <string name="hint_click_paste">(Click and hold to paste)</string>
+    <string name="header_choose_options">CHOOSE OPTIONS:</string>
+    <string name="option_bin">Bin</string>
+    <string name="option_hex">Hex</string>
+    <string name="option_delimiter">Delimiter</string>
+    <string name="option_encode">Encode</string>
+    <string name="option_decode">Decode</string>
+    <string name="btn_translate">TRANSLATE!</string>
+    <string name="hint_translation">TRANSLATION:</string>
+    <string name="btn_copy">COPY</string>
+    <string name="btn_send">SEND</string>
+    <string name="btn_clear">CLEAR</string>
+
+***REMOVED*** Unsorted/Misc -->
 ***REMOVED***

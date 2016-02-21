@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.StringToHexBin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,14 +21,17 @@ import java.util.List;
  */
 public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMenuHolder> {
     private List<String> stringList;
+    private Activity mActivity;
 
-    public MainMenuAdapter(List<String> strings)
+    public MainMenuAdapter(Activity activity, List<String> strings)
     {
+        this.mActivity = activity;
         this.stringList = strings;
     }
 
-    public MainMenuAdapter(String[] strings)
+    public MainMenuAdapter(Activity activity, String[] strings)
     {
+        this.mActivity = activity;
         this.stringList = Arrays.asList(strings);
     }
 
@@ -66,6 +72,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
         @Override
         public void onClick(View v) {
             switch (title.getText().toString()) {
+                case "String to Binary/Hex Converter": mActivity.startActivity(new Intent(mActivity, StringToHexBin.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
