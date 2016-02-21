@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.itachi1706.cheesecakeutilities.SpamMessages"
+    android:orientation="vertical">
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_messagespam_contact"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:nextFocusDown="@+id/edit_messagespam_text"
+            android:nextFocusRight="@+id/edit_messagespam_text"
+            android:singleLine="true"
+            android:hint="@string/hint_contact_number"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_messagespam_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@+id/edit_messagespam_times"
+            android:nextFocusRight="@+id/edit_messagespam_times"
+            android:hint="@string/hint_message"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/edit_messagespam_times"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="phone"
+            android:nextFocusDown="@+id/btn_messagespam_send"
+            android:nextFocusRight="@+id/btn_messagespam_send"
+            android:singleLine="true"
+            android:hint="@string/hint_number_times"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10.0dip">
+
+        <Button
+            android:id="@+id/btn_messagespam_contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_contacts"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btn_messagespam_send"
+            android:layout_toStartOf="@+id/btn_messagespam_send" />
+
+        <Button
+            android:id="@+id/btn_messagespam_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/btn_send" />
+    </RelativeLayout>
+</LinearLayout>

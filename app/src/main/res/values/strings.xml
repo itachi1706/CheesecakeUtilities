@@ -37,8 +37,17 @@
     <string name="btn_translate">TRANSLATE!</string>
     <string name="hint_translation">TRANSLATION:</string>
     <string name="btn_copy">COPY</string>
-    <string name="btn_send">SEND</string>
+    <string name="btn_send_caps">SEND</string>
     <string name="btn_clear">CLEAR</string>
+
+    <!-- Spam Messages -->
+    <string name="message_spammer">Message Spam</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_contacts">Contacts</string>
+    <string name="contentdesc_logo">Logo</string>
+    <string name="hint_number_times">Number of Times to Send:</string>
+    <string name="hint_message">Message:</string>
+    <string name="hint_contact_number">Contact Phone Number:</string>
 
     <!-- Unsorted/Misc -->
 </resources>

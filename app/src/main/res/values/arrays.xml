@@ -2,5 +2,6 @@
 <resources>
     <string-array name="mainmenu">
         <item>String to Binary/Hex Converter</item>
+        <item>Message Spam</item>
     </string-array>
 </resources>
