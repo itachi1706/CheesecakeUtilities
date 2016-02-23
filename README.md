@@ -5,8 +5,8 @@ This is a group of utilities that I have found on my phone and decided to compac
 - They are too old/abandoned
 - I've used them frequently
 
-Here are some miscellaneous statistics :D
-[![GitHub commits](https://img.shields.io/github/commits-since/itachi1706/CheesecakeUtilities/1.0.svg)](https://github.com/itachi1706/CheesecakeUtilities/commits/master)
+Here are some miscellaneous statistics :D  
+[![GitHub commits](https://img.shields.io/github/commits-since/itachi1706/CheesecakeUtilities/1.0.svg)](https://github.com/itachi1706/CheesecakeUtilities/commits/master)  
 [![GitHub issues](https://img.shields.io/github/issues/itachi1706/CheesecakeUtilities.svg)](https://github.com/itachi1706/CheesecakeUtilities/issues)
  
 
