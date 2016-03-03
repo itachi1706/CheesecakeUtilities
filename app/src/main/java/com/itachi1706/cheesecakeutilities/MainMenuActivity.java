@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import android.view.MenuItem;
 
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
 import com.itachi1706.cheesecakeutilities.Updater.AppUpdateChecker;
-import com.itachi1706.cheesecakeutilities.Util.NotifyUserUtil;
+import com.itachi1706.cheesecakeutilities.Updater.Util.NotifyUserUtil;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -56,7 +57,8 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                NotifyUserUtil.createShortToast(this, "Settings has not been implemented yet. Hold tight!");
+                //NotifyUserUtil.createShortToast(this, "Settings has not been implemented yet. Hold tight!");
+                startActivity(new Intent(this, GeneralSettingsActivity.class));
                 return true;
             case R.id.exit:
                 finish();

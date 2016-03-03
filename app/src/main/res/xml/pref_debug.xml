@@ -1,0 +1,25 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Device Info" android:key="dev_info">
+        <Preference android:title="Model" android:key="view_model_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Manufacturer" android:key="view_manufacturer_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Board" android:key="view_board_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Bootloader" android:key="view_bootloader_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Brand" android:key="view_brand_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="CPU Type" android:key="view_cpu1_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="CPU Type 2" android:key="view_cpu2_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Device" android:key="view_device_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Build ID" android:key="view_display_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Fingerprint" android:key="view_fingerprint_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Hardware" android:key="view_hardware_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Host" android:key="view_host_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Product ID" android:key="view_id_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Product" android:key="view_product_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Radio" android:key="view_radio_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Serial" android:key="view_serial_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Tags" android:key="view_tags_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="Type" android:key="view_type_ver" android:summary="Unavailable" android:selectable="false"/>
+        <Preference android:title="User" android:key="view_user_ver" android:summary="Unavailable" android:selectable="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
