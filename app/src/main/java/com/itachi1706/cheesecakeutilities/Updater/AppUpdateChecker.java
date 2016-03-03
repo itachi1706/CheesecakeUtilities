@@ -17,8 +17,8 @@ import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Updater.Objects.AppUpdateObject;
 import com.itachi1706.cheesecakeutilities.Updater.Objects.UpdateShell;
-import com.itachi1706.cheesecakeutilities.Util.NotifyUserUtil;
-import com.itachi1706.cheesecakeutilities.Util.StaticVariables;
+import com.itachi1706.cheesecakeutilities.Updater.Util.NotifyUserUtil;
+import com.itachi1706.cheesecakeutilities.Updater.Util.UpdaterHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -71,8 +71,8 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         try {
             URL urlConn = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
-            conn.setConnectTimeout(StaticVariables.HTTP_QUERY_TIMEOUT);
-            conn.setReadTimeout(StaticVariables.HTTP_QUERY_TIMEOUT);
+            conn.setConnectTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
+            conn.setReadTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
             InputStream in = conn.getInputStream();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -127,6 +127,8 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
 
         Log.i("Updater", "Server: " + serverVersion + " | Local: " + localVersion);
 
+        sp.edit().putString("version-changelog", gson.toJson(updater)).apply();
+
         if (localVersion >= serverVersion) {
             Log.i("Updater", "App is on the latest version");
             if (!main) {
@@ -152,7 +154,7 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
         Log.i("Updater", "Update Found! Generating Update Message! Latest Version: " +
                 updater.getLatestVersion() + " (" + updater.getLatestVersionCode() + ")");
         String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
-        message += StaticVariables.getChangelogStringFromArray(updater.getUpdateMessage());
+        message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
         if (!mActivity.isFinishing()) {
             new AlertDialog.Builder(mActivity).setTitle("A New Update is Available!")
                     .setMessage(Html.fromHtml(message))

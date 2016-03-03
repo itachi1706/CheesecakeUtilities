@@ -54,5 +54,13 @@
     <string name="menu_exit">Exit</string>
     <string name="menu_about">About</string>
 
+    <!-- Strings related to Settings -->
+    <string name="title_activity_general_settings">Settings</string>
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="link_updates">https://github.com/itachi1706/CheesecakeUtilities/releases/latest</string>
+    <string name="link_legacy">https://github.com/itachi1706/CheesecakeUtilities/releases</string>
+
     <!-- Unsorted/Misc -->
 </resources>

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Util;
+package com.itachi1706.cheesecakeutilities.Updater.Util;
 
 import android.content.Context;
 import android.support.design.widget.Snackbar;
