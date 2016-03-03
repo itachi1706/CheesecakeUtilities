@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -17,14 +16,12 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.Updater.AppUpdateChecker;
 import com.itachi1706.cheesecakeutilities.Updater.Objects.AppUpdateObject;
-import com.itachi1706.cheesecakeutilities.Updater.Util.NotifyUserUtil;
 import com.itachi1706.cheesecakeutilities.Updater.Util.UpdaterHelper;
 
 
