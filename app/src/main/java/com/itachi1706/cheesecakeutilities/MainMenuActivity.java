@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -47,7 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         Log.i("Updater", "Checking for new updates...");
-        new AppUpdateChecker(this, sp, true).execute();
+        new AppUpdateChecker(this, sp, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
