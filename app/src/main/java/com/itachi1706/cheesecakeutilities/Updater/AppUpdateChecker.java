@@ -168,7 +168,7 @@ public class AppUpdateChecker extends AsyncTask<Void, Void, String> {
                             Random random = new Random();
                             int notificationId = random.nextInt();
                             manager.notify(notificationId, mBuilder.build());
-                            new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId).execute(updateLink);
+                            new DownloadLatestUpdate(mActivity, mBuilder, manager, notificationId).executeOnExecutor(THREAD_POOL_EXECUTOR, updateLink);
                         }
                     }).show();
         }
