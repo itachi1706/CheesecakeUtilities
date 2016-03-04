@@ -11,6 +11,7 @@ import com.itachi1706.cheesecakeutilities.R;
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.Util in Cheesecake Utilities.
  */
+@SuppressWarnings("unused")
 public class NotifyUserUtil {
     public static void showShortDismissSnackbar(View currentLayout, String message){
         Snackbar.make(currentLayout, message, Snackbar.LENGTH_SHORT)

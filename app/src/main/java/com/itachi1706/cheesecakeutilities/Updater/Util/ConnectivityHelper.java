@@ -7,7 +7,9 @@ import android.net.NetworkInfo;
 /**
  * Created by Kenneth on 3/3/2016.
  * for com.itachi1706.cheesecakeutilities.Updater.Util in CheesecakeUtilities
+ * NOTE: Requires android.permission.ACCESS_NETWORK_STATE permission
  */
+@SuppressWarnings("unused")
 public class ConnectivityHelper {
 
     /**

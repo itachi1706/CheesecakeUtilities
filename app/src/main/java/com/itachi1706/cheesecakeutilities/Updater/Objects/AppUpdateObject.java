@@ -4,6 +4,7 @@ package com.itachi1706.cheesecakeutilities.Updater.Objects;
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.Updater.Objects in Cheesecake Utilities.
  */
+@SuppressWarnings("unused")
 public class AppUpdateObject {
     private int index;
     private String id, packageName, appName, dateCreated, latestVersion, latestVersionCode, apptype;
