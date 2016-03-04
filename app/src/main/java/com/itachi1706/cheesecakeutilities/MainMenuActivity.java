@@ -18,12 +18,12 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
 import com.itachi1706.cheesecakeutilities.Updater.AppUpdateChecker;
-import com.itachi1706.cheesecakeutilities.Updater.Util.NotifyUserUtil;
+import com.itachi1706.cheesecakeutilities.Updater.Util.UpdaterHelper;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
     SharedPreferences sp;
 
     @Override
@@ -35,7 +35,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -48,8 +48,10 @@ public class MainMenuActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.i("Updater", "Checking for new updates...");
-        new AppUpdateChecker(this, sp, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (UpdaterHelper.canCheckUpdate(sp, this)) {
+            Log.i("Updater", "Checking for new updates...");
+            new AppUpdateChecker(this, sp, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     @Override
