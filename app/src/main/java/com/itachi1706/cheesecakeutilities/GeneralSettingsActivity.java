@@ -64,8 +64,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             Preference pNamePref = findPreference("view_app_name");
             pNamePref.setSummary(packName);
 
-            final Preference updaterPref = findPreference("launch_updater");
-            updaterPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     new AppUpdateChecker(getActivity(), sp).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -82,8 +81,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 }
             });
 
-            Preference changelogPref = findPreference("android_changelog");
-            changelogPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("android_changelog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     String changelog = sp.getString("version-changelog", "l");
@@ -111,8 +109,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 }
             });
 
-            Preference oldVersionPref = findPreference("get_old_app");
-            oldVersionPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("get_old_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -122,8 +119,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 }
             });
 
-            Preference latestVersionPref = findPreference("get_latest_app");
-            latestVersionPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference("get_latest_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
