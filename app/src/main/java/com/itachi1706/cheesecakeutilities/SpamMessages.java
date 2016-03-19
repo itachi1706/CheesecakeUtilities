@@ -35,9 +35,13 @@ public class SpamMessages extends AppCompatActivity implements View.OnClickListe
         this.numberText = (EditText) findViewById(R.id.edit_messagespam_times);
         this.teleText = (EditText) findViewById(R.id.edit_messagespam_contact);
         Button sendBtn = (Button) findViewById(R.id.btn_messagespam_send);
-        sendBtn.setOnClickListener(this);
+        if (sendBtn != null) {
+            sendBtn.setOnClickListener(this);
+        }
         Button contactBtn = (Button) findViewById(R.id.btn_messagespam_contacts);
-        contactBtn.setOnClickListener(this);
+        if (contactBtn != null) {
+            contactBtn.setOnClickListener(this);
+        }
     }
 
     @Override
