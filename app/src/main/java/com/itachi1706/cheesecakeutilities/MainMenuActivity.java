@@ -65,7 +65,6 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                //NotifyUserUtil.createShortToast(this, "Settings has not been implemented yet. Hold tight!");
                 startActivity(new Intent(this, GeneralSettingsActivity.class));
                 return true;
             case R.id.exit:
