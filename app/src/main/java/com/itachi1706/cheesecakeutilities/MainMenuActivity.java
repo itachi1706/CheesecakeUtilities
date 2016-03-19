@@ -16,9 +16,10 @@ import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+import com.itachi1706.appupdater.AppUpdateChecker;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
-import com.itachi1706.cheesecakeutilities.Updater.AppUpdateChecker;
-import com.itachi1706.cheesecakeutilities.Updater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -50,7 +51,7 @@ public class MainMenuActivity extends AppCompatActivity {
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (UpdaterHelper.canCheckUpdate(sp, this)) {
             Log.i("Updater", "Checking for new updates...");
-            new AppUpdateChecker(this, sp, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new AppUpdateChecker(this, sp, true, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeutilities;
 
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -15,14 +14,12 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.Updater.AppUpdateChecker;
-import com.itachi1706.cheesecakeutilities.Updater.Objects.AppUpdateObject;
-import com.itachi1706.cheesecakeutilities.Updater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.AppUpdateChecker;
+import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 
 public class GeneralSettingsActivity extends AppCompatActivity {
@@ -67,7 +64,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    new AppUpdateChecker(getActivity(), sp).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    new AppUpdateChecker(getActivity(), sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     return false;
                 }
             });
@@ -84,27 +81,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             findPreference("android_changelog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    String changelog = sp.getString("version-changelog", "l");
-                    if (changelog.equals("l")) {
-                        //Not available
-                        new AlertDialog.Builder(getActivity()).setTitle("No Changelog")
-                                .setMessage("No changelog was found. Please check if you can connect to the server")
-                                .setPositiveButton(android.R.string.ok, null).show();
-                    } else {
-                        Gson gson = new Gson();
-                        AppUpdateObject updater = gson.fromJson(changelog, AppUpdateObject.class);
-                        if (updater.getUpdateMessage().length == 0) {
-                            new AlertDialog.Builder(getActivity()).setTitle("No Changelog")
-                                    .setMessage("No changelog was found. Please check if you can connect to the server")
-                                    .setPositiveButton(android.R.string.ok, null).show();
-                        } else {
-                            String message = "Latest Version: " + updater.getLatestVersion() + "<br /><br />";
-                            message += UpdaterHelper.getChangelogStringFromArray(updater.getUpdateMessage());
-
-                            new AlertDialog.Builder(getActivity()).setTitle("Changelog")
-                                    .setMessage(Html.fromHtml(message)).setPositiveButton("Close", null).show();
-                        }
-                    }
+                    UpdaterHelper.settingGenerateChangelog(sp, getActivity());
                     return true;
                 }
             });
