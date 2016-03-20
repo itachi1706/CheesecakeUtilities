@@ -28,6 +28,12 @@
     <string name="hint_message">Message:</string>
     <string name="hint_contact_number">Contact Phone Number:</string>
 
+    <!-- HTC Serial ID -->
+    <string name="htc_sn_id_serial_field_hint">Enter Serial Number</string>
+    <string name="htc_sn_id_button_phone_serial">Use Phone Serial</string>
+    <string name="htc_sn_id_btn_search">Search</string>
+    <string name="title_activity_htc_serial_identification">HtcSerialIdentificationActivity</string>
+
     <!-- Menu Items -->
     <string name="menu_settings">Settings</string>
     <string name="menu_exit">Exit</string>
