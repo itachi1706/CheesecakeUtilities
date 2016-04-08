@@ -6,7 +6,8 @@ env:
     - ANDROID_ABI=google_apis/armeabi-v7a
     - ANDROID_BUILD_TOOLS_VERSION=23.0.3
     - API_LEVEL=23
-    - ANDROID_EMULATOR_API_LEVEL=22
+    - ANDROID_EMULATOR_API_LEVEL=21
+    - ADB_INSTALL_TIMEOUT=20
 android:
     components:
         # Uncomment the lines below if you want to
