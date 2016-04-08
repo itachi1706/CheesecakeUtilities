@@ -25,7 +25,7 @@ android {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 34
+        versionCode 35
         versionName "1.2.0"
     }
     compileOptions {
