@@ -37,9 +37,7 @@ android:
         # if you need to run emulator(s) during your tests
         # - sys-img-armeabi-v7a-android-19
         # - sys-img-x86-android-17
-        # - sys-img-armeabi-v7a-android-$ANDROID_BUILD_TOOLS_VERSION
-        - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_EMULATOR_API_LEVEL
-        #- sys-img-armeabi-v7a-addon-google_apis-google-$API_LEVEL
+        - sys-img-armeabi-v7a-google_apis-$ANDROID_EMULATOR_API_LEVEL
 
 before_install:
     - android list targets
