@@ -49,7 +49,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         fileSizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getStoryCountAndFileSize();
+                getFileSizeAndStoryCount();
             }
         });
 
@@ -63,8 +63,10 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         folder.setText(getDefaultFolder().getAbsolutePath());
         database.setText(FanfictionDatabase.getDbFilePath());
 
-        CommonMethods.betaInfo(this, "Fanfiction Compactor");
+        // Check Permission Exist, else exit if not granted
+        accessStorageCheck();
 
+        CommonMethods.betaInfo(this, "Fanfiction Compactor");
     }
 
     @Override
@@ -92,18 +94,13 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
     }
 
 
-    private void getStoryCountAndFileSize() {
+    private void accessStorageCheck() {
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
-            canGetFileSizeAndStoryCount();
-        } else {
+        if (rc != PackageManager.PERMISSION_GRANTED)
             requestStoragePermission();
-        }
     }
 
-    // DEBUG METHOD
     private void getStoryList() {
-        // Assume that you have permissions
         FanfictionDatabase db = new FanfictionDatabase();
         ArrayList<FanficStories> stories = db.getAllStories();
         StringBuilder builder = new StringBuilder();
@@ -119,7 +116,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         return new File(external + "/FanfictionReader/stories");
     }
 
-    private void canGetFileSizeAndStoryCount() {
+    private void getFileSizeAndStoryCount() {
         File file = getDefaultFolder();
         long totalSize = getFileSize(file);
         this.folderSize.setText(CommonMethods.readableFileSize(totalSize) + " (" + totalSize + " bytes)");
@@ -190,7 +187,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         final Activity thisActivity = this;
 
         new AlertDialog.Builder(this).setTitle("Requesting Storage Permission")
-                .setMessage("This app requires ability to access your storage to calculate file size and compact Fanfictions")
+                .setMessage("This app requires ability to access your storage to compact fanfictions")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -224,16 +221,21 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("PermMan", "Storage Permission Granted. Getting File Size");
-                    canGetFileSizeAndStoryCount();
+                    Log.i("PermMan", "Storage Permission Granted. Allowing Utility Access");
                     return;
                 }
                 Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
                         " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to access your storage. This app will not be able to calculate" +
-                                " file size or compact Fanfictions")
-                        .setPositiveButton(android.R.string.ok, null)
+                                " file size or compact Fanfictions and will now exit")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                        .setCancelable(false)
                         .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -241,6 +243,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
                                 Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
                                 permIntent.setData(packageURI);
                                 startActivity(permIntent);
+                                finish();
                             }
                         }).show();
                 break;
