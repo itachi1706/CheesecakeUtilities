@@ -14,8 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.Util.HtcSerialNumberDates;
-import com.itachi1706.cheesecakeutilities.Util.HtcSerialNumberManufacturingLocations;
+import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
+import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
 
 public class HtcSerialIdentificationActivity extends AppCompatActivity {
 

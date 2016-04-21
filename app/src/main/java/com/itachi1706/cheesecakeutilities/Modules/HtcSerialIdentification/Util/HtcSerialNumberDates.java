@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Util;
+package com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util;
 
 /**
  * Created by Kenneth on 3/20/2016.
