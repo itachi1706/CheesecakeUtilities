@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -40,7 +41,8 @@
             android:name="io.fabric.ApiKey"
             android:value="4a76e5bed29f3c6bc0d8e90c16212c07cb8efbc0" />
 
-        <activity android:name=".HtcSerialIdentificationActivity"></activity>
+        <activity android:name=".HtcSerialIdentificationActivity" />
+        <activity android:name=".FanfictionCompactorActivity"></activity>
     </application>
 
 </manifest>
