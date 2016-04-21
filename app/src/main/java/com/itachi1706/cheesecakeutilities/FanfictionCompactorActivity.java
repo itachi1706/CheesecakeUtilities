@@ -6,34 +6,33 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.FanfictionDatabase;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class FanfictionCompactorActivity extends AppCompatActivity {
 
-    TextView folder, database, folderSize;
-    Button fileSizeButton;
+    TextView folder, database, folderSize, storyCount;
+    Button fileSizeButton, storyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +42,26 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         folder = (TextView) findViewById(R.id.tvFolder);
         database = (TextView) findViewById(R.id.tvDB);
         folderSize = (TextView) findViewById(R.id.tvSize);
+        storyCount = (TextView) findViewById(R.id.tvStories);
         fileSizeButton = (Button) findViewById(R.id.btnGetFolderSize);
+        storyButton = (Button) findViewById(R.id.btnStories);
 
         fileSizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFileSize();
+                getStoryCountAndFileSize();
+            }
+        });
+
+        storyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getStoryList();
             }
         });
 
         folder.setText(getDefaultFolder().getAbsolutePath());
-        database.setText("Unimplemented");
+        database.setText(FanfictionDatabase.getDbFilePath());
 
         CommonMethods.betaInfo(this, "Fanfiction Compactor");
 
@@ -84,13 +92,26 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
     }
 
 
-    private void getFileSize() {
+    private void getStoryCountAndFileSize() {
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (rc == PackageManager.PERMISSION_GRANTED) {
-            canGetFileSize();
+            canGetFileSizeAndStoryCount();
         } else {
             requestStoragePermission();
         }
+    }
+
+    // DEBUG METHOD
+    private void getStoryList() {
+        // Assume that you have permissions
+        FanfictionDatabase db = new FanfictionDatabase();
+        ArrayList<FanficStories> stories = db.getAllStories();
+        StringBuilder builder = new StringBuilder();
+        for (FanficStories story :  stories) {
+            builder.append("[").append(story.getId()).append("] ").append(story.getTitle()).append(" (").append(story.getChapters()).append(")\n");
+        }
+
+        new AlertDialog.Builder(this).setTitle("Story List (" + stories.size() + ")").setMessage(builder.toString()).setPositiveButton(android.R.string.ok, null).show();
     }
 
     private File getDefaultFolder() {
@@ -98,13 +119,18 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         return new File(external + "/FanfictionReader/stories");
     }
 
-    private void canGetFileSize() {
+    private void canGetFileSizeAndStoryCount() {
         File file = getDefaultFolder();
         long totalSize = getFileSize(file);
         this.folderSize.setText(CommonMethods.readableFileSize(totalSize) + " (" + totalSize + " bytes)");
+
+        // Get Stories
+        FanfictionDatabase db = new FanfictionDatabase();
+
+        this.storyCount.setText("DB: "  + db.getAllStories().size() + " stories | SD: " + getStoryFolderCount(file) + " stories");
     }
 
-    public static long getFileSize(final File file)
+    private static long getFileSize(final File file)
     {
         if(file==null||!file.exists())
             return 0;
@@ -129,6 +155,25 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             }
         }
         return result;
+    }
+
+    private static int getStoryFolderCount(final File file) {
+        return getStoryFolderCount(file, false);
+    }
+
+    private static int getStoryFolderCount(final File file, boolean countFiles) {
+        if (file == null || !file.exists() || !file.isDirectory())
+            return 0;
+        File[] files = file.listFiles();
+
+        if (files == null)
+            return 0;
+        int count = 0;
+        for (File f : files) {
+            if (!f.isDirectory() && !countFiles) continue;
+            count++;
+        }
+        return count;
     }
 
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
@@ -180,7 +225,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("PermMan", "Storage Permission Granted. Getting File Size");
-                    canGetFileSize();
+                    canGetFileSizeAndStoryCount();
                     return;
                 }
                 Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
