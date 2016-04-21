@@ -12,9 +12,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Folder Size"
+        android:text="Get Folder Size &amp; Stories Count"
         android:id="@+id/btnGetFolderSize"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="75dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -55,10 +56,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Folder Size:  "
         android:id="@+id/lblFolderSize"
-        android:layout_above="@+id/btnGetFolderSize"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="21dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,7 +68,8 @@
         android:id="@+id/tvFolder"
         android:layout_above="@+id/lblDBLoc"
         android:layout_toRightOf="@+id/lblFolderLoc"
-        android:layout_toEndOf="@+id/lblFolderLoc" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,7 +79,9 @@
         android:id="@+id/tvDB"
         android:layout_alignTop="@+id/lblDBLoc"
         android:layout_alignLeft="@+id/tvFolder"
-        android:layout_alignStart="@+id/tvFolder" />
+        android:layout_alignStart="@+id/tvFolder"
+        android:layout_alignRight="@+id/tvFolder"
+        android:layout_alignEnd="@+id/tvFolder" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,6 +90,39 @@
         android:text="Permission Not Granted"
         android:id="@+id/tvSize"
         android:layout_alignTop="@+id/lblFolderSize"
+        android:layout_alignLeft="@+id/tvStories"
+        android:layout_alignStart="@+id/tvStories"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Stories Count:  "
+        android:id="@+id/lblDBCount"
+        android:layout_below="@+id/lblDBLoc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Permission Not Granted"
+        android:id="@+id/tvStories"
+        android:layout_alignTop="@+id/lblDBCount"
         android:layout_alignLeft="@+id/tvDB"
-        android:layout_alignStart="@+id/tvDB" />
+        android:layout_alignStart="@+id/tvDB"
+        android:layout_alignRight="@+id/tvDB"
+        android:layout_alignEnd="@+id/tvDB" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Stories List"
+        android:id="@+id/btnStories"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
