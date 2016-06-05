@@ -45,3 +45,5 @@ captures/
 
 # Fabric Secret Key
 fabric.properties
+
+*.iml
