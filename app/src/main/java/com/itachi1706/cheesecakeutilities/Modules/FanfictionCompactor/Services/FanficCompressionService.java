@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -15,6 +16,16 @@ import com.itachi1706.cheesecakeutilities.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficNotificationObject;
 import com.itachi1706.cheesecakeutilities.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Kenneth on 1/6/2016.
@@ -59,6 +70,8 @@ public class FanficCompressionService extends IntentService{
     @Override
     protected void onHandleIntent(Intent intent) {
         lastStatusCode = 1;
+
+        // TODO: Start of test code
         updateNotification("Starting in 10 seconds...", "Lorum Ipsum", false, 0, 0, true);
         try {
             Thread.sleep(1000);
@@ -66,43 +79,155 @@ public class FanficCompressionService extends IntentService{
             Log.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
         }
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
                 Thread.sleep(1000);
-                updateNotification("Round " + (i+1), "Processing...", false, i + 1, 50, false);
+                updateNotification("Round " + (i+1), "Processing...", false, i + 1, 10, true);
             } catch (InterruptedException e) {
                 Log.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
             }
         }
+        // TODO: End of test code
 
-        updateNotification("Done!", "DONE", true, 0, 0, false);
+        updateNotification("Backing Up Existing Files...", "Backup", false, 0, 0, true);
+
+        // TODO: Make sure to check if the user has enough space on the device for the zip file
+        try {
+            zipFiles();
+        } catch (IOException e) {
+            Log.e(FANFIC_COMPRESSION_TAG, "Failed to zip files!");
+            updateNotification("File Backup failed", "File Backup Error", true, 0, 0, false);
+            sendCompleteIntent();
+            return;
+        }
+
+        updateNotification("Cleanup Completed", "Task Completed", true, 0, 0, false);
+        sendCompleteIntent();
+    }
+
+    private void sendCompleteIntent() {
         // Send a local broadcast to close any existing dialogs
         Intent completeIntent = new Intent(FanficBroadcast.BROADCAST_ACTION);
         completeIntent.putExtra(FanficBroadcast.BROADCAST_DATA_DONE, true);
         LocalBroadcastManager.getInstance(this).sendBroadcast(completeIntent);
     }
 
+    private String zipfile;
+
+    private void zipFiles() throws IOException {
+        File backupFolder = getBackupFolder();
+        File toBackup = getDefaultFolder();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS", Locale.US);
+        Date date = new Date();
+        String dateString = sdf.format(date);
+        zipfile = "fanfic-backup-" + dateString;
+        String filepath = backupFolder.getAbsolutePath() + File.separator + zipfile;
+        updateNotification("Backing up to " + zipfile, "Backup", true, 0, 0, true);
+        ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(filepath));
+
+        addDir(toBackup, zipOutputStream);
+        zipOutputStream.close();
+    }
+
+    private int totalFiles = 0, currentFile = 1;
+
+    private void addDir(File dirObj, ZipOutputStream out) throws IOException {
+        File[] files = dirObj.listFiles();
+        totalFiles += files.length;
+        byte[] tmpBuf = new byte[1024];
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                Log.i(FANFIC_COMPRESSION_TAG, "Zipping folder " + file.getAbsolutePath());
+                addDir(file, out);
+                continue;
+            }
+            FileInputStream in = new FileInputStream(file.getAbsolutePath());
+            fanficObj = new FanficNotificationObject("Backing Up to " + zipfile + ":\n " + file.getAbsolutePath(), "Backup", true, currentFile, totalFiles, false, "Backing up files...");
+            updateNotification();
+            Log.d(FANFIC_COMPRESSION_TAG, "Zipping: " + file.getAbsolutePath());
+            out.putNextEntry(new ZipEntry(file.getAbsolutePath()));
+            int len;
+            while ((len = in.read(tmpBuf)) > 0) {
+                out.write(tmpBuf, 0, len);
+            }
+            out.closeEntry();
+            currentFile++;
+            in.close();
+        }
+    }
+
+    private void deleteFiles() {
+        // TODO: Code Stub
+    }
+
+    private String getExternalStorage() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
+    private File getDefaultFolder() {
+        String external = getExternalStorage();
+        return new File(external + "/FanfictionReader/stories");
+    }
+
+    private File getBackupFolder() {
+        String external = getExternalStorage();
+        File file = new File(external + "/FanfictionReader/backups");
+        if (file.exists() && !file.isDirectory() && file.delete() && file.mkdir()) {
+            return file;
+        }
+
+        if (!file.exists() && file.mkdir()) {
+            return file;
+        }
+
+        return file;
+    }
+
     protected void updateNotification(String message, String title, boolean cancellable, int progress, int max, boolean indeterminate) {
         fanficObj = new FanficNotificationObject(message,title,cancellable,progress,max,indeterminate);
+
         updateNotification();
     }
+
+    private static int percentdone = 0;
+    private static String lasttitle = "", lastmessage = "";
+    private static boolean laststate = false;
 
     protected void updateNotification() {
         FanficNotificationObject obj = fanficObj;
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
-        Intent fanficActivity = new Intent(this, FanfictionCompactorActivity.class);
-        fanficActivity.putExtra("launchNotification", true);
-        fanficActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFY_ID, fanficActivity, 0);
+        int percent = 0;
+        if (obj.getProgress() != 0 && obj.getMax() != 0) {
+            percent = (int) Math.round(((double) obj.getProgress()) / ((double) obj.getMax()) * 100);
+        }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setContentTitle(obj.getTitle()).setContentText(obj.getMessage()).setOngoing(!obj.isCancellable())
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(pendingIntent)
-                .setProgress(obj.getMax(), obj.getProgress(), obj.isIndeterminate());
+        if (percent != percentdone || !lasttitle.equals(obj.getTitle()) || !lastmessage.equals(obj.getNotificationMessage()) || laststate != obj.isCancellable()) {
 
-        notificationManager.notify(NOTIFY_ID, builder.build());
+            percentdone = percent;
+            laststate = obj.isCancellable();
+            lasttitle = obj.getTitle();
+            lastmessage = obj.getNotificationMessage();
+
+            Intent fanficActivity = new Intent(this, FanfictionCompactorActivity.class);
+            fanficActivity.putExtra("launchNotification", true);
+            fanficActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFY_ID, fanficActivity, 0);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle(obj.getTitle()).setContentText(obj.getNotificationMessage()).setOngoing(!obj.isCancellable())
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentIntent(pendingIntent)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(obj.getNotificationMessage()))
+                    .setProgress(obj.getMax(), obj.getProgress(), obj.isIndeterminate());
+
+            // TODO: Remove update cause
+            Log.d(FANFIC_COMPRESSION_TAG, "Updating notification");
+            notificationManager.notify(NOTIFY_ID, builder.build());
+        }
+
+
 
         Intent localIntent = new Intent(FanficBroadcast.BROADCAST_ACTION);
         localIntent.putExtra(FanficBroadcast.BROADCAST_DATA_MAX, obj.getMax());
