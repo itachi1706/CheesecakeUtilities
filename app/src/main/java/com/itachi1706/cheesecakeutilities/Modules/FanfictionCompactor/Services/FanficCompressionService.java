@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Services;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.itachi1706.cheesecakeutilities.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficNotificationObject;
 import com.itachi1706.cheesecakeutilities.R;
@@ -24,6 +26,7 @@ public class FanficCompressionService extends IntentService{
     private static final String FANFIC_COMPRESSION_TAG = "FanficCompressionSvc";
 
     private static FanficNotificationObject fanficObj;
+    private int lastStatusCode = 0;
 
     private ResponseReceiver receiver;
 
@@ -55,6 +58,7 @@ public class FanficCompressionService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        lastStatusCode = 1;
         updateNotification("Starting in 10 seconds...", "Lorum Ipsum", false, 0, 0, true);
         try {
             Thread.sleep(1000);
@@ -65,7 +69,7 @@ public class FanficCompressionService extends IntentService{
         for (int i = 0; i < 50; i++) {
             try {
                 Thread.sleep(1000);
-                updateNotification("Round " + (i+1), "Processing...", false, i, 50, false);
+                updateNotification("Round " + (i+1), "Processing...", false, i + 1, 50, false);
             } catch (InterruptedException e) {
                 Log.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
             }
@@ -87,9 +91,15 @@ public class FanficCompressionService extends IntentService{
         FanficNotificationObject obj = fanficObj;
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
 
+        Intent fanficActivity = new Intent(this, FanfictionCompactorActivity.class);
+        fanficActivity.putExtra("launchNotification", true);
+        fanficActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFY_ID, fanficActivity, 0);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setContentTitle(obj.getTitle()).setContentText(obj.getMessage()).setOngoing(!obj.isCancellable())
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(pendingIntent)
                 .setProgress(obj.getMax(), obj.getProgress(), obj.isIndeterminate());
 
         notificationManager.notify(NOTIFY_ID, builder.build());
@@ -101,7 +111,9 @@ public class FanficCompressionService extends IntentService{
         localIntent.putExtra(FanficBroadcast.BROADCAST_DATA_TITLE, obj.getTitle());
         localIntent.putExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, obj.isIndeterminate());
 
-        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+        if (lastStatusCode != 2 && lastStatusCode != 0) {
+            LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+        }
     }
 
     private class ResponseReceiver extends BroadcastReceiver {
@@ -110,12 +122,13 @@ public class FanficCompressionService extends IntentService{
 
         public void onReceive(Context context, Intent intent) {
 
-            int status = intent.getIntExtra(FanficBroadcast.BROADCAST_STATUS, -99);
+            lastStatusCode = intent.getIntExtra(FanficBroadcast.BROADCAST_STATUS, -99);
 
-            switch (status) {
+            switch (lastStatusCode) {
                 case 1: Log.i(FANFIC_COMPRESSION_TAG, "Activity Connected, sending dialog..."); updateNotification(); break;
                 case 0: Log.i(FANFIC_COMPRESSION_TAG, "Activity Disconnected"); break;
-                default: Log.e(FANFIC_COMPRESSION_TAG, "Weird Status Code (" + status + "), ignoring"); break;
+                case 2: Log.i(FANFIC_COMPRESSION_TAG, "Activity Requested No Reminder"); break;
+                default: Log.e(FANFIC_COMPRESSION_TAG, "Weird Status Code (" + lastStatusCode + "), ignoring"); break;
             }
         }
     }

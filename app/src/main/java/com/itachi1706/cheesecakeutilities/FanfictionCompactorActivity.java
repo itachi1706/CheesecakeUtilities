@@ -80,7 +80,17 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(FanficBroadcast.BROADCAST_ACTION);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
-        notifyService(true);
+
+        if (getIntent().hasExtra("launchNotification") && getIntent().getBooleanExtra("launchNotification", false))
+            notifyService(true);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.hasExtra("launchNotification") && intent.getBooleanExtra("launchNotification", false))
+            notifyService(true);
     }
 
     @Override
@@ -147,6 +157,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         }
         Intent serviceIntent = new Intent(this, FanficCompressionService.class);
         startService(serviceIntent);
+        notifyService(true);
         Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
     }
 
@@ -159,8 +170,12 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
     }
 
     private void notifyService(boolean connected) {
+        notifyService((connected) ? 1 : 0);
+    }
+
+    private void notifyService(int connectVal) {
         Intent intent = new Intent(FanficBroadcast.BROADCAST_NOTIFY);
-        intent.putExtra(FanficBroadcast.BROADCAST_STATUS, (connected) ? 1 : 0);
+        intent.putExtra(FanficBroadcast.BROADCAST_STATUS, connectVal);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -182,10 +197,23 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             if (dialog == null)
                 dialog = new ProgressDialog(FanfictionCompactorActivity.this);
             dialog.setMax(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_MAX, 0));
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             dialog.setProgress(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_PROGRESS, 0));
             dialog.setTitle(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_TITLE));
             dialog.setMessage(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_MSG));
             dialog.setIndeterminate(intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, false));
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    notifyService(2); // Dont restart the service
+                }
+            });
+            dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    notifyService(2); // Dont restart the service
+                }
+            });
             dialog.show();
         }
     }
