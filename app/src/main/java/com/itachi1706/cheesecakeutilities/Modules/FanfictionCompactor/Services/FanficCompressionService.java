@@ -120,7 +120,7 @@ public class FanficCompressionService extends IntentService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS", Locale.US);
         Date date = new Date();
         String dateString = sdf.format(date);
-        zipfile = "fanfic-backup-" + dateString;
+        zipfile = "fanfic-backup-" + dateString + ".zip";
         String filepath = backupFolder.getAbsolutePath() + File.separator + zipfile;
         updateNotification("Backing up to " + zipfile, "Backup", true, 0, 0, true);
         ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(filepath));
