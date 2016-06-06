@@ -5,7 +5,7 @@ package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects;
  * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects in CheesecakeUtilities
  */
 public class FanficNotificationObject {
-    String message, title;
+    String message, title, altmessage;
     boolean cancellable, indeterminate;
     int progress, max;
 
@@ -16,6 +16,17 @@ public class FanficNotificationObject {
         this.progress = progress;
         this.max = max;
         this.indeterminate = indeterminate;
+        this.altmessage = null;
+    }
+
+    public FanficNotificationObject(String message, String title, boolean cancellable, int progress, int max, boolean indeterminate, String altmessage) {
+        this.message = message;
+        this.title = title;
+        this.cancellable = cancellable;
+        this.progress = progress;
+        this.max = max;
+        this.indeterminate = indeterminate;
+        this.altmessage = altmessage;
     }
 
     public String getMessage() {
@@ -64,5 +75,17 @@ public class FanficNotificationObject {
 
     public void setIndeterminate(boolean indeterminate) {
         this.indeterminate = indeterminate;
+    }
+
+    public String getAltmessage() {
+        return altmessage;
+    }
+
+    public void setAltmessage(String altmessage) {
+        this.altmessage = altmessage;
+    }
+
+    public String getNotificationMessage() {
+        return (altmessage == null) ? message : altmessage;
     }
 }
