@@ -12,13 +12,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Services.FanficCompressionService;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.FanfictionDatabase;
@@ -35,8 +35,6 @@ import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class FanfictionCompactorActivity extends AppCompatActivity {
 
@@ -69,7 +67,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             }
         });
 
-        folder.setText(getDefaultFolder().getAbsolutePath());
+        folder.setText(FileHelper.getDefaultFolder().getAbsolutePath());
         database.setText(FanfictionDatabase.getDbFilePath());
 
         // Check Permission Exist, else exit if not granted
@@ -134,14 +132,9 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         new AlertDialog.Builder(this).setTitle("Story List (" + stories.size() + ")").setMessage(builder.toString()).setPositiveButton(android.R.string.ok, null).show();
     }
 
-    private File getDefaultFolder() {
-        String external = Environment.getExternalStorageDirectory().getAbsolutePath();
-        return new File(external + "/FanfictionReader/stories");
-    }
-
     private void getFileSizeAndStoryCount() {
-        File file = getDefaultFolder();
-        long totalSize = getFileSize(file);
+        File file = FileHelper.getDefaultFolder();
+        long totalSize = FileHelper.getFileSize(file);
         this.folderSize.setText(CommonMethods.readableFileSize(totalSize) + " (" + totalSize + " bytes)");
 
         // Get Stories
@@ -149,6 +142,30 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
 
         this.storyCount.setText("DB: "  + db.getAllStories().size() + " stories | SD: " + getStoryFolderCount(file) + " stories");
 
+        float freespace = FileHelper.megabytesAvailable(file);
+        Log.i("MemoryCheck", "Free Space: " + freespace + " | Total Size: " + CommonMethods.readableFileSize(totalSize) + " (" + totalSize + ")");
+        freespace = freespace * 1024 * 1024; // Convert from MB to Bytes
+        if (freespace < totalSize) {
+            // Not enough memory
+            new AlertDialog.Builder(this).setTitle("Insufficient Memory")
+                    .setMessage("You have not enough memory, you need " +
+                            CommonMethods.readableFileSize(totalSize - (long)freespace) + " more.\n\n" +
+                            "Recommended Space: " + CommonMethods.readableFileSize(totalSize) + "\n" +
+                            "Available Space: " + CommonMethods.readableFileSize((long)freespace) + "\n\n" +
+                            "If you wish, you can choose to continue, this is not recommended though!")
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setNeutralButton("Continue Anyway", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            launchService();
+                        }
+                    }).show();
+            return;
+        }
+        launchService();
+    }
+
+    private void launchService() {
         // Test Intent
         if (isMyServiceRunning()) {
             Toast.makeText(this, "Service is already running", Toast.LENGTH_SHORT).show();
@@ -228,32 +245,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         return false;
     }
 
-    private static long getFileSize(final File file)
-    {
-        if(file==null||!file.exists())
-            return 0;
-        if(!file.isDirectory())
-            return file.length();
-        final List<File> dirs= new LinkedList<>();
-        dirs.add(file);
-        long result=0;
-        while(!dirs.isEmpty())
-        {
-            final File dir=dirs.remove(0);
-            if(!dir.exists())
-                continue;
-            final File[] listFiles=dir.listFiles();
-            if(listFiles==null||listFiles.length==0)
-                continue;
-            for(final File child : listFiles)
-            {
-                result+=child.length();
-                if(child.isDirectory())
-                    dirs.add(child);
-            }
-        }
-        return result;
-    }
+
 
     private static int getStoryFolderCount(final File file) {
         return getStoryFolderCount(file, false);

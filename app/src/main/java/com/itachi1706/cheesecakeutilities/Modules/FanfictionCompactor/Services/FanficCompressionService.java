@@ -7,13 +7,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.itachi1706.cheesecakeutilities.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficNotificationObject;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -115,8 +115,8 @@ public class FanficCompressionService extends IntentService{
     private String zipfile;
 
     private void zipFiles() throws IOException {
-        File backupFolder = getBackupFolder();
-        File toBackup = getDefaultFolder();
+        File backupFolder = FileHelper.getBackupFolder();
+        File toBackup = FileHelper.getDefaultFolder();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS", Locale.US);
         Date date = new Date();
         String dateString = sdf.format(date);
@@ -125,11 +125,13 @@ public class FanficCompressionService extends IntentService{
         updateNotification("Backing up to " + zipfile, "Backup", true, 0, 0, true);
         ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(filepath));
 
+        mainfile = new File(toBackup.getAbsolutePath().substring(0, toBackup.getAbsolutePath().lastIndexOf("/")));
         addDir(toBackup, zipOutputStream);
         zipOutputStream.close();
     }
 
     private int totalFiles = 0, currentFile = 1;
+    private static File mainfile;
 
     private void addDir(File dirObj, ZipOutputStream out) throws IOException {
         File[] files = dirObj.listFiles();
@@ -146,7 +148,7 @@ public class FanficCompressionService extends IntentService{
             fanficObj = new FanficNotificationObject("Backing Up to " + zipfile + ":\n " + file.getAbsolutePath(), "Backup", true, currentFile, totalFiles, false, "Backing up files...");
             updateNotification();
             Log.d(FANFIC_COMPRESSION_TAG, "Zipping: " + file.getAbsolutePath());
-            out.putNextEntry(new ZipEntry(file.getAbsolutePath()));
+            out.putNextEntry(new ZipEntry(mainfile.toURI().relativize(file.toURI()).getPath()));
             int len;
             while ((len = in.read(tmpBuf)) > 0) {
                 out.write(tmpBuf, 0, len);
@@ -159,29 +161,6 @@ public class FanficCompressionService extends IntentService{
 
     private void deleteFiles() {
         // TODO: Code Stub
-    }
-
-    private String getExternalStorage() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
-    }
-
-    private File getDefaultFolder() {
-        String external = getExternalStorage();
-        return new File(external + "/FanfictionReader/stories");
-    }
-
-    private File getBackupFolder() {
-        String external = getExternalStorage();
-        File file = new File(external + "/FanfictionReader/backups");
-        if (file.exists() && !file.isDirectory() && file.delete() && file.mkdir()) {
-            return file;
-        }
-
-        if (!file.exists() && file.mkdir()) {
-            return file;
-        }
-
-        return file;
     }
 
     protected void updateNotification(String message, String title, boolean cancellable, int progress, int max, boolean indeterminate) {
