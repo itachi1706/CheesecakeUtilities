@@ -140,7 +140,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         // Get Stories
         FanfictionDatabase db = new FanfictionDatabase();
 
-        this.storyCount.setText("DB: "  + db.getAllStories().size() + " stories | SD: " + getStoryFolderCount(file) + " stories");
+        this.storyCount.setText("DB: "  + db.getAllStories().size() + " stories | SD: " + FileHelper.getStoryFolderCount(file) + " stories");
 
         float freespace = FileHelper.megabytesAvailable(file);
         Log.i("MemoryCheck", "Free Space: " + freespace + " | Total Size: " + CommonMethods.readableFileSize(totalSize) + " (" + totalSize + ")");
@@ -151,6 +151,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
                     .setMessage("You have not enough memory, you need " +
                             CommonMethods.readableFileSize(totalSize - (long)freespace) + " more.\n\n" +
                             "Recommended Space: " + CommonMethods.readableFileSize(totalSize) + "\n" +
+                            "Available Space: " + CommonMethods.readableFileSize((long)freespace) + "\n\n" +
                             "Available Space: " + CommonMethods.readableFileSize((long)freespace) + "\n\n" +
                             "If you wish, you can choose to continue, this is not recommended though!")
                     .setPositiveButton(android.R.string.ok, null)
@@ -243,27 +244,6 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             }
         }
         return false;
-    }
-
-
-
-    private static int getStoryFolderCount(final File file) {
-        return getStoryFolderCount(file, false);
-    }
-
-    private static int getStoryFolderCount(final File file, boolean countFiles) {
-        if (file == null || !file.exists() || !file.isDirectory())
-            return 0;
-        File[] files = file.listFiles();
-
-        if (files == null)
-            return 0;
-        int count = 0;
-        for (File f : files) {
-            if (!f.isDirectory() && !countFiles) continue;
-            count++;
-        }
-        return count;
     }
 
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;

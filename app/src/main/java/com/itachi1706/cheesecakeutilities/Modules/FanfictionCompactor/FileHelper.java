@@ -96,4 +96,34 @@ public class FileHelper {
         }
         return bytesAvailable / (1024.f * 1024.f);
     }
+
+    /**
+     * Gets the story count
+     * @param file Folder Object (Must be folder with list of stories as directories)
+     * @return number of directories in folder
+     */
+    public static int getStoryFolderCount(final File file) {
+        return getStoryFolderCount(file, false);
+    }
+
+    /**
+     * Gets the story count
+     * @param file Folder Object (Must be folder with list of stories as directories)
+     * @param countFiles Whether to count the files or not
+     * @return count size
+     */
+    public static int getStoryFolderCount(final File file, boolean countFiles) {
+        if (file == null || !file.exists() || !file.isDirectory())
+            return 0;
+        File[] files = file.listFiles();
+
+        if (files == null)
+            return 0;
+        int count = 0;
+        for (File f : files) {
+            if (!f.isDirectory() && !countFiles) continue;
+            count++;
+        }
+        return count;
+    }
 }

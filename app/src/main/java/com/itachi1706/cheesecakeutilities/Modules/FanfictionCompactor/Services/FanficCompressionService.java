@@ -15,13 +15,19 @@ import com.itachi1706.cheesecakeutilities.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficNotificationObject;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.FanfictionDatabase;
 import com.itachi1706.cheesecakeutilities.R;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
@@ -91,7 +97,6 @@ public class FanficCompressionService extends IntentService{
 
         updateNotification("Backing Up Existing Files...", "Backup", false, 0, 0, true);
 
-        // TODO: Make sure to check if the user has enough space on the device for the zip file
         try {
             zipFiles();
         } catch (IOException e) {
@@ -101,7 +106,10 @@ public class FanficCompressionService extends IntentService{
             return;
         }
 
-        updateNotification("Cleanup Completed", "Task Completed", true, 0, 0, false);
+        // Try to start deleting files
+        int deletecount = deleteFiles();
+
+        updateNotification("Cleanup Completed. Pruned " + deletecount + " file(s)", "Task Completed", true, 0, 0, false);
         sendCompleteIntent();
     }
 
@@ -122,7 +130,7 @@ public class FanficCompressionService extends IntentService{
         String dateString = sdf.format(date);
         zipfile = "fanfic-backup-" + dateString + ".zip";
         String filepath = backupFolder.getAbsolutePath() + File.separator + zipfile;
-        updateNotification("Backing up to " + zipfile, "Backup", true, 0, 0, true);
+        updateNotification("Backing up to " + zipfile, "Backup", false, 0, 0, true);
         ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(filepath));
 
         mainfile = new File(toBackup.getAbsolutePath().substring(0, toBackup.getAbsolutePath().lastIndexOf("/")));
@@ -145,7 +153,7 @@ public class FanficCompressionService extends IntentService{
                 continue;
             }
             FileInputStream in = new FileInputStream(file.getAbsolutePath());
-            fanficObj = new FanficNotificationObject("Backing Up to " + zipfile + ":\n " + file.getAbsolutePath(), "Backup", true, currentFile, totalFiles, false, "Backing up files...");
+            fanficObj = new FanficNotificationObject("Backing Up to " + zipfile + ":\n " + file.getAbsolutePath(), "Backup", false, currentFile, totalFiles, false, "Backing up files...");
             updateNotification();
             Log.d(FANFIC_COMPRESSION_TAG, "Zipping: " + file.getAbsolutePath());
             out.putNextEntry(new ZipEntry(mainfile.toURI().relativize(file.toURI()).getPath()));
@@ -159,8 +167,56 @@ public class FanficCompressionService extends IntentService{
         }
     }
 
-    private void deleteFiles() {
-        // TODO: Code Stub
+    private int deleteFiles() {
+        // Get list of stories stored in storage
+        updateNotification("Initializing pruning of files", "Stories Pruning", false, 0, 0, true);
+        File mainFolder = FileHelper.getDefaultFolder();
+        File[] storyList = mainFolder.listFiles();
+
+        // Get list of stories in database
+        FanfictionDatabase db = new FanfictionDatabase();
+        ArrayList<FanficStories> stories = db.getAllStories();
+
+        // Start deleting
+        int count = 0;
+        int max = storyList.length;
+        int deleted = 0;
+        updateNotification("Beginning file pruning", "Stories Pruning", false, count, max, false);
+        count++;
+        for (File file : storyList) {
+            // Check if its a story we need to delete
+            boolean toDelete = true;
+            String filename = FilenameUtils.getBaseName(file.getName());
+
+            Log.d(FANFIC_COMPRESSION_TAG, "Checking " + filename + " (" + file.getAbsolutePath() + ")");
+            fanficObj = new FanficNotificationObject("Checking " + filename, "Pruning", false, count, max, false, "Pruning files...");
+            updateNotification();
+            for (FanficStories s : stories) {
+                if ((s.getId() + "").trim().equals(filename.trim())) {
+                    toDelete = false;
+                    break;
+                }
+            }
+
+            if (!toDelete) {
+                count++;
+                continue;
+            }
+
+            Log.i(FANFIC_COMPRESSION_TAG, "Pruning " + filename + " (" + file.getAbsolutePath() + ")");
+            fanficObj = new FanficNotificationObject("Deleting " + filename, "Pruning", false, count, max, false, "Pruning files...");
+            updateNotification();
+
+            try {
+                FileUtils.deleteDirectory(file);
+                deleted++;
+            } catch (IOException e) {
+                Log.w(FANFIC_COMPRESSION_TAG, "Unable to delete " + filename + " (" + file.getAbsolutePath() + ")");
+            }
+            count++;
+
+        }
+        return deleted;
     }
 
     protected void updateNotification(String message, String title, boolean cancellable, int progress, int max, boolean indeterminate) {
@@ -201,7 +257,6 @@ public class FanficCompressionService extends IntentService{
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(obj.getNotificationMessage()))
                     .setProgress(obj.getMax(), obj.getProgress(), obj.isIndeterminate());
 
-            // TODO: Remove update cause
             Log.d(FANFIC_COMPRESSION_TAG, "Updating notification");
             notificationManager.notify(NOTIFY_ID, builder.build());
         }
