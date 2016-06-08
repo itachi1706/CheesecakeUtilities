@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -334,12 +333,10 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
                     int dbstories = msg.getData().getInt("dbcount");
                     int storyCount = msg.getData().getInt("filecount");
 
-                    activity.folderSize.setText(CommonMethods.readableFileSize(totalSize) + " (" + totalSize + " bytes)");
-
-                    // Get Stories
-                    FanfictionDatabase db = new FanfictionDatabase();
-
-                    activity.storyCount.setText("DB: "  + dbstories + " stories | SD: " + storyCount + " stories");
+                    activity.folderSize.setText(String.format(activity.getString(R.string.result_fanfic_folder_size),
+                            CommonMethods.readableFileSize(totalSize), totalSize));
+                    activity.storyCount.setText(String.format(activity.getString(R.string.result_fanfic_story_count),
+                            dbstories, storyCount));
 
                     // Retrival done, allow button press
                     activity.startServiceBtn.setEnabled(true);
