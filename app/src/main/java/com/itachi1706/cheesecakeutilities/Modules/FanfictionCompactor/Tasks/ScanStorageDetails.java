@@ -16,7 +16,6 @@ import java.io.File;
  */
 public class ScanStorageDetails extends AsyncTask<Void, Void, Void> {
 
-    private Exception exception;
     private Handler handler;
 
     public static final int SCAN_STORAGE_RESULT = 1111;

@@ -47,5 +47,17 @@
     <string name="link_updates">https://github.com/itachi1706/CheesecakeUtilities/releases/latest</string>
     <string name="link_legacy">https://github.com/itachi1706/CheesecakeUtilities/releases</string>
 
+    <!-- Fanfic Compactor Strings -->
+    <string name="placeholder_query">Querying...</string>
+    <string name="label_stories_count">Stories Count:&#160;</string>
+    <string name="label_folder_size">Folder Size:&#160;</string>
+    <string name="label_db_location">DB Location:&#160;</string>
+    <string name="label_fanfic_folder">FanFic Folder:&#160;</string>
+    <string name="title_fanfiction_compactor">Fanfiction Compactor</string>
+    <string name="button_compact_stories">Compact Stories</string>
+    <string name="button_show_stories_list">Show Stories List</string>
+    <string name="result_fanfic_folder_size">%1$s (%2$d bytes)</string>
+    <string name="result_fanfic_story_count">DB: %1$d stories | SD: %2$d stories</string>
+
     <!-- Unsorted/Misc -->
 </resources>

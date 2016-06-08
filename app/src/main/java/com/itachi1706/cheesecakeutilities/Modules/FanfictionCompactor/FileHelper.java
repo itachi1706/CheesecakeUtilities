@@ -87,9 +87,9 @@ public class FileHelper {
      */
     public static float megabytesAvailable(File f) {
         StatFs stat = new StatFs(f.getPath());
-        long bytesAvailable = 0;
+        long bytesAvailable;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            bytesAvailable = (long)stat.getBlockSizeLong() * (long)stat.getAvailableBlocksLong();
+            bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
         } else {
             //noinspection deprecation (due to API requirement)
             bytesAvailable = (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
