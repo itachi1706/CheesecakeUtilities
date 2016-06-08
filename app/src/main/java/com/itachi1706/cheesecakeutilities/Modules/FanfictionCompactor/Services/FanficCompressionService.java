@@ -77,23 +77,12 @@ public class FanficCompressionService extends IntentService{
     protected void onHandleIntent(Intent intent) {
         lastStatusCode = 1;
 
-        // TODO: Start of test code
-        updateNotification("Starting in 10 seconds...", "Lorum Ipsum", false, 0, 0, true);
+        updateNotification("Starting in 5 seconds...", "Service Starting", false, 0, 0, true);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             Log.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
         }
-
-        for (int i = 0; i < 10; i++) {
-            try {
-                Thread.sleep(1000);
-                updateNotification("Round " + (i+1), "Processing...", false, i + 1, 10, true);
-            } catch (InterruptedException e) {
-                Log.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
-            }
-        }
-        // TODO: End of test code
 
         updateNotification("Backing Up Existing Files...", "Backup", false, 0, 0, true);
 
