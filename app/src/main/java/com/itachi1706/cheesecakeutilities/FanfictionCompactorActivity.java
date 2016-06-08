@@ -11,13 +11,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,15 +36,17 @@ import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FileHelper
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Services.FanficCompressionService;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.FanfictionDatabase;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Tasks.ScanStorageDetails;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class FanfictionCompactorActivity extends AppCompatActivity {
 
     TextView folder, database, folderSize, storyCount;
-    Button fileSizeButton, storyButton;
+    Button startServiceBtn, storyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +57,14 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         database = (TextView) findViewById(R.id.tvDB);
         folderSize = (TextView) findViewById(R.id.tvSize);
         storyCount = (TextView) findViewById(R.id.tvStories);
-        fileSizeButton = (Button) findViewById(R.id.btnGetFolderSize);
+        startServiceBtn = (Button) findViewById(R.id.btnStartPruning);
         storyButton = (Button) findViewById(R.id.btnStories);
 
-        fileSizeButton.setOnClickListener(new View.OnClickListener() {
+        startServiceBtn.setEnabled(false);
+        startServiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFileSizeAndStoryCount();
+                startPreCompactingService();
             }
         });
 
@@ -71,9 +79,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         database.setText(FanfictionDatabase.getDbFilePath());
 
         // Check Permission Exist, else exit if not granted
-        accessStorageCheck();
-
-        CommonMethods.betaInfo(this, "Fanfiction Compactor");
+        hasStoragePermissionCheck();
 
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(FanficBroadcast.BROADCAST_ACTION);
@@ -92,6 +98,14 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        notifyService(false);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.binhex_menu, menu);
         return true;
@@ -102,8 +116,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.about:
                 new AlertDialog.Builder(this)
-                        .setMessage("Compacts fanfiction folders by removing unneeded folders/files.\n\n" +
-                                "This is a BETA utility and may not appear in the release build of the application")
+                        .setMessage("Compacts fanfiction folders by removing unneeded folders/files.")
                         .setCancelable(false)
                         .setPositiveButton(android.R.string.ok, null).show();
                 return true;
@@ -113,12 +126,6 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void accessStorageCheck() {
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (rc != PackageManager.PERMISSION_GRANTED)
-            requestStoragePermission();
     }
 
     private void getStoryList() {
@@ -132,15 +139,31 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         new AlertDialog.Builder(this).setTitle("Story List (" + stories.size() + ")").setMessage(builder.toString()).setPositiveButton(android.R.string.ok, null).show();
     }
 
-    private void getFileSizeAndStoryCount() {
+    long totalSize = 9999999;
+
+    private void startPreCompactingService() {
+        new AlertDialog.Builder(this).setTitle(Html.fromHtml("<font color='red'>WARNING!</font>"))//"WARNING!")
+                .setMessage(Html.fromHtml("This service will clean up Fanfiction Stories from your device in <font color='blue'>" +
+                FileHelper.getDefaultFolder().getAbsolutePath() + "</font>.<br> A backup will be made in <font color='blue'>" +
+                FileHelper.getBackupFolder().getAbsolutePath() + "</font>. <br><br><br><font color='red'>Please make sure you have " +
+                        "already done a database export from the Fanfiction Application before continuing. " +
+                        "Failure to do so may result in a loss of story data!</font>"))
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startCompactingService();
+            }
+        }).show();
+    }
+
+    private void startCompactingService() {
         File file = FileHelper.getDefaultFolder();
-        long totalSize = FileHelper.getFileSize(file);
-        this.folderSize.setText(CommonMethods.readableFileSize(totalSize) + " (" + totalSize + " bytes)");
-
-        // Get Stories
-        FanfictionDatabase db = new FanfictionDatabase();
-
-        this.storyCount.setText("DB: "  + db.getAllStories().size() + " stories | SD: " + FileHelper.getStoryFolderCount(file) + " stories");
 
         float freespace = FileHelper.megabytesAvailable(file);
         Log.i("MemoryCheck", "Free Space: " + freespace + " | Total Size: " + CommonMethods.readableFileSize(totalSize) + " (" + totalSize + ")");
@@ -148,7 +171,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         if (freespace < totalSize) {
             // Not enough memory
             new AlertDialog.Builder(this).setTitle("Insufficient Memory")
-                    .setMessage("You have not enough memory, you need " +
+                    .setMessage("You do not have enough memory, you need " +
                             CommonMethods.readableFileSize(totalSize - (long)freespace) + " more.\n\n" +
                             "Recommended Space: " + CommonMethods.readableFileSize(totalSize) + "\n" +
                             "Available Space: " + CommonMethods.readableFileSize((long)freespace) + "\n\n" +
@@ -179,14 +202,6 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-        notifyService(false);
-    }
-
     private void notifyService(boolean connected) {
         notifyService((connected) ? 1 : 0);
     }
@@ -197,45 +212,6 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    ProgressDialog dialog;
-    ResponseReceiver receiver;
-
-    private class ResponseReceiver extends BroadcastReceiver {
-        private ResponseReceiver() {
-        }
-
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_DONE, false)) {
-                if (dialog != null)
-                    dialog.dismiss();
-                Toast.makeText(context, "Task Completed", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (dialog == null)
-                dialog = new ProgressDialog(FanfictionCompactorActivity.this);
-            dialog.setMax(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_MAX, 0));
-            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            dialog.setProgress(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_PROGRESS, 0));
-            dialog.setTitle(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_TITLE));
-            dialog.setMessage(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_MSG));
-            dialog.setIndeterminate(intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, false));
-            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    notifyService(2); // Dont restart the service
-                }
-            });
-            dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    notifyService(2); // Dont restart the service
-                }
-            });
-            dialog.show();
-        }
-    }
-
     private boolean isMyServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -244,6 +220,18 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void hasStoragePermissionCheck() {
+        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (rc != PackageManager.PERMISSION_GRANTED)
+            requestStoragePermission();
+
+        processPruningDetails();
+    }
+
+    private void processPruningDetails() {
+        new ScanStorageDetails(new FanficHandler(this)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
@@ -268,7 +256,6 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
                     }
                 }).show();
     }
-
 
     /**
      * Callback for the result from requesting permissions. This method
@@ -295,6 +282,7 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.i("PermMan", "Storage Permission Granted. Allowing Utility Access");
+                    processPruningDetails();
                     return;
                 }
                 Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
@@ -320,6 +308,86 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
                             }
                         }).show();
                 break;
+        }
+    }
+
+    /**
+     * HANDLER RECEIVER COMMUNICATING WITH TASK
+     */
+    static class FanficHandler extends Handler {
+        WeakReference<FanfictionCompactorActivity> mActivity;
+
+        FanficHandler(FanfictionCompactorActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            FanfictionCompactorActivity activity = mActivity.get();
+
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case ScanStorageDetails.SCAN_STORAGE_RESULT:
+                    activity.totalSize = msg.getData().getLong("filesize");
+                    long totalSize = activity.totalSize;
+                    int dbstories = msg.getData().getInt("dbcount");
+                    int storyCount = msg.getData().getInt("filecount");
+
+                    activity.folderSize.setText(CommonMethods.readableFileSize(totalSize) + " (" + totalSize + " bytes)");
+
+                    // Get Stories
+                    FanfictionDatabase db = new FanfictionDatabase();
+
+                    activity.storyCount.setText("DB: "  + dbstories + " stories | SD: " + storyCount + " stories");
+
+                    // Retrival done, allow button press
+                    activity.startServiceBtn.setEnabled(true);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * BROADCAST RECEIVER COMMUNICATION WITH SERVICE
+     */
+
+    ProgressDialog dialog;
+    ResponseReceiver receiver;
+
+    private class ResponseReceiver extends BroadcastReceiver {
+        private ResponseReceiver() {
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_DONE, false)) {
+                if (dialog != null)
+                    dialog.dismiss();
+                Toast.makeText(context, "Task Completed", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (dialog == null)
+                dialog = new ProgressDialog(FanfictionCompactorActivity.this);
+                dialog.setMax(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_MAX, 0));
+                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                dialog.setProgress(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_PROGRESS, 0));
+                dialog.setTitle(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_TITLE));
+                dialog.setMessage(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_MSG));
+                dialog.setIndeterminate(intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, false));
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        notifyService(2); // Dont restart the service
+                    }
+                });
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        notifyService(2); // Dont restart the service
+                    }
+                });
+                dialog.show();
         }
     }
 }

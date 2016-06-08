@@ -12,11 +12,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Folder Size &amp; Stories Count"
-        android:id="@+id/btnGetFolderSize"
-        android:layout_marginBottom="75dp"
+        android:text="Compact Stories"
+        android:id="@+id/btnStartPruning"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignRight="@+id/tvSize"
+        android:layout_alignEnd="@+id/tvSize" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -124,5 +124,6 @@
         android:text="Show Stories List"
         android:id="@+id/btnStories"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
