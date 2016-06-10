@@ -58,8 +58,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             }
             Preference verPref = findPreference("view_app_version");
             verPref.setSummary(version + "-b" + versionCode);
-            Preference pNamePref = findPreference("view_app_name");
-            pNamePref.setSummary(packName);
+            findPreference("view_app_name").setSummary(packName);
 
             findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -122,25 +121,9 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                                             endEgg();
                                         }
                                     }).show();
-                        } else {
-                            switch (count) {
-                                case 5:
-                                    prompt(5);
-                                    break;
-                                case 6:
-                                    prompt(4);
-                                    break;
-                                case 7:
-                                    prompt(3);
-                                    break;
-                                case 8:
-                                    prompt(2);
-                                    break;
-                                case 9:
-                                    prompt(1);
-                                    break;
-                            }
-                        }
+                            return false;
+                        } else if (count > 5)
+                            prompt(10 - count);
                         count++;
                     }
                     return false;
@@ -159,9 +142,8 @@ public class GeneralSettingsActivity extends AppCompatActivity {
         boolean isActive = false;
 
         private void prompt(int left){
-            if (toasty != null){
+            if (toasty != null)
                 toasty.cancel();
-            }
             if (left > 1)
                 toasty = Toast.makeText(getActivity(), left + " more clicks to have fun!", Toast.LENGTH_SHORT);
             else
