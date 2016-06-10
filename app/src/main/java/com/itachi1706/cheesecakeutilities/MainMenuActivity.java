@@ -37,16 +37,18 @@ public class MainMenuActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        if (recyclerView != null) {
+            recyclerView.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // Set up layout
-        String[] menuitems = getResources().getStringArray(R.array.mainmenu);
-        MainMenuAdapter adapter = new MainMenuAdapter(this, menuitems);
-        recyclerView.setAdapter(adapter);
+            // Set up layout
+            String[] menuitems = getResources().getStringArray(R.array.mainmenu);
+            MainMenuAdapter adapter = new MainMenuAdapter(this, menuitems);
+            recyclerView.setAdapter(adapter);
+        }
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (UpdaterHelper.canCheckUpdate(sp, this)) {

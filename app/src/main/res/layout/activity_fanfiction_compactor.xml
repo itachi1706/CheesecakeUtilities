@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.itachi1706.cheesecakeutilities.FanfictionCompactorActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_compact_stories"
+        android:id="@+id/btnStartPruning"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/tvSize"
+        android:layout_alignEnd="@+id/tvSize" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/title_fanfiction_compactor"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_fanfic_folder"
+        android:id="@+id/lblFolderLoc"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_db_location"
+        android:id="@+id/lblDBLoc"
+        android:layout_below="@+id/lblFolderLoc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_folder_size"
+        android:id="@+id/lblFolderSize"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:id="@+id/tvFolder"
+        android:layout_above="@+id/lblDBLoc"
+        android:layout_toRightOf="@+id/lblFolderLoc"
+        android:layout_toEndOf="@+id/lblFolderLoc"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:id="@+id/tvDB"
+        android:layout_alignTop="@+id/lblDBLoc"
+        android:layout_alignLeft="@+id/tvFolder"
+        android:layout_alignStart="@+id/tvFolder"
+        android:layout_alignRight="@+id/tvFolder"
+        android:layout_alignEnd="@+id/tvFolder" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/placeholder_query"
+        android:id="@+id/tvSize"
+        android:layout_alignTop="@+id/lblFolderSize"
+        android:layout_alignLeft="@+id/tvStories"
+        android:layout_alignStart="@+id/tvStories"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_stories_count"
+        android:id="@+id/lblDBCount"
+        android:layout_below="@+id/lblDBLoc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/placeholder_query"
+        android:id="@+id/tvStories"
+        android:layout_alignTop="@+id/lblDBCount"
+        android:layout_alignLeft="@+id/tvDB"
+        android:layout_alignStart="@+id/tvDB"
+        android:layout_alignRight="@+id/tvDB"
+        android:layout_alignEnd="@+id/tvDB" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_show_stories_list"
+        android:id="@+id/btnStories"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
