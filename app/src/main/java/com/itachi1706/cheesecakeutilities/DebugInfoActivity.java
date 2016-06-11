@@ -31,43 +31,26 @@ public class DebugInfoActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.pref_debug);
             getPreferenceManager().setSharedPreferencesMode(MODE_MULTI_PROCESS);
 
-            Preference prefs =  findPreference("view_board_ver");
-            prefs.setSummary(android.os.Build.BOARD);
-            prefs = findPreference("view_bootloader_ver");
-            prefs.setSummary(android.os.Build.BOOTLOADER);
-            prefs = findPreference("view_brand_ver");
-            prefs.setSummary(android.os.Build.BRAND);
-            prefs = findPreference("view_cpu1_ver");
-            prefs.setSummary(android.os.Build.CPU_ABI);
-            prefs = findPreference("view_cpu2_ver");
-            prefs.setSummary(android.os.Build.CPU_ABI2);
-            prefs = findPreference("view_device_ver");
-            prefs.setSummary(android.os.Build.DEVICE);
-            prefs = findPreference("view_display_ver");
-            prefs.setSummary(android.os.Build.DISPLAY);
-            prefs = findPreference("view_fingerprint_ver");
-            prefs.setSummary(android.os.Build.FINGERPRINT);
-            prefs = findPreference("view_hardware_ver");
-            prefs.setSummary(android.os.Build.HARDWARE);
-            prefs = findPreference("view_host_ver");
-            prefs.setSummary(android.os.Build.HOST);
-            prefs = findPreference("view_id_ver");
-            prefs.setSummary(android.os.Build.ID);
-            prefs = findPreference("view_manufacturer_ver");
-            prefs.setSummary(android.os.Build.MANUFACTURER);
-            prefs = findPreference("view_model_ver");
-            prefs.setSummary(android.os.Build.MODEL);
-            prefs = findPreference("view_product_ver");
-            prefs.setSummary(android.os.Build.PRODUCT);
-            prefs = findPreference("view_serial_ver");
-            prefs.setSummary(android.os.Build.SERIAL);
-            prefs = findPreference("view_tags_ver");
-            prefs.setSummary(android.os.Build.TAGS);
-            prefs = findPreference("view_type_ver");
-            prefs.setSummary(android.os.Build.TYPE);
-            prefs = findPreference("view_user_ver");
+            //Preference prefs =  findPreference("view_board_ver");
+            findPreference("view_board_ver").setSummary(android.os.Build.BOARD);
+            findPreference("view_bootloader_ver").setSummary(android.os.Build.BOOTLOADER);
+            findPreference("view_brand_ver").setSummary(android.os.Build.BRAND);
+            findPreference("view_cpu1_ver").setSummary(android.os.Build.CPU_ABI);
+            findPreference("view_cpu2_ver").setSummary(android.os.Build.CPU_ABI2);
+            findPreference("view_device_ver").setSummary(android.os.Build.DEVICE);
+            findPreference("view_display_ver").setSummary(android.os.Build.DISPLAY);
+            findPreference("view_fingerprint_ver").setSummary(android.os.Build.FINGERPRINT);
+            findPreference("view_hardware_ver").setSummary(android.os.Build.HARDWARE);
+            findPreference("view_host_ver").setSummary(android.os.Build.HOST);
+            findPreference("view_id_ver").setSummary(android.os.Build.ID);
+            findPreference("view_manufacturer_ver").setSummary(android.os.Build.MANUFACTURER);
+            findPreference("view_model_ver").setSummary(android.os.Build.MODEL);
+            findPreference("view_product_ver").setSummary(android.os.Build.PRODUCT);
+            findPreference("view_serial_ver").setSummary(android.os.Build.SERIAL);
+            findPreference("view_tags_ver").setSummary(android.os.Build.TAGS);
+            findPreference("view_type_ver").setSummary(android.os.Build.TYPE);
             if (android.os.Build.USER != null){
-                prefs.setSummary(android.os.Build.USER);
+                findPreference("view_user_ver").setSummary(android.os.Build.USER);
             }
         }
     }
