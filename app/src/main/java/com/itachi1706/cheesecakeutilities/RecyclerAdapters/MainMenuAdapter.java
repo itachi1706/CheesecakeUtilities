@@ -14,6 +14,7 @@ import com.itachi1706.cheesecakeutilities.HtcSerialIdentificationActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.SpamMessages;
 import com.itachi1706.cheesecakeutilities.StringToHexBin;
+import com.itachi1706.cheesecakeutilities.BluetoothBatteryActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,6 +80,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 case "Message Spam": mActivity.startActivity(new Intent(mActivity, SpamMessages.class)); break;
                 case "HTC Serial Number Identification": mActivity.startActivity(new Intent(mActivity, HtcSerialIdentificationActivity.class)); break;
                 case "Fanfiction Compactor": mActivity.startActivity(new Intent(mActivity, FanfictionCompactorActivity.class)); break;
+                case "Bluetooth Battery": mActivity.startActivity(new Intent(mActivity, BluetoothBatteryActivity.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
