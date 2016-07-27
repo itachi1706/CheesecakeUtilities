@@ -12,26 +12,31 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Device Admin"
+        android:text="@string/camera_disable_device_admin_status"
         android:id="@+id/btnDeviceAdmin"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/statusCamera"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Disable Camera"
+        android:text="@string/camera_disable_camera_status"
         android:id="@+id/btnCameraAdmin"
-        android:layout_alignTop="@+id/btnDeviceAdmin"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btnDeviceAdmin"
+        android:layout_alignEnd="@+id/btnDeviceAdmin" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Device Admin Status:"
+        android:text="@string/camera_disable_device_admin_status_label"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -41,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Camera Status"
+        android:text="@string/camera_disable_camera_status_label"
         android:id="@+id/textView3"
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
@@ -52,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Retrieving..."
+        android:text="@string/camera_disable_retrieving_status"
         android:id="@+id/statusCamera"
         android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
@@ -62,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Retrieving..."
+        android:text="@string/camera_disable_retrieving_status"
         android:id="@+id/statusDeviceAdmin"
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
