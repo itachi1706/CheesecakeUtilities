@@ -72,6 +72,9 @@
     <string name="camera_disable_camera_status_notification">Camera %1$s</string>
     <string name="camera_disable_device_admin_label">Camera Restriction</string>
     <string name="camera_disable_device_admin_disable_warning">You are about to disable this device administrator. Camera Blocking capabilities will be disabled</string>
+    <string name="camera_disable_retrieving_status">Retrieving…</string>
+    <string name="camera_disable_device_admin_status_label">Device Admin Status:</string>
+    <string name="camera_disable_camera_status_label">Camera Status</string>
 
     <!-- Unsorted/Misc -->
 
