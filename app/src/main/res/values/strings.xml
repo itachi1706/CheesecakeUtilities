@@ -60,4 +60,6 @@
     <string name="result_fanfic_story_count">DB: %1$d stories | SD: %2$d stories</string>
 
 ***REMOVED*** Unsorted/Misc -->
+    <string name="device_admin_desc">Receiver for Device Administrator</string>
+    <string name="admin_receiver_status">Device Admin Status: %1$s</string>
 ***REMOVED***
