@@ -43,10 +43,26 @@
             android:value="4a76e5bed29f3c6bc0d8e90c16212c07cb8efbc0" />
 
         <activity android:name=".HtcSerialIdentificationActivity" />
-        <activity android:name=".FanfictionCompactorActivity" android:launchMode="singleTop" />
-        <service android:name=".Modules.FanfictionCompactor.Services.FanficCompressionService"
+        <activity
+            android:name=".FanfictionCompactorActivity"
+            android:launchMode="singleTop" />
+
+        <service
+            android:name=".Modules.FanfictionCompactor.Services.FanficCompressionService"
             android:exported="false"
             tools:ignore="InnerclassSeparator" />
+
+        <activity android:name=".CameraDisablerActivity" />
+        <receiver android:name=".CameraDisablerActivity$DeviceAdminReceiver"
+            android:label="@string/camera_disable_device_admin_label"
+            android:description="@string/camera_disable_desc"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data android:name="android.app.device_admin"
+                android:resource="@xml/camera_device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

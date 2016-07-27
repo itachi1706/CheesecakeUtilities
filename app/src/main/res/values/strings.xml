@@ -59,5 +59,23 @@
     <string name="result_fanfic_folder_size">%1$s (%2$d bytes)</string>
     <string name="result_fanfic_story_count">DB: %1$d stories | SD: %2$d stories</string>
 
+    <!-- Camera Disable Device Administrator -->
+    <string name="camera_disable_desc">Allows Cheesecake Utilities to control the device\'s camera</string>
+    <string name="camera_disable_explaination">This allows the app to control whether or not the camera on the device should be disabled</string>
+    <string name="camera_disable_admin_receiver_status">Device Admin Status: %1$s</string>
+    <string name="camera_disable_enabled">Enabled</string>
+    <string name="camera_disable_disabled">Disabled</string>
+    <string name="camera_disable_enable">Enable</string>
+    <string name="camera_disable_disable">Disable</string>
+    <string name="camera_disable_device_admin_status">%1$s Device Admin</string>
+    <string name="camera_disable_camera_status">%1$s Camera</string>
+    <string name="camera_disable_camera_status_notification">Camera %1$s</string>
+    <string name="camera_disable_device_admin_label">Camera Restriction</string>
+    <string name="camera_disable_device_admin_disable_warning">You are about to disable this device administrator. Camera Blocking capabilities will be disabled</string>
+    <string name="camera_disable_retrieving_status">Retrieving…</string>
+    <string name="camera_disable_device_admin_status_label">Device Admin Status:</string>
+    <string name="camera_disable_camera_status_label">Camera Status</string>
+
     <!-- Unsorted/Misc -->
+
 </resources>
