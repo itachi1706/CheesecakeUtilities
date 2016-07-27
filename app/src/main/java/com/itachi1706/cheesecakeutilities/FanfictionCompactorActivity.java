@@ -225,8 +225,8 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (rc != PackageManager.PERMISSION_GRANTED)
             requestStoragePermission();
-
-        processPruningDetails();
+        else
+            processPruningDetails();
     }
 
     private void processPruningDetails() {

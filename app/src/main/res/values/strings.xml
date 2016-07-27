@@ -48,7 +48,7 @@
     <string name="link_legacy">https://github.com/itachi1706/CheesecakeUtilities/releases</string>
 
     <!-- Fanfic Compactor Strings -->
-    <string name="placeholder_query">Querying...</string>
+    <string name="placeholder_query">Querying…</string>
     <string name="label_stories_count">Stories Count:&#160;</string>
     <string name="label_folder_size">Folder Size:&#160;</string>
     <string name="label_db_location">DB Location:&#160;</string>
