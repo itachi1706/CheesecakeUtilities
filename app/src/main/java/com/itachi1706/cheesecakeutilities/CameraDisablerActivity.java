@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities;
 
+import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -158,6 +161,30 @@ public class CameraDisablerActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.i("CameraDisabler", "Received Update Broadcast");
             updateResources();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.binhex_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                new AlertDialog.Builder(this)
+                        .setMessage("Allows you to control whether or not to enable/disable the camera on the device.\n" +
+                                "Note: Device Admin Permissions are required")
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, null).show();
+                return true;
+            case R.id.exit:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
