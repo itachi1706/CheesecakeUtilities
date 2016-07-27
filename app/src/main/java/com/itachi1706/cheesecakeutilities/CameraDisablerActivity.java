@@ -62,7 +62,15 @@ public class CameraDisablerActivity extends AppCompatActivity {
     }
 
     private void updateCameraStatus() {
-
+        if (isCameraActive()) {
+            // Disable
+            devicePolicyManager.setCameraDisabled(deviceAdmin, true);
+            Toast.makeText(this, "Camera Disabled", Toast.LENGTH_SHORT).show();
+        } else {
+            devicePolicyManager.setCameraDisabled(deviceAdmin, false);
+            Toast.makeText(this, "Camera Enabled", Toast.LENGTH_SHORT).show();
+        }
+        updateResources();
     }
 
     private void updateDeviceAdminStatus() {
