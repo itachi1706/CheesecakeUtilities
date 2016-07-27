@@ -54,8 +54,8 @@
 
         <activity android:name=".CameraDisablerActivity" />
         <receiver android:name=".CameraDisablerActivity$DeviceAdminReceiver"
-            android:label="@string/device_admin_label"
-            android:description="@string/device_admin_desc"
+            android:label="@string/camera_disable_device_admin_label"
+            android:description="@string/camera_disable_desc"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data android:name="android.app.device_admin"
                 android:resource="@xml/camera_device_admin" />
