@@ -65,10 +65,10 @@ public class CameraDisablerActivity extends AppCompatActivity {
         if (isCameraActive()) {
             // Disable
             devicePolicyManager.setCameraDisabled(deviceAdmin, true);
-            Toast.makeText(this, "Camera Disabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.da_camera_status_notification, getString(R.string.da_disabled)), Toast.LENGTH_SHORT).show();
         } else {
             devicePolicyManager.setCameraDisabled(deviceAdmin, false);
-            Toast.makeText(this, "Camera Enabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.da_camera_status_notification, getString(R.string.da_enabled)), Toast.LENGTH_SHORT).show();
         }
         updateResources();
     }
@@ -81,7 +81,7 @@ public class CameraDisablerActivity extends AppCompatActivity {
             // Launch device admin request
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
-            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Explaination here");
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.device_admin_explaination));
             startActivityForResult(intent, DEVICE_ADMIN_REQUEST);
         }
     }
@@ -99,25 +99,25 @@ public class CameraDisablerActivity extends AppCompatActivity {
         boolean ca = isCameraActive();
 
         if (da) {
-            deviceAdminStatus.setText("Enabled");
+            deviceAdminStatus.setText(R.string.da_enabled);
             deviceAdminStatus.setTextColor(Color.GREEN);
-            deviceAdminBtn.setText("Disable Device Admin");
+            deviceAdminBtn.setText(getString(R.string.da_device_admin_status, getString(R.string.da_disable)));
             cameraBtn.setEnabled(true);
         } else {
-            deviceAdminStatus.setText("Disabled");
+            deviceAdminStatus.setText(R.string.da_disabled);
             deviceAdminStatus.setTextColor(Color.RED);
-            deviceAdminBtn.setText("Enable Device Admin");
+            deviceAdminBtn.setText(getString(R.string.da_device_admin_status, getString(R.string.da_enable)));
             cameraBtn.setEnabled(false);
         }
 
         if (ca) {
-            cameraStatus.setText("Enabled");
+            cameraStatus.setText(R.string.da_enabled);
             cameraStatus.setTextColor(Color.GREEN);
-            cameraBtn.setText("Disable Camera");
+            cameraBtn.setText(getString(R.string.da_camera_status, getString(R.string.da_disable)));
         } else {
-            cameraStatus.setText("Disabled");
+            cameraStatus.setText(R.string.da_disabled);
             cameraStatus.setTextColor(Color.RED);
-            cameraBtn.setText("Enable Camerea");
+            cameraBtn.setText(getString(R.string.da_camera_status, getString(R.string.da_enable)));
         }
     }
 
@@ -130,18 +130,18 @@ public class CameraDisablerActivity extends AppCompatActivity {
 
         @Override
         public void onEnabled(Context context, Intent intent) {
-            showToast(context, "Enabled");
+            showToast(context, context.getString(R.string.da_enabled));
             sendUpdateBroadcast(context);
         }
 
         @Override
         public CharSequence onDisableRequested(Context context, Intent intent) {
-            return "You are about to disable Device Administrator";
+            return context.getString(R.string.device_admin_disable_warning);
         }
 
         @Override
         public void onDisabled(Context context, Intent intent) {
-            showToast(context, "Disabled");
+            showToast(context, context.getString(R.string.da_disabled));
             sendUpdateBroadcast(context);
         }
 
