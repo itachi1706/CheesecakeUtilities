@@ -14,7 +14,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class StringToHexBin extends AppCompatActivity implements View.OnClickListener {
+public class StringToHexBin extends BaseActivity implements View.OnClickListener {
 
     TextView input, result;
 
@@ -28,29 +28,6 @@ public class StringToHexBin extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_binhex_copy).setOnClickListener(this);
         findViewById(R.id.btn_binhex_send).setOnClickListener(this);
         findViewById(R.id.btn_binhex_translate).setOnClickListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.binhex_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                new AlertDialog.Builder(this)
-                        .setMessage("Translates normal language into machine code and back.")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, null).show();
-                return true;
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private String translate() {
@@ -135,5 +112,10 @@ public class StringToHexBin extends AppCompatActivity implements View.OnClickLis
             case R.id.btn_binhex_translate:
                 result.setText(translate());
         }
+    }
+
+    @Override
+    String getHelpDescription() {
+        return "Translates normal language into machine code and back.";
     }
 }

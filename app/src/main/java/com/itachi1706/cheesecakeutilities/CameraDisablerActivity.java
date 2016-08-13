@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CameraDisablerActivity extends AppCompatActivity {
+public class CameraDisablerActivity extends BaseActivity {
 
     public static final String DEVICE_ADMIN_BROADCAST = "com.itachi1706.cheesecakeutilities.DEVICE_ADMIN_BROADCAST";
     private static final int DEVICE_ADMIN_REQUEST = 4;
@@ -165,26 +165,8 @@ public class CameraDisablerActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.binhex_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                new AlertDialog.Builder(this)
-                        .setMessage("Allows you to control whether or not to enable/disable the camera on the device.\n" +
-                                "Note: Device Admin Permissions are required")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, null).show();
-                return true;
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    String getHelpDescription() {
+        return "Allows you to control whether or not to enable/disable the camera on the device.\n" +
+                "Note: Device Admin Permissions are required";
     }
 }

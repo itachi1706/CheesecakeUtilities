@@ -42,7 +42,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class FanfictionCompactorActivity extends AppCompatActivity {
+public class FanfictionCompactorActivity extends BaseActivity {
 
     TextView folder, database, folderSize, storyCount;
     Button startServiceBtn, storyButton;
@@ -102,29 +102,6 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         notifyService(false);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.binhex_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                new AlertDialog.Builder(this)
-                        .setMessage("Compacts fanfiction folders by removing unneeded folders/files.")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, null).show();
-                return true;
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void getStoryList() {
@@ -308,6 +285,11 @@ public class FanfictionCompactorActivity extends AppCompatActivity {
                         }).show();
                 break;
         }
+    }
+
+    @Override
+    String getHelpDescription() {
+        return "Compacts fanfiction folders by removing unneeded folders/files.";
     }
 
     /**
