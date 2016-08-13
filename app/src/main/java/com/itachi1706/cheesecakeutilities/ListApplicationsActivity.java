@@ -9,7 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,31 +52,25 @@ public class ListApplicationsActivity extends BaseActivity {
     }
 
     private void eval(boolean system) {
-        final List<ApplicationInfo> pkgAppsList = getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA);
-        ArrayList<String> finalStr = new ArrayList<>();
+        PackageManager pm = getPackageManager();
+        final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        ArrayList<AppsItem> finalStr = new ArrayList<>();
         for (ApplicationInfo i : pkgAppsList) {
-            String test1 = "";
             if (isSystemApp(i)) {
                 if (!system) continue;
             } else {
                 if (system) continue;
             }
-            test1 += i.packageName + "\n";
-            test1 += i.sourceDir + "\n";
-            test1 += i.dataDir + "\n";
-            if (isSystemApp(i)) {
-                test1 += "System\n";
-            } else {
-                test1 += "Not System\n";
-            }
 
-            if ((i.flags & ApplicationInfo.FLAG_DEBUGGABLE) == ApplicationInfo.FLAG_DEBUGGABLE) {
-                test1 += "DEBUGGABLE\n";
-            }
-            test1 += "API " + i.targetSdkVersion + "\n\n";
-            finalStr.add(test1);
+            AppsItem item = new AppsItem(this);
+            item.setApiVersion(i.targetSdkVersion + "");
+            item.setAppName(i.loadLabel(pm).toString());
+            item.setAppPath(i.sourceDir);
+            item.setPackageName(i.packageName);
+            item.setIcon(i.loadIcon(pm));
+            finalStr.add(item);
         }
-        StringRecyclerAdapter adapter = new StringRecyclerAdapter(finalStr);
+        AppsAdapter adapter = new AppsAdapter(finalStr);
         recyclerView.setAdapter(adapter);
     }
 
