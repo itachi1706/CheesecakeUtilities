@@ -53,16 +53,22 @@
             tools:ignore="InnerclassSeparator" />
 
         <activity android:name=".CameraDisablerActivity" />
-        <receiver android:name=".CameraDisablerActivity$DeviceAdminReceiver"
-            android:label="@string/camera_disable_device_admin_label"
+
+        <receiver
+            android:name=".CameraDisablerActivity$DeviceAdminReceiver"
             android:description="@string/camera_disable_desc"
+            android:label="@string/camera_disable_device_admin_label"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data android:name="android.app.device_admin"
+            <meta-data
+                android:name="android.app.device_admin"
                 android:resource="@xml/camera_device_admin" />
+
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ListApplicationsActivity"></activity>
     </application>
 
 </manifest>
