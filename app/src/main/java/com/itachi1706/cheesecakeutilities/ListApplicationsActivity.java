@@ -1,36 +1,48 @@
 package com.itachi1706.cheesecakeutilities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListApplicationsActivity extends BaseActivity {
 
-    Button test, test2;
+    Button systemApps, dataApps;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_applications);
 
-        test = (Button) findViewById(R.id.button);
-        test2 = (Button) findViewById(R.id.button2);
-        test.setOnClickListener(new View.OnClickListener() {
+        systemApps = (Button) findViewById(R.id.btn_system_apps);
+        dataApps = (Button) findViewById(R.id.btn_data_apps);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_test);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        eval(false);
+
+        systemApps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 eval(true);
             }
         });
-        test2.setOnClickListener(new View.OnClickListener() {
+        dataApps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 eval(false);
@@ -40,8 +52,9 @@ public class ListApplicationsActivity extends BaseActivity {
 
     private void eval(boolean system) {
         final List<ApplicationInfo> pkgAppsList = getPackageManager().getInstalledApplications(PackageManager.GET_META_DATA);
-        String test1 = "";
+        ArrayList<String> finalStr = new ArrayList<>();
         for (ApplicationInfo i : pkgAppsList) {
+            String test1 = "";
             if (isSystemApp(i)) {
                 if (!system) continue;
             } else {
@@ -60,8 +73,10 @@ public class ListApplicationsActivity extends BaseActivity {
                 test1 += "DEBUGGABLE\n";
             }
             test1 += "API " + i.targetSdkVersion + "\n\n";
+            finalStr.add(test1);
         }
-        new AlertDialog.Builder(this).setMessage(test1).setPositiveButton(android.R.string.ok, null).show();
+        StringRecyclerAdapter adapter = new StringRecyclerAdapter(finalStr);
+        recyclerView.setAdapter(adapter);
     }
 
     private boolean isSystemApp(ApplicationInfo i) {
