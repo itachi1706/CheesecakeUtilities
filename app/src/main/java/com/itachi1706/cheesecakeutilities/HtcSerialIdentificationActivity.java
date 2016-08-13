@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
 
-public class HtcSerialIdentificationActivity extends AppCompatActivity {
+public class HtcSerialIdentificationActivity extends BaseActivity {
 
     Button search, serial;
     TextView resultList;
@@ -129,25 +129,7 @@ public class HtcSerialIdentificationActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.binhex_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                new AlertDialog.Builder(this)
-                        .setMessage("Identifies the manufacturing date and location of HTC devices based on their serial numbers")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, null).show();
-                return true;
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    String getHelpDescription() {
+        return "Identifies the manufacturing date and location of HTC devices based on their serial numbers";
     }
 }

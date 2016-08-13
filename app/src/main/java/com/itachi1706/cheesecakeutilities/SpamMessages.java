@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SpamMessages extends AppCompatActivity implements View.OnClickListener {
+public class SpamMessages extends BaseActivity implements View.OnClickListener {
 
     private EditText messageText, teleText, numberText;
 
@@ -53,32 +53,6 @@ public class SpamMessages extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_messagespam_send:
                 sendSMS();
                 break;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.binhex_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                new AlertDialog.Builder(this)
-                        .setMessage("Sends a SMS message multiple times to the same contact.\n\n" +
-                                "Note: Spamming may be illegal in your country and may cost real money as it send SMS messages" +
-                                ". Use with caution.\n\nThis app or the creator may not be held responsible for any " +
-                                "costs that this utility may incur.")
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, null).show();
-                return true;
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -271,5 +245,13 @@ public class SpamMessages extends AppCompatActivity implements View.OnClickListe
                 Log.d("PermMan", "Got unexpected permission result: " + requestCode);
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    String getHelpDescription() {
+        return "Sends a SMS message multiple times to the same contact.\n\n" +
+                "Note: Spamming may be illegal in your country and may cost real money as it send SMS messages" +
+                ". Use with caution.\n\nThis app or the creator may not be held responsible for any " +
+                "costs that this utility may incur.";
     }
 }
