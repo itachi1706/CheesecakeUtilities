@@ -63,7 +63,8 @@ public class ListApplicationsActivity extends BaseActivity {
 
     @Override
     String getHelpDescription() {
-        return "ListApplicationActivity";
+        return "List all applications installed on your device and their targeted API Levels\nComing Soon: " +
+                "Showing a more understandable API level";
     }
 
 
