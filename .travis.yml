@@ -19,9 +19,9 @@ env:
     - ANDROID_TARGET=android-22
 android:
     components:
+        - tools
+        - tools
         - platform-tools
-        - tools
-        - tools
         - build-tools-$ANDROID_BUILD_TOOLS_VERSION
         - android-$API_LEVEL
         - android-$ANDROID_EMULATOR_API_LEVEL
