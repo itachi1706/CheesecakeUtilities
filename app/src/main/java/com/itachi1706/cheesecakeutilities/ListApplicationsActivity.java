@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,16 +19,12 @@ import java.util.List;
 
 public class ListApplicationsActivity extends BaseActivity {
 
-    Button systemApps, dataApps;
     RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_applications);
-
-        systemApps = (Button) findViewById(R.id.btn_system_apps);
-        dataApps = (Button) findViewById(R.id.btn_data_apps);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_test);
         recyclerView.setHasFixedSize(true);
@@ -36,19 +34,6 @@ public class ListApplicationsActivity extends BaseActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         eval(false);
-
-        systemApps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                eval(true);
-            }
-        });
-        dataApps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                eval(false);
-            }
-        });
     }
 
     private void eval(boolean system) {
@@ -58,8 +43,6 @@ public class ListApplicationsActivity extends BaseActivity {
         for (ApplicationInfo i : pkgAppsList) {
             if (isSystemApp(i)) {
                 if (!system) continue;
-            } else {
-                if (system) continue;
             }
 
             AppsItem item = new AppsItem(this);
@@ -81,5 +64,21 @@ public class ListApplicationsActivity extends BaseActivity {
     @Override
     String getHelpDescription() {
         return "ListApplicationActivity";
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.modules_applist, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.systemapp: item.setChecked(!item.isChecked()); eval(item.isChecked()); return true;
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 }

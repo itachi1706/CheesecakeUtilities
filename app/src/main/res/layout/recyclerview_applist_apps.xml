@@ -4,7 +4,8 @@
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
     android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:minHeight="60dp"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -24,6 +25,7 @@
         android:layout_height="48dp"
         android:id="@+id/iv_icon"
         android:src="@mipmap/ic_launcher"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -44,18 +46,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="21"
         android:id="@+id/tvAPI"
-        android:layout_alignBottom="@+id/tvPackageName"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="/data/app/com.example.appname"
-        android:id="@+id/tvApkLocation"
-        android:layout_below="@+id/tvPackageName"
-        android:layout_toRightOf="@+id/iv_icon"
-        android:layout_alignRight="@+id/tvPackageName"
-        android:layout_alignEnd="@+id/tvPackageName" />
 </RelativeLayout>
