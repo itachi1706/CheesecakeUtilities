@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.itachi1706.appupdater.AppUpdateChecker;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 
@@ -104,6 +105,16 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            String installLocation;
+            String location = ValidationHelper.getInstallLocation(getActivity());
+            switch (ValidationHelper.checkInstallLocation(getActivity())) {
+                case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
+                case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
+                case ValidationHelper.SIDELOAD:
+                default: installLocation = "Sideloaded";
+            }
+            findPreference("installer_from").setSummary(installLocation);
 
             //Egg stuff
             verPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
