@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,8 +80,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         public void onClick(View v) {
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            Uri uri = Uri.fromParts("package", appName.getText().toString(), null);
+            Uri uri = Uri.fromParts("package", appPackageName.getText().toString(), null);
             intent.setData(uri);
+            Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
             v.getContext().startActivity(intent);
         }
 
