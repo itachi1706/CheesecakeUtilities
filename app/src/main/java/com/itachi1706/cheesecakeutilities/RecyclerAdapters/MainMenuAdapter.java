@@ -82,7 +82,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 case "HTC Serial Number Identification": mActivity.startActivity(new Intent(mActivity, HtcSerialIdentificationActivity.class)); break;
                 case "Fanfiction Compactor": mActivity.startActivity(new Intent(mActivity, FanfictionCompactorActivity.class)); break;
                 case "Disable Camera": mActivity.startActivity(new Intent(mActivity, CameraDisablerActivity.class)); break;
-                case "ListApplicationsActivity": mActivity.startActivity(new Intent(mActivity, ListApplicationsActivity.class)); break;
+                case "Application List": mActivity.startActivity(new Intent(mActivity, ListApplicationsActivity.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
