@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.itachi1706.cheesecakeutilities.CameraDisablerActivity;
 import com.itachi1706.cheesecakeutilities.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.HtcSerialIdentificationActivity;
+import com.itachi1706.cheesecakeutilities.ListApplicationsActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.SpamMessages;
 import com.itachi1706.cheesecakeutilities.StringToHexBin;
@@ -81,6 +82,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 case "HTC Serial Number Identification": mActivity.startActivity(new Intent(mActivity, HtcSerialIdentificationActivity.class)); break;
                 case "Fanfiction Compactor": mActivity.startActivity(new Intent(mActivity, FanfictionCompactorActivity.class)); break;
                 case "Disable Camera": mActivity.startActivity(new Intent(mActivity, CameraDisablerActivity.class)); break;
+                case "Application List": mActivity.startActivity(new Intent(mActivity, ListApplicationsActivity.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
