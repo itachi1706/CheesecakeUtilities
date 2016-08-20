@@ -1,5 +1,8 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +46,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         AppsItem s = appsList.get(i);
         appsViewHolder.appName.setText(s.getAppName());
         appsViewHolder.appApiVersion.setText(s.getApiVersion());
-        appsViewHolder.appApkPath.setText(s.getAppPath());
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
     }
@@ -60,7 +62,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
     public class AppsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        protected TextView appName, appPackageName, appApkPath, appApiVersion;
+        protected TextView appName, appPackageName, appApiVersion;
         protected ImageView appIcon;
 
         public AppsViewHolder(View v)
@@ -69,14 +71,17 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
             appName = (TextView) v.findViewById(R.id.tvAppName);
             appPackageName = (TextView) v.findViewById(R.id.tvPackageName);
             appApiVersion = (TextView) v.findViewById(R.id.tvAPI);
-            appApkPath = (TextView) v.findViewById(R.id.tvApkLocation);
             appIcon = (ImageView) v.findViewById(R.id.iv_icon);
             v.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(v.getContext(), appName.getText(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", appName.getText().toString(), null);
+            intent.setData(uri);
+            v.getContext().startActivity(intent);
         }
 
     }
