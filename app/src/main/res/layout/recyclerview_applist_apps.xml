@@ -12,11 +12,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="App Name"
         android:id="@+id/tvAppName"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tvAPI"
+        android:layout_above="@+id/tvPackageName"
         android:layout_toRightOf="@+id/iv_icon"
         android:layout_toEndOf="@+id/iv_icon" />
 
@@ -35,10 +34,10 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="com.example.appname"
         android:id="@+id/tvPackageName"
-        android:layout_below="@+id/tvAppName"
-        android:layout_toLeftOf="@+id/tvAPI"
-        android:layout_alignLeft="@+id/tvAppName"
-        android:layout_alignStart="@+id/tvAppName" />
+        android:maxLines="1"
+        android:maxWidth="250dp"
+        android:layout_alignBottom="@+id/iv_icon"
+        android:layout_toRightOf="@+id/iv_icon" />
 
     <TextView
         android:layout_width="wrap_content"
