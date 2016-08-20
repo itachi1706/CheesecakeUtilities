@@ -12,6 +12,7 @@
         <Preference android:title="View Changelog" android:key="android_changelog" android:summary="View Changelog Information" />
         <Preference android:title="App Version" android:key="view_app_version" android:summary="NULL" />
         <Preference android:title="Package Name" android:key="view_app_name" android:selectable="false" />
+        <Preference android:title="Installed From" android:key="installer_from" android:selectable="false" />
         <Preference android:summary="None" android:title="Android Version" android:key="view_sdk_version" android:selectable="false"/>
         <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
     </PreferenceCategory>
