@@ -77,5 +77,5 @@
     <string name="camera_disable_camera_status_label">Camera Status</string>
 
     <!-- Unsorted/Misc -->
-
+    <string name="pes_status">PES Status</string>
 </resources>
