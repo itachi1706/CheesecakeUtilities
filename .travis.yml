@@ -2,7 +2,7 @@ language: android
 jdk: oraclejdk8
 
 # Use Container Based
-sudo: false
+sudo: true # Temporary sudo mode it
 
 cache:
   directories:
