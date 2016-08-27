@@ -1,17 +1,25 @@
 package com.itachi1706.cheesecakeutilities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ORDActivity extends BaseActivity {
 
     RecyclerView recyclerView;
+    long ordDays, ptpDays, popDays;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +27,66 @@ public class ORDActivity extends BaseActivity {
         setContentView(R.layout.activity_ord);
 
         recyclerView = (RecyclerView) findViewById(R.id.ord_recycler_view);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (recyclerView != null) {
+            recyclerView.setHasFixedSize(true);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            // Set up layout
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            long ord = sp.getLong(ORDSettingsActivity.SP_ORD, 0);
+            long ptp = sp.getLong(ORDSettingsActivity.SP_PTP, 0);
+            long pop = sp.getLong(ORDSettingsActivity.SP_POP, 0);
+            long currentTime = System.currentTimeMillis();
+            List<String> menuItems = new ArrayList<>();
+            if (ptp != 0) {
+                // Non Enhanced Batch
+                if (currentTime > ptp) {
+                    // PTP LOH
+                    menuItems.add("PTP Phase Ended");
+                } else {
+                    long duration = ptp - currentTime;
+                    ptpDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
+                    menuItems.add(getResources().getQuantityString(R.plurals.ord_days_countdown, (int) ptpDays, ptpDays, "Start of BMT Phase"));
+                }
+            }
+
+            if (pop != 0) {
+                if (currentTime > pop) {
+                    // POP LOH
+                    menuItems.add("POP LOH");
+                } else {
+                    long duration = pop - currentTime;
+                    popDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
+                    menuItems.add(getResources().getQuantityString(R.plurals.ord_days_countdown, (int) popDays, popDays, "POP"));
+                }
+            } else {
+                menuItems.add("POP Date not defined. Please define in settings");
+            }
+
+            if (ord != 0) {
+                if (currentTime > ord) {
+                    // ORD LOH
+                    menuItems.add("ORD LOH");
+                } else {
+                    long duration = ord - currentTime;
+                    ordDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
+                    menuItems.add(getResources().getQuantityString(R.plurals.ord_days_countdown, (int) ordDays, ordDays, "ORD"));
+                }
+            } else {
+                menuItems.add("ORD Date not defined. Please define in settings");
+            }
+
+            StringRecyclerAdapter adapter = new StringRecyclerAdapter(menuItems);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override
