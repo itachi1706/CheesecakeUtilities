@@ -63,5 +63,6 @@ dependencies {
         transitive = true;
     }
     compile 'commons-io:commons-io:2.4'
+    compile 'com.mikhaellopez:circularprogressbar:1.1.1'
     compile project(':appupdater')
 }

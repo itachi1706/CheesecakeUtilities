@@ -7,10 +7,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,9 @@ import java.util.concurrent.TimeUnit;
 public class ORDActivity extends BaseActivity {
 
     RecyclerView recyclerView;
+    TextView ordCounter, ordDaysLabel, ordProgress;
+    CircularProgressBar progressBar;
+    int animationDuration = 2500; // ms
     long ordDays, ptpDays, popDays;
 
     @Override
@@ -27,6 +33,10 @@ public class ORDActivity extends BaseActivity {
         setContentView(R.layout.activity_ord);
 
         recyclerView = (RecyclerView) findViewById(R.id.ord_recycler_view);
+        ordDaysLabel = (TextView) findViewById(R.id.ord_days_counter);
+        ordCounter = (TextView) findViewById(R.id.ord_counter);
+        ordProgress = (TextView) findViewById(R.id.ord_precentage);
+        progressBar = (CircularProgressBar)  findViewById(R.id.ord_progressbar);
     }
 
     @Override
@@ -44,6 +54,7 @@ public class ORDActivity extends BaseActivity {
             long ord = sp.getLong(ORDSettingsActivity.SP_ORD, 0);
             long ptp = sp.getLong(ORDSettingsActivity.SP_PTP, 0);
             long pop = sp.getLong(ORDSettingsActivity.SP_POP, 0);
+            long enlist = sp.getLong(ORDSettingsActivity.SP_ENLIST, 0);
             long currentTime = System.currentTimeMillis();
             List<String> menuItems = new ArrayList<>();
             if (ptp != 0) {
@@ -74,15 +85,23 @@ public class ORDActivity extends BaseActivity {
             if (ord != 0) {
                 if (currentTime > ord) {
                     // ORD LOH
-                    menuItems.add("ORD LOH");
+                    ordDaysLabel.setText(getResources().getQuantityString(R.plurals.ord_days, 0));
+                    ordCounter.setText("ORD");
+                    progressBar.setProgressWithAnimation(100, animationDuration);
                 } else {
                     long duration = ord - currentTime;
                     ordDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
-                    menuItems.add(getResources().getQuantityString(R.plurals.ord_days_countdown, (int) ordDays, ordDays, "ORD"));
+                    ordDaysLabel.setText(getResources().getQuantityString(R.plurals.ord_days, (int) ordDays));
+                    ordCounter.setText(ordDays + "");
+
+                    double difference = ((TimeUnit.MILLISECONDS.toDays(currentTime-enlist)) / (double)(TimeUnit.MILLISECONDS.toDays(ord - enlist))) * 100.0;
+                    ordProgress.setText((Math.round(difference * 100.0)/100.0) + "% completed");
+                    progressBar.setProgressWithAnimation((float) difference, animationDuration);
                 }
             } else {
                 menuItems.add("ORD Date not defined. Please define in settings");
             }
+
 
             StringRecyclerAdapter adapter = new StringRecyclerAdapter(menuItems);
             recyclerView.setAdapter(adapter);

@@ -4,4 +4,9 @@
         <item quantity="one">%1$d day to %2$s</item>
         <item quantity="other">%1$d days to %2$s</item>
     </plurals>
+    <plurals name="ord_days">
+        <item quantity="one">Day to ORD</item>
+        <item quantity="zero">LOH</item>
+        <item quantity="other">Days to ORD</item>
+    </plurals>
 </resources>
