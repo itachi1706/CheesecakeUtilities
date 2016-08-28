@@ -27,6 +27,7 @@ android {
         targetSdkVersion 24
         versionCode 79
         versionName "1.4.0"
+        vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -56,11 +57,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:design:24.1.1'
-    compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:support-v4:24.2.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
     compile 'commons-io:commons-io:2.4'
+    compile 'com.github.lzyzsd:circleprogress:1.1.0@aar'
     compile project(':appupdater')
 }

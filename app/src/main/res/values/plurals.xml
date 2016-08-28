@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+***REMOVED***
+    <plurals name="ord_days_countdown">
+        <item quantity="one">%1$d day to %2$s</item>
+        <item quantity="other">%1$d days to %2$s</item>
+    </plurals>
+    <plurals name="ord_days">
+        <item quantity="one">Day to ORD</item>
+        <item quantity="other">Days to ORD</item>
+    </plurals>
+***REMOVED***
