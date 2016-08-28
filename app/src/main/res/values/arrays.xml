@@ -7,5 +7,13 @@
         <item>Fanfiction Compactor</item>
         <item>Disable Camera</item>
         <item>Application List</item>
+        <item>ORD Calculator</item>
+    </string-array>
+    <string-array name="pes">
+        <item>A/B</item>
+        <item>A/B PTP</item>
+        <item>BP</item>
+        <item>C</item>
+        <item>E</item>
     </string-array>
 </resources>
