@@ -2,24 +2,18 @@ package com.itachi1706.cheesecakeutilities;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.itachi1706.appupdater.AppUpdateChecker;
-import com.itachi1706.appupdater.Util.UpdaterHelper;
-import com.itachi1706.appupdater.Util.ValidationHelper;
+import com.itachi1706.appupdater.SettingsInitializer;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 
@@ -44,8 +38,6 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
 
-            final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-
             //Debug Info Get
             String version = "NULL", packName = "NULL";
             int versionCode = 0;
@@ -60,15 +52,6 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             Preference verPref = findPreference("view_app_version");
             verPref.setSummary(version + "-b" + versionCode);
             findPreference("view_app_name").setSummary(packName);
-
-            findPreference("launch_updater").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    new AppUpdateChecker(getActivity(), sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    return false;
-                }
-            });
-
             findPreference("view_sdk_version").setSummary(android.os.Build.VERSION.RELEASE);
             findPreference("vDevInfo").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -78,43 +61,9 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 }
             });
 
-            findPreference("android_changelog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    UpdaterHelper.settingGenerateChangelog(sp, getActivity());
-                    return true;
-                }
-            });
-
-            findPreference("get_old_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(getResources().getString(R.string.link_legacy)));
-                    startActivity(i);
-                    return false;
-                }
-            });
-
-            findPreference("get_latest_app").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(getResources().getString(R.string.link_updates)));
-                    startActivity(i);
-                    return false;
-                }
-            });
-
-            String installLocation;
-            String location = ValidationHelper.getInstallLocation(getActivity());
-            switch (ValidationHelper.checkInstallLocation(getActivity())) {
-                case ValidationHelper.GOOGLE_PLAY: installLocation = "Google Play (" + location + ")"; break;
-                case ValidationHelper.AMAZON: installLocation = "Amazon App Store (" + location + ")"; break;
-                case ValidationHelper.SIDELOAD:
-                default: installLocation = "Sideloaded";
-            }
-            findPreference("installer_from").setSummary(installLocation);
+            new SettingsInitializer(getActivity(), R.mipmap.ic_launcher,
+                    CommonVariables.BASE_SERVER_URL, getResources().getString(R.string.link_legacy),
+                    getResources().getString(R.string.link_updates)).explodeSettings(this);
 
             //Egg stuff
             verPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
