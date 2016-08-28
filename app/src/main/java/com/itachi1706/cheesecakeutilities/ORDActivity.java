@@ -57,10 +57,9 @@ public class ORDActivity extends BaseActivity {
             long currentTime = System.currentTimeMillis();
             List<String> menuItems = new ArrayList<>();
             if (ptp != 0) {
-                // Non Enhanced Batch
+                // Normal Batch
                 if (currentTime > ptp) {
-                    // PTP LOH
-                    menuItems.add("PTP Phase Ended");
+                    menuItems.add("PTP Phase Ended"); // PTP LOH
                 } else {
                     long duration = ptp - currentTime;
                     ptpDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
@@ -70,8 +69,7 @@ public class ORDActivity extends BaseActivity {
 
             if (pop != 0) {
                 if (currentTime > pop) {
-                    // POP LOH
-                    menuItems.add("POP LOH");
+                    menuItems.add("POP LOH"); // POP LOH
                 } else {
                     long duration = pop - currentTime;
                     popDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
@@ -100,7 +98,7 @@ public class ORDActivity extends BaseActivity {
 
                     int weekends = calculateWeekends();
                     int weekdays = calculateWeekdays(weekends);
-                    menuItems.add(weekdays + " Working Day(s)");
+                    menuItems.add(weekdays + " Weekdays");
                     menuItems.add(weekends + " Weekends");
                 }
             } else {
@@ -135,7 +133,7 @@ public class ORDActivity extends BaseActivity {
 
     @Override
     String getHelpDescription() {
-        return "ORD Calculator (WIP)";
+        return "A Basic ORD Countdown timer for Singapore NSF";
     }
 
     @Override

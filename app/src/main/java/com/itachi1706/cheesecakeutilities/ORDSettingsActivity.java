@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -98,6 +99,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.putString(SP_STATUS, this.pesStatusString);
         edit.putInt("ordcalc_status_pos", this.pesStatusSpinner.getSelectedItemPosition());
         edit.apply();
+        Toast.makeText(this, "Settings Saved", Toast.LENGTH_LONG).show();
     }
 
     private void clearSettings() {
@@ -119,6 +121,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         this.pesStatusString = this.pesStatusSpinner.getSelectedItem().toString();
 
         this.updateText(UPDATE_NONE);
+        Toast.makeText(this, "Cleared Settings", Toast.LENGTH_LONG).show();
     }
 
     private void saveAndExit() {

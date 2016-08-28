@@ -84,7 +84,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 case "Fanfiction Compactor": mActivity.startActivity(new Intent(mActivity, FanfictionCompactorActivity.class)); break;
                 case "Disable Camera": mActivity.startActivity(new Intent(mActivity, CameraDisablerActivity.class)); break;
                 case "Application List": mActivity.startActivity(new Intent(mActivity, ListApplicationsActivity.class)); break;
-                case "ORD Calculator": mActivity.startActivity(new Intent(mActivity, ORDActivity.class)); break;
+                case "ORD Countdown": mActivity.startActivity(new Intent(mActivity, ORDActivity.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
