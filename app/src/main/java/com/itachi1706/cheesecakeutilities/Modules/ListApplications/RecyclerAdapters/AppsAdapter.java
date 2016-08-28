@@ -1,8 +1,12 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,8 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Broadcasts.ListAppBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -49,6 +53,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         appsViewHolder.appApiVersion.setText(s.getApiVersion());
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
+        appsViewHolder.appLocation = s.getAppPath();
     }
 
     @Override
@@ -65,6 +70,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
         protected TextView appName, appPackageName, appApiVersion;
         protected ImageView appIcon;
+        protected String appLocation;
 
         public AppsViewHolder(View v)
         {
@@ -78,12 +84,40 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            Uri uri = Uri.fromParts("package", appPackageName.getText().toString(), null);
-            intent.setData(uri);
-            Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
-            v.getContext().startActivity(intent);
+            final View view = v;
+            new AlertDialog.Builder(v.getContext()).setTitle(appName.getText().toString())
+                    .setMessage("Package Name: " + appPackageName.getText().toString() +
+                            "\nAPI Version: " + appApiVersion.getText().toString() +
+                            "\nApp Location: " + appLocation)
+                    .setIcon(appIcon.getDrawable())
+                    .setNeutralButton("App Settings", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", appPackageName.getText().toString(), null);
+                            intent.setData(uri);
+                            Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
+                            view.getContext().startActivity(intent);
+                        }
+                    }).setPositiveButton("Backup", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // TODO Backup
+                    Log.i("Backup", "Requesting backup of " + appPackageName.getText().toString());
+                    sendCompleteIntent(view.getContext());
+                }
+            }).show();
+        }
+
+        private void sendCompleteIntent(Context context) {
+            // Send a local broadcast to close any existing dialogs
+            Intent completeIntent = new Intent(ListAppBroadcast.LISTAPP_BROADCAST_BACKUP);
+            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPNAME, appName.getText().toString());
+            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
+            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH, appLocation);
+            //completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION, app)
+            LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
         }
 
     }
