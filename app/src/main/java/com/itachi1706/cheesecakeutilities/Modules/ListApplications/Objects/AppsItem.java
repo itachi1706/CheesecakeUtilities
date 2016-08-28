@@ -11,26 +11,28 @@ import com.itachi1706.cheesecakeutilities.R;
  * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects in CheesecakeUtilities
  */
 public class AppsItem {
-    private String appName, appPath, apiVersion, packageName;
+    private String appName, appPath, apiVersion, packageName, version;
     private Drawable icon;
 
     public AppsItem(Context context) {
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
-    public AppsItem(Context context, String appName, String appPath, String apiVersion, String packageName) {
+    public AppsItem(Context context, String appName, String appPath, String apiVersion, String packageName, String version) {
         this.appName = appName;
         this.appPath = appPath;
         this.apiVersion = apiVersion;
         this.packageName = packageName;
+        this.version = version;
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
-    public AppsItem(String appName, String appPath, String apiVersion, String packageName, Drawable icon) {
+    public AppsItem(String appName, String appPath, String apiVersion, String packageName, Drawable icon, String version) {
         this.appName = appName;
         this.appPath = appPath;
         this.apiVersion = apiVersion;
         this.packageName = packageName;
+        this.version = version;
         this.icon = icon;
     }
 
@@ -72,5 +74,13 @@ public class AppsItem {
 
     public void setIcon(Drawable icon) {
         this.icon = icon;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }
