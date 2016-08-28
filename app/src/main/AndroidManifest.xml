@@ -70,7 +70,20 @@
 
         <activity android:name=".ListApplicationsActivity" />
         <activity android:name=".ORDActivity" />
-        <activity android:name=".ORDSettingsActivity"></activity>
+        <activity android:name=".ORDSettingsActivity" />
+
+        <receiver
+            android:name=".Modules.ORDCountdown.ORDCountdownWidgetProvider"
+            android:label="ORD Countdown"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ordcountdown_widget_provider_info" />
+        </receiver>
     </application>
 
 </manifest>
