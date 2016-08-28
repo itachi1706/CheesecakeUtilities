@@ -15,6 +15,7 @@ import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,6 @@ public class ORDActivity extends BaseActivity {
     RecyclerView recyclerView;
     TextView ordCounter, ordDaysLabel, ordProgress;
     ArcProgress progressBar;
-    int animationDuration = 2500; // ms
     long ordDays, ptpDays, popDays;
 
     @Override
@@ -97,6 +97,11 @@ public class ORDActivity extends BaseActivity {
                     double difference = ((TimeUnit.MILLISECONDS.toDays(currentTime-enlist)) / (double)(TimeUnit.MILLISECONDS.toDays(ord - enlist))) * 100.0;
                     ordProgress.setText((Math.round(difference * 100.0)/100.0) + "% completed");
                     progressBar.setProgress((int)difference);
+
+                    int weekends = calculateWeekends();
+                    int weekdays = calculateWeekdays(weekends);
+                    menuItems.add(weekdays + " Working Day(s)");
+                    menuItems.add(weekends + " Weekends");
                 }
             } else {
                 menuItems.add("ORD Date not defined. Please define in settings");
@@ -106,6 +111,26 @@ public class ORDActivity extends BaseActivity {
             StringRecyclerAdapter adapter = new StringRecyclerAdapter(menuItems);
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    private int calculateWeekends() {
+        if (ordDays == 0) return 0;
+        int weekends = 0;
+        Calendar cal = Calendar.getInstance();
+        for (int i = 0; i < ordDays; i++) {
+            if (i != 0) {
+                cal.add(Calendar.DAY_OF_WEEK, 1);
+            }
+            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                weekends++;
+            }
+        }
+        return weekends;
+    }
+
+    private int calculateWeekdays(int weekends) {
+        if (ordDays == 0) return 0;
+        return (int)ordDays - weekends;
     }
 
     @Override
