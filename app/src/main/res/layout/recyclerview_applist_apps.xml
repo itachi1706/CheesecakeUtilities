@@ -4,7 +4,7 @@
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
     android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:minHeight="60dp"
+    android:minHeight="80dp"
     android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -15,6 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="App Name"
         android:id="@+id/tvAppName"
+        android:maxLines="1"
         android:layout_above="@+id/tvPackageName"
         android:layout_toRightOf="@+id/iv_icon"
         android:layout_toEndOf="@+id/iv_icon" />
@@ -26,7 +27,8 @@
         android:src="@mipmap/ic_launcher"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,5 +50,17 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Version: Unknown"
+        android:id="@+id/tvVersion"
+        android:maxLines="1"
+        android:maxWidth="250dp"
+        android:layout_below="@+id/tvPackageName"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:layout_toEndOf="@+id/iv_icon" />
 
 </RelativeLayout>

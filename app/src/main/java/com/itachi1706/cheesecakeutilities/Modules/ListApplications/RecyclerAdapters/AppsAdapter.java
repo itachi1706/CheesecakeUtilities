@@ -54,6 +54,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
         appsViewHolder.appLocation = s.getAppPath();
+        appsViewHolder.version = s.getVersion();
+        appsViewHolder.appVersion.setText("Version: " + s.getVersion());
     }
 
     @Override
@@ -68,9 +70,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
     public class AppsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        protected TextView appName, appPackageName, appApiVersion;
+        protected TextView appName, appPackageName, appApiVersion, appVersion;
         protected ImageView appIcon;
-        protected String appLocation;
+        protected String appLocation, version;
 
         public AppsViewHolder(View v)
         {
@@ -79,6 +81,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
             appPackageName = (TextView) v.findViewById(R.id.tvPackageName);
             appApiVersion = (TextView) v.findViewById(R.id.tvAPI);
             appIcon = (ImageView) v.findViewById(R.id.iv_icon);
+            appVersion = (TextView) v.findViewById(R.id.tvVersion);
             v.setOnClickListener(this);
         }
 
@@ -87,8 +90,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
             final View view = v;
             new AlertDialog.Builder(v.getContext()).setTitle(appName.getText().toString())
                     .setMessage("Package Name: " + appPackageName.getText().toString() +
-                            "\nAPI Version: " + appApiVersion.getText().toString() +
-                            "\nApp Location: " + appLocation)
+                            "\n\nApp Version: " + version +
+                            "\n\nAPI Version: " + appApiVersion.getText().toString() +
+                            "\n\nApp Location: " + appLocation)
                     .setIcon(appIcon.getDrawable())
                     .setNeutralButton("App Settings", new DialogInterface.OnClickListener() {
                         @Override
@@ -116,7 +120,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPNAME, appName.getText().toString());
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH, appLocation);
-            //completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION, app)
+            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION, version);
             LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
         }
 

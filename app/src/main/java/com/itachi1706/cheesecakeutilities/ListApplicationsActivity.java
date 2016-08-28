@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -67,6 +68,13 @@ public class ListApplicationsActivity extends BaseActivity {
             if (isSystemApp(i)) {
                 if (!system) continue;
             }
+            String version = "Unknown";
+            try {
+                PackageInfo pInfo = getPackageManager().getPackageInfo(i.packageName, 0);
+                version = pInfo.versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
 
             AppsItem item = new AppsItem(this);
             item.setApiVersion(i.targetSdkVersion + "");
@@ -74,6 +82,7 @@ public class ListApplicationsActivity extends BaseActivity {
             item.setAppPath(i.sourceDir);
             item.setPackageName(i.packageName);
             item.setIcon(i.loadIcon(pm));
+            item.setVersion(version);
             finalStr.add(item);
         }
         AppsAdapter adapter = new AppsAdapter(finalStr);
@@ -122,7 +131,7 @@ public class ListApplicationsActivity extends BaseActivity {
     }
 
     private void processBackup(final String appName, final String appPath, String packageName, String appVersion) {
-        final String filepath = appName + "-" + packageName + "_" + appVersion + ".apk";
+        final String filepath = appName + "_" + packageName + "-" + appVersion + ".apk";
         Log.i("Backup", "Starting Backup Process for " + packageName);
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
