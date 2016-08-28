@@ -7,13 +7,12 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
-import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class ORDActivity extends BaseActivity {
 
     RecyclerView recyclerView;
     TextView ordCounter, ordDaysLabel, ordProgress;
-    CircularProgressBar progressBar;
+    ArcProgress progressBar;
     int animationDuration = 2500; // ms
     long ordDays, ptpDays, popDays;
 
@@ -36,7 +35,7 @@ public class ORDActivity extends BaseActivity {
         ordDaysLabel = (TextView) findViewById(R.id.ord_days_counter);
         ordCounter = (TextView) findViewById(R.id.ord_counter);
         ordProgress = (TextView) findViewById(R.id.ord_precentage);
-        progressBar = (CircularProgressBar)  findViewById(R.id.ord_progressbar);
+        progressBar = (ArcProgress)  findViewById(R.id.ord_progressbar);
     }
 
     @Override
@@ -85,9 +84,10 @@ public class ORDActivity extends BaseActivity {
             if (ord != 0) {
                 if (currentTime > ord) {
                     // ORD LOH
-                    ordDaysLabel.setText(getResources().getQuantityString(R.plurals.ord_days, 0));
+                    ordDaysLabel.setText("LOH");
                     ordCounter.setText("ORD");
-                    progressBar.setProgressWithAnimation(100, animationDuration);
+                    ordProgress.setText("100% Completed");
+                    progressBar.setProgress(100);
                 } else {
                     long duration = ord - currentTime;
                     ordDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
@@ -96,7 +96,7 @@ public class ORDActivity extends BaseActivity {
 
                     double difference = ((TimeUnit.MILLISECONDS.toDays(currentTime-enlist)) / (double)(TimeUnit.MILLISECONDS.toDays(ord - enlist))) * 100.0;
                     ordProgress.setText((Math.round(difference * 100.0)/100.0) + "% completed");
-                    progressBar.setProgressWithAnimation((float) difference, animationDuration);
+                    progressBar.setProgress((int)difference);
                 }
             } else {
                 menuItems.add("ORD Date not defined. Please define in settings");

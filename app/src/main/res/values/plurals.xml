@@ -6,7 +6,6 @@
     </plurals>
     <plurals name="ord_days">
         <item quantity="one">Day to ORD</item>
-        <item quantity="zero">LOH</item>
         <item quantity="other">Days to ORD</item>
     </plurals>
 </resources>
