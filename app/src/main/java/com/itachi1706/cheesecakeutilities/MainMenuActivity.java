@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,15 +9,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.itachi1706.appupdater.AppUpdateChecker;
+import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
-import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import io.fabric.sdk.android.Fabric;
@@ -51,10 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (UpdaterHelper.canCheckUpdate(sp, this)) {
-            Log.i("Updater", "Checking for new updates...");
-            new AppUpdateChecker(this, sp, true, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+        new AppUpdateInitializer(this, sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
     }
 
     @Override
