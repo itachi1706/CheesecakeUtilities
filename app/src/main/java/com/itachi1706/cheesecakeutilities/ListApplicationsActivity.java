@@ -151,11 +151,20 @@ public class ListApplicationsActivity extends BaseActivity {
                     if (!system) continue;
                 }
                 String version = "Unknown";
+                String[] requestedPermissions = null;
                 try {
-                    PackageInfo pInfo = getPackageManager().getPackageInfo(i.packageName, 0);
+                    PackageInfo pInfo = getPackageManager().getPackageInfo(i.packageName, PackageManager.GET_PERMISSIONS);
+                    requestedPermissions = pInfo.requestedPermissions;
                     version = pInfo.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
+                }
+
+                String permissionList = "";
+                if (requestedPermissions != null) {
+                    for (String s : requestedPermissions) {
+                        permissionList += s + "\n";
+                    }
                 }
 
                 AppsItem item = new AppsItem(getApplicationContext());
@@ -165,6 +174,7 @@ public class ListApplicationsActivity extends BaseActivity {
                 item.setPackageName(i.packageName);
                 item.setIcon(i.loadIcon(pm));
                 item.setVersion(version);
+                item.setPermissions(permissionList);
                 finalStr.add(item);
             }
 

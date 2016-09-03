@@ -95,6 +95,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         appsViewHolder.appLocation = s.getAppPath();
         appsViewHolder.version = s.getVersion();
         appsViewHolder.appVersion.setText("Version: " + s.getVersion());
+        appsViewHolder.permissions = (s.getPermissions().equals("") ? "No Permissions Requested" : s.getPermissions());
     }
 
     @Override
@@ -111,7 +112,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
         protected TextView appName, appPackageName, appApiVersion, appVersion;
         protected ImageView appIcon;
-        protected String appLocation, version;
+        protected String appLocation, version, permissions;
 
         public AppsViewHolder(View v)
         {
@@ -131,7 +132,8 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
                     .setMessage("Package Name: " + appPackageName.getText().toString() +
                             "\n\nApp Version: " + version +
                             "\n\nAPI Version: " + appApiVersion.getText().toString() +
-                            "\n\nApp Location: " + appLocation)
+                            "\n\nApp Location: " + appLocation +
+                            "\n\nPermissions List\n" + permissions)
                     .setIcon(appIcon.getDrawable())
                     .setNeutralButton("App Settings", new DialogInterface.OnClickListener() {
                         @Override
