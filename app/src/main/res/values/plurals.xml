@@ -8,4 +8,8 @@
         <item quantity="one">Day to ORD</item>
         <item quantity="other">Days to ORD</item>
     </plurals>
+    <plurals name="pop_days">
+        <item quantity="one">Day to POP</item>
+        <item quantity="other">Days to POP</item>
+    </plurals>
 ***REMOVED***
