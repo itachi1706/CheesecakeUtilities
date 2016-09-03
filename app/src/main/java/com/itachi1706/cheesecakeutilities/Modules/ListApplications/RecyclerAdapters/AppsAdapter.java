@@ -69,7 +69,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         Collections.sort(appsList, new Comparator<AppsItem>() {
             @Override
             public int compare(AppsItem o1, AppsItem o2) {
-                return AppsAdapter.compare(o1.getApiVersion(), o2.getApiVersion());
+                return AppsAdapter.compare(o2.getApiVersion(), o1.getApiVersion());
             }
         });
     }

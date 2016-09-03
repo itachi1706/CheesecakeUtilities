@@ -2,5 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/systemapp" android:title="Show System Apps"
+        android:orderInCategory="96" android:checkable="true" app:showAsAction="never" />
+    <item android:id="@+id/sortapi" android:title="Sort by API Version"
         android:orderInCategory="97" android:checkable="true" app:showAsAction="never" />
 </menu>

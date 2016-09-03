@@ -101,10 +101,16 @@ public class ListApplicationsActivity extends BaseActivity {
         return true;
     }
 
+    private boolean checkSystem = false;
+    private boolean sortByApi = false;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.systemapp: item.setChecked(!item.isChecked()); eval(item.isChecked()); return true;
+            case R.id.systemapp: item.setChecked(!item.isChecked()); checkSystem = item.isChecked();
+                eval(item.isChecked()); return true;
+            case R.id.sortapi: item.setChecked(!item.isChecked()); sortByApi = item.isChecked();
+                eval(checkSystem); return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
@@ -162,19 +168,24 @@ public class ListApplicationsActivity extends BaseActivity {
                 finalStr.add(item);
             }
 
+            finalAdapter = new AppsAdapter(finalStr);
+            finalAdapter.sort();
+            // Further sort if by API
+            if (sortByApi) finalAdapter.sort(AppsAdapter.SORT_API);
+
             // Done
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    AppsAdapter adapter = new AppsAdapter(finalStr);
-                    adapter.sort();
-                    recyclerView.setAdapter(adapter);
+                    recyclerView.setAdapter(finalAdapter);
                     bar.setVisibility(View.GONE);
                     label.setVisibility(View.GONE);
                 }
             });
             return null;
         }
+
+        private AppsAdapter finalAdapter;
     }
 
     private class BackupAppThread extends AsyncTask<String, Void, Void> {
