@@ -108,7 +108,7 @@ public class ListApplicationsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.systemapp: item.setChecked(!item.isChecked()); checkSystem = item.isChecked();
-                eval(item.isChecked()); return true;
+                eval(checkSystem); return true;
             case R.id.sortapi: item.setChecked(!item.isChecked()); sortByApi = item.isChecked();
                 eval(checkSystem); return true;
             default: return super.onOptionsItemSelected(item);
