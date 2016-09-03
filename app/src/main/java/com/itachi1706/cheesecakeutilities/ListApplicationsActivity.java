@@ -25,6 +25,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.BackupHelper;
@@ -39,6 +42,8 @@ import java.util.List;
 public class ListApplicationsActivity extends BaseActivity {
 
     RecyclerView recyclerView;
+    ProgressBar bar;
+    TextView label;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,9 @@ public class ListApplicationsActivity extends BaseActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        bar = (ProgressBar) findViewById(R.id.list_app_pb);
+        label = (TextView) findViewById(R.id.list_app_pb_label);
+
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(ListAppBroadcast.LISTAPP_BROADCAST_BACKUP);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
@@ -61,32 +69,11 @@ public class ListApplicationsActivity extends BaseActivity {
     }
 
     private void eval(boolean system) {
-        PackageManager pm = getPackageManager();
-        final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        ArrayList<AppsItem> finalStr = new ArrayList<>();
-        for (ApplicationInfo i : pkgAppsList) {
-            if (isSystemApp(i)) {
-                if (!system) continue;
-            }
-            String version = "Unknown";
-            try {
-                PackageInfo pInfo = getPackageManager().getPackageInfo(i.packageName, 0);
-                version = pInfo.versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            AppsItem item = new AppsItem(this);
-            item.setApiVersion(i.targetSdkVersion + "");
-            item.setAppName(i.loadLabel(pm).toString());
-            item.setAppPath(i.sourceDir);
-            item.setPackageName(i.packageName);
-            item.setIcon(i.loadIcon(pm));
-            item.setVersion(version);
-            finalStr.add(item);
-        }
-        AppsAdapter adapter = new AppsAdapter(finalStr);
+        AppsAdapter adapter = new AppsAdapter(new AppsItem[0]);
         recyclerView.setAdapter(adapter);
+        bar.setVisibility(View.VISIBLE);
+        label.setVisibility(View.VISIBLE);
+        new LoadAppThread().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, system);
     }
 
     @Override
@@ -139,17 +126,61 @@ public class ListApplicationsActivity extends BaseActivity {
         dialog.setCancelable(false);
         dialog.setMessage("Backing up " + appName + "...");
         dialog.show();
-        new BackupAppThread(this, dialog).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
+        new BackupAppThread(dialog).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
         Log.i("Backup", "Stopping Backup Process for " + packageName);
+    }
+
+    private class LoadAppThread extends AsyncTask<Boolean, Void, Void> {
+
+        private ArrayList<AppsItem> finalStr;
+
+        @Override
+        protected Void doInBackground(Boolean... params) {
+            boolean system = params[0];
+            PackageManager pm = getPackageManager();
+            final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+            finalStr = new ArrayList<>();
+            for (ApplicationInfo i : pkgAppsList) {
+                if (isSystemApp(i)) {
+                    if (!system) continue;
+                }
+                String version = "Unknown";
+                try {
+                    PackageInfo pInfo = getPackageManager().getPackageInfo(i.packageName, 0);
+                    version = pInfo.versionName;
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                AppsItem item = new AppsItem(getApplicationContext());
+                item.setApiVersion(i.targetSdkVersion + "");
+                item.setAppName(i.loadLabel(pm).toString());
+                item.setAppPath(i.sourceDir);
+                item.setPackageName(i.packageName);
+                item.setIcon(i.loadIcon(pm));
+                item.setVersion(version);
+                finalStr.add(item);
+            }
+
+            // Done
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AppsAdapter adapter = new AppsAdapter(finalStr);
+                    recyclerView.setAdapter(adapter);
+                    bar.setVisibility(View.GONE);
+                    label.setVisibility(View.GONE);
+                }
+            });
+            return null;
+        }
     }
 
     private class BackupAppThread extends AsyncTask<String, Void, Void> {
 
-        private Context context;
         private ProgressDialog dialog;
 
-        public BackupAppThread(Context context, ProgressDialog dialog) {
-            this.context = context;
+        public BackupAppThread(ProgressDialog dialog) {
             this.dialog = dialog;
         }
 
@@ -164,7 +195,7 @@ public class ListApplicationsActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "Unable to create folder! Backup failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Unable to create folder! Backup failed", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         }
                     });
@@ -172,7 +203,7 @@ public class ListApplicationsActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "Backup of " + appName + " completed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Backup of " + appName + " completed", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         }
                     });
@@ -181,7 +212,7 @@ public class ListApplicationsActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(context, "Error backuping app (" + e.getLocalizedMessage() + ")", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error backuping app (" + e.getLocalizedMessage() + ")", Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
                 });
@@ -274,7 +305,6 @@ public class ListApplicationsActivity extends BaseActivity {
         }
 
         public void onReceive(Context context, Intent intent) {
-            // TODO Code Stub
             String appname = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPNAME);
             String apppath = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH);
             String packageName = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE);
