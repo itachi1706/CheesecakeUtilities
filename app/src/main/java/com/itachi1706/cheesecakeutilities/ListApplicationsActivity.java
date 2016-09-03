@@ -153,7 +153,7 @@ public class ListApplicationsActivity extends BaseActivity {
                 }
 
                 AppsItem item = new AppsItem(getApplicationContext());
-                item.setApiVersion(i.targetSdkVersion + "");
+                item.setApiVersion(i.targetSdkVersion);
                 item.setAppName(i.loadLabel(pm).toString());
                 item.setAppPath(i.sourceDir);
                 item.setPackageName(i.packageName);
@@ -167,6 +167,7 @@ public class ListApplicationsActivity extends BaseActivity {
                 @Override
                 public void run() {
                     AppsAdapter adapter = new AppsAdapter(finalStr);
+                    adapter.sort();
                     recyclerView.setAdapter(adapter);
                     bar.setVisibility(View.GONE);
                     label.setVisibility(View.GONE);

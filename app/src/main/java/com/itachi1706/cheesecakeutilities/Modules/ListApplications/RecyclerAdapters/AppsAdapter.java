@@ -20,6 +20,8 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsI
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -29,6 +31,9 @@ import java.util.List;
 public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder> {
     private List<AppsItem> appsList;
 
+    public static final int SORT_NAME = 0;
+    public static final int SORT_API = 1;
+
     public AppsAdapter(List<AppsItem> strings)
     {
         this.appsList = strings;
@@ -37,6 +42,40 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
     public AppsAdapter(AppsItem[] strings)
     {
         this.appsList = Arrays.asList(strings);
+    }
+
+    public void sort() {
+        sort(SORT_NAME);
+    }
+
+    public void sort(int type) {
+        switch (type) {
+            case SORT_API: sortByApiVersion(); break;
+            case SORT_NAME:
+            default: sortByName(); break;
+        }
+    }
+
+    private void sortByName() {
+        Collections.sort(appsList, new Comparator<AppsItem>() {
+            @Override
+            public int compare(AppsItem o1, AppsItem o2) {
+                return o1.getAppName().compareTo(o2.getAppName());
+            }
+        });
+    }
+
+    private void sortByApiVersion() {
+        Collections.sort(appsList, new Comparator<AppsItem>() {
+            @Override
+            public int compare(AppsItem o1, AppsItem o2) {
+                return AppsAdapter.compare(o1.getApiVersion(), o2.getApiVersion());
+            }
+        });
+    }
+
+    private static int compare(int x, int y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
     @Override
@@ -50,7 +89,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
     {
         AppsItem s = appsList.get(i);
         appsViewHolder.appName.setText(s.getAppName());
-        appsViewHolder.appApiVersion.setText(s.getApiVersion());
+        appsViewHolder.appApiVersion.setText(s.getApiVersion() + "");
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
         appsViewHolder.appLocation = s.getAppPath();
