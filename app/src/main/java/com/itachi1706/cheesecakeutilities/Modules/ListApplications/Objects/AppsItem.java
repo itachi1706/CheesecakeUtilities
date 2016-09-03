@@ -11,7 +11,7 @@ import com.itachi1706.cheesecakeutilities.R;
  * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects in CheesecakeUtilities
  */
 public class AppsItem {
-    private String appName, appPath, packageName, version;
+    private String appName, appPath, packageName, version, permissions;
     private int apiVersion;
     private Drawable icon;
 
@@ -19,21 +19,23 @@ public class AppsItem {
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
-    public AppsItem(Context context, String appName, String appPath, int apiVersion, String packageName, String version) {
+    public AppsItem(Context context, String appName, String appPath, int apiVersion, String packageName, String version, String permissions) {
         this.appName = appName;
         this.appPath = appPath;
         this.apiVersion = apiVersion;
         this.packageName = packageName;
         this.version = version;
+        this.permissions = permissions;
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
-    public AppsItem(String appName, String appPath, int apiVersion, String packageName, Drawable icon, String version) {
+    public AppsItem(String appName, String appPath, int apiVersion, String packageName, Drawable icon, String version, String permissions) {
         this.appName = appName;
         this.appPath = appPath;
         this.apiVersion = apiVersion;
         this.packageName = packageName;
         this.version = version;
+        this.permissions = permissions;
         this.icon = icon;
     }
 
@@ -83,5 +85,13 @@ public class AppsItem {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
     }
 }
