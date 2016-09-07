@@ -10,64 +10,66 @@
     tools:context="com.itachi1706.cheesecakeutilities.BmiCalculatorActivity">
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_etHeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/til_etHeight">
+        android:layout_alignParentTop="true">
+
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/etHeight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="number"
             android:ems="10"
-            android:maxLength="3"
-            android:id="@+id/etHeight"
-            android:hint="Height (cm)" />
+            android:hint="Height (cm)"
+            android:inputType="number"
+            android:maxLength="3" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_etWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/til_etHeight"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/til_etWeight">
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/etWeight"
-        android:maxLength="4"
-        android:hint="Weight (kg)" />
+        android:layout_below="@+id/til_etHeight">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/etWeight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:hint="Weight (kg)"
+            android:inputType="numberDecimal"
+            android:maxLength="4" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:id="@+id/btnCalculate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calculate BMI"
-        android:id="@+id/btnCalculate"
         android:layout_below="@+id/til_etWeight"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp" />
+        android:layout_marginTop="86dp"
+        android:text="Calculate BMI" />
 
     <Button
+        android:id="@+id/btnTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BMI Table"
-        android:id="@+id/btnTable"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="BMI Table" />
 
     <TextView
+        android:id="@+id/tvResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="BMI Value: 0.0"
-        android:id="@+id/tvResults"
-        android:layout_below="@+id/btnCalculate"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="63dp" />
+        android:layout_below="@+id/btnCalculate"
+        android:layout_marginTop="63dp"
+        android:text="BMI Value: 0.0"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 </RelativeLayout>

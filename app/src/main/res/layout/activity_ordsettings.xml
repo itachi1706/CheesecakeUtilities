@@ -7,81 +7,103 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".Modules.ORDCountdown.ORDSettingsActivity">
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
-        android:ems="10"
-        android:id="@+id/etEnlist"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:id="@+id/til_etEnlist">
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/etEnlist"
         android:hint="Enlist"
         android:onClick="enlistDialog"
         android:focusableInTouchMode="false"
         android:focusable="false" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
-        android:ems="10"
-        android:id="@+id/etPTP"
-        android:hint="BMT"
-        android:onClick="ptpDialog"
+        android:id="@+id/spinnerPES"
+        android:layout_below="@+id/til_etEnlist"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:spinnerMode="dropdown"
+        android:prompt="@string/pes_status"
+        android:entries="@array/pes" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/spinnerPES"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:focusableInTouchMode="false"
+        android:id="@+id/til_etPTP">
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/etPTP"
+        android:hint="BMT Phase (if any)"
+        android:onClick="ptpDialog"
         android:focusable="false" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/til_etPTP"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/til_etPTP"
+        android:layout_alignEnd="@+id/til_etPTP"
+        android:id="@+id/til_etPOP">
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:inputType="none"
         android:ems="10"
         android:id="@+id/etPOP"
         android:hint="POP"
-        android:layout_below="@+id/etPTP"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/etPTP"
-        android:layout_alignEnd="@+id/etPTP"
         android:onClick="popDialog"
         android:focusableInTouchMode="false"
         android:focusable="false" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
-        android:ems="10"
-        android:id="@+id/etORD"
-        android:hint="ORD"
-        android:layout_below="@+id/etPOP"
+        android:layout_below="@+id/til_etPOP"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:id="@+id/til_etORD">
+    <android.support.design.widget.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="none"
+        android:ems="10"
+        android:id="@+id/etORD"
+        android:hint="ORD"
         android:onClick="ordDialog"
         android:focusableInTouchMode="false"
         android:focusable="false" />
+</android.support.design.widget.TextInputLayout>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerPES"
-        android:layout_below="@+id/etEnlist"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:spinnerMode="dropdown"
-        android:prompt="@string/pes_status"
-        android:entries="@array/pes" />
 
 </RelativeLayout>

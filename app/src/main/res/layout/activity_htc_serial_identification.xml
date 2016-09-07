@@ -10,46 +10,52 @@
     tools:context=".Modules.HtcSerialIdentification.HtcSerialIdentificationActivity">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/htc_sn_id_btn_search"
         android:id="@+id/btn_htc_sn_search"
-        android:layout_below="@+id/htc_sn_serialField"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions"
-        android:ems="10"
-        android:id="@+id/htc_sn_serialField"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="61dp"
-        android:hint="@string/htc_sn_id_serial_field_hint"
+        android:layout_below="@+id/til_htc_sn_serialField"
+        android:layout_centerHorizontal="true"
+        android:text="@string/htc_sn_id_btn_search" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_htc_sn_serialField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tv_htc_sn_result"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/tv_htc_sn_result"
-        android:layout_alignEnd="@+id/tv_htc_sn_result" />
+        android:layout_marginTop="61dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/htc_sn_serialField"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:hint="@string/htc_sn_id_serial_field_hint"
+            android:inputType="textNoSuggestions" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:id="@+id/btn_htc_sn_serial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/htc_sn_id_button_phone_serial"
-        android:id="@+id/btn_htc_sn_serial"
         android:layout_below="@+id/btn_htc_sn_search"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/htc_sn_id_button_phone_serial" />
 
     <TextView
+        android:id="@+id/tv_htc_sn_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text=""
-        android:id="@+id/tv_htc_sn_result"
-        android:layout_below="@+id/btn_htc_sn_serial"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btn_htc_sn_serial"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
