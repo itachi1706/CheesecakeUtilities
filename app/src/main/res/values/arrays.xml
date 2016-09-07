@@ -10,6 +10,16 @@
         <item>ORD Countdown</item>
         <item>BMI Calculator</item>
     </string-array>
+    <string-array name="mainmenulink">
+        <item>com.itachi1706.cheesecakeutilities.StringToHexBin</item>
+        <item>com.itachi1706.cheesecakeutilities.SpamMessages</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.HtcSerialIdentificationActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FanfictionCompactorActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.CameraDisablerActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.ORDActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.BmiCalculatorActivity</item>
+    </string-array>
     <string-array name="pes">
         <item>A/B</item>
         <item>A/B PTP</item>
