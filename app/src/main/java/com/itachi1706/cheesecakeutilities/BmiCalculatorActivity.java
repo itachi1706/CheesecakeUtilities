@@ -1,10 +1,8 @@
 package com.itachi1706.cheesecakeutilities;
 
 import android.content.Context;
-import android.renderscript.Double2;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -50,8 +48,22 @@ public class BmiCalculatorActivity extends BaseActivity {
         double heightVal = Double.parseDouble(height.getText().toString()) / 100.0;
         double weightVal = Double.parseDouble(weight.getText().toString());
         double bmi = Math.round((weightVal / Math.pow(heightVal, 2)) * 100.0) / 100.0;
-        result.setText("BMI Value: " + bmi);
+
+        // Check range
+        String range;
+        if (bmi < SU) range = "Severely Underweight";
+        else if (bmi < MU) range = "Moderately Underweight";
+        else if (bmi < U) range = "Underweight";
+        else if (bmi < N) range = "Normal";
+        else if (bmi < OW) range = "Overweight";
+        else if (bmi < CIO) range = "Class I Obese";
+        else if (bmi < CIIO) range = "Class II Obese";
+        else range = "Class III Obese";
+
+        result.setText("BMI Value: " + bmi + "\nStatus: " + range);
     }
+
+    private static final double SU = 16, MU = 17, U = 18.5, N = 25, OW = 30, CIO = 35, CIIO = 40;
 
     private void showTable() {
         new AlertDialog.Builder(this).setTitle("BMI Ranges")

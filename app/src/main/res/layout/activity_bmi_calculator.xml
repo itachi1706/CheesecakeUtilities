@@ -9,34 +9,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.itachi1706.cheesecakeutilities.BmiCalculatorActivity">
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/etHeight"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="Height (cm)" />
+        android:id="@+id/til_etHeight">
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:ems="10"
+            android:maxLength="3"
+            android:id="@+id/etHeight"
+            android:hint="Height (cm)" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/til_etHeight"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/til_etWeight">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/etWeight"
-        android:layout_below="@+id/etHeight"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:maxLength="4"
         android:hint="Weight (kg)" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Calculate BMI"
         android:id="@+id/btnCalculate"
-        android:layout_below="@+id/etWeight"
+        android:layout_below="@+id/til_etWeight"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="86dp" />
 
