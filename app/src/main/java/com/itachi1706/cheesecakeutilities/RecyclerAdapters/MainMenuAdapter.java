@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.BmiCalculatorActivity;
 import com.itachi1706.cheesecakeutilities.CameraDisablerActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.HtcSerialIdentificationActivity;
@@ -85,6 +86,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 case "Disable Camera": mActivity.startActivity(new Intent(mActivity, CameraDisablerActivity.class)); break;
                 case "Application List": mActivity.startActivity(new Intent(mActivity, ListApplicationsActivity.class)); break;
                 case "ORD Countdown": mActivity.startActivity(new Intent(mActivity, ORDActivity.class)); break;
+                case "BMI Calculator": mActivity.startActivity(new Intent(mActivity, BmiCalculatorActivity.class)); break;
                 default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
             }
         }
