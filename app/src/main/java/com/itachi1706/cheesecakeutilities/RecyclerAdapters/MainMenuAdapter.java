@@ -3,21 +3,13 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.BmiCalculatorActivity;
-import com.itachi1706.cheesecakeutilities.CameraDisablerActivity;
-import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FanfictionCompactorActivity;
-import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.HtcSerialIdentificationActivity;
-import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsActivity;
-import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.ORDActivity;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.SpamMessages;
-import com.itachi1706.cheesecakeutilities.StringToHexBin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -78,16 +70,17 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
 
         @Override
         public void onClick(View v) {
-            switch (title.getText().toString()) {
-                case "String to Binary/Hex Converter": mActivity.startActivity(new Intent(mActivity, StringToHexBin.class)); break;
-                case "Message Spam": mActivity.startActivity(new Intent(mActivity, SpamMessages.class)); break;
-                case "HTC Serial Number Identification": mActivity.startActivity(new Intent(mActivity, HtcSerialIdentificationActivity.class)); break;
-                case "Fanfiction Compactor": mActivity.startActivity(new Intent(mActivity, FanfictionCompactorActivity.class)); break;
-                case "Disable Camera": mActivity.startActivity(new Intent(mActivity, CameraDisablerActivity.class)); break;
-                case "Application List": mActivity.startActivity(new Intent(mActivity, ListApplicationsActivity.class)); break;
-                case "ORD Countdown": mActivity.startActivity(new Intent(mActivity, ORDActivity.class)); break;
-                case "BMI Calculator": mActivity.startActivity(new Intent(mActivity, BmiCalculatorActivity.class)); break;
-                default: Toast.makeText(v.getContext(), "This utility is unimplemented!", Toast.LENGTH_SHORT).show(); break;
+            String link = title.getText().toString();
+            Log.i("MainMenuAdapter", "Clicked on " + link);
+            int index = Arrays.asList(v.getContext().getResources().getStringArray(R.array.mainmenu)).indexOf(link);
+            String className = v.getContext().getResources().getStringArray(R.array.mainmenulink)[index];
+            Log.i("MainMenuAdapter", "Attempting to navigate to " + className);
+            try {
+                Class classObj = Class.forName(className);
+                mActivity.startActivity(new Intent(mActivity, classObj));
+            } catch (ClassNotFoundException e) {
+                Log.e("MainMenuAdapter", "Class Not Found: " + className);
+                e.printStackTrace();
             }
         }
 
