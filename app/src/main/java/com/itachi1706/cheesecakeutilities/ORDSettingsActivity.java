@@ -62,19 +62,6 @@ public class ORDSettingsActivity extends AppCompatActivity {
         ptpEt = (EditText) findViewById(R.id.etPTP);
         pesStatusSpinner = (Spinner) findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
-        pesStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("PES UPDATE", pesStatusSpinner.getSelectedItem().toString());
-                ORDSettingsActivity.this.pesStatusString = pesStatusSpinner.getSelectedItem().toString();
-                ORDSettingsActivity.this.updateText(UPDATE_STATUS);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override
@@ -88,6 +75,21 @@ public class ORDSettingsActivity extends AppCompatActivity {
         if (statusTmp != 0) {
             this.pesStatusSpinner.setSelection(statusTmp, true);
         }
+        this.pesStatusString = this.pesStatusSpinner.getSelectedItem().toString();
+        this.updateText(UPDATE_NONE);
+        pesStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("PES UPDATE", pesStatusSpinner.getSelectedItem().toString());
+                ORDSettingsActivity.this.pesStatusString = pesStatusSpinner.getSelectedItem().toString();
+                ORDSettingsActivity.this.updateText(UPDATE_STATUS);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void saveSettings() {
