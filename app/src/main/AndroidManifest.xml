@@ -70,7 +70,9 @@
 
         <activity android:name=".Modules.ListApplications.ListApplicationsActivity" />
         <activity android:name=".Modules.ORDCountdown.ORDActivity" />
-        <activity android:name=".Modules.ORDCountdown.ORDSettingsActivity" android:label="@string/ord_settings_label" />
+        <activity
+            android:name=".Modules.ORDCountdown.ORDSettingsActivity"
+            android:label="@string/ord_settings_label" />
 
         <receiver
             android:name=".Modules.ORDCountdown.WidgetProviders.ORDCountdownWidgetProvider"
@@ -96,6 +98,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/popcountdown_widget_provider_info" />
         </receiver>
+
+        <activity android:name=".BmiCalculatorActivity"></activity>
     </application>
 
 </manifest>

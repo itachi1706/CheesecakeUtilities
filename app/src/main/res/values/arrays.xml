@@ -8,6 +8,7 @@
         <item>Disable Camera</item>
         <item>Application List</item>
         <item>ORD Countdown</item>
+        <item>BMI Calculator</item>
     </string-array>
     <string-array name="pes">
         <item>A/B</item>
