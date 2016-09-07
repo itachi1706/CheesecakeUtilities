@@ -11,7 +11,7 @@ import android.view.MenuItem;
  * for com.itachi1706.cheesecakeutilities in CheesecakeUtilities
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    abstract String getHelpDescription();
+    public abstract String getHelpDescription();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

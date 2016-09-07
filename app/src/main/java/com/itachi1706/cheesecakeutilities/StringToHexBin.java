@@ -111,7 +111,7 @@ public class StringToHexBin extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "Translates normal language into machine code and back.";
     }
 }
