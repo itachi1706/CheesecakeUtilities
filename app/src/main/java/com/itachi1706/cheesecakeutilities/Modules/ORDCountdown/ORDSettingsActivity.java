@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities;
+package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.itachi1706.cheesecakeutilities.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

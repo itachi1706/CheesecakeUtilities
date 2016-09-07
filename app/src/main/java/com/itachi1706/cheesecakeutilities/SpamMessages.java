@@ -245,7 +245,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "Sends a SMS message multiple times to the same contact.\n\n" +
                 "Note: Spamming may be illegal in your country and may cost real money as it send SMS messages" +
                 ". Use with caution.\n\nThis app or the creator may not be held responsible for any " +

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities;
+package com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
+import com.itachi1706.cheesecakeutilities.R;
 
 public class HtcSerialIdentificationActivity extends BaseActivity {
 
@@ -126,7 +128,7 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "Identifies the manufacturing date and location of HTC devices based on their serial numbers";
     }
 }

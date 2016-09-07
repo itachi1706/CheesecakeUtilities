@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities;
+package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,12 +27,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
-import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FileHelper;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Services.FanficCompressionService;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.FanfictionDatabase;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Tasks.ScanStorageDetails;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.io.File;
@@ -285,7 +287,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "Compacts fanfiction folders by removing unneeded folders/files.";
     }
 

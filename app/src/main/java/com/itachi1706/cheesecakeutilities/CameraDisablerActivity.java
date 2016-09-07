@@ -161,7 +161,7 @@ public class CameraDisablerActivity extends BaseActivity {
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "Allows you to control whether or not to enable/disable the camera on the device.\n" +
                 "Note: Device Admin Permissions are required";
     }

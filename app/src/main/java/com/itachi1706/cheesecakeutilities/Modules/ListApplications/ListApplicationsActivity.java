@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities;
+package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,10 +30,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.Modules.ListApplications.BackupHelper;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Broadcasts.ListAppBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
+import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,7 +90,7 @@ public class ListApplicationsActivity extends BaseActivity {
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "List all applications installed on your device and their targeted API Levels\nComing Soon: " +
                 "Showing a more understandable API level";
     }

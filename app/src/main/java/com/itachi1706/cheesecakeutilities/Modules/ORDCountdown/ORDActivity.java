@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities;
+package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -132,7 +134,7 @@ public class ORDActivity extends BaseActivity {
     }
 
     @Override
-    String getHelpDescription() {
+    public String getHelpDescription() {
         return "A Basic ORD Countdown timer for Singapore NSF";
     }
 

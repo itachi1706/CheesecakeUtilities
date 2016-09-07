@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor;
+package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers;
 
 import android.os.Environment;
 import android.os.StatFs;

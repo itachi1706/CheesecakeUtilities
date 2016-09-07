@@ -1,8 +1,8 @@
-package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
+package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers;
 
 import android.util.Log;
 
-import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FileHelper;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
