@@ -99,7 +99,8 @@
                 android:resource="@xml/popcountdown_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".BmiCalculatorActivity"></activity>
+        <activity android:name=".BmiCalculatorActivity" />
+        <activity android:name=".Modules.IPPTCalculator.IpptCalculatorActivity"></activity>
     </application>
 
 </manifest>
