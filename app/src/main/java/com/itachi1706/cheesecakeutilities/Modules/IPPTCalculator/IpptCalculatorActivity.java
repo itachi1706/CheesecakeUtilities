@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +22,7 @@ public class IpptCalculatorActivity extends AppCompatActivity {
     private Spinner genderSpinner, ageSpinner;
     private EditText runMin, runSec, pushup, situp;
     private TextInputLayout pushupLayout;
-    private Button calculate;
+    private Button calculate, scores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class IpptCalculatorActivity extends AppCompatActivity {
         pushup = (EditText) findViewById(R.id.etPushUps);
         situp = (EditText) findViewById(R.id.etSitUps);
         calculate = (Button) findViewById(R.id.btnCalculate);
+        scores = (Button) findViewById(R.id.btnViewScoring);
         pushupLayout = (TextInputLayout) findViewById(R.id.til_etPushUps);
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -56,6 +58,12 @@ public class IpptCalculatorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 calculate();
+            }
+        });
+        scores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), IpptScoringActivity.class));
             }
         });
     }
@@ -83,26 +91,4 @@ public class IpptCalculatorActivity extends AppCompatActivity {
         return !runSec.getText().toString().isEmpty() && !runMin.getText().toString().isEmpty()
                 && !situp.getText().toString().isEmpty() && !pushup.getText().toString().isEmpty();
     }
-
-
-    // TODO: Move to the score table activity
-        /*genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String g = genderSpinner.getSelectedItem().toString();
-                Log.d("IPPT UPDATE", g);
-                int gender = JsonHelper.getGender(g);
-                if (gender == JsonHelper.FEMALE)
-                    exerciseSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item,
-                            Arrays.asList(getResources().getStringArray(R.array.exercisefemale))));
-                else
-                    exerciseSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item,
-                            Arrays.asList(getResources().getStringArray(R.array.exercisemale))));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
 }

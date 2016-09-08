@@ -100,7 +100,8 @@
         </receiver>
 
         <activity android:name=".BmiCalculatorActivity" />
-        <activity android:name=".Modules.IPPTCalculator.IpptCalculatorActivity"></activity>
+        <activity android:name=".Modules.IPPTCalculator.IpptCalculatorActivity" />
+        <activity android:name=".Modules.IPPTCalculator.IpptScoringActivity"></activity>
     </application>
 
 </manifest>
