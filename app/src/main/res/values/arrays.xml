@@ -9,7 +9,7 @@
         <item>Application List</item>
         <item>ORD Countdown</item>
         <item>BMI Calculator</item>
-        <item>IpptCalculatorActivity</item>
+        <item>IPPT Calculator</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>com.itachi1706.cheesecakeutilities.StringToHexBin</item>
