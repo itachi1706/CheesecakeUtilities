@@ -73,7 +73,9 @@ public class IpptCalculatorActivity extends AppCompatActivity {
         int ageGroup = JsonHelper.getAgeGroup(ageSpinner.getSelectedItem().toString(), this);
         int gender = JsonHelper.getGender(genderSpinner.getSelectedItem().toString());
         int score = JsonHelper.calculateScore(pu, su, rm, rs, ageGroup, gender, this);
-        new AlertDialog.Builder(this).setMessage("Score: " + score + "\nResults: " + JsonHelper.getScoreResults(score)).show();
+        new AlertDialog.Builder(this).setTitle("IPPT Score")
+                .setMessage("Score: " + score + "\nResults: " + JsonHelper.getScoreResults(score))
+                .setPositiveButton(R.string.dialog_action_positive_close, null).show();
 
     }
 

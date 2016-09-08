@@ -74,7 +74,7 @@ public class BmiCalculatorActivity extends BaseActivity {
                         "Overweight = 25 - 30\n" +
                         "Class I Obese = 30 - 35\n" +
                         "Class II Obese = 35 - 40\n" +
-                        "Class III Obese = > 40").setPositiveButton("Close", null).show();
+                        "Class III Obese = > 40").setPositiveButton(R.string.dialog_action_positive_close, null).show();
     }
 
     private boolean validate() {
