@@ -8,15 +8,11 @@ import com.google.gson.JsonObject;
  */
 public class Main {
 
-    private JsonObject ageRangeText, ageRangeLessThanOrEqualsTo, pass;
+    private JsonObject ageRangeText, pass;
     private Gender dataMale, dataFemale;
 
     public JsonObject getAgeRangeText() {
         return ageRangeText;
-    }
-
-    public JsonObject getAgeRangeLessThanOrEqualsTo() {
-        return ageRangeLessThanOrEqualsTo;
     }
 
     public JsonObject getPass() {
