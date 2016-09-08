@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,46 @@ public class JsonHelper {
             tmp.add(key);
         }
         return tmp;
+    }
+
+    public static final int PUSHUP = 0, RUN = 1, SITUP = 2;
+
+    public static int getExercise(String exercise) {
+        switch (exercise.toLowerCase()) {
+            case "2.4km run": return RUN;
+            case "sit-ups": return SITUP;
+            case "bent knee push-ups":
+            case "push-ups": return PUSHUP;
+        }
+        return RUN;
+    }
+
+    public static List<String> getExerciseScores(int age, int exercise, int gender, Context context) {
+        return getExerciseScores(age, exercise, gender, readFromJsonRaw(context));
+    }
+
+    public static List<String> getExerciseScores(int age, int exercise, int gender, Main object) {
+        Gender exercisesScore;
+        if (gender == FEMALE) exercisesScore = object.getDataFemale();
+        else exercisesScore = object.getDataMale();
+
+        JsonObject scoreBoard = null;
+        switch (exercise) {
+            case RUN: scoreBoard = exercisesScore.getRun(); break;
+            case SITUP: scoreBoard = exercisesScore.getSitups(); break;
+            case PUSHUP: scoreBoard = exercisesScore.getPushups(); break;
+        }
+
+        if (scoreBoard == null) return null;
+
+        List<String> scores = new ArrayList<>();
+        for (Map.Entry<String,JsonElement> entry : scoreBoard.entrySet()) {
+            String key = entry.getKey();
+            JsonElement element = entry.getValue().getAsJsonObject().get(age + "");
+            scores.add(key + "\t\t-\t\t" + element + " pts");
+        }
+        Collections.reverse(scores);
+        return scores;
     }
 
     public static int getAgeGroup(String ageText, Context context) {

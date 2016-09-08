@@ -52,7 +52,7 @@ public class ListApplicationsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_applications);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_test);
+        recyclerView = (RecyclerView) findViewById(R.id.list_app_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
