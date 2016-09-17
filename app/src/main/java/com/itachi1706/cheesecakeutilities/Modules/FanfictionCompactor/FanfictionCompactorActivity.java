@@ -140,6 +140,12 @@ public class FanfictionCompactorActivity extends BaseActivity {
     private void startCompactingService() {
         File file = FileHelper.getDefaultFolder();
 
+        // Make sure DB and folder exists
+        if (!file.exists() || !FanfictionDatabase.databaseExists()) {
+            Toast.makeText(this, "Unable to compact. No stories", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         float freespace = FileHelper.megabytesAvailable(file);
         Log.i("MemoryCheck", "Free Space: " + freespace + " | Total Size: " + CommonMethods.readableFileSize(totalSize) + " (" + totalSize + ")");
         freespace = freespace * 1024 * 1024; // Convert from MB to Bytes
@@ -206,6 +212,20 @@ public class FanfictionCompactorActivity extends BaseActivity {
     }
 
     private void processPruningDetails() {
+        // Make sure the file and folder exists
+        if (!FanfictionDatabase.databaseExists()) {
+            new AlertDialog.Builder(this).setTitle("No Database Found").setCancelable(false)
+                    .setMessage("Unable to find stories.db file in " + FanfictionDatabase.getDbFileFolder()
+                            + ". Please export database to use this utility").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            })
+                    .show();
+            //return;
+        }
+        Log.i("FanficCompactor", "Database exists. Continuing...");
         new ScanStorageDetails(new FanficHandler(this)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 

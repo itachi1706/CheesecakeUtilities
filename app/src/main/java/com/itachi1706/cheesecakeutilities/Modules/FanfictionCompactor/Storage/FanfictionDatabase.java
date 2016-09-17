@@ -2,7 +2,9 @@ package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Environment;
+import android.util.Log;
 
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
 
@@ -34,18 +36,31 @@ public class FanfictionDatabase {
         db = SQLiteDatabase.openOrCreateDatabase(file, null);
     }
 
-    public ArrayList<FanficStories> getAllStories(){
+    public ArrayList<FanficStories> getAllStories() {
         String queryString = "SELECT * FROM " + TABLE_STORIES + ";";
-        Cursor cursor = db.rawQuery(queryString, null);
-        ArrayList<FanficStories> result = new ArrayList<>();
+        try {
+            Cursor cursor = db.rawQuery(queryString, null);
+            ArrayList<FanficStories> result = new ArrayList<>();
 
-        if (cursor.moveToFirst()){
-            do {
-                result.add(new FanficStories(cursor.getInt(0), cursor.getInt(1), cursor.getInt(3), cursor.getString(2), cursor.getString(5)));
-            } while (cursor.moveToNext());
+            if (cursor.moveToFirst()) {
+                do {
+                    result.add(new FanficStories(cursor.getInt(0), cursor.getInt(1), cursor.getInt(3), cursor.getString(2), cursor.getString(5)));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return result;
+        } catch (SQLiteException e) {
+            Log.e("FanficDB", "Error: " + e.getLocalizedMessage());
+            return new ArrayList<>();
         }
-        cursor.close();
-        return result;
+    }
+
+    public static boolean databaseExists() {
+        return new File(DB_FILE_PATH).exists();
+    }
+
+    public static String getDbFileFolder() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
     public static String getDbFilePath() {
