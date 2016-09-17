@@ -57,27 +57,18 @@
                 android:id="@+id/spinnerGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:entries="@array/gender" />
 
             <Spinner
                 android:id="@+id/spinnerAge"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/ippt_pb"
-                android:layout_alignStart="@+id/ippt_pb"
-                android:layout_below="@+id/spinnerGender" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <Spinner
             android:id="@+id/spinnerExercise"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/spinnerAge" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

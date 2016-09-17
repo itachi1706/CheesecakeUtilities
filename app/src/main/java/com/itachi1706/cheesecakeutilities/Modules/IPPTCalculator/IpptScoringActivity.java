@@ -1,8 +1,8 @@
 package com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,10 +55,10 @@ public class IpptScoringActivity extends AppCompatActivity {
                 Log.d("IPPT UPDATE", g);
                 int gender = JsonHelper.getGender(g);
                 if (gender == JsonHelper.FEMALE)
-                    exerciseSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item,
+                    exerciseSpinner.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
                             Arrays.asList(getResources().getStringArray(R.array.exercisefemale))));
                 else
-                    exerciseSpinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item,
+                    exerciseSpinner.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
                             Arrays.asList(getResources().getStringArray(R.array.exercisemale))));
                 updateRecyclerView();
             }
