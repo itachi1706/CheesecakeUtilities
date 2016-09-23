@@ -126,41 +126,36 @@ public class IpptCalculatorActivity extends BaseActivity {
 
             if (countOfErrors == 1) {
                 // Calculate how many more reps to go
+                int ptsmoreactive = 61 - score;
                 switch (error) {
                     case SITUP:
-                        int situpptsmoreactive = 61 - score;
-                        int situpptsmorensmen = 51 - score;
-                        String situpmoreactive = JsonHelper.countSitupMore(situpptsmoreactive, ageGroup, exercisesScore);
-                        String situpmorensmen = JsonHelper.countSitupMore(situpptsmorensmen, ageGroup, exercisesScore);
                         message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
                                 .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
                         message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
                                 .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
 
-                        message.append("\n\nYou need ").append(situpmoreactive).append(" (Active)/").append(situpmorensmen).append(" (NSMen) sit ups to get a pass");
+                        message.append("\n\nYou need ").append(JsonHelper.countSitupMore(ptsmoreactive, ageGroup, exercisesScore))
+                                .append(" (Active)/").append(JsonHelper.countSitupMore(ptsmoreactive - 10, ageGroup, exercisesScore))
+                                .append(" (NSMen) sit ups to get a pass");
                         break;
                     case PUSHUP:
-                        int pushupptsmoreactive = 61 - score;
-                        int pushupptsmorensmen = 51 - score;
-                        String pushupmoreactive = JsonHelper.countPushupMore(pushupptsmoreactive, ageGroup, exercisesScore);
-                        String pushupmorensmen = JsonHelper.countPushupMore(pushupptsmorensmen, ageGroup, exercisesScore);
                         message.append("\n\nDetails:\nSit Ups: ").append(su).append(" (")
                                 .append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
                         message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
                                 .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
 
-                        message.append("\n\nYou need ").append(pushupmoreactive).append(" (Active)/").append(pushupmorensmen).append(" (NSMen) push ups to get a pass");
+                        message.append("\n\nYou need ").append(JsonHelper.countPushupMore(ptsmoreactive, ageGroup, exercisesScore))
+                                .append(" (Active)/").append(JsonHelper.countPushupMore(ptsmoreactive - 10, ageGroup, exercisesScore))
+                                .append(" (NSMen) push ups to get a pass");
                         break;
                     case RUN:
-                        int runptsmoreactive = 61 - score;
-                        int runptsmorensmen = 51 - score;
-                        String runmoreactive = JsonHelper.countRunMore(runptsmoreactive, ageGroup, exercisesScore);
-                        String runmorensmen = JsonHelper.countRunMore(runptsmorensmen, ageGroup, exercisesScore);
                         message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
                                 .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
                         message.append("\nSit Ups: ").append(su).append(" (").append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
 
-                        message.append("\n\nYou need to get ").append(runmoreactive).append(" (Active)/").append(runmorensmen).append(" (NSMen) for running to get a pass");
+                        message.append("\n\nYou need to get ").append(JsonHelper.countRunMore(ptsmoreactive, ageGroup, exercisesScore))
+                                .append(" (Active)/").append(JsonHelper.countRunMore(ptsmoreactive - 10, ageGroup, exercisesScore))
+                                .append(" (NSMen) for running to get a pass");
                 }
             }
         }
