@@ -43,6 +43,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/etRun"
+            android:maxLength="2"
             android:hint="2.4km Run (min)" />
     </android.support.design.widget.TextInputLayout>
 
@@ -62,7 +63,8 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/etRunSec"
-            android:hint="2.4km Run (sec)" />
+            android:hint="2.4km Run (sec)"
+            android:maxLength="2" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -80,6 +82,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/etPushUps"
+            android:maxLength="2"
             android:hint="Push Ups" />
     </android.support.design.widget.TextInputLayout>
 
@@ -97,6 +100,7 @@
         android:layout_height="match_parent"
         android:inputType="number"
         android:ems="10"
+        android:maxLength="2"
         android:id="@+id/etSitUps"
         android:hint="Sit Ups" />
     </android.support.design.widget.TextInputLayout>
@@ -118,6 +122,16 @@
         android:id="@+id/btnViewScoring"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/til_etSitUps"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="62dp"
+        android:id="@+id/tvResults"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
 </RelativeLayout>
