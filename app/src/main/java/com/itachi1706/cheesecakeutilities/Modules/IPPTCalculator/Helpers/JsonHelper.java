@@ -99,8 +99,7 @@ public class JsonHelper {
 
     public static List<String> getExerciseScores(int age, int exercise, int gender, Main object) {
         Gender exercisesScore;
-        if (gender == FEMALE) exercisesScore = object.getDataFemale();
-        else exercisesScore = object.getDataMale();
+        exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
 
         JsonObject scoreBoard = null;
         switch (exercise) {
@@ -143,8 +142,7 @@ public class JsonHelper {
 
     public static int calculateScore(int pushup, int situp, int runMin, int runSec, int age, int gender, Main object) {
         Gender exercisesScore;
-        if (gender == FEMALE) exercisesScore = object.getDataFemale();
-        else exercisesScore = object.getDataMale();
+        exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
         Log.i("IPPTCalc", "Age Group: " + age);
 
         int situpScore = getSitUpScore(situp, age, exercisesScore);

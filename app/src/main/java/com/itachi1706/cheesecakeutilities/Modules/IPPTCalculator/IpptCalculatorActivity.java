@@ -18,7 +18,11 @@ import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper;
+import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Gender;
+import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
+
+import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.FEMALE;
 
 public class IpptCalculatorActivity extends BaseActivity {
 
@@ -49,7 +53,7 @@ public class IpptCalculatorActivity extends BaseActivity {
                 String g = genderSpinner.getSelectedItem().toString();
                 Log.d("IPPT UPDATE", g);
                 int gender = JsonHelper.getGender(g);
-                if (gender == JsonHelper.FEMALE) pushupLayout.setHint("Bent Knee Push-Ups");
+                if (gender == FEMALE) pushupLayout.setHint("Bent Knee Push-Ups");
                 else pushupLayout.setHint("Push-Ups");
             }
 
@@ -88,10 +92,18 @@ public class IpptCalculatorActivity extends BaseActivity {
         int score = JsonHelper.calculateScore(pu, su, rm, rs, ageGroup, gender, this);
         StringBuilder message = new StringBuilder();
         message.append("Score: ").append(score).append("\nResults: ").append(JsonHelper.getScoreResults(score));
+        results.setText(message.toString());
+        Gender exercisesScore;
+        Main object = JsonHelper.readFromJsonRaw(this);
+        exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
+        message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
+                .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
+        message.append("\nSit Ups: ").append(su).append(" (").append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
+        message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
+                .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
         new AlertDialog.Builder(this).setTitle("IPPT Score")
                 .setMessage(message.toString())
                 .setPositiveButton(R.string.dialog_action_positive_close, null).show();
-        results.setText(message.toString());
 
     }
 
