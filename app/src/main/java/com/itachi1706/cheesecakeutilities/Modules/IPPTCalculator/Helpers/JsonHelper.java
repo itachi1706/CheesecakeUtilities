@@ -81,7 +81,7 @@ public class JsonHelper {
         return tmp;
     }
 
-    public static final int PUSHUP = 0, RUN = 1, SITUP = 2;
+    public static final int PUSHUP = 0, RUN = 1, SITUP = 2, UNKNOWN = 3;
 
     public static int getExercise(String exercise) {
         switch (exercise.toLowerCase()) {
@@ -98,8 +98,7 @@ public class JsonHelper {
     }
 
     public static List<String> getExerciseScores(int age, int exercise, int gender, Main object) {
-        Gender exercisesScore;
-        exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
+        Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
 
         JsonObject scoreBoard = null;
         switch (exercise) {
@@ -141,8 +140,7 @@ public class JsonHelper {
     }
 
     public static int calculateScore(int pushup, int situp, int runMin, int runSec, int age, int gender, Main object) {
-        Gender exercisesScore;
-        exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
+        Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
         Log.i("IPPTCalc", "Age Group: " + age);
 
         int situpScore = getSitUpScore(situp, age, exercisesScore);
@@ -152,6 +150,28 @@ public class JsonHelper {
         Log.i("IPPTCalc", "Pushup Score: " + pushup + " (" + pushupScore + ")");
         Log.i("IPPTCalc", "Run Score: " + runMin + ":" + runSec + " (" + runScore + ")");
         return situpScore+pushupScore+runScore;
+    }
+
+    public static int calculateIncompleteScore(int pushup, int situp, int runMin, int runSec, int age, int gender, Context context) {
+        return calculateIncompleteScore(pushup, situp, runMin, runSec, age, gender, readFromJsonRaw(context));
+    }
+
+    public static int calculateIncompleteScore(int pushup, int situp, int runMin, int runSec, int age, int gender, Main object) {
+        Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
+        Log.i("IPPTCalc", "Age Group: " + age);
+
+        int situpScore = (situp != -1) ? getSitUpScore(situp, age, exercisesScore) : -1;
+        int pushupScore = (pushup != -1) ? getPushUpScore(pushup, age, exercisesScore) : -1;
+        int runScore = (runMin != -1) ? getRunScore(runMin, runSec, age, exercisesScore) : -1;
+        Log.i("IPPTCalc", "Situp Score: " + situp + " (" + situpScore + ")");
+        Log.i("IPPTCalc", "Pushup Score: " + pushup + " (" + pushupScore + ")");
+        Log.i("IPPTCalc", "Run Score: " + runMin + ":" + runSec + " (" + runScore + ")");
+
+        int totalScore = 0;
+        if (situpScore != -1) totalScore += situpScore;
+        if (pushupScore != -1) totalScore += pushupScore;
+        if (runScore != -1) totalScore += runScore;
+        return totalScore;
     }
 
     public static String getScoreResults(int score) {
@@ -209,5 +229,70 @@ public class JsonHelper {
         if (element == null) return 0; // Presume run out of time
         JsonObject el = element.getAsJsonObject();
         return el.get(ageGroup + "").getAsInt();
+    }
+
+    public static String countSitupMore(int neededPts, int ageGroup, Gender object) {
+        final int SITUP_MAX = 25;
+        if (neededPts > SITUP_MAX) return "Cannot pass already";
+        if (neededPts < 0) return "Pass Already";
+
+        JsonObject obj = object.getSitups();
+        JsonObject element = null;
+        // Try 10 times, increasing pts every time
+        for (int i = 0; i < 10; i++) {
+            for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
+                String key = entry.getKey();
+                element = entry.getValue().getAsJsonObject();
+                if (element.get(ageGroup + "").getAsInt() == neededPts) {
+                    return key;
+                }
+            }
+            neededPts++;
+        }
+        return "Cannot Calculate";
+    }
+
+    public static String countPushupMore(int neededPts, int ageGroup, Gender object) {
+        final int PUSHUP_MAX = 25;
+        if (neededPts > PUSHUP_MAX) return "Cannot pass already";
+        if (neededPts < 0) return "Pass Already";
+
+        JsonObject obj = object.getPushups();
+        JsonObject element = null;
+        // Try 10 times, increasing pts every time
+        for (int i = 0; i < 10; i++) {
+            for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
+                String key = entry.getKey();
+                element = entry.getValue().getAsJsonObject();
+                if (element.get(ageGroup + "").getAsInt() == neededPts) {
+                    return key;
+                }
+            }
+            neededPts++;
+        }
+        return "Cannot Calculate";
+    }
+
+    public static String countRunMore(int neededPts, int ageGroup, Gender object) {
+        final int RUN_MAX = 50;
+        if (neededPts > RUN_MAX) return "Cannot pass already";
+        if (neededPts < 0) return "Pass Already";
+
+        JsonObject obj = object.getRun();
+        JsonObject element = null;
+        // Try 10 times, increasing pts every time
+        for (int i = 0; i < 10; i++) {
+            for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
+                String key = entry.getKey();
+                element = entry.getValue().getAsJsonObject();
+                if (element.get(ageGroup + "").getAsInt() == neededPts) {
+                    return key;
+                }
+            }
+            neededPts++;
+        }
+        return "Cannot Calculate";
+
+
     }
 }
