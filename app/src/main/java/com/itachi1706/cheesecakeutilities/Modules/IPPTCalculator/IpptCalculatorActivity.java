@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
@@ -23,6 +24,7 @@ public class IpptCalculatorActivity extends BaseActivity {
 
     private Spinner genderSpinner, ageSpinner;
     private EditText runMin, runSec, pushup, situp;
+    private TextView results;
     private TextInputLayout pushupLayout;
     private Button calculate, scores;
 
@@ -39,6 +41,7 @@ public class IpptCalculatorActivity extends BaseActivity {
         situp = (EditText) findViewById(R.id.etSitUps);
         calculate = (Button) findViewById(R.id.btnCalculate);
         scores = (Button) findViewById(R.id.btnViewScoring);
+        results = (TextView) findViewById(R.id.tvResults);
         pushupLayout = (TextInputLayout) findViewById(R.id.til_etPushUps);
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -83,9 +86,12 @@ public class IpptCalculatorActivity extends BaseActivity {
         int ageGroup = JsonHelper.getAgeGroup(ageSpinner.getSelectedItem().toString(), this);
         int gender = JsonHelper.getGender(genderSpinner.getSelectedItem().toString());
         int score = JsonHelper.calculateScore(pu, su, rm, rs, ageGroup, gender, this);
+        StringBuilder message = new StringBuilder();
+        message.append("Score: ").append(score).append("\nResults: ").append(JsonHelper.getScoreResults(score));
         new AlertDialog.Builder(this).setTitle("IPPT Score")
-                .setMessage("Score: " + score + "\nResults: " + JsonHelper.getScoreResults(score))
+                .setMessage(message.toString())
                 .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+        results.setText(message.toString());
 
     }
 
