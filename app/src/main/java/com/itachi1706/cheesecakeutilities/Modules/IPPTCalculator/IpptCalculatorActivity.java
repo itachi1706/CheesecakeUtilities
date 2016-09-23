@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper;
@@ -23,6 +22,10 @@ import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Mai
 import com.itachi1706.cheesecakeutilities.R;
 
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.FEMALE;
+import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.PUSHUP;
+import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.RUN;
+import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.SITUP;
+import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.UNKNOWN;
 
 public class IpptCalculatorActivity extends BaseActivity {
 
@@ -78,38 +81,97 @@ public class IpptCalculatorActivity extends BaseActivity {
     }
 
     private void calculate() {
-        if (!validate()) {
-            Toast.makeText(this, "Unable to calculate. Please make sure all fields are filled", Toast.LENGTH_LONG).show();
-            return;
-        }
+        int rm = (runMin.getText().toString().isEmpty()) ? -1 : Integer.parseInt(runMin.getText().toString());
+        int rs = (runSec.getText().toString().isEmpty()) ? 0 : Integer.parseInt(runSec.getText().toString());
+        int su = (situp.getText().toString().isEmpty()) ? -1 : Integer.parseInt(situp.getText().toString());
+        int pu = (pushup.getText().toString().isEmpty()) ? -1 : Integer.parseInt(pushup.getText().toString());
 
-        int rm = Integer.parseInt(runMin.getText().toString());
-        int rs = Integer.parseInt(runSec.getText().toString());
-        int su = Integer.parseInt(situp.getText().toString());
-        int pu = Integer.parseInt(pushup.getText().toString());
         int ageGroup = JsonHelper.getAgeGroup(ageSpinner.getSelectedItem().toString(), this);
         int gender = JsonHelper.getGender(genderSpinner.getSelectedItem().toString());
-        int score = JsonHelper.calculateScore(pu, su, rm, rs, ageGroup, gender, this);
-        StringBuilder message = new StringBuilder();
-        message.append("Score: ").append(score).append("\nResults: ").append(JsonHelper.getScoreResults(score));
-        results.setText(message.toString());
-        Gender exercisesScore;
+        int score = 0;
         Main object = JsonHelper.readFromJsonRaw(this);
-        exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
-        message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
-                .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
-        message.append("\nSit Ups: ").append(su).append(" (").append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
-        message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
-                .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
+        Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
+
+        StringBuilder message = new StringBuilder();
+        if (!incomplete(rm, rs, su, pu)) {
+            score = JsonHelper.calculateScore(pu, su, rm, rs, ageGroup, gender, this);
+            message.append("Score: ").append(score).append("\nResults: ").append(JsonHelper.getScoreResults(score));
+            results.setText(message.toString());
+
+
+            message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
+                    .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
+            message.append("\nSit Ups: ").append(su).append(" (").append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
+            message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
+                    .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
+        } else {
+            score = JsonHelper.calculateIncompleteScore(pu, su, rm, rs, ageGroup, gender, this);
+            message.append("Score: ").append(score).append("\nResults: Incomplete Score");
+            results.setText(message.toString());
+
+            int countOfErrors = 0;
+            int error = UNKNOWN;
+            if (su == -1) {
+                countOfErrors++;
+                error = SITUP;
+            }
+            if (pu == -1) {
+                countOfErrors++;
+                error = PUSHUP;
+            }
+            if (rm == -1) {
+                countOfErrors++;
+                error = RUN;
+            }
+
+            if (countOfErrors == 1) {
+                // Calculate how many more reps to go
+                switch (error) {
+                    case SITUP:
+                        int situpptsmoreactive = 61 - score;
+                        int situpptsmorensmen = 51 - score;
+                        String situpmoreactive = JsonHelper.countSitupMore(situpptsmoreactive, ageGroup, exercisesScore);
+                        String situpmorensmen = JsonHelper.countSitupMore(situpptsmorensmen, ageGroup, exercisesScore);
+                        message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
+                                .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
+                        message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
+                                .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
+
+                        message.append("\n\nYou need ").append(situpmoreactive).append(" (Active)/").append(situpmorensmen).append(" (NSMen) sit ups to get a pass");
+                        break;
+                    case PUSHUP:
+                        int pushupptsmoreactive = 61 - score;
+                        int pushupptsmorensmen = 51 - score;
+                        String pushupmoreactive = JsonHelper.countPushupMore(pushupptsmoreactive, ageGroup, exercisesScore);
+                        String pushupmorensmen = JsonHelper.countPushupMore(pushupptsmorensmen, ageGroup, exercisesScore);
+                        message.append("\n\nDetails:\nSit Ups: ").append(su).append(" (")
+                                .append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
+                        message.append("\n2.4 Run: ").append(rm).append(":").append(rs).append(" (")
+                                .append(JsonHelper.getRunScore(rm, rs, ageGroup, exercisesScore)).append(" pts)");
+
+                        message.append("\n\nYou need ").append(pushupmoreactive).append(" (Active)/").append(pushupmorensmen).append(" (NSMen) push ups to get a pass");
+                        break;
+                    case RUN:
+                        int runptsmoreactive = 61 - score;
+                        int runptsmorensmen = 51 - score;
+                        String runmoreactive = JsonHelper.countRunMore(runptsmoreactive, ageGroup, exercisesScore);
+                        String runmorensmen = JsonHelper.countRunMore(runptsmorensmen, ageGroup, exercisesScore);
+                        message.append("\n\nDetails:\nPush-Ups: ").append(pu).append(" (")
+                                .append(JsonHelper.getPushUpScore(pu, ageGroup, exercisesScore)).append(" pts)");
+                        message.append("\nSit Ups: ").append(su).append(" (").append(JsonHelper.getSitUpScore(su, ageGroup, exercisesScore)).append(" pts)");
+
+                        message.append("\n\nYou need to get ").append(runmoreactive).append(" (Active)/").append(runmorensmen).append(" (NSMen) for running to get a pass");
+                }
+            }
+        }
         new AlertDialog.Builder(this).setTitle("IPPT Score")
                 .setMessage(message.toString())
                 .setPositiveButton(R.string.dialog_action_positive_close, null).show();
 
     }
 
-    private boolean validate() {
-        return !runSec.getText().toString().isEmpty() && !runMin.getText().toString().isEmpty()
-                && !situp.getText().toString().isEmpty() && !pushup.getText().toString().isEmpty();
+    private boolean incomplete(int... values) {
+        return values.length != 4 || values[0] == -1 || values[1] == -1 || values[2] == -1 || values[3] == -1;
     }
 
     @Override
