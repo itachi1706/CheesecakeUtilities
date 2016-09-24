@@ -329,6 +329,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
 
             switch (msg.what) {
                 case ScanStorageDetails.SCAN_STORAGE_RESULT:
+                    if (activity == null) break; // Activity died for some reason, dont do anything
                     activity.totalSize = msg.getData().getLong("filesize");
                     long totalSize = activity.totalSize;
                     int dbstories = msg.getData().getInt("dbcount");
