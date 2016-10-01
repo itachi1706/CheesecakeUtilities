@@ -50,7 +50,11 @@ android {
             ext.enableCrashlytics = false
         }
     }
-
+    // This enables long timeouts required on slow environments, e.g. Travis
+    adbOptions {
+        timeOutInMs 10 * 60 * 1000  // Set the timeout to 10 minutes
+        installOptions "-d","-t"
+    }
     dexOptions {
         preDexLibraries = !isTravis
     }
