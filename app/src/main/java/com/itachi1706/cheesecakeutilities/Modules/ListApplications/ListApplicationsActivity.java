@@ -64,6 +64,7 @@ public class ListApplicationsActivity extends BaseActivity {
 
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(ListAppBroadcast.LISTAPP_BROADCAST_BACKUP);
+        filter.addAction(ListAppBroadcast.LISTAPP_BROADCAST_APPINFO);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
         Log.i("Backup", "Initialized Broadcast Receiver");
 
@@ -329,9 +330,21 @@ public class ListApplicationsActivity extends BaseActivity {
         }
 
         public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            String packageName = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE);
+            if (action.equals(ListAppBroadcast.LISTAPP_BROADCAST_APPINFO)) {
+               // TODO: Test app info screen
+                if (packageName.isEmpty() || packageName.equals("")) {
+                    Log.e("ListApp", "Invalid Package Name. Exiting");
+                    return;
+                }
+                Intent intent1 = new Intent(context, ListApplicationsDetailActivity.class);
+                intent1.putExtra("packageName", packageName);
+                context.startActivity(intent1);
+                return;
+            }
             String appname = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPNAME);
             String apppath = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH);
-            String packageName = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE);
             String appversion = intent.getStringExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION);
             if (appname == null || apppath == null || packageName == null) {
                 Toast.makeText(context, "Unable to backup app", Toast.LENGTH_LONG).show();

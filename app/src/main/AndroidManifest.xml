@@ -101,8 +101,10 @@
 
         <activity android:name=".BmiCalculatorActivity" />
         <activity android:name=".Modules.IPPTCalculator.IpptCalculatorActivity" />
-        <activity android:name=".Modules.IPPTCalculator.IpptScoringActivity"
-            android:label="IPPT Scoreboard"></activity>
+        <activity
+            android:name=".Modules.IPPTCalculator.IpptScoringActivity"
+            android:label="IPPT Scoreboard" />
+        <activity android:name=".Modules.ListApplications.ListApplicationsDetailActivity"></activity>
     </application>
 
 </manifest>
