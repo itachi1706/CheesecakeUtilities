@@ -223,7 +223,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
                 }
             })
                     .show();
-            //return;
+            return;
         }
         Log.i("FanficCompactor", "Database exists. Continuing...");
         new ScanStorageDetails(new FanficHandler(this)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
