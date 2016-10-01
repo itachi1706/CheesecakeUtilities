@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Broadcasts.ListAppBroadcast;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsDetailActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -134,7 +135,12 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
                             "\n\nAPI Version: " + appApiVersion.getText().toString() +
                             "\n\nApp Location: " + appLocation +
                             "\n\nPermissions List\n" + permissions)
-                    .setIcon(appIcon.getDrawable())
+                    .setIcon(appIcon.getDrawable()).setNegativeButton("Test", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sendTestIntent(view.getContext());
+                }
+            })
                     .setNeutralButton("App Settings", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -162,6 +168,13 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH, appLocation);
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION, version);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
+        }
+
+        private void sendTestIntent(Context context) {
+            // TODO: Test
+            Intent completeIntent = new Intent(ListAppBroadcast.LISTAPP_BROADCAST_APPINFO);
+            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
             LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
         }
 
