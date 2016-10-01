@@ -62,6 +62,31 @@ public class ORDSettingsActivity extends AppCompatActivity {
         ordEt = (EditText) findViewById(R.id.etORD);
         popEt = (EditText) findViewById(R.id.etPOP);
         ptpEt = (EditText) findViewById(R.id.etPTP);
+        popEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popDialog(v);
+            }
+        });
+        ptpEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ptpDialog(v);
+            }
+        });
+        ordEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ordDialog(v);
+            }
+        });
+        enlistEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enlistDialog(v);
+            }
+        });
+
         pesStatusSpinner = (Spinner) findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
     }
