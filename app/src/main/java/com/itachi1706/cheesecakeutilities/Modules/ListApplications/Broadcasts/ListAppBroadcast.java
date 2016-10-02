@@ -6,7 +6,6 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Broadcasts;
  */
 public class ListAppBroadcast {
     public static final String LISTAPP_BROADCAST_BACKUP = "com.itachi1706.cheesecakeutilities.LISTAPP_BROADCAST";
-    public static final String LISTAPP_BROADCAST_APPINFO = "com.itachi1706.cheesecakeutilities.LISTAPP_APPINFO";
     public static final String LISTAPP_BROADCAST_APPNAME = "com.itachi1706.cheesecakeutilities.LISTAPP_BROADCAST.APPNAME";
     public static final String LISTAPP_BROADCAST_APPPACKAGE = "com.itachi1706.cheesecakeutilities.LISTAPP_BROADCAST.APPPACKAGE";
     public static final String LISTAPP_BROADCAST_APPVERSION = "com.itachi1706.cheesecakeutilities.LISTAPP_BROADCAST.APPVERSION";

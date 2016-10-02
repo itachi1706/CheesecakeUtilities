@@ -138,7 +138,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
                     .setIcon(appIcon.getDrawable()).setNegativeButton("Test", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    sendTestIntent(view.getContext());
+                    Intent intent1 = new Intent(view.getContext(), ListApplicationsDetailActivity.class);
+                    intent1.putExtra("packageName", appPackageName.getText().toString());
+                    view.getContext().startActivity(intent1);
                 }
             })
                     .setNeutralButton("App Settings", new DialogInterface.OnClickListener() {
@@ -168,13 +170,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH, appLocation);
             completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION, version);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
-        }
-
-        private void sendTestIntent(Context context) {
-            // TODO: Test
-            Intent completeIntent = new Intent(ListAppBroadcast.LISTAPP_BROADCAST_APPINFO);
-            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
             LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
         }
 
