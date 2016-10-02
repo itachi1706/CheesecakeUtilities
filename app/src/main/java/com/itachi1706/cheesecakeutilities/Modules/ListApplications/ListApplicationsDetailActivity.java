@@ -43,7 +43,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     ImageView icon;
     GridLayout grid;
     LinearLayout creator;
-    Button backup;
+    Button backup, launchApp;
 
     private ApplicationInfo info;
 
@@ -95,6 +95,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         grid = (GridLayout) findViewById(R.id.gridLayout);
         creator = (LinearLayout) findViewById(R.id.layout_creator);
         backup = (Button) findViewById(R.id.btnBackup);
+        launchApp = (Button) findViewById(R.id.btnLaunch);
 
 
         appName.setText(info.loadLabel(pm).toString());
@@ -106,11 +107,11 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         testList.add(new LabelledColumn("Package Name", info.packageName));
         testList.add(new LabelledColumn("Version Code", versionCode));
         testList.add(new LabelledColumn("Target SDK", info.targetSdkVersion));
-        testList.add(new LabelledColumn("Signature", "TODO"));
+        //testList.add(new LabelledColumn("Signature", "Coming Soon")); // TODO: Implement it
         testList.add(new LabelledColumn("Data Dir", info.dataDir));
         testList.add(new LabelledColumn("App Location", info.sourceDir));
-        testList.add(new LabelledColumn("Installed On", "TODO"));
-        testList.add(new LabelledColumn("Updated On", "TODO"));
+        //testList.add(new LabelledColumn("Installed On", "Coming Soon")); // TODO: Implement it
+        //testList.add(new LabelledColumn("Updated On", "Coming Soon")); // TODO: Implement it
         testList.add(new LabelledColumn("UID", info.uid));
         creator.addView(generateDualColumn("Basic Information", testList));
         creator.addView(generateSingleColumn("Permissions", permissionList));
@@ -122,6 +123,14 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Start backup
                 hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, versionString);
+            }
+        });
+
+        launchApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(info.packageName);
+                startActivity(launchIntent);
             }
         });
     }
