@@ -200,7 +200,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
         private ProgressDialog dialog;
 
-        public BackupAppThread(ProgressDialog dialog) {
+        BackupAppThread(ProgressDialog dialog) {
             this.dialog = dialog;
         }
 
