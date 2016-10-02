@@ -14,6 +14,11 @@ public class LabelledColumn {
         this.field = field;
     }
 
+    public LabelledColumn(String label, int field) {
+        this.label = label;
+        this.field = field + "";
+    }
+
     public String getLabel() {
         return label;
     }

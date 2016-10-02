@@ -59,7 +59,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Browse" />
+                android:text="Backup"
+                android:id="@+id/btnBackup" />
 
             <Button
                 android:layout_width="wrap_content"
