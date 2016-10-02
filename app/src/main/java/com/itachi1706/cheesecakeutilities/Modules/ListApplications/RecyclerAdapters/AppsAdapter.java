@@ -1,21 +1,14 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Broadcasts.ListAppBroadcast;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsDetailActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -31,7 +24,7 @@ import java.util.List;
 public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder> {
     private List<AppsItem> appsList;
 
-    public static final int SORT_NAME = 0;
+    private static final int SORT_NAME = 0;
     public static final int SORT_API = 1;
 
     public AppsAdapter(List<AppsItem> strings)
@@ -108,13 +101,13 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
     }
 
 
-    public class AppsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class AppsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        protected TextView appName, appPackageName, appApiVersion, appVersion;
-        protected ImageView appIcon;
-        protected String appLocation, version, permissions;
+        TextView appName, appPackageName, appApiVersion, appVersion;
+        ImageView appIcon;
+        String appLocation, version, permissions;
 
-        public AppsViewHolder(View v)
+        AppsViewHolder(View v)
         {
             super(v);
             appName = (TextView) v.findViewById(R.id.tvAppName);
@@ -127,43 +120,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
         @Override
         public void onClick(View v) {
-            final View view = v;
-            new AlertDialog.Builder(v.getContext()).setTitle(appName.getText().toString())
-                    .setMessage("Package Name: " + appPackageName.getText().toString() +
-                            "\n\nApp Version: " + version +
-                            "\n\nAPI Version: " + appApiVersion.getText().toString() +
-                            "\n\nApp Location: " + appLocation +
-                            "\n\nPermissions List\n" + permissions)
-                    .setIcon(appIcon.getDrawable())
-                    .setNeutralButton("App Settings", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", appPackageName.getText().toString(), null);
-                            intent.setData(uri);
-                            Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
-                            view.getContext().startActivity(intent);
-                        }
-                    }).setPositiveButton("Backup", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // TODO Backup
-                    Log.i("Backup", "Requesting backup of " + appPackageName.getText().toString());
-                    sendCompleteIntent(view.getContext());
-                }
-            }).show();
+            Intent intent1 = new Intent(v.getContext(), ListApplicationsDetailActivity.class);
+            intent1.putExtra("packageName", appPackageName.getText().toString());
+            v.getContext().startActivity(intent1);
         }
-
-        private void sendCompleteIntent(Context context) {
-            // Send a local broadcast to close any existing dialogs
-            Intent completeIntent = new Intent(ListAppBroadcast.LISTAPP_BROADCAST_BACKUP);
-            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPNAME, appName.getText().toString());
-            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPACKAGE, appPackageName.getText().toString());
-            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPPATH, appLocation);
-            completeIntent.putExtra(ListAppBroadcast.LISTAPP_BROADCAST_APPVERSION, version);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(completeIntent);
-        }
-
     }
 }
