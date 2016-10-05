@@ -7,10 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.FeatureGroupInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
+import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -43,8 +44,11 @@ import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ListApplicationsDetailActivity extends AppCompatActivity {
 
@@ -80,21 +84,34 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         }
 
         String version = "Unknown";
-        int versionCode = 0;
+        final int INSTALL_UNKNOWN = -99;
+        int versionCode = 0, installLocation = INSTALL_UNKNOWN;
+        long firstInstall = 0, lastUpdate = 0;
         String[] requestedPermissions = null;
         ActivityInfo[] activities = null;
         Signature[] signatures = null;
-        FeatureGroupInfo[] configurations = null;
+        FeatureInfo[] configurations = null;
+
+        ProviderInfo[] providerInfos = null;
+        ActivityInfo[] receivers = null;
+        ServiceInfo[] serviceInfos = null;
         try {
-            int flags = PackageManager.GET_ACTIVITIES | PackageManager.GET_SIGNATURES | PackageManager.GET_PERMISSIONS;
+            int flags = PackageManager.GET_ACTIVITIES | PackageManager.GET_SIGNATURES | PackageManager.GET_PERMISSIONS |
+                    PackageManager.GET_PROVIDERS | PackageManager.GET_RECEIVERS | PackageManager.GET_CONFIGURATIONS | PackageManager.GET_SERVICES;
             PackageInfo pInfo = pm.getPackageInfo(info.packageName, flags);
             requestedPermissions = pInfo.requestedPermissions;
             version = pInfo.versionName;
             versionCode = pInfo.versionCode;
             signatures = pInfo.signatures;
             activities = pInfo.activities;
+            firstInstall = pInfo.firstInstallTime;
+            lastUpdate = pInfo.lastUpdateTime;
+            providerInfos = pInfo.providers;
+            receivers = pInfo.receivers;
+            serviceInfos = pInfo.services;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                configurations = pInfo.featureGroups;
+                installLocation = pInfo.installLocation;
+                configurations = pInfo.reqFeatures;
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -105,6 +122,9 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         String signatureList = generateSignatureList(signatures);
         String activityList = generateActivitiesList(activities);
         String configList = generateRequiredFeaturesList(configurations);
+        String providerList = generateProvidersList(providerInfos);
+        String serviceList = generateServicesList(serviceInfos);
+        String receiverList = generateReceiversList(receivers);
 
         appName = (TextView) findViewById(R.id.appName);
         appVersion = (TextView) findViewById(R.id.appVersion);
@@ -127,11 +147,22 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             testList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String insLoc;
+            switch (installLocation) {
+                case PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY: insLoc = "Internal Memory Only"; break;
+                case PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL: insLoc = "SD Card Preferred"; break;
+                case PackageInfo.INSTALL_LOCATION_AUTO: insLoc = "Auto"; break;
+                case INSTALL_UNKNOWN:
+                    default: insLoc = "Default (Auto)"; break;
+            }
+            testList.add(new LabelledColumn("Install Location", insLoc));
+        }
         testList.add(new LabelledColumn("Signature",  signatureList));
         testList.add(new LabelledColumn("Process", info.processName));
         testList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
-        //testList.add(new LabelledColumn("Installed On", "Coming Soon")); // TODO: Implement it
-        //testList.add(new LabelledColumn("Updated On", "Coming Soon")); // TODO: Implement it
+        testList.add(new LabelledColumn("Installed On", generateDateFromLong(firstInstall)));
+        testList.add(new LabelledColumn("Updated On", generateDateFromLong(lastUpdate)));
         File file = new File(info.sourceDir);
         if (file.exists()) {
             testList.add(new LabelledColumn("APK Size", humanReadableByteCount(file.length(), true)));
@@ -151,6 +182,9 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (!permissionList.isEmpty()) creator.addView(generateSingleColumn("Permissions", permissionList));
         if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features", configList));
         if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities", activityList));
+        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers", providerList));
+        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers", receiverList));
+        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services", serviceList));
         final String versionString = version;
 
         // Add features to buttons
@@ -178,6 +212,45 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 activityList += s.name + "\n";
             }
             return activityList;
+        }
+        return "";
+    }
+
+    private String generateDateFromLong(long date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault());
+        Date resultdate = new Date(date);
+        return sdf.format(resultdate);
+    }
+
+    private String generateProvidersList(ProviderInfo[] providers) {
+        if (providers != null) {
+            String providerList = "";
+            for (ProviderInfo s : providers) {
+                providerList += s.name + "\n";
+            }
+            return providerList;
+        }
+        return "";
+    }
+
+    private String generateReceiversList(ActivityInfo[] receivers) {
+        if (receivers != null) {
+            String receiverList = "";
+            for (ActivityInfo s : receivers) {
+                receiverList += s.name + "\n";
+            }
+            return receiverList;
+        }
+        return "";
+    }
+
+    private String generateServicesList(ServiceInfo[] services) {
+        if (services != null) {
+            String servicesList = "";
+            for (ServiceInfo s : services) {
+                servicesList += s.name + "\n";
+            }
+            return servicesList;
         }
         return "";
     }
@@ -213,18 +286,15 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         return "";
     }
 
-    private String generateRequiredFeaturesList(FeatureGroupInfo[] configurations) {
+    private String generateRequiredFeaturesList(FeatureInfo[] configurations) {
         if (configurations!= null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String configList = "";
-            for (FeatureGroupInfo s : configurations) {
-                FeatureInfo[] config = s.features;
-                for (FeatureInfo i : config) {
-                    if (i.name == null || i.name.isEmpty()) {
-                        // OpenGLES
-                        configList += "OpenGL ES Version: " + i.getGlEsVersion() + "\n";
-                    } else {
-                        configList += i.name + "\n";
-                    }
+            for (FeatureInfo i : configurations) {
+                if (i.name == null || i.name.isEmpty()) {
+                    // OpenGLES
+                    configList += "OpenGL ES Version: " + i.getGlEsVersion() + "\n";
+                } else {
+                    configList += i.name + "\n";
                 }
             }
             return configList;
