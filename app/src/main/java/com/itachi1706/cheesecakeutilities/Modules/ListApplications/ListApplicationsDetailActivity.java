@@ -101,51 +101,10 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             Log.e("ListAppDetail", "Failed to get package info for " + packageName + ". Some info might not be available");
         }
 
-        String permissionList = "";
-        if (requestedPermissions != null) {
-            for (String s : requestedPermissions) {
-                permissionList += s + "\n";
-            }
-        }
-
-        String signatureList = "";
-        if (signatures != null) {
-            try {
-                if (signatures.length == 1)
-                    signatureList = getSignatureString(signatures[0]).trim();
-
-                else {
-                    for (Signature s : signatures) {
-                        signatureList += getSignatureString(s).trim()+ "\n";
-                    }
-                }
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-        }
-
-        String activityList = "";
-        if (activities != null) {
-            for (ActivityInfo s : activities) {
-                activityList += s.name + "\n";
-            }
-        }
-
-
-        String configList = "";
-        if (configurations!= null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            for (FeatureGroupInfo s : configurations) {
-                FeatureInfo[] config = s.features;
-                for (FeatureInfo i : config) {
-                    if (i.name == null || i.name.isEmpty()) {
-                        // OpenGLES
-                        configList += "OpenGL ES Version: " + i.getGlEsVersion() + "\n";
-                    } else {
-                        configList += i.name + "\n";
-                    }
-                }
-            }
-        }
+        String permissionList = generatePermissionsList(requestedPermissions);
+        String signatureList = generateSignatureList(signatures);
+        String activityList = generateActivitiesList(activities);
+        String configList = generateRequiredFeaturesList(configurations);
 
         appName = (TextView) findViewById(R.id.appName);
         appVersion = (TextView) findViewById(R.id.appVersion);
@@ -168,7 +127,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             testList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
         }
-        testList.add(new LabelledColumn("Signature",  signatureList)); // TODO: Implement it
+        testList.add(new LabelledColumn("Signature",  signatureList));
         testList.add(new LabelledColumn("Process", info.processName));
         testList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
         //testList.add(new LabelledColumn("Installed On", "Coming Soon")); // TODO: Implement it
@@ -212,13 +171,74 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         });
     }
 
-    private static String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
+    private String generateActivitiesList(ActivityInfo[] activities) {
+        if (activities != null) {
+            String activityList = "";
+            for (ActivityInfo s : activities) {
+                activityList += s.name + "\n";
+            }
+            return activityList;
+        }
+        return "";
+    }
+
+    private String generatePermissionsList(String[] requestedPermissions) {
+        if (requestedPermissions != null) {
+            String permissionList = "";
+            for (String s : requestedPermissions) {
+                permissionList += s + "\n";
+            }
+            return permissionList;
+        }
+        return "";
+    }
+
+    private String generateSignatureList(Signature[] signatures) {
+        if (signatures != null) {
+            String signatureList = "";
+            try {
+                if (signatures.length == 1)
+                    signatureList = getSignatureString(signatures[0]).trim();
+
+                else {
+                    for (Signature s : signatures) {
+                        signatureList += getSignatureString(s).trim()+ "\n";
+                    }
+                }
+                return signatureList;
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    private String generateRequiredFeaturesList(FeatureGroupInfo[] configurations) {
+        if (configurations!= null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String configList = "";
+            for (FeatureGroupInfo s : configurations) {
+                FeatureInfo[] config = s.features;
+                for (FeatureInfo i : config) {
+                    if (i.name == null || i.name.isEmpty()) {
+                        // OpenGLES
+                        configList += "OpenGL ES Version: " + i.getGlEsVersion() + "\n";
+                    } else {
+                        configList += i.name + "\n";
+                    }
+                }
+            }
+            return configList;
+        }
+        return "";
+    }
+
+    private String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA");
         md.update(sig.toByteArray());
         return Base64.encodeToString(md.digest(), Base64.DEFAULT);
     }
 
-    private static String humanReadableByteCount(long bytes, boolean si) {
+    private String humanReadableByteCount(long bytes, boolean si) {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
