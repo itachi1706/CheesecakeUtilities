@@ -3,6 +3,8 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -59,6 +61,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     Button backup, launchApp;
 
     private ApplicationInfo info;
+    private String signature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +122,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         }
 
         String permissionList = generatePermissionsList(requestedPermissions);
-        String signatureList = generateSignatureList(signatures);
+        signature = generateSignatureList(signatures);
         String activityList = generateActivitiesList(activities);
         String configList = generateRequiredFeaturesList(configurations);
         String providerList = generateProvidersList(providerInfos);
@@ -158,7 +161,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             }
             testList.add(new LabelledColumn("Install Location", insLoc));
         }
-        testList.add(new LabelledColumn("Signature",  signatureList));
+        testList.add(new LabelledColumn("Signature",  signature));
         testList.add(new LabelledColumn("Process", info.processName));
         testList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
         testList.add(new LabelledColumn("Installed On", generateDateFromLong(firstInstall)));
@@ -182,9 +185,9 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (!permissionList.isEmpty()) creator.addView(generateSingleColumn("Permissions", permissionList));
         if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features", configList));
         if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities", activityList));
+        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services", serviceList));
         if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers", providerList));
         if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers", receiverList));
-        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services", serviceList));
         final String versionString = version;
 
         // Add features to buttons
@@ -305,7 +308,18 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     private String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA");
         md.update(sig.toByteArray());
-        return Base64.encodeToString(md.digest(), Base64.DEFAULT);
+        return bytesToHex(md.digest());
+    }
+
+    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 
     private String humanReadableByteCount(long bytes, boolean si) {
@@ -522,7 +536,13 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
                 startActivity(intent); return true;
             case R.id.playstore:
-            case R.id.copysig: Toast.makeText(this, "Feature coming soon", Toast.LENGTH_LONG).show(); return true;
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + info.packageName)));
+                return true;
+            case R.id.copysig:
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Signature", signature);
+                clipboard.setPrimaryClip(clip); Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_LONG).show(); return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
