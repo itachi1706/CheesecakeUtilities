@@ -1,14 +1,17 @@
 package com.itachi1706.cheesecakeutilities;
 
 
+import android.app.KeyguardManager;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.hardware.fingerprint.FingerprintManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -89,6 +92,21 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+
+            // Authentication processing
+            KeyguardManager keyguardManager = (KeyguardManager) getActivity().getSystemService(KEYGUARD_SERVICE);
+            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getActivity());
+            Preference pw = findPreference("password");
+            Preference fp_pw = findPreference("password_fp");
+
+            if (fingerprintManager.isHardwareDetected()) {
+                fp_pw.setSummary("No fingerprints enrolled on device");
+            }
+
+            if (fingerprintManager.hasEnrolledFingerprints()) {
+                fp_pw.setSummary("Use fingerprint for authentication instead of password");
+                fp_pw.setEnabled(true);
+            }
         }
 
 

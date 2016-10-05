@@ -7,4 +7,10 @@
         <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Authentication">
+        <Preference android:title="Set Password" android:key="password" android:summary="No Password Set" />
+        <CheckBoxPreference android:title="Use Fingerprint" android:enabled="false" android:key="password_fp"
+            android:summary="No Fingerprint Sensor on device" android:defaultValue="false" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
