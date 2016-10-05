@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +34,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.Backu
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,13 +109,30 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         testList.add(new LabelledColumn("Package Name", info.packageName));
         testList.add(new LabelledColumn("Version Code", versionCode));
         testList.add(new LabelledColumn("Target SDK", info.targetSdkVersion));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            testList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
+        }
         //testList.add(new LabelledColumn("Signature", "Coming Soon")); // TODO: Implement it
-        testList.add(new LabelledColumn("Data Dir", info.dataDir));
-        testList.add(new LabelledColumn("App Location", info.sourceDir));
+        testList.add(new LabelledColumn("Process", info.processName));
+        testList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
         //testList.add(new LabelledColumn("Installed On", "Coming Soon")); // TODO: Implement it
         //testList.add(new LabelledColumn("Updated On", "Coming Soon")); // TODO: Implement it
+        File file = new File(info.sourceDir);
+        if (file.exists()) {
+            testList.add(new LabelledColumn("APK Size", humanReadableByteCount(file.length(), true)));
+        }
         testList.add(new LabelledColumn("UID", info.uid));
         creator.addView(generateDualColumn("Basic Information", testList));
+
+        testList.clear();
+        testList.add(new LabelledColumn("App Location", info.sourceDir));
+        testList.add(new LabelledColumn("Data Dir", info.dataDir));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            testList.add(new LabelledColumn("Device Protected Dir", info.deviceProtectedDataDir));
+        }
+        testList.add(new LabelledColumn("Library Dir", info.nativeLibraryDir));
+        creator.addView(generateDualColumn("File Information", testList));
+
         creator.addView(generateSingleColumn("Permissions", permissionList));
         final String versionString = version;
 
@@ -133,6 +152,13 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 startActivity(launchIntent);
             }
         });
+    }
+
+    private static String humanReadableByteCount(long bytes, boolean si) {
+        if (bytes < 1024) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(1024));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        return String.format("%.2f %sB", bytes / Math.pow(1024, exp), pre);
     }
 
     private LinearLayout generateSingleColumn(String title, String... message) {
@@ -169,6 +195,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             detailLayout.setOrientation(LinearLayout.HORIZONTAL);
             labelView = new TextView(this);
             labelView.setTypeface(Typeface.DEFAULT_BOLD);
+            labelView.setMaxWidth(350);
             labelView.setMinWidth(350);
             labelView.setPadding(0,0,10,0);
             labelView.setTextColor(Color.BLACK);
