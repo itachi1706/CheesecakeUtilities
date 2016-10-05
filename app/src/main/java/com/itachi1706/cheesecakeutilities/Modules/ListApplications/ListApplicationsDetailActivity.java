@@ -5,20 +5,25 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.FeatureGroupInfo;
+import android.content.pm.FeatureInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +41,8 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,19 +82,68 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         String version = "Unknown";
         int versionCode = 0;
         String[] requestedPermissions = null;
+        ActivityInfo[] activities = null;
+        Signature[] signatures = null;
+        FeatureGroupInfo[] configurations = null;
         try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS);
+            int flags = PackageManager.GET_ACTIVITIES | PackageManager.GET_SIGNATURES | PackageManager.GET_PERMISSIONS;
+            PackageInfo pInfo = pm.getPackageInfo(info.packageName, flags);
             requestedPermissions = pInfo.requestedPermissions;
             version = pInfo.versionName;
             versionCode = pInfo.versionCode;
+            signatures = pInfo.signatures;
+            activities = pInfo.activities;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                configurations = pInfo.featureGroups;
+            }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+            Log.e("ListAppDetail", "Failed to get package info for " + packageName + ". Some info might not be available");
         }
 
         String permissionList = "";
         if (requestedPermissions != null) {
             for (String s : requestedPermissions) {
                 permissionList += s + "\n";
+            }
+        }
+
+        String signatureList = "";
+        if (signatures != null) {
+            try {
+                if (signatures.length == 1)
+                    signatureList = getSignatureString(signatures[0]).trim();
+
+                else {
+                    for (Signature s : signatures) {
+                        signatureList += getSignatureString(s).trim()+ "\n";
+                    }
+                }
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String activityList = "";
+        if (activities != null) {
+            for (ActivityInfo s : activities) {
+                activityList += s.name + "\n";
+            }
+        }
+
+
+        String configList = "";
+        if (configurations!= null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            for (FeatureGroupInfo s : configurations) {
+                FeatureInfo[] config = s.features;
+                for (FeatureInfo i : config) {
+                    if (i.name == null || i.name.isEmpty()) {
+                        // OpenGLES
+                        configList += "OpenGL ES Version: " + i.getGlEsVersion() + "\n";
+                    } else {
+                        configList += i.name + "\n";
+                    }
+                }
             }
         }
 
@@ -112,7 +168,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             testList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
         }
-        //testList.add(new LabelledColumn("Signature", "Coming Soon")); // TODO: Implement it
+        testList.add(new LabelledColumn("Signature",  signatureList)); // TODO: Implement it
         testList.add(new LabelledColumn("Process", info.processName));
         testList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
         //testList.add(new LabelledColumn("Installed On", "Coming Soon")); // TODO: Implement it
@@ -133,7 +189,9 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         testList.add(new LabelledColumn("Library Dir", info.nativeLibraryDir));
         creator.addView(generateDualColumn("File Information", testList));
 
-        creator.addView(generateSingleColumn("Permissions", permissionList));
+        if (!permissionList.isEmpty()) creator.addView(generateSingleColumn("Permissions", permissionList));
+        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features", configList));
+        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities", activityList));
         final String versionString = version;
 
         // Add features to buttons
@@ -152,6 +210,12 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 startActivity(launchIntent);
             }
         });
+    }
+
+    private static String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA");
+        md.update(sig.toByteArray());
+        return Base64.encodeToString(md.digest(), Base64.DEFAULT);
     }
 
     private static String humanReadableByteCount(long bytes, boolean si) {
