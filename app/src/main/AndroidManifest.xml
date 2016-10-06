@@ -119,7 +119,6 @@
         <activity
             android:name=".Modules.ListApplications.ListApplicationsDetailActivity"
             android:label="App Information" />
-        <activity android:name=".Features.FingerprintAuth.FingerprintTestActivity" />
         <activity android:name=".Features.FingerprintAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
