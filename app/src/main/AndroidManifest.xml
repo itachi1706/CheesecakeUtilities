@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
         android:allowBackup="true"
@@ -42,8 +43,9 @@
             android:name="io.fabric.ApiKey"
             android:value="4a76e5bed29f3c6bc0d8e90c16212c07cb8efbc0" />
 
-        <activity android:name=".Modules.HtcSerialIdentification.HtcSerialIdentificationActivity"
-            android:label="HTC S/N Identification"/>
+        <activity
+            android:name=".Modules.HtcSerialIdentification.HtcSerialIdentificationActivity"
+            android:label="HTC S/N Identification" />
         <activity
             android:name=".Modules.FanfictionCompactor.FanfictionCompactorActivity"
             android:label="Fanfiction Compactor"
@@ -70,10 +72,12 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Modules.ListApplications.ListApplicationsActivity"
-            android:label="Application List"/>
-        <activity android:name=".Modules.ORDCountdown.ORDActivity"
-            android:label="ORD Countdown"/>
+        <activity
+            android:name=".Modules.ListApplications.ListApplicationsActivity"
+            android:label="Application List" />
+        <activity
+            android:name=".Modules.ORDCountdown.ORDActivity"
+            android:label="ORD Countdown" />
         <activity
             android:name=".Modules.ORDCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
@@ -103,15 +107,20 @@
                 android:resource="@xml/popcountdown_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".BmiCalculatorActivity"
-            android:label="BMI Calculator"/>
-        <activity android:name=".Modules.IPPTCalculator.IpptCalculatorActivity"
-            android:label="IPPT Calculator"/>
+        <activity
+            android:name=".BmiCalculatorActivity"
+            android:label="BMI Calculator" />
+        <activity
+            android:name=".Modules.IPPTCalculator.IpptCalculatorActivity"
+            android:label="IPPT Calculator" />
         <activity
             android:name=".Modules.IPPTCalculator.IpptScoringActivity"
             android:label="IPPT Scoreboard" />
-        <activity android:name=".Modules.ListApplications.ListApplicationsDetailActivity"
-            android:label="App Information"/>
+        <activity
+            android:name=".Modules.ListApplications.ListApplicationsDetailActivity"
+            android:label="App Information" />
+        <activity android:name=".Features.FingerprintAuth.AuthenticationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
