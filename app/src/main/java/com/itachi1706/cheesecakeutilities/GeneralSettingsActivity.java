@@ -1,23 +1,33 @@
 package com.itachi1706.cheesecakeutilities;
 
 
-import android.app.KeyguardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.hardware.fingerprint.FingerprintManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.itachi1706.appupdater.SettingsInitializer;
+import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
+import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.PasswordHelper;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
+
+import java.security.InvalidKeyException;
 
 
 public class GeneralSettingsActivity extends AppCompatActivity {
@@ -94,21 +104,119 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             });
 
             // Authentication processing
-            KeyguardManager keyguardManager = (KeyguardManager) getActivity().getSystemService(KEYGUARD_SERVICE);
-            FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getActivity());
-            Preference pw = findPreference("password");
-            Preference fp_pw = findPreference("password_fp");
+            final Preference pw = findPreference("password");
+            final Preference fp_pw = findPreference("password_fp");
 
-            if (fingerprintManager.isHardwareDetected()) {
-                fp_pw.setSummary("No fingerprints enrolled on device");
-            }
+            sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            updatePasswordViews(pw, fp_pw);
 
-            if (fingerprintManager.hasEnrolledFingerprints()) {
-                fp_pw.setSummary("Use fingerprint for authentication instead of password");
-                fp_pw.setEnabled(true);
-            }
+            findPreference("testpw").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(), AuthenticationActivity.class));
+                    return false;
+                }
+            });
+
+            pw.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (PasswordHelper.hasPassword(sp)) {
+                        final EditText currentPassword = new EditText(getActivity());
+                        currentPassword.setSingleLine(true);
+                        currentPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                        currentPassword.setHint("Enter Current Password");
+                        final AlertDialog ad = new AlertDialog.Builder(getActivity()).setTitle("Enter Existing Password")
+                                .setMessage("Enter Existing Password").setView(currentPassword)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .setNegativeButton(android.R.string.cancel, null).setCancelable(false).create();
+                        ad.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                Button b = ad.getButton(AlertDialog.BUTTON_POSITIVE);
+                                b.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // Validate Password
+                                        String newPasswordString = currentPassword.getText().toString();
+                                        if (newPasswordString.isEmpty()) {
+                                            Toast.makeText(getActivity(), "Password cannot be empty!", Toast.LENGTH_LONG).show();
+                                            return;
+                                        }
+                                        boolean result;
+                                        try {
+                                            result = PasswordHelper.verifyPassword(sp, newPasswordString);
+                                        } catch (InvalidKeyException e) {
+                                            e.printStackTrace();
+                                            Log.e("PwChange", "Password Error. Invalid Key. Allowing user to change anyway");
+                                            result = true;
+                                        }
+
+                                        if (result) {
+                                            Log.i("PwChange", "Password Verified. Changing Password");
+                                            newPassword();
+                                            ad.dismiss();
+                                            return;
+                                        }
+                                        // Invalid Password
+                                        currentPassword.setError("Invalid Password");
+                                    }
+                                });
+                            }
+                        });
+                        ad.show();
+                        return true;
+                    }
+                    newPassword();
+                    return true;
+                }
+
+                private boolean newPassword() {
+                    final EditText newPassword = new EditText(getActivity());
+                    newPassword.setSingleLine(true);
+                    newPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    newPassword.setHint("Enter New Password");
+                    new AlertDialog.Builder(getActivity()).setTitle("Set new Password")
+                            .setMessage("Set a new app password or leave it blank to have no password").setView(newPassword)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Save Password
+                                    String newPasswordString = newPassword.getText().toString();
+                                    if (newPasswordString.isEmpty()) {
+                                        // Delete Password
+                                        if (PasswordHelper.hasPassword(sp)) {
+                                            Toast.makeText(getActivity(), "Password removed!", Toast.LENGTH_LONG).show();
+                                        }
+                                        PasswordHelper.deletePassword(sp);
+                                        updatePasswordViews(pw, fp_pw);
+                                        return;
+                                    }
+                                    PasswordHelper.savePassword(sp, newPasswordString);
+                                    updatePasswordViews(pw, fp_pw);
+                                    Toast.makeText(getActivity(), "Password Updated!", Toast.LENGTH_LONG).show();
+                                }
+                            }).setNegativeButton(android.R.string.cancel, null).setCancelable(false).show();
+                    return true;
+                }
+            });
         }
 
+        SharedPreferences sp;
+
+        private void updatePasswordViews(Preference pw, Preference fp_pw) {
+            if (PasswordHelper.hasPassword(sp)) {
+                fp_pw.setSummary("Protected with In-app Password");
+                FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getActivity());
+                if (fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints())
+                    fp_pw.setSummary("Protected with In-app Password. You can also use your fingerprint to unlock!");
+                pw.setSummary("Click here to change/remove password");
+                pw.setTitle("Change/Remove Password");
+            } else {
+                pw.setSummary("No Password Set");
+                pw.setTitle("Set Password");
+            }
+        }
 
         /**
          * Eggs are always nice :wink:

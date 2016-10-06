@@ -53,8 +53,8 @@
     <string name="status_listening_new">Listening for a fingerprint (new)…</string>
     <string name="stop_listening">Stop listening</string>
     <string name="use_dialog">Use Dialog</string>
-    <string name="dialog_authenticated">Authenticated via dialog!</string>
-    <string name="dialog_cancelled">Dialog cancelled</string>
+    <string name="dialog_authenticated">Authenticated</string>
+    <string name="dialog_cancelled">Authentication cancelled</string>
 
 ***REMOVED*** Example General settings -->
     <string name="pref_header_general">General</string>
