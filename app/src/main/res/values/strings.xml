@@ -42,6 +42,20 @@
 ***REMOVED*** Strings related to Settings -->
     <string name="title_activity_general_settings">Settings</string>
 
+***REMOVED*** Fingerprint -->
+    <string name="start_listening">Start Listening</string>
+    <string name="status_initializing">Initializing…</string>
+    <string name="status_ready">Ready to authenticate!</string>
+    <string name="status_authenticated">Authentication successful!</string>
+    <string name="status_error">Error: %1$s</string>
+    <string name="open_security_settings">Open Security Settings</string>
+    <string name="status_listening">Listening for a fingerprint…</string>
+    <string name="status_listening_new">Listening for a fingerprint (new)…</string>
+    <string name="stop_listening">Stop listening</string>
+    <string name="use_dialog">Use Dialog</string>
+    <string name="dialog_authenticated">Authenticated</string>
+    <string name="dialog_cancelled">Authentication cancelled</string>
+
 ***REMOVED*** Example General settings -->
     <string name="pref_header_general">General</string>
     <string name="link_updates">https://github.com/itachi1706/CheesecakeUtilities/releases/latest</string>

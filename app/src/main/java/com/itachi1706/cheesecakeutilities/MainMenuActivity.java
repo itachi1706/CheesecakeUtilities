@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.itachi1706.appupdater.AppUpdateInitializer;
+import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
@@ -49,6 +50,21 @@ public class MainMenuActivity extends AppCompatActivity {
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         new AppUpdateInitializer(this, sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
+
+        // Do Authentication
+        startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
+    }
+
+    private final int REQUEST_AUTH = 2;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_AUTH) {
+            if (resultCode == RESULT_CANCELED) {
+                finish();
+            }
+        }
     }
 
     @Override
