@@ -1,8 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
@@ -23,23 +21,14 @@ import java.util.UUID;
  * 3) Let user update password {@link PasswordHelper#savePassword(SharedPreferences, String)} or delete it {@link PasswordHelper#deletePassword(SharedPreferences)}
  */
 public class PasswordHelper {
-
-    public static SharedPreferences retrieveSP(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
-    }
-
-    public static boolean hasPassword(Context context) {
-        return hasPassword(retrieveSP(context));
-    }
-
     private static final String APP_PASSWORD = "app_pw_unlock_enc", APP_KEY = "app_pw_unlock_key";
 
     public static boolean hasPassword(SharedPreferences sp) {
         return sp.contains(APP_PASSWORD);
     }
 
-    public static String getPassword(SharedPreferences sp) {
-        if (hasPassword(sp)) {
+    private static String getPassword(SharedPreferences sp) {
+        if (!hasPassword(sp)) {
             return "";
         }
         return sp.getString(APP_PASSWORD, "");
@@ -72,16 +61,14 @@ public class PasswordHelper {
         }
 
         Log.i("Authentication", "Verifying Password...");
-        AesCbcWithIntegrity.CipherTextIvMac res;
+        AesCbcWithIntegrity.CipherTextIvMac existingPw = new AesCbcWithIntegrity.CipherTextIvMac(getPassword(sp));
         try {
-             res = AesCbcWithIntegrity.encrypt(passwordEntered, secretKeys);
-        } catch (UnsupportedEncodingException | GeneralSecurityException e) {
+            return passwordEntered.equals(AesCbcWithIntegrity.decryptString(existingPw, secretKeys));
+        } catch (GeneralSecurityException | UnsupportedEncodingException e) {
             e.printStackTrace();
-            Log.e("PasswordHelper", "Unsupported device, presuming go ahead");
-            return true;
+            Log.e("PasswordHelper", "Error occurred evaluating, denying access through exception");
+            throw new InvalidKeyException();
         }
-
-        return res.toString().equals(getPassword(sp));
     }
 
     public static boolean savePassword(SharedPreferences sp, String newPassword) {
@@ -108,7 +95,9 @@ public class PasswordHelper {
     }
 
     public static boolean deletePassword(SharedPreferences sp) {
-        sp.edit().remove(APP_PASSWORD).apply();
+        if (hasPassword(sp)) {
+            sp.edit().remove(APP_PASSWORD).apply();
+        }
         return true;
     }
 }

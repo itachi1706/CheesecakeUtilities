@@ -1,32 +1,74 @@
 package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.afollestad.digitus.FingerprintDialog;
 import com.itachi1706.cheesecakeutilities.R;
 
-import java.security.KeyStore;
-import java.security.KeyStoreException;
+import java.security.InvalidKeyException;
 
-public class AuthenticationActivity extends AppCompatActivity {
+public class AuthenticationActivity extends AppCompatActivity implements FingerprintDialog.Callback {
 
-    private KeyStore keyStore;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        try {
-            keyStore = KeyStore.getInstance("AndroidKeyStore");
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-            Log.e("Authentication", "CRITICAL: No Keystore, Presuming OK to go");
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!PasswordHelper.hasPassword(sp)) {
+            // No password, treat as authenticated
+            Log.i("Authentication", "No Password Found. Presuming Authenticated");
             setResult(RESULT_OK);
             finish();
         }
+        FingerprintDialog.show(this, getString(R.string.app_name), 10);
+    }
 
+    @Override
+    public void onFingerprintDialogAuthenticated() {
+        Toast.makeText(this, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
+        Log.i("Authentication", "User Authenticated");
+        setResult(RESULT_OK);
+        finish();
+    }
 
+    @Override
+    public void onFingerprintDialogVerifyPassword(final FingerprintDialog dialog, final String password) {
+        boolean result;
+        try {
+            result = PasswordHelper.verifyPassword(sp, password);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Invalid Password saved. Your data may have been tampered or corrupted. Please clear app data if you cannot advance", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            intent.putExtra("message", "Invalid Password");
+            setResult(RESULT_CANCELED, intent);
+            finish();
+            return;
+        }
+        dialog.notifyPasswordValidation(result);
+    }
+
+    @Override
+    public void onFingerprintDialogStageUpdated(FingerprintDialog dialog, FingerprintDialog.Stage stage) {
+        Log.d("Authentication", "Dialog stage: " + stage.name());
+    }
+
+    @Override
+    public void onFingerprintDialogCancelled() {
+        Toast.makeText(this, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+        Log.i("Authentication", "User Cancelled Authentication");
+        Intent intent = new Intent();
+        intent.putExtra("message", "Dialog Cancelled");
+        setResult(RESULT_CANCELED, intent);
+        finish();
     }
 }
