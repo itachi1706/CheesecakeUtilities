@@ -206,13 +206,15 @@ public class GeneralSettingsActivity extends AppCompatActivity {
 
         private void updatePasswordViews(Preference pw, Preference fp_pw) {
             if (PasswordHelper.hasPassword(sp)) {
-                fp_pw.setSummary("Protected with In-app Password");
                 FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(getActivity());
                 if (fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints())
                     fp_pw.setSummary("Protected with In-app Password. You can also use your fingerprint to unlock!");
+                else
+                    fp_pw.setSummary("Protected with In-app Password");
                 pw.setSummary("Click here to change/remove password");
                 pw.setTitle("Change/Remove Password");
             } else {
+                fp_pw.setSummary("Unprotected");
                 pw.setSummary("No Password Set");
                 pw.setTitle("Set Password");
             }
