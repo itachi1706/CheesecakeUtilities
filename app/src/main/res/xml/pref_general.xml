@@ -7,4 +7,11 @@
         <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Authentication">
+        <Preference android:title="Authentication Status" android:selectable="false" android:key="password_fp"
+            android:summary="Unprotected" />
+        <Preference android:title="Set Password" android:key="password" android:summary="No Password Set" />
+        <Preference android:title="Test Authentication" android:key="testpw" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
