@@ -124,7 +124,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     if (PasswordHelper.hasPassword(sp)) {
                         final EditText currentPassword = new EditText(getActivity());
                         currentPassword.setSingleLine(true);
-                        currentPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                        currentPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
                         currentPassword.setHint("Enter Current Password");
                         final AlertDialog ad = new AlertDialog.Builder(getActivity()).setTitle("Enter Existing Password")
                                 .setMessage("Enter Existing Password").setView(currentPassword)
@@ -174,7 +174,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 private boolean newPassword() {
                     final EditText newPassword = new EditText(getActivity());
                     newPassword.setSingleLine(true);
-                    newPassword.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                    newPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
                     newPassword.setHint("Enter New Password");
                     new AlertDialog.Builder(getActivity()).setTitle("Set new Password")
                             .setMessage("Set a new app password or leave it blank to have no password").setView(newPassword)
