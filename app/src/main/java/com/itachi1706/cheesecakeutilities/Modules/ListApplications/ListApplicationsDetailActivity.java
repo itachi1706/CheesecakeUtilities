@@ -181,12 +181,15 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         testList.add(new LabelledColumn("Library Dir", info.nativeLibraryDir));
         creator.addView(generateDualColumn("File Information", testList));
 
-        if (!permissionList.isEmpty()) creator.addView(generateSingleColumn("Permissions", permissionList));
-        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features", configList));
-        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities", activityList));
-        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services", serviceList));
-        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers", providerList));
-        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers", receiverList));
+        assert requestedPermissions != null;
+        assert configurations != null;
+        if (!permissionList.isEmpty())
+            creator.addView(generateSingleColumn("Permissions (" + requestedPermissions.length + ")", permissionList));
+        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features (" + configurations.length + ")", configList));
+        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities (" + activities.length + ")", activityList));
+        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services (" + serviceInfos.length + ")", serviceList));
+        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers (" + providerInfos.length + ")", providerList));
+        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers (" + receivers.length + ")", receiverList));
         final String versionString = version;
 
         // Add features to buttons
