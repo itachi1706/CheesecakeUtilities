@@ -1,12 +1,13 @@
 package com.itachi1706.cheesecakeutilities;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.filters.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -18,8 +19,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,17 +63,11 @@ public class AuthenticationFeatureTest {
         activity.runOnUiThread(wakeUpDevice);
     }
 
-    @Before
-    @After
-    public void resetAuth() {
-        final MainMenuActivity activity = mActivityTestRule.getActivity();
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
-                PasswordHelper.deletePassword(sp);
-            }
-        });
+    @BeforeClass
+    public static void resetAuth() {
+        Context context = getInstrumentation().getTargetContext();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        PasswordHelper.deletePassword(sp);
     }
 
     @Test
