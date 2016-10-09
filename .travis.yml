@@ -39,7 +39,9 @@ script: travis_retry travis_wait ./gradlew connectedAndroidTest
 after_success:
 - mv ./app/build/outputs/apk/app-debug.apk ./app/build/outputs/apk/CheesecakeUtilities-debug.apk
 - ls ./app/build/outputs/apk/
-after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-*.xml"
+after_failure:
+- ls $TRAVIS_BUILD_DIR/app/build/outputs/
+- "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-fatal.xml"
 deploy:
   provider: releases
   api_key: "$OAUTH_KEY"
