@@ -40,8 +40,8 @@ after_success:
 - mv ./app/build/outputs/apk/app-debug.apk ./app/build/outputs/apk/CheesecakeUtilities-debug.apk
 - ls ./app/build/outputs/apk/
 after_failure:
-- ls $TRAVIS_BUILD_DIR/app/build/outputs/
-- "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-fatal.xml"
+- ls $TRAVIS_BUILD_DIR/app/build/outputs/androidTest-results/connected/
+- cat $TRAVIS_BUILD_DIR/app/build/outputs/androidTest-results/connected/TEST-*.xml
 deploy:
   provider: releases
   api_key: "$OAUTH_KEY"
