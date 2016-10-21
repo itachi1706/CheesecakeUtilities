@@ -130,7 +130,7 @@
             android:label="System Information" />
         <service
             android:name=".Modules.NavbarCustomization.SublimeNavBarService"
-            android:label="NavigationBarService"
+            android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
