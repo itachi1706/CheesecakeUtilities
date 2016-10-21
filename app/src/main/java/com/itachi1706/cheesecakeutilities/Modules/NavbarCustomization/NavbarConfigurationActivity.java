@@ -135,9 +135,17 @@ public class NavbarConfigurationActivity extends BaseActivity {
             }
         });
 
+        String type = sp.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
+        switch (type) {
+            case NAVBAR_IMAGE_TYPE_RANDOM_IMG: imageType.setSelection(1); imageType.setTag(1); break;
+            case NAVBAR_IMAGE_TYPE_STATIC: imageType.setSelection(2); imageType.setTag(2); break;
+            case NAVBAR_IMAGE_TYPE_APP:
+            default: imageType.setSelection(0); imageType.setTag(0); break;
+        }
         imageType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (imageType.getTag() == (Object) position) return;
                 String type = imageType.getSelectedItem().toString();
                 switch (type) {
                     case "Random Image": sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG).apply(); break;
@@ -145,6 +153,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
                     case "Current App Color":
                     default: sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP).apply(); break;
                 }
+                imageType.setTag(null);
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
 
