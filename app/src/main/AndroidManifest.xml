@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -127,6 +128,16 @@
             android:name=".Modules.SystemInformation.ParentFragmentActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="System Information" />
+        <service
+            android:name=".Modules.NavbarCustomization.SublimeNavBarService"
+            android:label="SublimeNavBar"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".Modules.NavbarCustomization.InitializationAct" />
     </application>
 
 </manifest>
