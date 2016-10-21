@@ -24,7 +24,7 @@
         <item>com.itachi1706.cheesecakeutilities.BmiCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.IpptCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.SystemInformation.InitActivity</item>
-        <item>com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.InitializationAct</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
     </string-array>
     <string-array name="pes">
         <item>A/B</item>

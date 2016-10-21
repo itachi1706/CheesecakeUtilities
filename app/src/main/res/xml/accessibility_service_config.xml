@@ -5,5 +5,5 @@
     android:accessibilityFlags="flagDefault"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:notificationTimeout="0"
-    android:settingsActivity="com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.InitializationAct"
+    android:settingsActivity="com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.NavbarConfigurationActivity"
     />

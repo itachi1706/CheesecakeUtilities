@@ -129,7 +129,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="System Information" />
         <service
-            android:name=".Modules.NavbarCustomization.SublimeNavBarService"
+            android:name=".Modules.NavbarCustomization.NavBarService"
             android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -140,7 +140,7 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <activity android:name=".Modules.NavbarCustomization.InitializationAct" />
+        <activity android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity" />
     </application>
 
 </manifest>
