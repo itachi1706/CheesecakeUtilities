@@ -21,6 +21,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,6 +29,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -47,21 +53,28 @@ import android.widget.TextView;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
 
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
 
 public class NavBarService extends AccessibilityService {
 
     private static final String TAG = "NavBarService";
 
     private WindowManager mWindowManager;
+    private WindowManager.LayoutParams lpNavView;
     private static SharedPreferences sharedPreferences;
 
     private View mNavBarView;
     private TextView tvAppName;
     private TextClock clock;
     private ImageView ivImage;
+
+    private static boolean useAppColor = false;
 
     @Override
     protected void onServiceConnected() {
@@ -105,13 +118,33 @@ public class NavBarService extends AccessibilityService {
                 if (appInfo != null) {
                     display = pm.getApplicationLabel(appInfo);
                 }
+
+                // If App Color is true
+                if (useAppColor && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    Resources res = pm.getResourcesForApplication(event.getPackageName().toString());
+                    final int[] attrs = new int[]{
+                            res.getIdentifier("colorPrimaryDark", "attr", event.getPackageName().toString())
+                    };
+                    Resources.Theme t = res.newTheme();
+                    Intent launchIntent = pm.getLaunchIntentForPackage(event.getPackageName().toString());
+                    if (launchIntent != null) {
+                        ComponentName cn = launchIntent.getComponent();
+                        t.applyStyle(pm.getActivityInfo(cn, 0).theme, false);
+                        TypedArray a = t.obtainStyledAttributes(attrs); // Obtain the colorPrimary color from the attrs
+                        int colorPrimaryDark = a.getColor(0, 0); // Do something with the color
+                        a.recycle();
+                        ColorDrawable d = new ColorDrawable(colorPrimaryDark);
+                        ivImage.setImageDrawable((colorPrimaryDark == 0) ? null : d);
+                    } else {
+                        ivImage.setImageDrawable(null);
+                    }
+                }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
         }
 
         tvAppName.setText(display); // update label
-        updateVisibility();
     }
 
     @Override
@@ -136,9 +169,11 @@ public class NavBarService extends AccessibilityService {
     @SuppressLint("InflateParams")
     @TargetApi(Build.VERSION_CODES.M)
     private void addNavView() {
-        if (sharedPreferences == null) sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (sharedPreferences == null)
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this)) return; // Cannot draw overlay, exiting
+        if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this))
+            return; // Cannot draw overlay, exiting
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
@@ -152,16 +187,31 @@ public class NavBarService extends AccessibilityService {
         ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
         clock = (TextClock) mNavBarView.findViewById(R.id.tc_clock);
 
-        Picasso.with(this).load(imageLink).into(ivImage);   // Load Image
+        // See Image Type and do stuff with it
+        String res = sharedPreferences.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
+        switch (res) {
+            case NAVBAR_IMAGE_TYPE_RANDOM_IMG:
+                Picasso.with(this).load(imageLink).into(ivImage);
+                useAppColor = false;
+                break; // Load Image
+            case NAVBAR_IMAGE_TYPE_STATIC: // TODO: To Implement, using app for now
+            case NAVBAR_IMAGE_TYPE_APP:
+            default:
+                ivImage.setImageDrawable(null);
+                useAppColor = true;
+                break;
+        }
 
         // PORTRAIT orientation
-        WindowManager.LayoutParams lpNavView = new WindowManager.LayoutParams();
+        lpNavView = new WindowManager.LayoutParams();
         lpNavView.width = WindowManager.LayoutParams.MATCH_PARENT; // match the screen's width
         lpNavView.height = navBarSize; // height was looked up in the framework's source code
         lpNavView.x = 0; // start from the left edge
         lpNavView.y = -navBarSize;
+        lpNavView.format = PixelFormat.TRANSLUCENT;
         lpNavView.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY; // we need this to draw over other apps
-        lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS; // Lets us draw outside screen bounds
+        // Lets us draw outside screen bounds
+        lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
         // Since we are using Gravity.BOTTOM to position the view,
         // any value we specify to WindowManager.LayoutParams#y
@@ -172,7 +222,7 @@ public class NavBarService extends AccessibilityService {
         // That's why we choose a negative value equal to the nav bar's height.
         lpNavView.gravity = Gravity.BOTTOM;
 
-        updateVisibility();
+        //updateVisibility();
 
         // add the view
         mWindowManager.addView(mNavBarView, lpNavView);
@@ -188,12 +238,12 @@ public class NavBarService extends AccessibilityService {
         // App Name
         if (sharedPreferences.getBoolean(NAVBAR_SHOW_APPNAME, true) && tvAppName.getVisibility() == View.GONE)
             tvAppName.setVisibility(View.VISIBLE);
-        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_APPNAME, true) &&  tvAppName.getVisibility() == View.VISIBLE)
+        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_APPNAME, true) && tvAppName.getVisibility() == View.VISIBLE)
             tvAppName.setVisibility(View.GONE);
         // Image
         if (sharedPreferences.getBoolean(NAVBAR_SHOW_IMAGE, true) && ivImage.getVisibility() == View.GONE)
             ivImage.setVisibility(View.VISIBLE);
-        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_IMAGE, true) &&  ivImage.getVisibility() == View.VISIBLE)
+        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_IMAGE, true) && ivImage.getVisibility() == View.VISIBLE)
             ivImage.setVisibility(View.GONE);
     }
 
@@ -223,12 +273,14 @@ public class NavBarService extends AccessibilityService {
     }
 
     ResponseReceiver receiver;
+
     private class ResponseReceiver extends BroadcastReceiver {
         private ResponseReceiver() {
         }
 
         public void onReceive(Context context, Intent intent) {
-            updateVisibility();
+            tryRemovingNavView();
+            addNavView();
         }
     }
 }

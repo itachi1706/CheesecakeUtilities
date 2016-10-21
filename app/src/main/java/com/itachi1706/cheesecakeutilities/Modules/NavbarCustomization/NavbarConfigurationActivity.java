@@ -16,14 +16,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
 
 public class NavbarConfigurationActivity extends BaseActivity {
 
@@ -98,6 +105,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         SwitchCompat showClock = (SwitchCompat) findViewById(R.id.navbar_service_toggle_clock);
         SwitchCompat showAppName = (SwitchCompat) findViewById(R.id.navbar_service_toggle_app_name);
         SwitchCompat showImage = (SwitchCompat) findViewById(R.id.navbar_service_toggle_image);
+        final Spinner imageType = (Spinner) findViewById(R.id.navbar_service_image_type);
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         showAppName.setChecked(sp.getBoolean(NAVBAR_SHOW_APPNAME, true));
         showClock.setChecked(sp.getBoolean(NAVBAR_SHOW_CLOCK, true));
@@ -124,6 +132,25 @@ public class NavbarConfigurationActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sp.edit().putBoolean(NAVBAR_SHOW_APPNAME, isChecked).apply();
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+            }
+        });
+
+        imageType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String type = imageType.getSelectedItem().toString();
+                switch (type) {
+                    case "Random Image": sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG).apply(); break;
+                    case "Static Color": sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC).apply(); break;
+                    case "Current App Color":
+                    default: sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP).apply(); break;
+                }
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
