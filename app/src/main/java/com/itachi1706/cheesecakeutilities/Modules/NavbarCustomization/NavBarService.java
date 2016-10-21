@@ -1,19 +1,3 @@
-/*
- * Copyright 2016 Vikram Kakkar
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization;
 
 import android.accessibilityservice.AccessibilityService;
@@ -31,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -66,7 +49,6 @@ public class NavBarService extends AccessibilityService {
     private static final String TAG = "NavBarService";
 
     private WindowManager mWindowManager;
-    private WindowManager.LayoutParams lpNavView;
     private static SharedPreferences sharedPreferences;
 
     private View mNavBarView;
@@ -203,7 +185,7 @@ public class NavBarService extends AccessibilityService {
         }
 
         // PORTRAIT orientation
-        lpNavView = new WindowManager.LayoutParams();
+        WindowManager.LayoutParams lpNavView = new WindowManager.LayoutParams();
         lpNavView.width = WindowManager.LayoutParams.MATCH_PARENT; // match the screen's width
         lpNavView.height = navBarSize; // height was looked up in the framework's source code
         lpNavView.x = 0; // start from the left edge
