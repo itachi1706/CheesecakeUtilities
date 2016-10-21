@@ -18,7 +18,12 @@ package com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -26,6 +31,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -41,21 +47,26 @@ import android.widget.TextView;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
 
-public class SublimeNavBarService extends AccessibilityService {
+public class NavBarService extends AccessibilityService {
 
-    private static final String TAG = "SublimeNavBarService";
+    private static final String TAG = "NavBarService";
 
     private WindowManager mWindowManager;
     private static SharedPreferences sharedPreferences;
 
     private View mNavBarView;
     private TextView tvAppName;
+    private TextClock clock;
+    private ImageView ivImage;
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
 
-        Log.i(TAG, "SublimeNavBarService connected");
+        Log.i(TAG, "NavBarService connected");
+        receiver = new ResponseReceiver();
+        IntentFilter filter = new IntentFilter(Broadcasts.BROADCAST_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
 
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 
@@ -97,6 +108,7 @@ public class SublimeNavBarService extends AccessibilityService {
 
 
         tvAppName.setText(display); // update label
+        updateVisibility();
     }
 
     @Override
@@ -118,6 +130,7 @@ public class SublimeNavBarService extends AccessibilityService {
         // addNavView();
     }
 
+    @SuppressLint("InflateParams")
     @TargetApi(Build.VERSION_CODES.M)
     private void addNavView() {
         if (sharedPreferences == null) sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -133,8 +146,8 @@ public class SublimeNavBarService extends AccessibilityService {
         // view that will be added/removed
         mNavBarView = LayoutInflater.from(this).inflate(R.layout.view_nav_bar, null);
         tvAppName = (TextView) mNavBarView.findViewById(R.id.tv_app_name); // Current App Name Label
-        ImageView ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
-        TextClock clock = (TextClock) mNavBarView.findViewById(R.id.tc_clock);
+        ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
+        clock = (TextClock) mNavBarView.findViewById(R.id.tc_clock);
 
         Picasso.with(this).load(imageLink).into(ivImage);   // Load Image
 
@@ -156,6 +169,13 @@ public class SublimeNavBarService extends AccessibilityService {
         // That's why we choose a negative value equal to the nav bar's height.
         lpNavView.gravity = Gravity.BOTTOM;
 
+        updateVisibility();
+
+        // add the view
+        mWindowManager.addView(mNavBarView, lpNavView);
+    }
+
+    private void updateVisibility() {
         // Do hiding based on preferences stated
         // Clock
         if (sharedPreferences.getBoolean("navbar_clock", true) && clock.getVisibility() == View.GONE)
@@ -172,11 +192,6 @@ public class SublimeNavBarService extends AccessibilityService {
             ivImage.setVisibility(View.VISIBLE);
         else if (!sharedPreferences.getBoolean("navbar_image", true) &&  ivImage.getVisibility() == View.VISIBLE)
             ivImage.setVisibility(View.GONE);
-
-        Log.v(TAG, clock.getVisibility() + "");
-
-        // add the view
-        mWindowManager.addView(mNavBarView, lpNavView);
     }
 
     /**
@@ -192,13 +207,25 @@ public class SublimeNavBarService extends AccessibilityService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "SublimeNavBarService destroyed");
+        Log.i(TAG, "NavBarService destroyed");
         tryRemovingNavView();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
     @Override
     public void onInterrupt() {
-        Log.i(TAG, "SublimeNavBarService interrupted");
+        Log.i(TAG, "NavBarService interrupted");
         tryRemovingNavView();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+
+    ResponseReceiver receiver;
+    private class ResponseReceiver extends BroadcastReceiver {
+        private ResponseReceiver() {
+        }
+
+        public void onReceive(Context context, Intent intent) {
+            updateVisibility();
+        }
     }
 }
