@@ -22,7 +22,9 @@
         android:layout_marginStart="3dp"
         android:layout_marginLeft="3dp"/>
 
+***REMOVED*** TODO Test Text Clock on API 15 see what the results is -->
     <TextClock
+        android:id="@+id/tc_clock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"

@@ -34,7 +34,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +42,6 @@ import com.itachi1706.cheesecakeutilities.R;
 public class InitializationAct extends AppCompatActivity {
 
     private final int OVERLAY_PERMISSION_REQ_CODE = 1234;
-
-    private Button bAllowSystemAlertWindow;
-    private TextView tvAllowSystemAlertWindow;
-
     private SwitchCompat navbarToggle;
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -61,6 +56,26 @@ public class InitializationAct extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
                     // TODO: Disable shit
+                    if (accessibilityServiceEnabled(InitializationAct.this)) {
+                        new AlertDialog.Builder(InitializationAct.this).setTitle("Further Actions to disable needed")
+                                .setMessage(R.string.accessibility_disable_prompt)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                                    }
+                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                navbarToggle.setChecked(false);
+                            }
+                        }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                navbarToggle.setChecked(false);
+                            }
+                        }).show();
+                    }
                 } else {
                     // TODO: Enable shit
                     if (Utils.IS_AT_LEAST_MARSHMALLOW && !canShowOverlays()) {
@@ -89,38 +104,6 @@ public class InitializationAct extends AppCompatActivity {
                 }
             }
         });
-
-        LinearLayout llAllowSystemAlertWindow = (LinearLayout) findViewById(R.id.ll_allow_system_alert_window);
-
-        // Seek Settings.ACTION_MANAGE_OVERLAY_PERMISSION - required on Marshmallow & above
-        bAllowSystemAlertWindow = (Button) findViewById(R.id.b_allow_system_alert_window);
-        bAllowSystemAlertWindow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                allowSystemAlertWindow();
-            }
-        });
-
-        tvAllowSystemAlertWindow = (TextView) findViewById(R.id.tv_allow_system_alert_window);
-
-        // Takes the user to the Accessibility Settings activity.
-        // Here, you can enable/disable SublimeNavBar service
-        Button bStartStopService = (Button) findViewById(R.id.b_start_stop_service);
-        bStartStopService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-            }
-        });
-
-        // We only need permission if we're on Marshmallow & above.
-        // Hide the Button if we're on a lower API level, or if the
-        // permission has already been granted.
-        if (Utils.IS_AT_LEAST_MARSHMALLOW) {
-            if (!canShowOverlays()) {
-                llAllowSystemAlertWindow.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     @Override
@@ -145,17 +128,10 @@ public class InitializationAct extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
             if (!canShowOverlays()) {
-                // `Settings.ACTION_MANAGE_OVERLAY_PERMISSION` was not granted...
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                 // Disable toggle
                 navbarToggle.setChecked(false);
             } else {
-                // TODO: Request Accessibility
                 requestAccessibilityServiceEnable();
-
-                bAllowSystemAlertWindow.setVisibility(View.GONE);
-                tvAllowSystemAlertWindow.setText(getResources()
-                        .getString(R.string.text_permission_granted_restart_service));
             }
         }
     }
@@ -197,7 +173,6 @@ public class InitializationAct extends AppCompatActivity {
             accessibilityEnabled = Settings.Secure.getInt(
                     mContext.getApplicationContext().getContentResolver(),
                     android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
-            Log.v(TAG, "accessibilityEnabled = " + accessibilityEnabled);
         } catch (Settings.SettingNotFoundException e) {
             Log.e(TAG, "Error finding setting, default accessibility to not found: "
                     + e.getMessage());
@@ -205,7 +180,7 @@ public class InitializationAct extends AppCompatActivity {
         TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
 
         if (accessibilityEnabled == 1) {
-            Log.v(TAG, "***ACCESSIBILITY IS ENABLED*** -----------------");
+            Log.v(TAG, "Accessibility Status: Enabled");
             String settingValue = Settings.Secure.getString(
                     mContext.getApplicationContext().getContentResolver(),
                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
@@ -214,15 +189,14 @@ public class InitializationAct extends AppCompatActivity {
                 while (mStringColonSplitter.hasNext()) {
                     String accessibilityService = mStringColonSplitter.next();
 
-                    Log.v(TAG, "-------------- > accessibilityService :: " + accessibilityService + " " + service);
+                    Log.v(TAG, "Accessibility Service: " + accessibilityService + " | " + service);
                     if (accessibilityService.equalsIgnoreCase(service)) {
-                        Log.v(TAG, "We've found the correct setting - accessibility is switched on!");
                         return true;
                     }
                 }
             }
         } else {
-            Log.v(TAG, "***ACCESSIBILITY IS DISABLED***");
+            Log.v(TAG, "Accessibility Status: Disabled");
         }
 
         return false;

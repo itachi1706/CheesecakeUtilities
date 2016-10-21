@@ -19,10 +19,12 @@ package com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -33,6 +35,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.R;
@@ -43,6 +46,7 @@ public class SublimeNavBarService extends AccessibilityService {
     private static final String TAG = "SublimeNavBarService";
 
     private WindowManager mWindowManager;
+    private static SharedPreferences sharedPreferences;
 
     private View mNavBarView;
     private TextView tvAppName;
@@ -67,17 +71,13 @@ public class SublimeNavBarService extends AccessibilityService {
         info.notificationTimeout = 0;
 
         setServiceInfo(info);
-
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         addNavView();
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // Can't proceed
-        if (tvAppName == null) {
-            return;
-        }
+        if (tvAppName == null) return; // Can't proceed
 
         CharSequence display = null;
         PackageManager pm = getPackageManager();
@@ -95,8 +95,8 @@ public class SublimeNavBarService extends AccessibilityService {
             }
         }
 
-        // update label
-        tvAppName.setText(display);
+
+        tvAppName.setText(display); // update label
     }
 
     @Override
@@ -120,55 +120,32 @@ public class SublimeNavBarService extends AccessibilityService {
 
     @TargetApi(Build.VERSION_CODES.M)
     private void addNavView() {
+        if (sharedPreferences == null) sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        // On Marshmallow & above, we need to get user's permission
-        // before we can use `SYSTEM_ALERT_WINDOW`. See `InitializationAct`
-        // for more info.
-        if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this)) {
-            return;
-        }
+        if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this)) return; // Cannot draw overlay, exiting
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
-        // nav bar height since we're only designing for the portrait orientation
-        int navBarSize = getResources().getDimensionPixelSize(R.dimen.nav_bar_size);
+        final int navBarSize = getResources().getDimensionPixelSize(R.dimen.nav_bar_size); // nav bar height since we're only designing for the portrait orientation
+        String imageLink = "http://lorempixel.com/" + displayMetrics.widthPixels + "/" + navBarSize + "/abstract";
 
         // view that will be added/removed
         mNavBarView = LayoutInflater.from(this).inflate(R.layout.view_nav_bar, null);
+        tvAppName = (TextView) mNavBarView.findViewById(R.id.tv_app_name); // Current App Name Label
+        ImageView ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
+        TextClock clock = (TextClock) mNavBarView.findViewById(R.id.tc_clock);
 
-        // will show current application's label
-        tvAppName = (TextView) mNavBarView.findViewById(R.id.tv_app_name);
-
-        // shows an image from http://lorempixel.com
-        ImageView ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image);
-
-        String imageLink = "http://lorempixel.com/"
-                + displayMetrics.widthPixels + "/" + navBarSize + "/abstract";
-
-        Picasso.with(this).load(imageLink).into(ivImage);
+        Picasso.with(this).load(imageLink).into(ivImage);   // Load Image
 
         // PORTRAIT orientation
         WindowManager.LayoutParams lpNavView = new WindowManager.LayoutParams();
-
-        // match the screen's width
-        lpNavView.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-        // height was looked up in the framework's source code
-        lpNavView.height = navBarSize;
-
-        // start from the left edge
-        lpNavView.x = 0;
-
-        // see the comment for WindowManager.LayoutParams#y to
-        // understand why this is needed.
+        lpNavView.width = WindowManager.LayoutParams.MATCH_PARENT; // match the screen's width
+        lpNavView.height = navBarSize; // height was looked up in the framework's source code
+        lpNavView.x = 0; // start from the left edge
         lpNavView.y = -navBarSize;
-
-        // we need this to draw over other apps
-        lpNavView.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
-
-        // Lets us draw outside screen bounds
-        lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        lpNavView.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY; // we need this to draw over other apps
+        lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS; // Lets us draw outside screen bounds
 
         // Since we are using Gravity.BOTTOM to position the view,
         // any value we specify to WindowManager.LayoutParams#y
@@ -178,6 +155,25 @@ public class SublimeNavBarService extends AccessibilityService {
         // make our view 50 pixels above the top edge of the nav bar.
         // That's why we choose a negative value equal to the nav bar's height.
         lpNavView.gravity = Gravity.BOTTOM;
+
+        // Do hiding based on preferences stated
+        // Clock
+        if (sharedPreferences.getBoolean("navbar_clock", true) && clock.getVisibility() == View.GONE)
+            clock.setVisibility(View.VISIBLE);
+        else if (!sharedPreferences.getBoolean("navbar_clock", true) && clock.getVisibility() == View.VISIBLE)
+            clock.setVisibility(View.GONE);
+        // App Name
+        if (sharedPreferences.getBoolean("navbar_appname", true) && tvAppName.getVisibility() == View.GONE)
+            tvAppName.setVisibility(View.VISIBLE);
+        else if (!sharedPreferences.getBoolean("navbar_appname", true) &&  tvAppName.getVisibility() == View.VISIBLE)
+            tvAppName.setVisibility(View.GONE);
+        // Image
+        if (sharedPreferences.getBoolean("navbar_image", true) && ivImage.getVisibility() == View.GONE)
+            ivImage.setVisibility(View.VISIBLE);
+        else if (!sharedPreferences.getBoolean("navbar_image", true) &&  ivImage.getVisibility() == View.VISIBLE)
+            ivImage.setVisibility(View.GONE);
+
+        Log.v(TAG, clock.getVisibility() + "");
 
         // add the view
         mWindowManager.addView(mNavBarView, lpNavView);
@@ -197,20 +193,12 @@ public class SublimeNavBarService extends AccessibilityService {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "SublimeNavBarService destroyed");
-
-        // clean up
-
-        // remove  the view
         tryRemovingNavView();
     }
 
     @Override
     public void onInterrupt() {
         Log.i(TAG, "SublimeNavBarService interrupted");
-
-        // clean up
-
-        // remove  the view
         tryRemovingNavView();
     }
 }
