@@ -222,7 +222,7 @@ public class NavBarService extends AccessibilityService {
         // That's why we choose a negative value equal to the nav bar's height.
         lpNavView.gravity = Gravity.BOTTOM;
 
-        //updateVisibility();
+        updateVisibility();
 
         // add the view
         mWindowManager.addView(mNavBarView, lpNavView);
