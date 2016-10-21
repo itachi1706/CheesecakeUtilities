@@ -47,6 +47,10 @@ import android.widget.TextView;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
 
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
+
 public class NavBarService extends AccessibilityService {
 
     private static final String TAG = "NavBarService";
@@ -106,7 +110,6 @@ public class NavBarService extends AccessibilityService {
             }
         }
 
-
         tvAppName.setText(display); // update label
         updateVisibility();
     }
@@ -144,7 +147,7 @@ public class NavBarService extends AccessibilityService {
         String imageLink = "http://lorempixel.com/" + displayMetrics.widthPixels + "/" + navBarSize + "/abstract";
 
         // view that will be added/removed
-        mNavBarView = LayoutInflater.from(this).inflate(R.layout.view_nav_bar, null);
+        mNavBarView = LayoutInflater.from(this).inflate(R.layout.service_navbar, null);
         tvAppName = (TextView) mNavBarView.findViewById(R.id.tv_app_name); // Current App Name Label
         ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
         clock = (TextClock) mNavBarView.findViewById(R.id.tc_clock);
@@ -178,19 +181,19 @@ public class NavBarService extends AccessibilityService {
     private void updateVisibility() {
         // Do hiding based on preferences stated
         // Clock
-        if (sharedPreferences.getBoolean("navbar_clock", true) && clock.getVisibility() == View.GONE)
+        if (sharedPreferences.getBoolean(NAVBAR_SHOW_CLOCK, true) && clock.getVisibility() == View.GONE)
             clock.setVisibility(View.VISIBLE);
-        else if (!sharedPreferences.getBoolean("navbar_clock", true) && clock.getVisibility() == View.VISIBLE)
+        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_CLOCK, true) && clock.getVisibility() == View.VISIBLE)
             clock.setVisibility(View.GONE);
         // App Name
-        if (sharedPreferences.getBoolean("navbar_appname", true) && tvAppName.getVisibility() == View.GONE)
+        if (sharedPreferences.getBoolean(NAVBAR_SHOW_APPNAME, true) && tvAppName.getVisibility() == View.GONE)
             tvAppName.setVisibility(View.VISIBLE);
-        else if (!sharedPreferences.getBoolean("navbar_appname", true) &&  tvAppName.getVisibility() == View.VISIBLE)
+        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_APPNAME, true) &&  tvAppName.getVisibility() == View.VISIBLE)
             tvAppName.setVisibility(View.GONE);
         // Image
-        if (sharedPreferences.getBoolean("navbar_image", true) && ivImage.getVisibility() == View.GONE)
+        if (sharedPreferences.getBoolean(NAVBAR_SHOW_IMAGE, true) && ivImage.getVisibility() == View.GONE)
             ivImage.setVisibility(View.VISIBLE);
-        else if (!sharedPreferences.getBoolean("navbar_image", true) &&  ivImage.getVisibility() == View.VISIBLE)
+        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_IMAGE, true) &&  ivImage.getVisibility() == View.VISIBLE)
             ivImage.setVisibility(View.GONE);
     }
 

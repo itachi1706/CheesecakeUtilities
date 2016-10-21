@@ -21,6 +21,10 @@ import android.widget.CompoundButton;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
+
 public class NavbarConfigurationActivity extends BaseActivity {
 
     private final int OVERLAY_PERMISSION_REQ_CODE = 1234;
@@ -35,7 +39,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_initialization);
+        setContentView(R.layout.activity_navbar_config);
 
         navbarToggle = (SwitchCompat) findViewById(R.id.navbar_service_toggle);
         navbarToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,14 +99,14 @@ public class NavbarConfigurationActivity extends BaseActivity {
         SwitchCompat showAppName = (SwitchCompat) findViewById(R.id.navbar_service_toggle_app_name);
         SwitchCompat showImage = (SwitchCompat) findViewById(R.id.navbar_service_toggle_image);
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        showAppName.setChecked(sp.getBoolean("navbar_appname", true));
-        showClock.setChecked(sp.getBoolean("navbar_clock", true));
-        showImage.setChecked(sp.getBoolean("navbar_image", true));
+        showAppName.setChecked(sp.getBoolean(NAVBAR_SHOW_APPNAME, true));
+        showClock.setChecked(sp.getBoolean(NAVBAR_SHOW_CLOCK, true));
+        showImage.setChecked(sp.getBoolean(NAVBAR_SHOW_IMAGE, true));
 
         showClock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("navbar_clock", isChecked).apply();
+                sp.edit().putBoolean(NAVBAR_SHOW_CLOCK, isChecked).apply();
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
@@ -110,7 +114,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         showImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("navbar_image", isChecked).apply();
+                sp.edit().putBoolean(NAVBAR_SHOW_IMAGE, isChecked).apply();
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
@@ -118,7 +122,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         showAppName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean("navbar_appname", isChecked).apply();
+                sp.edit().putBoolean(NAVBAR_SHOW_APPNAME, isChecked).apply();
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
