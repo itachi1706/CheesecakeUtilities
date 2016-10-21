@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp">
+
+    <View
+        android:layout_height="6dp"
+        android:layout_width="match_parent" />
+
+    <android.support.v7.widget.CardView
+        card_view:cardCornerRadius="2dp"
+        card_view:cardUseCompatPadding="true"
+        android:id="@+id/card_view_sensors"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/sensors1"
+
+                android:textColor="#424242"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:layout_height="12dp"
+        android:layout_width="match_parent" />
+
+    <android.support.v7.widget.CardView
+        card_view:cardCornerRadius="2dp"
+        card_view:cardUseCompatPadding="true"
+        android:id="@+id/card_view_sensors1"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/sensorList1"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+
+                android:textColor="#616161"
+                android:textIsSelectable="true" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:layout_height="6dp"
+        android:layout_width="match_parent" />
+</LinearLayout>

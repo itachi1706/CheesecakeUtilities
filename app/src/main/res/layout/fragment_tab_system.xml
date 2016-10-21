@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp" />
+
+            <android.support.v7.widget.CardView
+                card_view:cardCornerRadius="2dp"
+                card_view:cardUseCompatPadding="true"
+                android:id="@+id/card_view_os"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="@string/OS1"
+
+                        android:textColor="#424242"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_grey_300" />
+
+                    <TextView
+                        android:id="@+id/osCodenameTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/OS2"
+
+                        android:textColor="#616161"
+                        android:textIsSelectable="true" />
+
+                    <TextView
+                        android:id="@+id/osInfoTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/OS3"
+
+                        android:textColor="#616161"
+                        android:textIsSelectable="true" />
+
+                    <TextView
+                        android:id="@+id/uptime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/OS4"
+
+                        android:textColor="#616161"
+                        android:textIsSelectable="true" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <View
+                android:layout_height="12dp"
+                android:layout_width="match_parent" />
+
+            <android.support.v7.widget.CardView
+                card_view:cardCornerRadius="2dp"
+                card_view:cardUseCompatPadding="true"
+                android:id="@+id/card_view_storage2"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="@string/storage4"
+
+                        android:textColor="#424242"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_grey_300" />
+
+                    <TextView
+                        android:id="@+id/intMemTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/storage2"
+
+                        android:textColor="#616161"
+                        android:textIsSelectable="true" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <View
+                android:layout_height="12dp"
+                android:layout_width="match_parent" />
+
+            <android.support.v7.widget.CardView
+                card_view:cardCornerRadius="2dp"
+                card_view:cardUseCompatPadding="true"
+                android:id="@+id/card_view_java"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="@string/java1"
+
+                        android:textColor="#424242"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/material_grey_300" />
+
+                    <TextView
+                        android:id="@+id/javaInfoTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="@string/java2"
+
+                        android:textColor="#616161"
+                        android:textIsSelectable="true" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <View
+                android:layout_height="6dp"
+                android:layout_width="match_parent" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
