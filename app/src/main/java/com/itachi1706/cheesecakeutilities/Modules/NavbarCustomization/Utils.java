@@ -9,6 +9,7 @@ class Utils {
     static final String NAVBAR_SHOW_IMAGE = "navbar_image";
     static final String NAVBAR_SHOW_IMAGE_TYPE = "navbar_image_type";
     static final String NAVBAR_SHOW_APPNAME = "navbar_appname";
+    static final String NAVBAR_SHOW_STATIC_COLOR = "navbar_static_color";
     static final String NAVBAR_IMAGE_TYPE_RANDOM_IMG = "random";
     static final String NAVBAR_IMAGE_TYPE_APP = "app";
     static final String NAVBAR_IMAGE_TYPE_STATIC = "static";

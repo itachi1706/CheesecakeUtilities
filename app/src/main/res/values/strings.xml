@@ -170,6 +170,7 @@
     <string name="activate_navbar_service_clock">Show Clock</string>
     <string name="activate_navbar_service_image">Color Navigation Bar Background</string>
     <string name="activate_navbar_service_type">Background Type</string>
+    <string name="activate_navbar_service_static_color">Choose Static Color</string>
     <string name="accessibility_setting_desc">Enable this to allow the app to change the navigation bar</string>
     <string name="request_overlay_perm">In order to activate the service, the app requires the permission to draw over other apps such as the Navigation Bar.\n\nClicking OK will bring you to the screen to grant this permission</string>
     <string name="accessibility_enable_prompt">Clicking OK will bring you to the accessibility screen to enable the accessibility service required to customize the navigation bar</string>
