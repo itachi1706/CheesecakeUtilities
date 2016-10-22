@@ -20,7 +20,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -65,7 +64,7 @@ public class NavBarService extends AccessibilityService {
         Log.i(TAG, "NavBarService connected");
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(Broadcasts.BROADCAST_ACTION);
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
+        this.registerReceiver(receiver, filter);
 
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 
@@ -244,14 +243,14 @@ public class NavBarService extends AccessibilityService {
         super.onDestroy();
         Log.i(TAG, "NavBarService destroyed");
         tryRemovingNavView();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        this.unregisterReceiver(receiver);
     }
 
     @Override
     public void onInterrupt() {
         Log.i(TAG, "NavBarService interrupted");
         tryRemovingNavView();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        this.unregisterReceiver(receiver);
     }
 
     ResponseReceiver receiver;
