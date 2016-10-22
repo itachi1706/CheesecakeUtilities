@@ -19,6 +19,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -54,7 +55,7 @@ public class NavBarService extends AccessibilityService {
 
     private View mNavBarView;
     private TextView tvAppName;
-    private TextClock clock;
+    @Nullable private TextClock clock;
     private ImageView ivImage;
 
     private static boolean useAppColor = false;
@@ -168,7 +169,7 @@ public class NavBarService extends AccessibilityService {
         mNavBarView = LayoutInflater.from(this).inflate(R.layout.service_navbar, null);
         tvAppName = (TextView) mNavBarView.findViewById(R.id.tv_app_name); // Current App Name Label
         ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
-        clock = (TextClock) mNavBarView.findViewById(R.id.tc_clock);
+        clock = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) ? (TextClock) mNavBarView.findViewById(R.id.tc_clock) : null;
 
         // See Image Type and do stuff with it
         String res = sharedPreferences.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
@@ -218,9 +219,9 @@ public class NavBarService extends AccessibilityService {
     private void updateVisibility() {
         // Do hiding based on preferences stated
         // Clock
-        if (sharedPreferences.getBoolean(NAVBAR_SHOW_CLOCK, true) && clock.getVisibility() == View.GONE)
+        if (sharedPreferences.getBoolean(NAVBAR_SHOW_CLOCK, true) && clock != null && clock.getVisibility() == View.GONE)
             clock.setVisibility(View.VISIBLE);
-        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_CLOCK, true) && clock.getVisibility() == View.VISIBLE)
+        else if (!sharedPreferences.getBoolean(NAVBAR_SHOW_CLOCK, true) && clock != null && clock.getVisibility() == View.VISIBLE)
             clock.setVisibility(View.GONE);
         // App Name
         if (sharedPreferences.getBoolean(NAVBAR_SHOW_APPNAME, true) && tvAppName.getVisibility() == View.GONE)
