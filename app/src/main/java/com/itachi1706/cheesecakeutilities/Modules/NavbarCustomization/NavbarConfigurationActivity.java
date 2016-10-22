@@ -4,14 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
@@ -23,6 +20,8 @@ import android.widget.Spinner;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
+
+import net.grandcentrix.tray.AppPreferences;
 
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
@@ -106,7 +105,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         SwitchCompat showAppName = (SwitchCompat) findViewById(R.id.navbar_service_toggle_app_name);
         SwitchCompat showImage = (SwitchCompat) findViewById(R.id.navbar_service_toggle_image);
         final Spinner imageType = (Spinner) findViewById(R.id.navbar_service_image_type);
-        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        final AppPreferences sp = new AppPreferences(this);
         showAppName.setChecked(sp.getBoolean(NAVBAR_SHOW_APPNAME, true));
         showClock.setChecked(sp.getBoolean(NAVBAR_SHOW_CLOCK, true));
         showImage.setChecked(sp.getBoolean(NAVBAR_SHOW_IMAGE, true));
@@ -114,7 +113,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         showClock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean(NAVBAR_SHOW_CLOCK, isChecked).apply();
+                sp.put(NAVBAR_SHOW_CLOCK, isChecked);
                 getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
@@ -122,7 +121,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         showImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean(NAVBAR_SHOW_IMAGE, isChecked).apply();
+                sp.put(NAVBAR_SHOW_IMAGE, isChecked);
                 getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
@@ -130,12 +129,13 @@ public class NavbarConfigurationActivity extends BaseActivity {
         showAppName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.edit().putBoolean(NAVBAR_SHOW_APPNAME, isChecked).apply();
+                sp.put(NAVBAR_SHOW_APPNAME, isChecked);
                 getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
 
         String type = sp.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
+        assert type != null;
         switch (type) {
             case NAVBAR_IMAGE_TYPE_RANDOM_IMG: imageType.setSelection(1); imageType.setTag(1); break;
             case NAVBAR_IMAGE_TYPE_STATIC: imageType.setSelection(2); imageType.setTag(2); break;
@@ -148,13 +148,13 @@ public class NavbarConfigurationActivity extends BaseActivity {
                 if (imageType.getTag() == (Object) position) return;
                 String type = imageType.getSelectedItem().toString();
                 switch (type) {
-                    case "Random Image": sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG).apply(); break;
-                    case "Static Color": sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC).apply(); break;
+                    case "Random Image": sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG); break;
+                    case "Static Color": sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC); break;
                     case "Current App Color":
-                    default: sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP).apply(); break;
+                    default: sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP); break;
                 }
                 imageType.setTag(null);
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
 
             @Override

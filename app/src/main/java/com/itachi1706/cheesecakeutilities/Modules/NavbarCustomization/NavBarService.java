@@ -9,7 +9,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -18,7 +17,6 @@ import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -35,6 +33,8 @@ import android.widget.TextView;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
 
+import net.grandcentrix.tray.AppPreferences;
+
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
@@ -48,7 +48,7 @@ public class NavBarService extends AccessibilityService {
     private static final String TAG = "NavBarService";
 
     private WindowManager mWindowManager;
-    private static SharedPreferences sharedPreferences;
+    private static AppPreferences sharedPreferences;
 
     private View mNavBarView;
     private TextView tvAppName;
@@ -151,7 +151,7 @@ public class NavBarService extends AccessibilityService {
     @TargetApi(Build.VERSION_CODES.M)
     private void addNavView() {
         if (sharedPreferences == null)
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            sharedPreferences = new AppPreferences(getApplicationContext());
 
         if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this))
             return; // Cannot draw overlay, exiting
