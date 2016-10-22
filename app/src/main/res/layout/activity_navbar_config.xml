@@ -156,8 +156,9 @@
 
         <ImageView
             android:id="@+id/navbar_service_static_color"
-            android:layout_width="20dp"
+            android:layout_width="40dp"
             android:layout_gravity="end"
+            android:src="@color/colorPrimary"
             android:layout_height="20dp" />
     </LinearLayout>
 

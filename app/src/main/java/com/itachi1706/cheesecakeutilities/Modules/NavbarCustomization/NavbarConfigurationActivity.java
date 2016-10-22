@@ -176,22 +176,27 @@ public class NavbarConfigurationActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 ColorPickerDialogBuilder.with(NavbarConfigurationActivity.this).setTitle("Select Static Color")
-                        .initialColor(Color.BLACK).wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                        .initialColor(getColorFromPref(sp)).wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                         .density(12).setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
-                        updateColorPref(i);
+                        updateColorPref(i, sp);
                     }
-                }).setNegativeButton(android.R.string.cancel, null).showColorPreview(true).build().show();
+                }).setNegativeButton(android.R.string.cancel, null).build().show();
             }
         });
 
-        staticColor.setImageDrawable(new ColorDrawable(sp.getInt(NAVBAR_SHOW_STATIC_COLOR, Color.BLACK)));
+        staticColor.setImageDrawable(new ColorDrawable(getColorFromPref(sp)));
     }
 
-    private void updateColorPref(int newColor) {
+    private void updateColorPref(int newColor, AppPreferences sp) {
         staticColor.setImageDrawable(new ColorDrawable(newColor));
-        // TODO: Update AppPref
+        sp.put(NAVBAR_SHOW_STATIC_COLOR, newColor);
+        this.sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+    }
+
+    private int getColorFromPref(AppPreferences sp) {
+        return sp.getInt(NAVBAR_SHOW_STATIC_COLOR, Color.BLUE);
     }
 
     @Override
