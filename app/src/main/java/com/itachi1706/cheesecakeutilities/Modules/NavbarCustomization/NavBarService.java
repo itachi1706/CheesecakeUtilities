@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -42,6 +43,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Uti
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
 public class NavBarService extends AccessibilityService {
 
@@ -170,12 +172,16 @@ public class NavBarService extends AccessibilityService {
 
         // See Image Type and do stuff with it
         String res = sharedPreferences.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
+        assert res != null;
         switch (res) {
             case NAVBAR_IMAGE_TYPE_RANDOM_IMG:
                 Picasso.with(this).load(imageLink).into(ivImage);
                 useAppColor = false;
                 break; // Load Image
-            case NAVBAR_IMAGE_TYPE_STATIC: // TODO: To Implement, using app for now
+            case NAVBAR_IMAGE_TYPE_STATIC:
+                useAppColor = false;
+                ivImage.setImageDrawable(new ColorDrawable(sharedPreferences.getInt(NAVBAR_SHOW_STATIC_COLOR, Color.BLUE)));
+                break;
             case NAVBAR_IMAGE_TYPE_APP:
             default:
                 ivImage.setImageDrawable(null);
