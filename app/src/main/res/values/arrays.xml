@@ -11,6 +11,7 @@
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
         <item>System Information</item>
+        <item>NavbarCustomization</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>com.itachi1706.cheesecakeutilities.StringToHexBin</item>
@@ -23,6 +24,7 @@
         <item>com.itachi1706.cheesecakeutilities.BmiCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.IpptCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.SystemInformation.InitActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
     </string-array>
     <string-array name="pes">
         <item>A/B</item>
@@ -44,5 +46,15 @@
         <item>2.4km Run</item>
         <item>Sit-Ups</item>
         <item>Bent Knee Push-Ups</item>
+    </string-array>
+    <string-array name="imagetype">
+        <item>Current App Color</item>
+        <item>Random Image</item>
+        <item>Static Color</item>
+    </string-array>
+    <string-array name="imagetyperef">
+        <item>app</item>
+        <item>random</item>
+        <item>static</item>
     </string-array>
 ***REMOVED***
