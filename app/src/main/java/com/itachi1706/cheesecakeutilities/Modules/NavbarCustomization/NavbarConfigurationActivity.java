@@ -115,7 +115,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sp.edit().putBoolean(NAVBAR_SHOW_CLOCK, isChecked).apply();
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
 
@@ -123,7 +123,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sp.edit().putBoolean(NAVBAR_SHOW_IMAGE, isChecked).apply();
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
 
@@ -131,7 +131,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 sp.edit().putBoolean(NAVBAR_SHOW_APPNAME, isChecked).apply();
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
             }
         });
 
