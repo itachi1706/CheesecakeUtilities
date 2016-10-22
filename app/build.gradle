@@ -12,6 +12,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 
@@ -29,6 +30,7 @@ android {
         versionName "1.7.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resValue "string", "tray__authority", "${applicationId}.tray" // add this to set a unique tray authority based on your applicationId
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -83,4 +85,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
     compile 'com.afollestad:digitus:0.2.12'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'net.grandcentrix.tray:tray:0.11.0'
+    compile 'com.github.QuadFlask:colorpicker:0.0.12'
 }

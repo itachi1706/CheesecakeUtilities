@@ -163,6 +163,19 @@
     <string name="cpucores">CPU Cores: %s</string>
     <string name="cpufreq">Current Frequency: %s</string>
 
+    <!-- Nav Bar Customization -->
+    <string name="cd_nav_bar_image">Navigation Bar image</string>
+    <string name="activate_navbar_service">Activate Navigation Bar Service</string>
+    <string name="activate_navbar_service_app_name">Show current Application Name</string>
+    <string name="activate_navbar_service_clock">Show Clock</string>
+    <string name="activate_navbar_service_image">Color Navigation Bar Background</string>
+    <string name="activate_navbar_service_type">Background Type</string>
+    <string name="activate_navbar_service_static_color">Choose Static Color</string>
+    <string name="accessibility_setting_desc">Enable this to allow the app to change the navigation bar</string>
+    <string name="request_overlay_perm">In order to activate the service, the app requires the permission to draw over other apps such as the Navigation Bar.\n\nClicking OK will bring you to the screen to grant this permission</string>
+    <string name="accessibility_enable_prompt">Clicking OK will bring you to the accessibility screen to enable the accessibility service required to customize the navigation bar</string>
+    <string name="accessibility_disable_prompt">Clicking OK will bring you to the accessibility screen to disable the accessibility service for customizing the navigation bar</string>
+
     <!-- Unsorted/Misc -->
     <string name="pes_status">PES Status</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
