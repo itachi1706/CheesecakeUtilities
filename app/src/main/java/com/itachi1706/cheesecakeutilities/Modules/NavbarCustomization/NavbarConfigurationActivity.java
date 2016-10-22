@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +18,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -30,11 +36,13 @@ import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Uti
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
 public class NavbarConfigurationActivity extends BaseActivity {
 
     private final int OVERLAY_PERMISSION_REQ_CODE = 1234;
     private SwitchCompat navbarToggle;
+    private ImageView staticColor;
 
     @Override
     public String getHelpDescription() {
@@ -104,6 +112,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         SwitchCompat showClock = (SwitchCompat) findViewById(R.id.navbar_service_toggle_clock);
         SwitchCompat showAppName = (SwitchCompat) findViewById(R.id.navbar_service_toggle_app_name);
         SwitchCompat showImage = (SwitchCompat) findViewById(R.id.navbar_service_toggle_image);
+        staticColor = (ImageView) findViewById(R.id.navbar_service_static_color);
         final Spinner imageType = (Spinner) findViewById(R.id.navbar_service_image_type);
         final AppPreferences sp = new AppPreferences(this);
         showAppName.setChecked(sp.getBoolean(NAVBAR_SHOW_APPNAME, true));
@@ -163,6 +172,26 @@ public class NavbarConfigurationActivity extends BaseActivity {
             }
         });
 
+        staticColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPickerDialogBuilder.with(NavbarConfigurationActivity.this).setTitle("Select Static Color")
+                        .initialColor(Color.BLACK).wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                        .density(12).setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
+                        updateColorPref(i);
+                    }
+                }).setNegativeButton(android.R.string.cancel, null).showColorPreview(true).build().show();
+            }
+        });
+
+        staticColor.setImageDrawable(new ColorDrawable(sp.getInt(NAVBAR_SHOW_STATIC_COLOR, Color.BLACK)));
+    }
+
+    private void updateColorPref(int newColor) {
+        staticColor.setImageDrawable(new ColorDrawable(newColor));
+        // TODO: Update AppPref
     }
 
     @Override
