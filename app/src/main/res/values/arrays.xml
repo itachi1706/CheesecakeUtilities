@@ -11,7 +11,7 @@
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
         <item>System Information</item>
-        <item>NavbarCustomization</item>
+        <item>Navigation Bar Customizer</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>com.itachi1706.cheesecakeutilities.StringToHexBin</item>
