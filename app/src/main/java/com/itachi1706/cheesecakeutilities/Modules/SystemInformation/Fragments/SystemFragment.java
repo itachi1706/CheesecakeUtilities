@@ -28,11 +28,11 @@ public class SystemFragment extends Fragment {
     public static String getCodename(int sdkint) {
         for (Field fld : Build.VERSION_CODES.class.getFields()) {
             try {
-                if (fld.getInt(null) == sdkint && fld.getName().length() > 1) {
+                if (fld.getInt(null) == sdkint && fld.getName().length() >= 1) {
                     return fld.getName();
                 }
             } catch (IllegalAccessException e) {
-                return "Unknown";
+                return "Unknown (Exception Occurred: " + e.getLocalizedMessage() + ")";
             }
         }
         return "Unknown";
