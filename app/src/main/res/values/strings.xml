@@ -179,6 +179,11 @@
 ***REMOVED*** Tic Tac Toe Game -->
     <string name="button_tic_tac_toe_game_area_placeholder">New Button</string>
 
+***REMOVED*** App Shortcuts -->
+    <string name="featured_util_label">Featured Utility</string>
+    <string name="featured_util_long_label">Displays a Featured Utility from the app</string>
+    <string name="featured_util_disabled_label">The Featured Utility shortcut is disabled</string>
+
 ***REMOVED*** Unsorted/Misc -->
     <string name="pes_status">PES Status</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
