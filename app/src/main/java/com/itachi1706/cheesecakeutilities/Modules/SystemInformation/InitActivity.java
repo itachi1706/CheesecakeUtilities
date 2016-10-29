@@ -52,7 +52,13 @@ public class InitActivity extends AppCompatActivity {
         prefs = getSharedPreferences("GPUinfo", 0);
         GLSurfaceView mGLView = new GLSurfaceView(this);
         mGLView.setRenderer(new ClearRenderer());
-        startActivity(new Intent(this, ParentFragmentActivity.class));
-        finish();
+        setContentView(mGLView);
+        mGLView.post(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(InitActivity.this, ParentFragmentActivity.class));
+                finish();
+            }
+        });
     }
 }
