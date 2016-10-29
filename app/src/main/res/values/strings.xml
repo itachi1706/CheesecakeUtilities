@@ -176,6 +176,9 @@
     <string name="accessibility_enable_prompt">Clicking OK will bring you to the accessibility screen to enable the accessibility service required to customize the navigation bar</string>
     <string name="accessibility_disable_prompt">Clicking OK will bring you to the accessibility screen to disable the accessibility service for customizing the navigation bar</string>
 
+***REMOVED*** Tic Tac Toe Game -->
+    <string name="button_tic_tac_toe_game_area_placeholder">New Button</string>
+
 ***REMOVED*** Unsorted/Misc -->
     <string name="pes_status">PES Status</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
