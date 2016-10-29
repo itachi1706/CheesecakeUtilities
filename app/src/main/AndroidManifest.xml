@@ -121,27 +121,32 @@
         <activity
             android:name=".Modules.ListApplications.ListApplicationsDetailActivity"
             android:label="App Information" />
-        <activity android:name=".Features.FingerprintAuth.AuthenticationActivity"
+        <activity
+            android:name=".Features.FingerprintAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Modules.SystemInformation.InitActivity" />
         <activity
             android:name=".Modules.SystemInformation.ParentFragmentActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="System Information" />
+            android:label="System Information"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".Modules.NavbarCustomization.NavBarService"
             android:label="Customize Navigation Bar"
-            android:process=":NavBarCustomizer"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:process=":NavBarCustomizer">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <activity android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity" />
+        <activity android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity"
+            android:label="Navigation Bar Customizer" />
+        <activity android:name=".GamesActivity" android:label="Games List" />
     </application>
 
 </manifest>
