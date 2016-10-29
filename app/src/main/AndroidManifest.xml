@@ -147,6 +147,10 @@
         <activity android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity"
             android:label="Navigation Bar Customizer" />
         <activity android:name=".GamesActivity" android:label="Games List" />
+        <activity
+            android:name=".Games.TicTacToe.TicTacToeActivity"
+            android:label="Tic Tac Toe" />
+
     </application>
 
 </manifest>

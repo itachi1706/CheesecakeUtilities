@@ -29,10 +29,10 @@
         <item>com.itachi1706.cheesecakeutilities.GamesActivity</item>
     </string-array>
     <string-array name="gamesmenu">
-        <item>Sample</item>
+        <item>Tic Tac Toe</item>
     </string-array>
     <string-array name="gamesmenulink">
-        <item>com.itachi1706.cheesecakeutilities.SpamMessages</item>
+        <item>com.itachi1706.cheesecakeutilities.Games.TicTacToe.TicTacToeActivity</item>
     </string-array>
     <string-array name="pes">
         <item>A/B</item>
