@@ -1,5 +1,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="General">
+        <Preference android:title="Hide Utilities" android:summary="Select utilities to hide"
+            android:key="hide_util" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Authentication">
         <Preference android:title="Authentication Status" android:selectable="false" android:key="password_fp"
             android:summary="Unprotected" />

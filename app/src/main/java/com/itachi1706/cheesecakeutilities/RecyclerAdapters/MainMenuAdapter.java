@@ -47,6 +47,10 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
         stringViewHolder.title.setText(s);
     }
 
+    public void updateList(List<String> newList) {
+        this.stringList = newList;
+    }
+
     @Override
     public MainMenuHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.

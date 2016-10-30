@@ -13,8 +13,8 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
@@ -27,8 +27,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
-                android:resource="@xml/static_shortcuts"/>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/static_shortcuts" />
         </activity>
         <activity
             android:name=".StringToHexBin"
@@ -148,13 +150,17 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <activity android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity"
+        <activity
+            android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity"
             android:label="Navigation Bar Customizer" />
-        <activity android:name=".GamesActivity" android:label="Games List" />
+        <activity
+            android:name=".GamesActivity"
+            android:label="Games List" />
         <activity
             android:name=".Games.TicTacToe.TicTacToeActivity"
             android:label="Tic Tac Toe" />
-
+        <activity android:name=".Features.HideUtility.HideUtilityActivity"
+            android:label="Hide Utilities" />
     </application>
 
 </manifest>
