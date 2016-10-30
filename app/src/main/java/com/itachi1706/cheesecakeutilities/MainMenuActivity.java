@@ -19,11 +19,16 @@ import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.Authenticatio
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainMenuActivity extends AppCompatActivity {
 
     SharedPreferences sp;
+    MainMenuAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {
@@ -43,16 +49,30 @@ public class MainMenuActivity extends AppCompatActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            String[] menuitems = getResources().getStringArray(R.array.mainmenu);
-            MainMenuAdapter adapter = new MainMenuAdapter(this, menuitems);
+            List<String> menuitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
+            adapter = new MainMenuAdapter(this, menuitems);
             recyclerView.setAdapter(adapter);
         }
 
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
         new AppUpdateInitializer(this, sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
 
         // Do Authentication
         startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Remove hidden items
+        List<String> menuitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
+        List<String> hiddenitems = new ArrayList<>(Arrays.asList(sp.getString("utilHidden", "").split("\\|\\|\\|")));
+        for (String s : hiddenitems) {
+            menuitems.remove(s);
+        }
+
+        adapter.updateList(menuitems);
+        adapter.notifyDataSetChanged();
+
     }
 
     private final int REQUEST_AUTH = 2;

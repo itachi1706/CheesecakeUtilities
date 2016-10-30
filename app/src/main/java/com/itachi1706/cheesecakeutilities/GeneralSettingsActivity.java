@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.itachi1706.appupdater.SettingsInitializer;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.PasswordHelper;
+import com.itachi1706.cheesecakeutilities.Features.HideUtility.HideUtilityActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import java.security.InvalidKeyException;
@@ -114,6 +115,14 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     startActivity(new Intent(getActivity(), AuthenticationActivity.class));
+                    return false;
+                }
+            });
+
+            findPreference("hide_util").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(), HideUtilityActivity.class));
                     return false;
                 }
             });
