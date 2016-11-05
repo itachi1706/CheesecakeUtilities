@@ -12,12 +12,4 @@
         <Preference android:title="Test Authentication" android:key="testpw" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="App Info" android:key="info_category">
-        <Preference android:title="App Version" android:key="view_app_version" android:summary="NULL" />
-        <Preference android:title="Package Name" android:key="view_app_name" android:selectable="false" />
-        <Preference android:summary="None" android:title="Android Version" android:key="view_sdk_version" android:selectable="false"/>
-        <Preference android:title="View Device Info" android:key="vDevInfo" android:summary="View information of your device"/>
-    </PreferenceCategory>
-
-
 </PreferenceScreen>
