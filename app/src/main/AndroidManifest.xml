@@ -156,8 +156,8 @@
         <activity
             android:name=".Games.TicTacToe.TicTacToeActivity"
             android:label="Tic Tac Toe" />
-        <activity android:name=".Features.HideUtility.HideUtilityActivity"
-            android:label="Hide Utilities" />
+        <activity android:name=".Features.UtilityManagement.ManageUtilityActivity"
+            android:label="Utilities Management" />
     </application>
 
 </manifest>

@@ -1,16 +1,16 @@
 package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.R;
@@ -50,7 +50,9 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
     {
         String s  = stringList.get(i);
         stringViewHolder.title.setText(s);
-        stringViewHolder.checkBox.setChecked(stringViewHolder.isHidden(s));
+        stringViewHolder.checkBox.setImageDrawable(stringViewHolder.isHidden(s) ?
+                ContextCompat.getDrawable(stringViewHolder.mContext, R.drawable.eye_off) :
+                ContextCompat.getDrawable(stringViewHolder.mContext, R.drawable.eye));
     }
 
     @Override
@@ -63,24 +65,50 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
     }
 
 
-    class HideUtilHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener {
+    class HideUtilHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView title;
-        CheckBox checkBox;
+        ImageButton checkBox;
         protected SharedPreferences sp;
+        Context mContext;
 
         HideUtilHolder(View v)
         {
             super(v);
+            mContext = v.getContext();
             sp = PreferenceManager.getDefaultSharedPreferences(v.getContext());
             title = (TextView) v.findViewById(R.id.text1);
-            checkBox = (CheckBox) v.findViewById(R.id.checkbox);
-            checkBox.setOnCheckedChangeListener(this);
+            checkBox = (ImageButton) v.findViewById(R.id.checkbox);
+            checkBox.setOnClickListener(this);
         }
 
         @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        public void onClick(View view) {
             String link = title.getText().toString();
+            Drawable eye = ContextCompat.getDrawable(view.getContext(), R.drawable.eye);
+
+            if (checkBox.getDrawable().getConstantState() == eye.getConstantState()) {
+                // Hide Utility
+                List<String> utils = getHiddenAsArray();
+                if (!utils.contains(link)) utils.add(link);
+                hiddenUtil = convertHiddenArrayToString(utils);
+                sp.edit().putString("utilHidden", hiddenUtil).apply();
+                checkBox.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.eye_off));
+                Log.i("HideUtilAdapter", link + " hidden");
+            } else {
+                List<String> utils = getHiddenAsArray();
+                utils.remove(link);
+                hiddenUtil = convertHiddenArrayToString(utils);
+                sp.edit().putString("utilHidden", hiddenUtil).apply();
+                Log.i("HideUtilAdapter", link + " shown");
+                checkBox.setImageDrawable(eye);
+            }
+
+        }
+
+        /*@Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
 
             if (b) {
                 // Hide Utility
@@ -97,7 +125,7 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
                 sp.edit().putString("utilHidden", hiddenUtil).apply();
                 Log.i("HideUtilAdapter", link + " shown");
             }
-        }
+        }*/
 
         private List<String> getHiddenAsArray() {
             return new ArrayList<>(Arrays.asList(hiddenUtil.split("\\|\\|\\|")));
