@@ -81,7 +81,7 @@ public class AuthenticationFeatureTest {
         ViewInteraction linearLayout = onView(
                 allOf(childAtPosition(
                         withId(android.R.id.list),
-                        2),
+                        4),
                         isDisplayed()));
         linearLayout.perform(click());
 
@@ -119,7 +119,7 @@ public class AuthenticationFeatureTest {
         ViewInteraction linearLayout2 = onView(
                 allOf(childAtPosition(
                         withId(android.R.id.list),
-                        2),
+                        4),
                         isDisplayed()));
         linearLayout2.perform(click());
 
