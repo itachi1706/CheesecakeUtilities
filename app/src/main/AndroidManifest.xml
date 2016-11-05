@@ -43,9 +43,6 @@
         <activity
             android:name=".GeneralSettingsActivity"
             android:label="@string/title_activity_general_settings" />
-        <activity
-            android:name=".DebugInfoActivity"
-            android:label="@string/title_activity_general_settings" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
