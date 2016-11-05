@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Features.HideUtility;
+package com.itachi1706.cheesecakeutilities.Features.UtilityManagement;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +13,7 @@ import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.Authenticatio
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.HideUtilAdapter;
 
-public class HideUtilityActivity extends AppCompatActivity {
+public class ManageUtilityActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
