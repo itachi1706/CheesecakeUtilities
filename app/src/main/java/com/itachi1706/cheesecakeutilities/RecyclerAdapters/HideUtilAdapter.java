@@ -106,27 +106,6 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
 
         }
 
-        /*@Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-
-            if (b) {
-                // Hide Utility
-                List<String> utils = getHiddenAsArray();
-                if (!utils.contains(link)) utils.add(link);
-                hiddenUtil = convertHiddenArrayToString(utils);
-                sp.edit().putString("utilHidden", hiddenUtil).apply();
-                Log.i("HideUtilAdapter", link + " hidden");
-            } else {
-                // Unhide Utility
-                List<String> utils = getHiddenAsArray();
-                utils.remove(link);
-                hiddenUtil = convertHiddenArrayToString(utils);
-                sp.edit().putString("utilHidden", hiddenUtil).apply();
-                Log.i("HideUtilAdapter", link + " shown");
-            }
-        }*/
-
         private List<String> getHiddenAsArray() {
             return new ArrayList<>(Arrays.asList(hiddenUtil.split("\\|\\|\\|")));
         }
