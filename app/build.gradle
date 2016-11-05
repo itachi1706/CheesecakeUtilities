@@ -26,7 +26,7 @@ android {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 225
+        versionCode 226
         versionName "1.9.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

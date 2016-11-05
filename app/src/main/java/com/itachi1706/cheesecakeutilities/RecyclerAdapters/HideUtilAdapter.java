@@ -2,9 +2,8 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,9 +49,8 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
     {
         String s  = stringList.get(i);
         stringViewHolder.title.setText(s);
-        stringViewHolder.checkBox.setImageDrawable(stringViewHolder.isHidden(s) ?
-                ContextCompat.getDrawable(stringViewHolder.mContext, R.drawable.eye_off) :
-                ContextCompat.getDrawable(stringViewHolder.mContext, R.drawable.eye));
+        stringViewHolder.isVisible = !stringViewHolder.isHidden(s);
+        stringViewHolder.updateVisibleIcon();
     }
 
     @Override
@@ -68,9 +66,10 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
     class HideUtilHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView title;
-        ImageButton checkBox;
+        ImageButton visibleToggle;
         protected SharedPreferences sp;
         Context mContext;
+        boolean isVisible = true;
 
         HideUtilHolder(View v)
         {
@@ -78,22 +77,21 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
             mContext = v.getContext();
             sp = PreferenceManager.getDefaultSharedPreferences(v.getContext());
             title = (TextView) v.findViewById(R.id.text1);
-            checkBox = (ImageButton) v.findViewById(R.id.checkbox);
-            checkBox.setOnClickListener(this);
+            visibleToggle = (ImageButton) v.findViewById(R.id.checkbox);
+            visibleToggle.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             String link = title.getText().toString();
-            Drawable eye = ContextCompat.getDrawable(view.getContext(), R.drawable.eye);
 
-            if (checkBox.getDrawable().getConstantState() == eye.getConstantState()) {
+            if (isVisible) {
                 // Hide Utility
                 List<String> utils = getHiddenAsArray();
                 if (!utils.contains(link)) utils.add(link);
                 hiddenUtil = convertHiddenArrayToString(utils);
                 sp.edit().putString("utilHidden", hiddenUtil).apply();
-                checkBox.setImageDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.eye_off));
+                isVisible = false;
                 Log.i("HideUtilAdapter", link + " hidden");
             } else {
                 List<String> utils = getHiddenAsArray();
@@ -101,14 +99,16 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
                 hiddenUtil = convertHiddenArrayToString(utils);
                 sp.edit().putString("utilHidden", hiddenUtil).apply();
                 Log.i("HideUtilAdapter", link + " shown");
-                checkBox.setImageDrawable(eye);
+                isVisible = true;
             }
+            updateVisibleIcon();
 
         }
 
         private List<String> getHiddenAsArray() {
             return new ArrayList<>(Arrays.asList(hiddenUtil.split("\\|\\|\\|")));
         }
+
         private String convertHiddenArrayToString(List<String> array) {
             String res = "";
             for (String s : array) {
@@ -116,6 +116,12 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
                 else res += "|||" + s;
             }
             return res;
+        }
+
+        private void updateVisibleIcon() {
+            visibleToggle.setImageDrawable(isVisible ?
+                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.eye, mContext.getTheme()) :
+                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.eye_off, mContext.getTheme()));
         }
 
         private boolean isHidden(String util) {
