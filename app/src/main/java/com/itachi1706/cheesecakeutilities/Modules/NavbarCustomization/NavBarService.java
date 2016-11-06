@@ -40,6 +40,7 @@ import net.grandcentrix.tray.AppPreferences;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SERVICE_ENABLED;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
@@ -90,6 +91,8 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (tvAppName == null) return; // Can't proceed
+        if (sharedPreferences == null) sharedPreferences = new AppPreferences(getApplicationContext());
+        if (!sharedPreferences.getBoolean(NAVBAR_SERVICE_ENABLED, true)) return; // Service not enabled
 
         CharSequence display = null;
         PackageManager pm = getPackageManager();
@@ -156,8 +159,8 @@ public class NavBarService extends AccessibilityService {
         if (sharedPreferences == null)
             sharedPreferences = new AppPreferences(getApplicationContext());
 
-        if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this))
-            return; // Cannot draw overlay, exiting
+        if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this)) return; // Cannot draw overlay, exiting
+        if (!sharedPreferences.getBoolean(NAVBAR_SERVICE_ENABLED, true)) return; // Service not enabled
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
