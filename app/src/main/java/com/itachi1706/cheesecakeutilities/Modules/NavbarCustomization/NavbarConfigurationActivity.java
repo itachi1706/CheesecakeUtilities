@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -32,6 +33,7 @@ import net.grandcentrix.tray.AppPreferences;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
+import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SERVICE_ENABLED;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
@@ -44,6 +46,9 @@ public class NavbarConfigurationActivity extends BaseActivity {
     private SwitchCompat navbarToggle;
     private ImageView staticColor;
 
+    private LinearLayout enableServiceLayout;
+    private SwitchCompat enableServiceToggle;
+
     @Override
     public String getHelpDescription() {
         return "A navigation bar utility that makes the navigation bar more special and provides information in it";
@@ -54,6 +59,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navbar_config);
+        final AppPreferences sp = new AppPreferences(this);
 
         navbarToggle = (SwitchCompat) findViewById(R.id.navbar_service_toggle);
         navbarToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -71,12 +77,12 @@ public class NavbarConfigurationActivity extends BaseActivity {
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                navbarToggle.setChecked(false);
+                                navbarToggle.setChecked(true);
                             }
                         }).setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                                navbarToggle.setChecked(false);
+                                navbarToggle.setChecked(true);
                             }
                         }).show();
                     }
@@ -108,16 +114,26 @@ public class NavbarConfigurationActivity extends BaseActivity {
             }
         });
 
+        enableServiceLayout = (LinearLayout) findViewById(R.id.enable_service);
+
         // Update Configurations
         SwitchCompat showClock = (SwitchCompat) findViewById(R.id.navbar_service_toggle_clock);
         SwitchCompat showAppName = (SwitchCompat) findViewById(R.id.navbar_service_toggle_app_name);
         SwitchCompat showImage = (SwitchCompat) findViewById(R.id.navbar_service_toggle_image);
         staticColor = (ImageView) findViewById(R.id.navbar_service_static_color);
+        enableServiceToggle = (SwitchCompat) findViewById(R.id.navbar_service_enable_toggle);
         final Spinner imageType = (Spinner) findViewById(R.id.navbar_service_image_type);
-        final AppPreferences sp = new AppPreferences(this);
         showAppName.setChecked(sp.getBoolean(NAVBAR_SHOW_APPNAME, true));
         showClock.setChecked(sp.getBoolean(NAVBAR_SHOW_CLOCK, true));
         showImage.setChecked(sp.getBoolean(NAVBAR_SHOW_IMAGE, true));
+
+        enableServiceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                sp.put(NAVBAR_SERVICE_ENABLED, b);
+                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
+            }
+        });
 
         showClock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -202,7 +218,15 @@ public class NavbarConfigurationActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        AppPreferences sp = new AppPreferences(this);
         navbarToggle.setChecked(accessibilityServiceEnabled(this));
+        if (accessibilityServiceEnabled(this))
+            enableServiceLayout.setVisibility(View.VISIBLE);
+        else {
+            enableServiceLayout.setVisibility(View.GONE);
+            sp.put(NAVBAR_SERVICE_ENABLED, true);
+        }
+        enableServiceToggle.setChecked(sp.getBoolean(NAVBAR_SERVICE_ENABLED, true));
     }
 
     @TargetApi(Build.VERSION_CODES.M)
