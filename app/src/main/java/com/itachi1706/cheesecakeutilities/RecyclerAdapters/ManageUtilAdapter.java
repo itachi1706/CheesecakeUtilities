@@ -22,17 +22,17 @@ import java.util.List;
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.RecyclerAdapters in Cheesecake Utilities.
  */
-public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUtilHolder> {
+public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.ManageUtilHolder> {
     private List<String> stringList;
     private String hiddenUtil;
 
-    public HideUtilAdapter(List<String> strings, String hiddenUtil)
+    public ManageUtilAdapter(List<String> strings, String hiddenUtil)
     {
         this.stringList = strings;
         this.hiddenUtil = hiddenUtil;
     }
 
-    public HideUtilAdapter(String[] strings, String hiddenUtil)
+    public ManageUtilAdapter(String[] strings, String hiddenUtil)
     {
         this.stringList = Arrays.asList(strings);
         this.hiddenUtil = hiddenUtil;
@@ -45,7 +45,7 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
     }
 
     @Override
-    public void onBindViewHolder(HideUtilHolder stringViewHolder, int i)
+    public void onBindViewHolder(ManageUtilHolder stringViewHolder, int i)
     {
         String s  = stringList.get(i);
         stringViewHolder.title.setText(s);
@@ -54,16 +54,16 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
     }
 
     @Override
-    public HideUtilHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ManageUtilHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.recyclerview_hide_utility, viewGroup, false);
+                inflate(R.layout.recyclerview_manage_utility, viewGroup, false);
 
-        return new HideUtilHolder(itemView);
+        return new ManageUtilHolder(itemView);
     }
 
 
-    class HideUtilHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ManageUtilHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView title;
         ImageButton visibleToggle;
@@ -71,7 +71,7 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
         Context mContext;
         boolean isVisible = true;
 
-        HideUtilHolder(View v)
+        ManageUtilHolder(View v)
         {
             super(v);
             mContext = v.getContext();
@@ -92,13 +92,13 @@ public class HideUtilAdapter extends RecyclerView.Adapter<HideUtilAdapter.HideUt
                 hiddenUtil = convertHiddenArrayToString(utils);
                 sp.edit().putString("utilHidden", hiddenUtil).apply();
                 isVisible = false;
-                Log.i("HideUtilAdapter", link + " hidden");
+                Log.i("ManageUtilAdapter", link + " hidden");
             } else {
                 List<String> utils = getHiddenAsArray();
                 utils.remove(link);
                 hiddenUtil = convertHiddenArrayToString(utils);
                 sp.edit().putString("utilHidden", hiddenUtil).apply();
-                Log.i("HideUtilAdapter", link + " shown");
+                Log.i("ManageUtilAdapter", link + " shown");
                 isVisible = true;
             }
             updateVisibleIcon();
