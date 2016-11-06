@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.HideUtilAdapter;
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.ManageUtilAdapter;
 
 public class ManageUtilityActivity extends AppCompatActivity {
 
@@ -20,7 +20,7 @@ public class ManageUtilityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hide_utility);
+        setContentView(R.layout.activity_manage_utility);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.hide_util_recycler);
         recyclerView.setHasFixedSize(true);
@@ -34,7 +34,7 @@ public class ManageUtilityActivity extends AppCompatActivity {
 
         // Set up layout
         String[] menuitems = getResources().getStringArray(R.array.mainmenu);
-        HideUtilAdapter adapter = new HideUtilAdapter(menuitems, hiddenUtil);
+        ManageUtilAdapter adapter = new ManageUtilAdapter(menuitems, hiddenUtil);
         recyclerView.setAdapter(adapter);
 
         // Do Authentication
