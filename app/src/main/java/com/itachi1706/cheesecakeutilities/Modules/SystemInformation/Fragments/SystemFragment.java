@@ -10,6 +10,7 @@ import android.os.StatFs;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,12 @@ import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.R;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class SystemFragment extends Fragment {
     private static final int EVENT_TICK = 1;
@@ -102,7 +107,44 @@ public class SystemFragment extends Fragment {
                 .append(VERSION.CODENAME).append("\nIncremental: ").append(VERSION.INCREMENTAL)
                 .append("\nKernel Type: ").append(System.getProperty("os.name")).append("\nKernel Version: ")
                 .append(System.getProperty("os.version"));
+        if (System.getProperty("java.vm.version").equals("2.1.0") && System.getProperty("java.vm.name").equals("Dalvik")) {
+            builder.append("\nRuntime: ").append("ART (2.1.0)"); // ART
+        } else {
+            builder.append("\nRuntime: ").append(System.getProperty("java.vm.name")).append(" (")
+                    .append(System.getProperty("java.vm.version")).append(")");
+        }
+        builder.append("\nRoot Status: ").append((isRooted()) ? "Rooted" : "Not Rooted").append("\nSELinux Status: ")
+                .append((isSELinuxEnforcing()) ? "Enforcing" : "Permissive");
         return builder.toString();
+    }
+
+    public static boolean isSELinuxEnforcing() {
+        try {
+            Class<?> c = Class.forName("android.os.SELinux");
+            boolean cs = (boolean) c.getMethod("isSELinuxEnabled").invoke(c);
+            if (cs)
+                cs = (boolean) c.getMethod("isSELinuxEnforced").invoke(c);
+            return cs;
+        } catch (Exception ignored) {
+        }
+
+        return VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
+    }
+
+    private static boolean findBinary(String binaryName) {
+        String[] places = { "/sbin/", "/system/bin/", "/system/xbin/",
+                "/data/local/xbin/", "/data/local/bin/",
+                "/system/sd/xbin/", "/system/bin/failsafe/", "/data/local/" };
+        for (String where : places) {
+            if (new File(where + binaryName).exists()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isRooted() {
+        return findBinary("su");
     }
 
     @SuppressWarnings("deprecation")
