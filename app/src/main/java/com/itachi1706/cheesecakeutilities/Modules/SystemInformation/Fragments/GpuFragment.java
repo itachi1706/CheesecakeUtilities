@@ -106,7 +106,7 @@ public class GpuFragment extends Fragment {
     }
 
     public String getGpuExtensions() {
-        return getActivity().getSharedPreferences("GPUinfo", 0).getString("EXTENSIONS", null);
+        return getActivity().getSharedPreferences("GPUinfo", 0).getString("EXTENSIONS", "").trim().replace(" ", "\n");
     }
 
     private String getGPUClock() {
