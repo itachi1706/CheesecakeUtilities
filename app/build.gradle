@@ -26,8 +26,8 @@ android {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 231
-        versionName "1.9.2"
+        versionCode 234
+        versionName "1.9.3"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "tray__authority", "${applicationId}.tray" // add this to set a unique tray authority based on your applicationId
