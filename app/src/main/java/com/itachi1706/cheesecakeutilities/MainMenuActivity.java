@@ -17,6 +17,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class MainMenuActivity extends AppCompatActivity {
         new AppUpdateInitializer(this, sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
 
         // Do Authentication
-        startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
+        if (CommonMethods.isGlobalLocked(sp)) startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
     }
 
     @Override
