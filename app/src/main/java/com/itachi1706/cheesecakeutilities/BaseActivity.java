@@ -88,9 +88,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         if (requestCode == REQUEST_AUTH_GLOBAL) {
             if (resultCode == RESULT_CANCELED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) finishAffinity();
-                else finish();
-            } else if (resultCode == RESULT_OK && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                finishAffinity();
+            } else if (resultCode == RESULT_OK) {
                 TaskStackBuilder.create(this)
                         .addParentStack(MainMenuActivity.class)
                         .addNextIntent(new Intent(this, MainMenuActivity.class).putExtra("authagain", false))
