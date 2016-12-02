@@ -12,4 +12,8 @@
         <item quantity="one">Day to POP</item>
         <item quantity="other">Days to POP</item>
     </plurals>
+    <plurals name="payday">
+        <item quantity="one">%1$d day to Pay Day</item>
+        <item quantity="other">%1$d days to Pay Day</item>
+    </plurals>
 </resources>

@@ -26,7 +26,7 @@ public class ORDActivity extends BaseActivity {
     RecyclerView recyclerView;
     TextView ordCounter, ordDaysLabel, ordProgress;
     ArcProgress progressBar;
-    long ordDays, ptpDays, popDays;
+    long ordDays, ptpDays, popDays, pdoption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class ORDActivity extends BaseActivity {
             long ptp = sp.getLong(ORDSettingsActivity.SP_PTP, 0);
             long pop = sp.getLong(ORDSettingsActivity.SP_POP, 0);
             long enlist = sp.getLong(ORDSettingsActivity.SP_ENLIST, 0);
+            pdoption = sp.getLong(ORDSettingsActivity.SP_PAYDAY, -1);
             long currentTime = System.currentTimeMillis();
             List<String> menuItems = new ArrayList<>();
             if (ptp != 0) {
@@ -105,6 +106,23 @@ public class ORDActivity extends BaseActivity {
                 }
             } else {
                 menuItems.add("ORD Date not defined. Please define in settings");
+            }
+
+            if (pdoption != -1) {
+                Calendar cal = Calendar.getInstance();
+                switch ((int) pdoption) {
+                    case ORDSettingsActivity.PAYDAY_10: cal.set(Calendar.DAY_OF_MONTH, 10); break;
+                    case ORDSettingsActivity.PAYDAY_12: cal.set(Calendar.DAY_OF_MONTH, 12); break;
+                }
+
+                if (cal.getTimeInMillis() < currentTime) {
+                    cal.add(Calendar.MONTH, 1);
+                }
+
+                long duration = cal.getTimeInMillis() - currentTime;
+                long daysToPayday = TimeUnit.MILLISECONDS.toDays(duration);
+                if (daysToPayday == 0) menuItems.add("PAY DAY!!!");
+                else menuItems.add(getResources().getQuantityString(R.plurals.payday, (int) daysToPayday, daysToPayday));
             }
 
 
