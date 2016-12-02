@@ -108,7 +108,7 @@ public class ORDActivity extends BaseActivity {
             }
 
 
-            StringRecyclerAdapter adapter = new StringRecyclerAdapter(menuItems);
+            StringRecyclerAdapter adapter = new StringRecyclerAdapter(menuItems, false);
             recyclerView.setAdapter(adapter);
         }
     }
