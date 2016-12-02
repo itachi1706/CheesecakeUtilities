@@ -26,10 +26,10 @@ import java.util.Locale;
 
 public class ORDSettingsActivity extends AppCompatActivity {
 
-    private long enlistMS, ordMS, popMS, ptpMS;
+    private long enlistMS, ordMS, popMS, ptpMS, pdoption;
     private String pesStatusString;
     private TextView enlistEt, ordEt, popEt, ptpEt;
-    private Spinner pesStatusSpinner;
+    private Spinner pesStatusSpinner, payDaySpinner;
     private DatePickerDialog.OnDateSetListener pop,ord,enlist,ptp;
 
     private SharedPreferences sp;
@@ -40,7 +40,8 @@ public class ORDSettingsActivity extends AppCompatActivity {
     public static final int ENHANCED_BMT = 9, PTP_BMT = 17, BP_BMT = 19, E_BMT = 4; // BMT Weeks
     public static final int ENHANCED_PES = 21, NORMAL_PES = 24; // NS Weeks
     public static final String SP_ORD = "ordcalc_ord", SP_PTP = "ordcalc_ptp",
-            SP_POP = "ordcalc_pop", SP_ENLIST = "ordcalc_enlist", SP_STATUS = "ordcalc_status";
+            SP_POP = "ordcalc_pop", SP_ENLIST = "ordcalc_enlist", SP_STATUS = "ordcalc_status", SP_PAYDAY = "ordcalc_payday";
+    public static final int PAYDAY_10 = 0, PAYDAY_12 = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
         pesStatusSpinner = (Spinner) findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
+        payDaySpinner = (Spinner) findViewById(R.id.spinnerPD);
     }
 
     @Override
@@ -101,6 +103,10 @@ public class ORDSettingsActivity extends AppCompatActivity {
         int statusTmp = sp.getInt("ordcalc_status_pos", -2);
         if (statusTmp != 0) {
             this.pesStatusSpinner.setSelection(statusTmp, true);
+        }
+        this.pdoption = sp.getLong(SP_PAYDAY, -1);
+        if (this.pdoption != -1) {
+            this.payDaySpinner.setSelection((int) this.pdoption);
         }
         this.pesStatusString = this.pesStatusSpinner.getSelectedItem().toString();
         this.updateText(UPDATE_NONE);
@@ -117,6 +123,17 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
             }
         });
+        payDaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                pdoption = payDaySpinner.getSelectedItemId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void saveSettings() {
@@ -126,6 +143,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.putLong(SP_ENLIST, this.enlistMS);
         edit.putLong(SP_ORD, this.ordMS);
         edit.putString(SP_STATUS, this.pesStatusString);
+        edit.putLong(SP_PAYDAY, this.pdoption);
         edit.putInt("ordcalc_status_pos", this.pesStatusSpinner.getSelectedItemPosition());
         edit.apply();
         Toast.makeText(this, "Settings Saved", Toast.LENGTH_LONG).show();
