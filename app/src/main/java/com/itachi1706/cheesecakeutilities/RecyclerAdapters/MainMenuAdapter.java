@@ -81,7 +81,9 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
             Log.i("MainMenuAdapter", "Attempting to navigate to " + className);
             try {
                 Class classObj = Class.forName(className);
-                mActivity.startActivity(new Intent(mActivity, classObj));
+                Intent intent = new Intent(mActivity, classObj);
+                intent.putExtra("menuitem", link);
+                mActivity.startActivity(intent);
             } catch (ClassNotFoundException e) {
                 Log.e("MainMenuAdapter", "Class Not Found: " + className);
                 e.printStackTrace();

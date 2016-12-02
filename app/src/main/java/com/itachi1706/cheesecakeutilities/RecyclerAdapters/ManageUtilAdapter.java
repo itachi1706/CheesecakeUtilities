@@ -117,14 +117,14 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
                     List<String> utils = getLockedAsArray();
                     if (!utils.contains(link)) utils.add(link);
                     lockedUtil = convertHiddenOrLockedArrayToString(utils);
-                    sp.edit().putString("utilLocked", hiddenUtil).apply();
+                    sp.edit().putString("utilLocked", lockedUtil).apply();
                     isLocked = true;
                     Log.i("ManageUtilAdapter", link + " protected");
                 } else {
                     List<String> utils = getLockedAsArray();
                     utils.remove(link);
                     lockedUtil = convertHiddenOrLockedArrayToString(utils);
-                    sp.edit().putString("utilLocked", hiddenUtil).apply();
+                    sp.edit().putString("utilLocked", lockedUtil).apply();
                     Log.i("ManageUtilAdapter", link + " unprotected");
                     isLocked = false;
                 }
