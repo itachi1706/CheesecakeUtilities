@@ -18,15 +18,26 @@ import java.util.List;
  */
 public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAdapter.StringViewHolder> {
     private List<String> stringList;
+    private boolean announce = false;
 
-    public StringRecyclerAdapter(List<String> strings)
-    {
-        this.stringList = strings;
+    public StringRecyclerAdapter(List<String> strings) {
+        this(strings, true);
     }
 
-    public StringRecyclerAdapter(String[] strings)
+    public StringRecyclerAdapter(String[] strings) {
+        this(strings, true);
+    }
+
+    public StringRecyclerAdapter(List<String> strings, boolean announce)
+    {
+        this.stringList = strings;
+        this.announce = announce;
+    }
+
+    public StringRecyclerAdapter(String[] strings, boolean announce)
     {
         this.stringList = Arrays.asList(strings);
+        this.announce = announce;
     }
 
     @Override
@@ -65,7 +76,7 @@ public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAd
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(v.getContext(), title.getText(), Toast.LENGTH_SHORT).show();
+            if (announce) Toast.makeText(v.getContext(), title.getText(), Toast.LENGTH_SHORT).show();
         }
 
     }
