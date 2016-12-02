@@ -1,8 +1,10 @@
 package com.itachi1706.cheesecakeutilities;
 
 import android.app.AlertDialog;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -28,13 +30,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         String menuitem = this.getIntent().hasExtra("menuitem") ? this.getIntent().getExtras().getString("menuitem", "") : "";
+        boolean checkGlobal = this.getIntent().hasExtra("globalcheck") && this.getIntent().getExtras().getBoolean("globalcheck");
+        boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
+        if (!authagain) return;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!(menuitem == null || menuitem.isEmpty() || menuitem.equals(""))) {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             if (!CommonMethods.isGlobalLocked(sp) && CommonMethods.isUtilityLocked(sp, menuitem)) {
                 Log.i("Authentication", "Requesting Utility Authentication for " + menuitem);
                 startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
             }
-
+        }
+        if (checkGlobal) {
+            if (CommonMethods.isGlobalLocked(sp)) {
+                Log.i("Authentication", "Requesting Authentication as app is locked globally");
+                startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH_GLOBAL);
+            }
         }
     }
 
@@ -66,6 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private final int REQUEST_AUTH = 3;
+    private final int REQUEST_AUTH_GLOBAL = 4;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -73,6 +84,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (requestCode == REQUEST_AUTH) {
             if (resultCode == RESULT_CANCELED) {
                 finish();
+            }
+        }
+        if (requestCode == REQUEST_AUTH_GLOBAL) {
+            if (resultCode == RESULT_CANCELED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) finishAffinity();
+                else finish();
+            } else if (resultCode == RESULT_OK && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                TaskStackBuilder.create(this)
+                        .addParentStack(MainMenuActivity.class)
+                        .addNextIntent(new Intent(this, MainMenuActivity.class).putExtra("authagain", false))
+                        .addNextIntent(new Intent(this, this.getClass()).putExtra("authagain", false))
+                .startActivities();
             }
         }
     }

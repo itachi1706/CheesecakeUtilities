@@ -48,11 +48,13 @@ public class POPCountdownWidgetProvider extends AppWidgetProvider {
             views.setTextViewText(R.id.wid_ord_days_counter, context.getResources().getQuantityString(R.plurals.pop_days, 999));
         }
 
-        Intent ordIntent = new Intent(context, ORDActivity.class);
+        Intent popIntent = new Intent(context, ORDActivity.class);
+        popIntent.putExtra("menuitem", "ORD Countdown");
+        popIntent.putExtra("globalcheck", true);
         TaskStackBuilder backStack = TaskStackBuilder.create(context);
         backStack.addParentStack(MainMenuActivity.class);
         backStack.addNextIntent(new Intent(context, MainMenuActivity.class));
-        backStack.addNextIntent(ordIntent);
+        backStack.addNextIntent(popIntent);
         PendingIntent intent = backStack.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.wid_ord_main, intent);
 
