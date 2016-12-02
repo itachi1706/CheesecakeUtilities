@@ -49,6 +49,8 @@ public class ORDCountdownWidgetProvider extends AppWidgetProvider {
         }
 
         Intent ordIntent = new Intent(context, ORDActivity.class);
+        ordIntent.putExtra("menuitem", "ORD Countdown");
+        ordIntent.putExtra("globalcheck", true);
         TaskStackBuilder backStack = TaskStackBuilder.create(context);
         backStack.addParentStack(MainMenuActivity.class);
         backStack.addNextIntent(new Intent(context, MainMenuActivity.class));
