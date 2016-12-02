@@ -9,6 +9,9 @@
         <Preference android:title="Authentication Status" android:selectable="false" android:key="password_fp"
             android:summary="Unprotected" />
         <Preference android:title="Set Password" android:key="password" android:summary="No Password Set" />
+        <CheckBoxPreference android:title="Global Lock" android:key="global_applock"
+            android:summary="Protects the whole application. Uncheck to selectively protect a utility instead (through the Utilities Management)"
+            android:defaultValue="true" />
         <Preference android:title="Test Authentication" android:key="testpw" />
     </PreferenceCategory>
 
