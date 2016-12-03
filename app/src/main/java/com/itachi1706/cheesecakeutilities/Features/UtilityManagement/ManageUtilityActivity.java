@@ -31,10 +31,11 @@ public class ManageUtilityActivity extends AppCompatActivity {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         String hiddenUtil = sp.getString("utilHidden", "");
+        String lockedUtil = sp.getString("utilLocked", "");
 
         // Set up layout
         String[] menuitems = getResources().getStringArray(R.array.mainmenu);
-        ManageUtilAdapter adapter = new ManageUtilAdapter(menuitems, hiddenUtil);
+        ManageUtilAdapter adapter = new ManageUtilAdapter(menuitems, hiddenUtil, lockedUtil);
         recyclerView.setAdapter(adapter);
 
         // Do Authentication

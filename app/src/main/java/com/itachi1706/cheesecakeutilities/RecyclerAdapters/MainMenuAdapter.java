@@ -2,6 +2,10 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +16,9 @@ import android.widget.TextView;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by itachi1706 on 2/20/2016.
@@ -81,7 +87,32 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
             Log.i("MainMenuAdapter", "Attempting to navigate to " + className);
             try {
                 Class classObj = Class.forName(className);
-                mActivity.startActivity(new Intent(mActivity, classObj));
+                Intent intent = new Intent(mActivity, classObj);
+                intent.putExtra("menuitem", link);
+                mActivity.startActivity(intent);
+
+                // Add dynamic shortcuts
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                    ShortcutManager shortcutManager = v.getContext().getSystemService(ShortcutManager.class);
+                    Queue<ShortcutInfo> infos = new LinkedList<>(shortcutManager.getDynamicShortcuts());
+                    final int shortcutCount = shortcutManager.getMaxShortcutCountPerActivity() - 2;
+                    if (infos.size() >= shortcutCount) {
+                        Log.i("ShortcutManager", "Dynamic Shortcuts more than " + shortcutCount
+                                + ". Removing extras");
+                        do {
+                            infos.remove();
+                        } while (infos.size() > shortcutCount);
+                    }
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.putExtra("globalcheck", true);
+                    ShortcutInfo newShortcut = new ShortcutInfo.Builder(v.getContext(), link.replace(" ", ""))
+                            .setShortLabel(link).setLongLabel("Launch this utility directly")
+                            .setIcon(Icon.createWithResource(v.getContext(), R.mipmap.ic_launcher_round))
+                            .setIntent(intent).build();
+
+                    infos.add(newShortcut);
+                    shortcutManager.setDynamicShortcuts(new LinkedList<>(infos));
+                }
             } catch (ClassNotFoundException e) {
                 Log.e("MainMenuAdapter", "Class Not Found: " + className);
                 e.printStackTrace();

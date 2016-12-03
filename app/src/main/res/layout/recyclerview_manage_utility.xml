@@ -33,6 +33,16 @@
             android:id="@+id/checkbox"
             app:srcCompat="@drawable/eye"
             android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/lockutilbutton"
+            app:srcCompat="@drawable/lock_open"
+            android:background="@android:color/transparent" />
     </LinearLayout>
 
 
