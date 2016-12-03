@@ -2,8 +2,12 @@ package com.itachi1706.cheesecakeutilities.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Kenneth on 3/19/2016.
@@ -24,6 +28,17 @@ public class CommonMethods {
         final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
         int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+
+    public static boolean isGlobalLocked(SharedPreferences sp) {
+        return sp.getBoolean("global_applock", true);
+    }
+
+    public static boolean isUtilityLocked(SharedPreferences sp, String utilityName) {
+        String lockedUtil = sp.getString("utilLocked", "");
+        if (lockedUtil.isEmpty() || lockedUtil.equals("")) return false;
+        List<String> locked = new ArrayList<>(Arrays.asList(lockedUtil.split("\\|\\|\\|")));
+        return locked.contains(utilityName);
     }
 
 }

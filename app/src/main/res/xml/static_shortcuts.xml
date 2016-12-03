@@ -16,6 +16,8 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.itachi1706.cheesecakeutilities"
-            android:targetClass="com.itachi1706.cheesecakeutilities.Games.TicTacToe.TicTacToeActivity" />
+            android:targetClass="com.itachi1706.cheesecakeutilities.Games.TicTacToe.TicTacToeActivity" >
+            <extra android:name="globalcheck" android:value="true" />
+        </intent>
     </shortcut>
 </shortcuts>
