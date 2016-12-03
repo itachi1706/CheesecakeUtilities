@@ -85,10 +85,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         appsViewHolder.appApiVersion.setText(s.getApiVersion() + "");
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
-        appsViewHolder.appLocation = s.getAppPath();
-        appsViewHolder.version = s.getVersion();
         appsViewHolder.appVersion.setText("Version: " + s.getVersion());
-        appsViewHolder.permissions = (s.getPermissions().equals("") ? "No Permissions Requested" : s.getPermissions());
     }
 
     @Override
@@ -105,7 +102,6 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
         TextView appName, appPackageName, appApiVersion, appVersion;
         ImageView appIcon;
-        String appLocation, version, permissions;
 
         AppsViewHolder(View v)
         {
