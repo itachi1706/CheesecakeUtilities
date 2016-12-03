@@ -11,7 +11,8 @@ import com.itachi1706.cheesecakeutilities.R;
  * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects in CheesecakeUtilities
  */
 public class AppsItem {
-    private String appName, appPath, packageName, version, permissions;
+    @Deprecated private String appPath, permissions;
+    private String appName, packageName, version;
     private int apiVersion;
     private Drawable icon;
 
@@ -19,6 +20,7 @@ public class AppsItem {
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
+    @Deprecated
     public AppsItem(Context context, String appName, String appPath, int apiVersion, String packageName, String version, String permissions) {
         this.appName = appName;
         this.appPath = appPath;
@@ -29,6 +31,7 @@ public class AppsItem {
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
+    @Deprecated
     public AppsItem(String appName, String appPath, int apiVersion, String packageName, Drawable icon, String version, String permissions) {
         this.appName = appName;
         this.appPath = appPath;
@@ -36,6 +39,22 @@ public class AppsItem {
         this.packageName = packageName;
         this.version = version;
         this.permissions = permissions;
+        this.icon = icon;
+    }
+
+    public AppsItem(Context context, String appName, int apiVersion, String packageName, String version) {
+        this.appName = appName;
+        this.apiVersion = apiVersion;
+        this.packageName = packageName;
+        this.version = version;
+        this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
+    }
+
+    public AppsItem(String appName, int apiVersion, String packageName, Drawable icon, String version) {
+        this.appName = appName;
+        this.apiVersion = apiVersion;
+        this.packageName = packageName;
+        this.version = version;
         this.icon = icon;
     }
 
@@ -47,10 +66,12 @@ public class AppsItem {
         this.appName = appName;
     }
 
+    @Deprecated
     public String getAppPath() {
         return appPath;
     }
 
+    @Deprecated
     public void setAppPath(String appPath) {
         this.appPath = appPath;
     }
@@ -87,10 +108,12 @@ public class AppsItem {
         this.version = version;
     }
 
+    @Deprecated
     public String getPermissions() {
         return permissions;
     }
 
+    @Deprecated
     public void setPermissions(String permissions) {
         this.permissions = permissions;
     }

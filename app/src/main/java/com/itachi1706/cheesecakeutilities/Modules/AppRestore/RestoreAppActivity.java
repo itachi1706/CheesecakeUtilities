@@ -1,11 +1,10 @@
 package com.itachi1706.cheesecakeutilities.Modules.AppRestore;
 
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,20 +14,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
-import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFileFilter;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class RestoreAppActivity extends AppCompatActivity {
 
@@ -82,9 +76,13 @@ public class RestoreAppActivity extends AppCompatActivity {
             String[] ext = {"apk"};
             Collection<File> apkfiles = FileUtils.listFiles(backupFolder, ext, false);
             finalStr = new ArrayList<>();
+            PackageManager pm = getPackageManager();
             for (File f : apkfiles) {
                 Log.d("File", f.getName());
-                finalStr.add(new AppsItem(getApplicationContext(), f.getName(), f.getAbsolutePath(), 1, "1", "1", ""));
+
+                PackageInfo info = pm.getPackageArchiveInfo(f.getAbsolutePath(), PackageManager.GET_META_DATA);
+                finalStr.add(new AppsItem(getApplicationContext(), info.applicationInfo.loadLabel(pm).toString(),
+                        info.applicationInfo.targetSdkVersion, info.packageName, info.versionName));
             }
             finalAdapter = new AppsAdapter(finalStr);
 
