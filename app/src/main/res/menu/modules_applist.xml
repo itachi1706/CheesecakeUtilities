@@ -5,4 +5,6 @@
         android:orderInCategory="50" android:checkable="true" app:showAsAction="never" />
     <item android:id="@+id/sortapi" android:title="Sort by API Version"
         android:orderInCategory="51" android:checkable="true" app:showAsAction="never" />
+    <item android:id="@+id/graph" android:title="Graph by API"
+        android:orderInCategory="49" app:showAsAction="ifRoom"/>
 </menu>
