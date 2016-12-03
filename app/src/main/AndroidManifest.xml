@@ -159,7 +159,18 @@
         <activity
             android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
-        <activity android:name=".Modules.AppRestore.RestoreAppActivity"></activity>
+        <activity android:name=".Modules.AppRestore.RestoreAppActivity" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.appupdater.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                tools:replace="android:resource"
+                android:resource="@xml/app_restore_provider_paths"/>
+
+        </provider>
     </application>
 
 </manifest>
