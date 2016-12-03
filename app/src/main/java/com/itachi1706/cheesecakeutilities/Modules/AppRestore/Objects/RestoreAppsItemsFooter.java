@@ -8,6 +8,7 @@ public class RestoreAppsItemsFooter extends RestoreAppsItemsBase {
     private String fullpath, version;
 
     public RestoreAppsItemsFooter(String fullpath, String version) {
+        super();
         this.fullpath = fullpath;
         this.version = version;
     }
