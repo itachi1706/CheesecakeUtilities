@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.itachi1706.cheesecakeutilities.Modules.AppRestore.RecyclerAdapters.RestoreAppsAdapter;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
@@ -60,6 +61,7 @@ public class RestoreAppActivity extends AppCompatActivity {
     private class LoadAppThread extends AsyncTask<Boolean, Void, Void> {
 
         private ArrayList<AppsItem> finalStr;
+        private AppsAdapter finalAdapter;
 
         @Override
         protected Void doInBackground(Boolean... params) {
@@ -97,7 +99,5 @@ public class RestoreAppActivity extends AppCompatActivity {
             bar.setVisibility(View.GONE);
             label.setVisibility(View.GONE);
         }
-
-        private AppsAdapter finalAdapter;
     }
 }
