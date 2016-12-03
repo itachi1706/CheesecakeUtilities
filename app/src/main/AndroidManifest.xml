@@ -171,6 +171,9 @@
                 android:resource="@xml/app_restore_provider_paths"/>
 
         </provider>
+        <activity
+            android:name=".Modules.ListApplications.ListApplicationsApiGraphActivity"
+            android:label="Graph by API Level"/>
     </application>
 
 </manifest>
