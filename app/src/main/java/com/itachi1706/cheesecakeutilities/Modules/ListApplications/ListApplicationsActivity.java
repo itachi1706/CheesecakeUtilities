@@ -1,10 +1,12 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ListApplicationsActivity extends BaseActivity {
 
@@ -74,6 +77,7 @@ public class ListApplicationsActivity extends BaseActivity {
 
     private boolean checkSystem = false;
     private boolean sortByApi = false;
+    private String appCountString = "";
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -82,6 +86,11 @@ public class ListApplicationsActivity extends BaseActivity {
                 eval(checkSystem); return true;
             case R.id.sortapi: item.setChecked(!item.isChecked()); sortByApi = item.isChecked();
                 eval(checkSystem); return true;
+            case R.id.graph:
+                Intent i = new Intent(this, ListApplicationsApiGraphActivity.class);
+                i.putExtra("appCount", appCountString);
+                startActivity(i);
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
@@ -122,6 +131,9 @@ public class ListApplicationsActivity extends BaseActivity {
             // Further sort if by API
             if (sortByApi) finalAdapter.sort(AppsAdapter.SORT_API);
 
+            // Generate app count by API List
+            appCountString = generateApiAppCountList();
+
             // Done
             runOnUiThread(new Runnable() {
                 @Override
@@ -132,6 +144,24 @@ public class ListApplicationsActivity extends BaseActivity {
                 }
             });
             return null;
+        }
+
+        private String generateApiAppCountList() {
+            ArrayMap<Integer, Integer> tmp = new ArrayMap<>();
+            for (AppsItem appsItem : finalStr) {
+                int count = 0;
+                if (tmp.containsKey(appsItem.getApiVersion())) {
+                    count = tmp.get(appsItem.getApiVersion());
+                }
+                count++;
+                tmp.put(appsItem.getApiVersion(), count);
+            }
+
+            String appCount = "";
+            for (Map.Entry<Integer, Integer> object : tmp.entrySet()) {
+                appCount += object.getKey() + ":" + object.getValue() + "-";
+            }
+            return appCount.substring(0, appCount.length() - 1);
         }
 
         private AppsAdapter finalAdapter;
