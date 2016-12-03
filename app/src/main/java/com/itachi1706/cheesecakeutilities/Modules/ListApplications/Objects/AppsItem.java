@@ -11,7 +11,7 @@ import com.itachi1706.cheesecakeutilities.R;
  * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects in CheesecakeUtilities
  */
 public class AppsItem {
-    private String appName, appPath, packageName, version, permissions;
+    private String appName, packageName, version;
     private int apiVersion;
     private Drawable icon;
 
@@ -19,23 +19,19 @@ public class AppsItem {
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
-    public AppsItem(Context context, String appName, String appPath, int apiVersion, String packageName, String version, String permissions) {
+    public AppsItem(Context context, String appName, int apiVersion, String packageName, String version) {
         this.appName = appName;
-        this.appPath = appPath;
         this.apiVersion = apiVersion;
         this.packageName = packageName;
         this.version = version;
-        this.permissions = permissions;
         this.icon = ContextCompat.getDrawable(context, R.mipmap.ic_launcher);
     }
 
-    public AppsItem(String appName, String appPath, int apiVersion, String packageName, Drawable icon, String version, String permissions) {
+    public AppsItem(String appName, int apiVersion, String packageName, Drawable icon, String version) {
         this.appName = appName;
-        this.appPath = appPath;
         this.apiVersion = apiVersion;
         this.packageName = packageName;
         this.version = version;
-        this.permissions = permissions;
         this.icon = icon;
     }
 
@@ -45,14 +41,6 @@ public class AppsItem {
 
     public void setAppName(String appName) {
         this.appName = appName;
-    }
-
-    public String getAppPath() {
-        return appPath;
-    }
-
-    public void setAppPath(String appPath) {
-        this.appPath = appPath;
     }
 
     public int getApiVersion() {
@@ -85,13 +73,5 @@ public class AppsItem {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public String getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(String permissions) {
-        this.permissions = permissions;
     }
 }

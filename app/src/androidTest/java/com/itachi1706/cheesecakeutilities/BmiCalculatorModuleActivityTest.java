@@ -53,7 +53,7 @@ public class BmiCalculatorModuleActivityTest {
     public void bmiCalculatorModuleActivityTest() {
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.main_menu_recycler_view), isDisplayed()));
-        recyclerView.perform(actionOnItemAtPosition(7, click()));
+        recyclerView.perform(actionOnItemAtPosition(8, click()));
 
         ViewInteraction textInputEditText = onView(
                 allOf(withId(R.id.etHeight), isDisplayed()));
