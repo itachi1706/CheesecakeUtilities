@@ -7,6 +7,7 @@
         <item>Fanfiction Compactor</item>
         <item>Disable Camera</item>
         <item>Application List</item>
+        <item>Restore Application</item>
         <item>ORD Countdown</item>
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
@@ -21,6 +22,7 @@
         <item>com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FanfictionCompactorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.CameraDisablerActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.AppRestore.RestoreAppActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.ORDActivity</item>
         <item>com.itachi1706.cheesecakeutilities.BmiCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.IpptCalculatorActivity</item>

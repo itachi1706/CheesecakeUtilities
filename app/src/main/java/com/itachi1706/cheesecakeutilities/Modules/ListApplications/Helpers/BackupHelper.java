@@ -45,7 +45,7 @@ public class BackupHelper {
         return true;
     }
 
-    private static File getFolder() {
+    public static File getFolder() {
         String externalStorage = FileHelper.getExternalStorage();
         return new File(externalStorage + "/AndroidAppBackup");
     }

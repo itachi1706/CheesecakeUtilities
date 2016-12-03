@@ -156,8 +156,10 @@
         <activity
             android:name=".Games.TicTacToe.TicTacToeActivity"
             android:label="Tic Tac Toe" />
-        <activity android:name=".Features.UtilityManagement.ManageUtilityActivity"
+        <activity
+            android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
+        <activity android:name=".Modules.AppRestore.RestoreAppActivity"></activity>
     </application>
 
 </manifest>
