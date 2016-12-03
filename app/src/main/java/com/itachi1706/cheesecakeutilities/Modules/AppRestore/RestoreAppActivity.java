@@ -81,8 +81,10 @@ public class RestoreAppActivity extends AppCompatActivity {
                 Log.d("File", f.getName());
 
                 PackageInfo info = pm.getPackageArchiveInfo(f.getAbsolutePath(), PackageManager.GET_META_DATA);
-                finalStr.add(new AppsItem(getApplicationContext(), info.applicationInfo.loadLabel(pm).toString(),
-                        info.applicationInfo.targetSdkVersion, info.packageName, info.versionName));
+                info.applicationInfo.sourceDir = f.getAbsolutePath();
+                info.applicationInfo.publicSourceDir = f.getAbsolutePath();
+                finalStr.add(new AppsItem(info.applicationInfo.loadLabel(pm).toString(),
+                        info.applicationInfo.targetSdkVersion, info.packageName, info.applicationInfo.loadIcon(pm), info.versionName));
             }
             finalAdapter = new AppsAdapter(finalStr);
 
