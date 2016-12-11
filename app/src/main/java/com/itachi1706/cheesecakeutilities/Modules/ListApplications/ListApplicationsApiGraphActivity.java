@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -33,7 +34,9 @@ public class ListApplicationsApiGraphActivity extends AppCompatActivity implemen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_applications_api_graph);
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         if (!getIntent().hasExtra("appCount")) {
             Toast.makeText(this, "Cannot plot graph. Please wait for the app list to finish loading first!", Toast.LENGTH_LONG).show();
@@ -106,5 +109,16 @@ public class ListApplicationsApiGraphActivity extends AppCompatActivity implemen
             snackbar.dismiss();
 
         snackbar = null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
