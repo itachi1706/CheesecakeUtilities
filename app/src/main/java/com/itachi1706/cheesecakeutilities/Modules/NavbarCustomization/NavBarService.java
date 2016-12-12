@@ -17,9 +17,12 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -88,11 +91,16 @@ public class NavBarService extends AccessibilityService {
         addNavView();
     }
 
+    private ColorDrawable transparent = null;
+    private static final int TRANSITION_DURATION = 500;
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (tvAppName == null) return; // Can't proceed
         if (sharedPreferences == null) sharedPreferences = new AppPreferences(getApplicationContext());
         if (!sharedPreferences.getBoolean(NAVBAR_SERVICE_ENABLED, true)) return; // Service not enabled
+
+        if (transparent == null) transparent = new ColorDrawable(ContextCompat.getColor(this, android.R.color.transparent));
 
         CharSequence display = null;
         PackageManager pm = getPackageManager();
@@ -114,6 +122,9 @@ public class NavBarService extends AccessibilityService {
                     };
                     Resources.Theme t = res.newTheme();
                     Intent launchIntent = pm.getLaunchIntentForPackage(event.getPackageName().toString());
+                    Drawable[] transitions = new Drawable[2];
+                    Drawable existing = ivImage.getDrawable();
+                    transitions[0] = (existing != null) ? existing : transparent;
                     if (launchIntent != null) {
                         ComponentName cn = launchIntent.getComponent();
                         t.applyStyle(pm.getActivityInfo(cn, 0).theme, false);
@@ -121,10 +132,14 @@ public class NavBarService extends AccessibilityService {
                         int colorPrimaryDark = a.getColor(0, 0); // Do something with the color
                         a.recycle();
                         ColorDrawable d = new ColorDrawable(colorPrimaryDark);
-                        ivImage.setImageDrawable((colorPrimaryDark == 0) ? null : d);
+                        transitions[1] = (colorPrimaryDark == 0) ? transparent : d;
                     } else {
-                        ivImage.setImageDrawable(null);
+                        transitions[1] = transparent;
                     }
+                    TransitionDrawable transitionDrawable = new TransitionDrawable(transitions);
+                    transitionDrawable.setCrossFadeEnabled(true);
+                    ivImage.setImageDrawable(transitionDrawable);
+                    transitionDrawable.startTransition(TRANSITION_DURATION);
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
