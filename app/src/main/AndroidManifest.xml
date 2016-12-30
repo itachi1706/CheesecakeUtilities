@@ -175,7 +175,8 @@
         <activity
             android:name=".Modules.ListApplications.ListApplicationsApiGraphActivity"
             android:label="Graph by API Level" />
-        <activity android:name=".Modules.SafetyNet.SafetyNetActivity"></activity>
+        <activity android:name=".Modules.SafetyNet.SafetyNetActivity"
+            android:label="SafetyNet Validator"/>
     </application>
 
 </manifest>
