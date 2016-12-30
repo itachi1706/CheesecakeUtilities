@@ -41,13 +41,25 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
     }
+    def Properties props = new Properties()
+    def propFile = file('key.properties')
+    //check if SAFETY_NET_DEVICE_VERIFICATION_API_KEY is defined in gradle.properties (this is so the key is not in github)
+    String GOOGLE_VERIFICATION_API_KEY = "";
+    if (propFile.canRead()) {
+        props.load(new FileInputStream(propFile))
+        if (props!=null && props.containsKey('key.safetynet')) {
+            GOOGLE_VERIFICATION_API_KEY = props.getProperty('key.safetynet')
+        }
+    }
     buildTypes {
         release {
+            buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
             // Disable Fabric Stuff
             ext.enableCrashlytics = false
         }
@@ -91,4 +103,6 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
+    compile 'com.github.scottyab:safetynethelper:0.2.0'
+    compile 'com.google.android.gms:play-services-safetynet:10.0.1'
 }
