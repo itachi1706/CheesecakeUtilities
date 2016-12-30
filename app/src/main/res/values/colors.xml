@@ -6,4 +6,7 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="colorItembg">#eeeeee</color>
+    <color name="pass">#8BC34A</color>
+    <color name="fail">#FF5252</color>
+    <color name="problem">#0097A7</color>
 ***REMOVED***
