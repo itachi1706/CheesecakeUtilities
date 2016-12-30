@@ -90,4 +90,5 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.1.0'
 }
