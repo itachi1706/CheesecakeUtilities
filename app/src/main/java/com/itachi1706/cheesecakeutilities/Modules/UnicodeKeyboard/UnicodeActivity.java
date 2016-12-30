@@ -1,15 +1,24 @@
 package com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard.RecyclerAdapters.UnicodeMenuAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
-public class UnicodeActivity extends AppCompatActivity {
+public class UnicodeActivity extends BaseActivity {
+
+    @Override
+    public String getHelpDescription() {
+        String message = "List of Unicode emojis that you can click on to copy to your clipboard for use everywhere else :D";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            message += "\n\nYou can even drag and drop emojis into textboxes when you are in Android's Multi Window mode by long clicking the emoji!";
+        return message;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +28,9 @@ public class UnicodeActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(linearLayoutManager);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+
+            recyclerView.setLayoutManager(gridLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
