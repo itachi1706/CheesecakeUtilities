@@ -1,10 +1,13 @@
 package com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard.RecyclerAdapters;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +61,7 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
     }
 
 
-    class UnicodeMenuHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class UnicodeMenuHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         protected TextView title;
 
@@ -67,6 +70,8 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
             super(v);
             title = (TextView) v.findViewById(R.id.text1);
             v.setOnClickListener(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                v.setOnLongClickListener(this);
         }
 
         @Override
@@ -78,5 +83,15 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
             Toast.makeText(v.getContext(), "Copied to clipboard", Toast.LENGTH_LONG).show();
         }
 
+        @Override
+        @RequiresApi(api = android.os.Build.VERSION_CODES.N)
+        public boolean onLongClick(View v) {
+            String link = title.getText().toString();
+            ClipData clip = ClipData.newPlainText("unicode", link);
+            View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v);
+            v.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ|
+                    View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
+            return true;
+        }
     }
 }
