@@ -160,6 +160,7 @@
             android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
         <activity android:name=".Modules.AppRestore.RestoreAppActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.appupdater.provider"
@@ -167,13 +168,15 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                tools:replace="android:resource"
-                android:resource="@xml/app_restore_provider_paths"/>
-
+                android:resource="@xml/app_restore_provider_paths"
+                tools:replace="android:resource" />
         </provider>
+
         <activity
             android:name=".Modules.ListApplications.ListApplicationsApiGraphActivity"
-            android:label="Graph by API Level"/>
+            android:label="Graph by API Level" />
+        <activity android:name=".Modules.SafetyNet.SafetyNetActivity"
+            android:label="SafetyNet Validator"/>
     </application>
 
 </manifest>
