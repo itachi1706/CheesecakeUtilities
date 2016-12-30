@@ -7,17 +7,15 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.scottyab.safetynet.SafetyNetHelper;
@@ -27,22 +25,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class SafetyNetActivity extends AppCompatActivity {
+import static com.google.android.gms.common.GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
+
+public class SafetyNetActivity extends BaseActivity {
 
     private static final String API_KEY = BuildConfig.GOOGLE_VERIFICATION_API_KEY;
 
     private View loading;
-    private AlertDialog infoDialog;
-    private static final String TAG = "SafetyNetHelperSAMPLE";
+    private static final String TAG = "SafetyNet";
     final SafetyNetHelper safetyNetHelper = new SafetyNetHelper(API_KEY);
     private TextView resultsTV;
     private TextView nonceTV;
     private TextView timestampTV;
     private View resultsContainer;
-    private boolean hasAnimated =false;
     private View sucessResultsContainer;
     private TextView packagenameTV;
-    private Button runTestBtn;
+
+    @Override
+    public String getHelpDescription() {
+        return "Does a basic validation check of SafetyNet. Obtained from the SafetyNet Sample project";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class SafetyNetActivity extends AppCompatActivity {
         resultsContainer = findViewById(R.id.resultsContainer);
         sucessResultsContainer = findViewById(R.id.sucessResultsContainer);
         loading = findViewById(R.id.loading);
-        runTestBtn = (Button) findViewById(R.id.runTestButton);
+        Button runTestBtn = (Button) findViewById(R.id.runTestButton);
         runTestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,17 +117,17 @@ public class SafetyNetActivity extends AppCompatActivity {
                 b.append("\n*GooglePlayServices outdated*\n");
                 try {
                     int v = getPackageManager().getPackageInfo("com.google.android.gms", 0).versionCode;
-                    String vName = getPackageManager().getPackageInfo("com.google.android.gms", 0).versionName.split(" ")[0];
-                    b.append("You are running version:\n" + vName + " " + v + "\nSafetyNet requires minimum:\n7.3.27 7327000\n");
+                    b.append("You are running version:\n").append(v).append("\nSafetyNet requires minimum:\n").append(GOOGLE_PLAY_SERVICES_VERSION_CODE).append("\n");
                 } catch (Exception NameNotFoundException) {
-                    b.append("Could not find GooglePlayServices on this device.\nPackage com.google.android.gms missing.");
+                    b.append("Could not find Google Play Services on this device.\nThis Utility only supports Google Play devices");
                 }
                 break;
         }
+        if (errorMsg.contains(API_KEY)) errorMsg = errorMsg.replace(API_KEY, "<API_KEY>");
         resultsTV.setText(b.toString() + "\nError Msg:\n" + errorMsg);
 
         sucessResultsContainer.setVisibility(View.GONE);
-        revealResults(getResources().getColor(R.color.problem));
+        revealResults(ContextCompat.getColor(this, R.color.problem));
     }
 
     private void showLoading(boolean show) {
@@ -167,7 +169,8 @@ public class SafetyNetActivity extends AppCompatActivity {
     }
 
     private void updateUIWithSucessfulResult(SafetyNetResponse safetyNetResponse) {
-        resultsTV.setText("SafetyNet request: success \nResponse validation: success\nCTS profile match: "+ (safetyNetResponse.isCtsProfileMatch() ? "true" : "false"));
+        resultsTV.setText("SafetyNet request: success \nResponse validation: success\nCTS profile match: "
+                + (safetyNetResponse.isCtsProfileMatch() ? "true" : "false"));
 
         sucessResultsContainer.setVisibility(View.VISIBLE);
 
@@ -178,7 +181,7 @@ public class SafetyNetActivity extends AppCompatActivity {
         timestampTV.setText(sim.format(timeOfResponse));
         packagenameTV.setText(safetyNetResponse.getApkPackageName());
 
-        revealResults(getResources().getColor(safetyNetResponse.isCtsProfileMatch() ? R.color.pass : R.color.fail));
+        revealResults(ContextCompat.getColor(this, safetyNetResponse.isCtsProfileMatch() ? R.color.pass : R.color.fail));
     }
 
 }
