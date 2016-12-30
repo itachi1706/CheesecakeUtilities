@@ -32,6 +32,7 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
@@ -100,10 +101,7 @@ public class AuthenticationFeatureTest {
         editText2.perform(replaceText("qwerty"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        withParent(allOf(withId(R.id.buttonPanel),
-                                withParent(withId(R.id.parentPanel)))),
-                        isDisplayed()));
+                allOf(withId(android.R.id.button1), withText("OK")));
         appCompatButton.perform(click());
 
         ViewInteraction textView = onView(
@@ -138,10 +136,7 @@ public class AuthenticationFeatureTest {
         editText4.perform(replaceText("qwert"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        withParent(allOf(withId(R.id.buttonPanel),
-                                withParent(withId(R.id.parentPanel)))),
-                        isDisplayed()));
+                allOf(withId(android.R.id.button1), withText("OK")));
         appCompatButton2.perform(click());
 
         ViewInteraction editText5 = onView(
@@ -162,10 +157,7 @@ public class AuthenticationFeatureTest {
         editText6.perform(clearText(), typeText("qwerty"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        withParent(allOf(withId(R.id.buttonPanel),
-                                withParent(withId(R.id.parentPanel)))),
-                        isDisplayed()));
+                allOf(withId(android.R.id.button1), withText("OK")));
         appCompatButton3.perform(click());
 
         ViewInteraction textView2 = onView(
@@ -174,20 +166,17 @@ public class AuthenticationFeatureTest {
         textView2.check(matches(withText("Set new Password")));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(android.R.id.message), withText("Set a new app password or leave it blank to have no password"),
+                allOf(withId(android.R.id.message),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.scrollView),
                                         0),
-                                0),
+                                1),
                         isDisplayed()));
         textView3.check(matches(withText("Set a new app password or leave it blank to have no password")));
 
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        withParent(allOf(withId(R.id.buttonPanel),
-                                withParent(withId(R.id.parentPanel)))),
-                        isDisplayed()));
+                allOf(withId(android.R.id.button1), withText("OK")));
         appCompatButton4.perform(click());
 
         ViewInteraction textView4 = onView(

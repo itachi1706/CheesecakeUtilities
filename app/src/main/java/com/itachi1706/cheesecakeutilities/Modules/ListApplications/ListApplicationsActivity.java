@@ -1,26 +1,42 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +94,7 @@ public class ListApplicationsActivity extends BaseActivity {
     private boolean checkSystem = false;
     private boolean sortByApi = false;
     private String appCountString = "";
+    private List<String> appPackageNamesInstalled = new ArrayList<>();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,7 +108,141 @@ public class ListApplicationsActivity extends BaseActivity {
                 i.putExtra("appCount", appCountString);
                 startActivity(i);
                 return true;
+            case R.id.scan_ghost:
+                new AlertDialog.Builder(this).setTitle("Scan Ghost Directories")
+                        .setMessage("This will scan your external application data folder (/sdcard/Android) for any ghost directories " +
+                                "left behind by applications no longer installed on your device")
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton("Scan", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                hasStoragePermissionCheck();
+                            }
+                        }).show();
+                return true;
             default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void hasStoragePermissionCheck() {
+        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (rc != PackageManager.PERMISSION_GRANTED)
+            requestStoragePermission();
+        else
+            scanGhostDir();
+    }
+
+    private static final int RC_HANDLE_REQUEST_STORAGE = 4;
+
+    private void requestStoragePermission() {
+        Log.w("PermMan", "Storage permission is not granted. Requesting permission");
+        final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_REQUEST_STORAGE);
+            return;
+        }
+
+        final Activity thisActivity = this;
+
+        new AlertDialog.Builder(this).setTitle("Requesting Storage Permission")
+                .setMessage("This app requires ability to access your storage to scan your internal storage and " +
+                        "perform cleanup activities for you")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE);
+                    }
+                }).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        final Activity thisActivity = this;
+        switch (requestCode) {
+            case RC_HANDLE_REQUEST_STORAGE:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i("PermMan", "Storage Permission Granted. Allowing Utility Access");
+                    scanGhostDir();
+                    return;
+                }
+                Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
+                        " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+                new AlertDialog.Builder(this).setTitle("Permission Denied")
+                        .setMessage("You have denied the app ability to access your storage. This app will not be able to scan" +
+                                " for ghost directories or perform ghost directories cleanup for you")
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setCancelable(false)
+                        .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
+                                permIntent.setData(packageURI);
+                                startActivity(permIntent);
+                            }
+                        }).show();
+                break;
+        }
+    }
+
+    private void scanGhostDir() {
+        String androidDirString = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data";
+        File androidDir = new File(androidDirString);
+        if (!androidDir.exists() || !androidDir.isDirectory() || appPackageNamesInstalled.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "An error occurred when attempting to do a scan", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        File[] subDir = androidDir.listFiles();
+        final ArrayMap<String, String> listOfGhostDir = new ArrayMap<>();
+        if (subDir.length == 0) {
+            new AlertDialog.Builder(this).setTitle("Ghost Directory Scanning Complete")
+                    .setMessage("You do not have any folders in the Android Application Data directory of your device")
+                    .setPositiveButton(android.R.string.ok, null).show();
+            return;
+        }
+        for (File f : subDir) {
+            if (!f.isDirectory()) continue;
+            if (!appPackageNamesInstalled.contains(f.getName())) {
+                listOfGhostDir.put(f.getName(), f.getAbsolutePath());
+            }
+        }
+
+        if (listOfGhostDir.isEmpty()) {
+            // Empty
+            new AlertDialog.Builder(this).setTitle("Ghost Directory Scanning Complete")
+                    .setMessage("You have no ghost directories found in your device")
+                    .setPositiveButton(android.R.string.ok, null).show();
+        } else {
+            new MaterialDialog.Builder(this).title("Ghost Directory Scanning Complete")
+                    .items(listOfGhostDir.keySet()).itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                @Override
+                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    int count = 0;
+                    String removeMan = "";
+                    for (CharSequence t : text) {
+                        String path = listOfGhostDir.get(t);
+                        File del = new File(path);
+                        try {
+                            FileUtils.deleteDirectory(del);
+                            count++;
+                        } catch (IOException e) {
+                            Log.e("GhostCleanup", "Unable to remove " + t);
+                            removeMan += t + "\n";
+                        }
+                    }
+                    if (!removeMan.isEmpty()) {
+                        new AlertDialog.Builder(ListApplicationsActivity.this).setTitle("Unable to remove some directories")
+                                .setMessage("Some directories cannot be removed. Please remove them manually.\n\n" + removeMan)
+                                .setPositiveButton(android.R.string.ok, null).show();
+                    }
+                    Toast.makeText(getApplicationContext(), "Cleaned up " + count + " directories", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            }).positiveText("Clean Up").negativeText(android.R.string.cancel).show();
         }
     }
 
@@ -106,6 +257,7 @@ public class ListApplicationsActivity extends BaseActivity {
             final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
             finalStr = new ArrayList<>();
             for (ApplicationInfo i : pkgAppsList) {
+                appPackageNamesInstalled.add(i.packageName);
                 if (isSystemApp(i)) {
                     if (!system) continue;
                 }
