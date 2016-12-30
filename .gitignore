@@ -47,3 +47,4 @@ captures/
 fabric.properties
 
 *.iml
+app/key.properties
