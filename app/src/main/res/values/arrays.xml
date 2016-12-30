@@ -12,6 +12,7 @@
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
         <item>System Information</item>
+        <item>Unicode Emoticons</item>
         <item>Navigation Bar Customizer</item>
         <item>SafetyNet Validator</item>
         <item>Games List</item>
@@ -28,6 +29,7 @@
         <item>com.itachi1706.cheesecakeutilities.BmiCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.IpptCalculatorActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.SystemInformation.InitActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.SafetyNet.SafetyNetActivity</item>
         <item>com.itachi1706.cheesecakeutilities.GamesActivity</item>
