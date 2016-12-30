@@ -1,11 +1,14 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,12 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +83,7 @@ public class ListApplicationsActivity extends BaseActivity {
     private boolean checkSystem = false;
     private boolean sortByApi = false;
     private String appCountString = "";
+    private List<String> appPackageNamesInstalled = new ArrayList<>();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,8 +97,54 @@ public class ListApplicationsActivity extends BaseActivity {
                 i.putExtra("appCount", appCountString);
                 startActivity(i);
                 return true;
+            case R.id.scan_ghost:
+                new AlertDialog.Builder(this).setTitle("Scan Ghost Directories")
+                        .setMessage("This will scan your storage folder (/sdcard/Android) for any ghost directories " +
+                                "left behind by applications no longer installed on your device")
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton("Scan", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (!scanGhostDir()) {
+                                    Toast.makeText(getApplicationContext(), "An error occurred when attempting to do a scan", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }).show();
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean scanGhostDir() {
+        String androidDirString = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data";
+        File androidDir = new File(androidDirString);
+        if (!androidDir.exists() || !androidDir.isDirectory()) return false;
+        if (appPackageNamesInstalled.isEmpty()) return false;
+
+        File[] subDir = androidDir.listFiles();
+        ArrayMap<String, String> listOfGhostDir = new ArrayMap<>();
+        for (File f : subDir) {
+            if (!f.isDirectory()) continue;
+            if (!appPackageNamesInstalled.contains(f.getName())) {
+                listOfGhostDir.put(f.getName(), f.getAbsolutePath());
+            }
+        }
+
+        if (listOfGhostDir.isEmpty()) {
+            // Empty
+            new AlertDialog.Builder(this).setTitle("Ghost Directory Scanning Complete")
+                    .setMessage("You have no ghost directories found in your device")
+                    .setPositiveButton(android.R.string.ok, null).show();
+        } else {
+            // TODO: Change to checklist of items in a DialogFragment
+            String message = "Found " + listOfGhostDir.size() + " ghost directories\n\n";
+            for (Map.Entry<String, String> entry : listOfGhostDir.entrySet()) {
+                message += entry.getKey() + "\n";
+            }
+            new AlertDialog.Builder(this).setTitle("Ghost Directory Scanning Complete")
+                    .setMessage(message).setPositiveButton(android.R.string.ok, null).show();
+        }
+        return true;
     }
 
     private class LoadAppThread extends AsyncTask<Boolean, Void, Void> {
@@ -106,6 +158,7 @@ public class ListApplicationsActivity extends BaseActivity {
             final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
             finalStr = new ArrayList<>();
             for (ApplicationInfo i : pkgAppsList) {
+                appPackageNamesInstalled.add(i.packageName);
                 if (isSystemApp(i)) {
                     if (!system) continue;
                 }
