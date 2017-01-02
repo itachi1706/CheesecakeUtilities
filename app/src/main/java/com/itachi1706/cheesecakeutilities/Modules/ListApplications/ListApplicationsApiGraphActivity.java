@@ -97,7 +97,7 @@ public class ListApplicationsApiGraphActivity extends AppCompatActivity implemen
 
         PieEntry pieEntry = (PieEntry) e;
         String api = pieEntry.getLabel();
-        float count = pieEntry.getValue();
+        int count = (int) pieEntry.getValue();
 
         snackbar = Snackbar.make(layout, api + "\nApp Count: " + count, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
