@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
     {
         String s  = stringList.get(i);
         stringViewHolder.title.setText(s);
+        stringViewHolder.title.setSelected(true);
     }
 
     @Override
@@ -69,6 +71,9 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
         {
             super(v);
             title = (TextView) v.findViewById(R.id.text1);
+            title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            title.setMarqueeRepeatLimit(-1);
+            title.setHorizontallyScrolling(true);
             v.setOnClickListener(this);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 v.setOnLongClickListener(this);
@@ -76,18 +81,18 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
 
         @Override
         public void onClick(View v) {
-            String link = title.getText().toString();
+            String emoji = title.getText().toString();
             ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("unicode", link);
+            ClipData clip = ClipData.newPlainText("unicode", emoji);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(v.getContext(), "Copied to clipboard", Toast.LENGTH_LONG).show();
+            Toast.makeText(v.getContext(), emoji + "\ncopied to clipboard", Toast.LENGTH_LONG).show();
         }
 
         @Override
         @RequiresApi(api = android.os.Build.VERSION_CODES.N)
         public boolean onLongClick(View v) {
-            String link = title.getText().toString();
-            ClipData clip = ClipData.newPlainText("unicode", link);
+            String emoji = title.getText().toString();
+            ClipData clip = ClipData.newPlainText("unicode", emoji);
             View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v);
             v.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ|
                     View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
