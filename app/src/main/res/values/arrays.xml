@@ -15,6 +15,7 @@
         <item>Unicode Emoticons</item>
         <item>Navigation Bar Customizer</item>
         <item>SafetyNet Validator</item>
+        <item>MaskMediaActivity</item>
         <item>Games List</item>
     </string-array>
     <string-array name="mainmenulink">
@@ -32,6 +33,7 @@
         <item>com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.SafetyNet.SafetyNetActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Modules.MaskMedia.MaskMediaActivity</item>
         <item>com.itachi1706.cheesecakeutilities.GamesActivity</item>
     </string-array>
     <string-array name="gamesmenu">

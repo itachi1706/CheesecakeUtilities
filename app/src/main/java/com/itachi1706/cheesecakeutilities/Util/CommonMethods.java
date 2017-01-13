@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
 import java.text.DecimalFormat;
@@ -21,6 +22,17 @@ public class CommonMethods {
                         " may or may not be present in the release application.\n\nBugs and Crashes " +
                         "are to be expected for the utility")
                 .setPositiveButton(android.R.string.ok, null).show();
+    }
+
+    public static void incompatible(final Activity mActivity, String version, String status) {
+        new AlertDialog.Builder(mActivity).setTitle("Unsupported Android Version")
+                .setMessage("This utility is only compatible with Android " + version + " and " + status)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mActivity.finish();
+                    }
+                }).show();
     }
 
     public static String readableFileSize(long size) {

@@ -175,9 +175,13 @@
         <activity
             android:name=".Modules.ListApplications.ListApplicationsApiGraphActivity"
             android:label="Graph by API Level" />
-        <activity android:name=".Modules.SafetyNet.SafetyNetActivity"
-            android:label="SafetyNet Validator"/>
-        <activity android:name=".Modules.UnicodeKeyboard.UnicodeActivity" android:label="Unicode Emoticons"/>
+        <activity
+            android:name=".Modules.SafetyNet.SafetyNetActivity"
+            android:label="SafetyNet Validator" />
+        <activity
+            android:name=".Modules.UnicodeKeyboard.UnicodeActivity"
+            android:label="Unicode Emoticons" />
+        <activity android:name=".Modules.MaskMedia.MaskMediaActivity"></activity>
     </application>
 
 </manifest>
