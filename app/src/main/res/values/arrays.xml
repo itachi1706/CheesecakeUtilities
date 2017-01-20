@@ -36,9 +36,11 @@
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
+        <item>Chrome T-Rex Game</item>
     </string-array>
     <string-array name="gamesmenulink">
         <item>com.itachi1706.cheesecakeutilities.Games.TicTacToe.TicTacToeActivity</item>
+        <item>com.itachi1706.cheesecakeutilities.Games.ChromiumTRex.ChromiumTRexActivity</item>
     </string-array>
     <string-array name="pes">
         <item>A/B</item>
