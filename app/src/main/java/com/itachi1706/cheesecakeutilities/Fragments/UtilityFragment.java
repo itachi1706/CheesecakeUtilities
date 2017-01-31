@@ -10,11 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
 
@@ -35,7 +31,7 @@ public class UtilityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.content_main_menu, container, false);
+        View v = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
         sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
