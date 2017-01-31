@@ -1,8 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +11,6 @@ import android.view.ViewGroup;
 
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.GamesMenuAdapter;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Kenneth on 31/1/2017.
@@ -29,7 +22,7 @@ public class GamesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.content_main_menu, container, false);
+        View v = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {
