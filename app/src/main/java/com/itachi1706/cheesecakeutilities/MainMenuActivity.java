@@ -2,12 +2,11 @@ package com.itachi1706.cheesecakeutilities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,44 +15,41 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
+import com.itachi1706.cheesecakeutilities.Fragments.GamesFragment;
+import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
 public class MainMenuActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
+    ViewPager pager;
+    TabLayout tabLayout;
     SharedPreferences sp;
-    MainMenuAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Error Handling
         Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
         Fabric.with(this, crashlyticsKit);
-        setContentView(R.layout.activity_main_menu);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setContentView(R.layout.activity_main_menu_tabbed);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(true);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
+        pager = (ViewPager) findViewById(R.id.main_viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.main_tablayout);
 
-            // Set up layout
-            List<String> menuitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
-            adapter = new MainMenuAdapter(this, menuitems);
-            recyclerView.setAdapter(adapter);
-        }
+        setupViewPager(pager);
+        tabLayout.setupWithViewPager(pager);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         new AppUpdateInitializer(this, sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
 
@@ -63,19 +59,14 @@ public class MainMenuActivity extends AppCompatActivity {
         if (CommonMethods.isGlobalLocked(sp)) startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Remove hidden items
-        List<String> menuitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
-        List<String> hiddenitems = new ArrayList<>(Arrays.asList(sp.getString("utilHidden", "").split("\\|\\|\\|")));
-        for (String s : hiddenitems) {
-            menuitems.remove(s);
-        }
+    private void setupViewPager(ViewPager viewPager)
+    {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.updateList(menuitems);
-        adapter.notifyDataSetChanged();
+        adapter.addFrag(new UtilityFragment(), "Utilities");
+        adapter.addFrag(new GamesFragment(), "Games");
 
+        viewPager.setAdapter(adapter);
     }
 
     private final int REQUEST_AUTH = 2;
