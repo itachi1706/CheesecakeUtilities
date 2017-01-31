@@ -181,8 +181,11 @@
         <activity
             android:name=".Modules.UnicodeKeyboard.UnicodeActivity"
             android:label="Unicode Emoticons" />
-        <activity android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
-            android:label="Chrome T-Rex Game"/>
+        <activity
+            android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
+            android:label="Chrome T-Rex Game" />
+        <activity android:name=".MainMenuTabbedActivity"
+            android:theme="@style/AppTheme.NoAppBar" />
     </application>
 
 </manifest>
