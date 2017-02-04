@@ -29,8 +29,6 @@ android:
   - addon-google_apis-google-$ANDROID_EMULATOR_API_LEVEL
   - sys-img-armeabi-v7a-google_apis-$ANDROID_EMULATOR_API_LEVEL
 before_install:
-- openssl aes-256-cbc -K $encrypted_2969307dece5_key -iv $encrypted_2969307dece5_iv
-  -in key.properties.enc -out app/key.properties -d
 - android list targets
 - chmod +x gradlew
 - echo no | android create avd --force -n test -t "android-"$ANDROID_EMULATOR_API_LEVEL
@@ -73,4 +71,6 @@ notifications:
     secure: kEKJ+tmlXUZSvnD64bk4I3Jt1Rn6TEAvxOpWguJaaBTwbzvXjsf8FWdNlcqA1znBU5nN9HHqFQDwMoKByCUI+6soihghDfC0wKSiC/qUbpG0310P6awR61ToEj6nkBlWB95Vkn+Vl8eOLgG0xTTN1K7vB9UQGJ/oXPpwH7zi/HL1jg9vuv8HYV2XqLnE6tAq3h9RUGnfIS8g+tvhlMvEPGd/S0b9hg7hmzJwatiZ5VWN9ED1nyrgepmgXmNtxRA8XMQ7pczv3wS5bPr7kaS4KIeGkrxymuGyxW/bNcI2EAO7rrjgTTn6olZY0RKpBR62Q3nnZXOBFGdRxcJO0Ei/Xtqe7G6x2Jed5f4n8hP4PBYUxK437gQGNtCFB8u2k/G3t0kHMSbcGHFVG3lTBfQ7OavETXkZdTLkJgwMrvUw8HNaKGvWUeOQM07m7MyObBzNF40NdTm9GKJhL5B/TGDrjkcAtLQs1ZG3UGAdwVNfw6H8e5NlxSlcHb60KAHhA+9qPALBUvyMJA/5TLjNvKpKG9t4licIjvp0i5xVO36vgwH4P+IctvGV8yYKYnIwoviAbtGcYP/nbwsy9+D6oSIbWUUJDDnZQ93ocHTv1IIM3zQrysX8+2dGNhDgr1322F/xeslt1kLPC4tMdflaeG+vxlYP33eVy7C1WIw1qsCHAQU=
 dd:
 - openssl aes-256-cbc -K $encrypted_2969307dece5_key -iv $encrypted_2969307dece5_iv
-  -in google-services.json.enc -out app/google-services.json -d
+  -in google-services.json.enc -out ./app/google-services.json -d
+- openssl aes-256-cbc -K $encrypted_2969307dece5_key -iv $encrypted_2969307dece5_iv
+  -in key.properties.enc -out ./app/key.properties -d
