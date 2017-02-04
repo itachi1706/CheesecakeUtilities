@@ -48,3 +48,4 @@ fabric.properties
 
 *.iml
 app/key.properties
+app/google-services.json
