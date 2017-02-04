@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.digitus.FingerprintDialog;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.security.InvalidKeyException;
@@ -16,11 +17,13 @@ import java.security.InvalidKeyException;
 public class AuthenticationActivity extends AppCompatActivity implements FingerprintDialog.Callback {
 
     SharedPreferences sp;
+    FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!PasswordHelper.hasPassword(sp)) {
@@ -37,6 +40,7 @@ public class AuthenticationActivity extends AppCompatActivity implements Fingerp
         Toast.makeText(this, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
         Log.i("Authentication", "User Authenticated");
         setResult(RESULT_OK);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
         finish();
     }
 

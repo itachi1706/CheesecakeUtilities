@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Arrays;
@@ -82,6 +84,14 @@ public class GamesMenuAdapter extends RecyclerView.Adapter<GamesMenuAdapter.Game
                 Log.e("GamesMenuAdapter", "Class Not Found: " + className);
                 e.printStackTrace();
             }
+
+            // Firebase Analytics Event Logging
+            FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(mActivity);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, link);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "game_launched");
+            analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            Log.i("Firebase", "Logged Event Game Launched: " + link);
         }
 
     }

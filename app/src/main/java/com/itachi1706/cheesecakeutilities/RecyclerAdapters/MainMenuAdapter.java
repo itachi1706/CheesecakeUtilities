@@ -6,6 +6,7 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Arrays;
@@ -90,6 +92,14 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 Intent intent = new Intent(mActivity, classObj);
                 intent.putExtra("menuitem", link);
                 mActivity.startActivity(intent);
+
+                // Firebase Analytics Event Logging
+                FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(mActivity);
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, link);
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "utility_launched");
+                analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                Log.i("Firebase", "Logged Event Utility Launched: " + link);
 
                 // Add dynamic shortcuts
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
