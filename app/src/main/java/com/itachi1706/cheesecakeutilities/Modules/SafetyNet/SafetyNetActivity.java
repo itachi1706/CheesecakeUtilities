@@ -71,6 +71,7 @@ public class SafetyNetActivity extends BaseActivity {
 
     private void runTest() {
         showLoading(true);
+        Log.d(TAG, "Package: " + this.getPackageName());
 
         Log.d(TAG, "SafetyNet start request");
         safetyNetHelper.requestTest(this, new SafetyNetHelper.SafetyNetWrapperCallback() {

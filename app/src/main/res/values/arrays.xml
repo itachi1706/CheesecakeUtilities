@@ -14,7 +14,7 @@
         <item>System Information</item>
         <item>Unicode Emoticons</item>
         <item>Navigation Bar Customizer</item>
-        <item>SafetyNet Validator</item>
+    ***REMOVED***<item>SafetyNet Validator</item>-->
     </string-array>
     <string-array name="mainmenulink">
         <item>com.itachi1706.cheesecakeutilities.StringToHexBin</item>
@@ -30,7 +30,7 @@
         <item>com.itachi1706.cheesecakeutilities.Modules.SystemInformation.InitActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
-        <item>com.itachi1706.cheesecakeutilities.Modules.SafetyNet.SafetyNetActivity</item>
+    ***REMOVED***<item>com.itachi1706.cheesecakeutilities.Modules.SafetyNet.SafetyNetActivity</item>-->
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
