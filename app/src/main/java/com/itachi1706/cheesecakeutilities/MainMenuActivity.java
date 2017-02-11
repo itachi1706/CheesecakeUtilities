@@ -36,7 +36,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         // Error Handling
         Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-        Fabric.with(this, crashlyticsKit, new Crashlytics());
+        Fabric.with(this, crashlyticsKit);
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
