@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
@@ -74,6 +75,14 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             return;
         }
 
+        // Firebase Analytics Event Logging
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, packageName);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "utility_listapp_viewdetail");
+        analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        Log.i("Firebase", "Logged Viewing of Detailed App Info Launched: " + packageName);
+
         PackageManager pm = getPackageManager();
         try {
             info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
@@ -97,10 +106,19 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         ProviderInfo[] providerInfos = null;
         ActivityInfo[] receivers = null;
         ServiceInfo[] serviceInfos = null;
+        boolean error = false;
         try {
             int flags = PackageManager.GET_ACTIVITIES | PackageManager.GET_SIGNATURES | PackageManager.GET_PERMISSIONS |
                     PackageManager.GET_PROVIDERS | PackageManager.GET_RECEIVERS | PackageManager.GET_CONFIGURATIONS | PackageManager.GET_SERVICES;
-            PackageInfo pInfo = pm.getPackageInfo(info.packageName, flags);
+            PackageInfo pInfo;
+            try {
+                pInfo = pm.getPackageInfo(info.packageName, flags);
+            } catch (RuntimeException e) {
+                if (e.getMessage().contains("Package manager has died")) {
+                    pInfo = pm.getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS); // Do a basic version
+                    error = true;
+                } else throw e;
+            }
             requestedPermissions = pInfo.requestedPermissions;
             version = pInfo.versionName;
             versionCode = pInfo.versionCode;
@@ -208,6 +226,16 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 startActivity(launchIntent);
             }
         });
+
+        if (error) {
+            // Firebase Analytics Event Logging
+            Bundle errorbundle = new Bundle();
+            errorbundle.putString(FirebaseAnalytics.Param.ITEM_ID, packageName);
+            errorbundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "utility_listapp_viewdetail");
+            analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, errorbundle);
+            Log.i("Firebase", "Logged Error Processing Detailed App Info: " + packageName);
+            creator.addView(generateSingleColumn("Error", "An error occurred while retrieving app information, Providing truncated results"));
+        }
     }
 
     private String generateActivitiesList(ActivityInfo[] activities) {
