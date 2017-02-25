@@ -19,8 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".MainMenuActivity"
-            android:theme="@style/AppTheme.NoAppBar" >
+        <activity
+            android:name=".MainMenuActivity"
+            android:theme="@style/AppTheme.NoAppBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -180,6 +181,7 @@
         <activity
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
             android:label="Chrome T-Rex Game" />
+        <activity android:name=".LaunchTileSettingsActivity"></activity>
     </application>
 
 </manifest>

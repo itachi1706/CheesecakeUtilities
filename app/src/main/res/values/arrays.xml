@@ -15,6 +15,7 @@
         <item>Unicode Emoticons</item>
         <item>Navigation Bar Customizer</item>
         <item>SafetyNet Validator</item>
+        <item>Quick Settings Tiles Configuration</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -31,6 +32,7 @@
         <item>.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
         <item>.Modules.SafetyNet.SafetyNetActivity</item>
+        <item>.LaunchTileSettingsActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
