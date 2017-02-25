@@ -76,6 +76,7 @@ public class GamesMenuAdapter extends RecyclerView.Adapter<GamesMenuAdapter.Game
             Log.i("GamesMenuAdapter", "Clicked on " + link);
             int index = Arrays.asList(v.getContext().getResources().getStringArray(R.array.gamesmenu)).indexOf(link);
             String className = v.getContext().getResources().getStringArray(R.array.gamesmenulink)[index];
+            if (className.startsWith(".")) className = "com.itachi1706.cheesecakeutilities" + className;
             Log.i("GamesMenuAdapter", "Attempting to navigate to " + className);
             try {
                 Class classObj = Class.forName(className);

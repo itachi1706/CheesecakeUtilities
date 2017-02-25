@@ -86,6 +86,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
             Log.i("MainMenuAdapter", "Clicked on " + link);
             int index = Arrays.asList(v.getContext().getResources().getStringArray(R.array.mainmenu)).indexOf(link);
             String className = v.getContext().getResources().getStringArray(R.array.mainmenulink)[index];
+            if (className.startsWith(".")) className = "com.itachi1706.cheesecakeutilities" + className;
             Log.i("MainMenuAdapter", "Attempting to navigate to " + className);
             try {
                 Class classObj = Class.forName(className);
