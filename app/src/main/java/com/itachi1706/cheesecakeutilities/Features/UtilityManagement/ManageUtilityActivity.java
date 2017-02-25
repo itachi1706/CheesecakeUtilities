@@ -9,13 +9,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.ManageUtilAdapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ManageUtilityActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
+    FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,14 @@ public class ManageUtilityActivity extends AppCompatActivity {
         String lockedUtil = sp.getString("utilLocked", "");
 
         // Set up layout
-        String[] menuitems = getResources().getStringArray(R.array.mainmenu);
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        List<String> menuitemsList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
+        List<String> firebaseHidden = new ArrayList<>(Arrays.asList(mFirebaseRemoteConfig.getString("serverHide").split("\\|\\|\\|")));
+        for (String s : firebaseHidden) {
+            menuitemsList.remove(s);
+        }
+        String[] menuitems = menuitemsList.toArray(new String[menuitemsList.size()]);
         ManageUtilAdapter adapter = new ManageUtilAdapter(menuitems, hiddenUtil, lockedUtil);
         recyclerView.setAdapter(adapter);
 
