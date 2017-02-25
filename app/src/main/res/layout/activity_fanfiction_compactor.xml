@@ -33,27 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_db_location"
-        android:id="@+id/lblDBLoc"
-        android:layout_below="@+id/lblFolderLoc"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_folder_size"
-        android:id="@+id/lblFolderSize"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text=""
         android:id="@+id/tvFolder"
         android:layout_above="@+id/lblDBLoc"
@@ -90,17 +69,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/label_stories_count"
-        android:id="@+id/lblDBCount"
-        android:layout_below="@+id/lblDBLoc"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/placeholder_query"
         android:id="@+id/tvStories"
         android:layout_alignTop="@+id/lblDBCount"
@@ -112,9 +80,53 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_show_stories_list"
-        android:id="@+id/btnStories"
+        android:text="Scan for Duplicates"
+        android:id="@+id/btnRemoveDuplicates"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_folder_size"
+        android:id="@+id/lblFolderSize"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/lblDBCount"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_db_location"
+        android:id="@+id/lblDBLoc"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/lblFolderLoc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/label_stories_count"
+        android:id="@+id/lblDBCount"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/tvDB"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_show_stories_list"
+        android:id="@+id/btnStories"
+        android:layout_above="@+id/btnStartPruning"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
