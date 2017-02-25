@@ -20,6 +20,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.util.ArrayMap;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 public class FanfictionCompactorActivity extends BaseActivity {
 
     TextView folder, database, folderSize, storyCount;
-    Button startServiceBtn, storyButton;
+    Button startServiceBtn, storyButton, duplicateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
         storyCount = (TextView) findViewById(R.id.tvStories);
         startServiceBtn = (Button) findViewById(R.id.btnStartPruning);
         storyButton = (Button) findViewById(R.id.btnStories);
+        duplicateButton = (Button) findViewById(R.id.btnRemoveDuplicates);
 
         startServiceBtn.setEnabled(false);
         startServiceBtn.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +72,12 @@ public class FanfictionCompactorActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 getStoryList();
+            }
+        });
+        duplicateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDuplicateList();
             }
         });
 
@@ -112,6 +120,27 @@ public class FanfictionCompactorActivity extends BaseActivity {
         }
 
         new AlertDialog.Builder(this).setTitle("Story List (" + stories.size() + ")").setMessage(builder.toString()).setPositiveButton(android.R.string.ok, null).show();
+    }
+
+    private void getDuplicateList() {
+        FanfictionDatabase db = new FanfictionDatabase();
+        ArrayList<FanficStories> stories = db.getAllStories();
+        StringBuilder builder = new StringBuilder();
+        int count = 0;
+        // Parse out duplicates
+        ArrayMap<Integer, FanficStories> parser = new ArrayMap<>();
+        for (FanficStories s : stories) {
+            if (parser.containsKey(s.getPage_id())) {
+                // Duplicates
+                FanficStories dupe = parser.get(s.getPage_id());
+                builder.append(s.getTitle()).append(" &lt;==&gt; ").append(dupe.getTitle()).append("\n(").append(s.getPage_id()).append(")\n\n");
+                count++;
+            } else
+                parser.put(s.getPage_id(), s);
+        }
+
+        if (count <= 0) builder.append("You have no stories that are duplicates in the database!");
+        new AlertDialog.Builder(this).setTitle("Duplicates Scanner (" + count + ")").setMessage(Html.fromHtml(builder.toString().replace("\n", "<br>"))).setPositiveButton(android.R.string.ok, null).show();
     }
 
     long totalSize = 9999999;
