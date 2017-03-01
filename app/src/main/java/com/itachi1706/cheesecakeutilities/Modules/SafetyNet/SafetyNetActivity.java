@@ -15,11 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.scottyab.safetynet.SafetyNetHelper;
 import com.scottyab.safetynet.SafetyNetResponse;
+import com.scottyab.safetynet.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,13 +35,16 @@ public class SafetyNetActivity extends BaseActivity {
 
     private View loading;
     private static final String TAG = "SafetyNet";
-    final SafetyNetHelper safetyNetHelper = new SafetyNetHelper(API_KEY);
+    private SafetyNetHelper safetyNetHelper;
+
     private TextView resultsTV;
     private TextView nonceTV;
     private TextView timestampTV;
     private View resultsContainer;
-    private View sucessResultsContainer;
-    private TextView packagenameTV;
+    private View successResultsContainer;
+    private TextView packageNameTV;
+    private TextView resultNoteTV;
+    private TextView welcomeTV;
 
     @Override
     public String getHelpDescription() {
@@ -51,12 +56,17 @@ public class SafetyNetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_net);
 
+        safetyNetHelper = new SafetyNetHelper(API_KEY);
+        Log.d(TAG, "AndroidAPIKEY: " + Utils.getSigningKeyFingerprint(this) + ";" + getPackageName());
+
         resultsTV = (TextView)findViewById(R.id.results);
         nonceTV = (TextView)findViewById(R.id.nonce);
         timestampTV = (TextView)findViewById(R.id.timestamp);
-        packagenameTV = (TextView)findViewById(R.id.packagename);
+        packageNameTV = (TextView)findViewById(R.id.packagename);
         resultsContainer = findViewById(R.id.resultsContainer);
-        sucessResultsContainer = findViewById(R.id.sucessResultsContainer);
+        successResultsContainer = findViewById(R.id.sucessResultsContainer);
+        resultNoteTV = (TextView) findViewById(R.id.resultsNote);
+        welcomeTV = (TextView) findViewById(R.id.welcomeTV);
         loading = findViewById(R.id.loading);
         Button runTestBtn = (Button) findViewById(R.id.runTestButton);
         runTestBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +76,9 @@ public class SafetyNetActivity extends BaseActivity {
             }
         });
 
-
+        if (ConnectionResult.SUCCESS != GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)) {
+            handleError(0, "Google Play Services is not available on this device.\n\nThis SafetyNet test will not work");
+        }
     }
 
     private void runTest() {
@@ -82,10 +94,10 @@ public class SafetyNetActivity extends BaseActivity {
             }
 
             @Override
-            public void success(boolean ctsProfileMatch) {
-                Log.d(TAG, "SafetyNet req success: ctsProfileMatch:" + ctsProfileMatch);
+            public void success(boolean ctsProfileMatch, boolean basicIntegrity) {
+                Log.d(TAG, "SafetyNet req success: ctsProfileMatch:" + ctsProfileMatch + " and basicIntegrity, " + basicIntegrity);
                 showLoading(false);
-                updateUIWithSucessfulResult(safetyNetHelper.getLastResponse());
+                updateUIWithSuccessfulResult(safetyNetHelper.getLastResponse());
 
             }
         });
@@ -94,12 +106,13 @@ public class SafetyNetActivity extends BaseActivity {
     private void handleError(int errorCode, String errorMsg) {
         Log.e(TAG, errorMsg);
 
-        StringBuilder b=new StringBuilder();
+        StringBuilder b = new StringBuilder();
 
         switch(errorCode){
             default:
-            case SafetyNetHelper.SAFTYNET_API_REQUEST_UNSUCCESSFUL:
-                b.append("SafetyNet request: fail\n");
+            case SafetyNetHelper.SAFETY_NET_API_REQUEST_UNSUCCESSFUL:
+                b.append("SafetyNet request failed\n");
+                b.append("(This could be a networking issue.)\n");
                 break;
             case SafetyNetHelper.RESPONSE_ERROR_VALIDATING_SIGNATURE:
                 b.append("SafetyNet request: success\n");
@@ -125,9 +138,11 @@ public class SafetyNetActivity extends BaseActivity {
                 break;
         }
         if (errorMsg.contains(API_KEY)) errorMsg = errorMsg.replace(API_KEY, "<API_KEY>");
-        resultsTV.setText(b.toString() + "\nError Msg:\n" + errorMsg);
+        resultsTV.setText(b.toString());
+        resultNoteTV.setText("Error Msg:\n" + errorMsg);
 
-        sucessResultsContainer.setVisibility(View.GONE);
+        successResultsContainer.setVisibility(View.VISIBLE);
+        welcomeTV.setVisibility(View.GONE);
         revealResults(ContextCompat.getColor(this, R.color.problem));
     }
 
@@ -136,6 +151,7 @@ public class SafetyNetActivity extends BaseActivity {
         if(show) {
             resultsContainer.setBackgroundColor(Color.TRANSPARENT);
             resultsContainer.setVisibility(View.GONE);
+            welcomeTV.setVisibility(View.GONE);
         }
     }
 
@@ -153,7 +169,7 @@ public class SafetyNetActivity extends BaseActivity {
     private void doPropertyAnimatorReveal(Integer colorTo) {
         Integer colorFrom = Color.TRANSPARENT;
         Drawable background = resultsContainer.getBackground();
-        if (background instanceof ColorDrawable){
+        if (background instanceof ColorDrawable) {
             colorFrom = ((ColorDrawable) background).getColor();
         }
 
@@ -169,18 +185,18 @@ public class SafetyNetActivity extends BaseActivity {
         colorAnimation.start();
     }
 
-    private void updateUIWithSucessfulResult(SafetyNetResponse safetyNetResponse) {
-        resultsTV.setText("SafetyNet request: success \nResponse validation: success\nCTS profile match: "
-                + (safetyNetResponse.isCtsProfileMatch() ? "true" : "false"));
+    private void updateUIWithSuccessfulResult(SafetyNetResponse safetyNetResponse) {
+        resultsTV.setText(getString(R.string.safety_results, safetyNetResponse.isCtsProfileMatch(), safetyNetResponse.isBasicIntegrity()));
+        resultNoteTV.setText(R.string.safety_results_note);
 
-        sucessResultsContainer.setVisibility(View.VISIBLE);
+        successResultsContainer.setVisibility(View.VISIBLE);
 
         nonceTV.setText(safetyNetResponse.getNonce());
 
         SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
         Date timeOfResponse = new Date(safetyNetResponse.getTimestampMs());
         timestampTV.setText(sim.format(timeOfResponse));
-        packagenameTV.setText(safetyNetResponse.getApkPackageName());
+        packageNameTV.setText(safetyNetResponse.getApkPackageName());
 
         revealResults(ContextCompat.getColor(this, safetyNetResponse.isCtsProfileMatch() ? R.color.pass : R.color.fail));
     }
