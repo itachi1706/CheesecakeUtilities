@@ -108,7 +108,7 @@ dependencies {
     compile 'com.github.lzyzsd:circleprogress:1.1.0@aar' // ORD Countdown Utility
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1' // Application List Utility
     compile 'com.afollestad.material-dialogs:core:0.9.1.0' // Application List Utility
-    compile 'com.github.scottyab:safetynethelper:0.2.0' // SafetyNet Validator
+    compile 'com.github.scottyab:safetynethelper:0.3.0' // SafetyNet Validator
     compile 'com.google.android.gms:play-services-safetynet:10.2.0' // SafetyNet Validator
     testCompile 'junit:junit:4.12'
 }

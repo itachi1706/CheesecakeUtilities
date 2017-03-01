@@ -184,6 +184,16 @@
     <string name="featured_util_long_label">Displays a Featured Utility from the app</string>
     <string name="featured_util_disabled_label">The Featured Utility shortcut is disabled</string>
 
+***REMOVED*** SafetyNet -->
+    <string name="info_details">Running the test verify if the device and ROM has passed the Android Compatibility Test Suite (CTS).</string>
+    <string name="safety_results">SafetyNet response success!\nCTS profile match: %1$b\nBasic Integrity: %2$b</string>
+    <string name="safety_results_note">Note: The "basicIntegrity" field is a weaker check than "ctsProfileMatch". Use the result from "ctsProfileMatch" if you need to be absolutely sure that the device passes CTS.</string>
+    <string name="request_token">One time request token</string>
+    <string name="timestamp">Request timestamp</string>
+    <string name="package_name">App Id (package name)</string>
+    <string name="msg_loading">Loading…</string>
+    <string name="run_safetynet_test_button">Run SafetyNet test</string>
+
 ***REMOVED*** Unsorted/Misc -->
     <string name="pes_status">PES Status</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
