@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,8 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -163,7 +166,7 @@ public class ORDActivity extends BaseActivity {
                 long duration = upcomingHoliday.getTime() - (holidayChecker);
                 long daysToHoliday = TimeUnit.MILLISECONDS.toDays(duration);
                 if (daysToHoliday == 0) menuItems.add("It's " + upcomingHoliday.getHolidayName());
-                else menuItems.add(daysToHoliday + " to " + upcomingHoliday.getHolidayName());
+                else menuItems.add(getResources().getQuantityString(R.plurals.holidays, (int) daysToHoliday, daysToHoliday, upcomingHoliday.getHolidayName()));
             }
 
 
@@ -223,6 +226,22 @@ public class ORDActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.modify_settings: startActivity(new Intent(getApplicationContext(), ORDSettingsActivity.class)); return true;
+            case R.id.holiday:
+                ArrayList<Holiday> holidayList = new ArrayList<>(getHolidayList().values());
+                Collections.sort(holidayList, new Comparator<Holiday>() {
+                    @Override
+                    public int compare(Holiday o1, Holiday o2) {
+                        return (o1.getTime() < o2.getTime()) ? -1 : ((o1.getTime() == o2.getTime()) ? 0 : 1);
+                    }
+                });
+                StringBuilder b = new StringBuilder();
+                for (Holiday h : holidayList) {
+                    b.append(h.getHolidayName()).append(": ").append(h.getTimeString()).append("\n");
+                }
+                new AlertDialog.Builder(this).setTitle("Holiday List")
+                        .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)
+                        .show();
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
