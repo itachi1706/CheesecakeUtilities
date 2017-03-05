@@ -4,4 +4,8 @@
         <key>serverHide</key>
         <value>SafetyNet Validator|||Quick Settings Tiles Configuration</value>
     </entry>
+    <entry>
+        <key>ord_holidays</key>
+        <value>New Year's Day:01-01-2017|Labour Day:01-05-2017|Christmas Day:25-12-2017</value>
+    </entry>
 </defaultsMap>
