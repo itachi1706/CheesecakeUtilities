@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
@@ -28,6 +31,8 @@ public class ORDActivity extends BaseActivity {
     ArcProgress progressBar;
     long ordDays, ptpDays, popDays, pdoption;
 
+    String firebaseHolidayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,11 @@ public class ORDActivity extends BaseActivity {
         ordCounter = (TextView) findViewById(R.id.ord_counter);
         ordProgress = (TextView) findViewById(R.id.ord_precentage);
         progressBar = (ArcProgress)  findViewById(R.id.ord_progressbar);
+
+        // Get Holiday List from Firebase
+        FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        firebaseHolidayList = firebaseRemoteConfig.getString("ord_holidays");
     }
 
     @Override
@@ -125,10 +135,56 @@ public class ORDActivity extends BaseActivity {
                 else menuItems.add(getResources().getQuantityString(R.plurals.payday, (int) daysToPayday, daysToPayday));
             }
 
+            // Holidays Calculation
+            ArrayMap<String, Holiday> holidays = getHolidayList();
+            Holiday upcomingHoliday = null;
+
+            // Set time to midnight
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(currentTime);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            long holidayChecker = c.getTimeInMillis();
+            // Get closest upcoming date
+            for (ArrayMap.Entry<String, Holiday> holidayEntry : holidays.entrySet()) {
+                Holiday h = holidayEntry.getValue();
+                Log.d("Holiday", h.getHolidayName() + ": " + h.getTime() + " | " + holidayChecker);
+                if (h.getTime() >= holidayChecker) {
+                    // Upcoming
+                    if (upcomingHoliday == null) upcomingHoliday = h;
+                    else if (upcomingHoliday.getTime() > h.getTime()) upcomingHoliday = h;
+                }
+            }
+
+            if (upcomingHoliday != null) {
+                // Calculate Days remaining
+                long duration = upcomingHoliday.getTime() - (holidayChecker);
+                long daysToHoliday = TimeUnit.MILLISECONDS.toDays(duration);
+                if (daysToHoliday == 0) menuItems.add("It's " + upcomingHoliday.getHolidayName());
+                else menuItems.add(daysToHoliday + " to " + upcomingHoliday.getHolidayName());
+            }
+
 
             StringRecyclerAdapter adapter = new StringRecyclerAdapter(menuItems, false);
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    /**
+     * Split Holiday List String from Firebase
+     * Example String: New Year's:01-01-2017|Christmas:25-12-2017
+     * @return Array Map of holidays
+     */
+    private ArrayMap<String, Holiday> getHolidayList() {
+        ArrayMap<String, Holiday> holidays = new ArrayMap<>();
+        String[] holidayList = firebaseHolidayList.split("\\|");
+        for (String holidayItem : holidayList) {
+            Holiday h = new Holiday(holidayItem);
+            holidays.put(h.getHolidayName(), h);
+        }
+        return holidays;
     }
 
     private int calculateWeekends() {
