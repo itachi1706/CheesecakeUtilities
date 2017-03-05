@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import java.util.Calendar;
+import java.util.Comparator;
 
 /**
  * Created by Kenneth on 5/3/2017.
@@ -10,7 +11,7 @@ import java.util.Calendar;
 public class Holiday {
 
     private long time;
-    private String holidayName;
+    private String holidayName, timeString;
 
     public Holiday(String holidayString) {
         String[] tmp = holidayString.split(":");
@@ -20,6 +21,7 @@ public class Holiday {
         cal.set(Calendar.MILLISECOND, 0);
         this.time = cal.getTimeInMillis();
         this.holidayName = tmp[0];
+        this.timeString = tmp[1];
     }
 
     public long getTime() {
@@ -28,5 +30,9 @@ public class Holiday {
 
     public String getHolidayName() {
         return holidayName;
+    }
+
+    public String getTimeString() {
+        return timeString;
     }
 }
