@@ -51,6 +51,7 @@ public class InitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         prefs = getSharedPreferences("GPUinfo", 0);
         GLSurfaceView mGLView = new GLSurfaceView(this);
+        mGLView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mGLView.setRenderer(new ClearRenderer());
         setContentView(mGLView);
         mGLView.post(new Runnable() {
