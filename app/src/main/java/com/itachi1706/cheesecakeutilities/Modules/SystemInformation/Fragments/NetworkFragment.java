@@ -81,7 +81,7 @@ public class NetworkFragment extends Fragment {
     }
 
     public String getSsid() {
-        String netSsid = ((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID();
+        String netSsid = ((WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID();
         if (netSsid == null) {
             return "Not available (Wi-Fi).";
         }
@@ -113,7 +113,7 @@ public class NetworkFragment extends Fragment {
             return "Not available (Wi-Fi).";
         }
         @SuppressLint("HardwareIds")
-        String macAddress = ((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE))
+        String macAddress = ((WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE))
                 .getConnectionInfo().getMacAddress();
         if (macAddress == null) {
             return "Not available (Wi-Fi).";
