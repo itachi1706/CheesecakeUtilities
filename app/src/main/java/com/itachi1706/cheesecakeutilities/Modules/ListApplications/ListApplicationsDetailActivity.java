@@ -42,10 +42,15 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.Backu
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -336,9 +341,22 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     }
 
     private String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA");
-        md.update(sig.toByteArray());
-        return bytesToHex(md.digest());
+        byte[] cert = sig.toByteArray();
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(cert);
+            CertificateFactory cf = CertificateFactory.getInstance("X509");
+            X509Certificate c = (X509Certificate) cf.generateCertificate(inputStream);
+            byte[] sigCert = c.getEncoded();
+            MessageDigest md = MessageDigest.getInstance("SHA1");
+            byte[] publicKey = md.digest(sigCert);
+            return bytesToHex(publicKey);
+        } catch (CertificateException e) {
+            Log.e("Signature", "Cannot Create Signature, Falling back");
+            Log.e("Signature", "Error: " + e.getLocalizedMessage());
+            MessageDigest md = MessageDigest.getInstance("SHA1");
+            md.update(sig.toByteArray());
+            return bytesToHex(md.digest());
+        }
     }
 
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
@@ -349,7 +367,12 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
-        return new String(hexChars);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < hexChars.length; i++) {
+            if (i % 2 == 0 && i != 0) sb.append(":");
+            sb.append(hexChars[i]);
+        }
+        return sb.toString();
     }
 
     private String humanReadableByteCount(long bytes, boolean si) {
