@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects.RestoreAppsItemsBase;
 import com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects.RestoreAppsItemsFooter;
 import com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects.RestoreAppsItemsHeader;
@@ -28,11 +29,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class RestoreAppActivity extends AppCompatActivity {
+public class RestoreAppActivity extends BaseActivity {
 
     RecyclerView recyclerView;
     ProgressBar bar;
     TextView label;
+
+    @Override
+    public String getHelpDescription() {
+        return "Restores Applications previously backed up by the Application List utility";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

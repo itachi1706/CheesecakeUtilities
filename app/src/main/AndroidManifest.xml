@@ -156,7 +156,8 @@
         <activity
             android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
-        <activity android:name=".Modules.AppRestore.RestoreAppActivity" />
+        <activity android:name=".Modules.AppRestore.RestoreAppActivity"
+            android:label="Restore Application" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
