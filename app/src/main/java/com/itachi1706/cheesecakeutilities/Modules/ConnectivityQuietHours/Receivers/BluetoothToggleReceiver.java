@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -34,17 +36,18 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
         if (bluetoothAdapter == null) return; // Can't get BT Adapter
 
         boolean workDone = false;
-        Log.i(TAG, "Quiet Hour: " + state + " | Adapter Enabled: " + bluetoothAdapter.isEnabled());
+        boolean enabled = bluetoothAdapter.isEnabled();
+        Log.i(TAG, "Quiet Hour: " + state + " | Adapter Enabled: " + enabled);
         if (state) {
             // Quiet Mode Enabled, Turn off BT
-            if (bluetoothAdapter.isEnabled()) {
+            if (enabled) {
                 bluetoothAdapter.disable();
                 Log.i(TAG, "Disabled Bluetooth at " + System.currentTimeMillis());
                 workDone = true;
             }
         } else {
             // Quiet Mode Disabled, Turn On BT
-            if (!bluetoothAdapter.isEnabled()) {
+            if (!enabled) {
                 bluetoothAdapter.enable();
                 Log.i(TAG, "Enabled Bluetooth at " + System.currentTimeMillis());
                 workDone = true;
@@ -59,7 +62,9 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Bluetooth Quiet Hour " + ((btState) ? "Enabled" : "Disabled"))
-                .setContentText("Bluetooth state toggled on " + time);
+                .setContentText("Bluetooth state toggled on " + time)
+                .setAutoCancel(true)
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         Random random = new Random();
 
         switch (notificationLevel) {
@@ -70,6 +75,5 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
             case QHConstants.QH_NOTIFY_NEVER:
             default: break;
         }
-
     }
 }
