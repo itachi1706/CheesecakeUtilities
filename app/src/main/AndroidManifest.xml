@@ -11,6 +11,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -184,8 +187,18 @@
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
             android:label="Chrome T-Rex Game" />
         <activity android:name=".LaunchTileSettingsActivity" />
-        <activity android:name=".Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity"
+        <activity
+            android:name=".Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity"
             android:label="ConnectivityWork" />
+
+        <receiver
+            android:name=".Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".Modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
