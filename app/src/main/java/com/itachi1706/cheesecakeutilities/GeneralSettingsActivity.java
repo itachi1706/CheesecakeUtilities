@@ -48,7 +48,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
 
-            new SettingsInitializer(getActivity(), R.mipmap.ic_launcher,
+            new SettingsInitializer(getActivity(), R.drawable.notification_icon,
                     CommonVariables.BASE_SERVER_URL, getResources().getString(R.string.link_legacy),
                     getResources().getString(R.string.link_updates))
                     .explodeUpdaterSettings(this);
