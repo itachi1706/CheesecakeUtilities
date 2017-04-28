@@ -27,6 +27,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receive
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BootRescheduleToggleReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -52,7 +53,8 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
 
     @Override
     public String getHelpDescription() {
-        return "Wifi BT Connectivity Configurator";
+        return "Configures \"Quiet Hours\" for your device where within the period, either wireless or bluetooth connectivity will" +
+                " be turned off to help conserve power" + "\n\nThis utility is currently in BETA Testing";
     }
 
     @Override
@@ -178,6 +180,9 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
 
             }
         });
+        // BETA
+        // TODO: Remove after exiting BETA
+        CommonMethods.betaInfo(this, "Connectivity Quiet Hours Configuration");
     }
 
     private static final int BT_START_INTENT = 2000, BT_END_INTENT = 2001, WIFI_START_INTENT = 2002, WIFI_END_INTENT = 2003;
@@ -336,7 +341,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         String minStr = (min < 10) ? "0" + min : "" + min;
         if (hr > 12) return (hr - 12) + ":" + minStr + " pm";
         if (hr == 12) return "12:" + minStr + " pm";
-        if (hr == 0) return "12:" + minStr + "am";
+        if (hr == 0) return "12:" + minStr + " am";
         return hr + ":" + minStr + " am";
     }
 }
