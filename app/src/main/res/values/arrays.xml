@@ -16,6 +16,7 @@
         <item>Navigation Bar Customizer</item>
         <item>SafetyNet Validator</item>
         <item>Quick Settings Tiles Configuration</item>
+        <item>ConnectActivity</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -33,6 +34,7 @@
         <item>.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
         <item>.Modules.SafetyNet.SafetyNetActivity</item>
         <item>.LaunchTileSettingsActivity</item>
+        <item>.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
@@ -76,5 +78,11 @@
     <string-array name="payday">
         <item>10th of every month</item>
         <item>12th of every month</item>
+    </string-array>
+    <string-array name="connectivity_notification_type">
+        <item>None</item>
+        <item>When Executed</item>
+        <item>Always</item>
+        <item>Always (DEBUG)</item>
     </string-array>
 </resources>

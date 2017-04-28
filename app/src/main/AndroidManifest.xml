@@ -156,7 +156,8 @@
         <activity
             android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
-        <activity android:name=".Modules.AppRestore.RestoreAppActivity"
+        <activity
+            android:name=".Modules.AppRestore.RestoreAppActivity"
             android:label="Restore Application" />
 
         <provider
@@ -183,6 +184,8 @@
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
             android:label="Chrome T-Rex Game" />
         <activity android:name=".LaunchTileSettingsActivity" />
+        <activity android:name=".Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity"
+            android:label="ConnectivityWork" />
     </application>
 
 </manifest>
