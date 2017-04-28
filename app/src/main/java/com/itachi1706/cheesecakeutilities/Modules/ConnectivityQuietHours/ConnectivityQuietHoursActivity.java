@@ -186,6 +186,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         // Cancel all possible pending intents
         alarmManager.cancel(btStartIntent);
         alarmManager.cancel(btEndIntent);
+        Log.i("QH", "Cleared existing BT Schedules");
         if (btSwitch.isChecked()) { // Enabled
             // Set Alarm
             long millis = System.currentTimeMillis();
@@ -225,6 +226,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         // Cancel all possible pending intents
         alarmManager.cancel(wifiStartIntent);
         alarmManager.cancel(wifiEndIntent);
+        Log.i("QH", "Cleared existing Wifi Schedules");
         if (wifiSwitch.isChecked()) { // Enabled
             // Set Alarm
             long millis = System.currentTimeMillis();

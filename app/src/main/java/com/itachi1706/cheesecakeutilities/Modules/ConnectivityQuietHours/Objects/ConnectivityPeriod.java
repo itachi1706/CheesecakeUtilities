@@ -7,7 +7,7 @@ package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Object
 
 public class ConnectivityPeriod {
 
-    int startHr, startMin, endHr, endMin;
+    private int startHr, startMin, endHr, endMin;
 
     public ConnectivityPeriod(int startHr, int startMin, int endHr, int endMin) {
         this.startHr = startHr;
