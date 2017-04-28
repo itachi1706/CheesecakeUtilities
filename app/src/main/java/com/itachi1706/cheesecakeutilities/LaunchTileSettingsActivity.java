@@ -13,23 +13,21 @@ public class LaunchTileSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Check if tiles companion app is installed
-
         if (isQSTileModuleInstalled()) {
             // Launch configuration activity
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName("com.itachi1706.cheesecakeutilities_tiles", "com.itachi1706.cheesecakeutilities_tiles.ConfigurationActivity"));
+            intent.setComponent(new ComponentName("com.itachi1706.cheesecakeutilities_tiles",
+                    "com.itachi1706.cheesecakeutilities_tiles.ConfigurationActivity"));
             startActivity(intent);
         } else
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://play.google.com/store/apps/details?id=com.itachi1706.cheesecakeutilities_tiles"))); // Launch Play Store
-
         finish();
     }
 
     private boolean isQSTileModuleInstalled() {
-        PackageManager packageManager = getPackageManager();
         try {
-            packageManager.getPackageInfo("com.itachi1706.cheesecakeutilities_tiles", 0);
+            getPackageManager().getPackageInfo("com.itachi1706.cheesecakeutilities_tiles", 0);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;

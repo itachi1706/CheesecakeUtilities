@@ -182,7 +182,7 @@
         <activity
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
             android:label="Chrome T-Rex Game" />
-        <activity android:name=".LaunchTileSettingsActivity"></activity>
+        <activity android:name=".LaunchTileSettingsActivity" />
     </application>
 
 </manifest>
