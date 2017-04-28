@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.widget.TimePicker;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver;
+import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BootRescheduleToggleReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -218,6 +220,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, btEndIntent);
             Log.i("QH", "Updated BT Toggle State");
         }
+        toggleBootReceiver();
     }
 
     private void toggleWifiSwitch() {
@@ -258,6 +261,33 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, wifiEndIntent);
             Log.i("QH", "Updated Wifi Toggle State");
         }
+        toggleBootReceiver();
+    }
+
+    private void toggleBootReceiver() {
+        ComponentName receiver = new ComponentName(this, BootRescheduleToggleReceiver.class);
+        PackageManager pm = getPackageManager();
+
+        // COMPONENT_ENABLED_STATE_DISABLED - Disabled
+        // COMPONENT_ENABLED_STATE_ENABLED - Enabled
+        if (pm.getComponentEnabledSetting(receiver) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+            Log.i("QH", "Boot Receiver Status: Enabled");
+            // Enabled. Check if I should be disabling it
+            if (!btSwitch.isChecked() && !wifiSwitch.isChecked()) {
+                // No service running, disable boot receiver
+                Log.i("QH", "No toggles toggled, disabling boot receiver to save CPU time");
+                pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                Log.i("QH", "Boot Receiver disabled");
+            }
+        } else {
+            Log.i("QH", "Boot Receiver Status: Disabled");
+            if (btSwitch.isChecked() || wifiSwitch.isChecked()) {
+                Log.i("QH", "One of the toggle is toggled, enabling boot receiver...");
+                pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                Log.i("QH", "Boot Receiver enabled");
+
+            }
+        }
     }
 
     @Override
@@ -279,6 +309,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         btEndTxt.setText(get12HrTime(btConnectivity.getEndHr(), btConnectivity.getEndMin()));
         wifiStartTxt.setText(get12HrTime(wifiConnectivity.getStartHr(), wifiConnectivity.getStartMin()));
         wifiEndTxt.setText(get12HrTime(wifiConnectivity.getEndHr(), wifiConnectivity.getEndMin()));
+        toggleBootReceiver();
 
         // Hide layout if hardware doesnt exist
         boolean wifiFeature = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI);
