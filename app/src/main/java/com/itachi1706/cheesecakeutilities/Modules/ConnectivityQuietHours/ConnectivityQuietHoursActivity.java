@@ -1,9 +1,12 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.AdapterView;
@@ -180,6 +183,25 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         btEndTxt.setText(get12HrTime(btConnectivity.getEndHr(), btConnectivity.getEndMin()));
         wifiStartTxt.setText(get12HrTime(wifiConnectivity.getStartHr(), wifiConnectivity.getStartMin()));
         wifiEndTxt.setText(get12HrTime(wifiConnectivity.getEndHr(), wifiConnectivity.getEndMin()));
+
+        // Hide layout if hardware doesnt exist
+        boolean wifiFeature = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI);
+        boolean btFeature = getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH);
+        wifiLayout.setVisibility((wifiFeature) ? View.VISIBLE : View.GONE);
+        btLayout.setVisibility((btFeature) ? View.VISIBLE : View.GONE);
+
+        if (!wifiFeature && !btFeature) {
+            // Why the hell are you trying to use this utility lmao. you dont even have the hardware
+            new AlertDialog.Builder(this).setTitle("Hardware Not Found")
+                    .setMessage("This device does not have WiFi or Bluetooth capabilities and hence cannot utilize this utility." +
+                            " This utility will now exit")
+                    .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+        }
     }
 
     private static String get12HrTime(int hr, int min) {
