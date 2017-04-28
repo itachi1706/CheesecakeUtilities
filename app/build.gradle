@@ -91,24 +91,24 @@ dependencies {
         transitive = true;
     }
     compile project(':appupdater')
-    compile 'com.android.support:design:25.3.0'
-    compile 'com.android.support:cardview-v7:25.3.0'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    compile 'com.google.firebase:firebase-config:10.2.0'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.google.firebase:firebase-crash:10.2.1'
+    compile 'com.google.firebase:firebase-core:10.2.1'
+    compile 'com.google.firebase:firebase-config:10.2.1'
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'com.afollestad:digitus:0.2.12' // Fingerprint Authentication
+    compile 'com.afollestad:digitus:0.3.0' // Fingerprint Authentication
     // Specific Utility Dependencies
     compile 'com.squareup.picasso:picasso:2.5.2' // Navbar Utility
     compile 'net.grandcentrix.tray:tray:0.11.0' // Navbar Utility
     compile 'com.github.QuadFlask:colorpicker:0.0.12' // Navbar Utility
     compile 'com.github.lzyzsd:circleprogress:1.1.0@aar' // ORD Countdown Utility
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1' // Application List Utility
-    compile 'com.afollestad.material-dialogs:core:0.9.1.0' // Application List Utility
+    compile 'com.afollestad.material-dialogs:core:0.9.4.4' // Application List Utility
     compile 'com.github.scottyab:safetynethelper:0.3.0' // SafetyNet Validator
-    compile 'com.google.android.gms:play-services-safetynet:10.2.0' // SafetyNet Validator
+    compile 'com.google.android.gms:play-services-safetynet:10.2.1' // SafetyNet Validator
     testCompile 'junit:junit:4.12'
 }
 
