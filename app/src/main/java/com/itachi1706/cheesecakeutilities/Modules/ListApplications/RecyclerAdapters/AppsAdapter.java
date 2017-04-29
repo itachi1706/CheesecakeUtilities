@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdap
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
     {
         AppsItem s = appsList.get(i);
         appsViewHolder.appName.setText(s.getAppName());
+        appsViewHolder.appName.setSelected(true);
         appsViewHolder.appApiVersion.setText(s.getApiVersion() + "");
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
@@ -119,6 +121,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         {
             super(v);
             appName = (TextView) v.findViewById(R.id.tvAppName);
+            appName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            appName.setMarqueeRepeatLimit(-1);
+            appName.setHorizontallyScrolling(true);
             appPackageName = (TextView) v.findViewById(R.id.tvPackageName);
             appApiVersion = (TextView) v.findViewById(R.id.tvAPI);
             appIcon = (ImageView) v.findViewById(R.id.iv_icon);
