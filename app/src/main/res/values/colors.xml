@@ -9,4 +9,5 @@
     <color name="pass">#8BC34A</color>
     <color name="fail">#FF5252</color>
     <color name="problem">#0097A7</color>
+    <color name="transparent_gray">#CC444444</color>
 </resources>
