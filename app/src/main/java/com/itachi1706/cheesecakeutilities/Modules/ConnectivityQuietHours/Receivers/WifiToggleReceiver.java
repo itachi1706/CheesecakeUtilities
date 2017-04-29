@@ -54,6 +54,7 @@ public class WifiToggleReceiver extends BroadcastReceiver {
             }
         }
         sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state);
+        if (workDone) logResult(sp, state);
         Log.i(TAG, "Job Done");
     }
 
@@ -75,5 +76,11 @@ public class WifiToggleReceiver extends BroadcastReceiver {
             case QHConstants.QH_NOTIFY_NEVER:
             default: break;
         }
+    }
+
+    private void logResult(SharedPreferences sp, boolean state) {
+        String existing = sp.getString(QHConstants.QH_HISTORY, "");
+        existing += "WiFi" + ((state) ? "Enabled" : "Disabled") + ":" + System.currentTimeMillis() + ";";
+        sp.edit().putString(QHConstants.QH_HISTORY, existing).apply();
     }
 }
