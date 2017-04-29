@@ -80,7 +80,7 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
 
     private void logResult(SharedPreferences sp, boolean state) {
         String existing = sp.getString(QHConstants.QH_HISTORY, "");
-        existing += "Bluetooth" + ((state) ? "Enabled" : "Disabled") + ":" + System.currentTimeMillis() + ";";
+        existing += "Bluetooth:" + ((state) ? "Enabled" : "Disabled") + ":" + System.currentTimeMillis() + ";";
         sp.edit().putString(QHConstants.QH_HISTORY, existing).apply();
     }
 }
