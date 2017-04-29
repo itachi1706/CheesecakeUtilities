@@ -32,6 +32,9 @@ import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.turingtechnologies.materialscrollbar.AlphabetIndicator;
+import com.turingtechnologies.materialscrollbar.CustomIndicator;
+import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
 import org.apache.commons.io.FileUtils;
 
@@ -46,6 +49,7 @@ public class ListApplicationsActivity extends BaseActivity {
     RecyclerView recyclerView;
     ProgressBar bar;
     TextView label;
+    TouchScrollBar scrollBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class ListApplicationsActivity extends BaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        scrollBar = (TouchScrollBar) findViewById(R.id.scrollBar);
+        scrollBar.setIndicator(new CustomIndicator(this), true);
 
         bar = (ProgressBar) findViewById(R.id.list_app_pb);
         label = (TextView) findViewById(R.id.list_app_pb_label);
