@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Modules.ListApplications.ListApplicationsActivity">
 
     <android.support.v7.widget.RecyclerView
@@ -12,9 +13,18 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/scrollBar"
+        android:layout_toStartOf="@+id/scrollBar" />
+
+    <com.turingtechnologies.materialscrollbar.TouchScrollBar
+        android:id="@+id/scrollBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true" />
+        android:layout_width="wrap_content"
+        app:msb_recyclerView="@+id/list_app_recycler_view"
+        app:msb_lightOnTouch="false"
+        android:layout_height="match_parent" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
