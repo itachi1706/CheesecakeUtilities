@@ -54,6 +54,7 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
             }
         }
         sendNotification(context, sp.getInt(QHConstants.QH_BT_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state);
+        if (workDone) logResult(sp, state);
         Log.i(TAG, "Job Done");
     }
 
@@ -75,5 +76,11 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
             case QHConstants.QH_NOTIFY_NEVER:
             default: break;
         }
+    }
+
+    private void logResult(SharedPreferences sp, boolean state) {
+        String existing = sp.getString(QHConstants.QH_HISTORY, "");
+        existing += "Bluetooth" + ((state) ? "Enabled" : "Disabled") + ":" + System.currentTimeMillis() + ";";
+        sp.edit().putString(QHConstants.QH_HISTORY, existing).apply();
     }
 }

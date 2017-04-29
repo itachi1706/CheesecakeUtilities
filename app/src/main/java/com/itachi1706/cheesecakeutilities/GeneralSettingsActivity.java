@@ -22,6 +22,7 @@ import com.itachi1706.appupdater.SettingsInitializer;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.PasswordHelper;
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity;
+import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import java.security.InvalidKeyException;
@@ -159,6 +160,18 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            // Utility Specific
+            // Clear Quiet Hour Utility History
+            findPreference("quiethour_clear_hist").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    sp.edit().remove(QHConstants.QH_HISTORY).apply();
+                    Toast.makeText(getActivity(), "History Cleared", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
         }
 
         SharedPreferences sp;

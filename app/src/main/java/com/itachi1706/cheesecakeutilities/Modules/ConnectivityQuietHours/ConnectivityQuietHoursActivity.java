@@ -11,6 +11,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
@@ -26,18 +29,27 @@ import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BootRescheduleToggleReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver;
+import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_START_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_STATE;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_TIME;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_STATE;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_TIME;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_END_INTENT;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
 
 public class ConnectivityQuietHoursActivity extends BaseActivity {
 
@@ -50,6 +62,10 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
     ConnectivityPeriod wifiConnectivity, btConnectivity;
     SharedPreferences sharedPreferences;
     AlarmManager alarmManager;
+
+    // For History Processing
+    LinearLayout historyLayout;
+    RecyclerView historyRecyclerView;
 
     @Override
     public String getHelpDescription() {
@@ -77,6 +93,8 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         btEndTxt = (TextView) findViewById(R.id.bt_end_time);
         btSwitch = (SwitchCompat) findViewById(R.id.bt_activate);
         wifiSwitch = (SwitchCompat) findViewById(R.id.wifi_activate);
+        historyLayout = (LinearLayout) findViewById(R.id.layout_history);
+        historyRecyclerView = (RecyclerView) findViewById(R.id.rv_qh_history);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -184,8 +202,6 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         // TODO: Remove after exiting BETA
         CommonMethods.betaInfo(this, "Connectivity Quiet Hours Configuration");
     }
-
-    private static final int BT_START_INTENT = 2000, BT_END_INTENT = 2001, WIFI_START_INTENT = 2002, WIFI_END_INTENT = 2003;
 
     private void toggleBtSwitch() {
         PendingIntent btStartIntent = PendingIntent.getBroadcast(this, BT_START_INTENT, new Intent(this, BluetoothToggleReceiver.class).putExtra("status", true), 0);
@@ -334,6 +350,42 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
                 }
             }).show();
         }
+
+        // Setup the recyclerview
+        historyRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        historyRecyclerView.setLayoutManager(linearLayoutManager);
+        historyRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        String historyLines = sharedPreferences.getString(QHConstants.QH_HISTORY, "");
+        if (historyLines.isEmpty()) {
+            // Show no history
+            String[] s = new String[1];
+            s[0] = "No History Found";
+            StringRecyclerAdapter adapter = new StringRecyclerAdapter(s, false);
+            historyRecyclerView.setAdapter(adapter);
+        } else {
+            List<DualLineString> ds = new ArrayList<>();
+            String[] s1 = historyLines.split(";");
+            for (String s2 : s1) {
+                String[] s3 = s2.split(":");
+                if (s3.length != 3) continue;
+
+                s3[1] = (s3[1].equalsIgnoreCase("Enabled")) ? "<font color='green'>" + s3[1] + "</font>"
+                        : "<font color='red'>" + s3[1] + "</font>";
+                ds.add(new DualLineString(s3[0] + " Quiet Hour State " + s3[1], "Triggered at: " + DateFormat.getDateTimeInstance().format(s3[2])));
+            }
+
+            DualLineStringRecyclerAdapter adapter = new DualLineStringRecyclerAdapter(ds, false);
+            adapter.setHtmlFormat(true);
+            historyRecyclerView.setAdapter(adapter);
+        }
+
+
+        // Hide History if disabled
+        if (sharedPreferences.getBoolean(QHConstants.QH_HISTORY_VIEW, true)) historyLayout.setVisibility(View.VISIBLE);
+        else historyLayout.setVisibility(View.GONE);
     }
 
     private static String get12HrTime(int hr, int min) {
