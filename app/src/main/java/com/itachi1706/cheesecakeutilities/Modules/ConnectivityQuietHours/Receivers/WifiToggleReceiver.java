@@ -80,7 +80,7 @@ public class WifiToggleReceiver extends BroadcastReceiver {
 
     private void logResult(SharedPreferences sp, boolean state) {
         String existing = sp.getString(QHConstants.QH_HISTORY, "");
-        existing += "WiFi" + ((state) ? "Enabled" : "Disabled") + ":" + System.currentTimeMillis() + ";";
+        existing += "WiFi:" + ((state) ? "Enabled" : "Disabled") + ":" + System.currentTimeMillis() + ";";
         sp.edit().putString(QHConstants.QH_HISTORY, existing).apply();
     }
 }
