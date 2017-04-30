@@ -38,6 +38,7 @@ import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
@@ -377,6 +378,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
                         : "<font color='red'>" + s3[1] + "</font>";
                 ds.add(new DualLineString(s3[0] + " Quiet Hour State " + s3[1], "Triggered at: " + DateFormat.getDateTimeInstance().format(Long.parseLong(s3[2]))));
             }
+            Collections.reverse(ds);
 
             DualLineStringRecyclerAdapter adapter = new DualLineStringRecyclerAdapter(ds, false);
             adapter.setHtmlFormat(true);
