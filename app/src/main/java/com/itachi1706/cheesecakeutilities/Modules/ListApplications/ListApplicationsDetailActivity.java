@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,7 +48,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -379,7 +379,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-        return String.format("%.2f %sB", bytes / Math.pow(1024, exp), pre);
+        return String.format(Locale.US, "%.2f %sB", bytes / Math.pow(1024, exp), pre);
     }
 
     private LinearLayout generateSingleColumn(String title, String... message) {
@@ -387,7 +387,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        titleView.setTextAppearance(this, android.R.style.TextAppearance_Material_Medium);
+        titleView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView detailView;
@@ -405,7 +405,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        titleView.setTextAppearance(this, android.R.style.TextAppearance_Material_Medium);
+        titleView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView labelView;

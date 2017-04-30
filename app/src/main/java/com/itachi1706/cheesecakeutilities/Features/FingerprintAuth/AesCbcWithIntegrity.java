@@ -451,11 +451,7 @@ public class AesCbcWithIntegrity {
             if (getClass() != obj.getClass())
                 return false;
             SecretKeys other = (SecretKeys) obj;
-            if (!integrityKey.equals(other.integrityKey))
-                return false;
-            if (!confidentialityKey.equals(other.confidentialityKey))
-                return false;
-            return true;
+            return integrityKey.equals(other.integrityKey) && confidentialityKey.equals(other.confidentialityKey);
         }
     }
 
@@ -556,7 +552,7 @@ public class AesCbcWithIntegrity {
             String ivString = Base64.encodeToString(iv, BASE64_FLAGS);
             String cipherTextString = Base64.encodeToString(cipherText, BASE64_FLAGS);
             String macString = Base64.encodeToString(mac, BASE64_FLAGS);
-            return String.format(ivString + ":" + macString + ":" + cipherTextString);
+            return ivString + ":" + macString + ":" + cipherTextString;
         }
 
         @Override
@@ -578,13 +574,7 @@ public class AesCbcWithIntegrity {
             if (getClass() != obj.getClass())
                 return false;
             CipherTextIvMac other = (CipherTextIvMac) obj;
-            if (!Arrays.equals(cipherText, other.cipherText))
-                return false;
-            if (!Arrays.equals(iv, other.iv))
-                return false;
-            if (!Arrays.equals(mac, other.mac))
-                return false;
-            return true;
+            return Arrays.equals(cipherText, other.cipherText) && Arrays.equals(iv, other.iv) && Arrays.equals(mac, other.mac);
         }
     }
 
@@ -740,7 +730,6 @@ public class AesCbcWithIntegrity {
                         Log.w(PrngFixes.class.getSimpleName(),
                                 "SecureRandom.getInstance(\"SHA1PRNG\") backed by wrong" + " Provider: "
                                         + rng2.getProvider().getClass());
-                        return;
                     } else {
                         throw new SecurityException(
                                 "SecureRandom.getInstance(\"SHA1PRNG\") backed by wrong" + " Provider: "

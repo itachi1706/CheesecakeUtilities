@@ -35,6 +35,7 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (!intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) return; // Not Boot Action
         sp = PreferenceManager.getDefaultSharedPreferences(context);
         if (sp.getBoolean(QHConstants.QH_BT_STATE, false)) scheduleBt(context);
         if (sp.getBoolean(QHConstants.QH_WIFI_STATE, false)) scheduleWifi(context);

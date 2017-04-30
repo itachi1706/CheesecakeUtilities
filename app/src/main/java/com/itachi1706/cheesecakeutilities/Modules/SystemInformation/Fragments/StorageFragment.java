@@ -185,9 +185,7 @@ public class StorageFragment extends Fragment {
             usedSize = ((double) Math.round((100.0d * usedSize) / 1024.0d)) / 100.0d;
             unitUsed = " GB";
         }
-        if (VERSION.SDK_INT >= 14) {
-            sdkDetect = "Emulated SD Card (Android 4.0+)";
-        }
+        sdkDetect = "Emulated SD Card (Android 4.0+)";
         Mounts mem = getMountPoint(Environment.getExternalStorageDirectory().getAbsolutePath());
         String additionalData = "";
         if (mem != null) {
@@ -233,9 +231,6 @@ public class StorageFragment extends Fragment {
     @SuppressWarnings("deprecation")
     public String getRemovableMem() {
         if (String.valueOf(extRemovablePath()).equals("on")) {
-            return null;
-        }
-        if (VERSION.SDK_INT <= 13) {
             return null;
         }
         if (extRemovablePath().isEmpty()) {

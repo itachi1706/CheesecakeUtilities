@@ -16,7 +16,7 @@
             android:inputType="phone"
             android:nextFocusDown="@+id/edit_messagespam_text"
             android:nextFocusRight="@+id/edit_messagespam_text"
-            android:singleLine="true"
+            android:maxLines="1"
             android:hint="@string/hint_contact_number"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -44,7 +44,7 @@
             android:inputType="phone"
             android:nextFocusDown="@+id/btn_messagespam_send"
             android:nextFocusRight="@+id/btn_messagespam_send"
-            android:singleLine="true"
+            android:maxLines="1"
             android:hint="@string/hint_number_times"/>
     </android.support.design.widget.TextInputLayout>
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.itachi1706.cheesecakeutilities.MainMenuActivity"
-    tools:showIn="@layout/activity_main_menu">
+    tools:showIn="@layout/fragment_main_menu">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="0dp"

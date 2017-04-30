@@ -25,7 +25,6 @@
         android:text="@string/label_fanfic_folder"
         android:id="@+id/lblFolderLoc"
         android:layout_marginTop="27dp"
-        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

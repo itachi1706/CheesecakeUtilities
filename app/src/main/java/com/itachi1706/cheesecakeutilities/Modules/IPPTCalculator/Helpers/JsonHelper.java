@@ -237,7 +237,7 @@ public class JsonHelper {
         if (neededPts < 0) return "Pass Already";
 
         JsonObject obj = object.getSitups();
-        JsonObject element = null;
+        JsonObject element;
         // Try 10 times, increasing pts every time
         for (int i = 0; i < 10; i++) {
             for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
@@ -258,7 +258,7 @@ public class JsonHelper {
         if (neededPts < 0) return "Pass Already";
 
         JsonObject obj = object.getPushups();
-        JsonObject element = null;
+        JsonObject element;
         // Try 10 times, increasing pts every time
         for (int i = 0; i < 10; i++) {
             for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
@@ -279,7 +279,7 @@ public class JsonHelper {
         if (neededPts < 0) return "Pass Already";
 
         JsonObject obj = object.getRun();
-        JsonObject element = null;
+        JsonObject element;
         // Try 10 times, increasing pts every time
         for (int i = 0; i < 10; i++) {
             for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {

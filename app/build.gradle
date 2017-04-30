@@ -96,9 +96,9 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.2.4'
     compile 'com.google.firebase:firebase-core:10.2.4'
     compile 'com.google.firebase:firebase-config:10.2.4'
-    compile 'commons-io:commons-io:2.4'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'commons-io:commons-io:2.5'
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.afollestad:digitus:0.3.0' // Fingerprint Authentication
     // Specific Utility Dependencies
     compile 'com.squareup.picasso:picasso:2.5.2' // Navbar Utility

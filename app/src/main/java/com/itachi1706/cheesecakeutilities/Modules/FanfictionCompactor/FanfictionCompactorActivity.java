@@ -140,12 +140,14 @@ public class FanfictionCompactorActivity extends BaseActivity {
         }
 
         if (count <= 0) builder.append("You have no stories that are duplicates in the database!");
+        //noinspection deprecation
         new AlertDialog.Builder(this).setTitle("Duplicates Scanner (" + count + ")").setMessage(Html.fromHtml(builder.toString().replace("\n", "<br>"))).setPositiveButton(android.R.string.ok, null).show();
     }
 
     long totalSize = 9999999;
 
     private void startPreCompactingService() {
+        //noinspection deprecation,deprecation
         new AlertDialog.Builder(this).setTitle(Html.fromHtml("<font color='red'>WARNING!</font>"))//"WARNING!")
                 .setMessage(Html.fromHtml("This service will clean up Fanfiction Stories from your device in <font color='blue'>" +
                 FileHelper.getDefaultFolder().getAbsolutePath() + "</font>.<br> A backup will be made in <font color='blue'>" +

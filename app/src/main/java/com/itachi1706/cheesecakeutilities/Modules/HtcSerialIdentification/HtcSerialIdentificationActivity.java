@@ -52,6 +52,7 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
                 }
 
                 String htmlFormattedSN = parseSerialNumber(serialNumber.getText().toString());
+                //noinspection deprecation
                 resultList.setText(Html.fromHtml(htmlFormattedSN));
             }
         });
@@ -86,20 +87,10 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
         });
     }
 
-    private boolean isAHTCPhone(){
-        if (Build.MANUFACTURER.equalsIgnoreCase("HTC"))
-            return true;
-        if (Build.BRAND.equalsIgnoreCase("htc"))
-            return true;
-        if (Build.DEVICE.contains("htc") || Build.DEVICE.contains("HTC"))
-            return true;
-        if (Build.MODEL.contains("HTC") || Build.MODEL.contains("htc"))
-            return true;
-        if (Build.FINGERPRINT.contains("htc") || Build.FINGERPRINT.contains("HTC"))
-            return true;
-        if (Build.PRODUCT.contains("HTC") || Build.PRODUCT.contains("htc"))
-            return true;
-        return false;
+    private boolean isAHTCPhone() {
+        return Build.MANUFACTURER.equalsIgnoreCase("HTC") || Build.BRAND.equalsIgnoreCase("htc")
+                || Build.DEVICE.toLowerCase().contains("htc") || Build.MODEL.toLowerCase().contains("htc")
+                || Build.FINGERPRINT.toLowerCase().contains("htc") || Build.PRODUCT.toLowerCase().contains("htc");
     }
 
     private String parseSerialNumber(String serial){
