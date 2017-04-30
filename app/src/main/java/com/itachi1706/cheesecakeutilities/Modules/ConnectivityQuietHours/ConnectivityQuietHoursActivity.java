@@ -18,12 +18,14 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver;
@@ -46,6 +48,8 @@ import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_STATE;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_TIME;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_NOTIFY_ALWAYS;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_NOTIFY_DEBUG;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_STATE;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_TIME;
@@ -332,6 +336,31 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         wifiStartTxt.setText(get12HrTime(wifiConnectivity.getStartHr(), wifiConnectivity.getStartMin()));
         wifiEndTxt.setText(get12HrTime(wifiConnectivity.getEndHr(), wifiConnectivity.getEndMin()));
         toggleBootReceiver();
+
+        // Update to Always from Always (VERBOSE) if Firebase disables it
+        // Firebase key: quiethour_debug_mode
+        FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        if (!firebaseRemoteConfig.getBoolean("quiethour_debug_mode")) {
+            if (btNotification.getSelectedItemPosition() == QH_NOTIFY_DEBUG) {
+                btNotification.setSelection(QH_NOTIFY_ALWAYS);
+                sharedPreferences.edit().putInt(QH_BT_NOTIFICATION, QH_NOTIFY_ALWAYS).apply();
+            }
+            if (wifiNotification.getSelectedItemPosition() == QH_NOTIFY_DEBUG) {
+                wifiNotification.setSelection(QH_NOTIFY_ALWAYS);
+                sharedPreferences.edit().putInt(QH_WIFI_NOTIFICATION, QH_NOTIFY_ALWAYS).apply();
+            }
+            List<String> noDebugSpinnerOpts = new ArrayList<>();
+            Collections.addAll(noDebugSpinnerOpts, getResources().getStringArray(R.array.connectivity_notification_type));
+            noDebugSpinnerOpts.remove("Always (DEBUG)");
+            ArrayAdapter<String> noDebugSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+                    noDebugSpinnerOpts);
+            wifiNotification.setAdapter(noDebugSpinnerAdapter);
+            btNotification.setAdapter(noDebugSpinnerAdapter);
+            // Reinsert selection
+            btNotification.setSelection(sharedPreferences.getInt(QH_BT_NOTIFICATION, 0));
+            wifiNotification.setSelection(sharedPreferences.getInt(QH_WIFI_NOTIFICATION, 0));
+        }
 
         // Hide layout if hardware doesnt exist
         boolean wifiFeature = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI);
