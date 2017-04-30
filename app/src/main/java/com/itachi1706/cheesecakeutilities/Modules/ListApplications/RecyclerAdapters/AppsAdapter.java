@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdap
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsDetailActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.R;
+import com.turingtechnologies.materialscrollbar.ICustomAdapter;
+import com.turingtechnologies.materialscrollbar.INameableAdapter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,11 +24,13 @@ import java.util.List;
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters in Cheesecake Utilities.
  */
-public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder> {
+public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder> implements ICustomAdapter {
     private List<AppsItem> appsList;
 
     private static final int SORT_NAME = 0;
     public static final int SORT_API = 1;
+
+    private boolean sortByName = false;
 
     public AppsAdapter(List<AppsItem> strings)
     {
@@ -43,9 +48,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
 
     public void sort(int type) {
         switch (type) {
-            case SORT_API: sortByApiVersion(); break;
+            case SORT_API: sortByApiVersion(); sortByName = false; break;
             case SORT_NAME:
-            default: sortByName(); break;
+            default: sortByName(); sortByName = true; break;
         }
     }
 
@@ -82,6 +87,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
     {
         AppsItem s = appsList.get(i);
         appsViewHolder.appName.setText(s.getAppName());
+        appsViewHolder.appName.setSelected(true);
         appsViewHolder.appApiVersion.setText(s.getApiVersion() + "");
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
@@ -97,6 +103,14 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         return new AppsViewHolder(itemView);
     }
 
+    @Override
+    public String getCustomStringForElement(int element) {
+        if (sortByName)
+            return appsList.get(element).getAppName().charAt(0) + "";
+        else
+            return appsList.get(element).getApiVersion() + "";
+    }
+
 
     class AppsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -107,6 +121,9 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         {
             super(v);
             appName = (TextView) v.findViewById(R.id.tvAppName);
+            appName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            appName.setMarqueeRepeatLimit(-1);
+            appName.setHorizontallyScrolling(true);
             appPackageName = (TextView) v.findViewById(R.id.tvPackageName);
             appApiVersion = (TextView) v.findViewById(R.id.tvAPI);
             appIcon = (ImageView) v.findViewById(R.id.iv_icon);
