@@ -10,7 +10,6 @@ import android.os.StatFs;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,9 @@ import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.R;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 public class SystemFragment extends Fragment {
     private static final int EVENT_TICK = 1;

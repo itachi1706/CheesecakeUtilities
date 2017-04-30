@@ -13,7 +13,6 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicati
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.R;
 import com.turingtechnologies.materialscrollbar.ICustomAdapter;
-import com.turingtechnologies.materialscrollbar.INameableAdapter;
 
 import java.util.Arrays;
 import java.util.Collections;

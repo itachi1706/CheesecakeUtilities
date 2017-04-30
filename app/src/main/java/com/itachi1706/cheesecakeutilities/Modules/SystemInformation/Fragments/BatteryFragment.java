@@ -58,14 +58,6 @@ public class BatteryFragment extends Fragment {
         getActivity().unregisterReceiver(this.batteryStatusReceiver);
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    public void onStop() {
-        super.onStop();
-    }
-
     private String getPlugTypeString(int plug) {
         switch (plug) {
             case 1: return "AC";

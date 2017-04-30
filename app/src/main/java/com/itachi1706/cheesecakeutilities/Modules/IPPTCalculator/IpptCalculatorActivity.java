@@ -33,7 +33,6 @@ public class IpptCalculatorActivity extends BaseActivity {
     private EditText runMin, runSec, pushup, situp;
     private TextView results;
     private TextInputLayout pushupLayout;
-    private Button calculate, scores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +45,8 @@ public class IpptCalculatorActivity extends BaseActivity {
         runSec = (EditText) findViewById(R.id.etRunSec);
         pushup = (EditText) findViewById(R.id.etPushUps);
         situp = (EditText) findViewById(R.id.etSitUps);
-        calculate = (Button) findViewById(R.id.btnCalculate);
-        scores = (Button) findViewById(R.id.btnViewScoring);
+        Button calculate = (Button) findViewById(R.id.btnCalculate);
+        Button scores = (Button) findViewById(R.id.btnViewScoring);
         results = (TextView) findViewById(R.id.tvResults);
         pushupLayout = (TextInputLayout) findViewById(R.id.til_etPushUps);
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -88,7 +87,7 @@ public class IpptCalculatorActivity extends BaseActivity {
 
         int ageGroup = JsonHelper.getAgeGroup(ageSpinner.getSelectedItem().toString(), this);
         int gender = JsonHelper.getGender(genderSpinner.getSelectedItem().toString());
-        int score = 0;
+        int score;
         Main object = JsonHelper.readFromJsonRaw(this);
         Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
 

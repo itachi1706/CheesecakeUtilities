@@ -157,12 +157,8 @@ public class SafetyNetActivity extends BaseActivity {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void revealResults(Integer colorTo){
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.HONEYCOMB) {
-            doPropertyAnimatorReveal(colorTo);
-            resultsContainer.setVisibility(View.VISIBLE);
-        }else{
-            resultsContainer.setVisibility(View.VISIBLE);
-        }
+        doPropertyAnimatorReveal(colorTo);
+        resultsContainer.setVisibility(View.VISIBLE);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

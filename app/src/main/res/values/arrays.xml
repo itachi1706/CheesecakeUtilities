@@ -70,11 +70,6 @@
         <item>Random Image</item>
         <item>Static Color</item>
     </string-array>
-    <string-array name="imagetyperef">
-        <item>app</item>
-        <item>random</item>
-        <item>static</item>
-    </string-array>
     <string-array name="payday">
         <item>10th of every month</item>
         <item>12th of every month</item>

@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities.Games.ChromiumTRex;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
