@@ -31,15 +31,20 @@
         android:layout_marginRight="5dp" />
 
     <TextView
+        android:id="@+id/tvPackageName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="com.example.appname"
-        android:id="@+id/tvPackageName"
+        android:layout_alignBottom="@+id/iv_icon"
+        android:layout_toEndOf="@+id/iv_icon"
+        android:layout_toLeftOf="@+id/tvAPI"
+        android:layout_toStartOf="@+id/tvAPI"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:paddingRight="4dp"
         android:maxLines="1"
         android:maxWidth="250dp"
-        android:layout_alignBottom="@+id/iv_icon"
-        android:layout_toRightOf="@+id/iv_icon" />
+        android:ellipsize="end"
+        android:text="com.example.appname"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:layout_width="wrap_content"
