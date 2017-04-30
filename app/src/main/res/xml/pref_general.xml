@@ -15,4 +15,11 @@
         <Preference android:title="Test Authentication" android:key="testpw" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Utility Specific Settings">
+        <SwitchPreference android:title="Show Quiet Hour Trigger History"
+            android:summary="Shows a list of the times that Quiet Hour has triggered"
+            android:key="quiethour_history_view" android:defaultValue="true" />
+        <Preference android:title="Clear Quiet Hour Trigger History" android:key="quiethour_clear_hist" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

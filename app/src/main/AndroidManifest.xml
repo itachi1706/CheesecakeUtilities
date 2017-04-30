@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -156,7 +160,8 @@
         <activity
             android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
-        <activity android:name=".Modules.AppRestore.RestoreAppActivity"
+        <activity
+            android:name=".Modules.AppRestore.RestoreAppActivity"
             android:label="Restore Application" />
 
         <provider
@@ -183,6 +188,23 @@
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
             android:label="Chrome T-Rex Game" />
         <activity android:name=".LaunchTileSettingsActivity" />
+        <activity
+            android:name=".Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity"
+            android:label="Connectivity Quiet Hours Configuration" />
+
+        <receiver
+            android:name=".Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name=".Modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name=".Modules.ConnectivityQuietHours.Receivers.BootRescheduleToggleReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

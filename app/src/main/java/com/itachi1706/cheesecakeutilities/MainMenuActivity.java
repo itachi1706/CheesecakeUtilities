@@ -54,7 +54,7 @@ public class MainMenuActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-        new AppUpdateInitializer(this, sp, R.mipmap.ic_launcher, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
+        new AppUpdateInitializer(this, sp, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
 
         // Do Authentication
         boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
