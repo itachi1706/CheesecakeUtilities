@@ -65,6 +65,7 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Bluetooth Quiet Hour " + ((btState) ? "Enabled" : "Disabled"))
                 .setContentText("Bluetooth state toggled on " + time)
                 .setAutoCancel(true)
+                .setGroup("connectivityqh")
                 .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         Random random = new Random();
 
