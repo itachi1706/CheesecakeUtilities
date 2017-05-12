@@ -65,6 +65,7 @@ public class WifiToggleReceiver extends BroadcastReceiver {
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Wi-Fi Quiet Hour " + ((wifiState) ? "Enabled" : "Disabled"))
                 .setContentText("Wi-Fi state toggled on " + time)
                 .setAutoCancel(true)
+                .setGroup("connectivityqh")
                 .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         Random random = new Random();
 
