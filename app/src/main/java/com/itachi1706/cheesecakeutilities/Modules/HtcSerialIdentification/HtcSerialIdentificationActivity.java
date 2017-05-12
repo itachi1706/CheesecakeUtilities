@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
@@ -52,8 +53,7 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
                 }
 
                 String htmlFormattedSN = parseSerialNumber(serialNumber.getText().toString());
-                //noinspection deprecation
-                resultList.setText(Html.fromHtml(htmlFormattedSN));
+                resultList.setText(DeprecationHelper.Html.fromHtml(htmlFormattedSN));
             }
         });
 

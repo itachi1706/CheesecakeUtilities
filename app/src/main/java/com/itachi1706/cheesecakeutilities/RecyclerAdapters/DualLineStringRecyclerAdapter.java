@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -53,13 +54,12 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
         return stringList.size();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onBindViewHolder(StringViewHolder stringViewHolder, int i)
     {
         DualLineString s  = stringList.get(i);
-        stringViewHolder.title.setText((htmlformat) ? Html.fromHtml(s.getMain()) : s.getMain());
-        stringViewHolder.subtitle.setText((htmlformat) ? Html.fromHtml(s.getSub()) : s.getSub());
+        stringViewHolder.title.setText((htmlformat) ? DeprecationHelper.Html.fromHtml(s.getMain()) : s.getMain());
+        stringViewHolder.subtitle.setText((htmlformat) ? DeprecationHelper.Html.fromHtml(s.getSub()) : s.getSub());
     }
 
     @Override
