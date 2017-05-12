@@ -3,6 +3,8 @@ package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.itachi1706.appupdater.Util.DeprecationHelper;
+
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,8 +93,7 @@ public class FileHelper {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
         } else {
-            //noinspection deprecation (due to API requirement)
-            bytesAvailable = (long)stat.getBlockSize() * (long)stat.getAvailableBlocks();
+            bytesAvailable = DeprecationHelper.StatFs.getBlockSize(stat) * DeprecationHelper.StatFs.getAvailableBlocks(stat);
         }
         return bytesAvailable / (1024.f * 1024.f);
     }

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.File;
@@ -143,12 +144,11 @@ public class SystemFragment extends Fragment {
         return findBinary("su");
     }
 
-    @SuppressWarnings("deprecation")
     public String getIntMem() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        long blockSize = (long) statFs.getBlockSize();
-        double totalSize = (double) ((((long) statFs.getBlockCount()) * blockSize) / 1048576);
-        double availableSize = (double) ((((long) statFs.getAvailableBlocks()) * blockSize) / 1048576);
+        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
+        double totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
+        double availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";

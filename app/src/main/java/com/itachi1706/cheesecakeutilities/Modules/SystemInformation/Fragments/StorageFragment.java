@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -117,12 +118,11 @@ public class StorageFragment extends Fragment {
         return bestMount;
     }
 
-    @SuppressWarnings("deprecation")
     public String getIntMem() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        long blockSize = (long) statFs.getBlockSize();
-        double totalSize = (double) ((((long) statFs.getBlockCount()) * blockSize) / 1048576);
-        double availableSize = (double) ((((long) statFs.getAvailableBlocks()) * blockSize) / 1048576);
+        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
+        double totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
+        double availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";
@@ -153,20 +153,13 @@ public class StorageFragment extends Fragment {
                 + "\nUsed: " + usedSize + unitUsed + ((additionalData.isEmpty()) ? "" : "\n" + additionalData);
     }
 
-    @SuppressWarnings("deprecation")
     public String getExtMem() {
         StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
         double totalSize;
         double availableSize;
-        if (VERSION.SDK_INT >= 18) {
-            long blockSize = statFs.getBlockSizeLong();
-            totalSize = (double) ((statFs.getBlockCountLong() * blockSize) / 1048576);
-            availableSize = (double) ((statFs.getAvailableBlocksLong() * blockSize) / 1048576);
-        } else {
-            long blockSize = (long) statFs.getBlockSize();
-            totalSize = (double) ((((long) statFs.getBlockCount()) * blockSize) / 1048576);
-            availableSize = (double) ((((long) statFs.getAvailableBlocks()) * blockSize) / 1048576);
-        }
+        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
+        totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
+        availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";
@@ -228,7 +221,6 @@ public class StorageFragment extends Fragment {
         return sdcardPath;
     }
 
-    @SuppressWarnings("deprecation")
     public String getRemovableMem() {
         if (String.valueOf(extRemovablePath()).equals("on")) {
             return null;
@@ -240,9 +232,9 @@ public class StorageFragment extends Fragment {
             return null;
         }
         StatFs statFs = new StatFs(extRemovablePath());
-        long blockSize = (long) statFs.getBlockSize();
-        double totalSize = (double) ((((long) statFs.getBlockCount()) * blockSize) / 1048576);
-        double availableSize = (double) ((((long) statFs.getAvailableBlocks()) * blockSize) / 1048576);
+        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
+        double totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
+        double availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";

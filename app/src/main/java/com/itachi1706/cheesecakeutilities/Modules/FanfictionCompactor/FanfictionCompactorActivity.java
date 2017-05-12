@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
@@ -140,16 +141,14 @@ public class FanfictionCompactorActivity extends BaseActivity {
         }
 
         if (count <= 0) builder.append("You have no stories that are duplicates in the database!");
-        //noinspection deprecation
-        new AlertDialog.Builder(this).setTitle("Duplicates Scanner (" + count + ")").setMessage(Html.fromHtml(builder.toString().replace("\n", "<br>"))).setPositiveButton(android.R.string.ok, null).show();
+        new AlertDialog.Builder(this).setTitle("Duplicates Scanner (" + count + ")").setMessage(DeprecationHelper.Html.fromHtml(builder.toString().replace("\n", "<br>"))).setPositiveButton(android.R.string.ok, null).show();
     }
 
     long totalSize = 9999999;
 
     private void startPreCompactingService() {
-        //noinspection deprecation,deprecation
-        new AlertDialog.Builder(this).setTitle(Html.fromHtml("<font color='red'>WARNING!</font>"))//"WARNING!")
-                .setMessage(Html.fromHtml("This service will clean up Fanfiction Stories from your device in <font color='blue'>" +
+        new AlertDialog.Builder(this).setTitle(DeprecationHelper.Html.fromHtml("<font color='red'>WARNING!</font>"))//"WARNING!")
+                .setMessage(DeprecationHelper.Html.fromHtml("This service will clean up Fanfiction Stories from your device in <font color='blue'>" +
                 FileHelper.getDefaultFolder().getAbsolutePath() + "</font>.<br> A backup will be made in <font color='blue'>" +
                 FileHelper.getBackupFolder().getAbsolutePath() + "</font>. <br><br><br><font color='red'>Please make sure you have " +
                         "already done a database export from the Fanfiction Application before continuing. " +
