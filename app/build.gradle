@@ -93,9 +93,9 @@ dependencies {
     compile project(':appupdater')
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.google.firebase:firebase-crash:10.2.4'
-    compile 'com.google.firebase:firebase-core:10.2.4'
-    compile 'com.google.firebase:firebase-config:10.2.4'
+    compile 'com.google.firebase:firebase-crash:10.2.6'
+    compile 'com.google.firebase:firebase-core:10.2.6'
+    compile 'com.google.firebase:firebase-config:10.2.6'
     compile 'commons-io:commons-io:2.5'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.google.code.gson:gson:2.8.0'
@@ -109,7 +109,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.4' // Application List Utility
     compile 'com.github.turing-tech:MaterialScrollBar:12.3.5' // Application List Utility
     compile 'com.github.scottyab:safetynethelper:0.3.0' // SafetyNet Validator
-    compile 'com.google.android.gms:play-services-safetynet:10.2.4' // SafetyNet Validator
+    compile 'com.google.android.gms:play-services-safetynet:10.2.6' // SafetyNet Validator
     testCompile 'junit:junit:4.12'
 }
 
