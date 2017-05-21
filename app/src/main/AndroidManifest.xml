@@ -38,10 +38,12 @@
         </activity>
         <activity
             android:name=".StringToHexBin"
+            android:exported="true"
             android:label="@string/title_string_to_bin_or_hex_full"
             android:theme="@style/DarkTheme" />
         <activity
             android:name=".SpamMessages"
+            android:exported="true"
             android:label="@string/message_spammer"
             android:theme="@style/DarkTheme" />
         <activity
@@ -54,18 +56,22 @@
 
         <activity
             android:name=".Modules.HtcSerialIdentification.HtcSerialIdentificationActivity"
+            android:exported="true"
             android:label="HTC S/N Identification" />
         <activity
             android:name=".Modules.FanfictionCompactor.FanfictionCompactorActivity"
+            android:exported="true"
             android:label="Fanfiction Compactor"
             android:launchMode="singleTop" />
 
         <service
             android:name=".Modules.FanfictionCompactor.Services.FanficCompressionService"
-            android:exported="false"
+            android:exported="true"
             tools:ignore="InnerclassSeparator" />
 
-        <activity android:name=".CameraDisablerActivity" />
+        <activity android:name=".CameraDisablerActivity"
+            android:exported="true"
+            android:label="Disable Camera"/>
 
         <receiver
             android:name=".CameraDisablerActivity$DeviceAdminReceiver"
@@ -83,9 +89,11 @@
 
         <activity
             android:name=".Modules.ListApplications.ListApplicationsActivity"
+            android:exported="true"
             android:label="Application List" />
         <activity
             android:name=".Modules.ORDCountdown.ORDActivity"
+            android:exported="true"
             android:label="ORD Countdown" />
         <activity
             android:name=".Modules.ORDCountdown.ORDSettingsActivity"
@@ -118,9 +126,11 @@
 
         <activity
             android:name=".BmiCalculatorActivity"
+            android:exported="true"
             android:label="BMI Calculator" />
         <activity
             android:name=".Modules.IPPTCalculator.IpptCalculatorActivity"
+            android:exported="true"
             android:label="IPPT Calculator" />
         <activity
             android:name=".Modules.IPPTCalculator.IpptScoringActivity"
@@ -131,7 +141,7 @@
         <activity
             android:name=".Features.FingerprintAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Modules.SystemInformation.InitActivity" />
+        <activity android:name=".Modules.SystemInformation.InitActivity" android:exported="true" />
         <activity
             android:name=".Modules.SystemInformation.ParentFragmentActivity"
             android:label="System Information"
@@ -153,15 +163,18 @@
 
         <activity
             android:name=".Modules.NavbarCustomization.NavbarConfigurationActivity"
+            android:exported="true"
             android:label="Navigation Bar Customizer" />
         <activity
             android:name=".Games.TicTacToe.TicTacToeActivity"
+            android:exported="true"
             android:label="Tic Tac Toe" />
         <activity
             android:name=".Features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
         <activity
             android:name=".Modules.AppRestore.RestoreAppActivity"
+            android:exported="true"
             android:label="Restore Application" />
 
         <provider
@@ -180,16 +193,20 @@
             android:label="Graph by API Level" />
         <activity
             android:name=".Modules.SafetyNet.SafetyNetActivity"
+            android:exported="true"
             android:label="SafetyNet Validator" />
         <activity
             android:name=".Modules.UnicodeKeyboard.UnicodeActivity"
+            android:exported="true"
             android:label="Unicode Emoticons" />
         <activity
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
+            android:exported="true"
             android:label="Chrome T-Rex Game" />
-        <activity android:name=".LaunchTileSettingsActivity" />
+        <activity android:name=".LaunchTileSettingsActivity" android:exported="true" />
         <activity
             android:name=".Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity"
+            android:exported="true"
             android:label="Connectivity Quiet Hours Configuration" />
 
         <receiver
@@ -205,6 +222,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <activity android:name=".CreateShortcuts">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
