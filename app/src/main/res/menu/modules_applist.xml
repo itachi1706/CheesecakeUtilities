@@ -6,7 +6,7 @@
     <item android:id="@+id/sortapi" android:title="Sort by API Version"
         android:orderInCategory="51" android:checkable="true" app:showAsAction="never" />
     <item android:id="@+id/graph" android:title="Graph by API"
-        android:orderInCategory="49" app:showAsAction="ifRoom" android:icon="@drawable/chart_arc" />
+        android:orderInCategory="49" app:showAsAction="ifRoom" android:icon="@drawable/ic_chart_arc" />
     <item android:id="@+id/scan_ghost" app:showAsAction="never" android:title="Clean Ghost Directories"
         android:orderInCategory="52"/>
 </menu>
