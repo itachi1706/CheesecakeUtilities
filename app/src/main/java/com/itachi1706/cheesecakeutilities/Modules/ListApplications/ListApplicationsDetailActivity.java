@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
@@ -386,7 +387,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        titleView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+        DeprecationHelper.TextView.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView detailView;
@@ -404,7 +405,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        titleView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+        DeprecationHelper.TextView.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView labelView;
