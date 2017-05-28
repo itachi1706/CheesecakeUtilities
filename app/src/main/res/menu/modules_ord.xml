@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/modify_settings" android:title="Modify ORD Settings"
-        android:icon="@drawable/wrench" app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_wrench" app:showAsAction="ifRoom" />
     <item android:id="@+id/holiday" android:title="Holiday"
-        android:icon="@drawable/calendar" app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_calendar" app:showAsAction="ifRoom" />
 </menu>
