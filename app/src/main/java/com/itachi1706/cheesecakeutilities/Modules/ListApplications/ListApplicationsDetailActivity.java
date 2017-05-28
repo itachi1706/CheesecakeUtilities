@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.ConfigurationInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -144,13 +145,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             Log.e("ListAppDetail", "Failed to get package info for " + packageName + ". Some info might not be available");
         }
 
-        String permissionList = generatePermissionsList(requestedPermissions);
         signature = generateSignatureList(signatures);
-        String activityList = generateActivitiesList(activities);
-        String configList = generateRequiredFeaturesList(configurations);
-        String providerList = generateProvidersList(providerInfos);
-        String serviceList = generateServicesList(serviceInfos);
-        String receiverList = generateReceiversList(receivers);
 
         appName = (TextView) findViewById(R.id.appName);
         appVersion = (TextView) findViewById(R.id.appVersion);
@@ -159,7 +154,6 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         creator = (LinearLayout) findViewById(R.id.layout_creator);
         backup = (Button) findViewById(R.id.btnBackup);
         launchApp = (Button) findViewById(R.id.btnLaunch);
-
 
         appName.setText(info.loadLabel(pm).toString());
         appVersion.setText("Version " + version);
@@ -207,13 +201,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
         assert requestedPermissions != null;
         assert configurations != null;
-        if (!permissionList.isEmpty())
-            creator.addView(generateSingleColumn("Permissions (" + requestedPermissions.length + ")", permissionList));
-        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features (" + configurations.length + ")", configList));
-        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities (" + activities.length + ")", activityList));
-        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services (" + serviceInfos.length + ")", serviceList));
-        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers (" + providerInfos.length + ")", providerList));
-        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers (" + receivers.length + ")", receiverList));
+        generateLists(requestedPermissions, activities, configurations, providerInfos, receivers, serviceInfos);
 
         // Add features to buttons
         backup.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +229,24 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             Log.i("Firebase", "Logged Error Processing Detailed App Info: " + packageName);
             creator.addView(generateSingleColumn("Error", "An error occurred while retrieving app information, Providing truncated results"));
         }
+    }
+
+    private void generateLists(String[] requestedPermissions, ActivityInfo[] activities, FeatureInfo[] configurations,
+                               ProviderInfo[] providerInfos, ActivityInfo[] receivers, ServiceInfo[] serviceInfos) {
+        String permissionList = generatePermissionsList(requestedPermissions);
+        String activityList = generateActivitiesList(activities);
+        String configList = generateRequiredFeaturesList(configurations);
+        String providerList = generateProvidersList(providerInfos);
+        String serviceList = generateServicesList(serviceInfos);
+        String receiverList = generateReceiversList(receivers);
+
+        if (!permissionList.isEmpty())
+            creator.addView(generateSingleColumn("Permissions (" + requestedPermissions.length + ")", permissionList));
+        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features (" + configurations.length + ")", configList));
+        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities (" + activities.length + ")", activityList));
+        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services (" + serviceInfos.length + ")", serviceList));
+        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers (" + providerInfos.length + ")", providerList));
+        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers (" + receivers.length + ")", receiverList));
     }
 
     private String generateActivitiesList(ActivityInfo[] activities) {
