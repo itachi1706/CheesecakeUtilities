@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
@@ -66,6 +67,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
     private ApplicationInfo info;
     private String signature;
+    private String version;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             return;
         }
 
-        String version = "Unknown";
+        version = "Unknown";
         final int INSTALL_UNKNOWN = -99;
         int versionCode = 0, installLocation = INSTALL_UNKNOWN;
         long firstInstall = 0, lastUpdate = 0;
@@ -142,13 +144,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             Log.e("ListAppDetail", "Failed to get package info for " + packageName + ". Some info might not be available");
         }
 
-        String permissionList = generatePermissionsList(requestedPermissions);
         signature = generateSignatureList(signatures);
-        String activityList = generateActivitiesList(activities);
-        String configList = generateRequiredFeaturesList(configurations);
-        String providerList = generateProvidersList(providerInfos);
-        String serviceList = generateServicesList(serviceInfos);
-        String receiverList = generateReceiversList(receivers);
 
         appName = (TextView) findViewById(R.id.appName);
         appVersion = (TextView) findViewById(R.id.appVersion);
@@ -157,7 +153,6 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         creator = (LinearLayout) findViewById(R.id.layout_creator);
         backup = (Button) findViewById(R.id.btnBackup);
         launchApp = (Button) findViewById(R.id.btnLaunch);
-
 
         appName.setText(info.loadLabel(pm).toString());
         appVersion.setText("Version " + version);
@@ -205,21 +200,14 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
         assert requestedPermissions != null;
         assert configurations != null;
-        if (!permissionList.isEmpty())
-            creator.addView(generateSingleColumn("Permissions (" + requestedPermissions.length + ")", permissionList));
-        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features (" + configurations.length + ")", configList));
-        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities (" + activities.length + ")", activityList));
-        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services (" + serviceInfos.length + ")", serviceList));
-        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers (" + providerInfos.length + ")", providerList));
-        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers (" + receivers.length + ")", receiverList));
-        final String versionString = version;
+        generateLists(requestedPermissions, activities, configurations, providerInfos, receivers, serviceInfos);
 
         // Add features to buttons
         backup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Start backup
-                hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, versionString);
+                hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version);
             }
         });
 
@@ -240,6 +228,24 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             Log.i("Firebase", "Logged Error Processing Detailed App Info: " + packageName);
             creator.addView(generateSingleColumn("Error", "An error occurred while retrieving app information, Providing truncated results"));
         }
+    }
+
+    private void generateLists(String[] requestedPermissions, ActivityInfo[] activities, FeatureInfo[] configurations,
+                               ProviderInfo[] providerInfos, ActivityInfo[] receivers, ServiceInfo[] serviceInfos) {
+        String permissionList = generatePermissionsList(requestedPermissions);
+        String activityList = generateActivitiesList(activities);
+        String configList = generateRequiredFeaturesList(configurations);
+        String providerList = generateProvidersList(providerInfos);
+        String serviceList = generateServicesList(serviceInfos);
+        String receiverList = generateReceiversList(receivers);
+
+        if (!permissionList.isEmpty())
+            creator.addView(generateSingleColumn("Permissions (" + requestedPermissions.length + ")", permissionList));
+        if (!configList.isEmpty()) creator.addView(generateSingleColumn("Required Features (" + configurations.length + ")", configList));
+        if (!activityList.isEmpty()) creator.addView(generateSingleColumn("Activities (" + activities.length + ")", activityList));
+        if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services (" + serviceInfos.length + ")", serviceList));
+        if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers (" + providerInfos.length + ")", providerList));
+        if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers (" + receivers.length + ")", receiverList));
     }
 
     private String generateActivitiesList(ActivityInfo[] activities) {
@@ -386,7 +392,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        titleView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+        DeprecationHelper.TextView.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView detailView;
@@ -404,7 +410,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        titleView.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+        DeprecationHelper.TextView.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView labelView;
@@ -432,14 +438,18 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     }
 
     private void hasStoragePermissionCheck(String appName, String appPath, String packageName, String appVersion) {
+        hasStoragePermissionCheck(appName, appPath, packageName, appVersion, false);
+    }
+
+    private void hasStoragePermissionCheck(String appName, String appPath, String packageName, String appVersion, boolean shareApk) {
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (rc != PackageManager.PERMISSION_GRANTED)
             requestStoragePermission();
         else
-            processBackup(appName, appPath, packageName, appVersion);
+            processBackup(appName, appPath, packageName, appVersion, shareApk);
     }
 
-    private void processBackup(final String appName, final String appPath, String packageName, String appVersion) {
+    private void processBackup(final String appName, final String appPath, String packageName, String appVersion, boolean shareApk) {
         final String filepath = appName + "_" + packageName + "-" + appVersion + ".apk";
         Log.i("Backup", "Starting Backup Process for " + packageName);
         ProgressDialog dialog = new ProgressDialog(this);
@@ -448,16 +458,18 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setMessage("Backing up " + appName + "...");
         dialog.show();
-        new BackupAppThread(dialog).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
+        new BackupAppThread(dialog, shareApk).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
         Log.i("Backup", "Stopping Backup Process for " + packageName);
     }
 
     private class BackupAppThread extends AsyncTask<String, Void, Void> {
 
         private ProgressDialog dialog;
+        private boolean shareApk = false;
 
-        BackupAppThread(ProgressDialog dialog) {
+        BackupAppThread(ProgressDialog dialog, boolean shareApk) {
             this.dialog = dialog;
+            this.shareApk = shareApk;
         }
 
         @Override
@@ -481,6 +493,19 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Backup of " + appName + " completed", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
+
+                            // If Share APK share the APK itself
+                            if (shareApk) {
+                                File shareFile = new File(BackupHelper.getFolder().getAbsolutePath() + "/" + filepath);
+                                if (!shareFile.exists())
+                                    Toast.makeText(getApplicationContext(), "Unable to share file. File does not exist", Toast.LENGTH_SHORT).show();
+                                else {
+                                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                    shareIntent.setType("*/*");
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(shareFile));
+                                    startActivity(Intent.createChooser(shareIntent, "Share with"));
+                                }
+                            }
                         }
                     });
                 }
@@ -595,6 +620,9 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Signature", signature);
                 clipboard.setPrimaryClip(clip); Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_LONG).show(); return true;
+            case R.id.share_apk:
+                hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version, true);
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
