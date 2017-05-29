@@ -20,7 +20,7 @@
         android:inputType="none"
         android:ems="10"
         android:id="@+id/etEnlist"
-        android:hint="Enlist"
+        android:hint="@string/ord_hint_enlist"
         android:focusableInTouchMode="false"
         android:focusable="false" />
     </android.support.design.widget.TextInputLayout>

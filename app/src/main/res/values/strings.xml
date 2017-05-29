@@ -197,11 +197,12 @@
 ***REMOVED*** ORD Countdown -->
     <string name="ord_pes_status">PES Status:</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
-    <string name="ord_placeholder_complete">\?.??% Completed</string>
+    <string name="ord_placeholder_complete">\?.??\% Completed</string>
     <string name="ord_label_days">Days to ORD</string>
     <string name="ord_hint_ptp">Start of BMT Phase (if any)</string>
     <string name="ord_hint_pop">POP</string>
     <string name="ord_hint">ORD</string>
+    <string name="ord_hint_enlist">Enlist</string>
     <string name="ord_lbl_pay_day">Pay Day:</string>
     <string name="ord_widget_loading">Inf</string>
     <string name="ord_widget_days_ord">Days to ORD</string>
@@ -242,6 +243,7 @@
     <string name="list_app_placeholder_package_name">com.example.appname</string>
     <string name="list_app_placeholder_api">21</string>
     <string name="list_app_placeholder_version">Version: Unknown</string>
+    <string name="list_app_version">Version%1$s%2$s</string>
     <string name="list_app_hint_restore">Click to Restore App</string>
     <string name="list_app_menu_show_sys_apps">Show System Apps</string>
     <string name="list_app_menu_sort_api">Sort by API Version</string>
