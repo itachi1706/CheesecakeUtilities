@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/appsettings" android:title="App Settings"
+    <item android:id="@+id/appsettings" android:title="@string/list_app_menu_app_settings"
         android:orderInCategory="50" app:showAsAction="never" />
-    <item android:id="@+id/playstore" android:title="View in Play Store"
+    <item android:id="@+id/playstore" android:title="@string/list_app_menu_view_store"
         android:orderInCategory="51" app:showAsAction="never" />
-    <item android:id="@+id/copysig" android:title="Copy Signature"
+    <item android:id="@+id/copysig" android:title="@string/list_app_menu_copy_sig"
         android:orderInCategory="52" app:showAsAction="never" />
 </menu>
