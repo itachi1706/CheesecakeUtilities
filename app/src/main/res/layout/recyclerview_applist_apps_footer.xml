@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Version: 1"
+        android:text="@string/list_app_placeholder_version"
         android:id="@+id/tvVersion"
         android:maxLines="1"
         android:layout_alignParentLeft="true"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Click to Restore App"
+        android:text="@string/list_app_hint_restore"
         android:maxLines="1"
         android:maxWidth="250dp"
         android:layout_below="@+id/tvVersion" />

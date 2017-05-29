@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Wi-Fi Snooze Configuration"
+            android:text="@string/connectivity_wifi_snooze"
             android:textColor="@color/colorAccent" />
 
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Enable" />
+                android:text="@string/enable" />
 
             <View
                 android:layout_width="0dp"
@@ -58,7 +58,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start Time" />
+                android:text="@string/connectivity_start_time" />
 
             <View
                 android:layout_width="0dp"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text=" ???" />
+                android:text="@string/qn_mark_placeholder" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="End Time" />
+                android:text="@string/connectivity_end_time" />
 
             <View
                 android:layout_width="0dp"
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text=" ???" />
+                android:text="@string/qn_mark_placeholder" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Notifications" />
+                android:text="@string/connectivity_notifications" />
 
             <View
                 android:layout_width="0dp"
@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Bluetooth Snooze Configuration"
+            android:text="@string/connectivity_bluetooth_snooze"
             android:textColor="@color/colorAccent" />
 
         <LinearLayout
@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Enable" />
+                android:text="@string/enable" />
 
             <View
                 android:layout_width="0dp"
@@ -174,7 +174,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start Time" />
+                android:text="@string/connectivity_start_time" />
 
             <View
                 android:layout_width="0dp"
@@ -186,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text=" ???" />
+                android:text="@string/qn_mark_placeholder" />
         </LinearLayout>
 
         <LinearLayout
@@ -201,7 +201,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="End Time" />
+                android:text="@string/connectivity_end_time" />
 
             <View
                 android:layout_width="0dp"
@@ -213,7 +213,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text=" ???" />
+                android:text="@string/qn_mark_placeholder" />
         </LinearLayout>
 
         <LinearLayout
@@ -225,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Notifications" />
+                android:text="@string/connectivity_notifications" />
 
             <View
                 android:layout_width="0dp"
@@ -252,7 +252,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Trigger History"
+            android:text="@string/connectivity_trigger_history"
             android:textColor="@color/colorAccent" />
 
         <android.support.v7.widget.RecyclerView

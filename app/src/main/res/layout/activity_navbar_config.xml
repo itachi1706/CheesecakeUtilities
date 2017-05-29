@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nav_bar_activate_service" />
+            android:text="@string/nav_bar_activate_svc" />
 
         <View
             android:layout_width="0dp"
@@ -43,7 +43,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enable Service" />
+            android:text="@string/nav_bar_svc_enable" />
 
         <View
             android:layout_width="0dp"
@@ -64,7 +64,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Configurations"
+            android:text="@string/nav_bar_config"
             android:textColor="@color/colorAccent" />
     </LinearLayout>
 
@@ -78,7 +78,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nav_bar_activate_service_app_name" />
+            android:text="@string/nav_bar_activate_svc_app_name" />
 
         <View
             android:layout_width="0dp"
@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nav_bar_activate_service_clock" />
+            android:text="@string/nav_bar_activate_svc_clock" />
 
         <View
             android:layout_width="0dp"
@@ -124,7 +124,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nav_bar_activate_service_image" />
+            android:text="@string/nav_bar_activate_svc_image" />
 
         <View
             android:layout_width="0dp"
@@ -147,7 +147,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nav_bar_activate_service_type" />
+            android:text="@string/nav_bar_activate_svc_type" />
 
         <View
             android:layout_width="0dp"
@@ -171,7 +171,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nav_bar_activate_service_static_color" />
+            android:text="@string/nav_bar_activate_svc_static_color" />
 
         <View
             android:layout_width="0dp"
@@ -182,7 +182,7 @@
             android:id="@+id/navbar_service_static_color"
             android:layout_width="40dp"
             android:layout_gravity="end"
-            android:contentDescription="Background Color"
+            android:contentDescription="@string/nav_bar_background_color"
             android:src="@color/colorPrimary"
             android:layout_height="20dp" />
     </LinearLayout>

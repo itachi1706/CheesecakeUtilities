@@ -12,5 +12,5 @@
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
     android:paddingRight="?android:attr/listPreferredItemPaddingRight"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:text="Text Here"
+    android:text="@string/placeholder_text"
     tools:ignore="NewApi" />
