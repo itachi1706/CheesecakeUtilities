@@ -87,10 +87,10 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         AppsItem s = appsList.get(i);
         appsViewHolder.appName.setText(s.getAppName());
         appsViewHolder.appName.setSelected(true);
-        appsViewHolder.appApiVersion.setText(s.getApiVersion() + "");
+        appsViewHolder.appApiVersion.setText(appsViewHolder.appApiVersion.getContext().getString(R.string.number, s.getApiVersion()));
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
-        appsViewHolder.appVersion.setText("Version: " + s.getVersion());
+        appsViewHolder.appVersion.setText(appsViewHolder.appVersion.getContext().getString(R.string.list_app_version, ": ", s.getVersion()));
     }
 
     @Override

@@ -98,18 +98,18 @@ public class ORDActivity extends BaseActivity {
             if (ord != 0) {
                 if (currentTime > ord) {
                     // ORD LOH
-                    ordDaysLabel.setText("LOH");
-                    ordCounter.setText("ORD");
-                    ordProgress.setText("100% Completed");
+                    ordDaysLabel.setText(R.string.ord_loh);
+                    ordCounter.setText(R.string.ord_hint);
+                    ordProgress.setText(getString(R.string.ord_complete, "100"));
                     progressBar.setProgress(100);
                 } else {
                     long duration = ord - currentTime;
                     ordDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
                     ordDaysLabel.setText(getResources().getQuantityString(R.plurals.ord_days, (int) ordDays));
-                    ordCounter.setText(ordDays + "");
+                    ordCounter.setText(getString(R.string.number, ordDays));
 
                     double difference = ((TimeUnit.MILLISECONDS.toDays(currentTime-enlist)) / (double)(TimeUnit.MILLISECONDS.toDays(ord - enlist))) * 100.0;
-                    ordProgress.setText((Math.round(difference * 100.0)/100.0) + "% completed");
+                    ordProgress.setText(getString(R.string.ord_complete, Math.round(difference * 100.0)/100.0 + ""));
                     progressBar.setProgress((int)difference);
 
                     int weekends = calculateWeekends();
@@ -135,7 +135,7 @@ public class ORDActivity extends BaseActivity {
                 long duration = cal.getTimeInMillis() - currentTime;
                 long daysToPayday = TimeUnit.MILLISECONDS.toDays(duration);
                 if (daysToPayday == 0) menuItems.add("PAY DAY!!!");
-                else menuItems.add(getResources().getQuantityString(R.plurals.payday, (int) daysToPayday, daysToPayday));
+                else menuItems.add(getResources().getQuantityString(R.plurals.ord_payday, (int) daysToPayday, daysToPayday));
             }
 
             // Holidays Calculation
@@ -166,7 +166,7 @@ public class ORDActivity extends BaseActivity {
                 long duration = upcomingHoliday.getTime() - (holidayChecker);
                 long daysToHoliday = TimeUnit.MILLISECONDS.toDays(duration);
                 if (daysToHoliday == 0) menuItems.add("It's " + upcomingHoliday.getHolidayName());
-                else menuItems.add(getResources().getQuantityString(R.plurals.holidays, (int) daysToHoliday, daysToHoliday, upcomingHoliday.getHolidayName()));
+                else menuItems.add(getResources().getQuantityString(R.plurals.ord_holidays, (int) daysToHoliday, daysToHoliday, upcomingHoliday.getHolidayName()));
             }
 
 

@@ -139,7 +139,7 @@ public class SafetyNetActivity extends BaseActivity {
         }
         if (errorMsg.contains(API_KEY)) errorMsg = errorMsg.replace(API_KEY, "<API_KEY>");
         resultsTV.setText(b.toString());
-        resultNoteTV.setText("Error Msg:\n" + errorMsg);
+        resultNoteTV.setText(getString(R.string.safetynet_error, errorMsg));
 
         successResultsContainer.setVisibility(View.VISIBLE);
         welcomeTV.setVisibility(View.GONE);
@@ -182,8 +182,8 @@ public class SafetyNetActivity extends BaseActivity {
     }
 
     private void updateUIWithSuccessfulResult(SafetyNetResponse safetyNetResponse) {
-        resultsTV.setText(getString(R.string.safety_results, safetyNetResponse.isCtsProfileMatch(), safetyNetResponse.isBasicIntegrity()));
-        resultNoteTV.setText(R.string.safety_results_note);
+        resultsTV.setText(getString(R.string.safetynet_results, safetyNetResponse.isCtsProfileMatch(), safetyNetResponse.isBasicIntegrity()));
+        resultNoteTV.setText(R.string.safetynet_results_note);
 
         successResultsContainer.setVisibility(View.VISIBLE);
 

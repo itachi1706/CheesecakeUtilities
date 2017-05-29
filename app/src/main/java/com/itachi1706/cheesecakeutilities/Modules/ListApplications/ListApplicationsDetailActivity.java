@@ -155,7 +155,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         launchApp = (Button) findViewById(R.id.btnLaunch);
 
         appName.setText(info.loadLabel(pm).toString());
-        appVersion.setText("Version " + version);
+        appVersion.setText(getString(R.string.list_app_version, " ", version));
         icon.setImageDrawable(info.loadIcon(pm));
 
         List<LabelledColumn> testList = new ArrayList<>();

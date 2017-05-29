@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
-            android:hint="Height (cm)"
+            android:hint="@string/bmi_hint_height"
             android:inputType="number"
             android:maxLength="3" />
     </android.support.design.widget.TextInputLayout>
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
-            android:hint="Weight (kg)"
+            android:hint="@string/bmi_hint_weight"
             android:inputType="numberDecimal"
             android:maxLength="4" />
     </android.support.design.widget.TextInputLayout>
@@ -52,7 +52,7 @@
         android:layout_below="@+id/til_etWeight"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="86dp"
-        android:text="Calculate BMI" />
+        android:text="@string/bmi_btn_calculate" />
 
     <Button
         android:id="@+id/btnTable"
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="BMI Table" />
+        android:text="@string/bmi_btn_table" />
 
     <TextView
         android:id="@+id/tvResults"
@@ -70,6 +70,6 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/btnCalculate"
         android:layout_marginTop="63dp"
-        android:text="BMI Value: 0.0"
+        android:text="@string/bmi_val_placeholder"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 </RelativeLayout>

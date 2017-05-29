@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerGender"
-            android:entries="@array/gender"
+            android:entries="@array/ippt_gender"
             android:spinnerMode="dropdown" />
 
         <Spinner
@@ -44,7 +44,7 @@
             android:ems="10"
             android:id="@+id/etRun"
             android:maxLength="2"
-            android:hint="2.4km Run (min)" />
+            android:hint="@string/ippt_hint_run_min" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -63,7 +63,7 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/etRunSec"
-            android:hint="2.4km Run (sec)"
+            android:hint="@string/ippt_hint_run_sec"
             android:maxLength="2" />
     </android.support.design.widget.TextInputLayout>
 
@@ -83,7 +83,7 @@
             android:ems="10"
             android:id="@+id/etPushUps"
             android:maxLength="2"
-            android:hint="Push Ups" />
+            android:hint="@string/ippt_hint_push_ups" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -102,13 +102,13 @@
         android:ems="10"
         android:maxLength="2"
         android:id="@+id/etSitUps"
-        android:hint="Sit Ups" />
+        android:hint="@string/ippt_hint_sit_ups" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calculate Score"
+        android:text="@string/ippt_hint_btn_calculate"
         android:id="@+id/btnCalculate"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/til_etPushUps"
@@ -118,7 +118,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Scoring System"
+        android:text="@string/ippt_hint_score_table"
         android:id="@+id/btnViewScoring"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
