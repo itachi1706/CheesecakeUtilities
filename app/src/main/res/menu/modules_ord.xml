@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/modify_settings" android:title="Modify ORD Settings"
+    <item android:id="@+id/modify_settings" android:title="@string/ord_menu_modify"
         android:icon="@drawable/wrench" app:showAsAction="ifRoom" />
-    <item android:id="@+id/holiday" android:title="Holiday"
+    <item android:id="@+id/holiday" android:title="@string/ord_menu_holiday"
         android:icon="@drawable/calendar" app:showAsAction="ifRoom" />
 </menu>

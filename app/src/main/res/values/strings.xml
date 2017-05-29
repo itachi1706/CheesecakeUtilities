@@ -1,13 +1,6 @@
 <resources>
     <string name="app_name">Cheesecake Utilities</string>
 
-    <!-- Common Strings -->
-    <string name="loading_label">Loading…</string>
-    <string name="placeholder_text">Text Here</string>
-    <string name="enable">Enable</string>
-    <string name="ellipsis">…</string>
-    <string name="qn_mark_placeholder">\???</string>
-
     <!-- String to Binary/Hex Converter -->
     <string name="bin_hex_title">BIN/HEX CONVERTER</string>
     <string name="bin_hex_title_full">Binary/Hex Converter</string>
@@ -213,6 +206,8 @@
     <string name="ord_widget_loading">Inf</string>
     <string name="ord_widget_days_ord">Days to ORD</string>
     <string name="ord_widget_days_pop">Days to POP</string>
+    <string name="ord_menu_modify">Modify ORD Settings</string>
+    <string name="ord_menu_holiday">Holiday</string>
 
     <!-- BMI Calculator -->
     <string name="bmi_hint_height">Height (cm)</string>
@@ -236,6 +231,7 @@
     <string name="ippt_hint_sit_ups">Sit Ups</string>
     <string name="ippt_hint_btn_calculate">Calculate Score</string>
     <string name="ippt_hint_score_table">View Scoring System</string>
+    <string name="ippt_menu_score_board">View IPPT Scoring Board</string>
 
     <!-- App List/Restore -->
     <string name="list_app_desc_app_icon">App Icon</string>
@@ -247,7 +243,21 @@
     <string name="list_app_placeholder_api">21</string>
     <string name="list_app_placeholder_version">Version: Unknown</string>
     <string name="list_app_hint_restore">Click to Restore App</string>
+    <string name="list_app_menu_show_sys_apps">Show System Apps</string>
+    <string name="list_app_menu_sort_api">Sort by API Version</string>
+    <string name="list_app_menu_graph">Graph by API</string>
+    <string name="list_app_menu_clean_dir">Clean Ghost Directories</string>
+    <string name="list_app_menu_app_settings">App Settings</string>
+    <string name="list_app_menu_view_store">View in Play Store</string>
+    <string name="list_app_menu_copy_sig">Copy Signature</string>
 
-    <!-- Unsorted/Misc -->
+    <!-- Unsorted/Misc/General -->
+    <string name="loading_label">Loading…</string>
+    <string name="placeholder_text">Text Here</string>
+    <string name="enable">Enable</string>
+    <string name="ellipsis">…</string>
+    <string name="qn_mark_placeholder">\???</string>
+    <string name="save">Save</string>
+    <string name="clear">Clear</string>
 
 </resources>

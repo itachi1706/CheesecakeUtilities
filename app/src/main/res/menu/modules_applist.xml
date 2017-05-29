@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/systemapp" android:title="Show System Apps"
+    <item android:id="@+id/systemapp" android:title="@string/list_app_menu_show_sys_apps"
         android:orderInCategory="50" android:checkable="true" app:showAsAction="never" />
-    <item android:id="@+id/sortapi" android:title="Sort by API Version"
+    <item android:id="@+id/sortapi" android:title="@string/list_app_menu_sort_api"
         android:orderInCategory="51" android:checkable="true" app:showAsAction="never" />
-    <item android:id="@+id/graph" android:title="Graph by API"
+    <item android:id="@+id/graph" android:title="@string/list_app_menu_graph"
         android:orderInCategory="49" app:showAsAction="ifRoom" android:icon="@drawable/chart_arc" />
-    <item android:id="@+id/scan_ghost" app:showAsAction="never" android:title="Clean Ghost Directories"
+    <item android:id="@+id/scan_ghost" app:showAsAction="never" android:title="@string/list_app_menu_clean_dir"
         android:orderInCategory="52"/>
 </menu>
