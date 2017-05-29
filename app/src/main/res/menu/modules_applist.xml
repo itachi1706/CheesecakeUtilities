@@ -6,7 +6,7 @@
     <item android:id="@+id/sortapi" android:title="@string/list_app_menu_sort_api"
         android:orderInCategory="51" android:checkable="true" app:showAsAction="never" />
     <item android:id="@+id/graph" android:title="@string/list_app_menu_graph"
-        android:orderInCategory="49" app:showAsAction="ifRoom" android:icon="@drawable/chart_arc" />
+        android:orderInCategory="49" app:showAsAction="ifRoom" android:icon="@drawable/ic_chart_arc" />
     <item android:id="@+id/scan_ghost" app:showAsAction="never" android:title="@string/list_app_menu_clean_dir"
         android:orderInCategory="52"/>
 </menu>
