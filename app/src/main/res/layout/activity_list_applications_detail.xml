@@ -25,7 +25,8 @@
                 android:id="@+id/iv_icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="App Icon"
+                android:contentDescription="@string/list_app_desc_app_icon"
+                android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp" />
 
             <LinearLayout
@@ -33,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/iv_icon"
+                android:layout_toEndOf="@+id/iv_icon"
                 android:layout_centerVertical="true">
 
                 <TextView
@@ -40,19 +42,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/appName"
-                    android:text="..." />
+                    android:text="@string/ellipsis" />
 
                 <TextView
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/appVersion"
-                    android:text="..." />
+                    android:text="@string/ellipsis" />
             </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout
-            android:gravity="right"
+            android:gravity="end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true">
@@ -60,13 +62,15 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Backup"
+                style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/list_app_backup"
                 android:id="@+id/btnBackup" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Launch"
+                style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/list_app_launch"
                 android:id="@+id/btnLaunch" />
         </LinearLayout>
 

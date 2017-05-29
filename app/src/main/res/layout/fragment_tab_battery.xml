@@ -93,7 +93,7 @@
 
                 <TextView
                     android:id="@+id/batteryText"
-                    android:layout_gravity="left"
+                    android:layout_gravity="start"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:paddingLeft="3dp"
