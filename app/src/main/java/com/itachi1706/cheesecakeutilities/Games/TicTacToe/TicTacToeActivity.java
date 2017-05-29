@@ -106,7 +106,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
         LoggingClass.logInfo("SYSTEM", "Game Area Disabled");
         gameStart = 0;
         timerDuration = 0;
-        counter.setText("Time Taken: - seconds");
+        counter.setText(R.string.tic_tac_toe_placeholder_time);
         updateGamePlayArea(false);
         btnReset.setEnabled(false);
     }
@@ -217,7 +217,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
     private void startGameSP()
     {
         LoggingClass.logInfo("SYSTEM", "Game Start (SP)");
-        instructions.setText("Player Starts First! Turn: 0");
+        instructions.setText(getString(R.string.tic_tac_toe_hint_hud, "Player", 0));
         currentPlayer = TicTacToeValues.X;
         turnNo = 0;
     }
@@ -231,13 +231,13 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
         if (whoStartsFirst == 1)
         {
             //X
-            instructions.setText("X Starts First! Turn: 0");
+            instructions.setText(getString(R.string.tic_tac_toe_hint_hud, "X", 0));
             currentPlayer = TicTacToeValues.X;
         }
         else
         {
             //O
-            instructions.setText("O Starts First! Turn: 0");
+            instructions.setText(getString(R.string.tic_tac_toe_hint_hud, "O", 0));
             currentPlayer = TicTacToeValues.O;
         }
         turnNo = 0;
@@ -252,7 +252,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
         disableGame();
         btnStart.setEnabled(true);
         grpGamePlay.setEnabled(true);
-        instructions.setText("Press Start Game to Start");
+        instructions.setText(R.string.tic_tac_toe_hint_start);
     }
 
     private void updateTurnDisplay()
@@ -260,13 +260,13 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
         if (isSinglePlayer())
         {
             if (currentPlayer.equals(TicTacToeValues.AI))
-                instructions.setText("Current Turn: " + currentPlayer + " Turn: " + turnNo);
+                instructions.setText(getString(R.string.tic_tac_toe_hud, currentPlayer, turnNo));
             else
-                instructions.setText("Current Turn: Player   Turn: " + turnNo);
+                instructions.setText(getString(R.string.tic_tac_toe_hud, "Player", turnNo));
         }
         else
         {
-            instructions.setText("Current Turn: " + currentPlayer + " Turn: " + turnNo);
+            instructions.setText(getString(R.string.tic_tac_toe_hud, currentPlayer, turnNo));
         }
     }
 
@@ -333,7 +333,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
         r33.setEnabled(value);
     }
 
-    public class CountupTimer implements Runnable {
+    private class CountupTimer implements Runnable {
 
         private long start;
 
@@ -424,7 +424,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
             if (isSinglePlayer())
             {
                 //Single Player
-                instructions.setText("Single Player Mode Selected. Game Starts in 5 seconds...");
+                instructions.setText(R.string.tic_tac_toe_hint_sp);
                 gameStart = 1;
                 btnStart.setEnabled(false);
                 btnReset.setEnabled(true);
@@ -435,7 +435,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
             else
             {
                 //Multi Player
-                instructions.setText("Multi Player Mode Selected. Getting who starts first");
+                instructions.setText(R.string.tic_tac_toe_hint_mp);
                 gameStart = 1;
                 btnStart.setEnabled(false);
                 btnReset.setEnabled(true);

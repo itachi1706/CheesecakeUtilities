@@ -177,7 +177,11 @@
     <string name="tic_tac_toe_1p">1 Player</string>
     <string name="tic_tac_toe_2p">2 Player</string>
     <string name="tic_tac_toe_hint_start">Press Start Game to Start</string>
-    <string name="tic_tac_toe_placeholder_time">Time Taken: - secs</string>
+    <string name="tic_tac_toe_hint_sp">Single Player Mode Selected. Game Starts in 5 seconds…</string>
+    <string name="tic_tac_toe_hint_mp">Multi Player Mode Selected. Getting who starts first</string>
+    <string name="tic_tac_toe_placeholder_time">Time Taken: - seconds</string>
+    <string name="tic_tac_toe_hud">Current Turn: %1$s \t Turn: %2$d</string>
+    <string name="tic_tac_toe_hint_hud">%1$s Starts First! Turn: %2$d</string>
 
 ***REMOVED*** App Shortcuts -->
     <string name="featured_util_label">Featured Utility</string>
@@ -193,11 +197,14 @@
     <string name="safetynet_package_name">App Id (package name)</string>
     <string name="safetynet_msg_loading">Loading…</string>
     <string name="safetynet_run_safetynet_test_button">Run SafetyNet test</string>
+    <string name="safetynet_error">Error Msg:\n%1$s</string>
 
 ***REMOVED*** ORD Countdown -->
     <string name="ord_pes_status">PES Status:</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
     <string name="ord_placeholder_complete">\?.??\% Completed</string>
+    <string name="ord_complete">%1$s%% Completed</string>
+    <string name="ord_loh">LOH</string>
     <string name="ord_label_days">Days to ORD</string>
     <string name="ord_hint_ptp">Start of BMT Phase (if any)</string>
     <string name="ord_hint_pop">POP</string>
@@ -262,5 +269,6 @@
     <string name="qn_mark_placeholder">\???</string>
     <string name="save">Save</string>
     <string name="clear">Clear</string>
+    <string name="number">%1$d</string>
 
 ***REMOVED***

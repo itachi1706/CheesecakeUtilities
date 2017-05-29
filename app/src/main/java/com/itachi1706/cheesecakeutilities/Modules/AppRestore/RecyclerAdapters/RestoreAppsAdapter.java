@@ -57,12 +57,12 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             RestoreAppsItemsHeader header = (RestoreAppsItemsHeader) base;
             HeaderAppsViewHolder headerHolder = (HeaderAppsViewHolder) appsViewHolder;
             headerHolder.appName.setText(header.getAppName());
-            headerHolder.count.setText(header.getCount() + "");
+            headerHolder.count.setText(headerHolder.count.getContext().getString(R.string.number, header.getCount()));
             headerHolder.appIcon.setImageDrawable(header.getIcon());
         } else if (base instanceof RestoreAppsItemsFooter) {
             RestoreAppsItemsFooter detail = (RestoreAppsItemsFooter) base;
             DetailAppsViewHolder holder = (DetailAppsViewHolder) appsViewHolder;
-            holder.version.setText("Version: " + detail.getVersion());
+            holder.version.setText(holder.version.getContext().getString(R.string.list_app_version, ": ", detail.getVersion()));
             holder.fullpath = detail.getFullpath();
         }
     }

@@ -139,7 +139,7 @@ public class SafetyNetActivity extends BaseActivity {
         }
         if (errorMsg.contains(API_KEY)) errorMsg = errorMsg.replace(API_KEY, "<API_KEY>");
         resultsTV.setText(b.toString());
-        resultNoteTV.setText("Error Msg:\n" + errorMsg);
+        resultNoteTV.setText(getString(R.string.safetynet_error, errorMsg));
 
         successResultsContainer.setVisibility(View.VISIBLE);
         welcomeTV.setVisibility(View.GONE);

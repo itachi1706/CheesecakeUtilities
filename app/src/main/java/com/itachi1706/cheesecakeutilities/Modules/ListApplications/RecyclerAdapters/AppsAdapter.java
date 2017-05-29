@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by itachi1706 on 2/20/2016.
@@ -88,7 +87,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         AppsItem s = appsList.get(i);
         appsViewHolder.appName.setText(s.getAppName());
         appsViewHolder.appName.setSelected(true);
-        appsViewHolder.appApiVersion.setText(String.format(Locale.US, "%d", s.getApiVersion()));
+        appsViewHolder.appApiVersion.setText(appsViewHolder.appApiVersion.getContext().getString(R.string.number, s.getApiVersion()));
         appsViewHolder.appPackageName.setText(s.getPackageName());
         appsViewHolder.appIcon.setImageDrawable(s.getIcon());
         appsViewHolder.appVersion.setText(appsViewHolder.appVersion.getContext().getString(R.string.list_app_version, ": ", s.getVersion()));
