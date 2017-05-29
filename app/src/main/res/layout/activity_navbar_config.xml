@@ -159,7 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:entries="@array/imagetype" />
+            android:entries="@array/navbar_imagetype" />
     </LinearLayout>
 
     <LinearLayout

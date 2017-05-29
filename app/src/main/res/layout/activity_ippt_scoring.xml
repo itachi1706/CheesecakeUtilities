@@ -57,7 +57,7 @@
                 android:id="@+id/spinnerGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/gender" />
+                android:entries="@array/ippt_gender" />
 
             <Spinner
                 android:id="@+id/spinnerAge"

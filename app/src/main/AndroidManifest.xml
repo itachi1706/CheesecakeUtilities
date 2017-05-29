@@ -61,7 +61,7 @@
         <activity
             android:name=".Modules.FanfictionCompactor.FanfictionCompactorActivity"
             android:exported="true"
-            android:label="Fanfiction Compactor"
+            android:label="@string/ff_compat_title"
             android:launchMode="singleTop" />
 
         <service
