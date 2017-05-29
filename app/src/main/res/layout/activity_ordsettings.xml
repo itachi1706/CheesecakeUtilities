@@ -20,7 +20,7 @@
         android:inputType="none"
         android:ems="10"
         android:id="@+id/etEnlist"
-        android:hint="Enlist"
+        android:hint="@string/ord_hint_enlist"
         android:focusableInTouchMode="false"
         android:focusable="false" />
     </android.support.design.widget.TextInputLayout>
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="PES Status:"/>
+            android:text="@string/ord_pes_status"/>
 
         <Spinner
             android:layout_width="wrap_content"
@@ -44,8 +44,8 @@
             android:layout_marginStart="10dp"
             android:id="@+id/spinnerPES"
             android:spinnerMode="dropdown"
-            android:prompt="@string/pes_status"
-            android:entries="@array/pes" />
+            android:prompt="@string/ord_pes_status"
+            android:entries="@array/ord_pes" />
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -60,7 +60,7 @@
         android:inputType="none"
         android:ems="10"
         android:id="@+id/etPTP"
-        android:hint="BMT Phase (if any)"
+        android:hint="@string/ord_hint_ptp"
         android:focusable="false" />
     </android.support.design.widget.TextInputLayout>
 
@@ -75,7 +75,7 @@
         android:inputType="none"
         android:ems="10"
         android:id="@+id/etPOP"
-        android:hint="POP"
+        android:hint="@string/ord_hint_pop"
         android:focusableInTouchMode="false"
         android:focusable="false" />
     </android.support.design.widget.TextInputLayout>
@@ -91,7 +91,7 @@
         android:inputType="none"
         android:ems="10"
         android:id="@+id/etORD"
-        android:hint="ORD"
+        android:hint="@string/ord_hint"
         android:focusableInTouchMode="false"
         android:focusable="false" />
 </android.support.design.widget.TextInputLayout>
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Pay Day:"/>
+            android:text="@string/ord_lbl_pay_day"/>
 
         <Spinner
             android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
             android:layout_marginStart="10dp"
             android:id="@+id/spinnerPD"
             android:spinnerMode="dropdown"
-            android:entries="@array/payday" />
+            android:entries="@array/ord_payday" />
     </LinearLayout>
 
 

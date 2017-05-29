@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -18,14 +18,14 @@
                 android:id="@+id/runTestButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/run_safetynet_test_button" />
+                android:text="@string/safetynet_run_safetynet_test_button" />
 
             <TextView
                 android:id="@+id/welcomeTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="@string/info_details"
+                android:text="@string/safetynet_info_details"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -61,14 +61,6 @@
                     android:layout_gravity="center_horizontal"
                     android:paddingBottom="10dp" />
 
-                <!--<ImageView
-                    android:id="@+id/resultIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="top|center_horizontal"
-                    android:layout_weight="1"
-                    tools:src="@drawable/pass" />-->
-
                 <ScrollView
                     android:id="@+id/sucessResultsContainer"
                     android:layout_width="match_parent"
@@ -89,7 +81,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/request_token" />
+                            android:text="@string/safetynet_request_token" />
 
                         <TextView
                             android:id="@+id/nonce"
@@ -103,7 +95,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/timestamp" />
+                            android:text="@string/safetynet_timestamp" />
 
                         <TextView
                             android:id="@+id/timestamp"
@@ -118,7 +110,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/package_name" />
+                            android:text="@string/safetynet_package_name" />
 
                         <TextView
                             android:id="@+id/packagename"
@@ -132,7 +124,7 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <RelativeLayout
         android:id="@+id/loading"
@@ -153,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/progressBar"
             android:layout_centerHorizontal="true"
-            android:text="@string/msg_loading" />
+            android:text="@string/safetynet_msg_loading" />
 
     </RelativeLayout>
 

@@ -364,9 +364,9 @@ public class FanfictionCompactorActivity extends BaseActivity {
                     int dbstories = msg.getData().getInt("dbcount");
                     int storyCount = msg.getData().getInt("filecount");
 
-                    activity.folderSize.setText(String.format(activity.getString(R.string.result_fanfic_folder_size),
+                    activity.folderSize.setText(String.format(activity.getString(R.string.ff_compat_result_fanfic_folder_size),
                             CommonMethods.readableFileSize(totalSize), totalSize));
-                    activity.storyCount.setText(String.format(activity.getString(R.string.result_fanfic_story_count),
+                    activity.storyCount.setText(String.format(activity.getString(R.string.ff_compat_result_fanfic_story_count),
                             dbstories, storyCount));
 
                     // Retrival done, allow button press

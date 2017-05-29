@@ -8,15 +8,15 @@
         <item quantity="one">Day to ORD</item>
         <item quantity="other">Days to ORD</item>
     </plurals>
-    <plurals name="pop_days">
+    <plurals name="ord_pop_days">
         <item quantity="one">Day to POP</item>
         <item quantity="other">Days to POP</item>
     </plurals>
-    <plurals name="payday">
+    <plurals name="ord_payday">
         <item quantity="one">%1$d day to Pay Day</item>
         <item quantity="other">%1$d days to Pay Day</item>
     </plurals>
-    <plurals name="holidays">
+    <plurals name="ord_holidays">
         <item quantity="one">%1$d day to %2$s</item>
         <item quantity="other">%1$d days to %2$s</item>
     </plurals>
