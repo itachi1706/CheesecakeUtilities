@@ -69,7 +69,7 @@ public class SystemFragment extends Fragment {
         TextView osInfo = (TextView) view.findViewById(R.id.osInfoTxt);
         osInfo.setText(getOsInfo());
         TextView osCodename = (TextView) view.findViewById(R.id.osCodenameTxt);
-        osCodename.setText(getString(R.string.codename, getCodename(VERSION.SDK_INT)));// String.valueOf(Codenames.getCodename())));
+        osCodename.setText(getString(R.string.sys_info_codename, getCodename(VERSION.SDK_INT)));// String.valueOf(Codenames.getCodename())));
         TextView intMem = (TextView) view.findViewById(R.id.intMemTxt);
         intMem.setText(getIntMem());
         TextView javaInfo = (TextView) view.findViewById(R.id.javaInfoTxt);
@@ -78,7 +78,7 @@ public class SystemFragment extends Fragment {
     }
 
     private void liveUpdate() {
-        this.mUptime.setText(getString(R.string.uptime, DateUtils.formatElapsedTime(SystemClock.elapsedRealtime() / 1000)));
+        this.mUptime.setText(getString(R.string.sys_info_uptime, DateUtils.formatElapsedTime(SystemClock.elapsedRealtime() / 1000)));
     }
 
     @Override

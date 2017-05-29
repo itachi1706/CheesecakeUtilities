@@ -56,10 +56,10 @@ public class IpptScoringActivity extends AppCompatActivity {
                 int gender = JsonHelper.getGender(g);
                 if (gender == JsonHelper.FEMALE)
                     exerciseSpinner.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
-                            Arrays.asList(getResources().getStringArray(R.array.exercisefemale))));
+                            Arrays.asList(getResources().getStringArray(R.array.ippt_exercisefemale))));
                 else
                     exerciseSpinner.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
-                            Arrays.asList(getResources().getStringArray(R.array.exercisemale))));
+                            Arrays.asList(getResources().getStringArray(R.array.ippt_exercisemale))));
                 updateRecyclerView();
             }
 

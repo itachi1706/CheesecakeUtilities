@@ -56,13 +56,13 @@ public class ParentFragmentActivity extends BaseActivity {
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0: return ParentFragmentActivity.this.getString(R.string.title_section1).toUpperCase(l);
-                case 1: return ParentFragmentActivity.this.getString(R.string.title_section2).toUpperCase(l);
-                case 2: return ParentFragmentActivity.this.getString(R.string.title_section3).toUpperCase(l);
-                case 3: return ParentFragmentActivity.this.getString(R.string.title_section4).toUpperCase(l);
-                case 4: return ParentFragmentActivity.this.getString(R.string.title_section5).toUpperCase(l);
-                case 5: return ParentFragmentActivity.this.getString(R.string.title_section6).toUpperCase(l);
-                case 6: return ParentFragmentActivity.this.getString(R.string.title_section7).toUpperCase(l);
+                case 0: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section1).toUpperCase(l);
+                case 1: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section2).toUpperCase(l);
+                case 2: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section3).toUpperCase(l);
+                case 3: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section4).toUpperCase(l);
+                case 4: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section5).toUpperCase(l);
+                case 5: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section6).toUpperCase(l);
+                case 6: return ParentFragmentActivity.this.getString(R.string.sys_info_title_section7).toUpperCase(l);
                 default: return null;
             }
         }

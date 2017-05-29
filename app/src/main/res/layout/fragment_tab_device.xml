@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/CPU1"
+                        android:text="@string/sys_info_CPU1"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/CPU2"
+                        android:text="@string/sys_info_CPU2"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/CPU3"
+                        android:text="@string/sys_info_CPU3"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/CPU4"
+                        android:text="@string/sys_info_CPU4"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/CPU5"
+                        android:text="@string/sys_info_CPU5"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/CPU6"
+                        android:text="@string/sys_info_CPU6"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/CPU7"
+                        android:text="@string/sys_info_CPU7"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -138,7 +138,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/memory1"
+                        android:text="@string/sys_info_memory1"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -153,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/memory2"
+                        android:text="@string/sys_info_memory2"
 
                         android:textColor="#9e9e9e"
                         android:textStyle="italic" />
@@ -164,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/memory3"
+                        android:text="@string/sys_info_memory3"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -175,7 +175,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/memory4"
+                        android:text="@string/sys_info_memory4"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -204,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/display1"
+                        android:text="@string/sys_info_display1"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -220,7 +220,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/display2"
+                        android:text="@string/sys_info_display2"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -231,7 +231,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/display3"
+                        android:text="@string/sys_info_display3"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -260,7 +260,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/device1"
+                        android:text="@string/sys_info_device1"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -276,7 +276,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/device2"
+                        android:text="@string/sys_info_device2"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />

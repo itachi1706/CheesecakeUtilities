@@ -68,7 +68,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
                 if (!isChecked) {
                     if (accessibilityServiceEnabled(NavbarConfigurationActivity.this)) {
                         new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Further Actions to disable needed")
-                                .setMessage(R.string.accessibility_disable_prompt)
+                                .setMessage(R.string.nav_bar_accessibility_disable_prompt)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -89,7 +89,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
                 } else {
                     if (Utils.IS_AT_LEAST_MARSHMALLOW && !canShowOverlays()) {
                         new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Require Permission")
-                                .setMessage(R.string.request_overlay_perm)
+                                .setMessage(R.string.nav_bar_request_overlay_perm)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -256,7 +256,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
     private void requestAccessibilityServiceEnable() {
         if (!accessibilityServiceEnabled(this)) {
             new AlertDialog.Builder(this).setTitle("Further Actions needed")
-                    .setMessage(R.string.accessibility_enable_prompt)
+                    .setMessage(R.string.nav_bar_accessibility_enable_prompt)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

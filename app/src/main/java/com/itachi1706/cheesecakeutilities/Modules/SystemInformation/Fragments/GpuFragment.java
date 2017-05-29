@@ -61,20 +61,20 @@ public class GpuFragment extends Fragment {
         if (getMaxGPUClock().equalsIgnoreCase(BuildConfig.FLAVOR)) {
             getMaxGPUClock.setVisibility(View.GONE);
         } else {
-            getMaxGPUClock.setText(getString(R.string.gpu_clock_max_adreno, getMaxGPUClock()));
+            getMaxGPUClock.setText(getString(R.string.sys_info_gpu_clock_max_adreno, getMaxGPUClock()));
         }
         TextView getMaxGPUClock1 = (TextView) view.findViewById(R.id.getMaxGPUClock1);
         if (getMaxGPUClock1().equalsIgnoreCase(BuildConfig.FLAVOR)) {
             getMaxGPUClock1.setVisibility(View.GONE);
         } else {
-            getMaxGPUClock1.setText(getString(R.string.gpu_clock_max_mali, getMaxGPUClock1()));
+            getMaxGPUClock1.setText(getString(R.string.sys_info_gpu_clock_max_mali, getMaxGPUClock1()));
         }
         return view;
     }
 
     private void liveUpdate() {
-        getGPUClock.setText(getString(R.string.gpu_clock_adreno, String.valueOf(getGPUClock())));
-        getGPUClock1.setText(getString(R.string.gpu_clock_mali, String.valueOf(getGPUClock1())));
+        getGPUClock.setText(getString(R.string.sys_info_gpu_clock_adreno, String.valueOf(getGPUClock())));
+        getGPUClock1.setText(getString(R.string.sys_info_gpu_clock_mali, String.valueOf(getGPUClock1())));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class GpuFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", 0);
         String vendor = prefs.getString("VENDOR", null);
         String renderer = prefs.getString("RENDERER", null);
-        return getString(R.string.gpu_vendor) + vendor + "\n" + getString(R.string.gpu_vendor) + renderer + "\n" + getString(R.string.gpu_gles_version) + String.valueOf(am.getDeviceConfigurationInfo().getGlEsVersion());
+        return getString(R.string.sys_info_gpu_vendor) + vendor + "\n" + getString(R.string.sys_info_gpu_vendor) + renderer + "\n" + getString(R.string.sys_info_gpu_gles_version) + String.valueOf(am.getDeviceConfigurationInfo().getGlEsVersion());
     }
 
     public String getGpuExtensions() {
@@ -123,7 +123,7 @@ public class GpuFragment extends Fragment {
         if (freq == null) {
             return BuildConfig.FLAVOR;
         }
-        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) / 1000000))) + getString(R.string.gpu_mhz);
+        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) / 1000000))) + getString(R.string.sys_info_gpu_mhz);
     }
 
     private String getMaxGPUClock() {
@@ -136,7 +136,7 @@ public class GpuFragment extends Fragment {
         if (freq == null) {
             return BuildConfig.FLAVOR;
         }
-        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) / 1000000))) + getString(R.string.gpu_mhz);
+        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) / 1000000))) + getString(R.string.sys_info_gpu_mhz);
     }
 
     private String getGPUClock1() {
@@ -153,7 +153,7 @@ public class GpuFragment extends Fragment {
         if (freq == null) {
             return BuildConfig.FLAVOR;
         }
-        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)))) + getString(R.string.gpu_mhz);
+        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)))) + getString(R.string.sys_info_gpu_mhz);
     }
 
     private String getMaxGPUClock1() {
@@ -166,6 +166,6 @@ public class GpuFragment extends Fragment {
         if (freq == null) {
             return BuildConfig.FLAVOR;
         }
-        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)))) + getString(R.string.gpu_mhz);
+        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)))) + getString(R.string.sys_info_gpu_mhz);
     }
 }

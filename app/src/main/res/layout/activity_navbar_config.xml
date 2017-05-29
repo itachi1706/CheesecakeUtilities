@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activate_navbar_service" />
+            android:text="@string/nav_bar_activate_service" />
 
         <View
             android:layout_width="0dp"
@@ -78,7 +78,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activate_navbar_service_app_name" />
+            android:text="@string/nav_bar_activate_service_app_name" />
 
         <View
             android:layout_width="0dp"
@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activate_navbar_service_clock" />
+            android:text="@string/nav_bar_activate_service_clock" />
 
         <View
             android:layout_width="0dp"
@@ -124,7 +124,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activate_navbar_service_image" />
+            android:text="@string/nav_bar_activate_service_image" />
 
         <View
             android:layout_width="0dp"
@@ -147,7 +147,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activate_navbar_service_type" />
+            android:text="@string/nav_bar_activate_service_type" />
 
         <View
             android:layout_width="0dp"
@@ -171,7 +171,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/activate_navbar_service_static_color" />
+            android:text="@string/nav_bar_activate_service_static_color" />
 
         <View
             android:layout_width="0dp"

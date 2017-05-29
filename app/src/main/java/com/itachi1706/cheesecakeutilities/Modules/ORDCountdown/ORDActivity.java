@@ -135,7 +135,7 @@ public class ORDActivity extends BaseActivity {
                 long duration = cal.getTimeInMillis() - currentTime;
                 long daysToPayday = TimeUnit.MILLISECONDS.toDays(duration);
                 if (daysToPayday == 0) menuItems.add("PAY DAY!!!");
-                else menuItems.add(getResources().getQuantityString(R.plurals.payday, (int) daysToPayday, daysToPayday));
+                else menuItems.add(getResources().getQuantityString(R.plurals.ord_payday, (int) daysToPayday, daysToPayday));
             }
 
             // Holidays Calculation
@@ -166,7 +166,7 @@ public class ORDActivity extends BaseActivity {
                 long duration = upcomingHoliday.getTime() - (holidayChecker);
                 long daysToHoliday = TimeUnit.MILLISECONDS.toDays(duration);
                 if (daysToHoliday == 0) menuItems.add("It's " + upcomingHoliday.getHolidayName());
-                else menuItems.add(getResources().getQuantityString(R.plurals.holidays, (int) daysToHoliday, daysToHoliday, upcomingHoliday.getHolidayName()));
+                else menuItems.add(getResources().getQuantityString(R.plurals.ord_holidays, (int) daysToHoliday, daysToHoliday, upcomingHoliday.getHolidayName()));
             }
 
 

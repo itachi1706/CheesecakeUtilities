@@ -17,7 +17,7 @@
             android:nextFocusDown="@+id/edit_messagespam_text"
             android:nextFocusRight="@+id/edit_messagespam_text"
             android:maxLines="1"
-            android:hint="@string/hint_contact_number"/>
+            android:hint="@string/msg_spam_hint_contact_number"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -30,7 +30,7 @@
             android:imeOptions="actionNext"
             android:nextFocusDown="@+id/edit_messagespam_times"
             android:nextFocusRight="@+id/edit_messagespam_times"
-            android:hint="@string/hint_message"/>
+            android:hint="@string/msg_spam_hint_message"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -45,7 +45,7 @@
             android:nextFocusDown="@+id/btn_messagespam_send"
             android:nextFocusRight="@+id/btn_messagespam_send"
             android:maxLines="1"
-            android:hint="@string/hint_number_times"/>
+            android:hint="@string/msg_spam_hint_number_times"/>
     </android.support.design.widget.TextInputLayout>
 
 
@@ -59,7 +59,7 @@
             android:id="@+id/btn_messagespam_contacts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_contacts"
+            android:text="@string/msg_spam_btn_contacts"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/btn_messagespam_send"
             android:layout_toStartOf="@+id/btn_messagespam_send" />
@@ -70,6 +70,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:text="@string/btn_send" />
+            android:text="@string/msg_spam_btn_send" />
     </RelativeLayout>
 </LinearLayout>

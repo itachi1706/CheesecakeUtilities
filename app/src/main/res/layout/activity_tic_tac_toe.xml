@@ -9,7 +9,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r12"
         android:layout_marginTop="142dp"
         android:layout_alignParentTop="true"
@@ -19,7 +19,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r22"
         android:layout_below="@+id/r12"
         android:layout_centerHorizontal="true" />
@@ -27,7 +27,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r32"
         android:layout_below="@+id/r22"
         android:layout_centerHorizontal="true" />
@@ -35,7 +35,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r11"
         android:layout_above="@+id/r22"
         android:layout_toLeftOf="@+id/r12"
@@ -44,7 +44,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r21"
         android:layout_above="@+id/r32"
         android:layout_toLeftOf="@+id/r22"
@@ -53,7 +53,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r31"
         android:layout_alignTop="@+id/r32"
         android:layout_toLeftOf="@+id/r32"
@@ -62,7 +62,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r13"
         android:layout_above="@+id/r22"
         android:layout_toRightOf="@+id/r12"
@@ -71,7 +71,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r23"
         android:layout_alignBottom="@+id/r22"
         android:layout_toRightOf="@+id/r22"
@@ -80,7 +80,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="@string/button_tic_tac_toe_game_area_placeholder"
+        android:text="@string/tic_tac_toe_button_placeholder"
         android:id="@+id/r33"
         android:layout_alignBottom="@+id/r32"
         android:layout_alignLeft="@+id/r23"
