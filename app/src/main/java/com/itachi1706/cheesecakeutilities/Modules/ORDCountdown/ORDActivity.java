@@ -98,18 +98,18 @@ public class ORDActivity extends BaseActivity {
             if (ord != 0) {
                 if (currentTime > ord) {
                     // ORD LOH
-                    ordDaysLabel.setText("LOH");
-                    ordCounter.setText("ORD");
-                    ordProgress.setText("100% Completed");
+                    ordDaysLabel.setText(R.string.ord_loh);
+                    ordCounter.setText(R.string.ord_hint);
+                    ordProgress.setText(getString(R.string.ord_complete, "100"));
                     progressBar.setProgress(100);
                 } else {
                     long duration = ord - currentTime;
                     ordDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
                     ordDaysLabel.setText(getResources().getQuantityString(R.plurals.ord_days, (int) ordDays));
-                    ordCounter.setText(ordDays + "");
+                    ordCounter.setText(getString(R.string.number, ordDays));
 
                     double difference = ((TimeUnit.MILLISECONDS.toDays(currentTime-enlist)) / (double)(TimeUnit.MILLISECONDS.toDays(ord - enlist))) * 100.0;
-                    ordProgress.setText((Math.round(difference * 100.0)/100.0) + "% completed");
+                    ordProgress.setText(getString(R.string.ord_complete, Math.round(difference * 100.0)/100.0 + ""));
                     progressBar.setProgress((int)difference);
 
                     int weekends = calculateWeekends();
