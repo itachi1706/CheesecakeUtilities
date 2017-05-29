@@ -152,11 +152,11 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
 
         private void updateIcon() {
             visibleToggle.setImageDrawable(isVisible ?
-                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.eye, mContext.getTheme()) :
-                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.eye_off, mContext.getTheme()));
+                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_eye, mContext.getTheme()) :
+                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_eye_off, mContext.getTheme()));
             lockToggle.setImageDrawable(isLocked ?
-                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.lock, mContext.getTheme()) :
-                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.lock_open, mContext.getTheme()));
+                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_lock, mContext.getTheme()) :
+                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_lock_open, mContext.getTheme()));
         }
 
         private boolean isHidden(String util) {
