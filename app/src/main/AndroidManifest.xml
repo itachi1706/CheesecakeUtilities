@@ -39,12 +39,12 @@
         <activity
             android:name=".StringToHexBin"
             android:exported="true"
-            android:label="@string/title_string_to_bin_or_hex_full"
+            android:label="@string/bin_hex_title_full"
             android:theme="@style/DarkTheme" />
         <activity
             android:name=".SpamMessages"
             android:exported="true"
-            android:label="@string/message_spammer"
+            android:label="@string/msg_spam_title"
             android:theme="@style/DarkTheme" />
         <activity
             android:name=".GeneralSettingsActivity"

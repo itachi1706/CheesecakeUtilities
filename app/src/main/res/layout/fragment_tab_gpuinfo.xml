@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/gpu_title"
+                        android:text="@string/sys_info_gpu_title"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/gpu_info"
+                        android:text="@string/sys_info_gpu_info"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/gpu_clock_adreno"
+                        android:text="@string/sys_info_gpu_clock_adreno"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/gpu_clock_max_adreno"
+                        android:text="@string/sys_info_gpu_clock_max_adreno"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/gpu_clock_mali"
+                        android:text="@string/sys_info_gpu_clock_mali"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/gpu_clock_max_mali"
+                        android:text="@string/sys_info_gpu_clock_max_mali"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/gpu_extensions"
+                        android:text="@string/sys_info_gpu_extensions"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/gpu_ext"
+                        android:text="@string/sys_info_gpu_ext"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />

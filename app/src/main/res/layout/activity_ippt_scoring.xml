@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ippt_pb"
         android:layout_centerHorizontal="true"
-        android:text="@string/list_app_loading_label"
+        android:text="@string/loading_label"
         android:visibility="gone" />
 
     <LinearLayout

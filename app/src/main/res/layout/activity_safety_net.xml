@@ -18,14 +18,14 @@
                 android:id="@+id/runTestButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/run_safetynet_test_button" />
+                android:text="@string/safetynet_run_safetynet_test_button" />
 
             <TextView
                 android:id="@+id/welcomeTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="@string/info_details"
+                android:text="@string/safetynet_info_details"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -89,7 +89,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/request_token" />
+                            android:text="@string/safetynet_request_token" />
 
                         <TextView
                             android:id="@+id/nonce"
@@ -103,7 +103,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/timestamp" />
+                            android:text="@string/safetynet_timestamp" />
 
                         <TextView
                             android:id="@+id/timestamp"
@@ -118,7 +118,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/package_name" />
+                            android:text="@string/safetynet_package_name" />
 
                         <TextView
                             android:id="@+id/packagename"
@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/progressBar"
             android:layout_centerHorizontal="true"
-            android:text="@string/msg_loading" />
+            android:text="@string/safetynet_msg_loading" />
 
     </RelativeLayout>
 

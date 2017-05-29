@@ -72,7 +72,7 @@ public class DeviceFragment extends Fragment {
         TextView cpuInstruct = (TextView) view.findViewById(R.id.cpuInstructTxt);
         cpuInstruct.setText(getCpuInstructions());
         TextView cpuCoreCount = (TextView) view.findViewById(R.id.cpuCoreCountTxt);
-        cpuCoreCount.setText(getString(R.string.cpucores, String.valueOf(getCoreCount())));
+        cpuCoreCount.setText(getString(R.string.sys_info_cpucores, String.valueOf(getCoreCount())));
         TextView ramTotal = (TextView) view.findViewById(R.id.ramTotal);
         ramTotal.setText(getTotalRAM());
         TextView deviceInfo = (TextView) view.findViewById(R.id.deviceInfoTxt);
@@ -88,7 +88,7 @@ public class DeviceFragment extends Fragment {
 
     private void liveUpdate() {
         this.mFreeRam.setText(getFreeRAM());
-        this.getCpuFreq.setText(getString(R.string.cpufreq, getCpuFrequency()));
+        this.getCpuFreq.setText(getString(R.string.sys_info_cpufreq, getCpuFrequency()));
     }
 
     @Override

@@ -44,33 +44,33 @@
         <item>.Games.TicTacToe.TicTacToeActivity</item>
         <item>.Games.ChromiumTRex.ChromiumTRexActivity</item>
     </string-array>
-    <string-array name="pes">
+    <string-array name="ippt_pes">
         <item>A/B</item>
         <item>A/B PTP</item>
         <item>BP</item>
         <item>C</item>
         <item>E</item>
     </string-array>
-    <string-array name="gender">
+    <string-array name="ippt_gender">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-    <string-array name="exercisemale">
+    <string-array name="ippt_exercisemale">
         <item>2.4km Run</item>
         <item>Sit-Ups</item>
         <item>Push-Ups</item>
     </string-array>
-    <string-array name="exercisefemale">
+    <string-array name="ippt_exercisefemale">
         <item>2.4km Run</item>
         <item>Sit-Ups</item>
         <item>Bent Knee Push-Ups</item>
     </string-array>
-    <string-array name="imagetype">
+    <string-array name="navbar_imagetype">
         <item>Current App Color</item>
         <item>Random Image</item>
         <item>Static Color</item>
     </string-array>
-    <string-array name="payday">
+    <string-array name="ord_payday">
         <item>10th of every month</item>
         <item>12th of every month</item>
     </string-array>

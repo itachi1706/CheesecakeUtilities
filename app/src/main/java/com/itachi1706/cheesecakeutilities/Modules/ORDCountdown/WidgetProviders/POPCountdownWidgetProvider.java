@@ -41,11 +41,11 @@ public class POPCountdownWidgetProvider extends AppWidgetProvider {
                 long duration = pop - currentTime;
                 long popDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
                 views.setTextViewText(R.id.wid_ord_counter, popDays + "");
-                views.setTextViewText(R.id.wid_ord_days_counter, context.getResources().getQuantityString(R.plurals.pop_days, (int) popDays));
+                views.setTextViewText(R.id.wid_ord_days_counter, context.getResources().getQuantityString(R.plurals.ord_pop_days, (int) popDays));
             }
         } else {
             views.setTextViewText(R.id.wid_ord_counter, "???");
-            views.setTextViewText(R.id.wid_ord_days_counter, context.getResources().getQuantityString(R.plurals.pop_days, 999));
+            views.setTextViewText(R.id.wid_ord_days_counter, context.getResources().getQuantityString(R.plurals.ord_pop_days, 999));
         }
 
         Intent popIntent = new Intent(context, ORDActivity.class);

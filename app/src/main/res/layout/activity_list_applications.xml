@@ -41,7 +41,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/list_app_loading_label"
+        android:text="@string/loading_label"
         android:id="@+id/list_app_pb_label"
         android:layout_below="@+id/list_app_pb"
         android:layout_centerHorizontal="true"

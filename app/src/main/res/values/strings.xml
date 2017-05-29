@@ -2,37 +2,40 @@
     <string name="app_name">Cheesecake Utilities</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
 
+***REMOVED*** Common Strings -->
+    <string name="loading_label">Loading…</string>
+
 ***REMOVED*** String to Binary/Hex Converter -->
-    <string name="title_string_to_bin_or_hex">BIN/HEX CONVERTER</string>
-    <string name="title_string_to_bin_or_hex_full">Binary/Hex Converter</string>
-    <string name="hint_enter_message">ENTER MESSAGE:</string>
-    <string name="hint_click_paste">(Click and hold to paste)</string>
-    <string name="header_choose_options">CHOOSE OPTIONS:</string>
-    <string name="option_bin">Bin</string>
-    <string name="option_hex">Hex</string>
-    <string name="option_delimiter">Delimiter</string>
-    <string name="option_encode">Encode</string>
-    <string name="option_decode">Decode</string>
-    <string name="btn_translate">TRANSLATE!</string>
-    <string name="hint_translation">TRANSLATION:</string>
-    <string name="btn_copy">COPY</string>
-    <string name="btn_send_caps">SEND</string>
-    <string name="btn_clear">CLEAR</string>
+    <string name="bin_hex_title">BIN/HEX CONVERTER</string>
+    <string name="bin_hex_title_full">Binary/Hex Converter</string>
+    <string name="bin_hex_hint_enter_message">ENTER MESSAGE:</string>
+    <string name="bin_hex_hint_click_paste">(Click and hold to paste)</string>
+    <string name="bin_hex_header_choose_options">CHOOSE OPTIONS:</string>
+    <string name="bin_hex_opt_bin">Bin</string>
+    <string name="bin_hex_opt_hex">Hex</string>
+    <string name="bin_hex_opt_delimiter">Delimiter</string>
+    <string name="bin_hex_opt_encode">Encode</string>
+    <string name="bin_hex_opt_decode">Decode</string>
+    <string name="bin_hex_btn_translate">TRANSLATE!</string>
+    <string name="bin_hex_hint_translation">TRANSLATION:</string>
+    <string name="bin_hex_btn_copy">COPY</string>
+    <string name="bin_hex_btn_send_caps">SEND</string>
+    <string name="bin_hex_btn_clear">CLEAR</string>
 
 ***REMOVED*** Spam Messages -->
-    <string name="message_spammer">Message Spam</string>
-    <string name="btn_send">Send</string>
-    <string name="btn_contacts">Contacts</string>
-    <string name="contentdesc_logo">Logo</string>
-    <string name="hint_number_times">Number of Times to Send:</string>
-    <string name="hint_message">Message:</string>
-    <string name="hint_contact_number">Contact Phone Number:</string>
+    <string name="msg_spam_title">Message Spam</string>
+    <string name="msg_spam_btn_send">Send</string>
+    <string name="msg_spam_btn_contacts">Contacts</string>
+    <string name="msg_spam_desc_logo">Logo</string>
+    <string name="msg_spam_hint_number_times">Number of Times to Send:</string>
+    <string name="msg_spam_hint_message">Message:</string>
+    <string name="msg_spam_hint_contact_number">Contact Phone Number:</string>
 
 ***REMOVED*** HTC Serial ID -->
     <string name="htc_sn_id_serial_field_hint">Enter Serial Number</string>
     <string name="htc_sn_id_button_phone_serial">Use Phone Serial</string>
     <string name="htc_sn_id_btn_search">Search</string>
-    <string name="title_activity_htc_serial_identification">HtcSerialIdentificationActivity</string>
+    <string name="htc_sn_id_title">HtcSerialIdentificationActivity</string>
 
 ***REMOVED*** Menu Items -->
     <string name="menu_settings">Settings</string>
@@ -62,16 +65,16 @@
     <string name="link_legacy">https://github.com/itachi1706/CheesecakeUtilities/releases</string>
 
 ***REMOVED*** Fanfic Compactor Strings -->
-    <string name="placeholder_query">Querying…</string>
-    <string name="label_stories_count">Stories Count:&#160;</string>
-    <string name="label_folder_size">Folder Size:&#160;</string>
-    <string name="label_db_location">DB Location:&#160;</string>
-    <string name="label_fanfic_folder">FanFic Folder:&#160;</string>
-    <string name="title_fanfiction_compactor">Fanfiction Compactor</string>
-    <string name="button_compact_stories">Compact Stories</string>
-    <string name="button_show_stories_list">Show Stories List</string>
-    <string name="result_fanfic_folder_size">%1$s (%2$d bytes)</string>
-    <string name="result_fanfic_story_count">DB: %1$d stories | SD: %2$d stories</string>
+    <string name="ff_compat_query_placeholder">Querying…</string>
+    <string name="ff_compat_lbl_stories_count">Stories Count:&#160;</string>
+    <string name="ff_compat_lbl_folder_size">Folder Size:&#160;</string>
+    <string name="ff_compat_lbl_db_location">DB Location:&#160;</string>
+    <string name="ff_compat_lbl_fanfic_folder">FanFic Folder:&#160;</string>
+    <string name="ff_compat_title">Fanfiction Compactor</string>
+    <string name="ff_compat_btn_compact_stories">Compact Stories</string>
+    <string name="ff_compat_btn_show_stories_list">Show Stories List</string>
+    <string name="ff_compat_result_fanfic_folder_size">%1$s (%2$d bytes)</string>
+    <string name="ff_compat_result_fanfic_story_count">DB: %1$d stories | SD: %2$d stories</string>
 
 ***REMOVED*** Camera Disable Device Administrator -->
     <string name="camera_disable_desc">Allows Cheesecake Utilities to control the device\'s camera</string>
@@ -91,93 +94,93 @@
     <string name="camera_disable_camera_status_label">Camera Status</string>
 
 ***REMOVED*** System Information -->
-    <string name="CPU1">Processor</string>
-    <string name="CPU2">CPU Type</string>
-    <string name="CPU3">CPU Instructions</string>
-    <string name="CPU4">CPU MAX</string>
-    <string name="CPU5">CPU MIN</string>
-    <string name="CPU6">CPU FREQ</string>
-    <string name="CPU7">CPU CORES</string>
-    <string name="OS1">Operating System</string>
-    <string name="OS2">OS Codename</string>
-    <string name="OS3">OS Info</string>
-    <string name="OS4">Up time:</string>
-    <string name="battery1">Battery Statistics</string>
-    <string name="batteryBarText">Level Indicator</string>
-    <string name="battery_charging">Charging</string>
-    <string name="battery_discharging">Discharging</string>
-    <string name="battery_full">Full</string>
-    <string name="battery_health">"Health: "</string>
-    <string name="battery_health_dead">Dead</string>
-    <string name="battery_health_fail">Failure</string>
-    <string name="battery_health_good">Good</string>
-    <string name="battery_health_over_h">Over Heat</string>
-    <string name="battery_health_over_v">Over Voltage</string>
-    <string name="battery_health_unknown">Unknown</string>
-    <string name="battery_level">"Level: "</string>
-    <string name="battery_not_charging">Not Charging</string>
-    <string name="battery_plug">"Charge Method: "</string>
-    <string name="battery_status">"Status: "</string>
-    <string name="battery_temp">"Temperature: "</string>
-    <string name="battery_voltage">"Voltage: "</string>
-    <string name="device1">Hardware</string>
-    <string name="device2">Device Info</string>
-    <string name="display1">Display</string>
-    <string name="display2">Resolution: Unsupported Android Version</string>
-    <string name="display3">Physical Size: Unsupported Android Version</string>
-    <string name="gpu_clock_adreno">GPU Clock: %s</string>
-    <string name="gpu_clock_mali">GPU Clock: %s</string>
-    <string name="gpu_clock_max_adreno">GPU Clock Maximum: %s</string>
-    <string name="gpu_clock_max_mali">GPU Clock Maximum: %s</string>
-    <string name="gpu_ext">Extensions list</string>
-    <string name="gpu_extensions">GLES Extensions</string>
-    <string name="gpu_gles_version">"OpenGL ES: "</string>
-    <string name="gpu_info">GPU Info</string>
-    <string name="gpu_mhz">" MHz"</string>
-    <string name="gpu_title">GPU Information</string>
-    <string name="gpu_vendor">"GPU Vendor: "</string>
-    <string name="java1">Java VM</string>
-    <string name="java2">Java VM Info</string>
-    <string name="memory1">Memory</string>
-    <string name="memory2">Note: Total RAM seen here may be different than advertised due to shared GPU memory.</string>
-    <string name="memory3">Total RAM:</string>
-    <string name="memory4">Free RAM:</string>
-    <string name="network1">Network Info</string>
-    <string name="network2">IP Address:</string>
-    <string name="network3">MAC Address:</string>
-    <string name="network4">SSID:</string>
-    <string name="sensors1">Sensors</string>
-    <string name="storage1">Device Storage</string>
-    <string name="storage2">Internal</string>
-    <string name="storage3">SD Card(s)</string>
-    <string name="storage4">Internal Storage</string>
-    <string name="title_section1">System</string>
-    <string name="title_section2">Device</string>
-    <string name="title_section3">Battery</string>
-    <string name="title_section4">Network</string>
-    <string name="title_section5">Sensors</string>
-    <string name="title_section6">GPU</string>
-    <string name="title_section7">Storage</string>
-    <string name="codename">Android OS: %s</string>
-    <string name="uptime">Uptime: %s</string>
-    <string name="cpucores">CPU Cores: %s</string>
-    <string name="cpufreq">Current Frequency: %s</string>
+    <string name="sys_info_CPU1">Processor</string>
+    <string name="sys_info_CPU2">CPU Type</string>
+    <string name="sys_info_CPU3">CPU Instructions</string>
+    <string name="sys_info_CPU4">CPU MAX</string>
+    <string name="sys_info_CPU5">CPU MIN</string>
+    <string name="sys_info_CPU6">CPU FREQ</string>
+    <string name="sys_info_CPU7">CPU CORES</string>
+    <string name="sys_info_OS1">Operating System</string>
+    <string name="sys_info_OS2">OS Codename</string>
+    <string name="sys_info_OS3">OS Info</string>
+    <string name="sys_info_OS4">Up time:</string>
+    <string name="sys_info_battery1">Battery Statistics</string>
+    <string name="sys_info_batteryBarText">Level Indicator</string>
+    <string name="sys_info_battery_charging">Charging</string>
+    <string name="sys_info_battery_discharging">Discharging</string>
+    <string name="sys_info_battery_full">Full</string>
+    <string name="sys_info_battery_health">"Health: "</string>
+    <string name="sys_info_battery_health_dead">Dead</string>
+    <string name="sys_info_battery_health_fail">Failure</string>
+    <string name="sys_info_battery_health_good">Good</string>
+    <string name="sys_info_battery_health_over_h">Over Heat</string>
+    <string name="sys_info_battery_health_over_v">Over Voltage</string>
+    <string name="sys_info_battery_health_unknown">Unknown</string>
+    <string name="sys_info_battery_level">"Level: "</string>
+    <string name="sys_info_battery_not_charging">Not Charging</string>
+    <string name="sys_info_battery_plug">"Charge Method: "</string>
+    <string name="sys_info_battery_status">"Status: "</string>
+    <string name="sys_info_battery_temp">"Temperature: "</string>
+    <string name="sys_info_battery_voltage">"Voltage: "</string>
+    <string name="sys_info_device1">Hardware</string>
+    <string name="sys_info_device2">Device Info</string>
+    <string name="sys_info_display1">Display</string>
+    <string name="sys_info_display2">Resolution: Unsupported Android Version</string>
+    <string name="sys_info_display3">Physical Size: Unsupported Android Version</string>
+    <string name="sys_info_gpu_clock_adreno">GPU Clock: %s</string>
+    <string name="sys_info_gpu_clock_mali">GPU Clock: %s</string>
+    <string name="sys_info_gpu_clock_max_adreno">GPU Clock Maximum: %s</string>
+    <string name="sys_info_gpu_clock_max_mali">GPU Clock Maximum: %s</string>
+    <string name="sys_info_gpu_ext">Extensions list</string>
+    <string name="sys_info_gpu_extensions">GLES Extensions</string>
+    <string name="sys_info_gpu_gles_version">"OpenGL ES: "</string>
+    <string name="sys_info_gpu_info">GPU Info</string>
+    <string name="sys_info_gpu_mhz">" MHz"</string>
+    <string name="sys_info_gpu_title">GPU Information</string>
+    <string name="sys_info_gpu_vendor">"GPU Vendor: "</string>
+    <string name="sys_info_java1">Java VM</string>
+    <string name="sys_info_java2">Java VM Info</string>
+    <string name="sys_info_memory1">Memory</string>
+    <string name="sys_info_memory2">Note: Total RAM seen here may be different than advertised due to shared GPU memory.</string>
+    <string name="sys_info_memory3">Total RAM:</string>
+    <string name="sys_info_memory4">Free RAM:</string>
+    <string name="sys_info_network1">Network Info</string>
+    <string name="sys_info_network2">IP Address:</string>
+    <string name="sys_info_network3">MAC Address:</string>
+    <string name="sys_info_network4">SSID:</string>
+    <string name="sys_info_sensors1">Sensors</string>
+    <string name="sys_info_storage1">Device Storage</string>
+    <string name="sys_info_storage2">Internal</string>
+    <string name="sys_info_storage3">SD Card(s)</string>
+    <string name="sys_info_storage4">Internal Storage</string>
+    <string name="sys_info_title_section1">System</string>
+    <string name="sys_info_title_section2">Device</string>
+    <string name="sys_info_title_section3">Battery</string>
+    <string name="sys_info_title_section4">Network</string>
+    <string name="sys_info_title_section5">Sensors</string>
+    <string name="sys_info_title_section6">GPU</string>
+    <string name="sys_info_title_section7">Storage</string>
+    <string name="sys_info_codename">Android OS: %s</string>
+    <string name="sys_info_uptime">Uptime: %s</string>
+    <string name="sys_info_cpucores">CPU Cores: %s</string>
+    <string name="sys_info_cpufreq">Current Frequency: %s</string>
 
 ***REMOVED*** Nav Bar Customization -->
-    <string name="cd_nav_bar_image">Navigation Bar image</string>
-    <string name="activate_navbar_service">Activate Navigation Bar Service</string>
-    <string name="activate_navbar_service_app_name">Show current Application Name</string>
-    <string name="activate_navbar_service_clock">Show Clock</string>
-    <string name="activate_navbar_service_image">Color Navigation Bar Background</string>
-    <string name="activate_navbar_service_type">Background Type</string>
-    <string name="activate_navbar_service_static_color">Choose Static Color</string>
-    <string name="accessibility_setting_desc">Enable this to allow the app to change the navigation bar</string>
-    <string name="request_overlay_perm">In order to activate the service, the app requires the permission to draw over other apps such as the Navigation Bar.\n\nClicking OK will bring you to the screen to grant this permission</string>
-    <string name="accessibility_enable_prompt">Clicking OK will bring you to the accessibility screen to enable the accessibility service required to customize the navigation bar</string>
-    <string name="accessibility_disable_prompt">Clicking OK will bring you to the accessibility screen to disable the accessibility service for customizing the navigation bar</string>
+    <string name="nav_bar_image">Navigation Bar image</string>
+    <string name="nav_bar_activate_service">Activate Navigation Bar Service</string>
+    <string name="nav_bar_activate_service_app_name">Show current Application Name</string>
+    <string name="nav_bar_activate_service_clock">Show Clock</string>
+    <string name="nav_bar_activate_service_image">Color Navigation Bar Background</string>
+    <string name="nav_bar_activate_service_type">Background Type</string>
+    <string name="nav_bar_activate_service_static_color">Choose Static Color</string>
+    <string name="nav_bar_accessibility_desc">Enable this to allow the app to change the navigation bar</string>
+    <string name="nav_bar_request_overlay_perm">In order to activate the service, the app requires the permission to draw over other apps such as the Navigation Bar.\n\nClicking OK will bring you to the screen to grant this permission</string>
+    <string name="nav_bar_accessibility_enable_prompt">Clicking OK will bring you to the accessibility screen to enable the accessibility service required to customize the navigation bar</string>
+    <string name="nav_bar_accessibility_disable_prompt">Clicking OK will bring you to the accessibility screen to disable the accessibility service for customizing the navigation bar</string>
 
 ***REMOVED*** Tic Tac Toe Game -->
-    <string name="button_tic_tac_toe_game_area_placeholder">New Button</string>
+    <string name="tic_tac_toe_button_placeholder">New Button</string>
 
 ***REMOVED*** App Shortcuts -->
     <string name="featured_util_label">Featured Utility</string>
@@ -185,17 +188,19 @@
     <string name="featured_util_disabled_label">The Featured Utility shortcut is disabled</string>
 
 ***REMOVED*** SafetyNet -->
-    <string name="info_details">Running the test verify if the device and ROM has passed the Android Compatibility Test Suite (CTS).</string>
-    <string name="safety_results">SafetyNet response success!\nCTS profile match: %1$b\nBasic Integrity: %2$b</string>
-    <string name="safety_results_note">Note: The "basicIntegrity" field is a weaker check than "ctsProfileMatch". Use the result from "ctsProfileMatch" if you need to be absolutely sure that the device passes CTS.</string>
-    <string name="request_token">One time request token</string>
-    <string name="timestamp">Request timestamp</string>
-    <string name="package_name">App Id (package name)</string>
-    <string name="msg_loading">Loading…</string>
-    <string name="run_safetynet_test_button">Run SafetyNet test</string>
+    <string name="safetynet_info_details">Running the test verify if the device and ROM has passed the Android Compatibility Test Suite (CTS).</string>
+    <string name="safetynet_results">SafetyNet response success!\nCTS profile match: %1$b\nBasic Integrity: %2$b</string>
+    <string name="safetynet_results_note">Note: The "basicIntegrity" field is a weaker check than "ctsProfileMatch". Use the result from "ctsProfileMatch" if you need to be absolutely sure that the device passes CTS.</string>
+    <string name="safetynet_request_token">One time request token</string>
+    <string name="safetynet_timestamp">Request timestamp</string>
+    <string name="safetynet_package_name">App Id (package name)</string>
+    <string name="safetynet_msg_loading">Loading…</string>
+    <string name="safetynet_run_safetynet_test_button">Run SafetyNet test</string>
+
+***REMOVED*** ORD Countdown -->
+    <string name="ord_pes_status">PES Status</string>
+    <string name="ord_settings_label">ORD Countdown Settings</string>
 
 ***REMOVED*** Unsorted/Misc -->
-    <string name="pes_status">PES Status</string>
-    <string name="ord_settings_label">ORD Countdown Settings</string>
-    <string name="list_app_loading_label">Loading…</string>
+
 ***REMOVED***

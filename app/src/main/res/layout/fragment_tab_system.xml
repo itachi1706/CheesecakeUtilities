@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/OS1"
+                        android:text="@string/sys_info_OS1"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/OS2"
+                        android:text="@string/sys_info_OS2"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/OS3"
+                        android:text="@string/sys_info_OS3"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/OS4"
+                        android:text="@string/sys_info_OS4"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -105,7 +105,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/storage4"
+                        android:text="@string/sys_info_storage4"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/storage2"
+                        android:text="@string/sys_info_storage2"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />
@@ -150,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="@string/java1"
+                        android:text="@string/sys_info_java1"
 
                         android:textColor="#424242"
                         android:textStyle="bold" />
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:text="@string/java2"
+                        android:text="@string/sys_info_java2"
 
                         android:textColor="#616161"
                         android:textIsSelectable="true" />

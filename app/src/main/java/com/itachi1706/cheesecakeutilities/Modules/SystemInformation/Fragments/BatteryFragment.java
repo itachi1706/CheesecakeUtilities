@@ -32,7 +32,7 @@ public class BatteryFragment extends Fragment {
             int health = intent.getIntExtra("health", -1);
             int temp = intent.getIntExtra("temperature", -1);
             BatteryFragment.this.pb.setProgress(level);
-            BatteryFragment.this.batteryInfo.setText(BatteryFragment.this.getString(R.string.battery_level) + Integer.toString(level) + "%\n\n" + BatteryFragment.this.getString(R.string.battery_voltage) + Integer.toString(voltage) + " mV\n\n" + BatteryFragment.this.getString(R.string.battery_status) + BatteryFragment.this.getStatusString(status) + "\n\n" + BatteryFragment.this.getString(R.string.battery_plug) + BatteryFragment.this.getPlugTypeString(plug) + "\n\n" + BatteryFragment.this.getString(R.string.battery_health) + BatteryFragment.this.getHealthString(health) + "\n\n" + BatteryFragment.this.getString(R.string.battery_temp) + Integer.toString(temp / 10) + '\u00b0' + "C / " + Integer.toString((((temp / 10) * 9) / 5) + 32) + '\u00b0' + "F");
+            BatteryFragment.this.batteryInfo.setText(BatteryFragment.this.getString(R.string.sys_info_battery_level) + Integer.toString(level) + "%\n\n" + BatteryFragment.this.getString(R.string.sys_info_battery_voltage) + Integer.toString(voltage) + " mV\n\n" + BatteryFragment.this.getString(R.string.sys_info_battery_status) + BatteryFragment.this.getStatusString(status) + "\n\n" + BatteryFragment.this.getString(R.string.sys_info_battery_plug) + BatteryFragment.this.getPlugTypeString(plug) + "\n\n" + BatteryFragment.this.getString(R.string.sys_info_battery_health) + BatteryFragment.this.getHealthString(health) + "\n\n" + BatteryFragment.this.getString(R.string.sys_info_battery_temp) + Integer.toString(temp / 10) + '\u00b0' + "C / " + Integer.toString((((temp / 10) * 9) / 5) + 32) + '\u00b0' + "F");
         }
     }
 
@@ -63,28 +63,28 @@ public class BatteryFragment extends Fragment {
             case 1: return "AC";
             case 2: return "USB";
             case 4: return "Wireless";
-            default: return getString(R.string.battery_not_charging);
+            default: return getString(R.string.sys_info_battery_not_charging);
         }
     }
 
     private String getHealthString(int health) {
         switch (health) {
-            case 2: return getString(R.string.battery_health_good);
-            case 3: return getString(R.string.battery_health_over_h);
-            case 4: return getString(R.string.battery_health_dead);
-            case 5: return getString(R.string.battery_health_over_v);
-            case 6: return getString(R.string.battery_health_fail);
-            default: return getString(R.string.battery_health_unknown);
+            case 2: return getString(R.string.sys_info_battery_health_good);
+            case 3: return getString(R.string.sys_info_battery_health_over_h);
+            case 4: return getString(R.string.sys_info_battery_health_dead);
+            case 5: return getString(R.string.sys_info_battery_health_over_v);
+            case 6: return getString(R.string.sys_info_battery_health_fail);
+            default: return getString(R.string.sys_info_battery_health_unknown);
         }
     }
 
     private String getStatusString(int status) {
         switch (status) {
-            case 2: return getString(R.string.battery_charging);
-            case 3: return getString(R.string.battery_discharging);
-            case 4: return getString(R.string.battery_not_charging);
-            case 5: return getString(R.string.battery_full);
-            default: return getString(R.string.battery_health_unknown);
+            case 2: return getString(R.string.sys_info_battery_charging);
+            case 3: return getString(R.string.sys_info_battery_discharging);
+            case 4: return getString(R.string.sys_info_battery_not_charging);
+            case 5: return getString(R.string.sys_info_battery_full);
+            default: return getString(R.string.sys_info_battery_health_unknown);
         }
     }
 }
