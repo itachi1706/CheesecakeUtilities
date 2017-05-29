@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Cheesecake Utilities</string>
-    <string name="title_activity_main_menu">MainMenuActivity</string>
 
     <!-- Common Strings -->
     <string name="loading_label">Loading…</string>
@@ -26,7 +25,6 @@
     <string name="msg_spam_title">Message Spam</string>
     <string name="msg_spam_btn_send">Send</string>
     <string name="msg_spam_btn_contacts">Contacts</string>
-    <string name="msg_spam_desc_logo">Logo</string>
     <string name="msg_spam_hint_number_times">Number of Times to Send:</string>
     <string name="msg_spam_hint_message">Message:</string>
     <string name="msg_spam_hint_contact_number">Contact Phone Number:</string>
@@ -35,7 +33,6 @@
     <string name="htc_sn_id_serial_field_hint">Enter Serial Number</string>
     <string name="htc_sn_id_button_phone_serial">Use Phone Serial</string>
     <string name="htc_sn_id_btn_search">Search</string>
-    <string name="htc_sn_id_title">HtcSerialIdentificationActivity</string>
 
     <!-- Menu Items -->
     <string name="menu_settings">Settings</string>
@@ -46,16 +43,6 @@
     <string name="title_activity_general_settings">Settings</string>
 
     <!-- Fingerprint -->
-    <string name="start_listening">Start Listening</string>
-    <string name="status_initializing">Initializing…</string>
-    <string name="status_ready">Ready to authenticate!</string>
-    <string name="status_authenticated">Authentication successful!</string>
-    <string name="status_error">Error: %1$s</string>
-    <string name="open_security_settings">Open Security Settings</string>
-    <string name="status_listening">Listening for a fingerprint…</string>
-    <string name="status_listening_new">Listening for a fingerprint (new)…</string>
-    <string name="stop_listening">Stop listening</string>
-    <string name="use_dialog">Use Dialog</string>
     <string name="dialog_authenticated">Authenticated</string>
     <string name="dialog_cancelled">Authentication cancelled</string>
 
