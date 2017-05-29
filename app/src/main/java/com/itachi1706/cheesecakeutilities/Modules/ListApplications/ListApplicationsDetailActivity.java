@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
@@ -160,7 +161,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
 
         appName.setText(info.loadLabel(pm).toString());
-        appVersion.setText("Version " + version);
+        appVersion.setText(getString(R.string.list_app_version, " ", version));
         icon.setImageDrawable(info.loadIcon(pm));
 
         List<LabelledColumn> testList = new ArrayList<>();
