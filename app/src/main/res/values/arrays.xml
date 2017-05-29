@@ -44,7 +44,7 @@
         <item>.Games.TicTacToe.TicTacToeActivity</item>
         <item>.Games.ChromiumTRex.ChromiumTRexActivity</item>
     </string-array>
-    <string-array name="ippt_pes">
+    <string-array name="ord_pes">
         <item>A/B</item>
         <item>A/B PTP</item>
         <item>BP</item>

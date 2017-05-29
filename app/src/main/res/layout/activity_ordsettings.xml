@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="PES Status:"/>
+            android:text="@string/ord_pes_status"/>
 
         <Spinner
             android:layout_width="wrap_content"
@@ -44,8 +44,8 @@
             android:layout_marginStart="10dp"
             android:id="@+id/spinnerPES"
             android:spinnerMode="dropdown"
-            android:prompt="@string/pes_status"
-            android:entries="@array/pes" />
+            android:prompt="@string/ord_pes_status"
+            android:entries="@array/ord_pes" />
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -115,7 +115,7 @@
             android:layout_marginStart="10dp"
             android:id="@+id/spinnerPD"
             android:spinnerMode="dropdown"
-            android:entries="@array/payday" />
+            android:entries="@array/ord_payday" />
     </LinearLayout>
 
 

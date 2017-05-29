@@ -198,7 +198,7 @@
     <string name="safetynet_run_safetynet_test_button">Run SafetyNet test</string>
 
 ***REMOVED*** ORD Countdown -->
-    <string name="ord_pes_status">PES Status</string>
+    <string name="ord_pes_status">PES Status:</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
 
 ***REMOVED*** Unsorted/Misc -->

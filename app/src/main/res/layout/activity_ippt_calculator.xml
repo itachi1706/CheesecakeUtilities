@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerGender"
-            android:entries="@array/gender"
+            android:entries="@array/ippt_gender"
             android:spinnerMode="dropdown" />
 
         <Spinner
