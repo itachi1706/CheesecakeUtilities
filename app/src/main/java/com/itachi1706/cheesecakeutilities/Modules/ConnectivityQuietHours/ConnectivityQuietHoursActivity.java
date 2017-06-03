@@ -35,7 +35,6 @@ import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
     @Override
     public String getHelpDescription() {
         return "Configures \"Quiet Hours\" for your device where within the period, either wireless or bluetooth connectivity will" +
-                " be turned off to help conserve power" + "\n\nThis utility is currently in BETA Testing";
+                " be turned off to help conserve power";
     }
 
     @Override
@@ -203,9 +202,6 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
 
             }
         });
-        // BETA
-        // TODO: Remove after exiting BETA
-        CommonMethods.betaInfo(this, "Connectivity Quiet Hours Configuration");
     }
 
     private void toggleBtSwitch() {

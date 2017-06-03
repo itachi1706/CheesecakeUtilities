@@ -16,7 +16,7 @@
         <item>Navigation Bar Customizer</item>
         <item>SafetyNet Validator</item>
         <item>Quick Settings Tiles Configuration</item>
-        <item>Connectivity Quiet Hours Configuration (BETA)</item>
+        <item>Connectivity Quiet Hours Configuration</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
