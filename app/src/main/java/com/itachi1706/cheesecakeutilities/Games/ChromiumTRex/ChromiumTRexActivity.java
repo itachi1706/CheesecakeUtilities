@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Games.ChromiumTRex;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.webkit.WebView;
 
@@ -26,7 +27,6 @@ public class ChromiumTRexActivity extends BaseActivity {
         webView = (WebView) findViewById(R.id.webview);
 
         webView.getSettings().setJavaScriptEnabled(true);
-        //webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl("file:///android_asset/chromiumtrex/index.html");
     }
 }
