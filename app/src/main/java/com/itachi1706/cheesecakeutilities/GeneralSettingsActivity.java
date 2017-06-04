@@ -51,7 +51,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
 
             new SettingsInitializer(getActivity(), R.drawable.notification_icon,
                     CommonVariables.BASE_SERVER_URL, getResources().getString(R.string.link_legacy),
-                    getResources().getString(R.string.link_updates))
+                    getResources().getString(R.string.link_updates), true)
                     .explodeUpdaterSettings(this);
             super.addEggMethods();
 
