@@ -54,11 +54,12 @@ public class MainMenuActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-        new AppUpdateInitializer(this, sp, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL).checkForUpdate(true);
-
         // Do Authentication
         boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
-        if (!authagain) return;
+        if (!authagain) {
+            checkForUpdate();
+            return;
+        }
         if (CommonMethods.isGlobalLocked(sp)) startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
     }
 
@@ -78,10 +79,13 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_AUTH) {
-            if (resultCode == RESULT_CANCELED) {
-                finish();
-            }
+            if (resultCode == RESULT_CANCELED) finish();
+            else if (resultCode == RESULT_OK) checkForUpdate();
         }
+    }
+
+    private void checkForUpdate() {
+        new AppUpdateInitializer(this, sp, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL, true).checkForUpdate(true);
     }
 
     @Override
