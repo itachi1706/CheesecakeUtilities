@@ -69,6 +69,8 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     private String signature;
     private String version;
 
+    private static final int INSTALL_UNKNOWN = -99;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +103,6 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         }
 
         version = "Unknown";
-        final int INSTALL_UNKNOWN = -99;
         int versionCode = 0, installLocation = INSTALL_UNKNOWN;
         long firstInstall = 0, lastUpdate = 0;
         String[] requestedPermissions = null;
@@ -158,45 +159,8 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         appVersion.setText(getString(R.string.list_app_version, " ", version));
         icon.setImageDrawable(info.loadIcon(pm));
 
-        List<LabelledColumn> testList = new ArrayList<>();
-
-        testList.add(new LabelledColumn("Package Name", info.packageName));
-        testList.add(new LabelledColumn("Version Code", versionCode));
-        testList.add(new LabelledColumn("Target SDK", info.targetSdkVersion));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            testList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String insLoc;
-            switch (installLocation) {
-                case PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY: insLoc = "Internal Memory Only"; break;
-                case PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL: insLoc = "SD Card Preferred"; break;
-                case PackageInfo.INSTALL_LOCATION_AUTO: insLoc = "Auto"; break;
-                case INSTALL_UNKNOWN:
-                    default: insLoc = "Default (Auto)"; break;
-            }
-            testList.add(new LabelledColumn("Install Location", insLoc));
-        }
-        testList.add(new LabelledColumn("Signature",  signature));
-        testList.add(new LabelledColumn("Process", info.processName));
-        testList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
-        testList.add(new LabelledColumn("Installed On", generateDateFromLong(firstInstall)));
-        testList.add(new LabelledColumn("Updated On", generateDateFromLong(lastUpdate)));
-        File file = new File(info.sourceDir);
-        if (file.exists()) {
-            testList.add(new LabelledColumn("APK Size", humanReadableByteCount(file.length(), true)));
-        }
-        testList.add(new LabelledColumn("UID", info.uid));
-        creator.addView(generateDualColumn("Basic Information", testList));
-
-        testList.clear();
-        testList.add(new LabelledColumn("App Location", info.sourceDir));
-        testList.add(new LabelledColumn("Data Dir", info.dataDir));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            testList.add(new LabelledColumn("Device Protected Dir", info.deviceProtectedDataDir));
-        }
-        testList.add(new LabelledColumn("Library Dir", info.nativeLibraryDir));
-        creator.addView(generateDualColumn("File Information", testList));
+        creator.addView(generateDualColumn("Basic Information", getBasicInformation(lastUpdate, versionCode, firstInstall, installLocation)));
+        creator.addView(generateDualColumn("File Information", getFileLocation(info)));
 
         assert requestedPermissions != null;
         assert configurations != null;
@@ -246,6 +210,50 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         if (!serviceList.isEmpty()) creator.addView(generateSingleColumn("Services (" + serviceInfos.length + ")", serviceList));
         if (!providerList.isEmpty()) creator.addView(generateSingleColumn("Providers (" + providerInfos.length + ")", providerList));
         if (!receiverList.isEmpty()) creator.addView(generateSingleColumn("Receivers (" + receivers.length + ")", receiverList));
+    }
+
+    private List<LabelledColumn> getBasicInformation(long lastUpdate, int versionCode, long firstInstall, int installLocation) {
+        List<LabelledColumn> basicList = new ArrayList<>();
+
+        basicList.add(new LabelledColumn("Package Name", info.packageName));
+        basicList.add(new LabelledColumn("Version Code", versionCode));
+        basicList.add(new LabelledColumn("Target SDK", info.targetSdkVersion));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            basicList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String insLoc;
+            switch (installLocation) {
+                case PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY: insLoc = "Internal Memory Only"; break;
+                case PackageInfo.INSTALL_LOCATION_PREFER_EXTERNAL: insLoc = "SD Card Preferred"; break;
+                case PackageInfo.INSTALL_LOCATION_AUTO: insLoc = "Auto"; break;
+                case INSTALL_UNKNOWN:
+                default: insLoc = "Default (Auto)"; break;
+            }
+            basicList.add(new LabelledColumn("Install Location", insLoc));
+        }
+        basicList.add(new LabelledColumn("Signature",  signature));
+        basicList.add(new LabelledColumn("Process", info.processName));
+        basicList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
+        basicList.add(new LabelledColumn("Installed On", generateDateFromLong(firstInstall)));
+        basicList.add(new LabelledColumn("Updated On", generateDateFromLong(lastUpdate)));
+        File file = new File(info.sourceDir);
+        if (file.exists()) {
+            basicList.add(new LabelledColumn("APK Size", humanReadableByteCount(file.length(), true)));
+        }
+        basicList.add(new LabelledColumn("UID", info.uid));
+        return basicList;
+    }
+
+    private List<LabelledColumn> getFileLocation(ApplicationInfo info) {
+        List<LabelledColumn> fileList = new ArrayList<>();
+        fileList.add(new LabelledColumn("App Location", info.sourceDir));
+        fileList.add(new LabelledColumn("Data Dir", info.dataDir));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            fileList.add(new LabelledColumn("Device Protected Dir", info.deviceProtectedDataDir));
+        }
+        fileList.add(new LabelledColumn("Library Dir", info.nativeLibraryDir));
+        return fileList;
     }
 
     private String generateActivitiesList(ActivityInfo[] activities) {
