@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
+import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
@@ -160,7 +161,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         icon.setImageDrawable(info.loadIcon(pm));
 
         creator.addView(generateDualColumn("Basic Information", getBasicInformation(lastUpdate, versionCode, firstInstall, installLocation)));
-        creator.addView(generateDualColumn("File Information", getFileLocation(info)));
+        creator.addView(generateDualColumn("File Information", getFileLocation()));
 
         assert requestedPermissions != null;
         assert configurations != null;
@@ -235,6 +236,18 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         basicList.add(new LabelledColumn("Signature",  signature));
         basicList.add(new LabelledColumn("Process", info.processName));
         basicList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
+
+        String installFrom;
+        String installerPackageName = ValidationHelper.getInstallLocation(this, info.packageName);
+        switch (ValidationHelper.checkInstallLocation(this, info.packageName)) {
+            case ValidationHelper.GOOGLE_PLAY: installFrom = "Google Play (" + installerPackageName + ")"; break;
+            case ValidationHelper.AMAZON: installFrom = "Amazon App Store (" + installerPackageName + ")"; break;
+            case ValidationHelper.SIDELOAD:
+            default:
+                installFrom = "Package Installer";
+                if (installerPackageName != null) installFrom += " (" + installerPackageName + ")"; break;
+        }
+        basicList.add(new LabelledColumn("Installed From", installFrom));
         basicList.add(new LabelledColumn("Installed On", generateDateFromLong(firstInstall)));
         basicList.add(new LabelledColumn("Updated On", generateDateFromLong(lastUpdate)));
         File file = new File(info.sourceDir);
@@ -245,7 +258,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         return basicList;
     }
 
-    private List<LabelledColumn> getFileLocation(ApplicationInfo info) {
+    private List<LabelledColumn> getFileLocation() {
         List<LabelledColumn> fileList = new ArrayList<>();
         fileList.add(new LabelledColumn("App Location", info.sourceDir));
         fileList.add(new LabelledColumn("Data Dir", info.dataDir));
