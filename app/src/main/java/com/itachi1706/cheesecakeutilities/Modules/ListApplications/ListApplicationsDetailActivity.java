@@ -219,9 +219,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         basicList.add(new LabelledColumn("Package Name", info.packageName));
         basicList.add(new LabelledColumn("Version Code", versionCode));
         basicList.add(new LabelledColumn("Target SDK", info.targetSdkVersion));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            basicList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) basicList.add(new LabelledColumn("Min SDK", info.minSdkVersion));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String insLoc;
             switch (installLocation) {
@@ -236,15 +234,13 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         basicList.add(new LabelledColumn("Signature",  signature));
         basicList.add(new LabelledColumn("Process", info.processName));
         basicList.add(new LabelledColumn("Min Width (DP)", info.largestWidthLimitDp));
-
         String installFrom;
         String installerPackageName = ValidationHelper.getInstallLocation(this, info.packageName);
         switch (ValidationHelper.checkInstallLocation(this, info.packageName)) {
             case ValidationHelper.GOOGLE_PLAY: installFrom = "Google Play (" + installerPackageName + ")"; break;
             case ValidationHelper.AMAZON: installFrom = "Amazon App Store (" + installerPackageName + ")"; break;
             case ValidationHelper.SIDELOAD:
-            default:
-                installFrom = "Package Installer";
+            default: installFrom = "Package Installer";
                 if (installerPackageName != null) installFrom += " (" + installerPackageName + ")"; break;
         }
         basicList.add(new LabelledColumn("Installed From", installFrom));
