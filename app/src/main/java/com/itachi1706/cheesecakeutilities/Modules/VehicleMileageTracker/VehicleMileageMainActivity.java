@@ -78,8 +78,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             return;
         }
 
-        database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
+        database = FirebaseUtils.getFirebaseDatabase();
         userdata = database.getReference().child("users").child(user_id);
         // Listen to changes and update accordingly
         userdata.child("records").addValueEventListener(new ValueEventListener() {
