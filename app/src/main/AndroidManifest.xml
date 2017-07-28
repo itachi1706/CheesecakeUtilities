@@ -69,9 +69,10 @@
             android:exported="true"
             tools:ignore="InnerclassSeparator" />
 
-        <activity android:name=".CameraDisablerActivity"
+        <activity
+            android:name=".CameraDisablerActivity"
             android:exported="true"
-            android:label="Disable Camera"/>
+            android:label="Disable Camera" />
 
         <receiver
             android:name=".CameraDisablerActivity$DeviceAdminReceiver"
@@ -141,7 +142,9 @@
         <activity
             android:name=".Features.FingerprintAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Modules.SystemInformation.InitActivity" android:exported="true" />
+        <activity
+            android:name=".Modules.SystemInformation.InitActivity"
+            android:exported="true" />
         <activity
             android:name=".Modules.SystemInformation.ParentFragmentActivity"
             android:label="System Information"
@@ -203,7 +206,9 @@
             android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
             android:exported="true"
             android:label="Chrome T-Rex Game" />
-        <activity android:name=".LaunchTileSettingsActivity" android:exported="true" />
+        <activity
+            android:name=".LaunchTileSettingsActivity"
+            android:exported="true" />
         <activity
             android:name=".Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity"
             android:exported="true"
@@ -222,12 +227,17 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <activity android:name=".CreateShortcuts">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
+            android:label="@string/title_activity_vehicle_mileage_tracker_login" />
     </application>
 
 </manifest>
