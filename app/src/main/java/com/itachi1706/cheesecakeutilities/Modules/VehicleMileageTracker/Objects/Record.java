@@ -10,68 +10,76 @@ import java.util.List;
 
 public class Record {
 
-        private Long datetime;
-        private Double mileageFrom, mileageTo;
-        private String destination, purpose, vehicleNumber;
-        private Boolean trainingMileage;
+    private Long datetimeFrom, dateTimeTo;
+    private Double mileageFrom, mileageTo;
+    private String destination, purpose, vehicleNumber;
+    private Boolean trainingMileage;
 
-        public Record() {
+    public Record() {
 
-        }
+    }
 
-        public Long getDatetime() {
-            return datetime;
-        }
+    public Long getDatetimeFrom() {
+        return datetimeFrom;
+    }
 
-        public void setDatetime(Long datetime) {
-            this.datetime = datetime;
-        }
+    public void setDatetimeFrom(Long datetimeFrom) {
+        this.datetimeFrom = datetimeFrom;
+    }
 
-        public Double getMileageFrom() {
-            return mileageFrom;
-        }
+    public Long getDateTimeTo() {
+        return dateTimeTo;
+    }
 
-        public void setMileageFrom(Double mileageFrom) {
-            this.mileageFrom = mileageFrom;
-        }
+    public void setDateTimeTo(Long dateTimeTo) {
+        this.dateTimeTo = dateTimeTo;
+    }
 
-        public Double getMileageTo() {
-            return mileageTo;
-        }
+    public Double getMileageFrom() {
+        return mileageFrom;
+    }
 
-        public void setMileageTo(Double mileageTo) {
-            this.mileageTo = mileageTo;
-        }
+    public void setMileageFrom(Double mileageFrom) {
+        this.mileageFrom = mileageFrom;
+    }
 
-        public String getDestination() {
-            return destination;
-        }
+    public Double getMileageTo() {
+        return mileageTo;
+    }
 
-        public void setDestination(String destination) {
-            this.destination = destination;
-        }
+    public void setMileageTo(Double mileageTo) {
+        this.mileageTo = mileageTo;
+    }
 
-        public String getPurpose() {
-            return purpose;
-        }
+    public String getDestination() {
+        return destination;
+    }
 
-        public void setPurpose(String purpose) {
-            this.purpose = purpose;
-        }
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
 
-        public String getVehicleNumber() {
-            return vehicleNumber;
-        }
+    public String getPurpose() {
+        return purpose;
+    }
 
-        public void setVehicleNumber(String vehicleNumber) {
-            this.vehicleNumber = vehicleNumber;
-        }
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
 
-        public Boolean getTrainingMileage() {
-            return trainingMileage;
-        }
+    public String getVehicleNumber() {
+        return vehicleNumber;
+    }
 
-        public void setTrainingMileage(Boolean trainingMileage) {
-            this.trainingMileage = trainingMileage;
-        }
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
+
+    public Boolean getTrainingMileage() {
+        return trainingMileage;
+    }
+
+    public void setTrainingMileage(Boolean trainingMileage) {
+        this.trainingMileage = trainingMileage;
+    }
 }

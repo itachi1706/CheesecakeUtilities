@@ -11,9 +11,10 @@
     tools:context=".Modules.VehicleMileageTracker.AddNewVehicleActivity">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/veh_mileage_add_veh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

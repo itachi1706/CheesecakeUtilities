@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
@@ -33,15 +37,25 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
     private EditText locationTo, purpose, vehicleNumber, mileageBefore, mileageAfter, timeFrom, timeTo;
     private Spinner vehicle, classType;
-    private Button addRecord;
     private CheckBox trainingMileage;
+    private LinearLayout layout;
 
     private FirebaseDatabase database;
+
+    private long fromTimeVal = 0, toTimeVal = 0;
+    private String user_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_mileage_record);
+
+        if (!getIntent().hasExtra("uid")) {
+            Toast.makeText(this, "Accessed activity without User ID, exiting...", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        user_id = getIntent().getStringExtra("uid");
 
         // Init objects
         locationTo = (EditText) findViewById(R.id.veh_mileage_add_location);
@@ -53,8 +67,9 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         timeTo = (EditText) findViewById(R.id.veh_mileage_add_to_datetime);
         vehicle = (Spinner) findViewById(R.id.spinnerVeh);
         classType = (Spinner) findViewById(R.id.spinnerVehType);
-        addRecord = (Button) findViewById(R.id.veh_mileage_add_veh);
+        Button addRecord = (Button) findViewById(R.id.veh_mileage_add_veh);
         trainingMileage = (CheckBox) findViewById(R.id.cbTraining);
+        layout = (LinearLayout) findViewById(R.id.veh_mileage_add_veh_layout);
         database = FirebaseUtils.getFirebaseDatabase();
 
         // Init Spinner
@@ -92,9 +107,45 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
                 setToDate();
             }
         });
+        addRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addRecordToFirebase();
+            }
+        });
     }
 
-    private long fromTimeVal = 0, toTimeVal = 0;
+    private void addRecordToFirebase() {
+        if (!validate()) {
+            Snackbar.make(layout, "Please fill up all of the fields and ensure that they are correct", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        Record r = new Record();
+        r.setDatetimeFrom(fromTimeVal);
+        r.setDateTimeTo(toTimeVal);
+        r.setMileageFrom(Double.parseDouble(mileageBefore.getText().toString()));
+        r.setMileageTo(Double.parseDouble(mileageAfter.getText().toString()));
+        r.setDestination(locationTo.getText().toString());
+        r.setPurpose(purpose.getText().toString());
+        r.setVehicleNumber(vehicleNumber.getText().toString());
+        r.setTrainingMileage(trainingMileage.isChecked());
+
+        DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
+        newRec.setValue(r);
+        Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    private boolean validate() {
+        return !(fromTimeVal != 0 && toTimeVal != 0 && fromTimeVal > toTimeVal)
+                && !locationTo.getText().toString().isEmpty()
+                && !purpose.getText().toString().isEmpty()
+                && !vehicleNumber.getText().toString().isEmpty()
+                && !mileageAfter.getText().toString().isEmpty()
+                && !mileageBefore.getText().toString().isEmpty()
+                && fromTimeVal != 0 && toTimeVal != 0 && vehicle.getSelectedItem() != null;
+    }
 
     private void setFromDate() {
         Calendar cal = Calendar.getInstance();

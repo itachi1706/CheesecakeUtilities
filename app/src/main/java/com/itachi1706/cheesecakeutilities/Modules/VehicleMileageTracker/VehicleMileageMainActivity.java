@@ -46,10 +46,26 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             }
         });
 
+        // Do Firebase Setup
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        final String user_id = sp.getString("firebase_uid", "nien");
+        if (user_id.equalsIgnoreCase("nien")) {
+            // Fail, return to login activity
+            Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, VehicleMileageTrackerLoginActivity.class));
+            finish();
+            return;
+        }
+
+        database = FirebaseUtils.getFirebaseDatabase();
+        userdata = database.getReference().child("users").child(user_id);
+
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), AddNewMileageRecordActivity.class));
+                Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
+                i.putExtra("uid", user_id);
+                startActivity(i);
             }
         });
 
@@ -66,19 +82,6 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
         }
 
-        // Do Firebase Setup
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String user_id = sp.getString("firebase_uid", "nien");
-        if (user_id.equalsIgnoreCase("nien")) {
-            // Fail, return to login activity
-            Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, VehicleMileageTrackerLoginActivity.class));
-            finish();
-            return;
-        }
-
-        database = FirebaseUtils.getFirebaseDatabase();
-        userdata = database.getReference().child("users").child(user_id);
         // Listen to changes and update accordingly
         userdata.child("records").addValueEventListener(new ValueEventListener() {
             @Override
