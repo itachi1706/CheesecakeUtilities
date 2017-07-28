@@ -8,23 +8,7 @@ import java.util.List;
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects in CheesecakeUtilities
  */
 
-public class Records {
-
-    private List<Record> records;
-
-    public Records() {
-
-    }
-
-    public List<Record> getRecords() {
-        return records;
-    }
-
-    public void setRecords(ArrayList<Record> records) {
-        this.records = records;
-    }
-
-    private class Record {
+public class Record {
 
         private Long datetime;
         private Double mileageFrom, mileageTo;
@@ -90,5 +74,4 @@ public class Records {
         public void setTrainingMileage(Boolean trainingMileage) {
             this.trainingMileage = trainingMileage;
         }
-    }
 }

@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Records;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
@@ -83,7 +83,9 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
         userdata.child("records").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Records recList = dataSnapshot.getValue(Records.class);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Record recList = ds.getValue(Record.class);
+                }
                 // TODO: Update Recycler
             }
 
