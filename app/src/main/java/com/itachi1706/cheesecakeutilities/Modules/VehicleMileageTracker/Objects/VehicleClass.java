@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -22,6 +23,14 @@ public class VehicleClass {
         return null;
     }
 
+    public static VehClass getClassTypeWithName(String className) {
+        if (vehClassList == null) init();
+        for (VehClass v : vehClassList) {
+            if (v.getFullname().equalsIgnoreCase(className)) return v;
+        }
+        return null;
+    }
+
     public static List<VehClass> getVehClassList() {
         if (vehClassList == null) init();
         return vehClassList;
@@ -36,7 +45,7 @@ public class VehicleClass {
         vehClassList.add(new VehClass("class5", "Class 5"));
     }
 
-    private static class VehClass {
+    public static class VehClass {
         private String id, fullname;
 
         VehClass(String id, String fullname) {
@@ -44,6 +53,7 @@ public class VehicleClass {
             this.fullname = fullname;
         }
 
+        @NonNull
         public String getId() {
             return id;
         }
