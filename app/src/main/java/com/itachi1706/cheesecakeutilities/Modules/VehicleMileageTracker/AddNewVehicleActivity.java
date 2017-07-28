@@ -55,7 +55,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         v.setShortname(name.getText().toString());
         v.setVehicleClass(classV.getId());
 
-        FirebaseDatabase.getInstance().getReference().child("vehicles").child(v.getVehicleClass()).child(nameNoSpace).setValue(v);
+        FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").child(v.getVehicleClass()).child(nameNoSpace).setValue(v);
         Toast.makeText(this, "Vehicle Added", Toast.LENGTH_SHORT).show();
         finish();
     }
