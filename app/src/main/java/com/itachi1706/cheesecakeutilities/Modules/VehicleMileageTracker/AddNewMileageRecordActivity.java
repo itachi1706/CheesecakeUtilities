@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -28,6 +29,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     private EditText locationTo, purpose, vehicleNumber, mileageBefore, mileageAfter, timeFrom, timeTo;
     private Spinner vehicle, classType;
     private Button addRecord;
+    private CheckBox trainingMileage;
 
     private FirebaseDatabase database;
 
@@ -47,6 +49,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         vehicle = (Spinner) findViewById(R.id.spinnerVeh);
         classType = (Spinner) findViewById(R.id.spinnerVehType);
         addRecord = (Button) findViewById(R.id.veh_mileage_add_veh);
+        trainingMileage = (CheckBox) findViewById(R.id.cbTraining);
         database = FirebaseUtils.getFirebaseDatabase();
 
         // Init Spinner
