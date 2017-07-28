@@ -118,6 +118,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:11.0.4' // Vehicle Mileage Tracker
     compile 'com.google.firebase:firebase-auth:11.0.4' // Vehicle Mileage Tracker
     compile 'com.getbase:floatingactionbutton:1.10.1' // Vehicle Mileage Tracker
+    compile 'com.wdullaer:materialdatetimepicker:3.2.2' // Vehicle Mileage Tracker
     testCompile 'junit:junit:4.12'
 }
 
