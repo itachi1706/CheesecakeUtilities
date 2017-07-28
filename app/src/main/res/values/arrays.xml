@@ -53,6 +53,13 @@
         <item>C</item>
         <item>E</item>
     </string-array>
+    <string-array name="veh_class">
+        <item>Class 2</item>
+        <item>Class 3/3A</item>
+        <item>Class 4</item>
+        <item>Class 4A</item>
+        <item>Class 5</item>
+    </string-array>
     <string-array name="ippt_gender">
         <item>Male</item>
         <item>Female</item>

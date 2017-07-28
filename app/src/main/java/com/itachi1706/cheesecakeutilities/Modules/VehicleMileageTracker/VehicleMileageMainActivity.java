@@ -42,8 +42,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
         car.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Code Stub for Adding Vehicle Type
-                Toast.makeText(v.getContext(), "Car", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class));
             }
         });
 
@@ -80,6 +79,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
         }
 
         database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(true);
         userdata = database.getReference().child("users").child(user_id);
         // Listen to changes and update accordingly
         userdata.child("records").addValueEventListener(new ValueEventListener() {
