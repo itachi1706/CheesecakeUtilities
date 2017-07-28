@@ -49,8 +49,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Code Stub for Adding new Record
-                Toast.makeText(v.getContext(), "Record", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(v.getContext(), AddNewMileageRecordActivity.class));
             }
         });
 
@@ -90,7 +89,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                Log.w(TAG, "loadRecords:onCancelled", databaseError.toException());
             }
         });
     }

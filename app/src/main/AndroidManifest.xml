@@ -238,10 +238,14 @@
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
             android:label="@string/title_activity_vehicle_mileage_tracker_login" />
-        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity"
+        <activity
+            android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
-        <activity android:name=".Modules.VehicleMileageTracker.AddNewVehicleActivity"
+        <activity
+            android:name=".Modules.VehicleMileageTracker.AddNewVehicleActivity"
             android:label="Add a new Vehicle" />
+        <activity android:name=".Modules.VehicleMileageTracker.AddNewMileageRecordActivity"
+            android:label="Add a new Mileage Record"/>
     </application>
 
 </manifest>
