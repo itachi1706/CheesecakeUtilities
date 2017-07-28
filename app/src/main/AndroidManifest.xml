@@ -238,6 +238,7 @@
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
             android:label="@string/title_activity_vehicle_mileage_tracker_login" />
+        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity" />
     </application>
 
 </manifest>

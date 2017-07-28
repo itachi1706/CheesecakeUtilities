@@ -136,7 +136,7 @@ public class VehicleMileageTrackerLoginActivity extends AppCompatActivity implem
             // There's a user
             Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
             sp.edit().putString("firebase_uid", user.getUid()).apply();
-            startActivity(new Intent(this, VehicleMileageMainActivty.class));
+            startActivity(new Intent(this, VehicleMileageMainActivity.class));
             finish();
         } else {
             Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show();
