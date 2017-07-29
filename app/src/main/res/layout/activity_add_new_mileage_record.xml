@@ -50,6 +50,7 @@
                 android:id="@+id/veh_mileage_add_veh_num"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:maxLength="12"
                 android:hint="Vehicle Number"
                 android:inputType="textCapCharacters|textNoSuggestions" />
         </android.support.design.widget.TextInputLayout>
