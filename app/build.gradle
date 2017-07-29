@@ -48,21 +48,29 @@ android {
     def propFile = file('key.properties')
     //check if SAFETY_NET_DEVICE_VERIFICATION_API_KEY is defined in gradle.properties (this is so the key is not in github)
     String GOOGLE_VERIFICATION_API_KEY = "";
+    String GOOGLE_ID = "";
     if (propFile.canRead()) {
         props.load(new FileInputStream(propFile))
-        if (props != null && props.containsKey('key.safetynet')) {
-            GOOGLE_VERIFICATION_API_KEY = props.getProperty('key.safetynet')
+        if (props != null) {
+            if (props.containsKey('key.safetynet')) {
+                GOOGLE_VERIFICATION_API_KEY = props.getProperty('key.safetynet')
+            }
+            if (props.containsKey('key.googleid')) {
+                GOOGLE_ID = props.getProperty('key.googleid')
+            }
         }
     }
     buildTypes {
         release {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
+            buildConfigField("String", "GOOGLE_ID", "\"" + GOOGLE_ID + "\"")
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
+            buildConfigField("String", "GOOGLE_ID", "\"" + GOOGLE_ID + "\"")
             // Disable Fabric Stuff
             ext.enableCrashlytics = false
         }
@@ -93,12 +101,13 @@ dependencies {
         transitive = true;
     }
     compile project(':appupdater')
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.google.firebase:firebase-crash:10.2.6'
-    compile 'com.google.firebase:firebase-core:10.2.6'
-    compile 'com.google.firebase:firebase-config:10.2.6'
-    compile 'com.google.firebase:firebase-perf:10.2.6'
+    compile 'com.google.firebase:firebase-crash:11.0.4'
+    compile 'com.google.firebase:firebase-core:11.0.4'
+    compile 'com.google.firebase:firebase-config:11.0.4'
+    compile 'com.google.firebase:firebase-perf:11.0.4'
     compile 'commons-io:commons-io:2.5'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.google.code.gson:gson:2.8.0'
@@ -112,7 +121,11 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.4' // Application List Utility
     compile 'com.github.turing-tech:MaterialScrollBar:12.3.5' // Application List Utility
     compile 'com.github.scottyab:safetynethelper:0.3.0' // SafetyNet Validator
-    compile 'com.google.android.gms:play-services-safetynet:10.2.6' // SafetyNet Validator
+    compile 'com.google.android.gms:play-services-safetynet:11.0.4' // SafetyNet Validator
+    compile 'com.google.android.gms:play-services-auth:11.0.4' // Vehicle Mileage Tracker
+    compile 'com.google.firebase:firebase-database:11.0.4' // Vehicle Mileage Tracker
+    compile 'com.google.firebase:firebase-auth:11.0.4' // Vehicle Mileage Tracker
+    compile 'com.getbase:floatingactionbutton:1.10.1' // Vehicle Mileage Tracker
     testCompile 'junit:junit:4.12'
 }
 

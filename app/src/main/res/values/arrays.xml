@@ -11,6 +11,7 @@
         <item>ORD Countdown</item>
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
+        <item>Vehicle Mileage Tracker</item>
         <item>System Information</item>
         <item>Unicode Emoticons</item>
         <item>Navigation Bar Customizer</item>
@@ -29,6 +30,7 @@
         <item>.Modules.ORDCountdown.ORDActivity</item>
         <item>.BmiCalculatorActivity</item>
         <item>.Modules.IPPTCalculator.IpptCalculatorActivity</item>
+        <item>.Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity</item>
         <item>.Modules.SystemInformation.InitActivity</item>
         <item>.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
@@ -50,6 +52,13 @@
         <item>BP</item>
         <item>C</item>
         <item>E</item>
+    </string-array>
+    <string-array name="veh_class">
+        <item>Class 2</item>
+        <item>Class 3/3A</item>
+        <item>Class 4</item>
+        <item>Class 4A</item>
+        <item>Class 5</item>
     </string-array>
     <string-array name="ippt_gender">
         <item>Male</item>
