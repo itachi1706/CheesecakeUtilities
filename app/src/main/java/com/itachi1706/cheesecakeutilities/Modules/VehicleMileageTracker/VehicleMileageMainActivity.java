@@ -87,7 +87,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), null);
+            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), new ArrayList<String>(), null);
             recyclerView.setAdapter(adapter);
         }
 
@@ -97,6 +97,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "Records has been updated. Processing...");
                 final List<Record> records = new ArrayList<>();
+                final List<String> tags = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
                     // Update records
@@ -107,13 +108,15 @@ public class VehicleMileageMainActivity extends BaseActivity {
                         userdata.child("records").child(ds.getKey()).setValue(recList);
                     }
                     records.add(recList);
+                    tags.add(ds.getKey());
                 }
                 Log.i(TAG, "Records: " + records.size());
                 Collections.reverse(records);
+                Collections.reverse(tags);
                 FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        adapter.updateRecords(records);
+                        adapter.updateRecords(records, tags);
                         adapter.updateSnapshot(dataSnapshot);
                         adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
                         adapter.notifyDataSetChanged();
