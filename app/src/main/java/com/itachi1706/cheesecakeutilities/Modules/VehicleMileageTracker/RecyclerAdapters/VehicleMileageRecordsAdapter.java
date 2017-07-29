@@ -1,6 +1,9 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
@@ -27,17 +31,20 @@ import java.util.List;
  */
 public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMileageRecordsAdapter.VehicleMileageRecordsViewHolder> {
     private List<Record> recordsList, hidden;
+    private List<String> tags, hiddenTags;
     private DataSnapshot vehicles;
     private boolean hideTraining = false;
 
-    public VehicleMileageRecordsAdapter(List<Record> recordList, DataSnapshot vehicles)
+    public VehicleMileageRecordsAdapter(List<Record> recordList, List<String> tags, DataSnapshot vehicles)
     {
         this.recordsList = recordList;
+        this.tags = tags;
         this.vehicles = vehicles;
     }
 
-    public void updateRecords(List<Record> records) {
+    public void updateRecords(List<Record> records, List<String> tags) {
         this.recordsList = records;
+        this.tags = tags;
     }
 
     public void updateSnapshot(DataSnapshot vehicles) {
@@ -49,9 +56,13 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         if (this.hideTraining) {
             if (hidden == null) hidden = new ArrayList<>();
             hidden.clear();
-            for (Record r : recordsList) {
+            if (hiddenTags == null) hiddenTags = new ArrayList<>();
+            hiddenTags.clear();
+            for (int i = 0; i < recordsList.size(); i++) {
+                Record r = recordsList.get(i);
                 if (r.getTrainingMileage()) continue;
                 hidden.add(r);
+                hiddenTags.add(tags.get(i));
             }
         }
     }
@@ -68,6 +79,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         Record s;
         if (this.hideTraining) s = hidden.get(i);
         else s = recordsList.get(i);
+        recordsViewHolder.tag = (this.hideTraining) ? hiddenTags.get(i) : tags.get(i);
         recordsViewHolder.r = s;
         recordsViewHolder.location.setText(s.getDestination());
         recordsViewHolder.purpose.setText(s.getPurpose());
@@ -100,6 +112,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
         TextView location, purpose, vehicle, vehicleNumber, totalTimeDistance;
         int defaultTextColor;
+        String tag;
         Record r;
 
         VehicleMileageRecordsViewHolder(View v)
@@ -135,9 +148,29 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             message += "Mileage To: " + r.getMileageTo() + " km\n";
             message += "Total Mileage: " + r.getTotalMileage() + " km\n";
             message += "Training Mileage: " + ((r.getTrainingMileage()) ? "true" : "false") + "\n";
+            final View v1 = v;
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Mileage Record")
-                    .setMessage(message).setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                    .setMessage(message).setPositiveButton(R.string.dialog_action_positive_close, null)
+                    .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new AlertDialog.Builder(v1.getContext()).setTitle("Deleting Mileage Record")
+                                    .setMessage("Are you sure you want to delete this record? This cannot be reversed!" +
+                                            "\nID: " + tag)
+                            .setPositiveButton("Delete Anyway", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                                    FirebaseUtils.getFirebaseDatabase().getReference().child("users")
+                                            .child(sp.getString("firebase_uid", "nien")).child("records")
+                                            .child(tag).removeValue();
+                                    Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }).setNegativeButton("No", null).show();
+                        }
+                    }).show();
         }
     }
 }
