@@ -34,6 +34,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
 
     private DatabaseReference userdata;
     private VehicleMileageRecordsAdapter adapter;
+    private SharedPreferences sp;
 
 
     @Override
@@ -47,7 +48,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
         setContentView(R.layout.activity_vehicle_mileage_main_activty);
 
         // Do Firebase Setup
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
         final String user_id = sp.getString("firebase_uid", "nien");
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
@@ -114,6 +115,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         adapter.updateRecords(records);
                         adapter.updateSnapshot(dataSnapshot);
+                        adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
                         adapter.notifyDataSetChanged();
                     }
 
@@ -148,10 +150,13 @@ public class VehicleMileageMainActivity extends BaseActivity {
         return record;
     }
 
+    private static final String HIDE_TRAINING = "veh_mileage_hide_training";
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.modules_veh_mileage, menu);
+        menu.findItem(R.id.hide_training).setChecked(sp.getBoolean(HIDE_TRAINING, false));
         return true;
     }
 
@@ -164,6 +169,12 @@ public class VehicleMileageMainActivity extends BaseActivity {
                 startActivity(logoutIntent);
                 finish();
                 return true;
+            case R.id.hide_training:
+                item.setChecked(!item.isChecked());
+                if (item.isChecked()) sp.edit().putBoolean(HIDE_TRAINING, true).apply();
+                else sp.edit().putBoolean(HIDE_TRAINING, false).apply();
+                adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
+                adapter.notifyDataSetChanged();
             default: return super.onOptionsItemSelected(item);
         }
     }
