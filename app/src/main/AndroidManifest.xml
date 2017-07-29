@@ -237,7 +237,7 @@
         </activity>
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
-            android:label="@string/title_activity_vehicle_mileage_tracker_login" />
+            android:label="@string/title_activity_vehicle_mileage_tracker_login" android:exported="true" />
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />

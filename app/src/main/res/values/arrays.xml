@@ -11,13 +11,13 @@
         <item>ORD Countdown</item>
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
+        <item>Vehicle Mileage Tracker</item>
         <item>System Information</item>
         <item>Unicode Emoticons</item>
         <item>Navigation Bar Customizer</item>
         <item>SafetyNet Validator</item>
         <item>Quick Settings Tiles Configuration</item>
         <item>Connectivity Quiet Hours Configuration</item>
-        <item>Veh Mileage Tracker</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -30,13 +30,13 @@
         <item>.Modules.ORDCountdown.ORDActivity</item>
         <item>.BmiCalculatorActivity</item>
         <item>.Modules.IPPTCalculator.IpptCalculatorActivity</item>
+        <item>.Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity</item>
         <item>.Modules.SystemInformation.InitActivity</item>
         <item>.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
         <item>.Modules.SafetyNet.SafetyNetActivity</item>
         <item>.LaunchTileSettingsActivity</item>
         <item>.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity</item>
-        <item>.Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>

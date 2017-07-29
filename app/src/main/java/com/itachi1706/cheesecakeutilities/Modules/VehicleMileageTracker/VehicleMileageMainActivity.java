@@ -9,6 +9,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
@@ -26,13 +29,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class VehicleMileageMainActivity extends AppCompatActivity {
+public class VehicleMileageMainActivity extends BaseActivity {
 
     private static final String TAG = "VehMileageMain";
 
     private DatabaseReference userdata;
     private VehicleMileageRecordsAdapter adapter;
 
+
+    @Override
+    public String getHelpDescription() {
+        return "A utility to track vehicle mileage";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,9 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, VehicleMileageTrackerLoginActivity.class));
+            Intent logoutIntent = new Intent(this, VehicleMileageTrackerLoginActivity.class);
+            logoutIntent.putExtra("logout", true);
+            startActivity(logoutIntent);
             finish();
             return;
         }
@@ -137,5 +147,25 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             record.setVersion(1);
         }
         return record;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.modules_veh_mileage, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                Intent logoutIntent = new Intent(this, VehicleMileageTrackerLoginActivity.class);
+                logoutIntent.putExtra("logout", true);
+                startActivity(logoutIntent);
+                finish();
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 }
