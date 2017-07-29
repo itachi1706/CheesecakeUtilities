@@ -9,9 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,8 +25,8 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -138,6 +140,16 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private boolean validate() {
+        if (locationTo.getText().toString().isEmpty() || purpose.getText().toString().isEmpty()
+                || mileageAfter.getText().toString().isEmpty() || mileageBefore.getText().toString().isEmpty() || fromTimeVal == 0
+                || toTimeVal == 0) {
+            Snackbar.make(layout, "Please fill up all of the fields and ensure that they are correct", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (vehicle.getSelectedItem() == null) {
+            Snackbar.make(layout, "Please select a vehicle type or create a new vehicle type", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
         if (fromTimeVal != 0 && toTimeVal != 0 && fromTimeVal > toTimeVal) {
             Snackbar.make(layout, "End time cannot be after start time", Snackbar.LENGTH_SHORT).show();
             return false;
@@ -147,32 +159,19 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
             Snackbar.make(layout, "Mileage after trip cannot be smaller than the mileage before trip", Snackbar.LENGTH_SHORT).show();
             return false;
         }
-        if (locationTo.getText().toString().isEmpty() || purpose.getText().toString().isEmpty() || vehicle.getSelectedItem().toString().isEmpty()
-                || mileageAfter.getText().toString().isEmpty() || mileageBefore.getText().toString().isEmpty() || fromTimeVal == 0 || toTimeVal == 0) {
-            Snackbar.make(layout, "Please fill up all of the fields and ensure that they are correct", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-        if (vehicle.getSelectedItem() == null) {
-            Snackbar.make(layout, "Please select a vehicle type or create a new vehicle type", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
         return true;
     }
 
     private void setFromDate() {
         Calendar cal = Calendar.getInstance();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(new FromTimeDate(),
-                cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-        dpd.show(getFragmentManager(), "DatepickerdialogF");
-        dpd.dismissOnPause(true);
+        new DatePickerDialog(this, new FromTimeDate(), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void setFromTime() {
+        // Process first in case user cancel
+        processFromTime();
         Calendar cal = Calendar.getInstance();
-        TimePickerDialog tpd = TimePickerDialog.newInstance(new FromTimeDate(),
-                cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
-        tpd.show(getFragmentManager(), "TimepickerdialogF");
-        tpd.dismissOnPause(true);
+        new TimePickerDialog(this, new FromTimeDate(), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
     }
 
     private void processFromTime() {
@@ -186,7 +185,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     private class FromTimeDate implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
         @Override
-        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(fromTimeVal);
             c.set(Calendar.YEAR, year);
@@ -197,7 +196,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(fromTimeVal);
             c.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -209,18 +208,14 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
     private void setToDate() {
         Calendar cal = Calendar.getInstance();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(new ToTimeDate(),
-                cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-        dpd.show(getFragmentManager(), "DatepickerdialogT");
-        dpd.dismissOnPause(true);
+        new DatePickerDialog(this, new ToTimeDate(), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void setToTime() {
+        // Process first in case user cancel
+        processToTime();
         Calendar cal = Calendar.getInstance();
-        TimePickerDialog tpd = TimePickerDialog.newInstance(new ToTimeDate(),
-                cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
-        tpd.show(getFragmentManager(), "TimepickerdialogT");
-        tpd.dismissOnPause(true);
+        new TimePickerDialog(this, new ToTimeDate(), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
     }
 
     private void processToTime() {
@@ -234,7 +229,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     private class ToTimeDate implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
         @Override
-        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(toTimeVal);
             c.set(Calendar.YEAR, year);
@@ -245,7 +240,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(toTimeVal);
             c.set(Calendar.HOUR_OF_DAY, hourOfDay);
