@@ -20,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
 public class VehicleMileageMainActivity extends AppCompatActivity {
 
@@ -78,8 +77,8 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            StringRecyclerAdapter adapter = new StringRecyclerAdapter(new String[0]);
-            recyclerView.setAdapter(adapter);
+            /*StringRecyclerAdapter adapter = new StringRecyclerAdapter(new String[0]);
+            recyclerView.setAdapter(adapter);*/
         }
 
         // Listen to changes and update accordingly
@@ -88,6 +87,13 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
+                    // Update records
+                    assert recList != null;
+                    if (recList.getVersion() < FirebaseUtils.RECORDS_VERSION) {
+                        // Migrate records
+                        recList = migrateRecord(recList);
+                        userdata.child("records").child(ds.getKey()).setValue(recList);
+                    }
                 }
                 // TODO: Update Recycler
             }
@@ -97,5 +103,16 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
                 Log.w(TAG, "loadRecords:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    private Record migrateRecord(Record record) {
+        int oldV = record.getVersion();
+        if (oldV < 1) {
+            // Add Total Mileage and Total Time Taken
+            record.updateTotalTime();
+            record.updateMileage();
+            record.setVersion(1);
+        }
+        return record;
     }
 }

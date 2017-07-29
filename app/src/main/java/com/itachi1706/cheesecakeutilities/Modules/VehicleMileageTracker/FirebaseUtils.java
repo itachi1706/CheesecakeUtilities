@@ -11,6 +11,8 @@ public class FirebaseUtils {
 
     private static FirebaseDatabase firebaseDatabase;
 
+    public static final int RECORDS_VERSION = 1;
+
     public static FirebaseDatabase getFirebaseDatabase() {
         if (firebaseDatabase == null) {
             firebaseDatabase = FirebaseDatabase.getInstance();

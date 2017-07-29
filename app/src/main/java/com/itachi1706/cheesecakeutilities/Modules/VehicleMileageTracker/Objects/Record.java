@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,13 @@ public class Record {
     private Double mileageFrom, mileageTo;
     private String destination, purpose, vehicleNumber;
     private Boolean trainingMileage;
+
+    // Calculated fields
+    private Double totalMileage;
+    private Long totalTimeInMs;
+
+    // Version Number
+    private int version = -1;
 
     public Record() {
 
@@ -81,5 +90,40 @@ public class Record {
 
     public void setTrainingMileage(Boolean trainingMileage) {
         this.trainingMileage = trainingMileage;
+    }
+
+    public Double getTotalMileage() {
+        return totalMileage;
+    }
+
+    public void setTotalMileage(Double totalMileage) {
+        this.totalMileage = totalMileage;
+    }
+
+    public Boolean updateMileage() {
+        this.totalMileage = this.mileageTo - this.mileageFrom;
+        return true;
+    }
+
+    public Boolean updateTotalTime() {
+        this.totalTimeInMs = this.dateTimeTo - this.datetimeFrom;
+        return true;
+    }
+
+    public Long getTotalTimeInMs() {
+        return totalTimeInMs;
+    }
+
+    public void setTotalTimeInMs(Long totalTimeInMs) {
+        this.totalTimeInMs = totalTimeInMs;
+    }
+
+    @NonNull
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
