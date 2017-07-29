@@ -32,8 +32,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
 
@@ -46,6 +47,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
     private long fromTimeVal = 0, toTimeVal = 0;
     private String user_id = "";
+    private Map<String, Vehicle> vehicleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +131,8 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.setPurpose(purpose.getText().toString());
         r.setVehicleNumber(vehicleNumber.getText().toString());
         r.setTrainingMileage(trainingMileage.isChecked());
+        r.setVehicleId(getVehicleKey(vehicle.getSelectedItem().toString()));
+        r.setVehicleClass(getVehicleClass(vehicle.getSelectedItem().toString()));
         r.updateMileage();
         r.updateTotalTime();
         r.setVersion(FirebaseUtils.RECORDS_VERSION);
@@ -137,6 +141,24 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         newRec.setValue(r);
         Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    private String getVehicleKey(String vehicleName) {
+        for (Map.Entry<String, Vehicle> k : vehicleList.entrySet()) {
+            if (k.getValue().getName().equals(vehicleName)) {
+                return k.getKey();
+            }
+        }
+        return "";
+    }
+
+    private String getVehicleClass(String vehicleName) {
+        for (Map.Entry<String, Vehicle> k : vehicleList.entrySet()) {
+            if (k.getValue().getName().equals(vehicleName)) {
+                return k.getValue().getVehicleClass();
+            }
+        }
+        return "class3";
     }
 
     private boolean validate() {
@@ -254,14 +276,17 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         vehicles.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> vehicleList = new ArrayList<>();
+                ArrayList<String> vL = new ArrayList<>();
+                if (vehicleList == null) vehicleList = new HashMap<>();
+                else vehicleList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Vehicle v = ds.getValue(Vehicle.class);
                     assert v != null;
-                    vehicleList.add(v.getName());
+                    vehicleList.put(ds.getKey(), v);
+                    vL.add(v.getName());
                 }
                 ArrayAdapter<String> adapter =
-                        new ArrayAdapter<>(AddNewMileageRecordActivity.this, android.R.layout.simple_spinner_dropdown_item, vehicleList);
+                        new ArrayAdapter<>(AddNewMileageRecordActivity.this, android.R.layout.simple_spinner_dropdown_item, vL);
                 vehicle.setAdapter(adapter);
             }
 
