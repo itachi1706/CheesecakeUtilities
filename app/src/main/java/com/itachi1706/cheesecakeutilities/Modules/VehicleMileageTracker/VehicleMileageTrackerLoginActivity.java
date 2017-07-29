@@ -72,7 +72,6 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
             }
         });
 
-        // TODO: Remove hardcoded ID
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(BuildConfig.GOOGLE_ID)
                 .requestEmail().build();
