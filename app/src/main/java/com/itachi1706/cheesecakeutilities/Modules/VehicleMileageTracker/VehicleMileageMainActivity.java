@@ -23,6 +23,7 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Recycler
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class VehicleMileageMainActivity extends AppCompatActivity {
@@ -98,6 +99,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
                     records.add(recList);
                 }
                 Log.i(TAG, "Records: " + records.size());
+                Collections.reverse(records);
                 FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
