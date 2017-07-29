@@ -12,38 +12,31 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VehicleMileageMainActivity extends AppCompatActivity {
 
-    private FloatingActionButton car, record;
-    private RecyclerView recyclerView;
     private static final String TAG = "VehMileageMain";
 
-    private FirebaseDatabase database;
     private DatabaseReference userdata;
+    private VehicleMileageRecordsAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_mileage_main_activty);
-
-        car = (FloatingActionButton) findViewById(R.id.veh_mileage_fab_car);
-        record = (FloatingActionButton) findViewById(R.id.veh_mileage_fab_record);
-        car.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class));
-            }
-        });
 
         // Do Firebase Setup
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -56,10 +49,16 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             return;
         }
 
-        database = FirebaseUtils.getFirebaseDatabase();
+        final FirebaseDatabase database = FirebaseUtils.getFirebaseDatabase();
         userdata = database.getReference().child("users").child(user_id);
 
-        record.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.veh_mileage_fab_car).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class));
+            }
+        });
+        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
@@ -68,7 +67,7 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.veh_mileage_main_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.veh_mileage_main_list);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -77,14 +76,16 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            /*StringRecyclerAdapter adapter = new StringRecyclerAdapter(new String[0]);
-            recyclerView.setAdapter(adapter);*/
+            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), null);
+            recyclerView.setAdapter(adapter);
         }
 
         // Listen to changes and update accordingly
         userdata.child("records").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "Records has been updated. Processing...");
+                final List<Record> records = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
                     // Update records
@@ -94,8 +95,22 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
                         recList = migrateRecord(recList);
                         userdata.child("records").child(ds.getKey()).setValue(recList);
                     }
+                    records.add(recList);
                 }
-                // TODO: Update Recycler
+                Log.i(TAG, "Records: " + records.size());
+                FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        adapter.updateRecords(records);
+                        adapter.updateSnapshot(dataSnapshot);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("VehMileageAdapter", "loadVehicles:onCancelled", databaseError.toException());
+                    }
+                });
             }
 
             @Override
@@ -103,6 +118,12 @@ public class VehicleMileageMainActivity extends AppCompatActivity {
                 Log.w(TAG, "loadRecords:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((FloatingActionsMenu)findViewById(R.id.veh_mileage_fab)).collapseImmediately();
     }
 
     private Record migrateRecord(Record record) {

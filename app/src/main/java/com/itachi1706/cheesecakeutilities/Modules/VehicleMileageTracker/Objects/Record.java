@@ -1,10 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects;
 
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Kenneth on 28/7/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects in CheesecakeUtilities
@@ -96,16 +91,17 @@ public class Record {
         return totalMileage;
     }
 
-    public void setTotalMileage(Double totalMileage) {
+    private void setTotalMileage(Double totalMileage) {
         this.totalMileage = totalMileage;
     }
 
     public Boolean updateMileage() {
-        this.totalMileage = this.mileageTo - this.mileageFrom;
+        this.setTotalMileage(this.mileageTo - this.mileageFrom);
         return true;
     }
 
     public Boolean updateTotalTime() {
+        this.setTotalTimeInMs(this.dateTimeTo - this.datetimeFrom);
         this.totalTimeInMs = this.dateTimeTo - this.datetimeFrom;
         return true;
     }
@@ -114,11 +110,10 @@ public class Record {
         return totalTimeInMs;
     }
 
-    public void setTotalTimeInMs(Long totalTimeInMs) {
+    private void setTotalTimeInMs(Long totalTimeInMs) {
         this.totalTimeInMs = totalTimeInMs;
     }
 
-    @NonNull
     public int getVersion() {
         return version;
     }

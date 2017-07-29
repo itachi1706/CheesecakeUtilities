@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.R;
@@ -31,20 +27,18 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     private List<Record> recordsList;
     private DataSnapshot vehicles;
 
-    public VehicleMileageRecordsAdapter(List<Record> recordList)
+    public VehicleMileageRecordsAdapter(List<Record> recordList, DataSnapshot vehicles)
     {
         this.recordsList = recordList;
-        FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                vehicles = dataSnapshot;
-            }
+        this.vehicles = vehicles;
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("VehMileageAdapter", "loadVehicles:onCancelled", databaseError.toException());
-            }
-        });
+    public void updateRecords(List<Record> records) {
+        this.recordsList = records;
+    }
+
+    public void updateSnapshot(DataSnapshot vehicles) {
+        this.vehicles = vehicles;
     }
 
     @Override
