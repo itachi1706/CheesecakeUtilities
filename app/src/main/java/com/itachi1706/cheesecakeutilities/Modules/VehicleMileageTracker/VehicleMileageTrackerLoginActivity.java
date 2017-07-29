@@ -28,13 +28,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 /**
  * Created by Kenneth on 28/7/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker in CheesecakeUtilities
  */
-public class VehicleMileageTrackerLoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class VehicleMileageTrackerLoginActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private ProgressBar progress;
     private static final String TAG = "VehicleMileageLogin";
@@ -44,6 +45,12 @@ public class VehicleMileageTrackerLoginActivity extends AppCompatActivity implem
     private SharedPreferences sp;
 
     private static final int RC_SIGN_IN = 9001;
+
+    @Override
+    public String getHelpDescription() {
+        return "An utility to track vehicle mileage\n\nNote: This is the login screen where you have " +
+                "to login with a Google Account to continue as your mileage records will be saved based on your Google Account";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +81,9 @@ public class VehicleMileageTrackerLoginActivity extends AppCompatActivity implem
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 
         mAuth = FirebaseAuth.getInstance();
+        if (getIntent().hasExtra("logout") && getIntent().getBooleanExtra("logout", false)) {
+            mAuth.signOut();
+        }
     }
 
     @Override
