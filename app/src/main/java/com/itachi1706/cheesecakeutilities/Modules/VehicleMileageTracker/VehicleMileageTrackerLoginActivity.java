@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 
 /**
@@ -74,7 +74,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
 
         // TODO: Remove hardcoded ID
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("130875055469-0tnjhvd4029eau28up77h33kerk9adgm.apps.googleusercontent.com")
+                .requestIdToken(BuildConfig.GOOGLE_ID)
                 .requestEmail().build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this)
