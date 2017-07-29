@@ -18,6 +18,7 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +26,9 @@ import java.util.List;
  * For com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters in Cheesecake Utilities.
  */
 public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMileageRecordsAdapter.VehicleMileageRecordsViewHolder> {
-    private List<Record> recordsList;
+    private List<Record> recordsList, hidden;
     private DataSnapshot vehicles;
+    private boolean hideTraining = false;
 
     public VehicleMileageRecordsAdapter(List<Record> recordList, DataSnapshot vehicles)
     {
@@ -42,16 +44,30 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         this.vehicles = vehicles;
     }
 
+    public void setHideTraining(boolean hide) {
+        this.hideTraining = hide;
+        if (this.hideTraining) {
+            if (hidden == null) hidden = new ArrayList<>();
+            hidden.clear();
+            for (Record r : recordsList) {
+                if (r.getTrainingMileage()) continue;
+                hidden.add(r);
+            }
+        }
+    }
+
     @Override
     public int getItemCount()
     {
-        return recordsList.size();
+        return (this.hideTraining) ? hidden.size() : recordsList.size();
     }
 
     @Override
     public void onBindViewHolder(VehicleMileageRecordsViewHolder recordsViewHolder, int i)
     {
-        Record s = recordsList.get(i);
+        Record s;
+        if (this.hideTraining) s = hidden.get(i);
+        else s = recordsList.get(i);
         recordsViewHolder.r = s;
         recordsViewHolder.location.setText(s.getDestination());
         recordsViewHolder.purpose.setText(s.getPurpose());
