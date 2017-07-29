@@ -83,11 +83,15 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         recordsViewHolder.r = s;
         recordsViewHolder.location.setText(s.getDestination());
         recordsViewHolder.purpose.setText(s.getPurpose());
-        if (s.getVehicleId().isEmpty()) recordsViewHolder.vehicle.setText("Unknown Vehicle");
+        if (s.getVehicleId().isEmpty()) {
+            recordsViewHolder.vehicle.setText("Unknown Vehicle");
+            recordsViewHolder.fullVehicleName = "Unknown Vehicle";
+        }
         else {
             Vehicle v = vehicles.child(s.getVehicleClass()).child(s.getVehicleId()).getValue(Vehicle.class);
             if (v == null) recordsViewHolder.vehicle.setText("Unknown Vehicle");
-            else recordsViewHolder.vehicle.setText(v.getName());
+            else recordsViewHolder.vehicle.setText(v.getShortname());
+            recordsViewHolder.fullVehicleName = (v == null) ? "Unknown Vehicle" : v.getName();
         }
         recordsViewHolder.vehicleNumber.setText(s.getVehicleNumber());
         // Calculate distance time
@@ -112,7 +116,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
         TextView location, purpose, vehicle, vehicleNumber, totalTimeDistance;
         int defaultTextColor;
-        String tag;
+        String tag, fullVehicleName;
         Record r;
 
         VehicleMileageRecordsViewHolder(View v)
@@ -140,6 +144,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             message += "Location: " + r.getDestination() + "\n";
             message += "Purpose: " + r.getPurpose() + "\n";
             message += "Vehicle: " + vehicle.getText().toString() + "\n";
+            message += "Vehicle Full Name: " + fullVehicleName + "\n";
             message += "Vehicle License Plate: " + r.getVehicleNumber() + "\n";
             message += "From: " + FirebaseUtils.formatTime(r.getDatetimeFrom()) + " hrs\n";
             message += "To: " + FirebaseUtils.formatTime(r.getDateTimeTo()) + " hrs\n";
