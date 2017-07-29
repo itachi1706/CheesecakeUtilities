@@ -1,8 +1,10 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,16 +27,13 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.formatTime;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
 
@@ -190,18 +189,13 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void setFromTime() {
-        // Process first in case user cancel
-        processFromTime();
+        processFromTime(); // Process first in case user cancel
         Calendar cal = Calendar.getInstance();
         new TimePickerDialog(this, new FromTimeDate(), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
     }
 
     private void processFromTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.US);
-        Date dt = new Date();
-        dt.setTime(fromTimeVal);
-        String date = sdf.format(dt);
-        timeFrom.setText(date + " hrs");
+        timeFrom.setText(formatTime(fromTimeVal) + " hrs");
     }
 
     private class FromTimeDate implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -234,18 +228,13 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void setToTime() {
-        // Process first in case user cancel
-        processToTime();
+        processToTime(); // Process first in case user cancel
         Calendar cal = Calendar.getInstance();
         new TimePickerDialog(this, new ToTimeDate(), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
     }
 
     private void processToTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.US);
-        Date dt = new Date();
-        dt.setTime(toTimeVal);
-        String date = sdf.format(dt);
-        timeTo.setText(date + " hrs");
+        timeTo.setText(formatTime(toTimeVal) + " hrs");
     }
 
     private class ToTimeDate implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {

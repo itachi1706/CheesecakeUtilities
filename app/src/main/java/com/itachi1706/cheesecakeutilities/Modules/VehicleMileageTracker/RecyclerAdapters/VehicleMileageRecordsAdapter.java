@@ -2,15 +2,16 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Recycle
 
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.R;
@@ -51,6 +52,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     public void onBindViewHolder(VehicleMileageRecordsViewHolder recordsViewHolder, int i)
     {
         Record s = recordsList.get(i);
+        recordsViewHolder.r = s;
         recordsViewHolder.location.setText(s.getDestination());
         recordsViewHolder.purpose.setText(s.getPurpose());
         if (s.getVehicleId().isEmpty()) recordsViewHolder.vehicle.setText("Unknown Vehicle");
@@ -82,6 +84,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
         TextView location, purpose, vehicle, vehicleNumber, totalTimeDistance;
         int defaultTextColor;
+        Record r;
 
         VehicleMileageRecordsViewHolder(View v)
         {
@@ -103,9 +106,22 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
         @Override
         public void onClick(View v) {
-            // TODO: Code Stub Show Dialog box with details of record
             // TODO: Include ability to edit/delete record
-            Toast.makeText(v.getContext(), "Unimplemented", Toast.LENGTH_SHORT).show();
+            String message = "";
+            message += "Location: " + r.getDestination() + "\n";
+            message += "Purpose: " + r.getPurpose() + "\n";
+            message += "Vehicle: " + vehicle.getText().toString() + "\n";
+            message += "Vehicle License Plate: " + r.getVehicleNumber() + "\n";
+            message += "From: " + FirebaseUtils.formatTime(r.getDatetimeFrom()) + " hrs\n";
+            message += "To: " + FirebaseUtils.formatTime(r.getDateTimeTo()) + " hrs\n";
+            message += "Time Taken: " + DurationFormatUtils.formatDurationWords(r.getTotalTimeInMs(), true, true) + "\n";
+            message += "Mileage From: " + r.getMileageFrom() + " km\n";
+            message += "Mileage To: " + r.getMileageTo() + " km\n";
+            message += "Total Mileage: " + r.getTotalMileage() + " km\n";
+            message += "Training Mileage: " + ((r.getTrainingMileage()) ? "true" : "false") + "\n";
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Mileage Record")
+                    .setMessage(message).setPositiveButton(R.string.dialog_action_positive_close, null).show();
         }
     }
 }
