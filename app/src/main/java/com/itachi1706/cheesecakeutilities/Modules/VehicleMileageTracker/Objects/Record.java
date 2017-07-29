@@ -14,7 +14,7 @@ public class Record {
 
     private Long datetimeFrom, dateTimeTo;
     private Double mileageFrom, mileageTo;
-    private String destination, purpose, vehicleNumber;
+    private String destination, purpose, vehicleNumber, vehicleId, vehicleClass;
     private Boolean trainingMileage;
 
     // Calculated fields
@@ -125,5 +125,21 @@ public class Record {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(String vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public String getVehicleClass() {
+        return vehicleClass;
+    }
+
+    public void setVehicleClass(String vehicleClass) {
+        this.vehicleClass = vehicleClass;
     }
 }
