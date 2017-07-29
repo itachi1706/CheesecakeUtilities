@@ -135,7 +135,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
         @Override
         public void onClick(View v) {
-            // TODO: Include ability to edit/delete record
+            // TODO: Include ability to edit record
             String message = "";
             message += "Location: " + r.getDestination() + "\n";
             message += "Purpose: " + r.getPurpose() + "\n";
