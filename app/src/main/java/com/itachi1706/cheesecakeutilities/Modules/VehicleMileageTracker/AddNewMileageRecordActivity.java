@@ -116,10 +116,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void addRecordToFirebase() {
-        if (!validate()) {
-            Snackbar.make(layout, "Please fill up all of the fields and ensure that they are correct", Snackbar.LENGTH_SHORT).show();
-            return;
-        }
+        if (!validate()) return;
 
         Record r = new Record();
         r.setDatetimeFrom(fromTimeVal);
@@ -130,6 +127,9 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.setPurpose(purpose.getText().toString());
         r.setVehicleNumber(vehicleNumber.getText().toString());
         r.setTrainingMileage(trainingMileage.isChecked());
+        r.updateMileage();
+        r.updateTotalTime();
+        r.setVersion(FirebaseUtils.RECORDS_VERSION);
 
         DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
         newRec.setValue(r);
@@ -138,13 +138,25 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private boolean validate() {
-        return !(fromTimeVal != 0 && toTimeVal != 0 && fromTimeVal > toTimeVal)
-                && !locationTo.getText().toString().isEmpty()
-                && !purpose.getText().toString().isEmpty()
-                && !vehicleNumber.getText().toString().isEmpty()
-                && !mileageAfter.getText().toString().isEmpty()
-                && !mileageBefore.getText().toString().isEmpty()
-                && fromTimeVal != 0 && toTimeVal != 0 && vehicle.getSelectedItem() != null;
+        if (fromTimeVal != 0 && toTimeVal != 0 && fromTimeVal > toTimeVal) {
+            Snackbar.make(layout, "End time cannot be after start time", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!mileageBefore.getText().toString().isEmpty() && !mileageAfter.getText().toString().isEmpty()
+                && Double.parseDouble(mileageBefore.getText().toString()) > Double.parseDouble(mileageAfter.getText().toString())) {
+            Snackbar.make(layout, "Mileage after trip cannot be smaller than the mileage before trip", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (locationTo.getText().toString().isEmpty() || purpose.getText().toString().isEmpty() || vehicle.getSelectedItem().toString().isEmpty()
+                || mileageAfter.getText().toString().isEmpty() || mileageBefore.getText().toString().isEmpty() || fromTimeVal == 0 || toTimeVal == 0) {
+            Snackbar.make(layout, "Please fill up all of the fields and ensure that they are correct", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (vehicle.getSelectedItem() == null) {
+            Snackbar.make(layout, "Please select a vehicle type or create a new vehicle type", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void setFromDate() {
