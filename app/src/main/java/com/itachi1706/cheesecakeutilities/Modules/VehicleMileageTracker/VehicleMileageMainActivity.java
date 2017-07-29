@@ -34,6 +34,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
 
     private DatabaseReference userdata;
     private VehicleMileageRecordsAdapter adapter;
+    private SharedPreferences sp;
 
 
     @Override
@@ -47,7 +48,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
         setContentView(R.layout.activity_vehicle_mileage_main_activty);
 
         // Do Firebase Setup
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
         final String user_id = sp.getString("firebase_uid", "nien");
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
@@ -86,7 +87,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), null);
+            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), new ArrayList<String>(), null);
             recyclerView.setAdapter(adapter);
         }
 
@@ -96,6 +97,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "Records has been updated. Processing...");
                 final List<Record> records = new ArrayList<>();
+                final List<String> tags = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
                     // Update records
@@ -106,14 +108,17 @@ public class VehicleMileageMainActivity extends BaseActivity {
                         userdata.child("records").child(ds.getKey()).setValue(recList);
                     }
                     records.add(recList);
+                    tags.add(ds.getKey());
                 }
                 Log.i(TAG, "Records: " + records.size());
                 Collections.reverse(records);
+                Collections.reverse(tags);
                 FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        adapter.updateRecords(records);
+                        adapter.updateRecords(records, tags);
                         adapter.updateSnapshot(dataSnapshot);
+                        adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
                         adapter.notifyDataSetChanged();
                     }
 
@@ -148,10 +153,13 @@ public class VehicleMileageMainActivity extends BaseActivity {
         return record;
     }
 
+    private static final String HIDE_TRAINING = "veh_mileage_hide_training";
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.modules_veh_mileage, menu);
+        menu.findItem(R.id.hide_training).setChecked(sp.getBoolean(HIDE_TRAINING, false));
         return true;
     }
 
@@ -164,6 +172,12 @@ public class VehicleMileageMainActivity extends BaseActivity {
                 startActivity(logoutIntent);
                 finish();
                 return true;
+            case R.id.hide_training:
+                item.setChecked(!item.isChecked());
+                if (item.isChecked()) sp.edit().putBoolean(HIDE_TRAINING, true).apply();
+                else sp.edit().putBoolean(HIDE_TRAINING, false).apply();
+                adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
+                adapter.notifyDataSetChanged();
             default: return super.onOptionsItemSelected(item);
         }
     }

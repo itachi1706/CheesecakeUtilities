@@ -12,4 +12,8 @@
         <key>quiethour_debug_mode</key>
         <value>false</value>
     </entry>
+    <entry>
+        <key>veh_mileage_debug</key>
+        <value>false</value>
+    </entry>
 </defaultsMap>

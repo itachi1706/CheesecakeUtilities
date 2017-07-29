@@ -27,6 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
@@ -82,7 +84,36 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         mAuth = FirebaseAuth.getInstance();
         if (getIntent().hasExtra("logout") && getIntent().getBooleanExtra("logout", false)) {
             mAuth.signOut();
+            if (sp.contains("firebase_uid")) sp.edit().remove("firebase_uid").apply();
         }
+
+        FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        if (firebaseRemoteConfig.getBoolean("veh_mileage_debug"))
+            findViewById(R.id.test_account).setVisibility(View.VISIBLE);
+
+        findViewById(R.id.test_account).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInTestEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInTestEmail:failure", task.getException());
+                            Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -124,12 +155,12 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            Log.d(TAG, "signInWithGoogle:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.w(TAG, "signInWithGoogle:failure", task.getException());
                             Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
