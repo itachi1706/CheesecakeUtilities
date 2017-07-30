@@ -178,6 +178,10 @@ public class VehicleMileageMainActivity extends BaseActivity {
                 else sp.edit().putBoolean(HIDE_TRAINING, false).apply();
                 adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
                 adapter.notifyDataSetChanged();
+                return true;
+            case R.id.view_vehicles:
+                startActivity(new Intent(this, ViewVehicleActivity.class));
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
