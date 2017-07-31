@@ -90,9 +90,21 @@ public class VehicleMileageMainActivity extends BaseActivity {
             adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), new ArrayList<String>(), null);
             recyclerView.setAdapter(adapter);
         }
+    }
 
+    private ValueEventListener listener;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         // Listen to changes and update accordingly
-        userdata.child("records").addValueEventListener(new ValueEventListener() {
+        if (listener != null) {
+            FirebaseDatabase.getInstance().getReference().removeEventListener(listener);
+            listener = null;
+            Log.i(TAG, "Firebase DB Listeners exist when it should not, force terminating it");
+        }
+        Log.i(TAG, "Registering Firebase DB listeners");
+        listener = userdata.child("records").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "Records has been updated. Processing...");
@@ -134,6 +146,16 @@ public class VehicleMileageMainActivity extends BaseActivity {
                 Log.w(TAG, "loadRecords:onCancelled", databaseError.toException());
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (listener != null) {
+            FirebaseDatabase.getInstance().getReference().removeEventListener(listener);
+            Log.i(TAG, "Unregistered Firebase Listeners");
+            listener = null;
+        }
     }
 
     @Override
