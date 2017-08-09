@@ -31,8 +31,8 @@ android {
         versionName "3.2.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        resValue "string", "tray__authority", "${applicationId}.tray"
-        // add this to set a unique tray authority based on your applicationId
+        resValue "string", "tray__authority", "${applicationId}.tray" // add this to set a unique tray authority based on your applicationId
+        resConfigs "en"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
