@@ -4,11 +4,13 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -76,12 +78,34 @@ public class CameraDisablerActivity extends BaseActivity {
         if (isDeviceAdminActive()) {
             devicePolicyManager.removeActiveAdmin(deviceAdmin);
             updateResources();
+            Toast.makeText(this, R.string.camera_disable_disabled_toast, Toast.LENGTH_SHORT).show();
         } else {
-            // Launch device admin request
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
-            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.camera_disable_explaination));
-            startActivityForResult(intent, DEVICE_ADMIN_REQUEST);
+            // As per Google Play requirements, a disclosure of why it is needed
+            new AlertDialog.Builder(this).setTitle(R.string.camera_disable_disclosure_title).setMessage(R.string.camera_disable_explaination_disclosure)
+                    .setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Cancel and exit utility
+                            finish();
+                        }
+                    }).setPositiveButton(R.string.camera_disable_disclosure_grant, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Launch device admin request
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
+                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.camera_disable_explaination));
+                    startActivityForResult(intent, DEVICE_ADMIN_REQUEST);
+                }
+            }).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DEVICE_ADMIN_REQUEST && resultCode == RESULT_OK) {
+            new AlertDialog.Builder(this).setTitle(R.string.camera_disable_enabled_toast)
+                    .setMessage(R.string.camera_disable_enabled_message).setPositiveButton(R.string.dialog_action_positive_close, null).show();
         }
     }
 

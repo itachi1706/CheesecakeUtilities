@@ -66,6 +66,9 @@
 ***REMOVED*** Camera Disable Device Administrator -->
     <string name="camera_disable_desc">Allows Cheesecake Utilities to control the device\'s camera</string>
     <string name="camera_disable_explaination">This allows the app to control whether or not the camera on the device should be disabled</string>
+    <string name="camera_disable_explaination_disclosure">In order to control the camera capabilities of the device, it requires the use of a Device Administrator Policy that grants the capability to enable or disable the camera capabilities of the device.\n\nIf you still wish to continue, click the \"Grant Permission\" button. Otherwise click the \"Cancel\" button to return to the main screen</string>
+    <string name="camera_disable_disclosure_title">Device Administrator Policy Usage Disclosure</string>
+    <string name="camera_disable_disclosure_grant">Grant Permission</string>
     <string name="camera_disable_admin_receiver_status">Device Admin Status: %1$s</string>
     <string name="camera_disable_enabled">Enabled</string>
     <string name="camera_disable_disabled">Disabled</string>
@@ -79,6 +82,9 @@
     <string name="camera_disable_retrieving_status">Retrieving…</string>
     <string name="camera_disable_device_admin_status_label">Device Admin Status:</string>
     <string name="camera_disable_camera_status_label">Camera Status</string>
+    <string name="camera_disable_disabled_toast">Device Administrator Disabled</string>
+    <string name="camera_disable_enabled_toast">Device Administrator Enabled</string>
+    <string name="camera_disable_enabled_message">You are now able to control the camera capabilities of your device.\n\nNote: If you wish to revoke the Device Administrator permission from the app, simply click on the \"Disable Device Admin\" button</string>
 
 ***REMOVED*** System Information -->
     <string name="sys_info_CPU1">Processor</string>
