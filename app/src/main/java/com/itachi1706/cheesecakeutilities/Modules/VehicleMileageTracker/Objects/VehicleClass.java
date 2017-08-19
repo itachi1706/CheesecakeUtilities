@@ -38,11 +38,14 @@ public class VehicleClass {
 
     private static void init() {
         vehClassList = new ArrayList<>();
-        vehClassList.add(new VehClass("class2", "Class 2"));
+        vehClassList.add(new VehClass("class2", "Class 2A/2B/2"));
         vehClassList.add(new VehClass("class3", "Class 3/3A"));
         vehClassList.add(new VehClass("class4", "Class 4"));
-        vehClassList.add(new VehClass("class4a", "Class 4A"));
+        vehClassList.add(new VehClass("class4s", "Class 4S (Cargo Trailer)"));
         vehClassList.add(new VehClass("class5", "Class 5"));
+        vehClassList.add(new VehClass("class4a", "Class 4A (Public Buses)"));
+        vehClassList.add(new VehClass("class1", "Class 1 (Disabled)"));
+        vehClassList.add(new VehClass("class3c", "Class 3C/3CA"));
     }
 
     public static class VehClass {
