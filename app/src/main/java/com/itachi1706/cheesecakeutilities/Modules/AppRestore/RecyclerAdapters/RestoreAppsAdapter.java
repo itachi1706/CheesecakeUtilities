@@ -155,9 +155,9 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         HeaderAppsViewHolder(View v)
         {
             super(v);
-            appName = (TextView) v.findViewById(R.id.tvAppName);
-            count = (TextView) v.findViewById(R.id.tv_app_restore_count);
-            appIcon = (ImageView) v.findViewById(R.id.iv_icon);
+            appName = v.findViewById(R.id.tvAppName);
+            count = v.findViewById(R.id.tv_app_restore_count);
+            appIcon = v.findViewById(R.id.iv_icon);
             v.setOnClickListener(this);
         }
 
@@ -186,7 +186,7 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         DetailAppsViewHolder(View v)
         {
             super(v);
-            version = (TextView) v.findViewById(R.id.tvVersion);
+            version = v.findViewById(R.id.tvVersion);
             v.setOnClickListener(this);
         }
 

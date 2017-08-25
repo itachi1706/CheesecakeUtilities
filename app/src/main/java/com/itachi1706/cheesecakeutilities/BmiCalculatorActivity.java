@@ -21,11 +21,11 @@ public class BmiCalculatorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bmi_calculator);
 
-        height = (EditText) findViewById(R.id.etHeight);
-        weight = (EditText) findViewById(R.id.etWeight);
-        table = (Button) findViewById(R.id.btnTable);
-        calculate = (Button) findViewById(R.id.btnCalculate);
-        result = (TextView) findViewById(R.id.tvResults);
+        height = findViewById(R.id.etHeight);
+        weight = findViewById(R.id.etWeight);
+        table = findViewById(R.id.btnTable);
+        calculate = findViewById(R.id.btnCalculate);
+        result = findViewById(R.id.tvResults);
 
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override

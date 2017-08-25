@@ -41,11 +41,11 @@ public class ORDActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ord);
 
-        recyclerView = (RecyclerView) findViewById(R.id.ord_recycler_view);
-        ordDaysLabel = (TextView) findViewById(R.id.ord_days_counter);
-        ordCounter = (TextView) findViewById(R.id.ord_counter);
-        ordProgress = (TextView) findViewById(R.id.ord_precentage);
-        progressBar = (ArcProgress)  findViewById(R.id.ord_progressbar);
+        recyclerView = findViewById(R.id.ord_recycler_view);
+        ordDaysLabel = findViewById(R.id.ord_days_counter);
+        ordCounter = findViewById(R.id.ord_counter);
+        ordProgress = findViewById(R.id.ord_precentage);
+        progressBar = findViewById(R.id.ord_progressbar);
 
         // Get Holiday List from Firebase
         FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();

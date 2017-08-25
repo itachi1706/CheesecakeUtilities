@@ -55,17 +55,17 @@ public class ListApplicationsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_applications);
 
-        recyclerView = (RecyclerView) findViewById(R.id.list_app_recycler_view);
+        recyclerView = findViewById(R.id.list_app_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        scrollBar = (TouchScrollBar) findViewById(R.id.scrollBar);
+        scrollBar = findViewById(R.id.scrollBar);
         scrollBar.setIndicator(new CustomIndicator(this), true);
 
-        bar = (ProgressBar) findViewById(R.id.list_app_pb);
-        label = (TextView) findViewById(R.id.list_app_pb_label);
+        bar = findViewById(R.id.list_app_pb);
+        label = findViewById(R.id.list_app_pb_label);
 
         eval(false);
     }

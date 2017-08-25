@@ -42,12 +42,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main_menu_tabbed);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
 
-        pager = (ViewPager) findViewById(R.id.main_viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.main_tablayout);
+        pager = findViewById(R.id.main_viewpager);
+        tabLayout = findViewById(R.id.main_tablayout);
 
         setupViewPager(pager);
         tabLayout.setupWithViewPager(pager);

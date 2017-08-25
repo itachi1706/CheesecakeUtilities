@@ -78,8 +78,8 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
         public StringViewHolder(View v)
         {
             super(v);
-            title = (TextView) v.findViewById(android.R.id.text1);
-            subtitle = (TextView) v.findViewById(android.R.id.text2);
+            title = v.findViewById(android.R.id.text1);
+            subtitle = v.findViewById(android.R.id.text2);
             v.setOnClickListener(this);
         }
 

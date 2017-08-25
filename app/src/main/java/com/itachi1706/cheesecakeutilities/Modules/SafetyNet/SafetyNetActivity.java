@@ -59,16 +59,16 @@ public class SafetyNetActivity extends BaseActivity {
         safetyNetHelper = new SafetyNetHelper(API_KEY);
         Log.d(TAG, "AndroidAPIKEY: " + Utils.getSigningKeyFingerprint(this) + ";" + getPackageName());
 
-        resultsTV = (TextView)findViewById(R.id.results);
-        nonceTV = (TextView)findViewById(R.id.nonce);
-        timestampTV = (TextView)findViewById(R.id.timestamp);
-        packageNameTV = (TextView)findViewById(R.id.packagename);
+        resultsTV = findViewById(R.id.results);
+        nonceTV = findViewById(R.id.nonce);
+        timestampTV = findViewById(R.id.timestamp);
+        packageNameTV = findViewById(R.id.packagename);
         resultsContainer = findViewById(R.id.resultsContainer);
         successResultsContainer = findViewById(R.id.sucessResultsContainer);
-        resultNoteTV = (TextView) findViewById(R.id.resultsNote);
-        welcomeTV = (TextView) findViewById(R.id.welcomeTV);
+        resultNoteTV = findViewById(R.id.resultsNote);
+        welcomeTV = findViewById(R.id.welcomeTV);
         loading = findViewById(R.id.loading);
-        Button runTestBtn = (Button) findViewById(R.id.runTestButton);
+        Button runTestBtn = findViewById(R.id.runTestButton);
         runTestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

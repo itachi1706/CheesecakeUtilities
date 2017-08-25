@@ -25,11 +25,11 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_vehicle);
 
-        name = (EditText) findViewById(R.id.etName);
-        longname = (EditText) findViewById(R.id.etLongName);
-        vehClass = (Spinner) findViewById(R.id.spinnerVehType);
-        Button addVehicle = (Button) findViewById(R.id.veh_mileage_add_veh);
-        layout = (LinearLayout) findViewById(R.id.veh_mileage_layout_vehicle);
+        name = findViewById(R.id.etName);
+        longname = findViewById(R.id.etLongName);
+        vehClass = findViewById(R.id.spinnerVehType);
+        Button addVehicle = findViewById(R.id.veh_mileage_add_veh);
+        layout = findViewById(R.id.veh_mileage_layout_vehicle);
         addVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

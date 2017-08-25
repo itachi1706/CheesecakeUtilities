@@ -61,7 +61,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         setContentView(R.layout.activity_navbar_config);
         final AppPreferences sp = new AppPreferences(this);
 
-        navbarToggle = (SwitchCompat) findViewById(R.id.navbar_service_toggle);
+        navbarToggle = findViewById(R.id.navbar_service_toggle);
         navbarToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -114,15 +114,15 @@ public class NavbarConfigurationActivity extends BaseActivity {
             }
         });
 
-        enableServiceLayout = (LinearLayout) findViewById(R.id.enable_service);
+        enableServiceLayout = findViewById(R.id.enable_service);
 
         // Update Configurations
-        SwitchCompat showClock = (SwitchCompat) findViewById(R.id.navbar_service_toggle_clock);
-        SwitchCompat showAppName = (SwitchCompat) findViewById(R.id.navbar_service_toggle_app_name);
-        SwitchCompat showImage = (SwitchCompat) findViewById(R.id.navbar_service_toggle_image);
-        staticColor = (ImageView) findViewById(R.id.navbar_service_static_color);
-        enableServiceToggle = (SwitchCompat) findViewById(R.id.navbar_service_enable_toggle);
-        final Spinner imageType = (Spinner) findViewById(R.id.navbar_service_image_type);
+        SwitchCompat showClock = findViewById(R.id.navbar_service_toggle_clock);
+        SwitchCompat showAppName = findViewById(R.id.navbar_service_toggle_app_name);
+        SwitchCompat showImage = findViewById(R.id.navbar_service_toggle_image);
+        staticColor = findViewById(R.id.navbar_service_static_color);
+        enableServiceToggle = findViewById(R.id.navbar_service_enable_toggle);
+        final Spinner imageType = findViewById(R.id.navbar_service_image_type);
         showAppName.setChecked(sp.getBoolean(NAVBAR_SHOW_APPNAME, true));
         showClock.setChecked(sp.getBoolean(NAVBAR_SHOW_CLOCK, true));
         showImage.setChecked(sp.getBoolean(NAVBAR_SHOW_IMAGE, true));

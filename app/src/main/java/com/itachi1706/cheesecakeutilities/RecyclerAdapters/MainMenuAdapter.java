@@ -76,7 +76,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
         MainMenuHolder(View v)
         {
             super(v);
-            title = (TextView) v.findViewById(R.id.text1);
+            title = v.findViewById(R.id.text1);
             v.setOnClickListener(this);
         }
 

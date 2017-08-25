@@ -119,14 +119,14 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
         AppsViewHolder(View v)
         {
             super(v);
-            appName = (TextView) v.findViewById(R.id.tvAppName);
+            appName = v.findViewById(R.id.tvAppName);
             appName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             appName.setMarqueeRepeatLimit(-1);
             appName.setHorizontallyScrolling(true);
-            appPackageName = (TextView) v.findViewById(R.id.tvPackageName);
-            appApiVersion = (TextView) v.findViewById(R.id.tvAPI);
-            appIcon = (ImageView) v.findViewById(R.id.iv_icon);
-            appVersion = (TextView) v.findViewById(R.id.tvVersion);
+            appPackageName = v.findViewById(R.id.tvPackageName);
+            appApiVersion = v.findViewById(R.id.tvAPI);
+            appIcon = v.findViewById(R.id.iv_icon);
+            appVersion = v.findViewById(R.id.tvVersion);
             v.setOnClickListener(this);
         }
 
