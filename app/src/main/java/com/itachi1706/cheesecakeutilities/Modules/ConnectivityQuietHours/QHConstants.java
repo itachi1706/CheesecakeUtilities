@@ -15,4 +15,8 @@ public class QHConstants {
     public static final int QH_NOTIFY_NEVER = 0, QH_NOTIFY_WHEN_TRIGGERED = 1, QH_NOTIFY_ALWAYS = 2, QH_NOTIFY_DEBUG = 3;
 
     public static final int BT_START_INTENT = 2000, BT_END_INTENT = 2001, WIFI_START_INTENT = 2002, WIFI_END_INTENT = 2003;
+
+    public static final String QH_NOTIFICATION_CHANNEL = "quiet_hour_channel";
+    public static final String QH_NOTIFICATION_CHANNEL_TITLE = "Quiet Hours Utility Notifications";
+    public static final String QH_NOTIFICATION_CHANNEL_DESC = "Controls the notifications issued by the Quiet Hours Utility";
 }

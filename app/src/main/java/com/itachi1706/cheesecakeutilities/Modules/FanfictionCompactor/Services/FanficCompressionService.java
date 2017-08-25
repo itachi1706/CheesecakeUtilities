@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Services;
 
 import android.app.IntentService;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -221,6 +222,13 @@ public class FanficCompressionService extends IntentService{
     protected void updateNotification() {
         FanficNotificationObject obj = fanficObj;
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        // Create the Notification Channel
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel("fanfic_compress_channel", "Fanfiction Compactor Utility", NotificationManager.IMPORTANCE_DEFAULT);
+            mChannel.setDescription("Controls notifications issued by the Fanfiction Compactor Utility");
+            mChannel.enableLights(false);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
         int percent = 0;
         if (obj.getProgress() != 0 && obj.getMax() != 0) {
@@ -239,7 +247,7 @@ public class FanficCompressionService extends IntentService{
             fanficActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFY_ID, fanficActivity, 0);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "fanfic_compress_channel")
                     .setContentTitle(obj.getTitle()).setContentText(obj.getNotificationMessage()).setOngoing(!obj.isCancellable())
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentIntent(pendingIntent)
