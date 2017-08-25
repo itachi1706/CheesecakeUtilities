@@ -24,7 +24,7 @@ public class SensorsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab_sensors, container, false);
         SensorManager mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = mSensorManager.getSensorList(-1);
-        ListView list = (ListView) view.findViewById(R.id.sensorList1);
+        ListView list = view.findViewById(R.id.sensorList1);
         ArrayList<String> items = new ArrayList<>();
         for (Sensor s : sensorList) {
             String item = s.getName() + ": " + s.getVendor();

@@ -70,7 +70,7 @@ public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAd
         public StringViewHolder(View v)
         {
             super(v);
-            title = (TextView) v.findViewById(R.id.text1);
+            title = v.findViewById(R.id.text1);
             v.setOnClickListener(this);
         }
 

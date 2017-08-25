@@ -52,13 +52,13 @@ public class FanfictionCompactorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fanfiction_compactor);
 
-        folder = (TextView) findViewById(R.id.tvFolder);
-        database = (TextView) findViewById(R.id.tvDB);
-        folderSize = (TextView) findViewById(R.id.tvSize);
-        storyCount = (TextView) findViewById(R.id.tvStories);
-        startServiceBtn = (Button) findViewById(R.id.btnStartPruning);
-        storyButton = (Button) findViewById(R.id.btnStories);
-        duplicateButton = (Button) findViewById(R.id.btnRemoveDuplicates);
+        folder = findViewById(R.id.tvFolder);
+        database = findViewById(R.id.tvDB);
+        folderSize = findViewById(R.id.tvSize);
+        storyCount = findViewById(R.id.tvStories);
+        startServiceBtn = findViewById(R.id.btnStartPruning);
+        storyButton = findViewById(R.id.btnStories);
+        duplicateButton = findViewById(R.id.btnRemoveDuplicates);
 
         startServiceBtn.setEnabled(false);
         startServiceBtn.setOnClickListener(new View.OnClickListener() {

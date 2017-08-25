@@ -38,10 +38,10 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_htc_serial_identification);
 
-        search = (Button) findViewById(R.id.btn_htc_sn_search);
-        serial = (Button) findViewById(R.id.btn_htc_sn_serial);
-        resultList = (TextView) findViewById(R.id.tv_htc_sn_result);
-        serialNumber = (EditText) findViewById(R.id.htc_sn_serialField);
+        search = findViewById(R.id.btn_htc_sn_search);
+        serial = findViewById(R.id.btn_htc_sn_serial);
+        resultList = findViewById(R.id.tv_htc_sn_result);
+        serialNumber = findViewById(R.id.htc_sn_serialField);
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override

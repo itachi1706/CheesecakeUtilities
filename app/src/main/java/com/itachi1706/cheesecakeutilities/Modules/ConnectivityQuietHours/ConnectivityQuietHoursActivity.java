@@ -83,22 +83,22 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         setContentView(R.layout.activity_connectivity_quiet_hours);
 
         // Init elements
-        btLayout = (LinearLayout) findViewById(R.id.layout_configure_bt);
-        wifiLayout = (LinearLayout) findViewById(R.id.layout_configure_wifi);
-        btNotification = (Spinner) findViewById(R.id.spinner_bt_notification);
-        wifiNotification = (Spinner) findViewById(R.id.spinner_wifi_notification);
-        wifiStart = (LinearLayout) findViewById(R.id.wifi_st_layout);
-        wifiEnd = (LinearLayout) findViewById(R.id.wifi_et_layout);
-        btStart = (LinearLayout) findViewById(R.id.bt_st_layout);
-        btEnd = (LinearLayout) findViewById(R.id.bt_et_layout);
-        wifiStartTxt = (TextView) findViewById(R.id.wifi_start_time);
-        wifiEndTxt = (TextView) findViewById(R.id.wifi_end_time);
-        btStartTxt = (TextView) findViewById(R.id.bt_start_time);
-        btEndTxt = (TextView) findViewById(R.id.bt_end_time);
-        btSwitch = (SwitchCompat) findViewById(R.id.bt_activate);
-        wifiSwitch = (SwitchCompat) findViewById(R.id.wifi_activate);
-        historyLayout = (LinearLayout) findViewById(R.id.layout_history);
-        historyRecyclerView = (RecyclerView) findViewById(R.id.rv_qh_history);
+        btLayout = findViewById(R.id.layout_configure_bt);
+        wifiLayout = findViewById(R.id.layout_configure_wifi);
+        btNotification = findViewById(R.id.spinner_bt_notification);
+        wifiNotification = findViewById(R.id.spinner_wifi_notification);
+        wifiStart = findViewById(R.id.wifi_st_layout);
+        wifiEnd = findViewById(R.id.wifi_et_layout);
+        btStart = findViewById(R.id.bt_st_layout);
+        btEnd = findViewById(R.id.bt_et_layout);
+        wifiStartTxt = findViewById(R.id.wifi_start_time);
+        wifiEndTxt = findViewById(R.id.wifi_end_time);
+        btStartTxt = findViewById(R.id.bt_start_time);
+        btEndTxt = findViewById(R.id.bt_end_time);
+        btSwitch = findViewById(R.id.bt_activate);
+        wifiSwitch = findViewById(R.id.wifi_activate);
+        historyLayout = findViewById(R.id.layout_history);
+        historyRecyclerView = findViewById(R.id.rv_qh_history);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

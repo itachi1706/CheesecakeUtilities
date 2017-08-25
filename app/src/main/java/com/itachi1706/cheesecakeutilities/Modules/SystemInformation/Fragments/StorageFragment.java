@@ -33,11 +33,11 @@ public class StorageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_storage, container, false);
         getMountPoints();
-        TextView intMem = (TextView) view.findViewById(R.id.intMemTxt);
+        TextView intMem = view.findViewById(R.id.intMemTxt);
         intMem.setText(getIntMem());
-        TextView extMem = (TextView) view.findViewById(R.id.extMemTxt);
+        TextView extMem = view.findViewById(R.id.extMemTxt);
         extMem.setText(getExtMem());
-        TextView removableMem = (TextView) view.findViewById(R.id.remMemTxt);
+        TextView removableMem = view.findViewById(R.id.remMemTxt);
         removableMem.setText(getRemovableMem());
         return view;
     }

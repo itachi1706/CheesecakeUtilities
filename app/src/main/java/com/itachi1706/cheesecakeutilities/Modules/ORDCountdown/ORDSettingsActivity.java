@@ -88,9 +88,9 @@ public class ORDSettingsActivity extends AppCompatActivity {
             }
         });
 
-        pesStatusSpinner = (Spinner) findViewById(R.id.spinnerPES);
+        pesStatusSpinner = findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
-        payDaySpinner = (Spinner) findViewById(R.id.spinnerPD);
+        payDaySpinner = findViewById(R.id.spinnerPD);
     }
 
     @Override

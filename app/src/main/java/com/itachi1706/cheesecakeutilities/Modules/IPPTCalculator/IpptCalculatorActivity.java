@@ -39,16 +39,16 @@ public class IpptCalculatorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ippt_calculator);
 
-        genderSpinner = (Spinner) findViewById(R.id.spinnerGender);
-        ageSpinner = (Spinner) findViewById(R.id.spinnerAge);
-        runMin = (EditText) findViewById(R.id.etRun);
-        runSec = (EditText) findViewById(R.id.etRunSec);
-        pushup = (EditText) findViewById(R.id.etPushUps);
-        situp = (EditText) findViewById(R.id.etSitUps);
-        Button calculate = (Button) findViewById(R.id.btnCalculate);
-        Button scores = (Button) findViewById(R.id.btnViewScoring);
-        results = (TextView) findViewById(R.id.tvResults);
-        pushupLayout = (TextInputLayout) findViewById(R.id.til_etPushUps);
+        genderSpinner = findViewById(R.id.spinnerGender);
+        ageSpinner = findViewById(R.id.spinnerAge);
+        runMin = findViewById(R.id.etRun);
+        runSec = findViewById(R.id.etRunSec);
+        pushup = findViewById(R.id.etPushUps);
+        situp = findViewById(R.id.etSitUps);
+        Button calculate = findViewById(R.id.btnCalculate);
+        Button scores = findViewById(R.id.btnViewScoring);
+        results = findViewById(R.id.tvResults);
+        pushupLayout = findViewById(R.id.til_etPushUps);
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -185,8 +185,8 @@ public class NavBarService extends AccessibilityService {
 
         // view that will be added/removed
         mNavBarView = LayoutInflater.from(this).inflate(R.layout.service_navbar, null);
-        tvAppName = (TextView) mNavBarView.findViewById(R.id.tv_app_name); // Current App Name Label
-        ivImage = (ImageView) mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
+        tvAppName = mNavBarView.findViewById(R.id.tv_app_name); // Current App Name Label
+        ivImage = mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
         clock = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) ? (TextClock) mNavBarView.findViewById(R.id.tc_clock) : null;
 
         // See Image Type and do stuff with it
