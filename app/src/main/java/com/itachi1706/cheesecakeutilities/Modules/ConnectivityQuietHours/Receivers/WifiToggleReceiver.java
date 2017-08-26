@@ -1,6 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -62,13 +61,7 @@ public class WifiToggleReceiver extends BroadcastReceiver {
     private void sendNotification(Context context, int notificationLevel, boolean workDone, boolean wifiState) {
         String time = DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        // Create the Notification Channel
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel(QHConstants.QH_NOTIFICATION_CHANNEL, QHConstants.QH_NOTIFICATION_CHANNEL_TITLE, NotificationManager.IMPORTANCE_DEFAULT);
-            mChannel.setDescription(QHConstants.QH_NOTIFICATION_CHANNEL_DESC);
-            mChannel.enableLights(false);
-            notificationManager.createNotificationChannel(mChannel);
-        }
+        QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Wi-Fi Quiet Hour " + ((wifiState) ? "Enabled" : "Disabled"))
                 .setContentText("Wi-Fi state toggled on " + time)
