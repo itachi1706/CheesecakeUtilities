@@ -155,6 +155,36 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         });
     }
 
+    private void addRecordToFirebase() {
+        if (!validate()) return;
+
+        Record r = new Record();
+        r.setDatetimeFrom(fromTimeVal);
+        r.setDateTimeTo(toTimeVal);
+        r.setMileageFrom(Double.parseDouble(mileageBefore.getText().toString()));
+        r.setMileageTo(Double.parseDouble(mileageAfter.getText().toString()));
+        r.setDestination(locationTo.getText().toString());
+        r.setPurpose(purpose.getText().toString());
+        r.setVehicleNumber(vehicleNumber.getText().toString());
+        r.setTrainingMileage(trainingMileage.isChecked());
+        r.setVehicleId(getVehicleKey(vehicle.getSelectedItem().toString()));
+        r.setVehicleClass(getVehicleClass(vehicle.getSelectedItem().toString()));
+        r.updateMileage();
+        r.updateTotalTime();
+        r.setVersion(FirebaseUtils.RECORDS_VERSION);
+
+        if (record_id == null) {
+            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
+            newRec.setValue(r);
+            Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
+        } else {
+            FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").child(record_id).setValue(r);
+            Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
+        }
+        updateAutocomplete(r.getDestination(), r.getPurpose(), r.getVehicleNumber());
+        finish();
+    }
+
     private void processAutoComplete(DataSnapshot s) {
         DataSnapshot loc = s.child("location");
         DataSnapshot purposeDs = s.child("purpose");
@@ -209,36 +239,6 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), "Please reselect your vehicle and class", Snackbar.LENGTH_SHORT).show();
         addRecord.setText("Edit Mileage Record");
         if (getSupportActionBar() != null) getSupportActionBar().setTitle("Edit Mileage Record");
-    }
-
-    private void addRecordToFirebase() {
-        if (!validate()) return;
-
-        Record r = new Record();
-        r.setDatetimeFrom(fromTimeVal);
-        r.setDateTimeTo(toTimeVal);
-        r.setMileageFrom(Double.parseDouble(mileageBefore.getText().toString()));
-        r.setMileageTo(Double.parseDouble(mileageAfter.getText().toString()));
-        r.setDestination(locationTo.getText().toString());
-        r.setPurpose(purpose.getText().toString());
-        r.setVehicleNumber(vehicleNumber.getText().toString());
-        r.setTrainingMileage(trainingMileage.isChecked());
-        r.setVehicleId(getVehicleKey(vehicle.getSelectedItem().toString()));
-        r.setVehicleClass(getVehicleClass(vehicle.getSelectedItem().toString()));
-        r.updateMileage();
-        r.updateTotalTime();
-        r.setVersion(FirebaseUtils.RECORDS_VERSION);
-
-        if (record_id == null) {
-            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
-            newRec.setValue(r);
-            Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
-        } else {
-            FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").child(record_id).setValue(r);
-            Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
-        }
-        updateAutocomplete(r.getDestination(), r.getPurpose(), r.getVehicleNumber());
-        finish();
     }
 
     private String getVehicleKey(String vehicleName) {
