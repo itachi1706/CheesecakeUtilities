@@ -31,6 +31,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.formatTime;
@@ -41,11 +42,13 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     private Spinner vehicle, classType;
     private CheckBox trainingMileage;
     private LinearLayout layout;
+    private Button addRecord;
 
     private FirebaseDatabase database;
 
     private long fromTimeVal = 0, toTimeVal = 0;
     private String user_id = "";
+    private String record_id; // Nullable. If not null makes it edit mode
     private Map<String, Vehicle> vehicleList;
 
     @Override
@@ -70,7 +73,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         timeTo = findViewById(R.id.veh_mileage_add_to_datetime);
         vehicle = findViewById(R.id.spinnerVeh);
         classType = findViewById(R.id.spinnerVehType);
-        Button addRecord = findViewById(R.id.veh_mileage_add_veh);
+        addRecord = findViewById(R.id.veh_mileage_add_veh);
         trainingMileage = findViewById(R.id.cbTraining);
         layout = findViewById(R.id.veh_mileage_add_veh_layout);
         database = FirebaseUtils.getFirebaseDatabase();
@@ -116,6 +119,39 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
                 addRecordToFirebase();
             }
         });
+
+        // Check if edit mode, if so edit
+        if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
+        if (record_id != null) {
+            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
+                    .child(user_id).child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            processEdit(dataSnapshot.getValue(Record.class));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+        }
+    }
+
+    private void processEdit(Record r) {
+        fromTimeVal = r.getDatetimeFrom();
+        toTimeVal = r.getDateTimeTo();
+        mileageBefore.setText(String.format(Locale.getDefault(), "%.0f", r.getMileageFrom()));
+        mileageAfter.setText(String.format(Locale.getDefault(), "%.0f", r.getMileageTo()));
+        locationTo.setText(r.getDestination());
+        purpose.setText(r.getPurpose());
+        vehicleNumber.setText(r.getVehicleNumber());
+        trainingMileage.setChecked(r.getTrainingMileage());
+        processToTime();
+        processFromTime();
+        Snackbar.make(findViewById(android.R.id.content), "Please reselect your vehicle and class", Snackbar.LENGTH_SHORT).show();
+        addRecord.setText("Edit Mileage Record");
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle("Edit Mileage Record");
     }
 
     private void addRecordToFirebase() {
@@ -136,9 +172,14 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.updateTotalTime();
         r.setVersion(FirebaseUtils.RECORDS_VERSION);
 
-        DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
-        newRec.setValue(r);
-        Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
+        if (record_id == null) {
+            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
+            newRec.setValue(r);
+            Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
+        } else {
+            FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").child(record_id).setValue(r);
+            Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
+        }
         finish();
     }
 
