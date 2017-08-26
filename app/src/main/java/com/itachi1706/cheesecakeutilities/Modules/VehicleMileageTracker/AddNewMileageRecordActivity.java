@@ -27,6 +27,7 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.TextInputAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +39,8 @@ import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.F
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
 
-    private EditText locationTo, purpose, vehicleNumber, mileageBefore, mileageAfter, timeFrom, timeTo;
+    private EditText mileageBefore, mileageAfter, timeFrom, timeTo;
+    private TextInputAutoCompleteTextView locationTo, purpose, vehicleNumber;
     private Spinner vehicle, classType;
     private CheckBox trainingMileage;
     private LinearLayout layout;
@@ -50,6 +52,8 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     private String user_id = "";
     private String record_id; // Nullable. If not null makes it edit mode
     private Map<String, Vehicle> vehicleList;
+
+    private ArrayList<String> vehicleAutofill, locationAutofill, purposeAutofill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +140,59 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
                         }
                     });
         }
+
+        // Handle autocomplete
+        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                processAutoComplete(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void processAutoComplete(DataSnapshot s) {
+        DataSnapshot loc = s.child("location");
+        DataSnapshot purposeDs = s.child("purpose");
+        DataSnapshot vehN = s.child("vehicleNumber");
+        locationAutofill = new ArrayList<>();
+        purposeAutofill = new ArrayList<>();
+        vehicleAutofill = new ArrayList<>();
+        for (DataSnapshot l : loc.getChildren()) {
+            locationAutofill.add(l.getValue(String.class));
+        }
+        for (DataSnapshot p : purposeDs.getChildren()) {
+            purposeAutofill.add(p.getValue(String.class));
+        }
+        for (DataSnapshot v : vehN.getChildren()) {
+            vehicleAutofill.add(v.getValue(String.class));
+        }
+        locationTo.setThreshold(0);
+        purpose.setThreshold(0);
+        vehicleNumber.setThreshold(0);
+        locationTo.setAdapter(new ArrayAdapter<>(this, android.R.layout.select_dialog_item, locationAutofill));
+        purpose.setAdapter(new ArrayAdapter<>(this, android.R.layout.select_dialog_item, purposeAutofill));
+        vehicleNumber.setAdapter(new ArrayAdapter<>(this, android.R.layout.select_dialog_item, vehicleAutofill));
+    }
+
+    private void updateAutocomplete(String location, String purpose, String vehicleNumber) {
+        DatabaseReference ref = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill");
+        if (!locationAutofill.contains(location)) {
+            DatabaseReference newRef = ref.child("location").push();
+            newRef.setValue(location);
+        }
+        if (!purposeAutofill.contains(purpose)) {
+            DatabaseReference newRef = ref.child("purpose").push();
+            newRef.setValue(purpose);
+        }
+        if (!vehicleAutofill.contains(vehicleNumber)) {
+            DatabaseReference newRef = ref.child("vehicleNumber").push();
+            newRef.setValue(vehicleNumber);
+        }
     }
 
     private void processEdit(Record r) {
@@ -180,6 +237,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
             FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").child(record_id).setValue(r);
             Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
         }
+        updateAutocomplete(r.getDestination(), r.getPurpose(), r.getVehicleNumber());
         finish();
     }
 
