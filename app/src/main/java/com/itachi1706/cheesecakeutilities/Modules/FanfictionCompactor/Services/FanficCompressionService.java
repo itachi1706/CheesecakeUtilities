@@ -224,9 +224,10 @@ public class FanficCompressionService extends IntentService{
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         // Create the Notification Channel
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel mChannel = new NotificationChannel("fanfic_compress_channel", "Fanfiction Compactor Utility", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel mChannel = new NotificationChannel("fanfic_compress_channel", "Fanfiction Compactor Utility", NotificationManager.IMPORTANCE_LOW);
             mChannel.setDescription("Controls notifications issued by the Fanfiction Compactor Utility");
             mChannel.enableLights(false);
+            mChannel.enableVibration(false);
             notificationManager.createNotificationChannel(mChannel);
         }
 
