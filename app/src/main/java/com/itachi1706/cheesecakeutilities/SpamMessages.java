@@ -28,14 +28,14 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spam_messages);
-        this.messageText = (EditText) findViewById(R.id.edit_messagespam_text);
-        this.numberText = (EditText) findViewById(R.id.edit_messagespam_times);
-        this.teleText = (EditText) findViewById(R.id.edit_messagespam_contact);
-        Button sendBtn = (Button) findViewById(R.id.btn_messagespam_send);
+        this.messageText = findViewById(R.id.edit_messagespam_text);
+        this.numberText = findViewById(R.id.edit_messagespam_times);
+        this.teleText = findViewById(R.id.edit_messagespam_contact);
+        Button sendBtn = findViewById(R.id.btn_messagespam_send);
         if (sendBtn != null) {
             sendBtn.setOnClickListener(this);
         }
-        Button contactBtn = (Button) findViewById(R.id.btn_messagespam_contacts);
+        Button contactBtn = findViewById(R.id.btn_messagespam_contacts);
         if (contactBtn != null) {
             contactBtn.setOnClickListener(this);
         }

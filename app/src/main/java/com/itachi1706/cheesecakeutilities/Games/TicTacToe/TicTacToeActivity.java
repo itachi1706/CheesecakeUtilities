@@ -44,21 +44,21 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tic_tac_toe);
-        r11 = (Button) findViewById(R.id.r11);
-        r12 = (Button) findViewById(R.id.r12);
-        r13 = (Button) findViewById(R.id.r13);
-        r21 = (Button) findViewById(R.id.r21);
-        r22 = (Button) findViewById(R.id.r22);
-        r23 = (Button) findViewById(R.id.r23);
-        r31 = (Button) findViewById(R.id.r31);
-        r32 = (Button) findViewById(R.id.r32);
-        r33 = (Button) findViewById(R.id.r33);
-        instructions = (TextView) findViewById(R.id.lblInstructions);
-        counter = (TextView) findViewById(R.id.countUpTimerLabel);
-        rbSP = (RadioButton) findViewById(R.id.rbSP);
-        grpGamePlay = (RadioGroup) findViewById(R.id.grpGamePlay);
-        btnReset = (Button) findViewById(R.id.btnReset);
-        btnStart = (Button) findViewById(R.id.btnStart);
+        r11 = findViewById(R.id.r11);
+        r12 = findViewById(R.id.r12);
+        r13 = findViewById(R.id.r13);
+        r21 = findViewById(R.id.r21);
+        r22 = findViewById(R.id.r22);
+        r23 = findViewById(R.id.r23);
+        r31 = findViewById(R.id.r31);
+        r32 = findViewById(R.id.r32);
+        r33 = findViewById(R.id.r33);
+        instructions = findViewById(R.id.lblInstructions);
+        counter = findViewById(R.id.countUpTimerLabel);
+        rbSP = findViewById(R.id.rbSP);
+        grpGamePlay = findViewById(R.id.grpGamePlay);
+        btnReset = findViewById(R.id.btnReset);
+        btnStart = findViewById(R.id.btnStart);
 
         r11.setOnClickListener(this);
         r12.setOnClickListener(this);

@@ -61,7 +61,8 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
     private void sendNotification(Context context, int notificationLevel, boolean workDone, boolean btState) {
         String time = DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+        QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Bluetooth Quiet Hour " + ((btState) ? "Enabled" : "Disabled"))
                 .setContentText("Bluetooth state toggled on " + time)
                 .setAutoCancel(true)

@@ -43,8 +43,8 @@ public class BatteryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_battery, container, false);
-        this.batteryInfo = (TextView) view.findViewById(R.id.batteryText);
-        this.pb = (ProgressBar) view.findViewById(R.id.progressbar);
+        this.batteryInfo = view.findViewById(R.id.batteryText);
+        this.pb = view.findViewById(R.id.progressbar);
         return view;
     }
 

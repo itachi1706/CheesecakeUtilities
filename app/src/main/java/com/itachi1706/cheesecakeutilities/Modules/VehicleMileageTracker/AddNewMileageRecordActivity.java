@@ -61,18 +61,18 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         user_id = getIntent().getStringExtra("uid");
 
         // Init objects
-        locationTo = (EditText) findViewById(R.id.veh_mileage_add_location);
-        purpose = (EditText) findViewById(R.id.veh_mileage_add_purpose);
-        vehicleNumber = (EditText) findViewById(R.id.veh_mileage_add_veh_num);
-        mileageBefore = (EditText) findViewById(R.id.veh_mileage_add_mileage_before);
-        mileageAfter = (EditText) findViewById(R.id.veh_mileage_add_mileage_after);
-        timeFrom = (EditText) findViewById(R.id.veh_mileage_add_from_datetime);
-        timeTo = (EditText) findViewById(R.id.veh_mileage_add_to_datetime);
-        vehicle = (Spinner) findViewById(R.id.spinnerVeh);
-        classType = (Spinner) findViewById(R.id.spinnerVehType);
-        Button addRecord = (Button) findViewById(R.id.veh_mileage_add_veh);
-        trainingMileage = (CheckBox) findViewById(R.id.cbTraining);
-        layout = (LinearLayout) findViewById(R.id.veh_mileage_add_veh_layout);
+        locationTo = findViewById(R.id.veh_mileage_add_location);
+        purpose = findViewById(R.id.veh_mileage_add_purpose);
+        vehicleNumber = findViewById(R.id.veh_mileage_add_veh_num);
+        mileageBefore = findViewById(R.id.veh_mileage_add_mileage_before);
+        mileageAfter = findViewById(R.id.veh_mileage_add_mileage_after);
+        timeFrom = findViewById(R.id.veh_mileage_add_from_datetime);
+        timeTo = findViewById(R.id.veh_mileage_add_to_datetime);
+        vehicle = findViewById(R.id.spinnerVeh);
+        classType = findViewById(R.id.spinnerVehType);
+        Button addRecord = findViewById(R.id.veh_mileage_add_veh);
+        trainingMileage = findViewById(R.id.cbTraining);
+        layout = findViewById(R.id.veh_mileage_add_veh_layout);
         database = FirebaseUtils.getFirebaseDatabase();
 
         // Init Spinner

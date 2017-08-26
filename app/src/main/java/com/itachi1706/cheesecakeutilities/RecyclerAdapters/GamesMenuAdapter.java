@@ -66,7 +66,7 @@ public class GamesMenuAdapter extends RecyclerView.Adapter<GamesMenuAdapter.Game
         GamesMenuHolder(View v)
         {
             super(v);
-            title = (TextView) v.findViewById(R.id.text1);
+            title = v.findViewById(R.id.text1);
             v.setOnClickListener(this);
         }
 

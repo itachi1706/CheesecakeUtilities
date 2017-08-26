@@ -61,7 +61,8 @@ public class WifiToggleReceiver extends BroadcastReceiver {
     private void sendNotification(Context context, int notificationLevel, boolean workDone, boolean wifiState) {
         String time = DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+        QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Wi-Fi Quiet Hour " + ((wifiState) ? "Enabled" : "Disabled"))
                 .setContentText("Wi-Fi state toggled on " + time)
                 .setAutoCancel(true)

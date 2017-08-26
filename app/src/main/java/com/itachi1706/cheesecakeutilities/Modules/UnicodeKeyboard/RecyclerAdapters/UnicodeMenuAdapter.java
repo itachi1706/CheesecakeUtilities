@@ -66,7 +66,7 @@ public class UnicodeMenuAdapter extends RecyclerView.Adapter<UnicodeMenuAdapter.
         UnicodeMenuHolder(View v)
         {
             super(v);
-            title = (TextView) v.findViewById(R.id.text1);
+            title = v.findViewById(R.id.text1);
             title.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             title.setMarqueeRepeatLimit(-1);
             title.setHorizontallyScrolling(true);

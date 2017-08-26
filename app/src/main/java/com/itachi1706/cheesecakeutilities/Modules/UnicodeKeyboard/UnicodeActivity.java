@@ -25,7 +25,7 @@ public class UnicodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unicode);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_menu_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);

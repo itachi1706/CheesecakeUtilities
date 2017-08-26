@@ -18,8 +18,8 @@ public class StringToHexBin extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_string_to_hex_bin);
-        input = (TextView) findViewById(R.id.input_binhex_string);
-        result = (TextView) findViewById(R.id.tv_binhex_results);
+        input = findViewById(R.id.input_binhex_string);
+        result = findViewById(R.id.tv_binhex_results);
         findViewById(R.id.btn_binhex_clear).setOnClickListener(this);
         findViewById(R.id.btn_binhex_copy).setOnClickListener(this);
         findViewById(R.id.btn_binhex_send).setOnClickListener(this);
@@ -27,15 +27,15 @@ public class StringToHexBin extends BaseActivity implements View.OnClickListener
     }
 
     private String translate() {
-        RadioButton bin = (RadioButton) this.findViewById(R.id.rb_binhex_bin);
+        RadioButton bin = this.findViewById(R.id.rb_binhex_bin);
         String thetext = input.getText().toString();
         if (thetext.length() > 0 && thetext.charAt(0) == ' ')
             thetext = thetext.substring(1, thetext.length());
         if (thetext.length() > 0 && thetext.charAt(thetext.length() - 1) == ' ')
             thetext = thetext.substring(0, thetext.length() - 1);
         String theconv = "";
-        CheckBox chkDel = (CheckBox) this.findViewById(R.id.checkbox_binhex_delimit);
-        RadioButton encdec = (RadioButton) this.findViewById(R.id.rb_binhex_encode);
+        CheckBox chkDel = this.findViewById(R.id.checkbox_binhex_delimit);
+        RadioButton encdec = this.findViewById(R.id.rb_binhex_encode);
         for (int i = 0; i < thetext.length(); i++) {
             String thebin;
             int b = thetext.charAt(i);

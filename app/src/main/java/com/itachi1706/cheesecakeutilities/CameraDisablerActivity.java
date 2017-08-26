@@ -34,10 +34,10 @@ public class CameraDisablerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_disabler);
 
-        deviceAdminBtn = (Button) findViewById(R.id.btnDeviceAdmin);
-        cameraBtn = (Button) findViewById(R.id.btnCameraAdmin);
-        deviceAdminStatus = (TextView) findViewById(R.id.statusDeviceAdmin);
-        cameraStatus = (TextView) findViewById(R.id.statusCamera);
+        deviceAdminBtn = findViewById(R.id.btnDeviceAdmin);
+        cameraBtn = findViewById(R.id.btnCameraAdmin);
+        deviceAdminStatus = findViewById(R.id.statusDeviceAdmin);
+        cameraStatus = findViewById(R.id.statusCamera);
 
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         deviceAdmin = new ComponentName(this, DeviceAdminReceiver.class);

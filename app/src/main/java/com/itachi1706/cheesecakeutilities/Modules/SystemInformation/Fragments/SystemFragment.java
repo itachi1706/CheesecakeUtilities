@@ -40,7 +40,7 @@ public class SystemFragment extends Fragment {
         return "Unknown";
     }
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<SystemFragment> mFrag;
 
         MyInnerHandler(SystemFragment aFragment) {
@@ -66,13 +66,13 @@ public class SystemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_system, container, false);
-        TextView osInfo = (TextView) view.findViewById(R.id.osInfoTxt);
+        TextView osInfo = view.findViewById(R.id.osInfoTxt);
         osInfo.setText(getOsInfo());
-        TextView osCodename = (TextView) view.findViewById(R.id.osCodenameTxt);
+        TextView osCodename = view.findViewById(R.id.osCodenameTxt);
         osCodename.setText(getString(R.string.sys_info_codename, getCodename(VERSION.SDK_INT)));// String.valueOf(Codenames.getCodename())));
-        TextView intMem = (TextView) view.findViewById(R.id.intMemTxt);
+        TextView intMem = view.findViewById(R.id.intMemTxt);
         intMem.setText(getIntMem());
-        TextView javaInfo = (TextView) view.findViewById(R.id.javaInfoTxt);
+        TextView javaInfo = view.findViewById(R.id.javaInfoTxt);
         javaInfo.setText(getJavaInfo());
         return view;
     }
@@ -84,7 +84,7 @@ public class SystemFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.mUptime = (TextView) getActivity().findViewById(R.id.uptime);
+        this.mUptime = getActivity().findViewById(R.id.uptime);
         this.mHandler.sendEmptyMessageDelayed(EVENT_TICK, 1000);
     }
 

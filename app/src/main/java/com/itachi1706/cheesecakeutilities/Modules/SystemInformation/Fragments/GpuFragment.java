@@ -29,7 +29,7 @@ public class GpuFragment extends Fragment {
     private static int err_gpu_clock_count = 0, err_gpu_clock1_count = 0;
     private static final int SUPRESS_WARNINGS = 10;
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<GpuFragment> mFrag;
 
         MyInnerHandler(GpuFragment aFragment) {
@@ -57,13 +57,13 @@ public class GpuFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab_gpuinfo, container, false);
         ((TextView) view.findViewById(R.id.gpuInfoTxt)).setText(getGpuInfo());
         ((TextView) view.findViewById(R.id.gpuExtensionsTxt)).setText(getGpuExtensions());
-        TextView getMaxGPUClock = (TextView) view.findViewById(R.id.getMaxGPUClock);
+        TextView getMaxGPUClock = view.findViewById(R.id.getMaxGPUClock);
         if (getMaxGPUClock().equalsIgnoreCase(BuildConfig.FLAVOR)) {
             getMaxGPUClock.setVisibility(View.GONE);
         } else {
             getMaxGPUClock.setText(getString(R.string.sys_info_gpu_clock_max_adreno, getMaxGPUClock()));
         }
-        TextView getMaxGPUClock1 = (TextView) view.findViewById(R.id.getMaxGPUClock1);
+        TextView getMaxGPUClock1 = view.findViewById(R.id.getMaxGPUClock1);
         if (getMaxGPUClock1().equalsIgnoreCase(BuildConfig.FLAVOR)) {
             getMaxGPUClock1.setVisibility(View.GONE);
         } else {
@@ -80,11 +80,11 @@ public class GpuFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getGPUClock = (TextView) getActivity().findViewById(R.id.getGPUClock);
+        getGPUClock = getActivity().findViewById(R.id.getGPUClock);
         if (getGPUClock().equalsIgnoreCase(BuildConfig.FLAVOR)) {
             getGPUClock.setVisibility(View.GONE);
         }
-        getGPUClock1 = (TextView) getActivity().findViewById(R.id.getGPUClock1);
+        getGPUClock1 = getActivity().findViewById(R.id.getGPUClock1);
         if (getGPUClock1().equalsIgnoreCase(BuildConfig.FLAVOR)) {
             getGPUClock1.setVisibility(View.GONE);
         }

@@ -28,7 +28,7 @@ public class ParentFragmentActivity extends BaseActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -78,14 +78,14 @@ public class ParentFragmentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_info);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        this.mViewPager = (ViewPager) findViewById(R.id.pager);
+        this.mViewPager = findViewById(R.id.pager);
         this.mViewPager.setAdapter(this.mSectionsPagerAdapter);
 
-        TabLayout layout = (TabLayout) findViewById(R.id.sliding_tabs);
+        TabLayout layout = findViewById(R.id.sliding_tabs);
         layout.setupWithViewPager(this.mViewPager);
         layout.setTabTextColors(Color.LTGRAY, Color.WHITE);
         if (VERSION.SDK_INT >= 19) {

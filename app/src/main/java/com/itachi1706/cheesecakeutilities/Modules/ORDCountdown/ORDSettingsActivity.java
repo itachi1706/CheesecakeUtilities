@@ -88,9 +88,9 @@ public class ORDSettingsActivity extends AppCompatActivity {
             }
         });
 
-        pesStatusSpinner = (Spinner) findViewById(R.id.spinnerPES);
+        pesStatusSpinner = findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
-        payDaySpinner = (Spinner) findViewById(R.id.spinnerPD);
+        payDaySpinner = findViewById(R.id.spinnerPD);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         new DatePickerDialog(this, this.pop, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    class popListener implements DatePickerDialog.OnDateSetListener {
+    private class popListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -210,7 +210,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         }
     }
 
-    class enlistListener implements DatePickerDialog.OnDateSetListener {
+    private class enlistListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -220,7 +220,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         }
     }
 
-    class ptpListener implements DatePickerDialog.OnDateSetListener {
+    private class ptpListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
@@ -230,7 +230,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         }
     }
 
-    class ordListener implements DatePickerDialog.OnDateSetListener {
+    private class ordListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
