@@ -42,7 +42,7 @@ public class StorageFragment extends Fragment {
         return view;
     }
 
-    class Mounts {
+    private class Mounts {
         private String mountDevice, mountPoint, filesystem, options;
 
         Mounts(String mountDevice, String mountPoint, String filesystem, String options) {
@@ -164,7 +164,7 @@ public class StorageFragment extends Fragment {
         String unitTotal = " MB";
         String unitAvail = " MB";
         String unitUsed = " MB";
-        String sdkDetect = "Removable SD Card";
+        String sdkDetect = "Emulated SD Card (Android 4.0+)";
         String path = "Path: " + Environment.getExternalStorageDirectory().getAbsolutePath();
         if (totalSize >= 1024.0d) {
             totalSize = ((double) Math.round((100.0d * totalSize) / 1024.0d)) / 100.0d;
@@ -178,7 +178,6 @@ public class StorageFragment extends Fragment {
             usedSize = ((double) Math.round((100.0d * usedSize) / 1024.0d)) / 100.0d;
             unitUsed = " GB";
         }
-        sdkDetect = "Emulated SD Card (Android 4.0+)";
         Mounts mem = getMountPoint(Environment.getExternalStorageDirectory().getAbsolutePath());
         String additionalData = "";
         if (mem != null) {

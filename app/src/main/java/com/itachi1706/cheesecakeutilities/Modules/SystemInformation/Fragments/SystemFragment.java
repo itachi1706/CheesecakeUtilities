@@ -40,7 +40,7 @@ public class SystemFragment extends Fragment {
         return "Unknown";
     }
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<SystemFragment> mFrag;
 
         MyInnerHandler(SystemFragment aFragment) {

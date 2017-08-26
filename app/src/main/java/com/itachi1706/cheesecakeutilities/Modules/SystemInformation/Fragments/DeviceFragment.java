@@ -37,7 +37,7 @@ public class DeviceFragment extends Fragment {
     private static int err_cpu_min_count = 0, err_cpu_freq_count = 0;
     private static final int SUPRESS_WARNINGS = 10;
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<DeviceFragment> mFrag;
 
         MyInnerHandler(DeviceFragment aFragment) {

@@ -29,7 +29,7 @@ public class GpuFragment extends Fragment {
     private static int err_gpu_clock_count = 0, err_gpu_clock1_count = 0;
     private static final int SUPRESS_WARNINGS = 10;
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<GpuFragment> mFrag;
 
         MyInnerHandler(GpuFragment aFragment) {
