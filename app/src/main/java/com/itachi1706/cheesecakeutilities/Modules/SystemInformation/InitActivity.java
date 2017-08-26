@@ -18,7 +18,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class InitActivity extends AppCompatActivity {
     private static SharedPreferences prefs;
 
-    class ClearRenderer implements Renderer {
+    private class ClearRenderer implements Renderer {
         ClearRenderer() {
         }
 

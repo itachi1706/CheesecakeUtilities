@@ -31,7 +31,7 @@ public class NetworkFragment extends Fragment {
     MyInnerHandler mHandler;
     private TextView macAddressInfo;
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<NetworkFragment> mFrag;
 
         MyInnerHandler(NetworkFragment aFragment) {
