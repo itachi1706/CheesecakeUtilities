@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
+import android.support.v4.content.pm.ShortcutInfoCompat;
+import android.support.v4.content.pm.ShortcutManagerCompat;
+import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,12 +63,12 @@ public class CreateShortcuts extends AppCompatActivity {
             intent.setAction(Intent.ACTION_MAIN);
             intent.putExtra("menuitem", link);
 
-
-            Intent createShortcutIntent = new Intent();
-            createShortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-            createShortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, link);
-            Parcelable iconRes = Intent.ShortcutIconResource.fromContext(this, R.mipmap.ic_launcher_round);
-            createShortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
+            // Using API 26 new method of creating shortcuts
+            ShortcutInfoCompat shortcutInfo = new ShortcutInfoCompat.Builder(this, link.replace(" ", "-"))
+                    .setShortLabel(link).setLongLabel(link + " Utility")
+                    .setIntent(intent).setIcon(IconCompat.createWithResource(this, R.mipmap.ic_launcher_round))
+                    .build();
+            Intent shortcutIntent = ShortcutManagerCompat.createShortcutResultIntent(this, shortcutInfo);
 
             // Firebase Analytics Event Logging
             FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
@@ -77,7 +79,8 @@ public class CreateShortcuts extends AppCompatActivity {
             Log.i("Firebase", "Logged Event Utility Shortcut Created: " + link);
 
             Log.i("CreateShortcuts", "Shortcut Creation success");
-            setResult(RESULT_OK, createShortcutIntent);
+
+            setResult(RESULT_OK, shortcutIntent);
             finish();
             return;
         } catch (ClassNotFoundException e) {
