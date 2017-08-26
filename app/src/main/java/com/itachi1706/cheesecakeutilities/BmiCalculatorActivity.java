@@ -87,6 +87,7 @@ public class BmiCalculatorActivity extends BaseActivity {
             return false;
         }
         try {
+            //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(height.getText().toString());
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Invalid Height", Toast.LENGTH_LONG).show();
@@ -94,6 +95,7 @@ public class BmiCalculatorActivity extends BaseActivity {
         }
 
         try {
+            //noinspection ResultOfMethodCallIgnored
             Double.parseDouble(weight.getText().toString());
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Invalid Weight", Toast.LENGTH_LONG).show();

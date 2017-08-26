@@ -1,5 +1,8 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+
 /**
  * Created by Kenneth on 28/4/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours in CheesecakeUtilities
@@ -17,6 +20,16 @@ public class QHConstants {
     public static final int BT_START_INTENT = 2000, BT_END_INTENT = 2001, WIFI_START_INTENT = 2002, WIFI_END_INTENT = 2003;
 
     public static final String QH_NOTIFICATION_CHANNEL = "quiet_hour_channel";
-    public static final String QH_NOTIFICATION_CHANNEL_TITLE = "Quiet Hours Utility Notifications";
-    public static final String QH_NOTIFICATION_CHANNEL_DESC = "Controls the notifications issued by the Quiet Hours Utility";
+    private static final String QH_NOTIFICATION_CHANNEL_TITLE = "Quiet Hours Utility Notifications";
+    private static final String QH_NOTIFICATION_CHANNEL_DESC = "Controls the notifications issued by the Quiet Hours Utility";
+
+    public static void createNotificationChannel(NotificationManager notificationManager) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(QH_NOTIFICATION_CHANNEL, QH_NOTIFICATION_CHANNEL_TITLE,
+                    NotificationManager.IMPORTANCE_LOW);
+            mChannel.setDescription(QH_NOTIFICATION_CHANNEL_DESC);
+            mChannel.enableLights(false);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+    }
 }
