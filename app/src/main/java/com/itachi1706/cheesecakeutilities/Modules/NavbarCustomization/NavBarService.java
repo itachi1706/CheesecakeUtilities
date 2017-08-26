@@ -215,6 +215,7 @@ public class NavBarService extends AccessibilityService {
         lpNavView.x = 0; // start from the left edge
         lpNavView.y = -navBarSize;
         lpNavView.format = PixelFormat.TRANSLUCENT;
+        //noinspection deprecation
         lpNavView.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY; // we need this to draw over other apps
         // Lets us draw outside screen bounds
         lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
