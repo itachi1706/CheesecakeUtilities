@@ -58,8 +58,8 @@ public class ListApplicationsApiGraphActivity extends AppCompatActivity implemen
             appCountMap.put(Integer.parseInt(tmp2[0]), Integer.parseInt(tmp2[1]));
         }
 
-        PieChart chart = (PieChart) findViewById(R.id.chart);
-        layout = (RelativeLayout) findViewById(R.id.activity_list_applications_api_graph);
+        PieChart chart = findViewById(R.id.chart);
+        layout = findViewById(R.id.activity_list_applications_api_graph);
         List<PieEntry> entries = new ArrayList<>();
         for (Map.Entry<Integer, Integer> object : appCountMap.entrySet()) {
             entries.add(new PieEntry((float) object.getValue(), "API " + object.getKey().toString()));

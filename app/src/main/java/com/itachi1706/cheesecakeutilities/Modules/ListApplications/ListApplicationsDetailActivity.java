@@ -148,13 +148,13 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
         signature = generateSignatureList(signatures);
 
-        appName = (TextView) findViewById(R.id.appName);
-        appVersion = (TextView) findViewById(R.id.appVersion);
-        icon = (ImageView) findViewById(R.id.iv_icon);
-        grid = (GridLayout) findViewById(R.id.gridLayout);
-        creator = (LinearLayout) findViewById(R.id.layout_creator);
-        backup = (Button) findViewById(R.id.btnBackup);
-        launchApp = (Button) findViewById(R.id.btnLaunch);
+        appName = findViewById(R.id.appName);
+        appVersion = findViewById(R.id.appVersion);
+        icon = findViewById(R.id.iv_icon);
+        grid = findViewById(R.id.gridLayout);
+        creator = findViewById(R.id.layout_creator);
+        backup = findViewById(R.id.btnBackup);
+        launchApp = findViewById(R.id.btnLaunch);
 
         appName.setText(info.loadLabel(pm).toString());
         appVersion.setText(getString(R.string.list_app_version, " ", version));

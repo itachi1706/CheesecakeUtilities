@@ -24,7 +24,7 @@ public class GamesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.main_menu_recycler_view);
+        RecyclerView recyclerView = v.findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

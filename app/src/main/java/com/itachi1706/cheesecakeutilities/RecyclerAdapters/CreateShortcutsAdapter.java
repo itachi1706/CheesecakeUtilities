@@ -60,7 +60,7 @@ public class CreateShortcutsAdapter extends RecyclerView.Adapter<CreateShortcuts
         CreateShortcutsHolder(View v)
         {
             super(v);
-            title = (TextView) v.findViewById(R.id.text1);
+            title = v.findViewById(R.id.text1);
             v.setOnClickListener(this);
         }
 

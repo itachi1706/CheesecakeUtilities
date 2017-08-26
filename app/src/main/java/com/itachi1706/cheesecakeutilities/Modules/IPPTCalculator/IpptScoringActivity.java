@@ -33,19 +33,19 @@ public class IpptScoringActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ippt_scoring);
 
-        genderSpinner = (Spinner) findViewById(R.id.spinnerGender);
-        ageSpinner = (Spinner) findViewById(R.id.spinnerAge);
-        exerciseSpinner = (Spinner) findViewById(R.id.spinnerExercise);
+        genderSpinner = findViewById(R.id.spinnerGender);
+        ageSpinner = findViewById(R.id.spinnerAge);
+        exerciseSpinner = findViewById(R.id.spinnerExercise);
 
-        recyclerView = (RecyclerView) findViewById(R.id.ippt_recycler_view);
+        recyclerView = findViewById(R.id.ippt_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        bar = (ProgressBar) findViewById(R.id.ippt_pb);
-        label = (TextView) findViewById(R.id.ippt_pb_label);
+        bar = findViewById(R.id.ippt_pb);
+        label = findViewById(R.id.ippt_pb_label);
 
         ageSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, JsonHelper.getAgeRangeText(this)));
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -79,10 +79,10 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
             super(v);
             mContext = v.getContext();
             sp = PreferenceManager.getDefaultSharedPreferences(v.getContext());
-            title = (TextView) v.findViewById(R.id.text1);
-            visibleToggle = (ImageButton) v.findViewById(R.id.checkbox);
+            title = v.findViewById(R.id.text1);
+            visibleToggle = v.findViewById(R.id.checkbox);
             visibleToggle.setOnClickListener(this);
-            lockToggle = (ImageButton) v.findViewById(R.id.lockutilbutton);
+            lockToggle = v.findViewById(R.id.lockutilbutton);
             lockToggle.setOnClickListener(this);
             if (sp.getBoolean("global_applock", true)) lockToggle.setVisibility(View.GONE);
         }

@@ -37,7 +37,7 @@ public class DeviceFragment extends Fragment {
     private static int err_cpu_min_count = 0, err_cpu_freq_count = 0;
     private static final int SUPRESS_WARNINGS = 10;
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<DeviceFragment> mFrag;
 
         MyInnerHandler(DeviceFragment aFragment) {
@@ -63,22 +63,22 @@ public class DeviceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_device, container, false);
-        TextView cpuMax = (TextView) view.findViewById(R.id.cpuMaxTxt);
+        TextView cpuMax = view.findViewById(R.id.cpuMaxTxt);
         cpuMax.setText(getCpuMax());
-        TextView cpuMin = (TextView) view.findViewById(R.id.cpuMinTxt);
+        TextView cpuMin = view.findViewById(R.id.cpuMinTxt);
         cpuMin.setText(getCpuMin());
-        TextView cpuType = (TextView) view.findViewById(R.id.cpuTypeTxt);
+        TextView cpuType = view.findViewById(R.id.cpuTypeTxt);
         cpuType.setText(getCpuType());
-        TextView cpuInstruct = (TextView) view.findViewById(R.id.cpuInstructTxt);
+        TextView cpuInstruct = view.findViewById(R.id.cpuInstructTxt);
         cpuInstruct.setText(getCpuInstructions());
-        TextView cpuCoreCount = (TextView) view.findViewById(R.id.cpuCoreCountTxt);
+        TextView cpuCoreCount = view.findViewById(R.id.cpuCoreCountTxt);
         cpuCoreCount.setText(getString(R.string.sys_info_cpucores, String.valueOf(getCoreCount())));
-        TextView ramTotal = (TextView) view.findViewById(R.id.ramTotal);
+        TextView ramTotal = view.findViewById(R.id.ramTotal);
         ramTotal.setText(getTotalRAM());
-        TextView deviceInfo = (TextView) view.findViewById(R.id.deviceInfoTxt);
+        TextView deviceInfo = view.findViewById(R.id.deviceInfoTxt);
         deviceInfo.setText(getDeviceInfo());
-        TextView displayInfo = (TextView) view.findViewById(R.id.displayInfoTxt);
-        TextView displaySize = (TextView) view.findViewById(R.id.displaySizeTxt);
+        TextView displayInfo = view.findViewById(R.id.displayInfoTxt);
+        TextView displaySize = view.findViewById(R.id.displaySizeTxt);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             displayInfo.setText(getDisplayInfo());
             displaySize.setText(getDisplaySize());
@@ -94,8 +94,8 @@ public class DeviceFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.mFreeRam = (TextView) getActivity().findViewById(R.id.ramFree);
-        this.getCpuFreq = (TextView) getActivity().findViewById(R.id.cpuFreq);
+        this.mFreeRam = getActivity().findViewById(R.id.ramFree);
+        this.getCpuFreq = getActivity().findViewById(R.id.cpuFreq);
         if (getCpuFrequency().equalsIgnoreCase("GONE")) {
             this.getCpuFreq.setVisibility(View.GONE);
         }

@@ -59,11 +59,11 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_mileage_tracker_login);
         // Set up the login form.
-        progress = (ProgressBar) findViewById(R.id.sign_in_progress);
+        progress = findViewById(R.id.sign_in_progress);
         progress.setIndeterminate(true);
         progress.setVisibility(View.GONE);
         sp = PreferenceManager.getDefaultSharedPreferences(this);
-        SignInButton mEmailSignInButton = (SignInButton) findViewById(R.id.email_sign_in_button);
+        SignInButton mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override

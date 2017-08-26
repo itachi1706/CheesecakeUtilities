@@ -78,7 +78,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.veh_mileage_main_list);
+        RecyclerView recyclerView = findViewById(R.id.veh_mileage_main_list);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

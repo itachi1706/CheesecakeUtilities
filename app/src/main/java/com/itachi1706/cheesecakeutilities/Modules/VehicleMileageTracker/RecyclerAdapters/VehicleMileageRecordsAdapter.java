@@ -123,11 +123,11 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         {
             super(v);
             defaultTextColor = ContextCompat.getColor(v.getContext(), R.color.default_text_color_sec);
-            location = (TextView) v.findViewById(R.id.tvLocation);
-            purpose = (TextView) v.findViewById(R.id.tvPurpose);
-            vehicle = (TextView) v.findViewById(R.id.tvVehicle);
-            vehicleNumber = (TextView) v.findViewById(R.id.tvVehicleNumber);
-            totalTimeDistance = (TextView) v.findViewById(R.id.tvTotalTimeDistance);
+            location = v.findViewById(R.id.tvLocation);
+            purpose = v.findViewById(R.id.tvPurpose);
+            vehicle = v.findViewById(R.id.tvVehicle);
+            vehicleNumber = v.findViewById(R.id.tvVehicleNumber);
+            totalTimeDistance = v.findViewById(R.id.tvTotalTimeDistance);
             location.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             location.setMarqueeRepeatLimit(-1);
             location.setHorizontallyScrolling(true);

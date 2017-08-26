@@ -21,11 +21,11 @@ public class BmiCalculatorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bmi_calculator);
 
-        height = (EditText) findViewById(R.id.etHeight);
-        weight = (EditText) findViewById(R.id.etWeight);
-        table = (Button) findViewById(R.id.btnTable);
-        calculate = (Button) findViewById(R.id.btnCalculate);
-        result = (TextView) findViewById(R.id.tvResults);
+        height = findViewById(R.id.etHeight);
+        weight = findViewById(R.id.etWeight);
+        table = findViewById(R.id.btnTable);
+        calculate = findViewById(R.id.btnCalculate);
+        result = findViewById(R.id.tvResults);
 
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +87,7 @@ public class BmiCalculatorActivity extends BaseActivity {
             return false;
         }
         try {
+            //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(height.getText().toString());
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Invalid Height", Toast.LENGTH_LONG).show();
@@ -94,6 +95,7 @@ public class BmiCalculatorActivity extends BaseActivity {
         }
 
         try {
+            //noinspection ResultOfMethodCallIgnored
             Double.parseDouble(weight.getText().toString());
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Invalid Weight", Toast.LENGTH_LONG).show();

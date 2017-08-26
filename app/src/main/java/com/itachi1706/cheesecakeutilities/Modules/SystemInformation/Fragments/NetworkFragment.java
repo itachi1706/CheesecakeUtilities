@@ -31,7 +31,7 @@ public class NetworkFragment extends Fragment {
     MyInnerHandler mHandler;
     private TextView macAddressInfo;
 
-    static class MyInnerHandler extends Handler {
+    private static class MyInnerHandler extends Handler {
         WeakReference<NetworkFragment> mFrag;
 
         MyInnerHandler(NetworkFragment aFragment) {
@@ -68,9 +68,9 @@ public class NetworkFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.dataIpAddress = (TextView) getActivity().findViewById(R.id.ipAddressTxt);
-        this.getNetSsid = (TextView) getActivity().findViewById(R.id.ssidTxt);
-        this.macAddressInfo = (TextView) getActivity().findViewById(R.id.macAddressTxt);
+        this.dataIpAddress = getActivity().findViewById(R.id.ipAddressTxt);
+        this.getNetSsid = getActivity().findViewById(R.id.ssidTxt);
+        this.macAddressInfo = getActivity().findViewById(R.id.macAddressTxt);
         this.mHandler.sendEmptyMessageDelayed(EVENT_TICK, 1000);
     }
 
