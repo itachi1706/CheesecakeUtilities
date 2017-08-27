@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.AddNewMileageRecordActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
@@ -35,8 +37,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     private DataSnapshot vehicles;
     private boolean hideTraining = false;
 
-    public VehicleMileageRecordsAdapter(List<Record> recordList, List<String> tags, DataSnapshot vehicles)
-    {
+    public VehicleMileageRecordsAdapter(List<Record> recordList, List<String> tags, DataSnapshot vehicles) {
         this.recordsList = recordList;
         this.tags = tags;
         this.vehicles = vehicles;
@@ -68,14 +69,12 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return (this.hideTraining) ? hidden.size() : recordsList.size();
     }
 
     @Override
-    public void onBindViewHolder(VehicleMileageRecordsViewHolder recordsViewHolder, int i)
-    {
+    public void onBindViewHolder(VehicleMileageRecordsViewHolder recordsViewHolder, int i) {
         Record s;
         if (this.hideTraining) s = hidden.get(i);
         else s = recordsList.get(i);
@@ -86,8 +85,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         if (s.getVehicleId().isEmpty()) {
             recordsViewHolder.vehicle.setText("Unknown Vehicle");
             recordsViewHolder.fullVehicleName = "Unknown Vehicle";
-        }
-        else {
+        } else {
             Vehicle v = vehicles.child(s.getVehicleClass()).child(s.getVehicleId()).getValue(Vehicle.class);
             if (v == null) recordsViewHolder.vehicle.setText("Unknown Vehicle");
             else recordsViewHolder.vehicle.setText(v.getShortname());
@@ -119,8 +117,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         String tag, fullVehicleName;
         Record r;
 
-        VehicleMileageRecordsViewHolder(View v)
-        {
+        VehicleMileageRecordsViewHolder(View v) {
             super(v);
             defaultTextColor = ContextCompat.getColor(v.getContext(), R.color.default_text_color_sec);
             location = v.findViewById(R.id.tvLocation);
@@ -163,19 +160,29 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                             new AlertDialog.Builder(v1.getContext()).setTitle("Deleting Mileage Record")
                                     .setMessage("Are you sure you want to delete this record? This cannot be reversed!" +
                                             "\nID: " + tag)
-                            .setPositiveButton("Delete Anyway", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
-                                    FirebaseUtils.getFirebaseDatabase().getReference().child("users")
-                                            .child(sp.getString("firebase_uid", "nien")).child("records")
-                                            .child(tag).removeValue();
-                                    Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
+                                    .setPositiveButton("Delete Anyway", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                                            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
+                                                    .child(sp.getString("firebase_uid", "nien")).child("records")
+                                                    .child(tag).removeValue();
+                                            Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
 
-                                }
-                            }).setNegativeButton("No", null).show();
+                                        }
+                                    }).setNegativeButton("No", null).show();
                         }
-                    }).show();
+                    }).setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                    String uid = sp.getString("firebase_uid", "");
+                    Intent intent = new Intent(v1.getContext(), AddNewMileageRecordActivity.class);
+                    intent.putExtra("edit", tag);
+                    if (!uid.isEmpty()) intent.putExtra("uid", uid);
+                    v1.getContext().startActivity(intent);
+                }
+            }).show();
         }
     }
 }
