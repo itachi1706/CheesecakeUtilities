@@ -28,3 +28,21 @@ function calculateTotalMileage(recordList) {
     })
     return mileage;
 }
+
+function calculateByClass(recordList) {
+    var classMileage = {};
+    classMileage['class2'] = 0.0;
+    classMileage['class3'] = 0.0;
+    classMileage['class4'] = 0.0;
+    classMileage['class4s'] = 0.0;
+    classMileage['class5'] = 0.0;
+    classMileage['class4a'] = 0.0;
+    classMileage['class1'] = 0.0;
+    classMileage['class3c'] = 0.0;
+    Object.keys(recordList).forEach(key => {
+        if (typeof recordList[key] === 'object') {
+            classMileage[recordList[key].vehicleClass] += parseFloat(recordList[key].totalMileage);
+        }
+    })
+    return classMileage;
+}
