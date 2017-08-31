@@ -47,6 +47,14 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
         this.announce = announce;
     }
 
+    public void update(List<DualLineString> strings) {
+        this.stringList = strings;
+    }
+
+    public void update(DualLineString[] strings) {
+        this.update(Arrays.asList(strings));
+    }
+
     @Override
     public int getItemCount()
     {
