@@ -204,6 +204,9 @@ public class VehicleMileageMainActivity extends BaseActivity {
             case R.id.view_vehicles:
                 startActivity(new Intent(this, ViewVehicleActivity.class));
                 return true;
+            case R.id.view_statistics:
+                startActivity(new Intent(this, VehicleMileageStatisticsActivity.class));
+                return true;
             default: return super.onOptionsItemSelected(item);
         }
     }

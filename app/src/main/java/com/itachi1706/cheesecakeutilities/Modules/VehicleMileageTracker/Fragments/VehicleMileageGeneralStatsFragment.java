@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
@@ -66,7 +66,7 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
             recyclerView.setAdapter(adapter);
 
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            FirebaseDatabase.getInstance().getReference().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
+            FirebaseUtils.getFirebaseDatabase().getReference().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     legend = new ArrayMap<>();
@@ -100,7 +100,7 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
             return;
         }
-        FirebaseDatabase.getInstance().getReference().child("users").child(user_id).child("records").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
