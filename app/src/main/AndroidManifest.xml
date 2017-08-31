@@ -252,6 +252,7 @@
             android:name=".Modules.VehicleMileageTracker.ViewVehicleActivity"
             android:label="View All Vehicles" />
         <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageStatisticsActivity"
+            android:theme="@style/AppTheme.NoAppBar"
             android:label="Mileage Statistics" />
     </application>
 
