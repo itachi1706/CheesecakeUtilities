@@ -248,8 +248,11 @@
         <activity
             android:name=".Modules.VehicleMileageTracker.AddNewMileageRecordActivity"
             android:label="Add a new Mileage Record" />
-        <activity android:name=".Modules.VehicleMileageTracker.ViewVehicleActivity"
+        <activity
+            android:name=".Modules.VehicleMileageTracker.ViewVehicleActivity"
             android:label="View All Vehicles" />
+        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageStatisticsActivity"
+            android:label="Mileage Statistics" />
     </application>
 
 </manifest>
