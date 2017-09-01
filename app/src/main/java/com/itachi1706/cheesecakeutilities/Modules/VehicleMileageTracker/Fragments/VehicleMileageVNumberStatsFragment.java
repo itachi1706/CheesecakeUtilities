@@ -32,13 +32,12 @@ import java.util.Locale;
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments in CheesecakeUtilities
  */
 
-public class VehicleMileageMonthStatsFragment extends Fragment {
+public class VehicleMileageVNumberStatsFragment extends Fragment {
 
     DualLineStringRecyclerAdapter adapter;
     SharedPreferences sp;
 
-
-    public VehicleMileageMonthStatsFragment() {
+    public VehicleMileageVNumberStatsFragment() {
         // Required empty public constructor
     }
 
@@ -83,14 +82,12 @@ public class VehicleMileageMonthStatsFragment extends Fragment {
             return;
         }
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
-                .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("vehicleNumberRecords").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Date d = new Date(Long.parseLong(ds.getKey()));
-                    SimpleDateFormat sd = new SimpleDateFormat("MMMM yyyy", Locale.US);
-                    stats.add(new DualLineString("Total Mileage for " + sd.format(d), ds.getValue(Double.class) + " km"));
+                    stats.add(new DualLineString("Total Mileage with " + ds.getKey(), ds.getValue(Double.class) + " km"));
                 }
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();

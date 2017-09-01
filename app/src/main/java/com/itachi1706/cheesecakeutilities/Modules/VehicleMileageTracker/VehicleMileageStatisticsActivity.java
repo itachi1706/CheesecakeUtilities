@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageGeneralStatsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageMonthStatsFragment;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageVNumberStatsFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
@@ -45,6 +46,7 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
         adapter.addFrag(new VehicleMileageGeneralStatsFragment(), "General");
         adapter.addFrag(new VehicleMileageDateStatsFragment(), "Date");
         adapter.addFrag(new VehicleMileageMonthStatsFragment(), "Month");
+        adapter.addFrag(new VehicleMileageVNumberStatsFragment(), "Vehicle Number");
 
         viewPager.setAdapter(adapter);
     }

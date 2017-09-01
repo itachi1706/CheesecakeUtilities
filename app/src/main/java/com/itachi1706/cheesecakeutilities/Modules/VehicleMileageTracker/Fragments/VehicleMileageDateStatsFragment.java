@@ -90,7 +90,6 @@ public class VehicleMileageDateStatsFragment extends Fragment {
                     Date d = new Date(Long.parseLong(ds.getKey()));
                     SimpleDateFormat sd = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
                     stats.add(new DualLineString("Total Mileage for " + sd.format(d), ds.getValue(Double.class) + " km"));
-
                 }
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
