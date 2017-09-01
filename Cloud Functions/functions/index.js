@@ -19,15 +19,13 @@ exports.calculateStatistics = functions.database.ref('/users/{userid}/records').
         // Only save those that has more than 0;
         var classM = calculateByClass(records);
         stats = Object.assign({}, stats, classM);
-        console.log('Finished Calculating Class Total Mileage');
-        console.log('Processing Mileage split by misc items (date, month, vehicle type)');
+        console.log('Processing Mileage split by misc items (date, month, vehicle type)...');
         var misc = miscMileage(records);
         stats.timeRecords = misc.time;
         stats.vehicleTypes = misc.vehicles;
         stats.vehicleNumberRecords = misc.vehicleNumber;
-        console.log('Finished Processing Miscellaneous Mileage Processing');
+        console.log('Finished Processing User. Saving to Firebase DB');
         console.log(stats);
-        console.log('Finished Processing User');
         return event.data.ref.parent.child('statistics').set(stats);
     }
 )
