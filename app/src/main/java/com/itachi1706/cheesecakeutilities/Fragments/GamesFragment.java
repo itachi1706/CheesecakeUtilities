@@ -22,7 +22,7 @@ public class GamesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_main_menu, container, false);
+        View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         RecyclerView recyclerView = v.findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {
