@@ -18,11 +18,7 @@ exports.calculateStatistics = functions.database.ref('/users/{userid}/records').
         console.log('Calculating Class Total Mileage...');
         // Only save those that has more than 0;
         var classM = calculateByClass(records);
-        Object.keys(classM).forEach(key => {
-            if (typeof classM[key] === 'object') {
-                if (classM[key] > 0) stats[ classM[key] ] = classM[key];
-            }
-        })
+        stats = Object.assign({}, stats, classM);
         console.log('Finished Calculating Class Total Mileage');
         console.log(stats);
         console.log('Finished Processing User');
