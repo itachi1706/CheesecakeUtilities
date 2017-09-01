@@ -42,7 +42,7 @@ function miscMileage(recordList) {
             if (recordList[key].trainingMileage == true) return;
             
             // Add Date Time mileage
-            var rDate = new Date(recordList[key].dateTimeFrom);
+            var rDate = new Date(parseInt(recordList[key].datetimeFrom, 10));
             rDate.setHours(0,0,0,0); // Add to date
             if (!date[rDate.getTime().toString()]) date[rDate.getTime().toString()] = 0.0;
             date[rDate.getTime().toString()] += parseFloat(recordList[key].totalMileage);
@@ -58,7 +58,6 @@ function miscMileage(recordList) {
         }
     });
     var result = {time: {perDate: date, perMonth: month}, vehicles: vehicle, vehicleNumber: vehicleNum}
-    console.log(result);
     return result;
 }
 
