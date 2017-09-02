@@ -69,6 +69,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     private ApplicationInfo info;
     private String signature;
     private String version;
+    private Signature[] signatures;
 
     private static final int INSTALL_UNKNOWN = -99;
 
@@ -108,7 +109,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         long firstInstall = 0, lastUpdate = 0;
         String[] requestedPermissions = null;
         ActivityInfo[] activities = null;
-        Signature[] signatures = null;
+        signatures = null;
         FeatureInfo[] configurations = null;
 
         ProviderInfo[] providerInfos = null;
@@ -362,16 +363,16 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         return "";
     }
 
+    private X509Certificate getCert(byte[] cert) throws CertificateException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(cert);
+        CertificateFactory cf = CertificateFactory.getInstance("X509");
+        return (X509Certificate) cf.generateCertificate(inputStream);
+    }
+
     private String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
         byte[] cert = sig.toByteArray();
         try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(cert);
-            CertificateFactory cf = CertificateFactory.getInstance("X509");
-            X509Certificate c = (X509Certificate) cf.generateCertificate(inputStream);
-            byte[] sigCert = c.getEncoded();
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            byte[] publicKey = md.digest(sigCert);
-            return bytesToHex(publicKey);
+            return bytesToHex(MessageDigest.getInstance("SHA1").digest(getCert(cert).getEncoded()));
         } catch (CertificateException e) {
             Log.e("Signature", "Cannot Create Signature, Falling back");
             Log.e("Signature", "Error: " + e.getLocalizedMessage());
@@ -613,6 +614,25 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         }
     }
 
+    // Get primary signature only
+    private void viewCertificate(Signature signature) {
+        try {
+            X509Certificate c = getCert(signature.toByteArray());
+            byte[] sigCert = c.getEncoded();
+
+            new AlertDialog.Builder(this).setTitle("Certificate Information for " + appName.getText())
+                    .setMessage(c.getSubjectX500Principal().toString().replace(", ", ",\n")
+                            + "\n\nCertificate Fingerprints:\nMD5: "
+                            + bytesToHex(MessageDigest.getInstance("MD5").digest(sigCert)) + "\nSHA1: " + this.signature
+                            + "\nSHA256: " + bytesToHex(MessageDigest.getInstance("SHA256").digest(sigCert)))
+                    .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+        } catch (CertificateException e) {
+            Toast.makeText(this, "Unable to create certificate information screen", Toast.LENGTH_SHORT).show();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -637,6 +657,10 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Signature", signature);
                 clipboard.setPrimaryClip(clip); Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_LONG).show(); return true;
+            case R.id.viewcert:
+                if (signatures.length < 1) Toast.makeText(this, "No signature found!", Toast.LENGTH_SHORT).show();
+                else viewCertificate(signatures[0]);
+                return true;
             case R.id.share_apk:
                 hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version, true);
                 return true;
