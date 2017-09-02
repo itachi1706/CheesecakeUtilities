@@ -15,7 +15,7 @@ public class FirebaseUtils {
 
     private static FirebaseDatabase firebaseDatabase;
 
-    public static final int RECORDS_VERSION = 1;
+    static final int RECORDS_VERSION = 1;
 
     public static FirebaseDatabase getFirebaseDatabase() {
         if (firebaseDatabase == null) {
@@ -30,5 +30,15 @@ public class FirebaseUtils {
         Date dt = new Date();
         dt.setTime(time);
         return sdf.format(dt);
+    }
+
+    public static String formatTimeDuration(long start, long end) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HHmm", Locale.US);
+        Date dt = new Date();
+        dt.setTime(start);
+        String timeString = sdf.format(dt);
+        dt.setTime(end);
+        timeString += " - " + sdf.format(dt);
+        return timeString;
     }
 }
