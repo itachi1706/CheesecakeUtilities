@@ -13,25 +13,27 @@
         android:id="@+id/tvLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:ellipsize="end"
         android:paddingTop="4dp"
         android:text="Location"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/tvPurpose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tvLocation"
-        android:text="Purpose"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:ellipsize="end"
+        android:text="Purpose" />
 
     <TextView
         android:id="@+id/tvTotalTimeDistance"
@@ -50,10 +52,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tvPurpose"
+        android:ellipsize="end"
         android:maxLines="1"
         android:text="Vehicle Type"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_toLeftOf="@+id/tvDateTime"
+        android:layout_toStartOf="@+id/tvDateTime" />
 
     <TextView
         android:id="@+id/tvVehicleNumber"
@@ -65,4 +68,17 @@
         android:layout_below="@+id/tvVehicle"
         android:maxLength="12"
         android:text="Vehicle Number" />
+
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvPurpose"
+        android:ellipsize="marquee"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:text="12/12/12 0800 - 12/12/12 0800"
+        android:maxLines="1" />
 </RelativeLayout>
