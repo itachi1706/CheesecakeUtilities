@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +97,8 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         recordsViewHolder.totalTimeDistance.setText(distanceTime);
         if (s.getTrainingMileage()) recordsViewHolder.totalTimeDistance.setTextColor(Color.RED);
         else recordsViewHolder.totalTimeDistance.setTextColor(recordsViewHolder.defaultTextColor);
+        recordsViewHolder.datetime.setText(FirebaseUtils.formatTimeDuration(s.getDatetimeFrom(), s.getDateTimeTo()));
+        recordsViewHolder.datetime.setSelected(true);
     }
 
     @Override
@@ -112,7 +113,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
     class VehicleMileageRecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView location, purpose, vehicle, vehicleNumber, totalTimeDistance;
+        TextView location, purpose, vehicle, vehicleNumber, totalTimeDistance, datetime;
         int defaultTextColor;
         String tag, fullVehicleName;
         Record r;
@@ -123,20 +124,15 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             location = v.findViewById(R.id.tvLocation);
             purpose = v.findViewById(R.id.tvPurpose);
             vehicle = v.findViewById(R.id.tvVehicle);
+            datetime = v.findViewById(R.id.tvDateTime);
             vehicleNumber = v.findViewById(R.id.tvVehicleNumber);
             totalTimeDistance = v.findViewById(R.id.tvTotalTimeDistance);
-            location.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            location.setMarqueeRepeatLimit(-1);
-            location.setHorizontallyScrolling(true);
-            purpose.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            purpose.setMarqueeRepeatLimit(-1);
-            purpose.setHorizontallyScrolling(true);
+            datetime.setHorizontallyScrolling(true);
             v.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            // TODO: Include ability to edit record
             String message = "";
             message += "Location: " + r.getDestination() + "\n";
             message += "Purpose: " + r.getPurpose() + "\n";
