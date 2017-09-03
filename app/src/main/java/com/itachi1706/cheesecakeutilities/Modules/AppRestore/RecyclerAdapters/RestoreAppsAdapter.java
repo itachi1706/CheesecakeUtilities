@@ -192,7 +192,6 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View v) {
-            // TODO: Restore
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Log.d("DEBUG", "Retrieving from " + fullpath);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
