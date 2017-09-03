@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -520,7 +521,18 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                                 else {
                                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                                     shareIntent.setType("*/*");
-                                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(shareFile));
+                                    Uri shareUri;
+                                    // Android O Strict Mode crash fix
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        Log.i("ShareApp", "Post-Oreo: Using new Content URI method");
+                                        Log.i("ShareApp", "Invoking Content Provider " + getApplicationContext().getPackageName() + ".appupdater.provider");
+                                        shareUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                                                + ".appupdater.provider", shareFile);
+                                    } else {
+                                        Log.i("ShareApp", "Pre-Oreo: Fallbacking to old method as it worked previously");
+                                        shareUri = Uri.fromFile(shareFile);
+                                    }
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
                                     startActivity(Intent.createChooser(shareIntent, "Share with"));
                                 }
                             }
