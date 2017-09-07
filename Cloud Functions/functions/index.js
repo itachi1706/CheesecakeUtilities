@@ -8,6 +8,7 @@ admin.initializeApp(functions.config().firebase);
 // Calculate Statistics (non-training mileage only for now)
 exports.calculateStatistics = functions.database.ref('/users/{userid}/records').onWrite(
     event => {
+        console.log("Function Version: 070920171911")
         const records = event.data.val();
         var stats = {totalMileage: 0}
         console.log('Processing User', event.params.userid);
@@ -38,9 +39,10 @@ function miscMileage(recordList) {
     Object.keys(recordList).forEach(key => {
         if (typeof recordList[key] === 'object') {
             if (recordList[key].trainingMileage == true) return;
-            
             // Add Date Time mileage
-            var rDate = new Date(parseInt(recordList[key].datetimeFrom, 10));
+            var timezoneOffset = 8 * 60 * 60 * 1000; // 8 Hours
+            if (recordList[key].hasOwnProperty("timezone")) timezoneOffset = recordList[key].timezone; // Adjust date to timezone
+            var rDate = new Date(parseInt(recordList[key].datetimeFrom, 10) + timezoneOffset); // Init with timezone difference
             rDate.setHours(0,0,0,0); // Add to date
             if (!date[rDate.getTime().toString()]) date[rDate.getTime().toString()] = 0.0;
             date[rDate.getTime().toString()] += parseFloat(recordList[key].totalMileage);
