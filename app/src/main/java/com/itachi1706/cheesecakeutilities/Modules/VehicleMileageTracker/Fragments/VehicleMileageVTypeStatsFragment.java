@@ -25,7 +25,6 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecycle
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Kenneth on 31/8/2017.
@@ -37,7 +36,7 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
     DualLineStringRecyclerAdapter adapter;
     SharedPreferences sp;
 
-    private boolean ready = false;
+    private static boolean ready = false;
     private ArrayMap<String, String> vehicles;
 
 
