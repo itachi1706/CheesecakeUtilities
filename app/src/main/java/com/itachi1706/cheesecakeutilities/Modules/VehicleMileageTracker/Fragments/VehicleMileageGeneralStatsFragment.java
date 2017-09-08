@@ -116,12 +116,12 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 List<DualLineString> stats = new ArrayList<>();
                 for (Map.Entry<String, String> i : legend.entrySet()) {
                     if (!dataSnapshot.hasChild(i.getKey())) continue;
                     stats.add(new DualLineString(i.getValue(), dataSnapshot.child(i.getKey()).getValue(Double.class) + " km"));
                 }
+                if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
             }

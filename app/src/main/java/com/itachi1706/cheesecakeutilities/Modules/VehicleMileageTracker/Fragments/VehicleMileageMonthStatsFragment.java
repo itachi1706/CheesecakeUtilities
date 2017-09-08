@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,7 @@ import java.util.Locale;
 public class VehicleMileageMonthStatsFragment extends Fragment {
 
     DualLineStringRecyclerAdapter adapter;
+    SwipeRefreshLayout refreshLayout;
     SharedPreferences sp;
 
 
@@ -47,9 +49,9 @@ public class VehicleMileageMonthStatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+        View v = inflater.inflate(R.layout.fragment_refreshable_recycler_view, container, false);
 
-        RecyclerView recyclerView = v.findViewById(R.id.main_menu_recycler_view);
+        RecyclerView recyclerView = v.findViewById(R.id.recycler_view);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -65,6 +67,17 @@ public class VehicleMileageMonthStatsFragment extends Fragment {
 
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         }
+        refreshLayout = v.findViewById(R.id.pull_to_refresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateStats();
+            }
+        });
+        refreshLayout.setColorSchemeResources(
+                R.color.refresh_progress_1,
+                R.color.refresh_progress_2);
+
 
         return v;
     }
@@ -82,6 +95,7 @@ public class VehicleMileageMonthStatsFragment extends Fragment {
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
             return;
         }
+        refreshLayout.setRefreshing(true);
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
                 .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -92,6 +106,7 @@ public class VehicleMileageMonthStatsFragment extends Fragment {
                     SimpleDateFormat sd = new SimpleDateFormat("MMMM yyyy", Locale.US);
                     stats.add(new DualLineString("Total Mileage for " + sd.format(d), ds.getValue(Double.class) + " km"));
                 }
+                if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
             }
