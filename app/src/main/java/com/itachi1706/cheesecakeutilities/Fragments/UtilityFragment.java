@@ -80,6 +80,7 @@ public class UtilityFragment extends Fragment {
     }
 
     private void updateAdapter() {
+        if (!isAdded()) return;
         // Remove hidden items
         List<String> menuitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
         List<String> hiddenitems = new ArrayList<>(Arrays.asList(sp.getString("utilHidden", "").split("\\|\\|\\|")));
