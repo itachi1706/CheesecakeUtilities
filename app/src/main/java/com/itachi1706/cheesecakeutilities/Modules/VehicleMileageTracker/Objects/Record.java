@@ -7,7 +7,7 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects
 
 public class Record {
 
-    private Long datetimeFrom, dateTimeTo;
+    private Long datetimeFrom, dateTimeTo, timezone;
     private Double mileageFrom, mileageTo;
     private String destination, purpose, vehicleNumber, vehicleId, vehicleClass;
     private Boolean trainingMileage;
@@ -136,5 +136,13 @@ public class Record {
 
     public void setVehicleClass(String vehicleClass) {
         this.vehicleClass = vehicleClass;
+    }
+
+    public Long getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(Long timezone) {
+        this.timezone = timezone;
     }
 }

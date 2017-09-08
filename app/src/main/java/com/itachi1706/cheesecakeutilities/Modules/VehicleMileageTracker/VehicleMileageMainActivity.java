@@ -25,6 +25,7 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Recycler
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -171,6 +172,13 @@ public class VehicleMileageMainActivity extends BaseActivity {
             record.updateTotalTime();
             record.updateMileage();
             record.setVersion(1);
+        }
+        if (oldV < 3) {
+            // Add timezone offset
+            Calendar c = Calendar.getInstance();
+            long offset = c.getTimeZone().getOffset(record.getDatetimeFrom());
+            record.setTimezone(offset);
+            record.setVersion(3);
         }
         return record;
     }

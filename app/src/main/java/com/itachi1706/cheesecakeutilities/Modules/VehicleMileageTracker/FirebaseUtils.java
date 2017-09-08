@@ -15,7 +15,7 @@ public class FirebaseUtils {
 
     private static FirebaseDatabase firebaseDatabase;
 
-    static final int RECORDS_VERSION = 1;
+    static final int RECORDS_VERSION = 3;
 
     public static FirebaseDatabase getFirebaseDatabase() {
         if (firebaseDatabase == null) {
@@ -37,6 +37,7 @@ public class FirebaseUtils {
         Date dt = new Date();
         dt.setTime(start);
         String timeString = sdf.format(dt);
+        sdf.applyPattern("dd/MM/yy HHmm zzz");
         dt.setTime(end);
         timeString += " - " + sdf.format(dt);
         return timeString;
