@@ -182,7 +182,11 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent launchIntent = getPackageManager().getLaunchIntentForPackage(info.packageName);
-                startActivity(launchIntent);
+                if (launchIntent != null) startActivity(launchIntent);
+                else {
+                    Toast.makeText(v.getContext(), "Unable to launch activity", Toast.LENGTH_SHORT).show();
+                    launchApp.setEnabled(false);
+                }
             }
         });
 
