@@ -24,6 +24,7 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecycle
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -105,6 +106,7 @@ public class VehicleMileageDateStatsFragment extends Fragment {
                     SimpleDateFormat sd = new SimpleDateFormat("dd MMMM yyyy", Locale.US);
                     stats.add(new DualLineString("Total Mileage for " + sd.format(d), ds.getValue(Double.class) + " km"));
                 }
+                Collections.reverse(stats);
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
