@@ -11,4 +11,6 @@
     <color name="transparent_gray">#CC444444</color>
     <color name="grey_300">#ffe0e0e0</color>
     <color name="default_text_color_sec">#8a000000</color>
+    <color name="refresh_progress_1">@color/colorAccent</color>
+    <color name="refresh_progress_2">@color/colorPrimary</color>
 ***REMOVED***

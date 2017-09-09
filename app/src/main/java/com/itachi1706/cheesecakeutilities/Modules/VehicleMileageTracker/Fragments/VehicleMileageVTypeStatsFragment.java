@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +26,6 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecycle
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Kenneth on 31/8/2017.
@@ -35,9 +35,10 @@ import java.util.Map;
 public class VehicleMileageVTypeStatsFragment extends Fragment {
 
     DualLineStringRecyclerAdapter adapter;
+    SwipeRefreshLayout refreshLayout;
     SharedPreferences sp;
 
-    private boolean ready = false;
+    private static boolean ready = false;
     private ArrayMap<String, String> vehicles;
 
 
@@ -50,9 +51,9 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+        View v = inflater.inflate(R.layout.fragment_refreshable_recycler_view, container, false);
 
-        RecyclerView recyclerView = v.findViewById(R.id.main_menu_recycler_view);
+        RecyclerView recyclerView = v.findViewById(R.id.recycler_view);
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -90,6 +91,16 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
                 }
             });
         }
+        refreshLayout = v.findViewById(R.id.pull_to_refresh);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateStats();
+            }
+        });
+        refreshLayout.setColorSchemeResources(
+                R.color.refresh_progress_1,
+                R.color.refresh_progress_2);
 
         return v;
     }
@@ -107,6 +118,7 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
             return;
         }
+        refreshLayout.setRefreshing(true);
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
                 .child("vehicleTypes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -120,6 +132,7 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
                     if (vehicles.containsKey(ds.getKey()))
                         stats.add(new DualLineString("Total Mileage with " + vehicles.get(ds.getKey()), ds.getValue(Double.class) + " km"));
                 }
+                if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
             }
