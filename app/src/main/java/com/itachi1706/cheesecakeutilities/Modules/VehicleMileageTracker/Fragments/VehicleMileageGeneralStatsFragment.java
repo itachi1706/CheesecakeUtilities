@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,6 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
     SwipeRefreshLayout refreshLayout;
     SharedPreferences sp;
 
-    private static boolean ready = false;
     private ArrayMap<String, String> legend;
 
 
@@ -68,22 +68,6 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
             recyclerView.setAdapter(adapter);
 
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            FirebaseUtils.getFirebaseDatabase().getReference().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    legend = new ArrayMap<>();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        legend.put(ds.getKey(), ds.getValue(String.class));
-                    }
-                    ready = true;
-                    updateStats();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    ready = false;
-                }
-            });
         }
         refreshLayout = v.findViewById(R.id.pull_to_refresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -102,7 +86,24 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (ready) updateStats();
+        if (legend == null) {
+            refreshLayout.setRefreshing(true);
+            FirebaseUtils.getFirebaseDatabase().getReference().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    legend = new ArrayMap<>();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        legend.put(ds.getKey(), ds.getValue(String.class));
+                    }
+                    updateStats();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("VehicleMileageStats", "Error in Firebase DB call (General-Legend): " + databaseError.getDetails());
+                }
+            });
+        } else updateStats();
     }
 
     public void updateStats() {
@@ -112,7 +113,7 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
             return;
         }
-        refreshLayout.setRefreshing(true);
+        if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -128,7 +129,7 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("VehicleMileageStats", "Error in Firebase DB call (General-Data): " + databaseError.getDetails());
             }
         });
     }
