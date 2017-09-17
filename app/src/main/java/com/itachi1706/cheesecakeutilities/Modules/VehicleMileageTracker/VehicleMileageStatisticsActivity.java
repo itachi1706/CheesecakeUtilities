@@ -1,12 +1,15 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.firebase.database.DatabaseReference;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageGeneralStatsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageMonthStatsFragment;
@@ -38,6 +41,16 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+        // Keep Firebase synced
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String user_id = sp.getString("firebase_uid", "nien");
+        if (!user_id.equals("nien")) {
+            DatabaseReference dbRef = FirebaseUtils.getFirebaseDatabase().getReference();
+            dbRef.child("users").child(user_id).child("statistics").keepSynced(true);
+            dbRef.child("stat-legend").keepSynced(true);
+            dbRef.child("vehicles").keepSynced(true);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager)

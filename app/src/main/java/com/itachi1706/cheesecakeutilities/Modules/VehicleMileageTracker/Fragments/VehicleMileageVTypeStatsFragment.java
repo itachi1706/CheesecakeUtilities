@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,6 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
     SwipeRefreshLayout refreshLayout;
     SharedPreferences sp;
 
-    private static boolean ready = false;
     private ArrayMap<String, String> vehicles;
 
 
@@ -68,28 +68,6 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
             recyclerView.setAdapter(adapter);
 
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    vehicles = new ArrayMap<>();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.hasChildren()) {
-                            for (DataSnapshot ds1 : ds.getChildren()) {
-                                Vehicle v = ds1.getValue(Vehicle.class);
-                                assert v != null;
-                                vehicles.put(ds1.getKey(), v.getName());
-                            }
-                        }
-                    }
-                    ready = true;
-                    updateStats();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    ready = false;
-                }
-            });
         }
         refreshLayout = v.findViewById(R.id.pull_to_refresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -108,7 +86,30 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (ready) updateStats();
+        if (vehicles == null) {
+            refreshLayout.setRefreshing(true);
+            FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    vehicles = new ArrayMap<>();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.hasChildren()) {
+                            for (DataSnapshot ds1 : ds.getChildren()) {
+                                Vehicle v = ds1.getValue(Vehicle.class);
+                                assert v != null;
+                                vehicles.put(ds1.getKey(), v.getName());
+                            }
+                        }
+                    }
+                    updateStats();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e("VehicleMileageStats", "Error in Firebase DB call (VType-Legend): " + databaseError.getDetails());
+                }
+            });
+        } else updateStats();
     }
 
     public void updateStats() {
@@ -118,16 +119,12 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
             return;
         }
-        refreshLayout.setRefreshing(true);
+        if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
                 .child("vehicleTypes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
-                /*for (Map.Entry<String, String> i : vehicles.entrySet()) {
-                    if (!dataSnapshot.hasChild(i.getKey())) continue;
-                    stats.add(new DualLineString(i.getValue(), dataSnapshot.child(i.getKey()).getValue(Double.class) + " km"));
-                }*/
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (vehicles.containsKey(ds.getKey()))
                         stats.add(new DualLineString("Total Mileage with " + vehicles.get(ds.getKey()), ds.getValue(Double.class) + " km"));
@@ -139,7 +136,7 @@ public class VehicleMileageVTypeStatsFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("VehicleMileageStats", "Error in Firebase DB call (VType-Data): " + databaseError.getDetails());
             }
         });
     }
