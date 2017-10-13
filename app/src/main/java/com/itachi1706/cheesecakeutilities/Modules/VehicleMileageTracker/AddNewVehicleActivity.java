@@ -49,6 +49,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         VehicleClass.VehClass classV = VehicleClass.getClassTypeWithName(vehClass.getSelectedItem().toString());
         assert classV != null;
         String nameNoSpace = name.getText().toString().replace(" ", "");
+        nameNoSpace = nameNoSpace.replaceAll("[^A-Za-z0-9]", "");
         Vehicle v = new Vehicle();
         v.setName(longname.getText().toString());
         v.setShortname(name.getText().toString());
