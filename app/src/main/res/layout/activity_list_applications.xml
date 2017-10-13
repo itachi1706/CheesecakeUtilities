@@ -25,7 +25,7 @@
         app:msb_recyclerView="@+id/list_app_recycler_view"
         app:msb_lightOnTouch="true"
         app:msb_autoHide="false"
-        app:msb_barColour="@color/transparent_gray"
+        app:msb_barColor="@color/transparent_gray"
         android:layout_height="match_parent" />
 
     <ProgressBar
