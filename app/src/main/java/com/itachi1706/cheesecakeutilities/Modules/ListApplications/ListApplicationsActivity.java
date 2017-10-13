@@ -73,6 +73,7 @@ public class ListApplicationsActivity extends BaseActivity {
     private void eval(boolean system) {
         AppsAdapter adapter = new AppsAdapter(new AppsItem[0]);
         recyclerView.setAdapter(adapter);
+        scrollBar.setVisibility(View.GONE);
         bar.setVisibility(View.VISIBLE);
         label.setVisibility(View.VISIBLE);
         new LoadAppThread().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, system);
@@ -296,6 +297,7 @@ public class ListApplicationsActivity extends BaseActivity {
                 @Override
                 public void run() {
                     recyclerView.setAdapter(finalAdapter);
+                    scrollBar.setVisibility(View.VISIBLE);
                     bar.setVisibility(View.GONE);
                     label.setVisibility(View.GONE);
                 }
