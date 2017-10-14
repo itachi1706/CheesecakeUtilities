@@ -118,7 +118,7 @@ dependencies {
     compile 'com.github.lzyzsd:circleprogress:1.1.0@aar' // ORD Countdown Utility
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1' // Application List Utility
     compile 'com.afollestad.material-dialogs:core:0.9.4.7' // Application List Utility
-    compile 'com.github.turing-tech:MaterialScrollBar:12.3.5' // Application List Utility
+    compile 'com.github.turing-tech:MaterialScrollBar:13.0.1' // Application List Utility
     compile 'com.github.scottyab:safetynethelper:0.3.0' // SafetyNet Validator
     compile 'com.google.android.gms:play-services-safetynet:11.0.4' // SafetyNet Validator
     compile 'com.google.android.gms:play-services-auth:11.0.4' // Vehicle Mileage Tracker
