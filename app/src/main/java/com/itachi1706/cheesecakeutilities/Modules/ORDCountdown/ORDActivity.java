@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
@@ -52,8 +51,6 @@ public class ORDActivity extends BaseActivity {
     private static final String ORD_HOLIDAY_PREF = "ord_sg_holidays";
     private static final long ORD_HOLIDAY_TIMEOUT = 86400000; // 24 hours timeout
 
-    String firebaseHolidayList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +61,6 @@ public class ORDActivity extends BaseActivity {
         ordCounter = findViewById(R.id.ord_counter);
         ordProgress = findViewById(R.id.ord_precentage);
         progressBar = findViewById(R.id.ord_progressbar);
-
-        // Get Holiday List from Firebase
-        FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        firebaseHolidayList = firebaseRemoteConfig.getString("ord_holidays");
     }
 
     @Override
@@ -281,7 +273,6 @@ public class ORDActivity extends BaseActivity {
                     String[] tmp = h.getDate().split("-");
                     b.append(h.getName()).append(": ").append(tmp[2]).append("-").append(tmp[1]).append("-").append(tmp[0]).append("\n");
                 }
-
 
                 b.append("\nLast Updated: ").append(FirebaseUtils.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
                 b.append("\nServer Cached Data: ").append(holiday.isCache());
