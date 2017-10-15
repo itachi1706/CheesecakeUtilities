@@ -261,7 +261,6 @@ public class ORDActivity extends BaseActivity {
                     return true;
                 }
                 ArrayList<GCalHolidayItem> holidayList = new ArrayList<>(Arrays.asList(holiday.getOutput()));
-                //ArrayList<Holiday> holidayList = new ArrayList<>(getHolidayList().values());
                 Collections.sort(holidayList, new Comparator<GCalHolidayItem>() {
                     @Override
                     public int compare(GCalHolidayItem o1, GCalHolidayItem o2) {
