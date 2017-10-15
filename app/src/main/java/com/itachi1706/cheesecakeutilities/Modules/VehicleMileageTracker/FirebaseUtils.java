@@ -26,7 +26,11 @@ public class FirebaseUtils {
     }
 
     public static String formatTime(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.US);
+        return formatTime(time, "dd MMMM yyyy HH:mm");
+    }
+
+    public static String formatTime(long time, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         Date dt = new Date();
         dt.setTime(time);
         return sdf.format(dt);

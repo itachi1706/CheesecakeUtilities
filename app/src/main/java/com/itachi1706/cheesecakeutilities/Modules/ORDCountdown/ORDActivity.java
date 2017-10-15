@@ -1,11 +1,11 @@
 package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -22,6 +23,7 @@ import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHolidayItem;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.Util.JSONHelper;
@@ -33,6 +35,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -204,22 +207,6 @@ public class ORDActivity extends BaseActivity {
     }
 
     /**
-     * Split Holiday List String from Firebase
-     * Example String: New Year's:01-01-2017|Christmas:25-12-2017
-     * @return Array Map of holidays or empty if none
-     */
-    @Deprecated
-    private ArrayMap<String, Holiday> getHolidayList() {
-        ArrayMap<String, Holiday> holidays = new ArrayMap<>();
-        String[] holidayList = firebaseHolidayList.split("\\|");
-        for (String holidayItem : holidayList) {
-            Holiday h = new Holiday(holidayItem);
-            holidays.put(h.getHolidayName(), h);
-        }
-        return holidays;
-    }
-
-    /**
      * Get list of holiday from internal cache or API
      * @return GCalHoliday Holiday list object
      */
@@ -276,19 +263,37 @@ public class ORDActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.modify_settings: startActivity(new Intent(getApplicationContext(), ORDSettingsActivity.class)); return true;
             case R.id.holiday:
-                ArrayList<Holiday> holidayList = new ArrayList<>(getHolidayList().values());
-                Collections.sort(holidayList, new Comparator<Holiday>() {
+                GCalHoliday holiday = getHolidays();
+                if (holiday == null) {
+                    Toast.makeText(this, "Retrieving holiday list, try again later", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                ArrayList<GCalHolidayItem> holidayList = new ArrayList<>(Arrays.asList(holiday.getOutput()));
+                //ArrayList<Holiday> holidayList = new ArrayList<>(getHolidayList().values());
+                Collections.sort(holidayList, new Comparator<GCalHolidayItem>() {
                     @Override
-                    public int compare(Holiday o1, Holiday o2) {
-                        return (o1.getTime() < o2.getTime()) ? -1 : ((o1.getTime() == o2.getTime()) ? 0 : 1);
+                    public int compare(GCalHolidayItem o1, GCalHolidayItem o2) {
+                        return (o1.getDateInMillis() < o2.getDateInMillis()) ? -1 : ((o1.getDateInMillis() == o2.getDateInMillis()) ? 0 : 1);
                     }
                 });
                 StringBuilder b = new StringBuilder();
-                for (Holiday h : holidayList) {
-                    b.append(h.getHolidayName()).append(": ").append(h.getTimeString()).append("\n");
+                for (GCalHolidayItem h : holidayList) {
+                    String[] tmp = h.getDate().split("-");
+                    b.append(h.getName()).append(": ").append(tmp[2]).append("-").append(tmp[1]).append("-").append(tmp[0]).append("\n");
                 }
-                new AlertDialog.Builder(this).setTitle("Holiday List")
+
+
+                b.append("\nLast Updated: ").append(FirebaseUtils.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
+                b.append("\nServer Cached Data: ").append(holiday.isCache());
+                new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
                         .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)
+                        .setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new CalendarHolidayTask().execute();
+                                Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();
+                            }
+                        })
                         .show();
                 return true;
             default: return super.onOptionsItemSelected(item);
