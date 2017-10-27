@@ -50,3 +50,4 @@ fabric.properties
 app/key.properties
 app/google-services.json
 Cloud Functions/functions/node_modules/
+app/release/
