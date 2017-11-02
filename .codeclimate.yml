@@ -3,7 +3,9 @@ engines:
     enabled: true
   pmd:
     enabled: true
-    channel: "beta"
+  sonar-java:
+    enabled: true
+    channel: beta
 ratings:
   paths:
   - "**.java"
