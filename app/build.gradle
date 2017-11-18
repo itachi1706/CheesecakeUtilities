@@ -110,6 +110,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.5'
     implementation 'org.apache.commons:commons-lang3:3.5'
     implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
     implementation 'com.afollestad:digitus:0.3.0' // Fingerprint Authentication
     // Specific Utility Dependencies
     implementation 'com.squareup.picasso:picasso:2.5.2' // Navbar Utility
