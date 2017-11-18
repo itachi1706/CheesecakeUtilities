@@ -331,7 +331,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
      * BROADCAST RECEIVER COMMUNICATION WITH SERVICE
      */
 
-    ProgressDialog dialog;
+    ProgressDialog progressDialog;
     ResponseReceiver receiver;
 
     private class ResponseReceiver extends BroadcastReceiver {
@@ -340,27 +340,24 @@ public class FanfictionCompactorActivity extends BaseActivity {
 
         public void onReceive(Context context, Intent intent) {
             if (intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_DONE, false)) {
-                if (dialog != null)
-                    dialog.dismiss();
+                if (progressDialog != null)
+                    progressDialog.dismiss();
                 Toast.makeText(context, "Task Completed", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (dialog == null)
-                dialog = new ProgressDialog(FanfictionCompactorActivity.this);
-                dialog.setMax(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_MAX, 0));
-                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                dialog.setProgress(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_PROGRESS, 0));
-                dialog.setTitle(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_TITLE));
-                dialog.setMessage(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_MSG));
-                dialog.setIndeterminate(intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, false));
-                dialog.setOnDismissListener(dialog -> {
-                    notifyService(2); // Dont restart the service
-                });
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", (dialog, which) -> {
-                    notifyService(2); // Dont restart the service
-                });
-                dialog.show();
+            if (progressDialog == null)
+                progressDialog = new ProgressDialog(FanfictionCompactorActivity.this);
+                progressDialog.setMax(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_MAX, 0));
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialog.setProgress(intent.getIntExtra(FanficBroadcast.BROADCAST_DATA_PROGRESS, 0));
+                progressDialog.setTitle(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_TITLE));
+                progressDialog.setMessage(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_MSG));
+                progressDialog.setIndeterminate(intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, false));
+                // Dont restart the service
+                progressDialog.setOnDismissListener(dialog -> notifyService(2));
+                progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", (dialog, which) -> notifyService(2));
+                progressDialog.show();
         }
     }
 }
