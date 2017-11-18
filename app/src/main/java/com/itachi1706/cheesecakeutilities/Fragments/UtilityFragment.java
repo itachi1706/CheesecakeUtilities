@@ -58,16 +58,13 @@ public class UtilityFragment extends Fragment {
 
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        mFirebaseRemoteConfig.fetch(FIREBASE_REFRESH_TIME).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.i("RemoteConfig", "Values Updated from server");
-                    mFirebaseRemoteConfig.activateFetched();
-                    updateAdapter();
-                } else
-                    Log.i("RemoteConfig", "Values failed to update");
-            }
+        mFirebaseRemoteConfig.fetch(FIREBASE_REFRESH_TIME).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.i("RemoteConfig", "Values Updated from server");
+                mFirebaseRemoteConfig.activateFetched();
+                updateAdapter();
+            } else
+                Log.i("RemoteConfig", "Values failed to update");
         });
 
         return v;

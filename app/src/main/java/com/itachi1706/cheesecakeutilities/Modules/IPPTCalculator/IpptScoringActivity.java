@@ -118,14 +118,11 @@ public class IpptScoringActivity extends AppCompatActivity {
             int exercise = params[2];
 
             results = JsonHelper.getExerciseScores(ageGroup, exercise, gender, getApplicationContext());
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    StringRecyclerAdapter adapter = new StringRecyclerAdapter(results);
-                    recyclerView.setAdapter(adapter);
-                    bar.setVisibility(View.GONE);
-                    label.setVisibility(View.GONE);
-                }
+            runOnUiThread(() -> {
+                StringRecyclerAdapter adapter = new StringRecyclerAdapter(results);
+                recyclerView.setAdapter(adapter);
+                bar.setVisibility(View.GONE);
+                label.setVisibility(View.GONE);
             });
 
             return null;

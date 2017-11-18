@@ -150,35 +150,24 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Mileage Record")
                     .setMessage(message).setPositiveButton(R.string.dialog_action_positive_close, null)
-                    .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            new AlertDialog.Builder(v1.getContext()).setTitle("Deleting Mileage Record")
-                                    .setMessage("Are you sure you want to delete this record? This cannot be reversed!" +
-                                            "\nID: " + tag)
-                                    .setPositiveButton("Delete Anyway", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
-                                            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
-                                                    .child(sp.getString("firebase_uid", "nien")).child("records")
-                                                    .child(tag).removeValue();
-                                            Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
+                    .setNeutralButton("Delete", (dialog, which) -> new AlertDialog.Builder(v1.getContext()).setTitle("Deleting Mileage Record")
+                            .setMessage("Are you sure you want to delete this record? This cannot be reversed!" +
+                                    "\nID: " + tag)
+                            .setPositiveButton("Delete Anyway", (dialog1, which1) -> {
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                                FirebaseUtils.getFirebaseDatabase().getReference().child("users")
+                                        .child(sp.getString("firebase_uid", "nien")).child("records")
+                                        .child(tag).removeValue();
+                                Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
 
-                                        }
-                                    }).setNegativeButton("No", null).show();
-                        }
-                    }).setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
-                    String uid = sp.getString("firebase_uid", "");
-                    Intent intent = new Intent(v1.getContext(), AddNewMileageRecordActivity.class);
-                    intent.putExtra("edit", tag);
-                    if (!uid.isEmpty()) intent.putExtra("uid", uid);
-                    v1.getContext().startActivity(intent);
-                }
-            }).show();
+                            }).setNegativeButton("No", null).show()).setNegativeButton("Edit", (dialogInterface, i) -> {
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                        String uid = sp.getString("firebase_uid", "");
+                        Intent intent = new Intent(v1.getContext(), AddNewMileageRecordActivity.class);
+                        intent.putExtra("edit", tag);
+                        if (!uid.isEmpty()) intent.putExtra("uid", uid);
+                        v1.getContext().startActivity(intent);
+                    }).show();
         }
     }
 }

@@ -64,19 +64,11 @@ public class VehicleMileageMainActivity extends BaseActivity {
         final FirebaseDatabase database = FirebaseUtils.getFirebaseDatabase();
         userdata = database.getReference().child("users").child(user_id);
 
-        findViewById(R.id.veh_mileage_fab_car).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class));
-            }
-        });
-        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
-                i.putExtra("uid", user_id);
-                startActivity(i);
-            }
+        findViewById(R.id.veh_mileage_fab_car).setOnClickListener(v -> startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class)));
+        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
+            i.putExtra("uid", user_id);
+            startActivity(i);
         });
 
         RecyclerView recyclerView = findViewById(R.id.veh_mileage_main_list);

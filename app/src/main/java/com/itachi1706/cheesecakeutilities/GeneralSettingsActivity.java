@@ -62,20 +62,14 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
             updatePasswordViews(pw, fp_pw);
 
-            findPreference("testpw").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startActivity(new Intent(getActivity(), AuthenticationActivity.class));
-                    return false;
-                }
+            findPreference("testpw").setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getActivity(), AuthenticationActivity.class));
+                return false;
             });
 
-            findPreference("hide_util").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startActivity(new Intent(getActivity(), ManageUtilityActivity.class));
-                    return false;
-                }
+            findPreference("hide_util").setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getActivity(), ManageUtilityActivity.class));
+                return false;
             });
 
             pw.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -90,39 +84,33 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                                 .setMessage("Enter Existing Password").setView(currentPassword)
                                 .setPositiveButton(android.R.string.ok, null)
                                 .setNegativeButton(android.R.string.cancel, null).setCancelable(false).create();
-                        ad.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(DialogInterface dialog) {
-                                Button b = ad.getButton(AlertDialog.BUTTON_POSITIVE);
-                                b.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        // Validate Password
-                                        String newPasswordString = currentPassword.getText().toString();
-                                        if (newPasswordString.isEmpty()) {
-                                            Toast.makeText(getActivity(), "Password cannot be empty!", Toast.LENGTH_LONG).show();
-                                            return;
-                                        }
-                                        boolean result;
-                                        try {
-                                            result = PasswordHelper.verifyPassword(sp, newPasswordString);
-                                        } catch (InvalidKeyException e) {
-                                            e.printStackTrace();
-                                            Log.e("PwChange", "Password Error. Invalid Key. Allowing user to change anyway");
-                                            result = true;
-                                        }
+                        ad.setOnShowListener(dialog -> {
+                            Button b = ad.getButton(AlertDialog.BUTTON_POSITIVE);
+                            b.setOnClickListener(v -> {
+                                // Validate Password
+                                String newPasswordString = currentPassword.getText().toString();
+                                if (newPasswordString.isEmpty()) {
+                                    Toast.makeText(getActivity(), "Password cannot be empty!", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
+                                boolean result;
+                                try {
+                                    result = PasswordHelper.verifyPassword(sp, newPasswordString);
+                                } catch (InvalidKeyException e) {
+                                    e.printStackTrace();
+                                    Log.e("PwChange", "Password Error. Invalid Key. Allowing user to change anyway");
+                                    result = true;
+                                }
 
-                                        if (result) {
-                                            Log.i("PwChange", "Password Verified. Changing Password");
-                                            newPassword();
-                                            ad.dismiss();
-                                            return;
-                                        }
-                                        // Invalid Password
-                                        currentPassword.setError("Invalid Password");
-                                    }
-                                });
-                            }
+                                if (result) {
+                                    Log.i("PwChange", "Password Verified. Changing Password");
+                                    newPassword();
+                                    ad.dismiss();
+                                    return;
+                                }
+                                // Invalid Password
+                                currentPassword.setError("Invalid Password");
+                            });
                         });
                         ad.show();
                         return true;
@@ -138,24 +126,21 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     newPassword.setHint("Enter New Password");
                     new AlertDialog.Builder(getActivity()).setTitle("Set new Password")
                             .setMessage("Set a new app password or leave it blank to have no password").setView(newPassword)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Save Password
-                                    String newPasswordString = newPassword.getText().toString();
-                                    if (newPasswordString.isEmpty()) {
-                                        // Delete Password
-                                        if (PasswordHelper.hasPassword(sp)) {
-                                            Toast.makeText(getActivity(), "Password removed!", Toast.LENGTH_LONG).show();
-                                        }
-                                        PasswordHelper.deletePassword(sp);
-                                        updatePasswordViews(pw, fp_pw);
-                                        return;
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                // Save Password
+                                String newPasswordString = newPassword.getText().toString();
+                                if (newPasswordString.isEmpty()) {
+                                    // Delete Password
+                                    if (PasswordHelper.hasPassword(sp)) {
+                                        Toast.makeText(getActivity(), "Password removed!", Toast.LENGTH_LONG).show();
                                     }
-                                    PasswordHelper.savePassword(sp, newPasswordString);
+                                    PasswordHelper.deletePassword(sp);
                                     updatePasswordViews(pw, fp_pw);
-                                    Toast.makeText(getActivity(), "Password Updated!", Toast.LENGTH_LONG).show();
+                                    return;
                                 }
+                                PasswordHelper.savePassword(sp, newPasswordString);
+                                updatePasswordViews(pw, fp_pw);
+                                Toast.makeText(getActivity(), "Password Updated!", Toast.LENGTH_LONG).show();
                             }).setNegativeButton(android.R.string.cancel, null).setCancelable(false).show();
                     return true;
                 }
@@ -163,13 +148,10 @@ public class GeneralSettingsActivity extends AppCompatActivity {
 
             // Utility Specific
             // Clear Quiet Hour Utility History
-            findPreference("quiethour_clear_hist").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    sp.edit().remove(QHConstants.QH_HISTORY).apply();
-                    Toast.makeText(getActivity(), "History Cleared", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
+            findPreference("quiethour_clear_hist").setOnPreferenceClickListener(preference -> {
+                sp.edit().remove(QHConstants.QH_HISTORY).apply();
+                Toast.makeText(getActivity(), "History Cleared", Toast.LENGTH_SHORT).show();
+                return false;
             });
 
         }

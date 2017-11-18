@@ -61,25 +61,10 @@ public class FanfictionCompactorActivity extends BaseActivity {
         duplicateButton = findViewById(R.id.btnRemoveDuplicates);
 
         startServiceBtn.setEnabled(false);
-        startServiceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startPreCompactingService();
-            }
-        });
+        startServiceBtn.setOnClickListener(v -> startPreCompactingService());
 
-        storyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getStoryList();
-            }
-        });
-        duplicateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDuplicateList();
-            }
-        });
+        storyButton.setOnClickListener(v -> getStoryList());
+        duplicateButton.setOnClickListener(v -> getDuplicateList());
 
         folder.setText(FileHelper.getDefaultFolder().getAbsolutePath());
         database.setText(FanfictionDatabase.getDbFilePath());
@@ -152,18 +137,8 @@ public class FanfictionCompactorActivity extends BaseActivity {
                 FileHelper.getBackupFolder().getAbsolutePath() + "</font>. <br><br><br><font color='red'>Please make sure you have " +
                         "already done a database export from the Fanfiction Application before continuing. " +
                         "Failure to do so may result in a loss of story data!</font>"))
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startCompactingService();
-            }
-        }).show();
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> startCompactingService()).show();
     }
 
     private void startCompactingService() {
@@ -188,12 +163,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
                             "Available Space: " + CommonMethods.readableFileSize((long)freespace) + "\n\n" +
                             "If you wish, you can choose to continue, this is not recommended though!")
                     .setPositiveButton(android.R.string.ok, null)
-                    .setNeutralButton("Continue Anyway", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            launchService();
-                        }
-                    }).show();
+                    .setNeutralButton("Continue Anyway", (dialog, which) -> launchService()).show();
             return;
         }
         launchService();
@@ -245,12 +215,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
         if (!FanfictionDatabase.databaseExists()) {
             new AlertDialog.Builder(this).setTitle("No Database Found").setCancelable(false)
                     .setMessage("Unable to find stories.db file in " + FanfictionDatabase.getDbFileFolder()
-                            + ". Please export database to use this utility").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            })
+                            + ". Please export database to use this utility").setPositiveButton(android.R.string.ok, (dialog, which) -> finish())
                     .show();
             return;
         }
@@ -273,12 +238,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
 
         new AlertDialog.Builder(this).setTitle("Requesting Storage Permission")
                 .setMessage("This app requires ability to access your storage to compact fanfictions")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE);
-                    }
-                }).show();
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE)).show();
     }
 
     /**
@@ -314,22 +274,14 @@ public class FanfictionCompactorActivity extends BaseActivity {
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to access your storage. This app will not be able to calculate" +
                                 " file size or compact Fanfictions and will now exit")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> finish())
                         .setCancelable(false)
-                        .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                                permIntent.setData(packageURI);
-                                startActivity(permIntent);
-                                finish();
-                            }
+                        .setNeutralButton("SETTINGS", (dialog, which) -> {
+                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
+                            permIntent.setData(packageURI);
+                            startActivity(permIntent);
+                            finish();
                         }).show();
                 break;
         }
@@ -403,17 +355,11 @@ public class FanfictionCompactorActivity extends BaseActivity {
                 dialog.setTitle(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_TITLE));
                 dialog.setMessage(intent.getStringExtra(FanficBroadcast.BROADCAST_DATA_MSG));
                 dialog.setIndeterminate(intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_INDETERMINATE, false));
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        notifyService(2); // Dont restart the service
-                    }
+                dialog.setOnDismissListener(dialog -> {
+                    notifyService(2); // Dont restart the service
                 });
-                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        notifyService(2); // Dont restart the service
-                    }
+                dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Hide", (dialog, which) -> {
+                    notifyService(2); // Dont restart the service
                 });
                 dialog.show();
         }
