@@ -306,7 +306,7 @@ public class ORDActivity extends BaseActivity {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sp.edit().putString(ORD_HOLIDAY_PREF, tmp).apply();
 
-                runOnUiThread(() -> repopulateAdapter());
+                runOnUiThread(ORDActivity.this::repopulateAdapter);
             } catch (IOException e) {
                 e.printStackTrace();
             }

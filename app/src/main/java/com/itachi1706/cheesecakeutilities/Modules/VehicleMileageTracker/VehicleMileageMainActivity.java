@@ -79,7 +79,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), new ArrayList<String>(), null);
+            adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null);
             recyclerView.setAdapter(adapter);
         }
     }
