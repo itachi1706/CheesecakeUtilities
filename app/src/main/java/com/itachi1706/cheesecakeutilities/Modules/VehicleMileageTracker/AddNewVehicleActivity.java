@@ -30,12 +30,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         vehClass = findViewById(R.id.spinnerVehType);
         Button addVehicle = findViewById(R.id.veh_mileage_add_veh);
         layout = findViewById(R.id.veh_mileage_layout_vehicle);
-        addVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addVehicle();
-            }
-        });
+        addVehicle.setOnClickListener(v -> addVehicle());
     }
 
     private void addVehicle() {

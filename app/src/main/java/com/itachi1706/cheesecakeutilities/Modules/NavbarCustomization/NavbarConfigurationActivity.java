@@ -62,54 +62,23 @@ public class NavbarConfigurationActivity extends BaseActivity {
         final AppPreferences sp = new AppPreferences(this);
 
         navbarToggle = findViewById(R.id.navbar_service_toggle);
-        navbarToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    if (accessibilityServiceEnabled(NavbarConfigurationActivity.this)) {
-                        new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Further Actions to disable needed")
-                                .setMessage(R.string.nav_bar_accessibility_disable_prompt)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-                                    }
-                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                navbarToggle.setChecked(true);
-                            }
-                        }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                navbarToggle.setChecked(true);
-                            }
-                        }).show();
-                    }
+        navbarToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked) {
+                if (accessibilityServiceEnabled(NavbarConfigurationActivity.this)) {
+                    new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Further Actions to disable needed")
+                            .setMessage(R.string.nav_bar_accessibility_disable_prompt)
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))).setNegativeButton(android.R.string.cancel, (dialog, which) -> navbarToggle.setChecked(true)).setOnCancelListener(dialog -> navbarToggle.setChecked(true)).show();
+                }
+            } else {
+                if (Utils.IS_AT_LEAST_MARSHMALLOW && !canShowOverlays()) {
+                    new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Require Permission")
+                            .setMessage(R.string.nav_bar_request_overlay_perm)
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                // Show request overlay
+                                allowSystemAlertWindow();
+                            }).setNegativeButton(android.R.string.cancel, (dialog, which) -> navbarToggle.setChecked(false)).setOnCancelListener(dialog -> navbarToggle.setChecked(false)).show();
                 } else {
-                    if (Utils.IS_AT_LEAST_MARSHMALLOW && !canShowOverlays()) {
-                        new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Require Permission")
-                                .setMessage(R.string.nav_bar_request_overlay_perm)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // Show request overlay
-                                        allowSystemAlertWindow();
-                                    }
-                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                navbarToggle.setChecked(false);
-                            }
-                        }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                navbarToggle.setChecked(false);
-                            }
-                        }).show();
-                    } else {
-                        requestAccessibilityServiceEnable();
-                    }
+                    requestAccessibilityServiceEnable();
                 }
             }
         });
@@ -127,36 +96,24 @@ public class NavbarConfigurationActivity extends BaseActivity {
         showClock.setChecked(sp.getBoolean(NAVBAR_SHOW_CLOCK, true));
         showImage.setChecked(sp.getBoolean(NAVBAR_SHOW_IMAGE, true));
 
-        enableServiceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                sp.put(NAVBAR_SERVICE_ENABLED, b);
-                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
-            }
+        enableServiceToggle.setOnCheckedChangeListener((compoundButton, b) -> {
+            sp.put(NAVBAR_SERVICE_ENABLED, b);
+            getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
-        showClock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.put(NAVBAR_SHOW_CLOCK, isChecked);
-                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
-            }
+        showClock.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sp.put(NAVBAR_SHOW_CLOCK, isChecked);
+            getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
-        showImage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.put(NAVBAR_SHOW_IMAGE, isChecked);
-                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
-            }
+        showImage.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sp.put(NAVBAR_SHOW_IMAGE, isChecked);
+            getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
-        showAppName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sp.put(NAVBAR_SHOW_APPNAME, isChecked);
-                getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
-            }
+        showAppName.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sp.put(NAVBAR_SHOW_APPNAME, isChecked);
+            getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
         String type = sp.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
@@ -188,19 +145,9 @@ public class NavbarConfigurationActivity extends BaseActivity {
             }
         });
 
-        staticColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ColorPickerDialogBuilder.with(NavbarConfigurationActivity.this).setTitle("Select Static Color")
-                        .initialColor(getColorFromPref(sp)).wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
-                        .density(12).setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
-                        updateColorPref(i, sp);
-                    }
-                }).setNegativeButton(android.R.string.cancel, null).build().show();
-            }
-        });
+        staticColor.setOnClickListener(v -> ColorPickerDialogBuilder.with(NavbarConfigurationActivity.this).setTitle("Select Static Color")
+                .initialColor(getColorFromPref(sp)).wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                .density(12).setPositiveButton(android.R.string.ok, (dialogInterface, i, integers) -> updateColorPref(i, sp)).setNegativeButton(android.R.string.cancel, null).build().show());
 
         staticColor.setImageDrawable(new ColorDrawable(getColorFromPref(sp)));
     }
@@ -257,22 +204,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
         if (!accessibilityServiceEnabled(this)) {
             new AlertDialog.Builder(this).setTitle("Further Actions needed")
                     .setMessage(R.string.nav_bar_accessibility_enable_prompt)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-                        }
-                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    navbarToggle.setChecked(false);
-                }
-            }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    navbarToggle.setChecked(false);
-                }
-            }).show();
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))).setNegativeButton(android.R.string.cancel, (dialog, which) -> navbarToggle.setChecked(false)).setOnCancelListener(dialog -> navbarToggle.setChecked(false)).show();
         }
     }
 

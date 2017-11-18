@@ -170,23 +170,17 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         generateLists(requestedPermissions, activities, configurations, providerInfos, receivers, serviceInfos);
 
         // Add features to buttons
-        backup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start backup
-                hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version);
-            }
+        backup.setOnClickListener(v -> {
+            // Start backup
+            hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version);
         });
 
-        launchApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(info.packageName);
-                if (launchIntent != null) startActivity(launchIntent);
-                else {
-                    Toast.makeText(v.getContext(), "Unable to launch activity", Toast.LENGTH_SHORT).show();
-                    launchApp.setEnabled(false);
-                }
+        launchApp.setOnClickListener(v -> {
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(info.packageName);
+            if (launchIntent != null) startActivity(launchIntent);
+            else {
+                Toast.makeText(v.getContext(), "Unable to launch activity", Toast.LENGTH_SHORT).show();
+                launchApp.setEnabled(false);
             }
         });
 
@@ -503,53 +497,44 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             // Init
             try {
                 if (!BackupHelper.backupApk(appPath, filepath)) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), "Unable to create folder! Backup failed", Toast.LENGTH_LONG).show();
-                            dialog.dismiss();
-                        }
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(), "Unable to create folder! Backup failed", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
                     });
                 } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), "Backup of " + appName + " completed", Toast.LENGTH_LONG).show();
-                            dialog.dismiss();
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(), "Backup of " + appName + " completed", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
 
-                            // If Share APK share the APK itself
-                            if (shareApk) {
-                                File shareFile = new File(BackupHelper.getFolder().getAbsolutePath() + "/" + filepath);
-                                if (!shareFile.exists())
-                                    Toast.makeText(getApplicationContext(), "Unable to share file. File does not exist", Toast.LENGTH_SHORT).show();
-                                else {
-                                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                                    shareIntent.setType("*/*");
-                                    Uri shareUri;
-                                    // Android O Strict Mode crash fix
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        Log.i("ShareApp", "Post-Oreo: Using new Content URI method");
-                                        Log.i("ShareApp", "Invoking Content Provider " + getApplicationContext().getPackageName() + ".appupdater.provider");
-                                        shareUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
-                                                + ".appupdater.provider", shareFile);
-                                    } else {
-                                        Log.i("ShareApp", "Pre-Oreo: Fallbacking to old method as it worked previously");
-                                        shareUri = Uri.fromFile(shareFile);
-                                    }
-                                    shareIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
-                                    startActivity(Intent.createChooser(shareIntent, "Share with"));
+                        // If Share APK share the APK itself
+                        if (shareApk) {
+                            File shareFile = new File(BackupHelper.getFolder().getAbsolutePath() + "/" + filepath);
+                            if (!shareFile.exists())
+                                Toast.makeText(getApplicationContext(), "Unable to share file. File does not exist", Toast.LENGTH_SHORT).show();
+                            else {
+                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                                shareIntent.setType("*/*");
+                                Uri shareUri;
+                                // Android O Strict Mode crash fix
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    Log.i("ShareApp", "Post-Oreo: Using new Content URI method");
+                                    Log.i("ShareApp", "Invoking Content Provider " + getApplicationContext().getPackageName() + ".appupdater.provider");
+                                    shareUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName()
+                                            + ".appupdater.provider", shareFile);
+                                } else {
+                                    Log.i("ShareApp", "Pre-Oreo: Fallbacking to old method as it worked previously");
+                                    shareUri = Uri.fromFile(shareFile);
                                 }
+                                shareIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
+                                startActivity(Intent.createChooser(shareIntent, "Share with"));
                             }
                         }
                     });
                 }
             } catch (final IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Error backuping app (" + e.getLocalizedMessage() + ")", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), "Error backuping app (" + e.getLocalizedMessage() + ")", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
                 });
                 e.printStackTrace();
             }
@@ -572,12 +557,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
         new AlertDialog.Builder(this).setTitle("Requesting Storage Permission")
                 .setMessage("This app requires ability to access your storage to backup/restore apps")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE);
-                    }
-                }).show();
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE)).show();
     }
 
     /**
@@ -616,15 +596,12 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                         .setMessage("You have denied the app ability to access your storage. Backup will not continue")
                         .setPositiveButton(android.R.string.ok, null)
                         .setCancelable(false)
-                        .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                                permIntent.setData(packageURI);
-                                startActivity(permIntent);
-                                finish();
-                            }
+                        .setNeutralButton("SETTINGS", (dialog, which) -> {
+                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
+                            permIntent.setData(packageURI);
+                            startActivity(permIntent);
+                            finish();
                         }).show();
                 break;
         }

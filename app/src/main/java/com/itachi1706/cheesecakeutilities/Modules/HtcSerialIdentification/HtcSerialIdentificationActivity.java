@@ -43,46 +43,35 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
         resultList = findViewById(R.id.tv_htc_sn_result);
         serialNumber = findViewById(R.id.htc_sn_serialField);
 
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkSerialNumberValid(serialNumber.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Invalid Serial Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                String htmlFormattedSN = parseSerialNumber(serialNumber.getText().toString());
-                resultList.setText(DeprecationHelper.Html.fromHtml(htmlFormattedSN));
+        search.setOnClickListener(v -> {
+            if (!checkSerialNumberValid(serialNumber.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Invalid Serial Number", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            String htmlFormattedSN = parseSerialNumber(serialNumber.getText().toString());
+            resultList.setText(DeprecationHelper.Html.fromHtml(htmlFormattedSN));
         });
 
-        serial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                String uid = tManager.getDeviceId();
-                */
-                if (Build.SERIAL == null || Build.SERIAL.equals("")) {
-                    Toast.makeText(getApplicationContext(), "No Serial Number found", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (!isAHTCPhone()) {
-                    new AlertDialog.Builder(HtcSerialIdentificationActivity.this).setTitle("Not a HTC Phone")
-                            .setMessage("This application currently only supports HTC Phones. It may support other phones soon")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    HtcSerialIdentificationActivity.this.finish();
-                                }
-                            }).show();
-                    return;
-                }
-                //Check if this is a HTC phone
-                String uid = Build.SERIAL;
-                serialNumber.setText(uid);
-                search.performClick();
+        serial.setOnClickListener(v -> {
+            /*
+            TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String uid = tManager.getDeviceId();
+            */
+            if (Build.SERIAL == null || Build.SERIAL.equals("")) {
+                Toast.makeText(getApplicationContext(), "No Serial Number found", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (!isAHTCPhone()) {
+                new AlertDialog.Builder(HtcSerialIdentificationActivity.this).setTitle("Not a HTC Phone")
+                        .setMessage("This application currently only supports HTC Phones. It may support other phones soon")
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> HtcSerialIdentificationActivity.this.finish()).show();
+                return;
+            }
+            //Check if this is a HTC phone
+            String uid = Build.SERIAL;
+            serialNumber.setText(uid);
+            search.performClick();
         });
     }
 

@@ -119,12 +119,7 @@ public class ListApplicationsActivity extends BaseActivity {
                         .setMessage("This will scan your external application data folder (/sdcard/Android) for any ghost directories " +
                                 "left behind by applications no longer installed on your device")
                         .setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton("Scan", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                hasStoragePermissionCheck();
-                            }
-                        }).show();
+                        .setPositiveButton("Scan", (dialog, which) -> hasStoragePermissionCheck()).show();
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
@@ -154,12 +149,7 @@ public class ListApplicationsActivity extends BaseActivity {
         new AlertDialog.Builder(this).setTitle("Requesting Storage Permission")
                 .setMessage("This app requires ability to access your storage to scan your internal storage and " +
                         "perform cleanup activities for you")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE);
-                    }
-                }).show();
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_STORAGE)).show();
     }
 
     @Override
@@ -181,14 +171,11 @@ public class ListApplicationsActivity extends BaseActivity {
                                 " for ghost directories or perform ghost directories cleanup for you")
                         .setPositiveButton(android.R.string.ok, null)
                         .setCancelable(false)
-                        .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                                permIntent.setData(packageURI);
-                                startActivity(permIntent);
-                            }
+                        .setNeutralButton("SETTINGS", (dialog, which) -> {
+                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
+                            permIntent.setData(packageURI);
+                            startActivity(permIntent);
                         }).show();
                 break;
         }
@@ -224,31 +211,28 @@ public class ListApplicationsActivity extends BaseActivity {
                     .setPositiveButton(android.R.string.ok, null).show();
         } else {
             new MaterialDialog.Builder(this).title("Ghost Directory Scanning Complete")
-                    .items(listOfGhostDir.keySet()).itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
-                @Override
-                public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                    int count = 0;
-                    String removeMan = "";
-                    for (CharSequence t : text) {
-                        String path = listOfGhostDir.get(t);
-                        File del = new File(path);
-                        try {
-                            FileUtils.deleteDirectory(del);
-                            count++;
-                        } catch (IOException e) {
-                            Log.e("GhostCleanup", "Unable to remove " + t);
-                            removeMan += t + "\n";
+                    .items(listOfGhostDir.keySet()).itemsCallbackMultiChoice(null, (dialog, which, text) -> {
+                        int count = 0;
+                        String removeMan = "";
+                        for (CharSequence t : text) {
+                            String path = listOfGhostDir.get(t);
+                            File del = new File(path);
+                            try {
+                                FileUtils.deleteDirectory(del);
+                                count++;
+                            } catch (IOException e) {
+                                Log.e("GhostCleanup", "Unable to remove " + t);
+                                removeMan += t + "\n";
+                            }
                         }
-                    }
-                    if (!removeMan.isEmpty()) {
-                        new AlertDialog.Builder(ListApplicationsActivity.this).setTitle("Unable to remove some directories")
-                                .setMessage("Some directories cannot be removed. Please remove them manually.\n\n" + removeMan)
-                                .setPositiveButton(android.R.string.ok, null).show();
-                    }
-                    Toast.makeText(getApplicationContext(), "Cleaned up " + count + " directories", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-            }).positiveText("Clean Up").negativeText(android.R.string.cancel).show();
+                        if (!removeMan.isEmpty()) {
+                            new AlertDialog.Builder(ListApplicationsActivity.this).setTitle("Unable to remove some directories")
+                                    .setMessage("Some directories cannot be removed. Please remove them manually.\n\n" + removeMan)
+                                    .setPositiveButton(android.R.string.ok, null).show();
+                        }
+                        Toast.makeText(getApplicationContext(), "Cleaned up " + count + " directories", Toast.LENGTH_LONG).show();
+                        return true;
+                    }).positiveText("Clean Up").negativeText(android.R.string.cancel).show();
         }
     }
 
@@ -293,14 +277,11 @@ public class ListApplicationsActivity extends BaseActivity {
             appCountString = generateApiAppCountList();
 
             // Done
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    recyclerView.setAdapter(finalAdapter);
-                    scrollBar.setVisibility(View.VISIBLE);
-                    bar.setVisibility(View.GONE);
-                    label.setVisibility(View.GONE);
-                }
+            runOnUiThread(() -> {
+                recyclerView.setAdapter(finalAdapter);
+                scrollBar.setVisibility(View.VISIBLE);
+                bar.setVisibility(View.GONE);
+                label.setVisibility(View.GONE);
             });
             return null;
         }

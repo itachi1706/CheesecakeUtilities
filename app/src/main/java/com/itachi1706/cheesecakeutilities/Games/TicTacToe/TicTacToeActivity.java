@@ -354,12 +354,7 @@ public class TicTacToeActivity extends BaseActivity implements Button.OnClickLis
                 } else {
                     timerDuration = 0;
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        counter.setText("Time Taken: " + timerDuration + " seconds");
-                    }
-                });
+                runOnUiThread(() -> counter.setText("Time Taken: " + timerDuration + " seconds"));
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {

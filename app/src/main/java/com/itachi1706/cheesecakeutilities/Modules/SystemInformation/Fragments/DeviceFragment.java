@@ -178,11 +178,7 @@ public class DeviceFragment extends Fragment {
 
     private int getCoreCount() {
         try {
-            return new File("/sys/devices/system/cpu/").listFiles(new FileFilter() {
-                public boolean accept(File pathname) {
-                    return Pattern.matches("cpu[0-9]+", pathname.getName());
-                }
-            }).length;
+            return new File("/sys/devices/system/cpu/").listFiles(pathname -> Pattern.matches("cpu[0-9]+", pathname.getName())).length;
         } catch (Exception e) {
             return EVENT_TICK;
         }

@@ -54,12 +54,9 @@ public class InitActivity extends AppCompatActivity {
         mGLView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         mGLView.setRenderer(new ClearRenderer());
         setContentView(mGLView);
-        mGLView.post(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(InitActivity.this, ParentFragmentActivity.class));
-                finish();
-            }
+        mGLView.post(() -> {
+            startActivity(new Intent(InitActivity.this, ParentFragmentActivity.class));
+            finish();
         });
     }
 }

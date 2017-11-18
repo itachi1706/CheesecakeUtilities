@@ -143,12 +143,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
 
         new AlertDialog.Builder(this).setTitle("Requesting Contacts Permission")
                 .setMessage("This app requires ability to read your contacts to automatically get the phone number from your contacts list")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_CONTACTS);
-                    }
-                }).show();
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_CONTACTS)).show();
     }
 
     private void requestMessagingPermission() {
@@ -164,12 +159,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
 
         new AlertDialog.Builder(this).setTitle("Requesting SMS Permission")
                 .setMessage("This app requires ability to send SMS Messages")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_MESSAGING);
-                    }
-                }).show();
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_REQUEST_MESSAGING)).show();
     }
 
     /**
@@ -205,14 +195,11 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to send SMS. This app will not be able to spam anybody")
                         .setPositiveButton(android.R.string.ok, null)
-                        .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                                permIntent.setData(packageURI);
-                                startActivity(permIntent);
-                            }
+                        .setNeutralButton("SETTINGS", (dialog, which) -> {
+                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
+                            permIntent.setData(packageURI);
+                            startActivity(permIntent);
                         }).show();
                 break;
             case RC_HANDLE_REQUEST_CONTACTS:
@@ -228,14 +215,11 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
                         .setMessage("You have denied the app ability to access contacts. We are unable to let you select a contact. " +
                                 "Please enter the phone number manually or grant the app permission to read your contacts")
                         .setPositiveButton(android.R.string.ok, null)
-                        .setNeutralButton("SETTINGS", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                                permIntent.setData(packageURI);
-                                startActivity(permIntent);
-                            }
+                        .setNeutralButton("SETTINGS", (dialog, which) -> {
+                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
+                            permIntent.setData(packageURI);
+                            startActivity(permIntent);
                         }).show();
                 break;
             default:

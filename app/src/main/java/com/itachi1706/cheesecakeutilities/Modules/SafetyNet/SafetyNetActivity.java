@@ -69,12 +69,7 @@ public class SafetyNetActivity extends BaseActivity {
         welcomeTV = findViewById(R.id.welcomeTV);
         loading = findViewById(R.id.loading);
         Button runTestBtn = findViewById(R.id.runTestButton);
-        runTestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runTest();
-            }
-        });
+        runTestBtn.setOnClickListener(v -> runTest());
 
         if (ConnectionResult.SUCCESS != GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)) {
             handleError(0, "Google Play Services is not available on this device.\n\nThis SafetyNet test will not work");
@@ -171,13 +166,7 @@ public class SafetyNetActivity extends BaseActivity {
 
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(500);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                resultsContainer.setBackgroundColor((Integer) animator.getAnimatedValue());
-            }
-
-        });
+        colorAnimation.addUpdateListener(animator -> resultsContainer.setBackgroundColor((Integer) animator.getAnimatedValue()));
         colorAnimation.start();
     }
 

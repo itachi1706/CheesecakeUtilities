@@ -261,12 +261,7 @@ public class ORDActivity extends BaseActivity {
                     return true;
                 }
                 ArrayList<GCalHolidayItem> holidayList = new ArrayList<>(Arrays.asList(holiday.getOutput()));
-                Collections.sort(holidayList, new Comparator<GCalHolidayItem>() {
-                    @Override
-                    public int compare(GCalHolidayItem o1, GCalHolidayItem o2) {
-                        return (o1.getDateInMillis() < o2.getDateInMillis()) ? -1 : ((o1.getDateInMillis() == o2.getDateInMillis()) ? 0 : 1);
-                    }
-                });
+                Collections.sort(holidayList, (o1, o2) -> (o1.getDateInMillis() < o2.getDateInMillis()) ? -1 : ((o1.getDateInMillis() == o2.getDateInMillis()) ? 0 : 1));
                 StringBuilder b = new StringBuilder();
                 for (GCalHolidayItem h : holidayList) {
                     String[] tmp = h.getDate().split("-");
@@ -277,12 +272,9 @@ public class ORDActivity extends BaseActivity {
                 b.append("\nServer Cached Data: ").append(holiday.isCache());
                 new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
                         .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)
-                        .setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                new CalendarHolidayTask().execute();
-                                Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();
-                            }
+                        .setNeutralButton("Refresh", (dialog, which) -> {
+                            new CalendarHolidayTask().execute();
+                            Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();
                         })
                         .show();
                 return true;
@@ -316,12 +308,7 @@ public class ORDActivity extends BaseActivity {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sp.edit().putString(ORD_HOLIDAY_PREF, tmp).apply();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        repopulateAdapter();
-                    }
-                });
+                runOnUiThread(() -> repopulateAdapter());
             } catch (IOException e) {
                 e.printStackTrace();
             }
