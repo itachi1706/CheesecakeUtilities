@@ -168,10 +168,8 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         generateLists(requestedPermissions, activities, configurations, providerInfos, receivers, serviceInfos);
 
         // Add features to buttons
-        backup.setOnClickListener(v -> {
-            // Start backup
-            hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version);
-        });
+        // Start backup
+        backup.setOnClickListener(v -> hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version));
 
         launchApp.setOnClickListener(v -> {
             Intent launchIntent = getPackageManager().getLaunchIntentForPackage(info.packageName);

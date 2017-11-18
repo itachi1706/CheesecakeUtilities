@@ -70,10 +70,8 @@ public class CameraDisablerActivity extends BaseActivity {
         } else {
             // As per Google Play requirements, a disclosure of why it is needed
             new AlertDialog.Builder(this).setTitle(R.string.camera_disable_disclosure_title).setMessage(R.string.camera_disable_explaination_disclosure)
-                    .setNeutralButton(android.R.string.cancel, (dialog, which) -> {
-                        // Cancel and exit utility
-                        finish();
-                    }).setPositiveButton(R.string.camera_disable_disclosure_grant, (dialog, which) -> {
+                    .setNeutralButton(android.R.string.cancel, (dialog, which) -> finish())
+                    .setPositiveButton(R.string.camera_disable_disclosure_grant, (dialog, which) -> {
                         // Launch device admin request
                         Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);

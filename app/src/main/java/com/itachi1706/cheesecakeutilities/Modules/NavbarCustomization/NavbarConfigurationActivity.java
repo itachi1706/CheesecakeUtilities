@@ -70,10 +70,10 @@ public class NavbarConfigurationActivity extends BaseActivity {
                 if (Utils.IS_AT_LEAST_MARSHMALLOW && !canShowOverlays()) {
                     new AlertDialog.Builder(NavbarConfigurationActivity.this).setTitle("Require Permission")
                             .setMessage(R.string.nav_bar_request_overlay_perm)
-                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                                // Show request overlay
-                                allowSystemAlertWindow();
-                            }).setNegativeButton(android.R.string.cancel, (dialog, which) -> navbarToggle.setChecked(false)).setOnCancelListener(dialog -> navbarToggle.setChecked(false)).show();
+                            // Show request overlay
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> allowSystemAlertWindow())
+                            .setNegativeButton(android.R.string.cancel, (dialog, which) -> navbarToggle.setChecked(false))
+                            .setOnCancelListener(dialog -> navbarToggle.setChecked(false)).show();
                 } else {
                     requestAccessibilityServiceEnable();
                 }
@@ -116,10 +116,19 @@ public class NavbarConfigurationActivity extends BaseActivity {
         String type = sp.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
         assert type != null;
         switch (type) {
-            case NAVBAR_IMAGE_TYPE_RANDOM_IMG: imageType.setSelection(1); imageType.setTag(1); break;
-            case NAVBAR_IMAGE_TYPE_STATIC: imageType.setSelection(2); imageType.setTag(2); break;
+            case NAVBAR_IMAGE_TYPE_RANDOM_IMG:
+                imageType.setSelection(1);
+                imageType.setTag(1);
+                break;
+            case NAVBAR_IMAGE_TYPE_STATIC:
+                imageType.setSelection(2);
+                imageType.setTag(2);
+                break;
             case NAVBAR_IMAGE_TYPE_APP:
-            default: imageType.setSelection(0); imageType.setTag(0); break;
+            default:
+                imageType.setSelection(0);
+                imageType.setTag(0);
+                break;
         }
         imageType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -127,10 +136,16 @@ public class NavbarConfigurationActivity extends BaseActivity {
                 if (imageType.getTag() == (Object) position) return;
                 String type = imageType.getSelectedItem().toString();
                 switch (type) {
-                    case "Random Image": sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG); break;
-                    case "Static Color": sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC); break;
+                    case "Random Image":
+                        sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG);
+                        break;
+                    case "Static Color":
+                        sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC);
+                        break;
                     case "Current App Color":
-                    default: sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP); break;
+                    default:
+                        sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
+                        break;
                 }
                 imageType.setTag(null);
                 getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
@@ -209,6 +224,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
 
     /**
      * Check if accessibility service is enabled
+     *
      * @param mContext Application Context
      * @return true if enabled, false otherwise
      */
