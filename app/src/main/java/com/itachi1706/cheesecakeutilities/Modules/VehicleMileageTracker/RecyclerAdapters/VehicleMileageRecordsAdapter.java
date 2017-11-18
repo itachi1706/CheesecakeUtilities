@@ -1,6 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
