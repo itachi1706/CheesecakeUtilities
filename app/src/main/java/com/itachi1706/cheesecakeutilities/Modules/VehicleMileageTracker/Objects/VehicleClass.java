@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

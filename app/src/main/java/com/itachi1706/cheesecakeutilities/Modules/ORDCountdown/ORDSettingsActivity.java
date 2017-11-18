@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
