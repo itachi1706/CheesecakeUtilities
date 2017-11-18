@@ -5,6 +5,7 @@ engines:
     enabled: true
   sonar-java:
     enabled: true
+    channel: beta
     config:
       sonar.java.source: 8
 ratings:
