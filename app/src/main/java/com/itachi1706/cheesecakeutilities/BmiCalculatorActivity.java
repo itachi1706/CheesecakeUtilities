@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,20 +26,12 @@ public class BmiCalculatorActivity extends BaseActivity {
         calculate = findViewById(R.id.btnCalculate);
         result = findViewById(R.id.tvResults);
 
-        calculate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                calculate();
-            }
+        calculate.setOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            calculate();
         });
-        table.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTable();
-            }
-        });
+        table.setOnClickListener(v -> showTable());
     }
 
     private void calculate() {

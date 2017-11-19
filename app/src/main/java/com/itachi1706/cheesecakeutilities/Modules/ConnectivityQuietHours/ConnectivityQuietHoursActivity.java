@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,11 +18,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
@@ -103,81 +100,43 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Init On Click for Time
-        wifiStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        wifiStartTxt.setText(get12HrTime(hourOfDay, minute));
-                        wifiConnectivity.setStartHr(hourOfDay);
-                        wifiConnectivity.setStartMin(minute);
-                        sharedPreferences.edit().putString(QH_WIFI_TIME, wifiConnectivity.serialize()).apply();
-                        toggleWifiSwitch();
-                    }
-                }, wifiConnectivity.getStartHr(), wifiConnectivity.getStartMin(), false).show();
-            }
-        });
-        wifiEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        wifiEndTxt.setText(get12HrTime(hourOfDay, minute));
-                        wifiConnectivity.setEndHr(hourOfDay);
-                        wifiConnectivity.setEndMin(minute);
-                        sharedPreferences.edit().putString(QH_WIFI_TIME, wifiConnectivity.serialize()).apply();
-                        toggleWifiSwitch();
-                    }
-                }, wifiConnectivity.getEndHr(), wifiConnectivity.getEndMin(), false).show();
-            }
-        });
-        btStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        btStartTxt.setText(get12HrTime(hourOfDay, minute));
-                        btConnectivity.setStartHr(hourOfDay);
-                        btConnectivity.setStartMin(minute);
-                        sharedPreferences.edit().putString(QH_BT_TIME, btConnectivity.serialize()).apply();
-                        toggleBtSwitch();
-                    }
-                }, btConnectivity.getStartHr(), btConnectivity.getStartMin(), false).show();
-            }
-        });
-        btEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        btEndTxt.setText(get12HrTime(hourOfDay, minute));
-                        btConnectivity.setEndHr(hourOfDay);
-                        btConnectivity.setEndMin(minute);
-                        sharedPreferences.edit().putString(QH_BT_TIME, btConnectivity.serialize()).apply();
-                        toggleBtSwitch();
-                    }
-                }, btConnectivity.getEndHr(), btConnectivity.getEndMin(), false).show();
-            }
-        });
+        wifiStart.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
+            wifiStartTxt.setText(get12HrTime(hourOfDay, minute));
+            wifiConnectivity.setStartHr(hourOfDay);
+            wifiConnectivity.setStartMin(minute);
+            sharedPreferences.edit().putString(QH_WIFI_TIME, wifiConnectivity.serialize()).apply();
+            toggleWifiSwitch();
+        }, wifiConnectivity.getStartHr(), wifiConnectivity.getStartMin(), false).show());
+        wifiEnd.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
+            wifiEndTxt.setText(get12HrTime(hourOfDay, minute));
+            wifiConnectivity.setEndHr(hourOfDay);
+            wifiConnectivity.setEndMin(minute);
+            sharedPreferences.edit().putString(QH_WIFI_TIME, wifiConnectivity.serialize()).apply();
+            toggleWifiSwitch();
+        }, wifiConnectivity.getEndHr(), wifiConnectivity.getEndMin(), false).show());
+        btStart.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
+            btStartTxt.setText(get12HrTime(hourOfDay, minute));
+            btConnectivity.setStartHr(hourOfDay);
+            btConnectivity.setStartMin(minute);
+            sharedPreferences.edit().putString(QH_BT_TIME, btConnectivity.serialize()).apply();
+            toggleBtSwitch();
+        }, btConnectivity.getStartHr(), btConnectivity.getStartMin(), false).show());
+        btEnd.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
+            btEndTxt.setText(get12HrTime(hourOfDay, minute));
+            btConnectivity.setEndHr(hourOfDay);
+            btConnectivity.setEndMin(minute);
+            sharedPreferences.edit().putString(QH_BT_TIME, btConnectivity.serialize()).apply();
+            toggleBtSwitch();
+        }, btConnectivity.getEndHr(), btConnectivity.getEndMin(), false).show());
 
         // Init Enable toggle
-        btSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean(QH_BT_STATE, isChecked).apply();
-                toggleBtSwitch();
-            }
+        btSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean(QH_BT_STATE, isChecked).apply();
+            toggleBtSwitch();
         });
-        wifiSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPreferences.edit().putBoolean(QH_WIFI_STATE, isChecked).apply();
-                toggleWifiSwitch();
-            }
+        wifiSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean(QH_WIFI_STATE, isChecked).apply();
+            toggleWifiSwitch();
         });
         // Init Notification Toggle
         btNotification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -369,12 +328,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
             new AlertDialog.Builder(this).setTitle("Hardware Not Found")
                     .setMessage("This device does not have WiFi or Bluetooth capabilities and hence cannot utilize this utility." +
                             " This utility will now exit")
-                    .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            }).show();
+                    .setCancelable(false).setPositiveButton(android.R.string.ok, (dialog, which) -> finish()).show();
         }
 
         // Setup the recyclerview

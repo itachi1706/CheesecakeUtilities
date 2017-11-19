@@ -16,7 +16,6 @@ import com.turingtechnologies.materialscrollbar.ICustomAdapter;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -54,21 +53,11 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder
     }
 
     private void sortByName() {
-        Collections.sort(appsList, new Comparator<AppsItem>() {
-            @Override
-            public int compare(AppsItem o1, AppsItem o2) {
-                return o1.getAppName().compareTo(o2.getAppName());
-            }
-        });
+        Collections.sort(appsList, (o1, o2) -> o1.getAppName().compareTo(o2.getAppName()));
     }
 
     private void sortByApiVersion() {
-        Collections.sort(appsList, new Comparator<AppsItem>() {
-            @Override
-            public int compare(AppsItem o1, AppsItem o2) {
-                return AppsAdapter.compare(o2.getApiVersion(), o1.getApiVersion());
-            }
-        });
+        Collections.sort(appsList, (o1, o2) -> compare(o2.getApiVersion(), o1.getApiVersion()));
     }
 
     private static int compare(int x, int y) {

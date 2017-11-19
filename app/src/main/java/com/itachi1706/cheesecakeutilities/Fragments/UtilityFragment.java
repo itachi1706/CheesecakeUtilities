@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities.Fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
@@ -58,16 +55,13 @@ public class UtilityFragment extends Fragment {
 
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        mFirebaseRemoteConfig.fetch(FIREBASE_REFRESH_TIME).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.i("RemoteConfig", "Values Updated from server");
-                    mFirebaseRemoteConfig.activateFetched();
-                    updateAdapter();
-                } else
-                    Log.i("RemoteConfig", "Values failed to update");
-            }
+        mFirebaseRemoteConfig.fetch(FIREBASE_REFRESH_TIME).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.i("RemoteConfig", "Values Updated from server");
+                mFirebaseRemoteConfig.activateFetched();
+                updateAdapter();
+            } else
+                Log.i("RemoteConfig", "Values failed to update");
         });
 
         return v;

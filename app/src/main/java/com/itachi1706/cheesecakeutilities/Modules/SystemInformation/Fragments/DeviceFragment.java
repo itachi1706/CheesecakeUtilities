@@ -21,7 +21,6 @@ import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
@@ -178,11 +177,7 @@ public class DeviceFragment extends Fragment {
 
     private int getCoreCount() {
         try {
-            return new File("/sys/devices/system/cpu/").listFiles(new FileFilter() {
-                public boolean accept(File pathname) {
-                    return Pattern.matches("cpu[0-9]+", pathname.getName());
-                }
-            }).length;
+            return new File("/sys/devices/system/cpu/").listFiles(pathname -> Pattern.matches("cpu[0-9]+", pathname.getName())).length;
         } catch (Exception e) {
             return EVENT_TICK;
         }

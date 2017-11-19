@@ -65,18 +65,8 @@ public class IpptCalculatorActivity extends BaseActivity {
             }
         });
         ageSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, JsonHelper.getAgeRangeText(this)));
-        calculate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calculate();
-            }
-        });
-        scores.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), IpptScoringActivity.class));
-            }
-        });
+        calculate.setOnClickListener(v -> calculate());
+        scores.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), IpptScoringActivity.class)));
     }
 
     private void calculate() {

@@ -4,7 +4,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,19 +40,9 @@ public class CameraDisablerActivity extends BaseActivity {
         devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
         deviceAdmin = new ComponentName(this, DeviceAdminReceiver.class);
 
-        cameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateCameraStatus();
-            }
-        });
+        cameraBtn.setOnClickListener(view -> updateCameraStatus());
 
-        deviceAdminBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateDeviceAdminStatus();
-            }
-        });
+        deviceAdminBtn.setOnClickListener(view -> updateDeviceAdminStatus());
 
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(DEVICE_ADMIN_BROADCAST);
@@ -82,22 +70,14 @@ public class CameraDisablerActivity extends BaseActivity {
         } else {
             // As per Google Play requirements, a disclosure of why it is needed
             new AlertDialog.Builder(this).setTitle(R.string.camera_disable_disclosure_title).setMessage(R.string.camera_disable_explaination_disclosure)
-                    .setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Cancel and exit utility
-                            finish();
-                        }
-                    }).setPositiveButton(R.string.camera_disable_disclosure_grant, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Launch device admin request
-                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
-                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.camera_disable_explaination));
-                    startActivityForResult(intent, DEVICE_ADMIN_REQUEST);
-                }
-            }).show();
+                    .setNeutralButton(android.R.string.cancel, (dialog, which) -> finish())
+                    .setPositiveButton(R.string.camera_disable_disclosure_grant, (dialog, which) -> {
+                        // Launch device admin request
+                        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
+                        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.camera_disable_explaination));
+                        startActivityForResult(intent, DEVICE_ADMIN_REQUEST);
+                    }).show();
         }
     }
 

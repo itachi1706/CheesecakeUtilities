@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -64,19 +63,11 @@ public class VehicleMileageMainActivity extends BaseActivity {
         final FirebaseDatabase database = FirebaseUtils.getFirebaseDatabase();
         userdata = database.getReference().child("users").child(user_id);
 
-        findViewById(R.id.veh_mileage_fab_car).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class));
-            }
-        });
-        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
-                i.putExtra("uid", user_id);
-                startActivity(i);
-            }
+        findViewById(R.id.veh_mileage_fab_car).setOnClickListener(v -> startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class)));
+        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
+            i.putExtra("uid", user_id);
+            startActivity(i);
         });
 
         RecyclerView recyclerView = findViewById(R.id.veh_mileage_main_list);
@@ -88,7 +79,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            adapter = new VehicleMileageRecordsAdapter(new ArrayList<Record>(), new ArrayList<String>(), null);
+            adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null);
             recyclerView.setAdapter(adapter);
         }
     }

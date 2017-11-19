@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -63,30 +62,10 @@ public class ORDSettingsActivity extends AppCompatActivity {
         ordEt = (EditText) findViewById(R.id.etORD);
         popEt = (EditText) findViewById(R.id.etPOP);
         ptpEt = (EditText) findViewById(R.id.etPTP);
-        popEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popDialog(v);
-            }
-        });
-        ptpEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ptpDialog(v);
-            }
-        });
-        ordEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ordDialog(v);
-            }
-        });
-        enlistEt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                enlistDialog(v);
-            }
-        });
+        popEt.setOnClickListener(this::popDialog);
+        ptpEt.setOnClickListener(this::ptpDialog);
+        ordEt.setOnClickListener(this::ordDialog);
+        enlistEt.setOnClickListener(this::enlistDialog);
 
         pesStatusSpinner = findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
@@ -360,12 +339,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
             case R.id.save: saveAndExit(); return true;
             case R.id.clear: new AlertDialog.Builder(this).setTitle("Clearing options")
                     .setMessage("This will clear all of your settings. Are you sure you want to continue?")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            clearSettings();
-                        }
-                    }).setNegativeButton(android.R.string.no, null).show(); return true;
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> clearSettings()).setNegativeButton(android.R.string.no, null).show(); return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
