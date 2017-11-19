@@ -25,6 +25,8 @@ import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import java.security.InvalidKeyException;
 
+import de.psdev.licensesdialog.LicensesDialog;
+
 
 public class GeneralSettingsActivity extends AppCompatActivity {
     @Override
@@ -51,7 +53,14 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     CommonVariables.BASE_SERVER_URL, getResources().getString(R.string.link_legacy),
                     getResources().getString(R.string.link_updates), true)
                     .explodeUpdaterSettings(this);
-            super.addEggMethods();
+            super.addEggMethods(true, new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new LicensesDialog.Builder(getActivity()).setNotices(R.raw.notices)
+                            .setIncludeOwnLicense(true).build().show();
+                    return true;
+                }
+            });
 
             // Authentication processing
             final Preference pw = findPreference("password");
