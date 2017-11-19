@@ -53,13 +53,10 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     CommonVariables.BASE_SERVER_URL, getResources().getString(R.string.link_legacy),
                     getResources().getString(R.string.link_updates), true)
                     .explodeUpdaterSettings(this);
-            super.addEggMethods(true, new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    new LicensesDialog.Builder(getActivity()).setNotices(R.raw.notices)
-                            .setIncludeOwnLicense(true).build().show();
-                    return true;
-                }
+            super.addEggMethods(true, preference -> {
+                new LicensesDialog.Builder(getActivity()).setNotices(R.raw.notices)
+                        .setIncludeOwnLicense(true).build().show();
+                return true;
             });
 
             // Authentication processing
