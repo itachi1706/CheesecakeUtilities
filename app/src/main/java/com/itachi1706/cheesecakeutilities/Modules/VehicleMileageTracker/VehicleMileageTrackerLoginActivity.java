@@ -1,6 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -20,14 +18,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
@@ -65,13 +59,10 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         SignInButton mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Attempts to sign in with Google
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
+        mEmailSignInButton.setOnClickListener(v -> {
+            //Attempts to sign in with Google
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -92,28 +83,20 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         if (firebaseRemoteConfig.getBoolean("veh_mileage_debug"))
             findViewById(R.id.test_account).setVisibility(View.VISIBLE);
 
-        findViewById(R.id.test_account).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInTestEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInTestEmail:failure", task.getException());
-                            Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
+        findViewById(R.id.test_account).setOnClickListener(v -> mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(TAG, "signInTestEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInTestEmail:failure", task.getException());
+                Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
+                updateUI(null);
             }
-        });
+        }));
     }
 
     @Override
@@ -150,23 +133,20 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithGoogle:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithGoogle:failure", task.getException());
-                            Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                        progress.setVisibility(View.GONE);
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithGoogle:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithGoogle:failure", task.getException());
+                        Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
                     }
+                    progress.setVisibility(View.GONE);
                 });
     }
 
@@ -192,12 +172,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         if (mAuth.getCurrentUser() == null)
             new AlertDialog.Builder(this).setTitle("Unable to connect to Google Servers")
                     .setMessage("We are unable to connect to Google Servers to sign you in, therefore this utility cannot be used")
-                    .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            }).show();
+                    .setCancelable(false).setPositiveButton(android.R.string.ok, (dialog, which) -> finish()).show();
     }
 }
 

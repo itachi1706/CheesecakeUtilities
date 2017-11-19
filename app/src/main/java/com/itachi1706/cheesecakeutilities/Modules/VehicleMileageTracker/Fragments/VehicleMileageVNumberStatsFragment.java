@@ -64,12 +64,7 @@ public class VehicleMileageVNumberStatsFragment extends Fragment {
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         }
         refreshLayout = v.findViewById(R.id.pull_to_refresh);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                updateStats();
-            }
-        });
+        refreshLayout.setOnRefreshListener(this::updateStats);
         refreshLayout.setColorSchemeResources(
                 R.color.refresh_progress_1,
                 R.color.refresh_progress_2);

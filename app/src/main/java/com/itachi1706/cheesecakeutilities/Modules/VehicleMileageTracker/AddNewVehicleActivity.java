@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -30,12 +29,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         vehClass = findViewById(R.id.spinnerVehType);
         Button addVehicle = findViewById(R.id.veh_mileage_add_veh);
         layout = findViewById(R.id.veh_mileage_layout_vehicle);
-        addVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addVehicle();
-            }
-        });
+        addVehicle.setOnClickListener(v -> addVehicle());
     }
 
     private void addVehicle() {

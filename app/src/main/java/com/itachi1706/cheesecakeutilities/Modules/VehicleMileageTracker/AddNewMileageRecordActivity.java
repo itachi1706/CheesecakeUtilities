@@ -105,24 +105,9 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         });
 
         // Date Time Pickers
-        timeFrom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setFromDate();
-            }
-        });
-        timeTo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setToDate();
-            }
-        });
-        addRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addRecordToFirebase();
-            }
-        });
+        timeFrom.setOnClickListener(v -> setFromDate());
+        timeTo.setOnClickListener(v -> setToDate());
+        addRecord.setOnClickListener(v -> addRecordToFirebase());
 
         // Check if edit mode, if so edit
         if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
