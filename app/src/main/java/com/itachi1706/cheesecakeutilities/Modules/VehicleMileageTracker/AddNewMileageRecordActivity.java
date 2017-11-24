@@ -85,7 +85,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         // Init Spinner
         classType.setSelection(1); // Set to Class 3/3A default
         String defaultClassType = classType.getSelectedItem().toString();
-        VehicleClass.VehClass vClass = VehicleClass.getClassTypeWithName(defaultClassType);
+        VehicleClass.VehClass vClass = VehicleClass.INSTANCE.getClassTypeWithName(defaultClassType);
         assert vClass != null;
         DatabaseReference defaultVehicles = database.getReference().child("vehicles").child(vClass.getId());
         refreshVehicles(defaultVehicles);
@@ -93,7 +93,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         classType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                VehicleClass.VehClass v = VehicleClass.getClassTypeWithName(classType.getSelectedItem().toString());
+                VehicleClass.VehClass v = VehicleClass.INSTANCE.getClassTypeWithName(classType.getSelectedItem().toString());
                 assert v != null;
                 refreshVehicles(database.getReference().child("vehicles").child(v.getId()));
             }
