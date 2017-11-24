@@ -5,6 +5,7 @@ import android.os.Build;
 class Utils {
 
     static final boolean IS_AT_LEAST_MARSHMALLOW = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    static final boolean IS_OREO_AND_ABOVE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     static final String NAVBAR_SHOW_CLOCK = "navbar_clock";
     static final String NAVBAR_SERVICE_ENABLED = "service_enabled";
     static final String NAVBAR_SHOW_IMAGE = "navbar_image";

@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -177,6 +178,13 @@ public class NavbarConfigurationActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // TODO: See if there is a fix for devices with API 26 and above
+        if (Utils.IS_OREO_AND_ABOVE)
+            new AlertDialog.Builder(this).setCancelable(false)
+                    .setTitle("Not supported in Android Oreo")
+                    .setMessage("Due to API changes in Android Oreo, this feature is no longer supported as of now until a fix can be found. The utility will now exit")
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> finish()).show();
+
         AppPreferences sp = new AppPreferences(this);
         navbarToggle.setChecked(accessibilityServiceEnabled(this));
         if (accessibilityServiceEnabled(this))
