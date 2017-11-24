@@ -176,6 +176,7 @@ public class NavBarService extends AccessibilityService {
 
         if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this)) return; // Cannot draw overlay, exiting
         if (!sharedPreferences.getBoolean(NAVBAR_SERVICE_ENABLED, true)) return; // Service not enabled
+        if (Utils.IS_OREO_AND_ABOVE) return; // Oreo and above broke the app
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
