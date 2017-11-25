@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.afollestad.digitus.FingerprintDialog;
+import com.itachi1706.appupdater.extlib.fingerprint.FingerprintDialog;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
 
