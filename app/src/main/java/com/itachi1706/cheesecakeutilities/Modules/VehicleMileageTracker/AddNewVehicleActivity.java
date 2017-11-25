@@ -40,7 +40,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         }
 
         // Add to Firebase
-        VehicleClass.VehClass classV = VehicleClass.getClassTypeWithName(vehClass.getSelectedItem().toString());
+        VehicleClass.VehClass classV = VehicleClass.INSTANCE.getClassTypeWithName(vehClass.getSelectedItem().toString());
         assert classV != null;
         String nameNoSpace = name.getText().toString().replace(" ", "");
         nameNoSpace = nameNoSpace.replaceAll("[^A-Za-z0-9]", "");
@@ -56,6 +56,6 @@ public class AddNewVehicleActivity extends AppCompatActivity {
 
     private boolean validate() {
         return !name.getText().toString().isEmpty() && !longname.getText().toString().isEmpty()
-                && VehicleClass.getClassTypeWithName(vehClass.getSelectedItem().toString()) != null;
+                && VehicleClass.INSTANCE.getClassTypeWithName(vehClass.getSelectedItem().toString()) != null;
     }
 }
