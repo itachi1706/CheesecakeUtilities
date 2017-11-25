@@ -112,7 +112,7 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int add = getHeaderIndex(header);
         if (add == -1) return;
 
-        appsList.get(add).setIsExpanded(true);
+        appsList.get(add).setExpanded(true);
 
         ListIterator iterator = child.listIterator(child.size());
         while (iterator.hasPrevious()){
@@ -129,7 +129,7 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         int remove = getHeaderIndex(header);
         if (remove == -1) return;
 
-        appsList.get(remove).setIsExpanded(false);
+        appsList.get(remove).setExpanded(false);
 
         for (Iterator<RestoreAppsItemsBase> iterator = appsList.iterator(); iterator.hasNext();){
             RestoreAppsItemsBase base = iterator.next();
