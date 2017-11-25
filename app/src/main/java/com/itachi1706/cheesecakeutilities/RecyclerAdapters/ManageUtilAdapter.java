@@ -142,12 +142,12 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
         }
 
         private String convertHiddenOrLockedArrayToString(List<String> array) {
-            String res = "";
+            StringBuilder res = new StringBuilder();
             for (String s : array) {
-                if (res.isEmpty()) res += s;
-                else res += "|||" + s;
+                if (res.length() == 0) res.append(s);
+                else res.append("|||").append(s);
             }
-            return res;
+            return res.toString();
         }
 
         private void updateIcon() {

@@ -8,7 +8,7 @@ open class RestoreAppsItemsBase {
 
     var isExpanded = false
 
-    constructor() {}
+    constructor()
 
     constructor(isExpanded: Boolean) {
         this.isExpanded = isExpanded

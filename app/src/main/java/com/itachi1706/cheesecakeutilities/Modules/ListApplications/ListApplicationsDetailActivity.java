@@ -263,11 +263,11 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
     private String generateActivitiesList(ActivityInfo[] activities) {
         if (activities != null) {
-            String activityList = "";
+            StringBuilder activityList = new StringBuilder();
             for (ActivityInfo s : activities) {
-                activityList += s.name + "\n";
+                activityList.append(s.name).append("\n");
             }
-            return activityList;
+            return activityList.toString();
         }
         return "";
     }
@@ -280,61 +280,61 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
     private String generateProvidersList(ProviderInfo[] providers) {
         if (providers != null) {
-            String providerList = "";
+            StringBuilder providerList = new StringBuilder();
             for (ProviderInfo s : providers) {
-                providerList += s.name + "\n";
+                providerList.append(s.name).append("\n");
             }
-            return providerList;
+            return providerList.toString();
         }
         return "";
     }
 
     private String generateReceiversList(ActivityInfo[] receivers) {
         if (receivers != null) {
-            String receiverList = "";
+            StringBuilder receiverList = new StringBuilder();
             for (ActivityInfo s : receivers) {
-                receiverList += s.name + "\n";
+                receiverList.append(s.name).append("\n");
             }
-            return receiverList;
+            return receiverList.toString();
         }
         return "";
     }
 
     private String generateServicesList(ServiceInfo[] services) {
         if (services != null) {
-            String servicesList = "";
+            StringBuilder servicesList = new StringBuilder();
             for (ServiceInfo s : services) {
-                servicesList += s.name + "\n";
+                servicesList.append(s.name).append("\n");
             }
-            return servicesList;
+            return servicesList.toString();
         }
         return "";
     }
 
     private String generatePermissionsList(String[] requestedPermissions) {
         if (requestedPermissions != null) {
-            String permissionList = "";
+            StringBuilder permissionList = new StringBuilder();
             for (String s : requestedPermissions) {
-                permissionList += s + "\n";
+                permissionList.append(s).append("\n");
             }
-            return permissionList;
+            return permissionList.toString();
         }
         return "";
     }
 
     private String generateSignatureList(Signature[] signatures) {
         if (signatures != null) {
-            String signatureList = "";
+            StringBuilder signatureList = new StringBuilder();
             try {
                 if (signatures.length == 1)
-                    signatureList = getSignatureString(signatures[0]).trim();
+                    signatureList = new StringBuilder(getSignatureString(signatures[0]).trim());
 
                 else {
                     for (Signature s : signatures) {
-                        signatureList += getSignatureString(s).trim()+ "\n";
+                        signatureList.append(getSignatureString(s).trim()).append("\n");
                     }
                 }
-                return signatureList;
+                return signatureList.toString();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -344,16 +344,16 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
     private String generateRequiredFeaturesList(FeatureInfo[] configurations) {
         if (configurations!= null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            String configList = "";
+            StringBuilder configList = new StringBuilder();
             for (FeatureInfo i : configurations) {
                 if (i.name == null || i.name.isEmpty()) {
                     // OpenGLES
-                    configList += "OpenGL ES Version: " + i.getGlEsVersion() + "\n";
+                    configList.append("OpenGL ES Version: ").append(i.getGlEsVersion()).append("\n");
                 } else {
-                    configList += i.name + "\n";
+                    configList.append(i.name).append("\n");
                 }
             }
-            return configList;
+            return configList.toString();
         }
         return "";
     }

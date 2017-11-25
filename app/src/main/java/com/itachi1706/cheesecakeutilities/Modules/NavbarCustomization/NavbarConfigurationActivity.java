@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
