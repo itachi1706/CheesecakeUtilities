@@ -49,9 +49,7 @@ public class CreateShortcuts extends AppCompatActivity {
         menuitems.addAll(gameitems);
         List<String> hiddenitems = new ArrayList<>(Arrays.asList(mFirebaseRemoteConfig.getString("serverHide").split("\\|\\|\\|")));
 
-        for (String s : hiddenitems) {
-            menuitems.remove(s);
-        }
+        menuitems.removeAll(hiddenitems);
         return menuitems;
     }
 

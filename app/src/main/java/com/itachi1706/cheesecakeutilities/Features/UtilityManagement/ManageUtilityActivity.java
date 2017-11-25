@@ -44,9 +44,7 @@ public class ManageUtilityActivity extends AppCompatActivity {
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
         List<String> menuitemsList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
         List<String> firebaseHidden = new ArrayList<>(Arrays.asList(mFirebaseRemoteConfig.getString("serverHide").split("\\|\\|\\|")));
-        for (String s : firebaseHidden) {
-            menuitemsList.remove(s);
-        }
+        menuitemsList.removeAll(firebaseHidden);
         String[] menuitems = menuitemsList.toArray(new String[menuitemsList.size()]);
         ManageUtilAdapter adapter = new ManageUtilAdapter(menuitems, hiddenUtil, lockedUtil);
         recyclerView.setAdapter(adapter);

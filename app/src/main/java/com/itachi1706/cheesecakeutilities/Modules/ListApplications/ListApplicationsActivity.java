@@ -211,7 +211,7 @@ public class ListApplicationsActivity extends BaseActivity {
             new MaterialDialog.Builder(this).title("Ghost Directory Scanning Complete")
                     .items(listOfGhostDir.keySet()).itemsCallbackMultiChoice(null, (dialog, which, text) -> {
                         int count = 0;
-                        String removeMan = "";
+                        StringBuilder removeMan = new StringBuilder();
                         for (CharSequence t : text) {
                             String path = listOfGhostDir.get(t);
                             File del = new File(path);
@@ -220,10 +220,10 @@ public class ListApplicationsActivity extends BaseActivity {
                                 count++;
                             } catch (IOException e) {
                                 Log.e("GhostCleanup", "Unable to remove " + t);
-                                removeMan += t + "\n";
+                                removeMan.append(t).append("\n");
                             }
                         }
-                        if (!removeMan.isEmpty()) {
+                        if (removeMan.length() > 0) {
                             new AlertDialog.Builder(ListApplicationsActivity.this).setTitle("Unable to remove some directories")
                                     .setMessage("Some directories cannot be removed. Please remove them manually.\n\n" + removeMan)
                                     .setPositiveButton(android.R.string.ok, null).show();
@@ -294,9 +294,9 @@ public class ListApplicationsActivity extends BaseActivity {
                 tmp.put(appsItem.getApiVersion(), count);
             }
 
-            String appCount = "";
+            StringBuilder appCount = new StringBuilder();
             for (Map.Entry<Integer, Integer> object : tmp.entrySet()) {
-                appCount += object.getKey() + ":" + object.getValue() + "-";
+                appCount.append(object.getKey()).append(":").append(object.getValue()).append("-");
             }
             return appCount.substring(0, appCount.length() - 1);
         }

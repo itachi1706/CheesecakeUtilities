@@ -37,18 +37,18 @@ public class StringToHexBin extends BaseActivity implements View.OnClickListener
         CheckBox chkDel = this.findViewById(R.id.checkbox_binhex_delimit);
         RadioButton encdec = this.findViewById(R.id.rb_binhex_encode);
         for (int i = 0; i < thetext.length(); i++) {
-            String thebin;
+            StringBuilder thebin;
             int b = thetext.charAt(i);
             if (encdec.isChecked()) {
                 if (bin.isChecked()) {
-                    thebin = Integer.toBinaryString(b);
+                    thebin = new StringBuilder(Integer.toBinaryString(b));
                     while (thebin.length() < 8) {
-                        thebin = "0" + thebin;
+                        thebin.insert(0, "0");
                     }
                 } else {
-                    thebin = Integer.toHexString(b);
+                    thebin = new StringBuilder(Integer.toHexString(b));
                     if (thebin.length() == 1) {
-                        thebin = "0" + thebin;
+                        thebin.insert(0, "0");
                     }
                 }
                 if (chkDel.isChecked()) {
@@ -62,22 +62,22 @@ public class StringToHexBin extends BaseActivity implements View.OnClickListener
                 try {
                     if (chkDel.isChecked()) {
                         if (bin.isChecked()) {
-                            thebin = Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i))) + Character.toString(thetext.charAt(i + 1)) + Character.toString(thetext.charAt(i + 2)) + Character.toString(thetext.charAt(i + 3)) + Character.toString(thetext.charAt(i + 4)) + Character.toString(thetext.charAt(i + 5)) + Character.toString(thetext.charAt(i + 6)) + Character.toString(thetext.charAt(i + 7)), 2));
+                            thebin = new StringBuilder(Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i))) + Character.toString(thetext.charAt(i + 1)) + Character.toString(thetext.charAt(i + 2)) + Character.toString(thetext.charAt(i + 3)) + Character.toString(thetext.charAt(i + 4)) + Character.toString(thetext.charAt(i + 5)) + Character.toString(thetext.charAt(i + 6)) + Character.toString(thetext.charAt(i + 7)), 2)));
                             i += 8;
                         } else {
-                            thebin = Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i + 2))) + Character.toString(thetext.charAt(i + 3)), 16));
+                            thebin = new StringBuilder(Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i + 2))) + Character.toString(thetext.charAt(i + 3)), 16)));
                             i += 3;
                         }
                     } else if (bin.isChecked()) {
-                        thebin = Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i))) + Character.toString(thetext.charAt(i + 1)) + Character.toString(thetext.charAt(i + 2)) + Character.toString(thetext.charAt(i + 3)) + Character.toString(thetext.charAt(i + 4)) + Character.toString(thetext.charAt(i + 5)) + Character.toString(thetext.charAt(i + 6)) + Character.toString(thetext.charAt(i + 7)), 2));
+                        thebin = new StringBuilder(Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i))) + Character.toString(thetext.charAt(i + 1)) + Character.toString(thetext.charAt(i + 2)) + Character.toString(thetext.charAt(i + 3)) + Character.toString(thetext.charAt(i + 4)) + Character.toString(thetext.charAt(i + 5)) + Character.toString(thetext.charAt(i + 6)) + Character.toString(thetext.charAt(i + 7)), 2)));
                         i += 7;
                     } else {
-                        thebin = Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i))) + Character.toString(thetext.charAt(i + 1)), 16));
+                        thebin = new StringBuilder(Character.toString((char) Integer.parseInt(String.valueOf(Character.toString(thetext.charAt(i))) + Character.toString(thetext.charAt(i + 1)), 16)));
                         i++;
                     }
                 } catch (Exception e) {
                     i = thetext.length();
-                    thebin = "";
+                    thebin = new StringBuilder();
                     Toast.makeText(this.getApplicationContext(), "An error occurred during conversion! Please check your input and options.", Toast.LENGTH_LONG).show();
                 }
             }

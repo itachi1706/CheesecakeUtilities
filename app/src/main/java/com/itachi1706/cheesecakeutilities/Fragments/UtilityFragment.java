@@ -80,9 +80,7 @@ public class UtilityFragment extends Fragment {
         List<String> hiddenitems = new ArrayList<>(Arrays.asList(sp.getString("utilHidden", "").split("\\|\\|\\|")));
         List<String> moreStuffToHide = new ArrayList<>(Arrays.asList(mFirebaseRemoteConfig.getString("serverHide").split("\\|\\|\\|")));
         hiddenitems.addAll(moreStuffToHide);
-        for (String s : hiddenitems) {
-            menuitems.remove(s);
-        }
+        menuitems.removeAll(hiddenitems);
 
         adapter.updateList(menuitems);
         adapter.notifyDataSetChanged();
