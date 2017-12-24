@@ -70,7 +70,7 @@ import java.util.Map;
  * <li>android.permissions.CAMERA</li>
  * </ul>
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 public class CameraSource {
     @SuppressLint("InlinedApi")
     public static final int CAMERA_FACING_BACK = CameraInfo.CAMERA_FACING_BACK;
@@ -343,13 +343,8 @@ public class CameraSource {
 
             // SurfaceTexture was introduced in Honeycomb (11), so if we are running and
             // old version of Android. fall back to use SurfaceView.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
-                mCamera.setPreviewTexture(mDummySurfaceTexture);
-            } else {
-                mDummySurfaceView = new SurfaceView(mContext);
-                mCamera.setPreviewDisplay(mDummySurfaceView.getHolder());
-            }
+            mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
+            mCamera.setPreviewTexture(mDummySurfaceTexture);
             mCamera.startPreview();
 
             mProcessingThread = new Thread(mFrameProcessor);
@@ -420,12 +415,8 @@ public class CameraSource {
                     // developer wants to display a preview we must use a SurfaceHolder.  If the developer doesn't
                     // want to display a preview we use a SurfaceTexture if we are running at least Honeycomb.
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        mCamera.setPreviewTexture(null);
+                    mCamera.setPreviewTexture(null);
 
-                    } else {
-                        mCamera.setPreviewDisplay(null);
-                    }
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to clear camera preview: " + e);
                 }
@@ -642,10 +633,6 @@ public class CameraSource {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public boolean setAutoFocusMoveCallback(@Nullable AutoFocusMoveCallback cb) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            return false;
-        }
-
         synchronized (mCameraLock) {
             if (mCamera != null) {
                 CameraAutoFocusMoveCallback autoFocusMoveCallback = null;

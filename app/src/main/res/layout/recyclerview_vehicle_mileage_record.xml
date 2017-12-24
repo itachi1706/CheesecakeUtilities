@@ -80,5 +80,5 @@
         android:scrollHorizontally="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:text="12/12/12 0800 - 12/12/12 0800"
-        android:maxLines="1" />
+        android:singleLine="true" />
 </RelativeLayout>
