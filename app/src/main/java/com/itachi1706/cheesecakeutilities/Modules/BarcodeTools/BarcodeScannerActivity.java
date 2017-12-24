@@ -28,11 +28,11 @@ public class BarcodeScannerActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
 
-        statusMessage = (TextView) findViewById(R.id.status_message);
-        barcodeValue = (TextView) findViewById(R.id.barcode_value);
+        statusMessage = findViewById(R.id.status_message);
+        barcodeValue = findViewById(R.id.barcode_value);
 
-        autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
-        useFlash = (CompoundButton) findViewById(R.id.use_flash);
+        autoFocus = findViewById(R.id.auto_focus);
+        useFlash = findViewById(R.id.use_flash);
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
     }

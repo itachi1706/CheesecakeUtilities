@@ -103,7 +103,7 @@ public class AuthenticationFeatureTest {
                 allOf(withId(android.R.id.title), withText("Change/Remove Password"),
                         childAtPosition(
                                 childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
                                         1),
                                 0),
                         isDisplayed()));
@@ -178,7 +178,7 @@ public class AuthenticationFeatureTest {
                 allOf(withId(android.R.id.summary), withText("Unprotected"),
                         childAtPosition(
                                 childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
                                         1),
                                 1),
                         isDisplayed()));
