@@ -50,29 +50,23 @@ android {
     def propFile = file('key.properties')
     //check if SAFETY_NET_DEVICE_VERIFICATION_API_KEY is defined in gradle.properties (this is so the key is not in github)
     String GOOGLE_VERIFICATION_API_KEY = ""
-    String GOOGLE_ID = ""
     if (propFile.canRead()) {
         props.load(new FileInputStream(propFile))
         if (props != null) {
             if (props.containsKey('key.safetynet')) {
                 GOOGLE_VERIFICATION_API_KEY = props.getProperty('key.safetynet')
             }
-            if (props.containsKey('key.googleid')) {
-                GOOGLE_ID = props.getProperty('key.googleid')
-            }
         }
     }
     buildTypes {
         release {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
-            buildConfigField("String", "GOOGLE_ID", "\"" + GOOGLE_ID + "\"")
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
-            buildConfigField("String", "GOOGLE_ID", "\"" + GOOGLE_ID + "\"")
             // Disable Fabric Stuff
             ext.enableCrashlytics = false
         }
