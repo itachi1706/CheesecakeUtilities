@@ -8,6 +8,11 @@ import com.google.zxing.BarcodeFormat;
  * for com.itachi1706.cheesecakeutilities.Modules.BarcodeTools in CheesecakeUtilities
  */
 public class BarcodeHelper {
+
+    private BarcodeHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String getFormatName(int format) {
         switch (format) {
             case Barcode.CODE_128:
@@ -78,6 +83,7 @@ public class BarcodeHelper {
     private static final String REGEX_NUM_CAPS_ALPHA = "^[0-9A-Z-.$/+% ]*$";
     private static final String REGEX_NUM_SYMBOL = "^[0-9$-:/.+]*$";
     private static final String REGEX_ABCD = "^[ABCD]*$";
+    private static final String ERROR_NUM_ONLY = "Must only contain numbers";
     /**
      * Check if value is validated
      * @param generatedCode Barcode Type
@@ -85,42 +91,46 @@ public class BarcodeHelper {
      * @return null if validated, else String of error message
      */
     public static String checkValidation(int generatedCode, String value) {
+        String result = null;
         switch (generatedCode) {
             case GEN_UPC_A:
-                if (value.length() != 11) return "Must be 11 characters long";
-                if (value.matches(REGEX_NUM)) return null;
-                return "Must only contain numbers";
+                if (value.length() != 11) result = "Must be 11 characters long";
+                else if (!value.matches(REGEX_NUM)) result = ERROR_NUM_ONLY;
+                break;
             case GEN_EAN_13:
-                if (value.length() != 12) return "Must be 12 characters long";
-                if (value.matches(REGEX_NUM)) return null;
-                return "Must only contain numbers";
+                if (value.length() != 12) result = "Must be 12 characters long";
+                else if (!value.matches(REGEX_NUM)) result = ERROR_NUM_ONLY;
+                break;
             case GEN_CODE_39:
             case GEN_CODE_93:
-                if (value.matches(REGEX_NUM_CAPS_ALPHA)) return null;
-                return "Can only contain 0–9, A-Z, -.$/+% and space ONLY";
+                if (value.matches(REGEX_NUM_CAPS_ALPHA)) break;
+                result = "Can only contain 0–9, A-Z, -.$/+% and space ONLY";
+                break;
             case GEN_CODABAR:
-                if (value.matches(REGEX_NUM_SYMBOL)) return null;
-                if (Character.toString(value.charAt(0)).matches(REGEX_ABCD) && Character.toString(value.charAt(value.length() - 1)).matches(REGEX_ABCD)) return null;
-                return "0–9, –$:/.+ only, ABCD can be used at start and end of input";
+                if (value.matches(REGEX_NUM_SYMBOL)) break;
+                if (Character.toString(value.charAt(0)).matches(REGEX_ABCD) && Character.toString(value.charAt(value.length() - 1)).matches(REGEX_ABCD)) break;
+                result = "0–9, –$:/.+ only, ABCD can be used at start and end of input";
+                break;
             case GEN_ITF:
-                if (!value.matches(REGEX_NUM)) return "Must only contain numbers";
-                if (value.length() % 2 != 0) return "Input must be of even length";
-                return null;
+                if (!value.matches(REGEX_NUM)) result = ERROR_NUM_ONLY;
+                else if (value.length() % 2 != 0) result = "Input must be of even length";
+                break;
             case GEN_UPC_E:
-                if (value.length() != 5) return "Must be 5 characters long";
-                if (value.matches(REGEX_NUM)) return null;
-                else return "Must only contain numbers";
+                if (value.length() != 5) result = "Must be 5 characters long";
+                else if (!value.matches(REGEX_NUM)) result = ERROR_NUM_ONLY;
+                break;
             case GEN_EAN_8:
-                if (value.length() != 7) return "Must be 7 characters long";
-                if (value.matches(REGEX_NUM)) return null;
-                else return "Must only contain numbers";
+                if (value.length() != 7) result = "Must be 7 characters long";
+                if (!value.matches(REGEX_NUM)) result = ERROR_NUM_ONLY;
+                break;
             // No need for validation
             case GEN_AZTEC:
             case GEN_DATA_MATRIX:
             case GEN_PDF_417:
             case GEN_CODE_128:
             case GEN_QR:
-            default: return null;
+            default: break;
         }
+        return result;
     }
 }

@@ -66,8 +66,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
     // constants used to pass extra data in the intent
-    public static final String UseFlash = "UseFlash";
-    public static final String BarcodeObject = "Barcode";
+    public static final String USE_FLASH = "UseFlash";
+    public static final String BARCODE_OBJECT = "Barcode";
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
@@ -89,7 +89,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
-        boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
+        boolean useFlash = getIntent().getBooleanExtra(USE_FLASH, false);
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -266,7 +266,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
-            boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
+            boolean useFlash = getIntent().getBooleanExtra(USE_FLASH, false);
             createCameraSource(useFlash);
             return;
         }
@@ -344,7 +344,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
         if (best != null) {
             Intent data = new Intent();
-            data.putExtra(BarcodeObject, best);
+            data.putExtra(BARCODE_OBJECT, best);
             setResult(CommonStatusCodes.SUCCESS, data);
             finish();
             return true;

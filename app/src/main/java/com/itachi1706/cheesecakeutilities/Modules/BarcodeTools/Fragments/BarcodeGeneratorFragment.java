@@ -53,6 +53,8 @@ public class BarcodeGeneratorFragment extends Fragment {
 
     Bitmap bitmap = null;
 
+    private static final String TAG = "BarcodeGenerator";
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,7 +93,7 @@ public class BarcodeGeneratorFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Not used. Code stub
             }
         });
 
@@ -108,7 +110,7 @@ public class BarcodeGeneratorFragment extends Fragment {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, s);
             s.close();
         } catch (IOException e) {
-            Log.e("BarcodeGenerator", "Failed to create temp barcode file");
+            Log.e(TAG, "Failed to create temp barcode file");
             e.printStackTrace();
             return null;
         }
@@ -118,7 +120,7 @@ public class BarcodeGeneratorFragment extends Fragment {
                 + ".appupdater.provider", shareFile);
 
         if (contentUri == null) {
-            Log.e("BarcodeGenerator", "Failed to share file, invalid contentUri");
+            Log.e(TAG, "Failed to share file, invalid contentUri");
             return null;
         }
 
@@ -127,7 +129,7 @@ public class BarcodeGeneratorFragment extends Fragment {
 
     private void share() {
         if (bitmap == null) {
-            Log.e("BarcodeGenerator", "Cannot share an empty image");
+            Log.e(TAG, "Cannot share an empty image");
             Toast.makeText(getActivity(), "Invalid Action", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -203,27 +205,27 @@ public class BarcodeGeneratorFragment extends Fragment {
             hints.put(EncodeHintType.CHARACTER_SET, encoding);
         }
         MultiFormatWriter writer = new MultiFormatWriter();
-        BitMatrix result;
+        BitMatrix bitMatrix;
         try {
-            result = writer.encode(contents, format, IMAGE_DIMEN, IMAGE_DIMEN, hints);
+            bitMatrix = writer.encode(contents, format, IMAGE_DIMEN, IMAGE_DIMEN, hints);
         } catch (IllegalArgumentException iae) {
             // Unsupported format
             return null;
         }
-        int width = result.getWidth();
-        int height = result.getHeight();
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             int offset = y * width;
             for (int x = 0; x < width; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+                pixels[offset + x] = bitMatrix.get(x, y) ? BLACK : WHITE;
             }
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height,
+        Bitmap resultBitmap = Bitmap.createBitmap(width, height,
                 Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
+        resultBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return resultBitmap;
     }
 
     private static String guessAppropriateEncoding(CharSequence contents) {
