@@ -6,15 +6,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -25,6 +28,7 @@ import com.google.zxing.common.BitMatrix;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -33,8 +37,12 @@ public class BarcodeGeneratorFragment extends Fragment {
     LinearLayout barcodeActions;
     Button generate, share;
     ImageView result;
+    TextView restrictions;
     TextInputEditText textToConvert;
+    TextInputLayout convertTextError;
     Spinner barcodeType;
+
+    String[] restrictionString;
 
     Bitmap bitmap = null;
 
@@ -50,15 +58,30 @@ public class BarcodeGeneratorFragment extends Fragment {
         textToConvert = v.findViewById(R.id.etBarcode);
         result = v.findViewById(R.id.barcode_generated);
         barcodeType = v.findViewById(R.id.barcode_types);
+        restrictions = v.findViewById(R.id.barcode_restrictions);
+        convertTextError = v.findViewById(R.id.til_etBarcode);
 
+        restrictionString = getActivity().getResources().getStringArray(R.array.barcode_types_restrictions);
         generate.setOnClickListener(v1 -> generate());
         share.setOnClickListener(v2 -> share());
+        barcodeType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                restrictions.setText(restrictionString[position]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return v;
     }
 
     private void share() {
-        if (bitmap == null) {
+        Toast.makeText(getActivity(), "Unimplemented", Toast.LENGTH_LONG).show();
+        /*if (bitmap == null) {
             Log.e("BarcodeGenerator", "Cannot share an empty image");
             Toast.makeText(getActivity(), "Invalid Action", Toast.LENGTH_SHORT).show();
             return;
@@ -68,8 +91,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         String bitmapPath = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap,"title", null);
         Uri bitmapUri = Uri.parse(bitmapPath);
         intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
-        startActivity(Intent.createChooser(intent , "Share"));
-
+        startActivity(Intent.createChooser(intent , "Share"));*/
     }
 
     private void generate() {
@@ -80,8 +102,18 @@ public class BarcodeGeneratorFragment extends Fragment {
             return;
         }
         String text = textToConvert.getText().toString();
+
+        // Do validation
+        convertTextError.setError(null);
+        int generateCode = barcodeType.getSelectedItemPosition();
+        String error = BarcodeHelper.checkValidation(generateCode, text);
+        if (error != null && !error.isEmpty()) {
+            convertTextError.setError(error);
+            return;
+        }
+
         // Check type
-        BarcodeFormat format = BarcodeHelper.getGenerateType(barcodeType.getSelectedItemPosition());
+        BarcodeFormat format = BarcodeHelper.getGenerateType(generateCode);
         try {
             bitmap = encodeAsBitmap(text, format, 600, 600);
             result.setImageBitmap(bitmap);
