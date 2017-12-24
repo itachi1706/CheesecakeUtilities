@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools;
 
 import com.google.android.gms.vision.barcode.Barcode;
+import com.google.zxing.BarcodeFormat;
 
 /**
  * Created by Kenneth on 24/12/2017.
@@ -37,6 +38,15 @@ public class BarcodeHelper {
                 return "AZTEC";
             default:
                 return "Unknown (" + format + ")";
+        }
+    }
+
+    public static final int GEN_QR = 0;
+
+    public static BarcodeFormat getGenerateType(int generate) {
+        switch (generate) {
+            case GEN_QR:
+            default: return BarcodeFormat.QR_CODE;
         }
     }
 }
