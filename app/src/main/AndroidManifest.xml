@@ -259,7 +259,8 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
-        <activity android:name=".Modules.BarcodeTools.BarcodeScannerActivity"
+        <activity android:name=".Modules.BarcodeTools.BarcodeParentActivity"
+            android:theme="@style/AppTheme.NoAppBar"
             android:label="Barcode Tools"/>
         <activity android:name=".Modules.BarcodeTools.BarcodeCaptureActivity"
             android:label="Scan Barcode"/>

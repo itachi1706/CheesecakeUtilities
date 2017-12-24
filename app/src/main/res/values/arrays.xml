@@ -38,7 +38,7 @@
         <item>.Modules.SafetyNet.SafetyNetActivity</item>
         <item>.LaunchTileSettingsActivity</item>
         <item>.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity</item>
-        <item>.Modules.BarcodeTools.BarcodeScannerActivity</item>
+        <item>.Modules.BarcodeTools.BarcodeParentActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
