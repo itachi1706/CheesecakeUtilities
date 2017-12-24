@@ -95,25 +95,23 @@ public class BarcodeGeneratorFragment extends Fragment {
 
 
     // Generator
-
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
 
     Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
-        String contentsToEncode = contents;
-        if (contentsToEncode == null) {
+        if (contents == null) {
             return null;
         }
         Map<EncodeHintType, Object> hints = null;
-        String encoding = guessAppropriateEncoding(contentsToEncode);
+        String encoding = guessAppropriateEncoding(contents);
         if (encoding != null) {
-            hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+            hints = new EnumMap<>(EncodeHintType.class);
             hints.put(EncodeHintType.CHARACTER_SET, encoding);
         }
         MultiFormatWriter writer = new MultiFormatWriter();
         BitMatrix result;
         try {
-            result = writer.encode(contentsToEncode, format, img_width, img_height, hints);
+            result = writer.encode(contents, format, img_width, img_height, hints);
         } catch (IllegalArgumentException iae) {
             // Unsupported format
             return null;

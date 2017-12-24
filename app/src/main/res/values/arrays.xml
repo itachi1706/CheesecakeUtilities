@@ -95,6 +95,22 @@
         <item>Always (DEBUG)</item>
     </string-array>
     <string-array name="barcode_types">
-        <item>QR Code</item>
+        <item>QR Code (2D Barcode)</item>
+        <item>UPC A (1D US Num Product Barcode)</item>
+        <item>EAN 13 (1D EN Num Product Barcode)</item>
+        <item>CODE 39 (1D Identification Barcode)</item>
+        <item>CODE_93 (1D Identification Barcode)</item>
+        <item>CODE 128 (1D Compact Identification Barcode)</item>
+        <item>CODABAR (1D Normally Used in libraries</item>
+        <item>ITF (1D Num POS/Packaging Barcode)</item>
+        <item>Data Matrix (2D Barcode)</item>
+        <item>PDF417 (2D Govt/Airports Barcode)</item>
+        <item>UPC E (1D US Num Product Barcode Small)</item>
+        <item>EAN 8 (1D EN Num Product Barcode Small)</item>
+        <item>AZTEC (2D Airline Boarding Pass Barcode)</item>
+        <item>MAXICODE</item>
+        <item>RSS_14</item>
+        <item>RSS_EXPANDED</item>
+        <item>UPC_EAN_EXTENSION</item>
     </string-array>
 </resources>
