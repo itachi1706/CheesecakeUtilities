@@ -277,7 +277,7 @@
     <string name="barcode_header">Click &quot;Scan Barcode&quot; to scan a barcode and get its data</string>
     <string name="read_barcode">Scan Barcode</string>
     <string name="use_flash">Use Flash</string>
-    <string name="barcode_success">Barcode read successfully</string>
+    <string name="barcode_success">Barcode read successfully. Click the result to copy barcode data</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
 
