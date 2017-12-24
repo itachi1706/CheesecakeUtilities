@@ -18,7 +18,7 @@
         <item>SafetyNet Validator</item>
         <item>Quick Settings Tiles Configuration</item>
         <item>Connectivity Quiet Hours Configuration</item>
-        <item>BarcodeTools</item>
+        <item>Barcode Tools</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>

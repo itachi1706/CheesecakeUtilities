@@ -260,7 +260,7 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
         <activity android:name=".Modules.BarcodeTools.BarcodeScannerActivity"
-            android:label="Barcode Scanner"/>
+            android:label="Barcode Tools"/>
         <activity android:name=".Modules.BarcodeTools.BarcodeCaptureActivity"
             android:label="Scan Barcode"/>
     </application>

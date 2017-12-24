@@ -4,7 +4,6 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -12,9 +11,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
-public class BarcodeScannerActivity extends AppCompatActivity {
+public class BarcodeScannerActivity extends BaseActivity {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton useFlash;
@@ -24,6 +24,11 @@ public class BarcodeScannerActivity extends AppCompatActivity {
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeScanner";
+
+    @Override
+    public String getHelpDescription() {
+        return "Utility used to create or scan barcode (2D/3D)\nExamples: ISBN, QR Code etc";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
