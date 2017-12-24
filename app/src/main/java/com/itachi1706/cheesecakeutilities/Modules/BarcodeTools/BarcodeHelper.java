@@ -49,11 +49,11 @@ public class BarcodeHelper {
     private static final int GEN_CODE_128 = 5;
     private static final int GEN_CODABAR = 6;
     private static final int GEN_ITF = 7;
-    private static final int GEN_DATA_MATRIX = 8;
-    private static final int GEN_PDF_417 = 9;
-    private static final int GEN_UPC_E = 10;
-    private static final int GEN_EAN_8 = 11;
-    private static final int GEN_AZTEC = 12;
+    private static final int GEN_DATA_MATRIX = 12;
+    private static final int GEN_PDF_417 = 8;
+    private static final int GEN_UPC_E = 9;
+    private static final int GEN_EAN_8 = 10;
+    private static final int GEN_AZTEC = 11;
 
     public static BarcodeFormat getGenerateType(int generate) {
         switch (generate) {
@@ -64,7 +64,7 @@ public class BarcodeHelper {
             case GEN_CODE_128: return BarcodeFormat.CODE_128;
             case GEN_CODABAR: return BarcodeFormat.CODABAR;
             case GEN_ITF: return BarcodeFormat.ITF;
-            case GEN_DATA_MATRIX: return BarcodeFormat.DATA_MATRIX; // TODO: Need to be larger
+            case GEN_DATA_MATRIX: return BarcodeFormat.DATA_MATRIX; // Dont want
             case GEN_PDF_417: return BarcodeFormat.PDF_417;
             case GEN_UPC_E: return BarcodeFormat.UPC_E;
             case GEN_EAN_8: return BarcodeFormat.EAN_8;
