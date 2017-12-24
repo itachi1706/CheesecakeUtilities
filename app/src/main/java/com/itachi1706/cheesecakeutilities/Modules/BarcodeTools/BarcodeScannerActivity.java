@@ -15,7 +15,6 @@ import com.itachi1706.cheesecakeutilities.R;
 public class BarcodeScannerActivity extends AppCompatActivity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
-    private CompoundButton autoFocus;
     private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView barcodeValue;
@@ -31,7 +30,6 @@ public class BarcodeScannerActivity extends AppCompatActivity implements View.On
         statusMessage = findViewById(R.id.status_message);
         barcodeValue = findViewById(R.id.barcode_value);
 
-        autoFocus = findViewById(R.id.auto_focus);
         useFlash = findViewById(R.id.use_flash);
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
@@ -47,7 +45,6 @@ public class BarcodeScannerActivity extends AppCompatActivity implements View.On
         if (v.getId() == R.id.read_barcode) {
             // launch barcode activity.
             Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-            intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
 
             startActivityForResult(intent, RC_BARCODE_CAPTURE);

@@ -18,6 +18,7 @@
         <item>SafetyNet Validator</item>
         <item>Quick Settings Tiles Configuration</item>
         <item>Connectivity Quiet Hours Configuration</item>
+        <item>BarcodeTools</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -37,6 +38,7 @@
         <item>.Modules.SafetyNet.SafetyNetActivity</item>
         <item>.LaunchTileSettingsActivity</item>
         <item>.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity</item>
+        <item>.Modules.BarcodeTools.BarcodeScannerActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
