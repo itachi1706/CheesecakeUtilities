@@ -66,6 +66,7 @@ public class BarcodeScannerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // Check for camera source
+        //noinspection ConstantConditions
         DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getActivity().getSystemService(DEVICE_POLICY_SERVICE);
         if (!this.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
                 (devicePolicyManager != null && devicePolicyManager.getCameraDisabled(null))) {
