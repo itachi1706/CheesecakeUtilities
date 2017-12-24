@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -66,6 +68,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         restrictions = v.findViewById(R.id.barcode_restrictions);
         convertTextError = v.findViewById(R.id.til_etBarcode);
 
+        //noinspection ConstantConditions
         restrictionString = getActivity().getResources().getStringArray(R.array.barcode_types_restrictions);
         generate.setOnClickListener(v1 -> generate());
         share.setOnClickListener(v2 -> share());
@@ -139,6 +142,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+        //noinspection ConstantConditions
         shareIntent.setDataAndType(contentUri, getActivity().getContentResolver().getType(contentUri));
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         startActivity(Intent.createChooser(shareIntent, "Choose an app to share the image to"));
@@ -160,6 +164,13 @@ public class BarcodeGeneratorFragment extends Fragment {
         if (error != null && !error.isEmpty()) {
             convertTextError.setError(error);
             return;
+        }
+
+        //noinspection ConstantConditions
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            //noinspection ConstantConditions
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         }
 
         // Check type
