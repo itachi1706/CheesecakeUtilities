@@ -1,6 +1,9 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments;
 
 import android.app.admin.DevicePolicyManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -87,9 +91,19 @@ public class BarcodeScannerFragment extends Fragment {
                     result.append("Content: ").append(barcode.displayValue).append("\n\n");
                     result.append("Raw Value: ").append(barcode.rawValue).append("\n");
                     barcodeValue.setText(result);
+                    barcodeValue.setClickable(true);
+                    barcodeValue.setOnClickListener(v -> {
+                        ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        if (clipboard != null) {
+                            ClipData clip = ClipData.newPlainText("barcode", barcode.displayValue);
+                            clipboard.setPrimaryClip(clip);
+                            Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
+                        }
+                    });
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
+                    barcodeValue.setClickable(false);
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
