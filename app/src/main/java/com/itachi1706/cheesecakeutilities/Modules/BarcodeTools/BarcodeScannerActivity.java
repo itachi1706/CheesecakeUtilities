@@ -1,10 +1,12 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools;
 
+import android.app.admin.DevicePolicyManager;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -12,15 +14,16 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.itachi1706.cheesecakeutilities.R;
 
-public class BarcodeScannerActivity extends AppCompatActivity implements View.OnClickListener {
+public class BarcodeScannerActivity extends AppCompatActivity {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton useFlash;
+    private Button scan;
     private TextView statusMessage;
     private TextView barcodeValue;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
-    private static final String TAG = "BarcodeMain";
+    private static final String TAG = "BarcodeScanner";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,48 +35,33 @@ public class BarcodeScannerActivity extends AppCompatActivity implements View.On
 
         useFlash = findViewById(R.id.use_flash);
 
-        findViewById(R.id.read_barcode).setOnClickListener(this);
-    }
-
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.read_barcode) {
+        scan = findViewById(R.id.read_barcode);
+        scan.setOnClickListener(v -> {
             // launch barcode activity.
-            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+            Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
-
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
-        }
-
+        });
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode
-     * you started it with, the resultCode it returned, and any additional
-     * data from it.  The <var>resultCode</var> will be
-     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     * <p/>
-     * <p>You will receive this call immediately before onResume() when your
-     * activity is re-starting.
-     * <p/>
-     *
-     * @param requestCode The integer request code originally supplied to
-     *                    startActivityForResult(), allowing you to identify who this
-     *                    result came from.
-     * @param resultCode  The integer result code returned by the child activity
-     *                    through its setResult().
-     * @param data        An Intent, which can return result data to the caller
-     *                    (various data can be attached to Intent "extras").
-     * @see #startActivityForResult
-     * @see #createPendingResult
-     * @see #setResult(int)
-     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Check for camera source
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+        if (!this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
+                (devicePolicyManager != null && devicePolicyManager.getCameraDisabled(null))) {
+            // Disables stuff
+            scan.setEnabled(false);
+            statusMessage.setText(R.string.no_camera_hardware);
+        } else {
+            // Enable stuff
+            scan.setEnabled(true);
+            statusMessage.setText(getString(R.string.barcode_header));
+        }
+    }
+
+    // Returning barcode activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_BARCODE_CAPTURE) {
@@ -81,7 +69,11 @@ public class BarcodeScannerActivity extends AppCompatActivity implements View.On
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(barcode.displayValue);
+                    StringBuilder result = new StringBuilder();
+                    result.append("Format: ").append(getFormatName(barcode.format)).append("\n\n");
+                    result.append("Content: ").append(barcode.displayValue).append("\n\n");
+                    result.append("Raw Value: ").append(barcode.rawValue).append("\n");
+                    barcodeValue.setText(result);
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
@@ -93,6 +85,39 @@ public class BarcodeScannerActivity extends AppCompatActivity implements View.On
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private String getFormatName(int format) {
+        switch (format) {
+            case Barcode.CODE_128:
+                return "CODE_128";
+            case Barcode.CODE_39:
+                return "CODE_39";
+            case Barcode.CODE_93:
+                return "CODE_93";
+            case Barcode.CODABAR:
+                return "CODABAR";
+            case Barcode.DATA_MATRIX:
+                return "DATA_MATRIX";
+            case Barcode.EAN_13:
+                return "EAN_13";
+            case Barcode.EAN_8:
+                return "EAN_8";
+            case Barcode.ITF:
+                return "ITF";
+            case Barcode.QR_CODE:
+                return "QR_CODE";
+            case Barcode.UPC_A:
+                return "UPC_A";
+            case Barcode.UPC_E:
+                return "UPC_E";
+            case Barcode.PDF417:
+                return "PDF417";
+            case Barcode.AZTEC:
+                return "AZTEC";
+            default:
+                return "Unknown (" + format + ")";
         }
     }
 }
