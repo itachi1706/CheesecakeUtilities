@@ -66,7 +66,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(BuildConfig.GOOGLE_ID)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this)
