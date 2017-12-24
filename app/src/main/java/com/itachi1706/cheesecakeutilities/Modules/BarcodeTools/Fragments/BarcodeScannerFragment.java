@@ -56,7 +56,7 @@ public class BarcodeScannerFragment extends Fragment {
         scan.setOnClickListener(view -> {
             // launch barcode activity.
             Intent intent = new Intent(getActivity(), BarcodeCaptureActivity.class);
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
+            intent.putExtra(BarcodeCaptureActivity.USE_FLASH, useFlash.isChecked());
             startActivityForResult(intent, RC_BARCODE_CAPTURE);
         });
         return v;
@@ -86,7 +86,7 @@ public class BarcodeScannerFragment extends Fragment {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BARCODE_OBJECT);
                     statusMessage.setText(R.string.barcode_success);
                     StringBuilder result = new StringBuilder();
                     result.append("Format: ").append(BarcodeHelper.getFormatName(barcode.format)).append("\n\n");
