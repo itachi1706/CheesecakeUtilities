@@ -95,7 +95,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource(true, useFlash);
+            createCameraSource(useFlash);
         } else {
             requestCameraPermission();
         }
@@ -154,7 +154,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
      * the constant.
      */
     @SuppressLint("InlinedApi")
-    private void createCameraSource(boolean autoFocus, boolean useFlash) {
+    private void createCameraSource(boolean useFlash) {
         Context context = getApplicationContext();
 
         // A barcode detector is created to track barcodes.  An associated multi-processor instance
@@ -198,8 +198,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
                 .setRequestedFps(15.0f);
 
         // make sure that auto focus is an available option
-        builder = builder.setFocusMode(
-                autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null);
+        builder = builder.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         mCameraSource = builder
                 .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
@@ -268,7 +267,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
             boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
-            createCameraSource(true, useFlash);
+            createCameraSource(useFlash);
             return;
         }
 
