@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,9 @@ import com.google.zxing.common.BitMatrix;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -47,7 +50,7 @@ public class BarcodeGeneratorFragment extends Fragment {
     Bitmap bitmap = null;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_barcode_generator, container, false);
@@ -80,31 +83,54 @@ public class BarcodeGeneratorFragment extends Fragment {
     }
 
     private void share() {
-        Toast.makeText(getActivity(), "Unimplemented", Toast.LENGTH_LONG).show();
-        /*if (bitmap == null) {
+        if (bitmap == null) {
             Log.e("BarcodeGenerator", "Cannot share an empty image");
             Toast.makeText(getActivity(), "Invalid Action", Toast.LENGTH_SHORT).show();
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/png");
-        String bitmapPath = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap,"title", null);
-        Uri bitmapUri = Uri.parse(bitmapPath);
-        intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
-        startActivity(Intent.createChooser(intent , "Share"));*/
+
+        // Temporary save image
+        //noinspection ConstantConditions
+        File cache = new File(getActivity().getExternalCacheDir(), "images_cache");
+        //noinspection ResultOfMethodCallIgnored
+        cache.mkdirs();
+        try {
+            FileOutputStream s = new FileOutputStream(cache + "/barcode_share.png");
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, s);
+            s.close();
+        } catch (IOException e) {
+            Log.e("BarcodeGenerator", "Failed to create temp barcode file");
+            e.printStackTrace();
+        }
+        File shareFile = new File(cache, "barcode_share.png");
+        Uri contentUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName()
+                + ".appupdater.provider", shareFile);
+
+        if (contentUri == null) {
+            Log.e("BarcodeGenerator", "Failed to share file, invalid contentUri");
+            Toast.makeText(getActivity(), "Failed to share barcode", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+        shareIntent.setDataAndType(contentUri, getActivity().getContentResolver().getType(contentUri));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        startActivity(Intent.createChooser(shareIntent, "Choose an app to share the image to"));
     }
 
     private void generate() {
         // Check that theres something to generate
+        convertTextError.setError(null);
         if (textToConvert.getText() == null || textToConvert.getText().toString().isEmpty()) {
             // Nope
-            Toast.makeText(getActivity(), "Text to generate cannot be empty", Toast.LENGTH_SHORT).show();
+            convertTextError.setError("Input cannot be empty");
             return;
         }
         String text = textToConvert.getText().toString();
 
         // Do validation
-        convertTextError.setError(null);
         int generateCode = barcodeType.getSelectedItemPosition();
         String error = BarcodeHelper.checkValidation(generateCode, text);
         if (error != null && !error.isEmpty()) {
@@ -115,7 +141,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         // Check type
         BarcodeFormat format = BarcodeHelper.getGenerateType(generateCode);
         try {
-            bitmap = encodeAsBitmap(text, format, 600, 600);
+            bitmap = encodeAsBitmap(text, format);
             result.setImageBitmap(bitmap);
             barcodeActions.setVisibility(View.VISIBLE);
         } catch (WriterException e) {
@@ -129,8 +155,9 @@ public class BarcodeGeneratorFragment extends Fragment {
     // Generator
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
+    private static final int IMAGE_DIMEN = 1200;
 
-    Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
+    Bitmap encodeAsBitmap(String contents, BarcodeFormat format) throws WriterException {
         if (contents == null) {
             return null;
         }
@@ -143,7 +170,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         MultiFormatWriter writer = new MultiFormatWriter();
         BitMatrix result;
         try {
-            result = writer.encode(contents, format, img_width, img_height, hints);
+            result = writer.encode(contents, format, IMAGE_DIMEN, IMAGE_DIMEN, hints);
         } catch (IllegalArgumentException iae) {
             // Unsupported format
             return null;
