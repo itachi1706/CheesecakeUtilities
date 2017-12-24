@@ -113,19 +113,27 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
     // Specific Utility Dependencies
-    implementation 'com.squareup.picasso:picasso:2.5.2' // Navbar Utility
-    implementation 'net.grandcentrix.tray:tray:0.11.0' // Navbar Utility
-    implementation 'com.github.QuadFlask:colorpicker:0.0.12' // Navbar Utility
-    implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar' // ORD Countdown Utility
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2' // Application List Utility
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0' // Application List Utility
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1' // Application List Utility
-    implementation 'com.github.scottyab:safetynethelper:0.3.0' // SafetyNet Validator
-    implementation "com.google.android.gms:play-services-safetynet:$playServicesVersion" // SafetyNet Validator
-    implementation "com.google.android.gms:play-services-auth:$playServicesVersion" // Vehicle Mileage Tracker
-    implementation "com.google.firebase:firebase-database:$playServicesVersion" // Vehicle Mileage Tracker
-    implementation "com.google.firebase:firebase-auth:$playServicesVersion" // Vehicle Mileage Tracker
-    implementation 'com.getbase:floatingactionbutton:1.10.1' // Vehicle Mileage Tracker
+    // Navbar Utility
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'net.grandcentrix.tray:tray:0.11.0'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.12'
+    // ORD Countdown Utility
+    implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar'
+    // Application List Utility
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
+    // SafetyNet Validator
+    implementation 'com.github.scottyab:safetynethelper:0.3.0'
+    implementation "com.google.android.gms:play-services-safetynet:$playServicesVersion"
+    // Barcode Tools
+    implementation "com.google.android.gms:play-services-vision:$playServicesVersion"
+    // Vehicle Mileage Tracker
+    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
+    implementation "com.google.firebase:firebase-database:$playServicesVersion"
+    implementation "com.google.firebase:firebase-auth:$playServicesVersion"
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+    // Others
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"

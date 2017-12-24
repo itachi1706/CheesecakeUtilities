@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.itachi1706.cheesecakeutilities">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -251,9 +252,17 @@
         <activity
             android:name=".Modules.VehicleMileageTracker.ViewVehicleActivity"
             android:label="View All Vehicles" />
-        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageStatisticsActivity"
-            android:theme="@style/AppTheme.NoAppBar"
-            android:label="Mileage Statistics" />
+        <activity
+            android:name=".Modules.VehicleMileageTracker.VehicleMileageStatisticsActivity"
+            android:label="Mileage Statistics"
+            android:theme="@style/AppTheme.NoAppBar" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+        <activity android:name=".Modules.BarcodeTools.BarcodeScannerActivity"
+            android:label="Barcode Scanner"/>
+        <activity android:name=".Modules.BarcodeTools.BarcodeCaptureActivity"
+            android:label="Scan Barcode"/>
     </application>
 
 </manifest>
