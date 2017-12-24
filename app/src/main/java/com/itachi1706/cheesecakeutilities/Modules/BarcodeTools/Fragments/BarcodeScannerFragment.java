@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -100,6 +101,15 @@ public class BarcodeScannerFragment extends Fragment {
                             Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
                         }
                     });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        barcodeValue.setOnLongClickListener(v1 -> {
+                            ClipData clip = ClipData.newPlainText("barcode", barcode.displayValue);
+                            View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v1);
+                            v1.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL | View.DRAG_FLAG_GLOBAL_URI_READ |
+                                    View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
+                            return true;
+                        });
+                    }
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                 } else {
                     statusMessage.setText(R.string.barcode_failure);

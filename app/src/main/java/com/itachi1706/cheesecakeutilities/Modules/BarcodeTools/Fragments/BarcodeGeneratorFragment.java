@@ -1,8 +1,10 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -67,6 +69,17 @@ public class BarcodeGeneratorFragment extends Fragment {
         restrictionString = getActivity().getResources().getStringArray(R.array.barcode_types_restrictions);
         generate.setOnClickListener(v1 -> generate());
         share.setOnClickListener(v2 -> share());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            result.setOnLongClickListener(v12 -> {
+                if (bitmap == null) return false;
+                Uri contentUri = saveImageTmpAndGetUri();
+                ClipData clip = ClipData.newUri(getActivity().getContentResolver(), "barcode", contentUri);
+                View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v12);
+                v12.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL | View.DRAG_FLAG_GLOBAL_URI_READ |
+                        View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
+                return true;
+            });
+        }
         barcodeType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -82,14 +95,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         return v;
     }
 
-    private void share() {
-        if (bitmap == null) {
-            Log.e("BarcodeGenerator", "Cannot share an empty image");
-            Toast.makeText(getActivity(), "Invalid Action", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Temporary save image
+    private Uri saveImageTmpAndGetUri() {
         //noinspection ConstantConditions
         File cache = new File(getActivity().getExternalCacheDir(), "images_cache");
         //noinspection ResultOfMethodCallIgnored
@@ -101,13 +107,31 @@ public class BarcodeGeneratorFragment extends Fragment {
         } catch (IOException e) {
             Log.e("BarcodeGenerator", "Failed to create temp barcode file");
             e.printStackTrace();
+            return null;
         }
+
         File shareFile = new File(cache, "barcode_share.png");
         Uri contentUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName()
                 + ".appupdater.provider", shareFile);
 
         if (contentUri == null) {
             Log.e("BarcodeGenerator", "Failed to share file, invalid contentUri");
+            return null;
+        }
+
+        return contentUri;
+    }
+
+    private void share() {
+        if (bitmap == null) {
+            Log.e("BarcodeGenerator", "Cannot share an empty image");
+            Toast.makeText(getActivity(), "Invalid Action", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Temporary save image
+        Uri contentUri = saveImageTmpAndGetUri();
+        if (contentUri == null) {
             Toast.makeText(getActivity(), "Failed to share barcode", Toast.LENGTH_SHORT).show();
             return;
         }
