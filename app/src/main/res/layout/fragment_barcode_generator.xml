@@ -1,64 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeGeneratorFragment">
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_etBarcode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/etBarcode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Text to encode to barcode here" />
-    </android.support.design.widget.TextInputLayout>
-
-    <Spinner
-        android:id="@+id/barcode_types"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/til_etBarcode"
-        android:entries="@array/barcode_types" />
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:id="@+id/barcode_restrictions"/>
-
-    <Button
-        android:id="@+id/barcode_generate_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/spinner"
-        android:text="Encode Barcode" />
-
-    <ImageView
-        android:id="@+id/barcode_generated"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Generated Barcode"
-        android:src="@mipmap/ic_launcher_old" />
-
     <LinearLayout
-        android:id="@+id/ll_barcode_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:orientation="vertical">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_etBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/etBarcode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Text to encode to barcode here" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/barcode_types"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/barcode_types" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:id="@+id/barcode_restrictions"/>
 
         <Button
-            android:id="@+id/barcode_share"
+            android:id="@+id/barcode_generate_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share Barcode" />
+            android:text="Encode Barcode" />
+
+        <ImageView
+            android:id="@+id/barcode_generated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="Generated Barcode"
+            android:src="@mipmap/ic_launcher_old" />
+
+        <LinearLayout
+            android:id="@+id/ll_barcode_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/barcode_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Share Barcode" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+
+
+</ScrollView>
