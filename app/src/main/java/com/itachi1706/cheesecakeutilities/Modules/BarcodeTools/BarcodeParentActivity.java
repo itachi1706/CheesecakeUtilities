@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
 import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeGeneratorFragment;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeScannerFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
@@ -50,7 +51,7 @@ public class BarcodeParentActivity extends BaseActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFrag(new BarcodeScannerFragment(), "Scan");
-        adapter.addFrag(new BarcodeScannerFragment(), "Generate");
+        adapter.addFrag(new BarcodeGeneratorFragment(), "Generate");
 
         viewPager.setAdapter(adapter);
     }

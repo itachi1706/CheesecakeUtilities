@@ -94,4 +94,7 @@
         <item>Always</item>
         <item>Always (DEBUG)</item>
     </string-array>
+    <string-array name="barcode_types">
+        <item>QR Code</item>
+    </string-array>
 </resources>

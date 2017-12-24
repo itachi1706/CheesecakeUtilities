@@ -89,6 +89,7 @@ ext {
 dependencies {
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:support-v4:27.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -128,6 +129,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-safetynet:$playServicesVersion"
     // Barcode Tools
     implementation "com.google.android.gms:play-services-vision:$playServicesVersion"
+    implementation 'com.google.zxing:core:3.3.1'
     // Vehicle Mileage Tracker
     implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
     implementation "com.google.firebase:firebase-database:$playServicesVersion"
