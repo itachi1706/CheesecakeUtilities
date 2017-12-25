@@ -276,7 +276,8 @@
             android:name=".Modules.LyricFinder.LyricNotificationListener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":LyricNotifListener">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>

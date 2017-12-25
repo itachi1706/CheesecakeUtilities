@@ -52,53 +52,55 @@ public class LyricNotificationListener extends NotificationListenerService {
 
     private void processController(MediaController controller) {
         // Retrieve data
+        if (nowPlaying == null) nowPlaying = new NowPlaying();
         processMetadata(controller.getMetadata());
         if (controller.getPlaybackState() != null) {
             processPlaybackState(controller.getPlaybackState());
         } else
-            l_state = "Unknown";
+            nowPlaying.setState(NowPlaying.STOP);
         updateData();
         processing = false;
 
         Log.i(TAG, "Data retrieved");
     }
 
-    private static String l_album = "", l_title = "", l_artist = "", l_state = "Retrieving";
+    private static NowPlaying nowPlaying = null;
 
     private void updateData() {
-        Log.i(TAG, l_artist + " | " + l_title + " | " + l_album + " | " + l_state);
+        Log.i(TAG, nowPlaying.getArtist() + " | " + nowPlaying.getTitle() + " | " + nowPlaying.getAlbum()
+                + " | " + nowPlaying.getStateString());
     }
 
     private void processPlaybackState(@NonNull PlaybackState state) {
         switch (state.getState()) {
             case PlaybackState.STATE_PAUSED:
-                l_state = "Paused";
+                nowPlaying.setState(NowPlaying.PAUSE);
                 break;
             case PlaybackState.STATE_PLAYING:
-                l_state = "Playing";
+                nowPlaying.setState(NowPlaying.PLAY);
                 break;
             case PlaybackState.STATE_NONE:
             case PlaybackState.STATE_STOPPED:
-                l_state = "Stopped";
+                nowPlaying.setState(NowPlaying.STOP);
                 break;
         }
     }
 
     private void processMetadata(@Nullable MediaMetadata metadata) {
-        l_album = metadata.getString(MediaMetadata.METADATA_KEY_ALBUM);
-        l_title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
-        l_artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
+        nowPlaying.setAlbum(metadata.getString(MediaMetadata.METADATA_KEY_ALBUM));
+        nowPlaying.setTitle(metadata.getString(MediaMetadata.METADATA_KEY_TITLE));
+        nowPlaying.setArtist(metadata.getString(MediaMetadata.METADATA_KEY_ARTIST));
+        nowPlaying.setAlbumart(metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART));
     }
 
     // Unused
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Log.i(TAG,"Notification Posted ID : " + sbn.getId() + " | Time: " + sbn.getPostTime());
+        Log.i(TAG, "Notification Posted ID : " + sbn.getId() + " | Time: " + sbn.getPostTime());
         if (!processing) {
             processing = true;
             scanForControllers();
         }
-
     }
 
     @Override
