@@ -18,6 +18,7 @@
         <item>SafetyNet Validator</item>
         <item>Quick Settings Tiles Configuration</item>
         <item>Connectivity Quiet Hours Configuration</item>
+        <item>Barcode Tools</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -37,6 +38,7 @@
         <item>.Modules.SafetyNet.SafetyNetActivity</item>
         <item>.LaunchTileSettingsActivity</item>
         <item>.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity</item>
+        <item>.Modules.BarcodeTools.BarcodeParentActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
@@ -91,5 +93,33 @@
         <item>When Executed</item>
         <item>Always</item>
         <item>Always (DEBUG)</item>
+    </string-array>
+    <string-array name="barcode_types">
+        <item>QR Code (2D Barcode)</item>
+        <item>UPC A (1D US Product Barcode)</item>
+        <item>EAN 13 (1D EN Product Barcode)</item>
+        <item>CODE 39 (1D Identification Barcode)</item>
+        <item>CODE_93 (1D Identification Barcode)</item>
+        <item>CODE 128 (1D Compact Identification Barcode)</item>
+        <item>CODABAR (1D Normally Used in libraries</item>
+        <item>ITF (1D Num POS/Packaging Barcode)</item>
+        <item>PDF417 (2D Govt/Airports Barcode)</item>
+        <item>UPC E (1D US Product Barcode Small)</item>
+        <item>EAN 8 (1D EN Product Barcode Small)</item>
+        <item>AZTEC (2D Airline Boarding Pass Barcode)</item>
+    </string-array>
+    <string-array name="barcode_types_restrictions">
+        <item>No Restrictions</item>
+        <item>Must be 11 numbers long</item>
+        <item>Must be 12 numbers long</item>
+        <item>0–9, A-Z, -.$/+% and space ONLY</item>
+        <item>0–9, A-Z, -.$/+% and space ONLY</item>
+        <item>No Restrictions</item>
+        <item>0–9, –$:/.+ only, Letters ABCD can be used if its at both start and end of string</item>
+        <item>Numbers only of even length (2,4,6,8 etc)</item>
+        <item>No Restrictions</item>
+        <item>Must be 5 numbers long</item>
+        <item>Must be 7 numbers long</item>
+        <item>No Restrictions</item>
     </string-array>
 </resources>
