@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -12,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,18 +21,26 @@ import com.itachi1706.cheesecakeutilities.R;
 
 public class LyricFinderActivity extends AppCompatActivity {
 
-    private TextView nowplaying;
+    private TextView title, album, artist;
+    private ImageView albumart;
 
     private static final String TAG = "LyricFinder";
+    public static final String LYRIC_UPDATE = "com.itachi1706.cheesecakeutilities.LYRIC_UPDATE_BROADCAST";
+    public static final String LYRIC_DATA = "com.itachi1706.cheesecakeutilities.LYRIC_DATA_BROADCAST";
+    public static final String LYRIC_TITLE = "title";
+    public static final String LYRIC_ARTIST = "artist";
+    public static final String LYRIC_ALBUM = "album";
+    public static final String LYRIC_ALBUMART = "album_art";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lyric_finder);
 
-        nowplaying = findViewById(R.id.now_playing);
-
-
+        title = findViewById(R.id.now_playing_title);
+        album = findViewById(R.id.now_playing_album);
+        artist = findViewById(R.id.now_playing_artist);
+        albumart = findViewById(R.id.now_playing_album_art);
     }
 
     @Override
@@ -47,7 +57,7 @@ public class LyricFinderActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             unregisterReceiver(mReceiver);
         else {
-            // TODO: Unregister broadcast receiver
+            if (receiver != null) this.unregisterReceiver(receiver);
         }
     }
 
@@ -59,9 +69,37 @@ public class LyricFinderActivity extends AppCompatActivity {
     }
 
     private void registerMediaController() {
-        // TODO: Broadcast receiver register
-        // TODO: Request for current metadata
+        if (receiver == null) receiver = new DataReceiver();
+        IntentFilter filter = new IntentFilter(LYRIC_DATA);
+        this.registerReceiver(receiver, filter);
+        Log.i(TAG, "Request metadata update");
+        sendBroadcast(new Intent(LYRIC_UPDATE));
     }
+
+    private class DataReceiver extends BroadcastReceiver {
+
+        DataReceiver(){}
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Receieved broadcast");
+            album.setText(intent.getStringExtra(LYRIC_ALBUM));
+            artist.setText(intent.getStringExtra(LYRIC_ARTIST));
+            title.setText(intent.getStringExtra(LYRIC_TITLE));
+            if (intent.hasExtra(LYRIC_ALBUMART)) {
+                // Retrieve bitmap #hardcoded yay :D
+                String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
+                if (intent.getBooleanExtra(LYRIC_ALBUMART, false)) {
+                    Uri bitmapUri = Uri.parse(uri);
+                    albumart.setImageDrawable(null);
+                    albumart.setImageURI(bitmapUri);
+                }
+            }
+            else albumart.setImageResource(R.mipmap.ic_launcher_old);
+        }
+    }
+
+    DataReceiver receiver = null;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -73,9 +111,8 @@ public class LyricFinderActivity extends AppCompatActivity {
                     .setNeutralButton(android.R.string.cancel, (dialog, which) -> {
                         Toast.makeText(getApplicationContext(), "Permission not granted, exiting utility", Toast.LENGTH_LONG).show();
                         finish();
-                    }).setPositiveButton("GRANT PERMISSION", (dialog, which) -> {
-                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-            }).setCancelable(false).show();
+                    }).setPositiveButton("GRANT PERMISSION", (dialog, which) ->
+                    startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))).setCancelable(false).show();
         }
     }
 
@@ -111,20 +148,22 @@ public class LyricFinderActivity extends AppCompatActivity {
             String action = intent.getAction();
             String cmd = intent.getStringExtra("command");
             Log.v(TAG, action + " / " + cmd);
-            String artist;
-            String track;
+            String artists;
+            String tracks;
             if (action.equals("com.amazon.mp3.metachanged")) {
-                artist = intent.getStringExtra("com.amazon.mp3.artist");
-                track = intent.getStringExtra("com.amazon.mp3.track");
+                artists = intent.getStringExtra("com.amazon.mp3.artist");
+                tracks = intent.getStringExtra("com.amazon.mp3.track");
             } else {
-                artist = intent.getStringExtra("artist");
-                track = intent.getStringExtra("track");
+                artists = intent.getStringExtra("artist");
+                tracks = intent.getStringExtra("track");
 
             }
-            String album = intent.getStringExtra("album");
-            Log.v(TAG, artist + ":" + album + ":" + track);
-            Toast.makeText(getApplicationContext(), track, Toast.LENGTH_SHORT).show();
-            nowplaying.setText("Artist: " + artist + "\nTrack: " + track + "\nAlbum: " + album);
+            String albums = intent.getStringExtra("album");
+            Log.v(TAG, artists + ":" + albums + ":" + tracks);
+            Toast.makeText(getApplicationContext(), tracks, Toast.LENGTH_SHORT).show();
+            artist.setText(artists);
+            title.setText(tracks);
+            album.setText(albums);
         }
     };
 }

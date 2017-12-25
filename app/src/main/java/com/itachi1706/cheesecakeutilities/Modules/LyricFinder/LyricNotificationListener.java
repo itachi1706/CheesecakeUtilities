@@ -1,21 +1,35 @@
 package com.itachi1706.cheesecakeutilities.Modules.LyricFinder;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.net.Uri;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_ALBUM;
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_ALBUMART;
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_ARTIST;
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_TITLE;
 
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -33,12 +47,15 @@ public class LyricNotificationListener extends NotificationListenerService {
         mm = (MediaSessionManager) this.getSystemService(Context.MEDIA_SESSION_SERVICE);
 
         scanForControllers();
+        if (receiver == null) receiver = new UpdateReceiver();
+        IntentFilter filter = new IntentFilter(LyricFinderActivity.LYRIC_UPDATE);
+        this.registerReceiver(receiver, filter);
     }
 
     private void scanForControllers() {
         List<MediaController> controllers = mm.getActiveSessions(
                 new ComponentName(this, LyricNotificationListener.class));
-        Log.i(TAG, "Found " + controllers.size() + " controllers");
+        Log.d(TAG, "Found " + controllers.size() + " controllers");
         if (controllers.size() >= 1) processController(controllers.get(0));
         else processing = false;
         //noinspection UnusedAssignment
@@ -48,6 +65,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (receiver != null) this.unregisterReceiver(receiver);
     }
 
     private void processController(MediaController controller) {
@@ -61,7 +79,7 @@ public class LyricNotificationListener extends NotificationListenerService {
         updateData();
         processing = false;
 
-        Log.i(TAG, "Data retrieved");
+        Log.d(TAG, "Data Retrival Complete");
     }
 
     private static NowPlaying nowPlaying = null;
@@ -69,6 +87,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     private void updateData() {
         Log.i(TAG, nowPlaying.getArtist() + " | " + nowPlaying.getTitle() + " | " + nowPlaying.getAlbum()
                 + " | " + nowPlaying.getStateString());
+        sendBroadcastData();
     }
 
     private void processPlaybackState(@NonNull PlaybackState state) {
@@ -111,4 +130,57 @@ public class LyricNotificationListener extends NotificationListenerService {
             scanForControllers();
         }
     }
+
+    private class UpdateReceiver extends BroadcastReceiver {
+
+        UpdateReceiver(){}
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Receieved broadcast, updating metadata");
+            sendBroadcastData();
+        }
+    }
+
+    private void sendBroadcastData() {
+        if (nowPlaying == null) nowPlaying = new NowPlaying();
+        Intent intent = new Intent(LyricFinderActivity.LYRIC_DATA);
+        intent.putExtra(LYRIC_ALBUM, nowPlaying.getAlbum());
+        if (nowPlaying.getAlbumart() != null) {
+            intent.putExtra(LYRIC_ALBUMART, saveImageTmpAndGetUri() != null);
+        }
+        intent.putExtra(LYRIC_ARTIST, nowPlaying.getArtist());
+        intent.putExtra(LYRIC_TITLE, nowPlaying.getTitle());
+        sendBroadcast(intent);
+        Log.i(TAG, "Metadata Update Broadcast Sent");
+    }
+
+    private Uri saveImageTmpAndGetUri() {
+        //noinspection ConstantConditions
+        File cache = new File(getExternalCacheDir(), "images_cache");
+        //noinspection ResultOfMethodCallIgnored
+        cache.mkdirs();
+        try {
+            FileOutputStream s = new FileOutputStream(cache + "/albumart.png");
+            nowPlaying.getAlbumart().compress(Bitmap.CompressFormat.PNG, 100, s);
+            s.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to create temp barcode file");
+            e.printStackTrace();
+            return null;
+        }
+
+        File shareFile = new File(cache, "albumart.png");
+        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName()
+                + ".appupdater.provider", shareFile);
+
+        if (contentUri == null) {
+            Log.e(TAG, "Failed to share file, invalid contentUri");
+            return null;
+        }
+
+        return contentUri;
+    }
+
+    UpdateReceiver receiver = null;
 }
