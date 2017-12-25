@@ -5,15 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaMetadata;
-import android.media.session.MediaController;
-import android.media.session.MediaSessionManager;
-import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.R;
-
-import java.util.List;
 
 public class LyricFinderActivity extends AppCompatActivity {
 
@@ -55,95 +47,20 @@ public class LyricFinderActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             unregisterReceiver(mReceiver);
         else {
-            if (mm != null) mm.removeOnActiveSessionsChangedListener(listener);
+            // TODO: Unregister broadcast receiver
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     // Post Android 5
-    private MediaSessionManager mm;
-
     private boolean notificationAccessEnabled() {
         ComponentName cn = new ComponentName(getApplication(), LyricNotificationListener.class);
         String flat = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
         return flat != null && flat.contains(cn.flattenToString());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void registerMediaController() {
-        mm = (MediaSessionManager) this.getSystemService(
-                Context.MEDIA_SESSION_SERVICE);
-        List<MediaController> controllers = mm.getActiveSessions(
-                new ComponentName(this, LyricNotificationListener.class));
-        Log.i(TAG, "Found " + controllers.size() + " controllers");
-        if (controllers.size() >= 1) processController(controllers.get(0));
-        // Add a listener
-        mm.addOnActiveSessionsChangedListener(listener, new ComponentName(this, LyricNotificationListener.class));
-    }
-
-    private MediaSessionManager.OnActiveSessionsChangedListener listener = controllers -> {
-        Log.i(TAG, "Found " + controllers.size() + " controllers");
-        if (controllers.size() >= 1)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                processController(controllers.get(0));
-            }
-    };
-
-    private MediaController.Callback callback = new MediaController.Callback() {
-        @Override
-        public void onSessionDestroyed() {
-            super.onSessionDestroyed();
-            Log.i(TAG, "Controller session destroyed");
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public void onPlaybackStateChanged(@NonNull PlaybackState state) {
-            super.onPlaybackStateChanged(state);
-            Log.i(TAG, "Controller state changed");
-            switch (state.getState()) {
-                case PlaybackState.STATE_PAUSED:
-                    l_state = "Paused";
-                    break;
-                case PlaybackState.STATE_PLAYING:
-                    l_state = "Playing";
-                    break;
-                case PlaybackState.STATE_NONE:
-                case PlaybackState.STATE_STOPPED:
-                    l_state = "Stopped";
-                    break;
-            }
-            updateData();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public void onMetadataChanged(@Nullable MediaMetadata metadata) {
-            super.onMetadataChanged(metadata);
-            Log.i(TAG, "Controller metadata changed");
-            l_album = metadata.getString(MediaMetadata.METADATA_KEY_ALBUM);
-            l_title = metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
-            l_display_title = metadata.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE);
-            l_artist = metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
-            updateData();
-        }
-    };
-
-    private static String l_album = "", l_title = "", l_display_title = "", l_artist = "", l_state = "Retrieving";
-
-    private void updateData() {
-        nowplaying.setText("Artist: " + l_artist + "\nTrack: " + l_title + "\nAlbum: " + l_album + "\nDisplay Title: " + l_display_title +
-                "\nState: " + l_state);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void processController(MediaController controller) {
-        controller.registerCallback(callback);
-        Log.i(TAG, "Controller callback registered");
+        // TODO: Broadcast receiver register
+        // TODO: Request for current metadata
     }
 
 
