@@ -268,6 +268,19 @@
     <string name="list_app_menu_view_cert">View Certificate Info</string>
     <string name="list_app_menu_share_apk">Share APK File</string>
 
+***REMOVED*** Barcode Tools -->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This utility cannot run because it does not have the camera permission.  The utility will now exit.</string>
+    <string name="no_camera_hardware">Device has no camera or has its camera disabled by a device administrator. Utility cannot be used.</string>
+    <string name="low_storage_error">Barcode detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="barcode_header">Click &quot;Scan Barcode&quot; to scan a barcode and get its data</string>
+    <string name="read_barcode">Scan Barcode</string>
+    <string name="use_flash">Use Flash</string>
+    <string name="barcode_success">Barcode read successfully. Click the result to copy barcode data</string>
+    <string name="barcode_failure">No barcode captured</string>
+    <string name="barcode_error">"Error reading barcode: %1$s"</string>
+
 ***REMOVED*** Unsorted/Misc/General -->
     <string name="loading_label">Loading…</string>
     <string name="placeholder_text">Text Here</string>
