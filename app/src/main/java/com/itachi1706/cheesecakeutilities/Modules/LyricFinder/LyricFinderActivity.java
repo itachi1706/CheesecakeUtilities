@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
@@ -17,7 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
+
+import java.lang.ref.WeakReference;
 
 import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
 import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_DATA;
@@ -43,20 +49,62 @@ public class LyricFinderActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             registerReceiver(mReceiver, registerActions());
         else requestAndRegisterMediaController();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             unregisterReceiver(mReceiver);
         else {
-            if (receiver != null) this.unregisterReceiver(receiver);
+            if (receiver != null) {
+                this.unregisterReceiver(receiver);
+                receiver = null;
+            }
+        }
+    }
+
+    // Lyrics Handling
+    static class LyricHandler extends Handler {
+        WeakReference<LyricFinderActivity> mActivity;
+
+        LyricHandler(LyricFinderActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            LyricFinderActivity activity = mActivity.get();
+
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case RetrieveLyricTask.LYRIC_TASK_COMPLETE:
+                    if (activity == null) break; // Activity died for some reason, dont do anything
+                    if (!msg.getData().getBoolean("result")) {
+                        String error = msg.getData().getString("error");
+                        activity.lyrics.setText("Error Retrieving Lyrics: " + error);
+                        return;
+                    }
+                    String data = msg.getData().getString("data");
+                    Gson gson = new Gson();
+                    ApiResult result = gson.fromJson(data, ApiResult.class);
+
+                    switch (result.getError()) {
+
+                        case 0:
+                            activity.lyrics.setText(result.getMsg().replace("<br>","\n").trim()); break;
+                        case 1: activity.lyrics.setText("No Lyrics Found"); break;
+                        case -1:
+                        default: activity.lyrics.setText("Error occurred communicating with the server"); break;
+                    }
+                    break;
+            }
         }
     }
 
@@ -97,6 +145,12 @@ public class LyricFinderActivity extends AppCompatActivity {
                 }
             }
             else albumart.setImageResource(R.mipmap.ic_launcher_old);
+
+            // Request for lyrics
+            if (!obj.getTitle().equals("Unknown Title") && !obj.getArtist().equals("Unknown Artist"))
+                new RetrieveLyricTask(new LyricHandler(LyricFinderActivity.this)).execute(obj.getTitle(), obj.getArtist());
+            else
+                lyrics.setText("No Lyrics Available for this media");
         }
     }
 

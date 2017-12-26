@@ -112,7 +112,8 @@ public class LyricNotificationListener extends NotificationListenerService {
     // Unused
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Log.i(TAG, "Notification Posted ID : " + sbn.getId() + " | Time: " + sbn.getPostTime());
+        Log.i(TAG, "Notification Posted ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
+        if (sbn.getPackageName().equals(getPackageName())) return; // Don't process own notifications
         if (!processing) {
             processing = true;
             scanForControllers();
@@ -121,7 +122,8 @@ public class LyricNotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        Log.i(TAG,"Notification Removed ID : " + sbn.getId() + " | Time: " + sbn.getPostTime());
+        Log.i(TAG,"Notification Removed ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
+        if (sbn.getPackageName().equals(getPackageName())) return; // Don't process own notifications
         if (!processing) {
             processing = true;
             scanForControllers();
