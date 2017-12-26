@@ -43,9 +43,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_DATA;
-
 public class LyricFinderActivity extends BaseActivity {
 
     private TextView title, album, artist, state, lyrics;
@@ -192,10 +189,10 @@ public class LyricFinderActivity extends BaseActivity {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void registerMediaController() {
         if (receiver == null) receiver = new DataReceiver();
-        IntentFilter filter = new IntentFilter(LYRIC_DATA);
+        IntentFilter filter = new IntentFilter(NowPlaying.Companion.getLYRIC_DATA());
         this.registerReceiver(receiver, filter);
         Log.i(TAG, "Request metadata update");
-        sendBroadcast(new Intent(NowPlaying.LYRIC_UPDATE));
+        sendBroadcast(new Intent(NowPlaying.Companion.getLYRIC_UPDATE()));
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -212,10 +209,10 @@ public class LyricFinderActivity extends BaseActivity {
             artist.setText(obj.getArtist());
             title.setText(obj.getTitle());
             state.setText(obj.getStateString());
-            if (intent.hasExtra(LYRIC_ALBUMART)) {
+            if (intent.hasExtra(NowPlaying.Companion.getLYRIC_ALBUMART())) {
                 // Retrieve bitmap #hardcoded yay :D
                 String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
-                if (intent.getBooleanExtra(LYRIC_ALBUMART, false)) {
+                if (intent.getBooleanExtra(NowPlaying.Companion.getLYRIC_ALBUMART(), false)) {
                     Uri bitmapUri = Uri.parse(uri);
                     Drawable newImage, defaultImage = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_old));
                     try {

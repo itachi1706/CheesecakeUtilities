@@ -26,8 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
-
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class LyricNotificationListener extends NotificationListenerService {
@@ -45,7 +43,7 @@ public class LyricNotificationListener extends NotificationListenerService {
 
         scanForControllers();
         if (receiver == null) receiver = new UpdateReceiver();
-        IntentFilter filter = new IntentFilter(NowPlaying.LYRIC_UPDATE);
+        IntentFilter filter = new IntentFilter(NowPlaying.Companion.getLYRIC_UPDATE());
         this.registerReceiver(receiver, filter);
     }
 
@@ -72,7 +70,7 @@ public class LyricNotificationListener extends NotificationListenerService {
         if (controller.getPlaybackState() != null) {
             processPlaybackState(controller.getPlaybackState());
         } else
-            nowPlaying.setState(NowPlaying.STOP);
+            nowPlaying.setState(NowPlaying.Companion.getSTOP());
         updateData();
         processing = false;
 
@@ -90,14 +88,14 @@ public class LyricNotificationListener extends NotificationListenerService {
     private void processPlaybackState(@NonNull PlaybackState state) {
         switch (state.getState()) {
             case PlaybackState.STATE_PAUSED:
-                nowPlaying.setState(NowPlaying.PAUSE);
+                nowPlaying.setState(NowPlaying.Companion.getPAUSE());
                 break;
             case PlaybackState.STATE_PLAYING:
-                nowPlaying.setState(NowPlaying.PLAY);
+                nowPlaying.setState(NowPlaying.Companion.getPLAY());
                 break;
             case PlaybackState.STATE_NONE:
             case PlaybackState.STATE_STOPPED:
-                nowPlaying.setState(NowPlaying.STOP);
+                nowPlaying.setState(NowPlaying.Companion.getSTOP());
                 break;
         }
     }
@@ -145,7 +143,7 @@ public class LyricNotificationListener extends NotificationListenerService {
         if (nowPlaying == null) nowPlaying = new NowPlaying();
         Intent intent = nowPlaying.generateIntent();
         if (nowPlaying.getAlbumart() != null) {
-            intent.putExtra(LYRIC_ALBUMART, saveImageTmpAndGetUri() != null);
+            intent.putExtra(NowPlaying.Companion.getLYRIC_ALBUMART(), saveImageTmpAndGetUri() != null);
         }
         sendBroadcast(intent);
         Log.i(TAG, "Metadata Update Broadcast Sent");
