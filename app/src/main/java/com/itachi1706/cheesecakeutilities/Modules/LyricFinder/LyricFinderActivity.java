@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +37,8 @@ import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
 import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
@@ -43,7 +48,7 @@ public class LyricFinderActivity extends AppCompatActivity {
 
     private TextView title, album, artist, state, lyrics;
     private ImageView albumart;
-    private RelativeLayout nowPlayingLayout;
+    private RelativeLayout nowPlayingLayout, mainLayout;
 
     private ColorStateList medColor, smallColor;
     private int windowColor, systemui;
@@ -58,17 +63,20 @@ public class LyricFinderActivity extends AppCompatActivity {
         title = findViewById(R.id.now_playing_title);
         album = findViewById(R.id.now_playing_album);
         artist = findViewById(R.id.now_playing_artist);
-        albumart = findViewById(R.id.now_playing_album_art);
-        state = findViewById(R.id.now_playing_state);
         lyrics = findViewById(R.id.lyrics_view);
-        nowPlayingLayout = findViewById(R.id.now_playing_layout);
 
-        medColor = title.getTextColors();
-        smallColor = artist.getTextColors();
+        // Reduce variables initialized pre lollipop
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            albumart = findViewById(R.id.now_playing_album_art);
+            state = findViewById(R.id.now_playing_state);
+            nowPlayingLayout = findViewById(R.id.now_playing_layout);
+            mainLayout = findViewById(R.id.main_lyrics_layout);
+
+            medColor = title.getTextColors();
+            smallColor = artist.getTextColors();
             windowColor = getWindow().getNavigationBarColor();
+            systemui = getWindow().getDecorView().getSystemUiVisibility();
         }
-        systemui = getWindow().getDecorView().getSystemUiVisibility();
     }
 
     @Override
@@ -136,7 +144,15 @@ public class LyricFinderActivity extends AppCompatActivity {
         }
     }
 
+    private void findLyrics(String artist, String title) {
+        if (!title.equals("Unknown Title") && !artist.equals("Unknown Artist"))
+            new RetrieveLyricTask(new LyricHandler(LyricFinderActivity.this)).execute(title, artist);
+        else
+            lyrics.setText("No Lyrics Available for this media");
+    }
+
     // Post Android 5
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private boolean notificationAccessEnabled() {
         ComponentName cn = new ComponentName(getApplication(), LyricNotificationListener.class);
         String flat = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
@@ -171,61 +187,75 @@ public class LyricFinderActivity extends AppCompatActivity {
                 String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
                 if (intent.getBooleanExtra(LYRIC_ALBUMART, false)) {
                     Uri bitmapUri = Uri.parse(uri);
-                    albumart.setImageDrawable(null);
-                    albumart.setImageURI(bitmapUri);
-                }
+                    Drawable newImage, defaultImage = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_old));;
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(bitmapUri);
+                        newImage = BitmapDrawable.createFromStream(inputStream, bitmapUri.toString());
+                    } catch (FileNotFoundException e) {
+                        newImage = defaultImage;
+                    }
+                    Drawable[] layers = new Drawable[2];
+                    layers[0] = albumart.getDrawable();
+                    layers[1] = newImage;
+                    if (layers[0] == null) layers[0] = defaultImage;
+                    if (layers[1] == null) layers[1] = defaultImage;
+                    TransitionDrawable transition = new TransitionDrawable(layers);
+                    albumart.setImageDrawable(transition);
+                    transition.startTransition(100);
 
-                // Palette API LOL (Do all layout item checks see if they exist first before using this CPU intensive task)
-                if (albumart != null && nowPlayingLayout != null && album != null && title != null && state != null && artist != null
-                        && albumart.getDrawable() != null && albumart.getDrawable() instanceof BitmapDrawable && lyrics != null) {
-                    Bitmap toUseForPalette = ((BitmapDrawable) albumart.getDrawable()).getBitmap();
-                    new Palette.Builder(toUseForPalette)
-                            .maximumColorCount(32).generate(palette -> {
-                        if (getApplicationContext() == null)
-                            return; // Dont bother animating without a context
-                        Palette.Swatch selectedColors = palette.getDominantSwatch();
-                        int bgColor = ContextCompat.getColor(getApplicationContext(), android.R.color.white);
-                        if (nowPlayingLayout.getBackground() != null && nowPlayingLayout.getBackground() instanceof ColorDrawable)
-                            bgColor = ((ColorDrawable) nowPlayingLayout.getBackground()).getColor();
+                    // Palette API LOL (Do all layout item checks see if they exist first before using this CPU intensive task)
+                    if (albumart != null && nowPlayingLayout != null && album != null && title != null && state != null && artist != null
+                            && albumart.getDrawable() != null && newImage instanceof BitmapDrawable && lyrics != null
+                            && mainLayout != null) {
+                        Bitmap toUseForPalette = ((BitmapDrawable) newImage).getBitmap();
+                        new Palette.Builder(toUseForPalette)
+                                .maximumColorCount(32).generate(palette -> {
+                            if (getApplicationContext() == null)
+                                return; // Dont bother animating without a context
+                            Palette.Swatch selectedColors = palette.getDominantSwatch();
+                            int bgColor = ContextCompat.getColor(getApplicationContext(), android.R.color.white);
+                            if (nowPlayingLayout.getBackground() != null && nowPlayingLayout.getBackground() instanceof ColorDrawable)
+                                bgColor = ((ColorDrawable) nowPlayingLayout.getBackground()).getColor();
 
-                        if (selectedColors == null) {
-                            Log.e(TAG, "Unable to get colors, defaulting");
-                            selectedColors = new Palette.Swatch(Color.rgb(255, 255, 255), 1);
-                        }
+                            if (selectedColors == null) {
+                                Log.e(TAG, "Unable to get colors, defaulting");
+                                selectedColors = new Palette.Swatch(Color.rgb(255, 255, 255), 1);
+                            }
 
-                        Integer backgroundCFrom = bgColor, backgroundCTo = selectedColors.getRgb();
-                        Integer textCFrom = title.getCurrentTextColor(), textCTo = selectedColors.getTitleTextColor();
-                        Integer textSFrom = album.getCurrentTextColor(), textSTo = selectedColors.getBodyTextColor();
-                        ValueAnimator animateBg = ValueAnimator.ofArgb(backgroundCFrom, backgroundCTo);
+                            Integer backgroundCFrom = bgColor, backgroundCTo = selectedColors.getRgb();
+                            Integer textCFrom = title.getCurrentTextColor(), textCTo = selectedColors.getTitleTextColor();
+                            Integer textSFrom = album.getCurrentTextColor(), textSTo = selectedColors.getBodyTextColor();
+                            ValueAnimator animateBg = ValueAnimator.ofArgb(backgroundCFrom, backgroundCTo);
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            if (!CommonMethods.isColorDark(backgroundCTo))
-                                getWindow().getDecorView().setSystemUiVisibility(systemui | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            else
-                                getWindow().getDecorView().setSystemUiVisibility(systemui);
-                        }
-                        animateBg.addUpdateListener(animation -> {
-                            nowPlayingLayout.setBackground(new ColorDrawable((int) animateBg.getAnimatedValue()));
-                            lyrics.setBackgroundColor((int) animateBg.getAnimatedValue());
-                            getWindow().setNavigationBarColor((int) animateBg.getAnimatedValue());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (!CommonMethods.isColorDark(backgroundCTo))
+                                    getWindow().getDecorView().setSystemUiVisibility(systemui | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                                else
+                                    getWindow().getDecorView().setSystemUiVisibility(systemui);
+                            }
+                            animateBg.addUpdateListener(animation -> {
+                                nowPlayingLayout.setBackground(new ColorDrawable((int) animateBg.getAnimatedValue()));
+                                mainLayout.setBackgroundColor((int) animateBg.getAnimatedValue());
+                                getWindow().setNavigationBarColor((int) animateBg.getAnimatedValue());
+                            });
+                            animateBg.start();
+
+                            ValueAnimator animateMain = ValueAnimator.ofArgb(textCFrom, textCTo);
+                            animateMain.addUpdateListener(animation -> {
+                                title.setTextColor((int) animateMain.getAnimatedValue());
+                                lyrics.setTextColor((int) animateMain.getAnimatedValue());
+                            });
+                            animateMain.start();
+
+                            ValueAnimator animateSub = ValueAnimator.ofArgb(textSFrom, textSTo);
+                            animateSub.addUpdateListener(animation -> {
+                                album.setTextColor((int) animateSub.getAnimatedValue());
+                                artist.setTextColor((int) animateSub.getAnimatedValue());
+                                state.setTextColor((int) animateSub.getAnimatedValue());
+                            });
+                            animateSub.start();
                         });
-                        animateBg.start();
-
-                        ValueAnimator animateMain = ValueAnimator.ofArgb(textCFrom, textCTo);
-                        animateMain.addUpdateListener(animation -> {
-                            title.setTextColor((int) animateMain.getAnimatedValue());
-                            lyrics.setTextColor((int) animateMain.getAnimatedValue());
-                        });
-                        animateMain.start();
-
-                        ValueAnimator animateSub = ValueAnimator.ofArgb(textSFrom, textSTo);
-                        animateSub.addUpdateListener(animation -> {
-                            album.setTextColor((int) animateSub.getAnimatedValue());
-                            artist.setTextColor((int) animateSub.getAnimatedValue());
-                            state.setTextColor((int) animateSub.getAnimatedValue());
-                        });
-                        animateSub.start();
-                    });
+                    }
                 }
             } else {
                 albumart.setImageResource(R.mipmap.ic_launcher_old);
@@ -233,19 +263,17 @@ public class LyricFinderActivity extends AppCompatActivity {
                 album.setTextColor(smallColor);
                 title.setTextColor(medColor);
                 lyrics.setTextColor(medColor);
-                lyrics.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
+                mainLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
                 state.setTextColor(smallColor);
                 artist.setTextColor(smallColor);
                 nowPlayingLayout.setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), android.R.color.white)));
                 getWindow().setNavigationBarColor(windowColor);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) getWindow().getDecorView().setSystemUiVisibility(systemui);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    getWindow().getDecorView().setSystemUiVisibility(systemui);
             }
 
             // Request for lyrics
-            if (!obj.getTitle().equals("Unknown Title") && !obj.getArtist().equals("Unknown Artist"))
-                new RetrieveLyricTask(new LyricHandler(LyricFinderActivity.this)).execute(obj.getTitle(), obj.getArtist());
-            else
-                lyrics.setText("No Lyrics Available for this media");
+            findLyrics(obj.getArtist(), obj.getTitle());
         }
     }
 
@@ -266,7 +294,7 @@ public class LyricFinderActivity extends AppCompatActivity {
         }
     }
 
-    // Pre Android 5
+    // Pre Android 5 (LOLLIPOP) implementation
     private IntentFilter registerActions() {
         IntentFilter iF = new IntentFilter();
         iF.addAction("com.android.music.metachanged");
@@ -314,6 +342,7 @@ public class LyricFinderActivity extends AppCompatActivity {
             artist.setText(artists);
             title.setText(tracks);
             album.setText(albums);
+            findLyrics(artists, tracks);
         }
     };
 }
