@@ -23,9 +23,10 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
@@ -44,7 +46,7 @@ import java.lang.ref.WeakReference;
 import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
 import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_DATA;
 
-public class LyricFinderActivity extends AppCompatActivity {
+public class LyricFinderActivity extends BaseActivity {
 
     private TextView title, album, artist, state, lyrics;
     private ImageView albumart;
@@ -54,6 +56,15 @@ public class LyricFinderActivity extends AppCompatActivity {
     private int windowColor, systemui;
 
     private static final String TAG = "LyricFinder";
+
+    @Override
+    public String getHelpDescription() {
+        String msg = "Shows the lyrics (if available) of the currently playing media";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            msg += "\n\nRequires the Notification Listener permission to use. " +
+                    "Access the notification listener settings page from the options menu";
+        return msg;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +127,8 @@ public class LyricFinderActivity extends AppCompatActivity {
 
             switch (msg.what) {
                 case RetrieveLyricTask.LYRIC_TASK_COMPLETE:
-                    if (activity == null) break; // Activity died for some reason, dont do anything
+                    if (activity == null)
+                        break; // Activity died for some reason, dont do anything
                     if (!msg.getData().getBoolean("result")) {
                         String error = msg.getData().getString("error");
                         activity.lyrics.setText("Error Retrieving Lyrics: " + error);
@@ -149,6 +161,24 @@ public class LyricFinderActivity extends AppCompatActivity {
             new RetrieveLyricTask(new LyricHandler(LyricFinderActivity.this)).execute(title, artist);
         else
             lyrics.setText("No Lyrics Available for this media");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getMenuInflater().inflate(R.menu.modules_lyrics, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.notification_listener:
+                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // Post Android 5
@@ -187,7 +217,7 @@ public class LyricFinderActivity extends AppCompatActivity {
                 String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
                 if (intent.getBooleanExtra(LYRIC_ALBUMART, false)) {
                     Uri bitmapUri = Uri.parse(uri);
-                    Drawable newImage, defaultImage = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_old));;
+                    Drawable newImage, defaultImage = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_old));
                     try {
                         InputStream inputStream = getContentResolver().openInputStream(bitmapUri);
                         newImage = BitmapDrawable.createFromStream(inputStream, bitmapUri.toString());

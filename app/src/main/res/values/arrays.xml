@@ -19,7 +19,7 @@
         <item>Quick Settings Tiles Configuration</item>
         <item>Connectivity Quiet Hours Configuration</item>
         <item>Barcode Tools</item>
-        <item>LyricFinderActivity</item>
+        <item>Now Playing Lyrics</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>

@@ -270,7 +270,7 @@
             android:label="Scan Barcode" />
 
         <activity android:name=".Modules.LyricFinder.LyricFinderActivity"
-            android:label="Lyric Finder"/>
+            android:label="Now Playing Lyrics"/>
 
         <service
             android:name=".Modules.LyricFinder.LyricNotificationListener"
