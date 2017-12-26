@@ -29,12 +29,14 @@ import java.util.List;
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class LyricNotificationListener extends NotificationListenerService {
-    public LyricNotificationListener() {
-    }
 
     private static MediaSessionManager mm;
     private static final String TAG = "LyricService";
     private static boolean processing = false;
+
+    public LyricNotificationListener() {
+        // Constructor that is needed just for show
+    }
 
     @Override
     public void onCreate() {
@@ -95,6 +97,7 @@ public class LyricNotificationListener extends NotificationListenerService {
                 break;
             case PlaybackState.STATE_NONE:
             case PlaybackState.STATE_STOPPED:
+            default:
                 nowPlaying.setState(NowPlaying.Companion.getSTOP());
                 break;
         }
@@ -110,17 +113,16 @@ public class LyricNotificationListener extends NotificationListenerService {
     // Unused
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Log.i(TAG, "Notification Posted ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
-        if (sbn.getPackageName().equals(getPackageName())) return; // Don't process own notifications
-        if (!processing) {
-            processing = true;
-            scanForControllers();
-        }
+        processNotification(sbn, "Posted");
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        Log.i(TAG,"Notification Removed ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
+        processNotification(sbn, "Removed");
+    }
+
+    private void processNotification(StatusBarNotification sbn, String state) {
+        Log.i(TAG,"Notification " + state + " ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
         if (sbn.getPackageName().equals(getPackageName())) return; // Don't process own notifications
         if (!processing) {
             processing = true;
