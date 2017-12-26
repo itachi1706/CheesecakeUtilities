@@ -26,10 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_ALBUM;
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_ALBUMART;
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_ARTIST;
-import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.LyricFinderActivity.LYRIC_TITLE;
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
 
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -48,7 +45,7 @@ public class LyricNotificationListener extends NotificationListenerService {
 
         scanForControllers();
         if (receiver == null) receiver = new UpdateReceiver();
-        IntentFilter filter = new IntentFilter(LyricFinderActivity.LYRIC_UPDATE);
+        IntentFilter filter = new IntentFilter(NowPlaying.LYRIC_UPDATE);
         this.registerReceiver(receiver, filter);
     }
 
@@ -144,13 +141,10 @@ public class LyricNotificationListener extends NotificationListenerService {
 
     private void sendBroadcastData() {
         if (nowPlaying == null) nowPlaying = new NowPlaying();
-        Intent intent = new Intent(LyricFinderActivity.LYRIC_DATA);
-        intent.putExtra(LYRIC_ALBUM, nowPlaying.getAlbum());
+        Intent intent = nowPlaying.generateIntent();
         if (nowPlaying.getAlbumart() != null) {
             intent.putExtra(LYRIC_ALBUMART, saveImageTmpAndGetUri() != null);
         }
-        intent.putExtra(LYRIC_ARTIST, nowPlaying.getArtist());
-        intent.putExtra(LYRIC_TITLE, nowPlaying.getTitle());
         sendBroadcast(intent);
         Log.i(TAG, "Metadata Update Broadcast Sent");
     }

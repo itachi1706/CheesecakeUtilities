@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.LyricFinder;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import javax.annotation.Nullable;
@@ -19,11 +20,36 @@ public class NowPlaying {
     private Bitmap albumart;
     private int state;
 
+    public static final String LYRIC_TITLE = "title";
+    public static final String LYRIC_ARTIST = "artist";
+    public static final String LYRIC_ALBUM = "album";
+    public static final String LYRIC_STATE = "state";
+    public static final String LYRIC_ALBUMART = "album_art";
+
+    public static final String LYRIC_UPDATE = "com.itachi1706.cheesecakeutilities.LYRIC_UPDATE_BROADCAST";
+    public static final String LYRIC_DATA = "com.itachi1706.cheesecakeutilities.LYRIC_DATA_BROADCAST";
+
     public NowPlaying(){
         album = "Unknown Album";
         title = "Unknown Title";
         artist = "Unknown Artist";
         state = STOP;
+    }
+
+    public NowPlaying(Intent intent) {
+        album = intent.getStringExtra(LYRIC_ALBUM);
+        artist = intent.getStringExtra(LYRIC_ARTIST);
+        title = intent.getStringExtra(LYRIC_TITLE);
+        state = intent.getIntExtra(LYRIC_STATE, STOP);
+    }
+
+    public Intent generateIntent() {
+        Intent intent = new Intent(LYRIC_DATA);
+        intent.putExtra(LYRIC_ALBUM, album);
+        intent.putExtra(LYRIC_ARTIST, artist);
+        intent.putExtra(LYRIC_TITLE, title);
+        intent.putExtra(LYRIC_STATE, state);
+        return intent;
     }
 
     public String getAlbum() {

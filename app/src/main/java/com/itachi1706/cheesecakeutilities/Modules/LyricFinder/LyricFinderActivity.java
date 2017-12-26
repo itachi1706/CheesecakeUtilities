@@ -19,18 +19,15 @@ import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.R;
 
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_ALBUMART;
+import static com.itachi1706.cheesecakeutilities.Modules.LyricFinder.NowPlaying.LYRIC_DATA;
+
 public class LyricFinderActivity extends AppCompatActivity {
 
-    private TextView title, album, artist;
+    private TextView title, album, artist, state, lyrics;
     private ImageView albumart;
 
     private static final String TAG = "LyricFinder";
-    public static final String LYRIC_UPDATE = "com.itachi1706.cheesecakeutilities.LYRIC_UPDATE_BROADCAST";
-    public static final String LYRIC_DATA = "com.itachi1706.cheesecakeutilities.LYRIC_DATA_BROADCAST";
-    public static final String LYRIC_TITLE = "title";
-    public static final String LYRIC_ARTIST = "artist";
-    public static final String LYRIC_ALBUM = "album";
-    public static final String LYRIC_ALBUMART = "album_art";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +38,8 @@ public class LyricFinderActivity extends AppCompatActivity {
         album = findViewById(R.id.now_playing_album);
         artist = findViewById(R.id.now_playing_artist);
         albumart = findViewById(R.id.now_playing_album_art);
+        state = findViewById(R.id.now_playing_state);
+        lyrics = findViewById(R.id.lyrics_view);
     }
 
     @Override
@@ -73,7 +72,7 @@ public class LyricFinderActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(LYRIC_DATA);
         this.registerReceiver(receiver, filter);
         Log.i(TAG, "Request metadata update");
-        sendBroadcast(new Intent(LYRIC_UPDATE));
+        sendBroadcast(new Intent(NowPlaying.LYRIC_UPDATE));
     }
 
     private class DataReceiver extends BroadcastReceiver {
@@ -83,9 +82,11 @@ public class LyricFinderActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Receieved broadcast");
-            album.setText(intent.getStringExtra(LYRIC_ALBUM));
-            artist.setText(intent.getStringExtra(LYRIC_ARTIST));
-            title.setText(intent.getStringExtra(LYRIC_TITLE));
+            NowPlaying obj = new NowPlaying(intent);
+            album.setText(obj.getAlbum());
+            artist.setText(obj.getArtist());
+            title.setText(obj.getTitle());
+            state.setText(obj.getStateString());
             if (intent.hasExtra(LYRIC_ALBUMART)) {
                 // Retrieve bitmap #hardcoded yay :D
                 String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
