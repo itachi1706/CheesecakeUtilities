@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeutilities.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -39,6 +40,15 @@ public class CommonMethods {
         if (lockedUtil.isEmpty() || lockedUtil.equals("")) return false;
         List<String> locked = new ArrayList<>(Arrays.asList(lockedUtil.split("\\|\\|\\|")));
         return locked.contains(utilityName);
+    }
+
+    public static boolean isColorDark(int color){
+        double darkness = 1-(0.299* Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
+        if(darkness<0.5){
+            return false; // It's a light color
+        }else{
+            return true; // It's a dark color
+        }
     }
 
 }

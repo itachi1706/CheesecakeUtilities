@@ -1,10 +1,16 @@
 package com.itachi1706.cheesecakeutilities.Modules.LyricFinder;
 
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,16 +18,21 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.lang.ref.WeakReference;
 
@@ -32,6 +43,10 @@ public class LyricFinderActivity extends AppCompatActivity {
 
     private TextView title, album, artist, state, lyrics;
     private ImageView albumart;
+    private RelativeLayout nowPlayingLayout;
+
+    private ColorStateList medColor, smallColor;
+    private int windowColor, systemui;
 
     private static final String TAG = "LyricFinder";
 
@@ -46,6 +61,14 @@ public class LyricFinderActivity extends AppCompatActivity {
         albumart = findViewById(R.id.now_playing_album_art);
         state = findViewById(R.id.now_playing_state);
         lyrics = findViewById(R.id.lyrics_view);
+        nowPlayingLayout = findViewById(R.id.now_playing_layout);
+
+        medColor = title.getTextColors();
+        smallColor = artist.getTextColors();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            windowColor = getWindow().getNavigationBarColor();
+        }
+        systemui = getWindow().getDecorView().getSystemUiVisibility();
     }
 
     @Override
@@ -98,10 +121,15 @@ public class LyricFinderActivity extends AppCompatActivity {
                     switch (result.getError()) {
 
                         case 0:
-                            activity.lyrics.setText(result.getMsg().replace("<br>","\n").trim()); break;
-                        case 1: activity.lyrics.setText("No Lyrics Found"); break;
+                            activity.lyrics.setText(result.getMsg().replace("<br>", "\n").trim());
+                            break;
+                        case 1:
+                            activity.lyrics.setText("No Lyrics Found");
+                            break;
                         case -1:
-                        default: activity.lyrics.setText("Error occurred communicating with the server"); break;
+                        default:
+                            activity.lyrics.setText("Error occurred communicating with the server");
+                            break;
                     }
                     break;
             }
@@ -115,6 +143,7 @@ public class LyricFinderActivity extends AppCompatActivity {
         return flat != null && flat.contains(cn.flattenToString());
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void registerMediaController() {
         if (receiver == null) receiver = new DataReceiver();
         IntentFilter filter = new IntentFilter(LYRIC_DATA);
@@ -123,9 +152,11 @@ public class LyricFinderActivity extends AppCompatActivity {
         sendBroadcast(new Intent(NowPlaying.LYRIC_UPDATE));
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private class DataReceiver extends BroadcastReceiver {
 
-        DataReceiver(){}
+        DataReceiver() {
+        }
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -143,8 +174,72 @@ public class LyricFinderActivity extends AppCompatActivity {
                     albumart.setImageDrawable(null);
                     albumart.setImageURI(bitmapUri);
                 }
+
+                // Palette API LOL (Do all layout item checks see if they exist first before using this CPU intensive task)
+                if (albumart != null && nowPlayingLayout != null && album != null && title != null && state != null && artist != null
+                        && albumart.getDrawable() != null && albumart.getDrawable() instanceof BitmapDrawable && lyrics != null) {
+                    Bitmap toUseForPalette = ((BitmapDrawable) albumart.getDrawable()).getBitmap();
+                    new Palette.Builder(toUseForPalette)
+                            .maximumColorCount(32).generate(palette -> {
+                        if (getApplicationContext() == null)
+                            return; // Dont bother animating without a context
+                        Palette.Swatch selectedColors = palette.getDominantSwatch();
+                        int bgColor = ContextCompat.getColor(getApplicationContext(), android.R.color.white);
+                        if (nowPlayingLayout.getBackground() != null && nowPlayingLayout.getBackground() instanceof ColorDrawable)
+                            bgColor = ((ColorDrawable) nowPlayingLayout.getBackground()).getColor();
+
+                        if (selectedColors == null) {
+                            Log.e(TAG, "Unable to get colors, defaulting");
+                            selectedColors = new Palette.Swatch(Color.rgb(255, 255, 255), 1);
+                        }
+
+                        Integer backgroundCFrom = bgColor, backgroundCTo = selectedColors.getRgb();
+                        Integer textCFrom = title.getCurrentTextColor(), textCTo = selectedColors.getTitleTextColor();
+                        Integer textSFrom = album.getCurrentTextColor(), textSTo = selectedColors.getBodyTextColor();
+                        ValueAnimator animateBg = ValueAnimator.ofArgb(backgroundCFrom, backgroundCTo);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (!CommonMethods.isColorDark(backgroundCTo))
+                                getWindow().getDecorView().setSystemUiVisibility(systemui | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                            else
+                                getWindow().getDecorView().setSystemUiVisibility(systemui);
+                        }
+                        animateBg.addUpdateListener(animation -> {
+                            nowPlayingLayout.setBackground(new ColorDrawable((int) animateBg.getAnimatedValue()));
+                            lyrics.setBackgroundColor((int) animateBg.getAnimatedValue());
+                            getWindow().setNavigationBarColor((int) animateBg.getAnimatedValue());
+                        });
+                        animateBg.start();
+
+                        ValueAnimator animateMain = ValueAnimator.ofArgb(textCFrom, textCTo);
+                        animateMain.addUpdateListener(animation -> {
+                            title.setTextColor((int) animateMain.getAnimatedValue());
+                            lyrics.setTextColor((int) animateMain.getAnimatedValue());
+                        });
+                        animateMain.start();
+
+                        ValueAnimator animateSub = ValueAnimator.ofArgb(textSFrom, textSTo);
+                        animateSub.addUpdateListener(animation -> {
+                            album.setTextColor((int) animateSub.getAnimatedValue());
+                            artist.setTextColor((int) animateSub.getAnimatedValue());
+                            state.setTextColor((int) animateSub.getAnimatedValue());
+                        });
+                        animateSub.start();
+                    });
+                }
+            } else {
+                albumart.setImageResource(R.mipmap.ic_launcher_old);
+                // Reset palette API no animation cause lazy
+                album.setTextColor(smallColor);
+                title.setTextColor(medColor);
+                lyrics.setTextColor(medColor);
+                lyrics.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
+                state.setTextColor(smallColor);
+                artist.setTextColor(smallColor);
+                nowPlayingLayout.setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), android.R.color.white)));
+                getWindow().setNavigationBarColor(windowColor);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) getWindow().getDecorView().setSystemUiVisibility(systemui);
             }
-            else albumart.setImageResource(R.mipmap.ic_launcher_old);
 
             // Request for lyrics
             if (!obj.getTitle().equals("Unknown Title") && !obj.getArtist().equals("Unknown Artist"))
