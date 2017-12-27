@@ -103,7 +103,7 @@
         <item>CODE 39 (1D Identification Barcode)</item>
         <item>CODE_93 (1D Identification Barcode)</item>
         <item>CODE 128 (1D Compact Identification Barcode)</item>
-        <item>CODABAR (1D Normally Used in libraries</item>
+        <item>CODABAR (1D Normally Used in libraries)</item>
         <item>ITF (1D Num POS/Packaging Barcode)</item>
         <item>PDF417 (2D Govt/Airports Barcode)</item>
         <item>UPC E (1D US Product Barcode Small)</item>
