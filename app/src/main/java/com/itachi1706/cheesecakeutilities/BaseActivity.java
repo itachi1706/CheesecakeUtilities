@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
@@ -28,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        if (BuildConfig.DEBUG && FirebaseCrash.isCrashCollectionEnabled()) FirebaseCrash.setCrashCollectionEnabled(false);
         String menuitem = this.getIntent().hasExtra("menuitem") ? this.getIntent().getExtras().getString("menuitem", "") : "";
         boolean checkGlobal = this.getIntent().hasExtra("globalcheck") && this.getIntent().getExtras().getBoolean("globalcheck");
         boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
