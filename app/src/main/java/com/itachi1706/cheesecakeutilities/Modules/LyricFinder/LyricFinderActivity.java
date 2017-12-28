@@ -134,9 +134,12 @@ public class LyricFinderActivity extends BaseActivity {
                     String data = msg.getData().getString("data");
                     Gson gson = new Gson();
                     ApiResult result = gson.fromJson(data, ApiResult.class);
+                    if (result == null) {
+                        activity.lyrics.setText("Error occurred communicating with the server. Try again later");
+                        break;
+                    }
 
                     switch (result.getError()) {
-
                         case 0:
                             activity.lyrics.setText(result.getMsg().replace("<br>", "\n").trim());
                             break;
