@@ -8,7 +8,7 @@ checks:
     enabled: false
   method-lines:
     enabled: false
-engines:
+plugins:
   fixme:
     enabled: true
   pmd:
@@ -21,4 +21,4 @@ engines:
 ratings:
   paths:
   - "**.java"
-exclude_paths: []
+exclude_patterns: []
