@@ -35,10 +35,16 @@ import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+import com.google.firebase.crash.FirebaseCrash;
+import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
 
 import net.grandcentrix.tray.AppPreferences;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
@@ -263,6 +269,14 @@ public class NavBarService extends AccessibilityService {
         if (mNavBarView != null && mNavBarView.getWindowToken() != null) {
             mWindowManager.removeView(mNavBarView);
         }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (BuildConfig.DEBUG && FirebaseCrash.isCrashCollectionEnabled()) FirebaseCrash.setCrashCollectionEnabled(false);
+        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+        Fabric.with(this, crashlyticsKit);
     }
 
     @Override
