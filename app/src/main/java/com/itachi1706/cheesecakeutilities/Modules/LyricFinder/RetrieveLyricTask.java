@@ -13,8 +13,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by Kenneth on 26/12/2017.
@@ -53,9 +55,10 @@ public class RetrieveLyricTask extends AsyncTask<String, Void, Void> {
         }
         String artist = strings[1];
         String title = strings[0];
-        String url = CommonVariables.BASE_API_URL + "lyricget.php?title=" + title + "&artist=" + artist;
         String tmp = "";
         try {
+            String url = CommonVariables.BASE_API_URL + "lyricget.php?title=" +
+                    URLEncoder.encode(title, "UTF-8") + "&artist=" + URLEncoder.encode(artist, "UTF-8");
             URL urlConn = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
             conn.setConnectTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);

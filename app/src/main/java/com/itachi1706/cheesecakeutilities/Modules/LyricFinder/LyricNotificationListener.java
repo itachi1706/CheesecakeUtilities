@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.LyricFinder;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,10 +22,17 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+import com.google.firebase.crash.FirebaseCrash;
+import com.itachi1706.cheesecakeutilities.BuildConfig;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -41,6 +49,10 @@ public class LyricNotificationListener extends NotificationListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (BuildConfig.DEBUG && FirebaseCrash.isCrashCollectionEnabled()) FirebaseCrash.setCrashCollectionEnabled(false);
+        else FirebaseCrash.setCrashCollectionEnabled(true);
+        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+        Fabric.with(this, crashlyticsKit);
         mm = (MediaSessionManager) this.getSystemService(Context.MEDIA_SESSION_SERVICE);
 
         scanForControllers();
@@ -50,8 +62,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     }
 
     private void scanForControllers() {
-        List<MediaController> controllers = mm.getActiveSessions(
-                new ComponentName(this, LyricNotificationListener.class));
+        List<MediaController> controllers = mm.getActiveSessions(new ComponentName(this, LyricNotificationListener.class));
         Log.d(TAG, "Found " + controllers.size() + " controllers");
         if (controllers.size() >= 1) processController(controllers.get(0));
         else processing = false;
@@ -124,6 +135,10 @@ public class LyricNotificationListener extends NotificationListenerService {
     private void processNotification(StatusBarNotification sbn, String state) {
         Log.i(TAG,"Notification " + state + " ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
         if (sbn.getPackageName().equals(getPackageName())) return; // Don't process own notifications
+        // Dont process ongoing notifications beside media notification
+        if (!sbn.isClearable() && sbn.getNotification() != null && sbn.getNotification().extras != null
+                && !sbn.getNotification().extras.containsKey(Notification.EXTRA_MEDIA_SESSION))
+                return;
         if (!processing) {
             processing = true;
             scanForControllers();
