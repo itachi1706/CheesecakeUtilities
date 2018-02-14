@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public class VehicleMileageMainActivity extends BaseActivity {
 
     private static final String TAG = "VehMileageMain";
@@ -35,6 +38,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
     private DatabaseReference userdata;
     private VehicleMileageRecordsAdapter adapter;
     private SharedPreferences sp;
+    private String lastRecord;
 
 
     @Override
@@ -64,10 +68,13 @@ public class VehicleMileageMainActivity extends BaseActivity {
         userdata = database.getReference().child("users").child(user_id);
 
         findViewById(R.id.veh_mileage_fab_car).setOnClickListener(v -> startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class)));
-        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(v -> {
-            Intent i = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
-            i.putExtra("uid", user_id);
-            startActivity(i);
+        findViewById(R.id.veh_mileage_fab_record).setOnClickListener(v -> launchAddRecordActivity(v.getContext(), user_id, null));
+        findViewById(R.id.veh_mileage_fab_record_cont).setOnClickListener(v -> {
+            if (lastRecord == null || lastRecord.isEmpty() || lastRecord.equals("")) {
+                Toast.makeText(v.getContext(), "Unable to query last record", Toast.LENGTH_LONG).show();
+                return;
+            }
+            launchAddRecordActivity(v.getContext(), user_id, lastRecord);
         });
 
         RecyclerView recyclerView = findViewById(R.id.veh_mileage_main_list);
@@ -82,6 +89,13 @@ public class VehicleMileageMainActivity extends BaseActivity {
             adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null);
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    private void launchAddRecordActivity(Context context, String userid, @Nullable String lastRecord) {
+        Intent i = new Intent(context, AddNewMileageRecordActivity.class);
+        i.putExtra("uid", userid);
+        if (lastRecord != null) i.putExtra("cont", lastRecord);
+        startActivity(i);
     }
 
     private ValueEventListener listener;
@@ -117,6 +131,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
                 Log.i(TAG, "Records: " + records.size());
                 Collections.reverse(records);
                 Collections.reverse(tags);
+                if (tags.size() > 0) lastRecord = tags.get(0);
                 FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
