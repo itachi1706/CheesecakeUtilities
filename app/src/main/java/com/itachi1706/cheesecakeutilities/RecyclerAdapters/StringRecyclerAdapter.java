@@ -12,6 +12,8 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.RecyclerAdapters in Cheesecake Utilities.
@@ -19,6 +21,7 @@ import java.util.List;
 public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAdapter.StringViewHolder> {
     private List<String> stringList;
     private boolean announce = false;
+    private View.OnClickListener onClickListener = null;
 
     public StringRecyclerAdapter(List<String> strings) {
         this(strings, true);
@@ -40,6 +43,10 @@ public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAd
         this.announce = announce;
     }
 
+    public void setOnClickListener(View.OnClickListener listener) {
+        onClickListener = listener;
+    }
+
     @Override
     public int getItemCount()
     {
@@ -59,7 +66,7 @@ public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAd
                 from(viewGroup.getContext()).
                 inflate(R.layout.recyclerview_default_simple_list_item_1, viewGroup, false);
 
-        return new StringViewHolder(itemView);
+        return new StringViewHolder(itemView, onClickListener);
     }
 
 
@@ -67,11 +74,11 @@ public class StringRecyclerAdapter extends RecyclerView.Adapter<StringRecyclerAd
 
         protected TextView title;
 
-        public StringViewHolder(View v)
+        public StringViewHolder(View v, @Nullable View.OnClickListener listener)
         {
             super(v);
             title = v.findViewById(R.id.text1);
-            v.setOnClickListener(this);
+            v.setOnClickListener((listener == null) ? this : listener);
         }
 
         @Override
