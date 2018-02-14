@@ -109,23 +109,6 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         timeTo.setOnClickListener(v -> setToDate());
         addRecord.setOnClickListener(v -> addRecordToFirebase());
 
-        // Check if edit mode, if so edit
-        if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
-        if (record_id != null) {
-            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
-                    .child(user_id).child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            processEdit(dataSnapshot.getValue(Record.class));
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
-
         // Handle autocomplete
         FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -138,6 +121,42 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
             }
         });
+
+        // Check if edit mode, if so edit
+        if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
+        if (record_id != null) {
+            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
+                    .child(user_id).child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    processEdit(dataSnapshot.getValue(Record.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            return;
+        }
+
+        // Check if continue from previous, if so retrieve record and reflect
+        if (getIntent().hasExtra("cont")) {
+            String cont = getIntent().getStringExtra("cont");
+            if (cont != null)
+                FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id)
+                        .child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        processContinuation(dataSnapshot.getValue(Record.class));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+        }
     }
 
     private void addRecordToFirebase() {
@@ -224,6 +243,13 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), "Please reselect your vehicle and class", Snackbar.LENGTH_SHORT).show();
         addRecord.setText("Edit Mileage Record");
         if (getSupportActionBar() != null) getSupportActionBar().setTitle("Edit Mileage Record");
+    }
+
+    private void processContinuation(Record r) {
+        mileageBefore.setText(String.format(Locale.getDefault(), "%.0f", r.getMileageTo()));
+        purpose.setText(r.getPurpose());
+        vehicleNumber.setText(r.getVehicleNumber());
+        trainingMileage.setChecked(r.getTrainingMileage());
     }
 
     private String getVehicleKey(String vehicleName) {
