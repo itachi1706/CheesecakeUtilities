@@ -145,7 +145,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
             String cont = getIntent().getStringExtra("cont");
             if (cont != null)
                 FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id)
-                        .child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        .child("records").child(cont).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         processContinuation(dataSnapshot.getValue(Record.class));

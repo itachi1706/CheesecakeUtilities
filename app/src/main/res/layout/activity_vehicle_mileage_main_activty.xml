@@ -43,6 +43,15 @@
             app:fab_size="mini"
             app:fab_title="New Mileage Record" />
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/veh_mileage_fab_record_cont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/white"
+            app:fab_icon="@drawable/ic_book_open_variant"
+            app:fab_size="mini"
+            app:fab_title="Continue from Last Record" />
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
     <android.support.v7.widget.RecyclerView
