@@ -150,6 +150,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
                 switch (type) {
                     case TYPE_EDIT: processEdit(dataSnapshot.getValue(Record.class)); break;
                     case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class)); break;
+                    default: Log.e("AddNewRecord", "Not supposed to be here!"); break;
                 }
             }
 
