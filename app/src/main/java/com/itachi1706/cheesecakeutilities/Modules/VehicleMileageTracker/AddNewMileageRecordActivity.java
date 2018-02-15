@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -141,15 +142,14 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
     private static final int TYPE_EDIT = 0, TYPE_CONT = 1;
 
-    private void processEditOrCont(int type, String record_id) {
+    private void processEditOrCont(int type, @NonNull String record_id) {
         FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id)
                 .child(FB_REC_RECORDS).child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 switch (type) {
                     case TYPE_EDIT: processEdit(dataSnapshot.getValue(Record.class)); break;
-                    case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class));
-                    default: break;
+                    case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class)); break;
                 }
             }
 
