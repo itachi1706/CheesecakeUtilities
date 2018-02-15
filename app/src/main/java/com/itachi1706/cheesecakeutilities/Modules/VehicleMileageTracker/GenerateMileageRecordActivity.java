@@ -17,11 +17,15 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -42,7 +46,6 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_generate_mileage_record);
 
         layout = findViewById(R.id.veh_mileage_table);
-        //monthSel = findViewById(R.id.veh_mileage_recordgen_spinner);
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sp.getString("firebase_uid", "nien");
@@ -86,7 +89,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                             Log.e(TAG, "Position #" + position + " exceeds dataset size of " + monthData.size());
                             return;
                         }
-                        long date = monthData.indexOfKey(position);
+                        long date = monthData.keyAt(position);
                         processDate(date);
                     }
 
@@ -106,6 +109,40 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
     }
 
     private void processDate(long date) {
-        // TODO: Process Date and generate the reports
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date(date));
+        int lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, lastDate);
+        long endDate = cal.getTimeInMillis();
+
+        Query specificMonth = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records")
+                .orderByChild("datetimeFrom").startAt(date).endAt(endDate);
+        specificMonth.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final List<Record> records = new ArrayList<>();
+                final List<String> tags = new ArrayList<>();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Record recList = ds.getValue(Record.class);
+                    // Update records
+                    assert recList != null;
+                    records.add(recList);
+                    tags.add(ds.getKey());
+                }
+                Log.i(TAG, "Records: " + records.size());
+                Collections.reverse(records);
+                Collections.reverse(tags);
+                processRecords(records, tags);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void processRecords(List<Record> records, List<String> keys) {
+        // TODO: Generate the report in the table view
     }
 }
