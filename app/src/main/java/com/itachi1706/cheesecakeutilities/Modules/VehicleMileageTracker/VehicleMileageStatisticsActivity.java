@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -7,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.database.DatabaseReference;
@@ -70,8 +72,17 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.modules_veh_mileage_stats, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.generateReport:
+                startActivity(new Intent(this, GenerateMileageRecordActivity.class));
+                return true;
             case android.R.id.home:
             case R.id.exit:
                 finish();
