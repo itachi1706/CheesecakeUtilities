@@ -3,6 +3,8 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -13,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -144,5 +148,44 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
     private void processRecords(List<Record> records, List<String> keys) {
         // TODO: Generate the report in the table view
+        layout.removeAllViews();
+        generateHeaders();
+    }
+
+    private void generateHeaders() {
+        TableRow tr = new TableRow(this);
+        tr.addView(getTextView(0, "Date"));
+        tr.addView(getTextView(0, "Vehicle Number"));
+        tr.addView(getTextView(0, "Start"));
+        tr.addView(getTextView(0, "End"));
+        tr.addView(getTextView(0, "Class 3"));
+        tr.addView(getTextView(0, "Class 4"));
+        layout.addView(tr, getTblLayoutParams());
+    }
+
+    private TextView getTextView(int id, String title) {
+        TextView tv = new TextView(this);
+        tv.setId(id);
+        tv.setText(title.toUpperCase());
+        tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+        tv.setPadding(40, 40, 40, 40);
+        tv.setLayoutParams(getLayoutParams());
+        return tv;
+    }
+
+    @NonNull
+    private TableRow.LayoutParams getLayoutParams() {
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT);
+        params.setMargins(2, 0, 0, 2);
+        return params;
+    }
+
+    @NonNull
+    private TableLayout.LayoutParams getTblLayoutParams() {
+        return new TableLayout.LayoutParams(
+                TableLayout.LayoutParams.MATCH_PARENT,
+                TableLayout.LayoutParams.WRAP_CONTENT);
     }
 }
