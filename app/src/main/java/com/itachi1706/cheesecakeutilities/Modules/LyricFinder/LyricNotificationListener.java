@@ -117,6 +117,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     }
 
     private void processMetadata(@Nullable MediaMetadata metadata) {
+        if (metadata == null) return; // Don't process if no metadata
         nowPlaying.setAlbum(metadata.getString(MediaMetadata.METADATA_KEY_ALBUM));
         nowPlaying.setTitle(metadata.getString(MediaMetadata.METADATA_KEY_TITLE));
         nowPlaying.setArtist(metadata.getString(MediaMetadata.METADATA_KEY_ARTIST));
