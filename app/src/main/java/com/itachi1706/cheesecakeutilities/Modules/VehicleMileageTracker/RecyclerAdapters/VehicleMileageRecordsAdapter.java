@@ -25,6 +25,9 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+
 /**
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters in Cheesecake Utilities.
@@ -154,8 +157,8 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                                     "\nID: " + tag)
                             .setPositiveButton("Delete Anyway", (dialog1, which1) -> {
                                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
-                                FirebaseUtils.getFirebaseDatabase().getReference().child("users")
-                                        .child(sp.getString("firebase_uid", "nien")).child("records")
+                                FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER)
+                                        .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
                                         .child(tag).removeValue();
                                 Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
 

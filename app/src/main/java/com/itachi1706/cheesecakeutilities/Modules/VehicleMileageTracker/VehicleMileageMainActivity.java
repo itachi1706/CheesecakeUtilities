@@ -31,6 +31,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+
 public class VehicleMileageMainActivity extends BaseActivity {
 
     private static final String TAG = "VehMileageMain";
@@ -65,7 +68,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
         }
 
         final FirebaseDatabase database = FirebaseUtils.getFirebaseDatabase();
-        userdata = database.getReference().child("users").child(user_id);
+        userdata = database.getReference().child(FB_REC_USER).child(user_id);
 
         findViewById(R.id.veh_mileage_fab_car).setOnClickListener(v -> startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class)));
         findViewById(R.id.veh_mileage_fab_record).setOnClickListener(v -> launchAddRecordActivity(v.getContext(), user_id, null));
@@ -110,7 +113,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             Log.i(TAG, "Firebase DB Listeners exist when it should not, force terminating it");
         }
         Log.i(TAG, "Registering Firebase DB listeners");
-        listener = userdata.child("records").addValueEventListener(new ValueEventListener() {
+        listener = userdata.child(FB_REC_RECORDS).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "Records has been updated. Processing...");
@@ -123,7 +126,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
                     if (recList.getVersion() < FirebaseUtils.RECORDS_VERSION) {
                         // Migrate records
                         recList = migrateRecord(recList);
-                        userdata.child("records").child(ds.getKey()).setValue(recList);
+                        userdata.child(FB_REC_RECORDS).child(ds.getKey()).setValue(recList);
                     }
                     records.add(recList);
                     tags.add(ds.getKey());

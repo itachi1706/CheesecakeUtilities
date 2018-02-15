@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+
 /**
  * Created by Kenneth on 31/8/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments in CheesecakeUtilities
@@ -109,7 +112,7 @@ public class VehicleMileageGeneralStatsFragment extends Fragment {
             return;
         }
         if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
-        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();

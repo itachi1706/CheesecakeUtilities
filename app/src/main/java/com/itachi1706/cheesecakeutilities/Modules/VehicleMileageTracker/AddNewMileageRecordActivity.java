@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.formatTime;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
@@ -110,7 +112,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         addRecord.setOnClickListener(v -> addRecordToFirebase());
 
         // Handle autocomplete
-        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 processAutoComplete(dataSnapshot);
@@ -125,18 +127,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         // Check if edit mode, if so edit
         if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
         if (record_id != null) {
-            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
-                    .child(user_id).child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    processEdit(dataSnapshot.getValue(Record.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+            processEditOrCont(TYPE_EDIT, record_id);
             return;
         }
 
@@ -144,19 +135,28 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         if (getIntent().hasExtra("cont")) {
             String cont = getIntent().getStringExtra("cont");
             if (cont != null)
-                FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id)
-                        .child("records").child(cont).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        processContinuation(dataSnapshot.getValue(Record.class));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                processEditOrCont(TYPE_CONT, cont);
         }
+    }
+
+    private static final int TYPE_EDIT = 0, TYPE_CONT = 1;
+
+    private void processEditOrCont(int type, String record_id) {
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id)
+                .child(FB_REC_RECORDS).child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                switch (type) {
+                    case TYPE_EDIT: processEdit(dataSnapshot.getValue(Record.class)); break;
+                    case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class));
+                    default: break;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     private void addRecordToFirebase() {
@@ -178,11 +178,11 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.setVersion(FirebaseUtils.RECORDS_VERSION);
 
         if (record_id == null) {
-            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
+            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).push();
             newRec.setValue(r);
             Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
         } else {
-            FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").child(record_id).setValue(r);
+            FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).child(record_id).setValue(r);
             Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
         }
         updateAutocomplete(r.getDestination(), r.getPurpose(), r.getVehicleNumber());
@@ -214,7 +214,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void updateAutocomplete(String location, String purpose, String vehicleNumber) {
-        DatabaseReference ref = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill");
+        DatabaseReference ref = FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill");
         if (!locationAutofill.contains(location)) {
             DatabaseReference newRef = ref.child("location").push();
             newRef.setValue(location);
