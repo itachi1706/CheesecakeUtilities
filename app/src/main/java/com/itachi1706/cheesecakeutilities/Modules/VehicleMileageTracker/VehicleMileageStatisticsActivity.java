@@ -18,6 +18,9 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragment
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+
 public class VehicleMileageStatisticsActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -47,7 +50,7 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
         String user_id = sp.getString("firebase_uid", "nien");
         if (!user_id.equals("nien")) {
             DatabaseReference dbRef = FirebaseUtils.getFirebaseDatabase().getReference();
-            dbRef.child("users").child(user_id).child("statistics").keepSynced(true);
+            dbRef.child(FB_REC_USER).child(user_id).child(FB_REC_STATS).keepSynced(true);
             dbRef.child("stat-legend").keepSynced(true);
             dbRef.child("vehicles").keepSynced(true);
         }
