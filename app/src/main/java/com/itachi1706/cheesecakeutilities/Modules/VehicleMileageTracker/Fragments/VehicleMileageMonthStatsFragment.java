@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+
 /**
  * Created by Kenneth on 31/8/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments in CheesecakeUtilities
@@ -92,7 +95,7 @@ public class VehicleMileageMonthStatsFragment extends Fragment {
             return;
         }
         refreshLayout.setRefreshing(true);
-        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
                 .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

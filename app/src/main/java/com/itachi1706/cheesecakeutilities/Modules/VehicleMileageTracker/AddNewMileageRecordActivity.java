@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,6 +36,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.formatTime;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
@@ -109,25 +112,8 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         timeTo.setOnClickListener(v -> setToDate());
         addRecord.setOnClickListener(v -> addRecordToFirebase());
 
-        // Check if edit mode, if so edit
-        if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
-        if (record_id != null) {
-            FirebaseUtils.getFirebaseDatabase().getReference().child("users")
-                    .child(user_id).child("records").child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            processEdit(dataSnapshot.getValue(Record.class));
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-        }
-
         // Handle autocomplete
-        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 processAutoComplete(dataSnapshot);
@@ -136,6 +122,40 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        // Check if edit mode, if so edit
+        if (getIntent().hasExtra("edit")) record_id = getIntent().getStringExtra("edit");
+        if (record_id != null) {
+            processEditOrCont(TYPE_EDIT, record_id);
+            return;
+        }
+
+        // Check if continue from previous, if so retrieve record and reflect
+        if (getIntent().hasExtra("cont")) {
+            String cont = getIntent().getStringExtra("cont");
+            if (cont != null)
+                processEditOrCont(TYPE_CONT, cont);
+        }
+    }
+
+    private static final int TYPE_EDIT = 0, TYPE_CONT = 1;
+
+    private void processEditOrCont(int type, @NonNull String record_id) {
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id)
+                .child(FB_REC_RECORDS).child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                switch (type) {
+                    case TYPE_EDIT: processEdit(dataSnapshot.getValue(Record.class)); break;
+                    case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class)); break;
+                    default: Log.e("AddNewRecord", "Not supposed to be here!"); break;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
@@ -159,11 +179,11 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.setVersion(FirebaseUtils.RECORDS_VERSION);
 
         if (record_id == null) {
-            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").push();
+            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).push();
             newRec.setValue(r);
             Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
         } else {
-            FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records").child(record_id).setValue(r);
+            FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).child(record_id).setValue(r);
             Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
         }
         updateAutocomplete(r.getDestination(), r.getPurpose(), r.getVehicleNumber());
@@ -195,7 +215,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void updateAutocomplete(String location, String purpose, String vehicleNumber) {
-        DatabaseReference ref = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("autofill");
+        DatabaseReference ref = FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill");
         if (!locationAutofill.contains(location)) {
             DatabaseReference newRef = ref.child("location").push();
             newRef.setValue(location);
@@ -224,6 +244,13 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), "Please reselect your vehicle and class", Snackbar.LENGTH_SHORT).show();
         addRecord.setText("Edit Mileage Record");
         if (getSupportActionBar() != null) getSupportActionBar().setTitle("Edit Mileage Record");
+    }
+
+    private void processContinuation(Record r) {
+        mileageBefore.setText(String.format(Locale.getDefault(), "%.0f", r.getMileageTo()));
+        purpose.setText(r.getPurpose());
+        vehicleNumber.setText(r.getVehicleNumber());
+        trainingMileage.setChecked(r.getTrainingMileage());
     }
 
     private String getVehicleKey(String vehicleName) {

@@ -25,6 +25,9 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecycle
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+
 /**
  * Created by Kenneth on 31/8/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments in CheesecakeUtilities
@@ -87,7 +90,7 @@ public class VehicleMileageVNumberStatsFragment extends Fragment {
             return;
         }
         refreshLayout.setRefreshing(true);
-        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
+        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
                 .child("vehicleNumberRecords").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

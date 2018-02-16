@@ -14,6 +14,8 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.RecyclerAdapters in Cheesecake Utilities.
@@ -21,6 +23,7 @@ import java.util.List;
 public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLineStringRecyclerAdapter.StringViewHolder> {
     private List<DualLineString> stringList;
     private boolean announce = false, htmlformat = false;
+    private View.OnClickListener onClickListener = null;
 
     public DualLineStringRecyclerAdapter(List<DualLineString> strings) {
         this(strings, true);
@@ -45,6 +48,10 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
     {
         this.stringList = Arrays.asList(strings);
         this.announce = announce;
+    }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        onClickListener = listener;
     }
 
     public void update(List<DualLineString> strings) {
@@ -75,7 +82,7 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
                 from(viewGroup.getContext()).
                 inflate(R.layout.recyclerview_default_simple_list_item_2, viewGroup, false);
 
-        return new StringViewHolder(itemView);
+        return new StringViewHolder(itemView, onClickListener);
     }
 
 
@@ -83,12 +90,12 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
 
         protected TextView title, subtitle;
 
-        public StringViewHolder(View v)
+        public StringViewHolder(View v, @Nullable View.OnClickListener listener)
         {
             super(v);
             title = v.findViewById(android.R.id.text1);
             subtitle = v.findViewById(android.R.id.text2);
-            v.setOnClickListener(this);
+            v.setOnClickListener((listener == null) ? this : listener);
         }
 
         @Override

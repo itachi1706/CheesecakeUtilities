@@ -17,7 +17,7 @@ class Record {
     var vehicleNumber: String? = null
     var vehicleId: String? = null
     var vehicleClass: String? = null
-    var trainingMileage: Boolean? = null
+    var trainingMileage: Boolean = false
 
     // Calculated fields
     var totalMileage: Double? = null
