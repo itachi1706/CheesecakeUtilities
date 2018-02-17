@@ -46,6 +46,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
     private ScrollView vScroll;
 
     private String user_id;
+    private int maxPerRecord;
     private LongSparseArray<String> monthData = null;
 
     private static final String TAG = "GenerateMileageRec";
@@ -60,6 +61,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         vScroll = findViewById(R.id.vscroll);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        maxPerRecord = Integer.parseInt(sp.getString("veh_mileage_report_rows", "38"));
         user_id = sp.getString("firebase_uid", "nien");
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
@@ -91,7 +93,9 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                 vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
                 hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
                 break;
-            default: Log.e(TAG, "Invalid case"); break;
+            default:
+                Log.e(TAG, "Invalid case");
+                break;
         }
         return true;
     }
@@ -178,7 +182,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                     records.add(recList);
                 }
                 Log.i(TAG, "Records: " + records.size());
-                processRecords(records);
+                processRecordsGeneral(records);
             }
 
             @Override
@@ -190,16 +194,38 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
     private double totalC3 = 0, totalC4 = 0;
 
-    private void processRecords(List<Record> records) {
+    private void processRecordsGeneral(List<Record> records) {
         layout.removeAllViews();
+        List<List<Record>> tmp = new ArrayList<>();
+        List<Record> tmpRec = records;
+        Log.d(TAG, "Size check, Size: " + tmpRec.size() + " | Max: " + maxPerRecord);
+        if (tmpRec.size() > maxPerRecord) {
+            while (tmpRec.size() > maxPerRecord) {
+                // Split records
+                tmp.add(tmpRec.subList(0, maxPerRecord));
+                tmpRec = tmpRec.subList(maxPerRecord, tmpRec.size());
+            }
+            tmp.add(tmpRec);
+            Log.d(TAG, "Total count of reports: " + tmp.size());
+            int offsetMax = maxPerRecord + 2;
+            for (int i = 0; i < tmp.size(); i++) {
+                processRecords(tmp.get(i), i * offsetMax);
+            }
+        } else {
+            processRecords(records, 0);
+        }
+    }
+
+    private void processRecords(List<Record> records, int offset) {
         totalC4 = 0;
         totalC3 = 0;
         generateHeaders();
         int row = 1;
         for (Record r : records) {
-            if (generateData(r, row)) row++;
+            if (generateData(r, row, offset + row)) row++;
         }
         generateFooter(row);
+        generateBlankRow(row + 1);
     }
 
     private void generateHeaders() {
@@ -214,9 +240,9 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         layout.addView(tr, getTblLayoutParams());
     }
 
-    private boolean generateData(Record record, int col) {
+    private boolean generateData(Record record, int sn, int col) {
         TableRow tr = new TableRow(this);
-        tr.addView(getTextView(col, Integer.toString(col)));
+        tr.addView(getTextView(col, Integer.toString(sn)));
         // Process Date
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
         Date dt = new Date();
@@ -247,6 +273,18 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         tr.addView(getTextView(col, "TOTAL", true));
         tr.addView(getTextView(col, Double.toString(totalC3)));
         tr.addView(getTextView(col, Double.toString(totalC4)));
+        layout.addView(tr, getTblLayoutParams());
+    }
+
+    private void generateBlankRow(int col) {
+        TableRow tr = new TableRow(this);
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
         layout.addView(tr, getTblLayoutParams());
     }
 
