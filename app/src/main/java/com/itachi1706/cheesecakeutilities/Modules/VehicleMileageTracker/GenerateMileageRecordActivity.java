@@ -153,12 +153,21 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
     private void processDate(long date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(date));
-        int lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        cal.set(Calendar.DAY_OF_MONTH, lastDate);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
+        cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, cal.getActualMinimum(Calendar.MILLISECOND));
+        long startDate = cal.getTimeInMillis();
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
+        cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
+        cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
         long endDate = cal.getTimeInMillis();
 
         Query specificMonth = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records")
-                .orderByChild("datetimeFrom").startAt(date).endAt(endDate);
+                .orderByChild("datetimeFrom").startAt(startDate).endAt(endDate);
         specificMonth.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
