@@ -10,9 +10,12 @@ import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -36,11 +39,14 @@ import java.util.Locale;
 
 public class GenerateMileageRecordActivity extends AppCompatActivity {
 
-    TableLayout layout;
-    Spinner monthSel;
-    SharedPreferences sp;
-    String user_id;
-    LongSparseArray<String> monthData = null;
+    private TableLayout layout;
+    private Spinner monthSel;
+    private HorizontalScrollView hScroll;
+    private ScrollView vScroll;
+
+    private SharedPreferences sp;
+    private String user_id;
+    private LongSparseArray<String> monthData = null;
 
     private static final String TAG = "GenerateMileageRec";
 
@@ -50,6 +56,8 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_generate_mileage_record);
 
         layout = findViewById(R.id.veh_mileage_table);
+        hScroll = findViewById(R.id.hscroll);
+        vScroll = findViewById(R.id.vscroll);
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sp.getString("firebase_uid", "nien");
@@ -57,6 +65,36 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private float mx, my;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float curX, curY;
+        switch (event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+                mx = event.getX();
+                my = event.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                curX = event.getX();
+                curY = event.getY();
+                vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                mx = curX;
+                my = curY;
+                break;
+            case MotionEvent.ACTION_UP:
+                curX = event.getX();
+                curY = event.getY();
+                vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                break;
+        }
+
+        return true;
     }
 
     @Override
