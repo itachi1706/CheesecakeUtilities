@@ -20,22 +20,22 @@ class Record {
     var trainingMileage: Boolean = false
 
     // Calculated fields
-    var totalMileage: Double? = null
+    var totalMileage: Double = 0.0
         private set
-    var totalTimeInMs: Long? = null
+    var totalTimeInMs: Long = 0
         private set
 
     // Version Number
     var version = -1
 
     fun updateMileage(): Boolean? {
-        this.totalMileage = this.mileageTo!! - this.mileageFrom!!
+        this.totalMileage = this.mileageTo - this.mileageFrom
         return true
     }
 
     fun updateTotalTime(): Boolean? {
-        this.totalTimeInMs = this.dateTimeTo!! - this.datetimeFrom!!
-        this.totalTimeInMs = this.dateTimeTo!! - this.datetimeFrom!!
+        this.totalTimeInMs = this.dateTimeTo - this.datetimeFrom
+        this.totalTimeInMs = this.dateTimeTo - this.datetimeFrom
         return true
     }
 }

@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.LongSparseArray;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,7 +34,6 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +45,6 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
     private HorizontalScrollView hScroll;
     private ScrollView vScroll;
 
-    private SharedPreferences sp;
     private String user_id;
     private LongSparseArray<String> monthData = null;
 
@@ -59,7 +59,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         hScroll = findViewById(R.id.hscroll);
         vScroll = findViewById(R.id.vscroll);
 
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         user_id = sp.getString("firebase_uid", "nien");
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
@@ -163,18 +163,14 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final List<Record> records = new ArrayList<>();
-                final List<String> tags = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
                     // Update records
                     assert recList != null;
                     records.add(recList);
-                    tags.add(ds.getKey());
                 }
                 Log.i(TAG, "Records: " + records.size());
-                Collections.reverse(records);
-                Collections.reverse(tags);
-                processRecords(records, tags);
+                processRecords(records);
             }
 
             @Override
@@ -184,29 +180,79 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         });
     }
 
-    private void processRecords(List<Record> records, List<String> keys) {
-        // TODO: Generate the report in the table view
+    private double totalC3 = 0, totalC4 = 0;
+
+    private void processRecords(List<Record> records) {
         layout.removeAllViews();
+        totalC4 = 0;
+        totalC3 = 0;
         generateHeaders();
+        int row = 1;
+        for (Record r : records) {
+            if (generateData(r, row)) row++;
+        }
+        generateFooter(row);
     }
 
     private void generateHeaders() {
         TableRow tr = new TableRow(this);
-        tr.addView(getTextView(0, "Date"));
-        tr.addView(getTextView(0, "Vehicle Number"));
-        tr.addView(getTextView(0, "Start"));
-        tr.addView(getTextView(0, "End"));
-        tr.addView(getTextView(0, "Class 3"));
-        tr.addView(getTextView(0, "Class 4"));
+        tr.addView(getTextView(0, "S/N", true));
+        tr.addView(getTextView(0, "DATE", true));
+        tr.addView(getTextView(0, "VEHICLE NO", true));
+        tr.addView(getTextView(0, "START", true));
+        tr.addView(getTextView(0, "END", true));
+        tr.addView(getTextView(0, "CLASS 3", true));
+        tr.addView(getTextView(0, "CLASS 4", true));
+        layout.addView(tr, getTblLayoutParams());
+    }
+
+    private boolean generateData(Record record, int col) {
+        TableRow tr = new TableRow(this);
+        tr.addView(getTextView(col, col + ""));
+        // Process Date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
+        Date dt = new Date();
+        dt.setTime(record.getDatetimeFrom());
+        tr.addView(getTextView(col, sdf.format(dt)));
+        tr.addView(getTextView(col, record.getVehicleNumber()));
+        tr.addView(getTextView(col, record.getMileageFrom() + ""));
+        tr.addView(getTextView(col, record.getMileageTo() + ""));
+        if (record.getVehicleClass().equalsIgnoreCase("class3")) {
+            tr.addView(getTextView(col, record.getTotalMileage() + ""));
+            tr.addView(getTextView(col, "-"));
+            totalC3 += record.getTotalMileage();
+        } else if (record.getVehicleClass().equalsIgnoreCase("class4")) {
+            tr.addView(getTextView(col, "-"));
+            tr.addView(getTextView(col, record.getTotalMileage() + ""));
+            totalC4 += record.getTotalMileage();
+        } else return false;
+        layout.addView(tr, getTblLayoutParams());
+        return true;
+    }
+
+    private void generateFooter(int col) {
+        TableRow tr = new TableRow(this);
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, ""));
+        tr.addView(getTextView(col, "TOTAL", true));
+        tr.addView(getTextView(col, totalC3 + ""));
+        tr.addView(getTextView(col, totalC4 + ""));
         layout.addView(tr, getTblLayoutParams());
     }
 
     private TextView getTextView(int id, String title) {
+        return getTextView(id, title, false);
+    }
+
+    private TextView getTextView(int id, String title, boolean bold) {
         TextView tv = new TextView(this);
         tv.setId(id);
-        tv.setText(title.toUpperCase());
+        tv.setText(title);
+        if (bold) tv.setTypeface(null, Typeface.BOLD);
         tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
-        tv.setPadding(40, 40, 40, 40);
+        tv.setPadding(40, 5, 40, 5);
         tv.setLayoutParams(getLayoutParams());
         return tv;
     }
@@ -216,6 +262,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         TableRow.LayoutParams params = new TableRow.LayoutParams(
                 TableRow.LayoutParams.MATCH_PARENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
         params.setMargins(2, 0, 0, 2);
         return params;
     }
