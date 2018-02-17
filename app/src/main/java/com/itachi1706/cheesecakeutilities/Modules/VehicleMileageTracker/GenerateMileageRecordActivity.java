@@ -73,7 +73,6 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         float curX, curY;
         switch (event.getAction()) {
-
             case MotionEvent.ACTION_DOWN:
                 mx = event.getX();
                 my = event.getY();
@@ -92,8 +91,8 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                 vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
                 hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
                 break;
+            default: Log.e(TAG, "Invalid case"); break;
         }
-
         return true;
     }
 
@@ -137,14 +136,14 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
+                        // Unused
                     }
                 });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // Unused
             }
         });
         return true;
@@ -184,7 +183,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                // Unused
             }
         });
     }
@@ -217,7 +216,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
     private boolean generateData(Record record, int col) {
         TableRow tr = new TableRow(this);
-        tr.addView(getTextView(col, col + ""));
+        tr.addView(getTextView(col, Integer.toString(col)));
         // Process Date
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy", Locale.US);
         Date dt = new Date();
@@ -246,8 +245,8 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         tr.addView(getTextView(col, ""));
         tr.addView(getTextView(col, ""));
         tr.addView(getTextView(col, "TOTAL", true));
-        tr.addView(getTextView(col, totalC3 + ""));
-        tr.addView(getTextView(col, totalC4 + ""));
+        tr.addView(getTextView(col, Double.toString(totalC3)));
+        tr.addView(getTextView(col, Double.toString(totalC4)));
         layout.addView(tr, getTblLayoutParams());
     }
 
