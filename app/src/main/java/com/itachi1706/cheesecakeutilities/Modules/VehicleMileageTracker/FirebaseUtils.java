@@ -18,7 +18,7 @@ public class FirebaseUtils {
 
     private static FirebaseDatabase firebaseDatabase;
 
-    static final int RECORDS_VERSION = 3;
+    static final int RECORDS_VERSION = 4;
 
     public static FirebaseDatabase getFirebaseDatabase() {
         if (firebaseDatabase == null) {

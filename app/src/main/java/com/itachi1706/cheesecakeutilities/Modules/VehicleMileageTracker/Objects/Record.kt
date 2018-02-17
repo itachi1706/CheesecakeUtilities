@@ -7,11 +7,11 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects
 
 class Record {
 
-    var datetimeFrom: Long? = null
-    var dateTimeTo: Long? = null
+    var datetimeFrom: Long = 0
+    var dateTimeTo: Long = 0
     var timezone: Long? = null
-    var mileageFrom: Double? = null
-    var mileageTo: Double? = null
+    var mileageFrom: Double = 0.0
+    var mileageTo: Double = 0.0
     var destination: String? = null
     var purpose: String? = null
     var vehicleNumber: String? = null
