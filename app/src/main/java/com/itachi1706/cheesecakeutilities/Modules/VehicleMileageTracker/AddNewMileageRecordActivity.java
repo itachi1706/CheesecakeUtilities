@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
@@ -174,6 +175,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.setTrainingMileage(trainingMileage.isChecked());
         r.setVehicleId(getVehicleKey(vehicle.getSelectedItem().toString()));
         r.setVehicleClass(getVehicleClass(vehicle.getSelectedItem().toString()));
+        r.setTimezone((long) TimeZone.getDefault().getOffset(System.currentTimeMillis()));
         r.updateMileage();
         r.updateTotalTime();
         r.setVersion(FirebaseUtils.RECORDS_VERSION);

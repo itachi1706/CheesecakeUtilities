@@ -268,20 +268,23 @@
         <activity
             android:name=".Modules.BarcodeTools.BarcodeCaptureActivity"
             android:label="Scan Barcode" />
-
-        <activity android:name=".Modules.LyricFinder.LyricFinderActivity"
-            android:label="Now Playing Lyrics"/>
+        <activity
+            android:name=".Modules.LyricFinder.LyricFinderActivity"
+            android:label="Now Playing Lyrics" />
 
         <service
             android:name=".Modules.LyricFinder.LyricNotificationListener"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:enabled="true"
             android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:process=":LyricNotifListener">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+        <activity android:name=".Modules.VehicleMileageTracker.GenerateMileageRecordActivity"
+            android:label="Generate Mileage Report" />
     </application>
 
 </manifest>

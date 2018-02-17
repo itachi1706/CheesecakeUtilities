@@ -4,6 +4,7 @@ package com.itachi1706.cheesecakeutilities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
@@ -74,6 +75,12 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             findPreference("hide_util").setOnPreferenceClickListener(preference -> {
                 startActivity(new Intent(getActivity(), ManageUtilityActivity.class));
                 return false;
+            });
+
+            findPreference("veh_mileage_report_rows").setSummary(((EditTextPreference)findPreference("veh_mileage_report_rows")).getText());
+            findPreference("veh_mileage_report_rows").setOnPreferenceChangeListener((preference, newValue) -> {
+                preference.setSummary(String.valueOf(newValue));
+                return true;
             });
 
             pw.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

@@ -27,6 +27,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -119,18 +120,22 @@ public class VehicleMileageMainActivity extends BaseActivity {
                 Log.i(TAG, "Records has been updated. Processing...");
                 final List<Record> records = new ArrayList<>();
                 final List<String> tags = new ArrayList<>();
+                HashMap<String, Object> migratedRecords = null;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Record recList = ds.getValue(Record.class);
+                    Record record = ds.getValue(Record.class);
                     // Update records
-                    assert recList != null;
-                    if (recList.getVersion() < FirebaseUtils.RECORDS_VERSION) {
+                    assert record != null;
+                    if (record.getVersion() < FirebaseUtils.RECORDS_VERSION) {
                         // Migrate records
-                        recList = migrateRecord(recList);
-                        userdata.child(FB_REC_RECORDS).child(ds.getKey()).setValue(recList);
+                        record = migrateRecord(record);
+                        if (migratedRecords == null) migratedRecords = new HashMap<>();
+                        migratedRecords.put(ds.getKey(), record);
                     }
-                    records.add(recList);
+                    records.add(record);
                     tags.add(ds.getKey());
                 }
+                if (migratedRecords != null)
+                    userdata.child(FB_REC_RECORDS).updateChildren(migratedRecords);
                 Log.i(TAG, "Records: " + records.size());
                 Collections.reverse(records);
                 Collections.reverse(tags);
@@ -182,12 +187,12 @@ public class VehicleMileageMainActivity extends BaseActivity {
             record.updateMileage();
             record.setVersion(1);
         }
-        if (oldV < 3) {
+        if (oldV < 4) {
             // Add timezone offset
             Calendar c = Calendar.getInstance();
             long offset = c.getTimeZone().getOffset(record.getDatetimeFrom());
-            record.setTimezone(offset);
-            record.setVersion(3);
+            if (record.getTimezone() == null) record.setTimezone(offset);
+            record.setVersion(4);
         }
         return record;
     }
