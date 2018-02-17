@@ -53,7 +53,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_generate_mileage_record);
+        setContentView(R.layout.activity_generate_mileage_record);
 
         layout = findViewById(R.id.veh_mileage_table);
         hScroll = findViewById(R.id.hscroll);
