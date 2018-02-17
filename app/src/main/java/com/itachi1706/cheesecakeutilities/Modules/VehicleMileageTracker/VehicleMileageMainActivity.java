@@ -182,12 +182,12 @@ public class VehicleMileageMainActivity extends BaseActivity {
             record.updateMileage();
             record.setVersion(1);
         }
-        if (oldV < 3) {
+        if (oldV < 4) {
             // Add timezone offset
             Calendar c = Calendar.getInstance();
             long offset = c.getTimeZone().getOffset(record.getDatetimeFrom());
-            record.setTimezone(offset);
-            record.setVersion(3);
+            if (record.getTimezone() == null) record.setTimezone(offset);
+            record.setVersion(4);
         }
         return record;
     }
