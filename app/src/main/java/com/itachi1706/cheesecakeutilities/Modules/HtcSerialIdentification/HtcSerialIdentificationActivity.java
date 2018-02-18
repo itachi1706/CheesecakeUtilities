@@ -13,6 +13,7 @@ import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 public class HtcSerialIdentificationActivity extends BaseActivity {
 
@@ -40,6 +41,7 @@ public class HtcSerialIdentificationActivity extends BaseActivity {
         serial = findViewById(R.id.btn_htc_sn_serial);
         resultList = findViewById(R.id.tv_htc_sn_result);
         serialNumber = findViewById(R.id.htc_sn_serialField);
+        CommonMethods.disableAutofill(getWindow().getDecorView());
 
         search.setOnClickListener(v -> {
             if (!checkSerialNumberValid(serialNumber.getText().toString())) {

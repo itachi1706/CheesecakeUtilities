@@ -9,6 +9,7 @@ import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeGeneratorFragment;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeScannerFragment;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
 /**
@@ -39,6 +40,7 @@ public class BarcodeParentActivity extends BaseActivity {
 
         pager = findViewById(R.id.main_viewpager);
         tabLayout = findViewById(R.id.main_tablayout);
+        CommonMethods.disableAutofill(getWindow().getDecorView());
 
         setupViewPager(pager);
         tabLayout.setupWithViewPager(pager);
