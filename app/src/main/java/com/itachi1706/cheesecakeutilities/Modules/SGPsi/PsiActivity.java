@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.SGPsi;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
@@ -7,10 +8,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.itachi1706.cheesecakeutilities.GeneralSettingsActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.lang.ref.WeakReference;
@@ -55,6 +59,27 @@ public class PsiActivity extends AppCompatActivity {
 
         // Retrieve data
         retrieveData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.modules_psi, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                Toast.makeText(this, "Refreshing", Toast.LENGTH_SHORT).show();
+                retrieveData();
+                return true;
+            case R.id.view_graph:
+                startActivity(new Intent(this, PsiGraphActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void retrieveData() {
