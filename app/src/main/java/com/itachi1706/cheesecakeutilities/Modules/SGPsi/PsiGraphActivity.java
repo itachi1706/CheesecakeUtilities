@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.R;
@@ -25,6 +26,9 @@ public class PsiGraphActivity extends AppCompatActivity {
         ((AppBarLayout.LayoutParams) toolbar.getLayoutParams())
                 .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         ViewPager pager = findViewById(R.id.main_viewpager);
         TabLayout tabLayout = findViewById(R.id.main_tablayout);
@@ -55,5 +59,16 @@ public class PsiGraphActivity extends AppCompatActivity {
         adapter.addFrag(f2, "24-Hours PSI");
 
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

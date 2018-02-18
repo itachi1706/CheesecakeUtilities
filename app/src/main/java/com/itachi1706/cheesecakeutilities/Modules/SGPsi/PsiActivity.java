@@ -2,11 +2,10 @@ package com.itachi1706.cheesecakeutilities.Modules.SGPsi;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,18 +13,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.GeneralSettingsActivity;
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-public class PsiActivity extends AppCompatActivity {
+public class PsiActivity extends BaseActivity {
     
     private TextView psiRange, psiNorth, psiSouth, psiEast, psiWest, psiCentral;
     private TextView pmRange, pmNorth, pmSouth, pmEast, pmWest, pmCentral;
     private TextView lastUpdate;
     private SwipeRefreshLayout refreshLayout;
+
+    @Override
+    public String getHelpDescription() {
+        return "Gives you information about the current PM2.5 and PSI data of Singapore. " +
+                "Also provides a graph to show the history of all of the said data\n" +
+                "\nData Credits: National Environment Agency, Singapore";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class PsiActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.modules_psi, menu);
         return true;
     }

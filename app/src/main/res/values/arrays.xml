@@ -20,7 +20,7 @@
         <item>Connectivity Quiet Hours Configuration</item>
         <item>Barcode Tools</item>
         <item>Now Playing Lyrics</item>
-        <item>Singapore PSI</item>
+        <item>SG PSI</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
