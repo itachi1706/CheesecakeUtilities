@@ -1,17 +1,18 @@
 package com.itachi1706.cheesecakeutilities.Modules.SGPsi;
 
-import android.preference.PreferenceManager;
+import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.Fragments.GamesFragment;
-import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class PsiGraphActivity extends AppCompatActivity {
 
@@ -21,6 +22,8 @@ public class PsiGraphActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu_tabbed);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ((AppBarLayout.LayoutParams) toolbar.getLayoutParams())
+                .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         setSupportActionBar(toolbar);
 
         ViewPager pager = findViewById(R.id.main_viewpager);
@@ -30,6 +33,10 @@ public class PsiGraphActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        ((AppBarLayout.LayoutParams)tabLayout.getLayoutParams()).setScrollFlags(0);
+
+        if (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT)
+            Toast.makeText(this, "Graphs are best viewed in landscape mode", Toast.LENGTH_SHORT).show();
     }
 
     private void setupViewPager(ViewPager viewPager)
