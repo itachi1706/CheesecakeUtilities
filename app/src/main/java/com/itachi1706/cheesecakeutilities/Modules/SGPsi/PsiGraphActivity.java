@@ -36,16 +36,15 @@ public class PsiGraphActivity extends AppCompatActivity {
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        Bundle bundle = new Bundle();
+        Bundle pmB = new Bundle();
         Bundle psiB = new Bundle();
-        bundle.putString("key", "pm");
-        Fragment f1 = new PsiGraphFragment();
-        f1.setArguments(bundle);
-        adapter.addFrag(f1, "1-Hour PM 2.5");
-        bundle.clear();
+        pmB.putString("key", "pm");
         psiB.putString("key", "psi");
+        Fragment f1 = new PsiGraphFragment();
         Fragment f2 = new PsiGraphFragment();
-        f2.setArguments(bundle);
+        f1.setArguments(pmB);
+        f2.setArguments(psiB);
+        adapter.addFrag(f1, "1-Hour PM 2.5");
         adapter.addFrag(f2, "24-Hours PSI");
 
         viewPager.setAdapter(adapter);
