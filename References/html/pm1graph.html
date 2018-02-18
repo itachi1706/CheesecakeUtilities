@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test JS</title>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        // Load the Visualization API and the corechart package and set a callback to run when the Google Visualization API is loaded.
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function processGraph(handleData){
+            $.ajax({
+                url: 'http://api.itachi1706.com/api/internal/dbPSIToGChart.php?type=PM&limit=1',
+                dataType: 'json',
+                async: true,
+                success:function(data){
+                    handleData(data);
+                }
+            });
+        }
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+            processGraph(function (output) {
+                var data = new google.visualization.DataTable(output);
+                // Set chart options
+                var options = {'title':'1 Hour PM 2.5 Values (Past 90 Days)', 'height':500};
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="chart_div"></div>
+</body>
+</html>
