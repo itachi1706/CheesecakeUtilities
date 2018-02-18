@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,7 +67,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         ptpEt.setOnClickListener(this::ptpDialog);
         ordEt.setOnClickListener(this::ordDialog);
         enlistEt.setOnClickListener(this::enlistDialog);
-
+        CommonMethods.disableAutofill(getWindow().getDecorView());
         pesStatusSpinner = findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
         payDaySpinner = findViewById(R.id.spinnerPD);

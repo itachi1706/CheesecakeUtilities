@@ -32,6 +32,7 @@ import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -96,6 +97,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         wifiSwitch = findViewById(R.id.wifi_activate);
         historyLayout = findViewById(R.id.layout_history);
         historyRecyclerView = findViewById(R.id.rv_qh_history);
+        CommonMethods.disableAutofill(getWindow().getDecorView());
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

@@ -20,6 +20,7 @@ import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHel
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.FEMALE;
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.PUSHUP;
@@ -49,6 +50,7 @@ public class IpptCalculatorActivity extends BaseActivity {
         Button scores = findViewById(R.id.btnViewScoring);
         results = findViewById(R.id.tvResults);
         pushupLayout = findViewById(R.id.til_etPushUps);
+        CommonMethods.disableAutofill(getWindow().getDecorView());
         genderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

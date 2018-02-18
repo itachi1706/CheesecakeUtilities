@@ -10,6 +10,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+
 public class StringToHexBin extends BaseActivity implements View.OnClickListener {
 
     TextView input, result;
@@ -24,6 +26,7 @@ public class StringToHexBin extends BaseActivity implements View.OnClickListener
         findViewById(R.id.btn_binhex_copy).setOnClickListener(this);
         findViewById(R.id.btn_binhex_send).setOnClickListener(this);
         findViewById(R.id.btn_binhex_translate).setOnClickListener(this);
+        CommonMethods.disableAutofill(getWindow().getDecorView());
     }
 
     private String translate() {
