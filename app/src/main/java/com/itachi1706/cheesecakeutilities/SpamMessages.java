@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+
 public class SpamMessages extends BaseActivity implements View.OnClickListener {
 
     private EditText messageText, teleText, numberText;
@@ -30,6 +32,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
         this.messageText = findViewById(R.id.edit_messagespam_text);
         this.numberText = findViewById(R.id.edit_messagespam_times);
         this.teleText = findViewById(R.id.edit_messagespam_contact);
+        CommonMethods.disableAutofill(getWindow().getDecorView());
         Button sendBtn = findViewById(R.id.btn_messagespam_send);
         if (sendBtn != null) {
             sendBtn.setOnClickListener(this);

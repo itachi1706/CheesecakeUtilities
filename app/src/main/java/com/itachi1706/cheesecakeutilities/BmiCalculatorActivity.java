@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+
 public class BmiCalculatorActivity extends BaseActivity {
 
     EditText height, weight;
@@ -25,7 +27,7 @@ public class BmiCalculatorActivity extends BaseActivity {
         table = findViewById(R.id.btnTable);
         calculate = findViewById(R.id.btnCalculate);
         result = findViewById(R.id.tvResults);
-
+        CommonMethods.disableAutofill(getWindow().getDecorView());
         calculate.setOnClickListener(v -> {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
