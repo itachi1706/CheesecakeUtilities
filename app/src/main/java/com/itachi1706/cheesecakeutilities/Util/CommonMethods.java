@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
+import android.view.View;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -45,6 +47,11 @@ public class CommonMethods {
     public static boolean isColorDark(int color){
         double darkness = 1-(0.299* Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
         return !(darkness < 0.5);
+    }
+
+    public static void disableAutofill(View v) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            v.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
     }
 
 }
