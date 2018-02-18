@@ -283,8 +283,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Modules.VehicleMileageTracker.GenerateMileageRecordActivity"
+        <activity
+            android:name=".Modules.VehicleMileageTracker.GenerateMileageRecordActivity"
             android:label="Generate Mileage Report" />
+        <activity android:name=".Modules.SGPsi.PsiActivity"></activity>
     </application>
 
 </manifest>
