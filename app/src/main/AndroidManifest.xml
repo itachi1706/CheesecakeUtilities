@@ -283,8 +283,14 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Modules.VehicleMileageTracker.GenerateMileageRecordActivity"
+        <activity
+            android:name=".Modules.VehicleMileageTracker.GenerateMileageRecordActivity"
             android:label="Generate Mileage Report" />
+        <activity android:name=".Modules.SGPsi.PsiActivity"
+            android:label="SG PSI"/>
+        <activity android:name=".Modules.SGPsi.PsiGraphActivity"
+            android:label="SG PSI Graphs"
+            android:theme="@style/AppTheme.NoAppBar"/>
     </application>
 
 </manifest>
