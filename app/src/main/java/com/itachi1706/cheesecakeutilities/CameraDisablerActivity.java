@@ -77,16 +77,23 @@ public class CameraDisablerActivity extends BaseActivity {
                         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, deviceAdmin);
                         intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.camera_disable_explaination));
                         startActivityForResult(intent, DEVICE_ADMIN_REQUEST);
+                        requestAdmin = true;
                     }).show();
         }
     }
 
+    boolean requestAdmin = false;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == DEVICE_ADMIN_REQUEST && resultCode == RESULT_OK) {
-            new AlertDialog.Builder(this).setTitle(R.string.camera_disable_enabled_toast)
-                    .setMessage(R.string.camera_disable_enabled_message).setPositiveButton(R.string.dialog_action_positive_close, null).show();
+        if (requestAdmin) {
+            requestAdmin = false;
+            if (requestCode == DEVICE_ADMIN_REQUEST && resultCode == RESULT_OK) {
+                new AlertDialog.Builder(this).setTitle(R.string.camera_disable_enabled_toast)
+                        .setMessage(R.string.camera_disable_enabled_message).setPositiveButton(R.string.dialog_action_positive_close, null).show();
+            }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private boolean isDeviceAdminActive() {
