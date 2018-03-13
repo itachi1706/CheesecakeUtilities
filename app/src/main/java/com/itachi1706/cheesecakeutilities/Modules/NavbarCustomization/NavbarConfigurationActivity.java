@@ -209,6 +209,7 @@ public class NavbarConfigurationActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
             if (!canShowOverlays()) {
                 // Disable toggle
