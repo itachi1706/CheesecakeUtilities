@@ -60,6 +60,7 @@ public class CreateShortcuts extends AppCompatActivity {
             Intent intent = new Intent(this, classObj);
             intent.setAction(Intent.ACTION_MAIN);
             intent.putExtra("menuitem", link);
+            intent.putExtra("globalcheck", true);
 
             // Using API 26 new method of creating shortcuts
             ShortcutInfoCompat shortcutInfo = new ShortcutInfoCompat.Builder(this, link.replace(" ", "-"))
