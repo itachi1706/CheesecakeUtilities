@@ -1,6 +1,8 @@
 package com.itachi1706.cheesecakeutilities.Games.ChromiumTRex;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebView;
 
@@ -25,7 +27,13 @@ public class ChromiumTRexActivity extends BaseActivity {
 
         webView = findViewById(R.id.webview);
 
+        if (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            WebView.setWebContentsDebuggingEnabled(true);
+
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.loadUrl("file:///android_asset/chromiumtrex/index.html");
     }
 }
