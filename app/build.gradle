@@ -29,8 +29,8 @@ android {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 596
-        versionName "4.2.0"
+        versionCode 603
+        versionName "4.2.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "tray__authority", "${applicationId}.tray"
@@ -140,7 +140,7 @@ dependencies {
     // Others
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
