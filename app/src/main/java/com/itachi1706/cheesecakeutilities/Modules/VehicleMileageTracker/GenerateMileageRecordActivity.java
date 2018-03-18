@@ -178,7 +178,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
                     // Update records
-                    assert recList != null;
+                    if (recList == null || recList.getTrainingMileage()) continue;
                     records.add(recList);
                 }
                 Log.i(TAG, "Records: " + records.size());
