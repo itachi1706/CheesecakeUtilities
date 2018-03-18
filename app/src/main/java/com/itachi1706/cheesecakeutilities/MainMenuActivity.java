@@ -16,6 +16,8 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crash.FirebaseCrash;
 import com.itachi1706.appupdater.AppUpdateInitializer;
+import com.itachi1706.appupdater.Objects.CAAnalytics;
+import com.itachi1706.appupdater.Util.AnalyticsHelper;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Fragments.GamesFragment;
 import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
@@ -40,6 +42,14 @@ public class MainMenuActivity extends AppCompatActivity {
         Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
         Fabric.with(this, crashlyticsKit);
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        AnalyticsHelper helper = new AnalyticsHelper(this, true);
+        CAAnalytics analytics = helper.getData();
+        if (analytics != null) {
+            // Update Firebase Analytics User Properties
+            setAnalyticsData(true, firebaseAnalytics, analytics);
+        } else {
+            setAnalyticsData(false, firebaseAnalytics, analytics);
+        }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
         setContentView(R.layout.activity_main_menu_tabbed);
@@ -63,6 +73,18 @@ public class MainMenuActivity extends AppCompatActivity {
             return;
         }
         if (CommonMethods.isGlobalLocked(sp)) startActivityForResult(new Intent(this, AuthenticationActivity.class), REQUEST_AUTH);
+    }
+
+    private void setAnalyticsData(boolean enabled, FirebaseAnalytics firebaseAnalytics, CAAnalytics analytics) {
+        firebaseAnalytics.setUserProperty("debug_mode", (enabled) ? analytics.isDebug() + "" : null);
+        firebaseAnalytics.setUserProperty("device_manufacturer", (enabled) ? analytics.getdManufacturer() : null);
+        firebaseAnalytics.setUserProperty("device_codename", (enabled) ? analytics.getdCodename() : null);
+        firebaseAnalytics.setUserProperty("device_fingerprint", (enabled) ? analytics.getdFingerprint() : null);
+        firebaseAnalytics.setUserProperty("device_cpu_abi", (enabled) ? analytics.getdCPU() : null);
+        firebaseAnalytics.setUserProperty("device_tags", (enabled) ? analytics.getdTags() : null);
+        firebaseAnalytics.setUserProperty("app_version_code", (enabled) ? Integer.toString(analytics.getAppVerCode()) : null);
+        firebaseAnalytics.setUserProperty("android_sec_patch", (enabled) ? analytics.getSdkPatch() : null);
+        firebaseAnalytics.setUserProperty("AndroidOS", (enabled) ? Integer.toString(analytics.getSdkver()) : null);
     }
 
     private void setupViewPager(ViewPager viewPager)
