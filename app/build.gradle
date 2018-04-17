@@ -82,7 +82,7 @@ android {
 }
 
 ext {
-    supportLibraryVersion = '27.1.1'
+    supportLibraryVersion = '27.1.0'
     playServicesVersion = '15.0.0'
 }
 
