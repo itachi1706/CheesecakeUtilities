@@ -36,8 +36,8 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Error Handling
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(true).build();
-        Fabric.with(fabric);
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
+        if (!BuildConfig.DEBUG) Fabric.with(fabric);
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         AnalyticsHelper helper = new AnalyticsHelper(this, true);
         CAAnalytics analytics = helper.getData();

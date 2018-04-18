@@ -31,8 +31,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(!BuildConfig.DEBUG).build();
-        Fabric.with(fabric);
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
+        if (!BuildConfig.DEBUG) Fabric.with(fabric);
         String menuitem = this.getIntent().hasExtra("menuitem") ? this.getIntent().getExtras().getString("menuitem", "") : "";
         boolean checkGlobal = this.getIntent().hasExtra("globalcheck") && this.getIntent().getExtras().getBoolean("globalcheck");
         boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
