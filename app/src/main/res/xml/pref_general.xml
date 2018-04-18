@@ -19,10 +19,13 @@
         <SwitchPreference android:title="Show Quiet Hour Trigger History"
             android:summary="Shows a list of the times that Quiet Hour has triggered"
             android:key="quiethour_history_view" android:defaultValue="true" />
+        <Preference android:title="Clear Quiet Hour Trigger History" android:key="quiethour_clear_hist" />
         <EditTextPreference android:title="Vehicle Mileage Report Rows"
             android:summary="%s" android:defaultValue="38" android:inputType="numberDecimal"
             android:key="veh_mileage_report_rows" />
-        <Preference android:title="Clear Quiet Hour Trigger History" android:key="quiethour_clear_hist" />
+        <SwitchPreference android:title="Mileage Decimal"
+            android:summary="Whether to enable the decimal point if enabled or round up otherwise"
+            android:key="veh_mileage_decimal" android:defaultValue="true" />
     </PreferenceCategory>
 
 </PreferenceScreen>
