@@ -49,4 +49,9 @@ public class FirebaseUtils {
         timeString += " - " + sdf.format(dt);
         return timeString;
     }
+
+    public static String parseData(double d, boolean decimal) {
+        if (decimal) return String.format(Locale.getDefault(), "%.1f", d);
+        return String.format(Locale.getDefault(), "%d", Math.round(d));
+    }
 }
