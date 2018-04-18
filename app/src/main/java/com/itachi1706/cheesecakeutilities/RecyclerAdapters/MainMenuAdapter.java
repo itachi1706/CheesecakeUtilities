@@ -20,7 +20,6 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * Created by itachi1706 on 2/20/2016.
@@ -105,13 +104,13 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 // Add dynamic shortcuts
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     ShortcutManager shortcutManager = v.getContext().getSystemService(ShortcutManager.class);
-                    Queue<ShortcutInfo> infos = new LinkedList<>(shortcutManager.getDynamicShortcuts());
+                    LinkedList<ShortcutInfo> infos = new LinkedList<>(shortcutManager.getDynamicShortcuts());
                     final int shortcutCount = shortcutManager.getMaxShortcutCountPerActivity() - 2;
                     if (infos.size() >= shortcutCount) {
                         Log.i("ShortcutManager", "Dynamic Shortcuts more than " + shortcutCount
                                 + ". Removing extras");
                         do {
-                            infos.remove();
+                            infos.removeLast();
                         } while (infos.size() > shortcutCount);
                     }
                     intent.setAction(Intent.ACTION_VIEW);
@@ -122,7 +121,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                             .setIntent(intent).build();
 
                     infos.add(newShortcut);
-                    shortcutManager.setDynamicShortcuts(new LinkedList<>(infos));
+                    shortcutManager.setDynamicShortcuts(infos);
                 }
             } catch (ClassNotFoundException e) {
                 Log.e("MainMenuAdapter", "Class Not Found: " + className);
