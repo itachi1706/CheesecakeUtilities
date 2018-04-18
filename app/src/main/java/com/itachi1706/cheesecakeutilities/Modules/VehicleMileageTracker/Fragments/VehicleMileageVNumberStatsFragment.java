@@ -27,6 +27,8 @@ import java.util.List;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.MILEAGE_DEC;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
 
 /**
  * Created by Kenneth on 31/8/2017.
@@ -38,6 +40,7 @@ public class VehicleMileageVNumberStatsFragment extends Fragment {
     DualLineStringRecyclerAdapter adapter;
     SwipeRefreshLayout refreshLayout;
     SharedPreferences sp;
+    private boolean decimal;
 
     public VehicleMileageVNumberStatsFragment() {
         // Required empty public constructor
@@ -65,6 +68,7 @@ public class VehicleMileageVNumberStatsFragment extends Fragment {
             recyclerView.setAdapter(adapter);
 
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            decimal = sp.getBoolean(MILEAGE_DEC, true);
         }
         refreshLayout = v.findViewById(R.id.pull_to_refresh);
         refreshLayout.setOnRefreshListener(this::updateStats);
@@ -96,7 +100,7 @@ public class VehicleMileageVNumberStatsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    stats.add(new DualLineString("Total Mileage with " + ds.getKey(), ds.getValue(Double.class) + " km"));
+                    stats.add(new DualLineString("Total Mileage with " + ds.getKey(), parseData(ds.getValue(Double.class), decimal) + " km"));
                 }
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
