@@ -23,6 +23,7 @@
 -dontwarn java.nio.file.OpenOption
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn com.squareup.picasso.**
+-dontwarn com.scottyab.safetynet.**
 -dontwarn com.itachi1706.cheesecakeutilities.**
 -keep public class com.itachi1706.cheesecakeutilities.**
 -keepattributes Signature

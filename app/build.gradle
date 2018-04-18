@@ -59,6 +59,8 @@ android {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
             // Disable Fabric Stuff (Deprecated, it is now disabled by default and enabled in runtime)
             //ext.enableCrashlytics = false
+            minifyEnabled isTravis
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     // This enables long timeouts required on slow environments, e.g. Travis
