@@ -2,17 +2,16 @@ package com.itachi1706.cheesecakeutilities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.appupdater.Objects.CAAnalytics;
@@ -37,8 +36,8 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Error Handling
-        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-        Fabric.with(this, crashlyticsKit);
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(true).build();
+        Fabric.with(fabric);
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         AnalyticsHelper helper = new AnalyticsHelper(this, true);
         CAAnalytics analytics = helper.getData();

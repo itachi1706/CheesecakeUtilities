@@ -36,7 +36,6 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
@@ -273,8 +272,8 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
-        Fabric.with(this, crashlyticsKit);
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(!BuildConfig.DEBUG).build();
+        Fabric.with(fabric);
     }
 
     @Override
