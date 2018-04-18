@@ -14,7 +14,8 @@ import java.util.Locale;
 public class FirebaseUtils {
 
     // Constants
-    public static final String FB_REC_USER = "users", FB_REC_STATS = "statistics", FB_REC_RECORDS = "records";
+    public static final String FB_REC_USER = "users", FB_REC_STATS = "statistics", FB_REC_RECORDS = "records",
+            MILEAGE_DEC = "veh_mileage_decimal";
 
     private static FirebaseDatabase firebaseDatabase;
 
