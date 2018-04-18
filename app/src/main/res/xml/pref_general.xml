@@ -23,8 +23,8 @@
         <EditTextPreference android:title="Vehicle Mileage Report Rows"
             android:summary="%s" android:defaultValue="38" android:inputType="numberDecimal"
             android:key="veh_mileage_report_rows" />
-        <SwitchPreference android:title="Mileage Decimal"
-            android:summary="Whether to enable the decimal point if enabled or round up otherwise"
+        <SwitchPreference android:title="Decimal point in Mileage value"
+            android:summary="If enabled, shows the decimal point, otherwise round up the mileage"
             android:key="veh_mileage_decimal" android:defaultValue="true" />
     </PreferenceCategory>
 
