@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects
+package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects
 
 /**
  * Created by Kenneth on 3/12/2016.
