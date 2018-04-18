@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.MILEAGE_DEC;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
 
 public class GenerateMileageRecordActivity extends AppCompatActivity {
@@ -66,7 +67,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         maxPerRecord = Integer.parseInt(sp.getString("veh_mileage_report_rows", "38"));
         user_id = sp.getString("firebase_uid", "nien");
-        decimal = sp.getBoolean("veh_mileage_decimal", true);
+        decimal = sp.getBoolean(MILEAGE_DEC, true);
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
