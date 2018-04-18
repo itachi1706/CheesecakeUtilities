@@ -37,8 +37,6 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.crash.FirebaseCrash;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
@@ -275,8 +273,6 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onCreate() {
         super.onCreate();
-        FirebaseApp.initializeApp(this);
-        if (BuildConfig.DEBUG && FirebaseCrash.isCrashCollectionEnabled()) FirebaseCrash.setCrashCollectionEnabled(false);
         Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
         Fabric.with(this, crashlyticsKit);
     }

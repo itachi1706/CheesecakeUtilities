@@ -11,9 +11,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Kenneth on 13/8/2016.
@@ -29,7 +32,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        if (BuildConfig.DEBUG && FirebaseCrash.isCrashCollectionEnabled()) FirebaseCrash.setCrashCollectionEnabled(false);
+        Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
+        Fabric.with(this, crashlyticsKit);
         String menuitem = this.getIntent().hasExtra("menuitem") ? this.getIntent().getExtras().getString("menuitem", "") : "";
         boolean checkGlobal = this.getIntent().hasExtra("globalcheck") && this.getIntent().getExtras().getBoolean("globalcheck");
         boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");

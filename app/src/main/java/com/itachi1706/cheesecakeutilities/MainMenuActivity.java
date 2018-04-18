@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.appupdater.Objects.CAAnalytics;
 import com.itachi1706.appupdater.Util.AnalyticsHelper;
@@ -38,7 +37,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Error Handling
-        if (BuildConfig.DEBUG && FirebaseCrash.isCrashCollectionEnabled()) FirebaseCrash.setCrashCollectionEnabled(false);
         Crashlytics crashlyticsKit = new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build();
         Fabric.with(this, crashlyticsKit);
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -48,7 +46,7 @@ public class MainMenuActivity extends AppCompatActivity {
             // Update Firebase Analytics User Properties
             setAnalyticsData(true, firebaseAnalytics, analytics);
         } else {
-            setAnalyticsData(false, firebaseAnalytics, analytics);
+            setAnalyticsData(false, firebaseAnalytics, null);
         }
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
