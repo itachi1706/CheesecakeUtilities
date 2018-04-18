@@ -47,8 +47,8 @@ public class LyricNotificationListener extends NotificationListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(!BuildConfig.DEBUG).build();
-        Fabric.with(fabric);
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
+        if (!BuildConfig.DEBUG) Fabric.with(fabric);
         mm = (MediaSessionManager) this.getSystemService(Context.MEDIA_SESSION_SERVICE);
 
         scanForControllers();

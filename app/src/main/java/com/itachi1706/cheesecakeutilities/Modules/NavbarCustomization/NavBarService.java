@@ -272,8 +272,8 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(!BuildConfig.DEBUG).build();
-        Fabric.with(fabric);
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
+        if (!BuildConfig.DEBUG) Fabric.with(fabric);
     }
 
     @Override
