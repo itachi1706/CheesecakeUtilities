@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects
+package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects
 
 import android.content.Context
 import android.graphics.drawable.Drawable
