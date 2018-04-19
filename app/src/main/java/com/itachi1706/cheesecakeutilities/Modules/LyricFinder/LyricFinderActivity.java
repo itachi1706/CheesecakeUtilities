@@ -143,6 +143,9 @@ public class LyricFinderActivity extends BaseActivity {
                         case 0:
                             activity.lyrics.setText(result.getMsg().replace("<br>", "\n").trim());
                             break;
+                        case 2:
+                            activity.lyrics.setText(result.getMsg().replace("<br>", "\n").trim() + "\n\nCached on server");
+                            break;
                         case 1:
                             activity.lyrics.setText("No Lyrics Found");
                             break;
