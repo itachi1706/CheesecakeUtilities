@@ -6,10 +6,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.SmsManager;
@@ -21,6 +19,7 @@ import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
+import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
 public class SpamMessages extends BaseActivity implements View.OnClickListener {
@@ -186,7 +185,6 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        final Activity thisActivity = this;
         switch (requestCode) {
             case RC_HANDLE_REQUEST_MESSAGING:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -194,16 +192,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
                     canSendSMS();
                     return;
                 }
-                CommonMethods.logPermError(grantResults);
-                new AlertDialog.Builder(this).setTitle("Permission Denied")
-                        .setMessage("You have denied the app ability to send SMS. This app will not be able to spam anybody")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setNeutralButton("SETTINGS", (dialog, which) -> {
-                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                            permIntent.setData(packageURI);
-                            startActivity(permIntent);
-                        }).show();
+                displayPermErrorMessage("You have denied the app ability to send SMS. This app will not be able to spam anybody", grantResults, this);
                 break;
             case RC_HANDLE_REQUEST_CONTACTS:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -212,17 +201,8 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
                     startActivityForResult(new Intent(Intent.ACTION_PICK, Phone.CONTENT_URI), 2);
                     return;
                 }
-                CommonMethods.logPermError(grantResults);
-                new AlertDialog.Builder(this).setTitle("Permission Denied")
-                        .setMessage("You have denied the app ability to access contacts. We are unable to let you select a contact. " +
-                                "Please enter the phone number manually or grant the app permission to read your contacts")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setNeutralButton("SETTINGS", (dialog, which) -> {
-                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                            permIntent.setData(packageURI);
-                            startActivity(permIntent);
-                        }).show();
+                displayPermErrorMessage("You have denied the app ability to access contacts. We are unable to let you select a contact. " +
+                        "Please enter the phone number manually or grant the app permission to read your contacts", grantResults, this);
                 break;
             default:
                 Log.d(PERM_MAN_TAG, "Got unexpected permission result: " + requestCode);
