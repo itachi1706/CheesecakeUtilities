@@ -27,6 +27,7 @@ import java.util.List;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
 
 /**
  * Created by itachi1706 on 2/20/2016.
@@ -37,11 +38,13 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     private List<String> tags, hiddenTags;
     private DataSnapshot vehicles;
     private boolean hideTraining = false;
+    private boolean decimal;
 
-    public VehicleMileageRecordsAdapter(List<Record> recordList, List<String> tags, DataSnapshot vehicles) {
+    public VehicleMileageRecordsAdapter(List<Record> recordList, List<String> tags, DataSnapshot vehicles, boolean decimal) {
         this.recordsList = recordList;
         this.tags = tags;
         this.vehicles = vehicles;
+        this.decimal = decimal;
     }
 
     public void updateRecords(List<Record> records, List<String> tags) {
@@ -95,7 +98,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         recordsViewHolder.vehicleNumber.setText(s.getVehicleNumber());
         // Calculate distance time
         String distanceTime = DurationFormatUtils.formatDurationWords(s.getTotalTimeInMs(), true, true);
-        distanceTime += " (" + s.getTotalMileage() + " km)";
+        distanceTime += " (" + parseData(s.getTotalMileage(), decimal) + " km)";
         recordsViewHolder.totalTimeDistance.setText(distanceTime);
         if (s.getTrainingMileage()) recordsViewHolder.totalTimeDistance.setTextColor(Color.RED);
         else recordsViewHolder.totalTimeDistance.setTextColor(recordsViewHolder.defaultTextColor);
@@ -144,9 +147,9 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             message += "From: " + FirebaseUtils.formatTime(r.getDatetimeFrom()) + " hrs\n";
             message += "To: " + FirebaseUtils.formatTime(r.getDateTimeTo()) + " hrs\n";
             message += "Time Taken: " + DurationFormatUtils.formatDurationWords(r.getTotalTimeInMs(), true, true) + "\n";
-            message += "Mileage From: " + r.getMileageFrom() + " km\n";
-            message += "Mileage To: " + r.getMileageTo() + " km\n";
-            message += "Total Mileage: " + r.getTotalMileage() + " km\n";
+            message += "Mileage From: " + parseData(r.getMileageFrom(), decimal) + " km\n";
+            message += "Mileage To: " + parseData(r.getMileageTo(), decimal) + " km\n";
+            message += "Total Mileage: " + parseData(r.getTotalMileage(), decimal) + " km\n";
             message += "Training Mileage: " + ((r.getTrainingMileage()) ? "true" : "false") + "\n";
             final View v1 = v;
             new AlertDialog.Builder(v.getContext())
