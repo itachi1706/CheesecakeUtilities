@@ -2,15 +2,22 @@ package com.itachi1706.cheesecakeutilities.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
 /**
  * Created by Kenneth on 3/19/2016.
@@ -52,6 +59,24 @@ public class CommonMethods {
     public static void disableAutofill(View v) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             v.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+    }
+
+    public static void logPermError(@NonNull int[] grantResults) {
+        Log.e(PERM_MAN_TAG, "Permission not granted: results len = " + grantResults.length +
+                " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+    }
+
+    public static void displayPermErrorMessage(@NonNull String title, @NonNull int[] grantResults, @NonNull Activity activity) {
+        logPermError(grantResults);
+        new AlertDialog.Builder(activity).setTitle("Permission Denied")
+                .setMessage(title)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton("SETTINGS", (dialog, which) -> {
+                    Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri packageURI = Uri.parse("package:" + activity.getPackageName());
+                    permIntent.setData(packageURI);
+                    activity.startActivity(permIntent);
+                }).show();
     }
 
 }

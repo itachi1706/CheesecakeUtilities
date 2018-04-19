@@ -57,6 +57,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
+import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+
 public class ListApplicationsDetailActivity extends AppCompatActivity {
 
     TextView appName, appVersion;
@@ -541,7 +544,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
 
     private void requestStoragePermission() {
-        Log.w("PermMan", "Storage permission is not granted. Requesting permission");
+        Log.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -580,14 +583,13 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("PermMan", "Storage Permission Granted. Allowing Utility Access");
+                    Log.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
                     new AlertDialog.Builder(this).setTitle("Permission Granted")
                             .setMessage("Please request the backup of the app again")
                             .setPositiveButton(android.R.string.ok, null).show();
                     return;
                 }
-                Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
-                        " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+                logPermError(grantResults);
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to access your storage. Backup will not continue")
                         .setPositiveButton(android.R.string.ok, null)

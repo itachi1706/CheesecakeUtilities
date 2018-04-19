@@ -7,7 +7,6 @@
         <item>Fanfiction Compactor</item>
         <item>Disable Camera</item>
         <item>Application List</item>
-        <item>Restore Application</item>
         <item>ORD Countdown</item>
         <item>BMI Calculator</item>
         <item>IPPT Calculator</item>
@@ -29,7 +28,6 @@
         <item>.Modules.FanfictionCompactor.FanfictionCompactorActivity</item>
         <item>.CameraDisablerActivity</item>
         <item>.Modules.ListApplications.ListApplicationsActivity</item>
-        <item>.Modules.AppRestore.RestoreAppActivity</item>
         <item>.Modules.ORDCountdown.ORDActivity</item>
         <item>.BmiCalculatorActivity</item>
         <item>.Modules.IPPTCalculator.IpptCalculatorActivity</item>
