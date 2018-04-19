@@ -47,6 +47,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
+import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+
 /**
  * Created by Kenneth on 18/4/2018.
  * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Fragments in CheesecakeUtilities
@@ -151,7 +154,7 @@ public class ListApplicationFragment extends Fragment {
     private static final int RC_HANDLE_REQUEST_STORAGE = 4;
 
     private void requestStoragePermission() {
-        Log.w("PermMan", "Storage permission is not granted. Requesting permission");
+        Log.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         assert getActivity() != null;
@@ -176,12 +179,11 @@ public class ListApplicationFragment extends Fragment {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("PermMan", "Storage Permission Granted. Allowing Utility Access");
+                    Log.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
                     scanGhostDir();
                     return;
                 }
-                Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
-                        " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+                logPermError(grantResults);
                 new AlertDialog.Builder(getActivity()).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to access your storage. This app will not be able to scan" +
                                 " for ghost directories or perform ghost directories cleanup for you")
@@ -204,11 +206,12 @@ public class ListApplicationFragment extends Fragment {
             Toast.makeText(getContext(), "An error occurred when attempting to do a scan", Toast.LENGTH_LONG).show();
             return;
         }
+        final String GHOST_DIR_TITLE = "Ghost Directory Scanning Complete";
 
         File[] subDir = androidDir.listFiles();
         final ArrayMap<String, String> listOfGhostDir = new ArrayMap<>();
         if (subDir.length == 0) {
-            new AlertDialog.Builder(getContext()).setTitle("Ghost Directory Scanning Complete")
+            new AlertDialog.Builder(getContext()).setTitle(GHOST_DIR_TITLE)
                     .setMessage("You do not have any folders in the Android Application Data directory of your device")
                     .setPositiveButton(android.R.string.ok, null).show();
             return;
@@ -222,12 +225,12 @@ public class ListApplicationFragment extends Fragment {
 
         if (listOfGhostDir.isEmpty()) {
             // Empty
-            new AlertDialog.Builder(getContext()).setTitle("Ghost Directory Scanning Complete")
+            new AlertDialog.Builder(getContext()).setTitle(GHOST_DIR_TITLE)
                     .setMessage("You have no ghost directories found in your device")
                     .setPositiveButton(android.R.string.ok, null).show();
         } else {
             assert getContext() != null;
-            new MaterialDialog.Builder(getContext()).title("Ghost Directory Scanning Complete")
+            new MaterialDialog.Builder(getContext()).title(GHOST_DIR_TITLE)
                     .items(listOfGhostDir.keySet()).itemsCallbackMultiChoice(null, (dialog, which, text) -> {
                 int count = 0;
                 StringBuilder removeMan = new StringBuilder();
@@ -265,9 +268,7 @@ public class ListApplicationFragment extends Fragment {
             finalStr = new ArrayList<>();
             for (ApplicationInfo i : pkgAppsList) {
                 appPackageNamesInstalled.add(i.packageName);
-                if (isSystemApp(i)) {
-                    if (!system) continue;
-                }
+                if (isSystemApp(i) && !system) continue;
                 String version = "Unknown";
                 try {
                     PackageInfo pInfo = getContext().getPackageManager().getPackageInfo(i.packageName, PackageManager.GET_PERMISSIONS);

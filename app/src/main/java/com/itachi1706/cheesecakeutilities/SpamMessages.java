@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
+import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+
 public class SpamMessages extends BaseActivity implements View.OnClickListener {
 
     private EditText messageText, teleText, numberText;
@@ -133,7 +135,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
     private static final int RC_HANDLE_REQUEST_MESSAGING = 2;
 
     private void requestContactsPermission() {
-        Log.w("PermMan", "Contacts permission is not granted. Requesting permission");
+        Log.w(PERM_MAN_TAG, "Contacts permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)){
@@ -149,7 +151,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
     }
 
     private void requestMessagingPermission() {
-        Log.w("PermMan", "Messaging permission is not granted. Requesting permission");
+        Log.w(PERM_MAN_TAG, "Messaging permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.SEND_SMS};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)){
@@ -188,12 +190,11 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_MESSAGING:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("PermMan", "Messaging Permission Granted. Sending SMS");
+                    Log.d(PERM_MAN_TAG, "Messaging Permission Granted. Sending SMS");
                     canSendSMS();
                     return;
                 }
-                Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
-                        " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+                CommonMethods.logPermError(grantResults);
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to send SMS. This app will not be able to spam anybody")
                         .setPositiveButton(android.R.string.ok, null)
@@ -206,13 +207,12 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
                 break;
             case RC_HANDLE_REQUEST_CONTACTS:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("PermMan", "Contacts Permission Granted. Launching Contacts Picker");
+                    Log.d(PERM_MAN_TAG, "Contacts Permission Granted. Launching Contacts Picker");
                     // we have permission, so create the camerasource
                     startActivityForResult(new Intent(Intent.ACTION_PICK, Phone.CONTENT_URI), 2);
                     return;
                 }
-                Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
-                        " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+                CommonMethods.logPermError(grantResults);
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to access contacts. We are unable to let you select a contact. " +
                                 "Please enter the phone number manually or grant the app permission to read your contacts")
@@ -225,7 +225,7 @@ public class SpamMessages extends BaseActivity implements View.OnClickListener {
                         }).show();
                 break;
             default:
-                Log.d("PermMan", "Got unexpected permission result: " + requestCode);
+                Log.d(PERM_MAN_TAG, "Got unexpected permission result: " + requestCode);
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

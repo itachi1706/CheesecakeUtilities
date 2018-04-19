@@ -51,6 +51,8 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.IOException;
 
+import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
+
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
@@ -271,8 +273,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
             return;
         }
 
-        Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
-                " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+        logPermError(grantResults);
 
         DialogInterface.OnClickListener listener = (dialog, id) -> finish();
 
