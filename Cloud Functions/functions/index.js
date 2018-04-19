@@ -3,15 +3,15 @@ const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database. 
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 // Calculate Statistics (non-training mileage only for now)
 exports.calculateStatistics = functions.database.ref('/users/{userid}/records').onWrite(
-    event => {
-        console.log("Function Version: 070920171911")
-        const records = event.data.val();
+    (snapshot, context) => {
+        console.log("Function Version: 190420181700")
+        const records = snapshot.after.val();
         var stats = {totalMileage: 0}
-        console.log('Processing User', event.params.userid);
+        console.log('Processing User', context.params.userid);
         console.log('Calculating Total Mileage...');
         var total = calculateTotalMileage(records);
         stats.totalMileage = total;
@@ -27,9 +27,23 @@ exports.calculateStatistics = functions.database.ref('/users/{userid}/records').
         stats.vehicleNumberRecords = misc.vehicleNumber;
         console.log('Finished Processing User. Saving to Firebase DB');
         console.log(stats);
-        return event.data.ref.parent.child('statistics').set(stats);
+        return setRecord(snapshot.after.ref.parent.child('statistics'), stats, context);
     }
 )
+
+function setRecord(ref, stats, context) {
+    const appOptions = JSON.parse(process.env.FIREBASE_CONFIG);
+    appOptions.databaseAuthVariableOverride = context.auth;
+    const app = admin.initializeApp(appOptions, 'app');
+
+    const deleteApp = () => app.delete().catch(() => null);
+    return app.database().ref(ref).set(stats).then(res => {
+        // Deleting the app is necessary for preventing concurrency leaks
+        return deleteApp().then(() => res);
+      }).catch(err => {
+        return deleteApp().then(() => Promise.reject(err));
+      });
+}
 
 function miscMileage(recordList) {
     var date = {};
