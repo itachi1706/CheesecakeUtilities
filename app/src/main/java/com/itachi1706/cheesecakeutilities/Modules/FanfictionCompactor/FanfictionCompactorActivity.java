@@ -41,6 +41,8 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+
 public class FanfictionCompactorActivity extends BaseActivity {
 
     TextView folder, database, folderSize, storyCount;
@@ -225,7 +227,7 @@ public class FanfictionCompactorActivity extends BaseActivity {
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
 
     private void requestStoragePermission() {
-        Log.w("PermMan", "Storage permission is not granted. Requesting permission");
+        Log.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -264,12 +266,11 @@ public class FanfictionCompactorActivity extends BaseActivity {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("PermMan", "Storage Permission Granted. Allowing Utility Access");
+                    Log.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
                     processPruningDetails();
                     return;
                 }
-                Log.e("PermMan", "Permission not granted: results len = " + grantResults.length +
-                        " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+                CommonMethods.logPermError(grantResults);
                 new AlertDialog.Builder(this).setTitle("Permission Denied")
                         .setMessage("You have denied the app ability to access your storage. This app will not be able to calculate" +
                                 " file size or compact Fanfictions and will now exit")
