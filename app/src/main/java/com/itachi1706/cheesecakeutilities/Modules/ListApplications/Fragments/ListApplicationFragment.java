@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -47,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
+import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
 /**
@@ -175,7 +173,7 @@ public class ListApplicationFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        final Activity thisActivity = getActivity();
+        assert getActivity() != null;
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -183,18 +181,8 @@ public class ListApplicationFragment extends Fragment {
                     scanGhostDir();
                     return;
                 }
-                logPermError(grantResults);
-                new AlertDialog.Builder(getActivity()).setTitle("Permission Denied")
-                        .setMessage("You have denied the app ability to access your storage. This app will not be able to scan" +
-                                " for ghost directories or perform ghost directories cleanup for you")
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setCancelable(false)
-                        .setNeutralButton("SETTINGS", (dialog, which) -> {
-                            Intent permIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri packageURI = Uri.parse("package:" + thisActivity.getPackageName());
-                            permIntent.setData(packageURI);
-                            startActivity(permIntent);
-                        }).show();
+                displayPermErrorMessage("You have denied the app ability to access your storage. This app will not be able to scan" +
+                        " for ghost directories or perform ghost directories cleanup for you", grantResults, getActivity());
                 break;
         }
     }
