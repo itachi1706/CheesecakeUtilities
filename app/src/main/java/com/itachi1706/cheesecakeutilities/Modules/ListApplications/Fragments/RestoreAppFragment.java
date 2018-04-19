@@ -1,22 +1,26 @@
-package com.itachi1706.cheesecakeutilities.Modules.AppRestore;
+package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Fragments;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
-import com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects.RestoreAppsItemsBase;
-import com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects.RestoreAppsItemsFooter;
-import com.itachi1706.cheesecakeutilities.Modules.AppRestore.Objects.RestoreAppsItemsHeader;
-import com.itachi1706.cheesecakeutilities.Modules.AppRestore.RecyclerAdapters.RestoreAppsAdapter;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsBase;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsFooter;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsHeader;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.RestoreAppsAdapter;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -28,31 +32,36 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class RestoreAppActivity extends BaseActivity {
+/**
+ * Created by Kenneth on 18/4/2018.
+ * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Fragments in CheesecakeUtilities
+ */
+public class RestoreAppFragment extends Fragment {
 
     RecyclerView recyclerView;
     ProgressBar bar;
     TextView label;
 
-    @Override
-    public String getHelpDescription() {
-        return "Restores Applications previously backed up by the Application List utility";
+    public RestoreAppFragment() {
+        // Required Constructor for Fragments
     }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restore_app);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_list_applications, container, false);
 
-        recyclerView = findViewById(R.id.list_app_recycler_view);
+        recyclerView = v.findViewById(R.id.list_app_recycler_view);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        bar = findViewById(R.id.list_app_pb);
-        label = findViewById(R.id.list_app_pb_label);
+        bar = v.findViewById(R.id.list_app_pb);
+        label = v.findViewById(R.id.list_app_pb_label);
+
+        return v;
     }
 
     @Override
@@ -85,7 +94,7 @@ public class RestoreAppActivity extends BaseActivity {
 
             String[] ext = {"apk"};
             Collection<File> apkfiles = FileUtils.listFiles(backupFolder, ext, false);
-            PackageManager pm = getPackageManager();
+            PackageManager pm = getContext().getPackageManager();
             items = new HashMap<>();
             for (File f : apkfiles) {
                 Log.d("File", f.getName());
@@ -124,7 +133,7 @@ public class RestoreAppActivity extends BaseActivity {
             List<RestoreAppsItemsBase> tmp = new ArrayList<>(items.values());
             finalAdapter = new RestoreAppsAdapter(tmp);
 
-           return null;
+            return null;
         }
 
         @Override
