@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.MILEAGE_DEC;
 
 public class VehicleMileageMainActivity extends BaseActivity {
 
@@ -90,7 +91,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             // Set up layout
-            adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null);
+            adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null, sp.getBoolean(MILEAGE_DEC, true));
             recyclerView.setAdapter(adapter);
         }
     }

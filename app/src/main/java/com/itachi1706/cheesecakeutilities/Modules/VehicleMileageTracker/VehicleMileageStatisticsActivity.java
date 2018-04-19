@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -35,12 +36,15 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu_tabbed);
 
         toolbar = findViewById(R.id.toolbar);
+        ((AppBarLayout.LayoutParams) toolbar.getLayoutParams())
+                .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         pager = findViewById(R.id.main_viewpager);
         tabLayout = findViewById(R.id.main_tablayout);
+        ((AppBarLayout.LayoutParams) tabLayout.getLayoutParams()).setScrollFlags(0);
 
         setupViewPager(pager);
         tabLayout.setupWithViewPager(pager);

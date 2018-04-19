@@ -38,6 +38,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.MILEAGE_DEC;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
+
 public class GenerateMileageRecordActivity extends AppCompatActivity {
 
     private TableLayout layout;
@@ -47,6 +50,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
     private String user_id;
     private int maxPerRecord;
+    private boolean decimal;
     private LongSparseArray<String> monthData = null;
 
     private static final String TAG = "GenerateMileageRec";
@@ -63,6 +67,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         maxPerRecord = Integer.parseInt(sp.getString("veh_mileage_report_rows", "38"));
         user_id = sp.getString("firebase_uid", "nien");
+        decimal = sp.getBoolean(MILEAGE_DEC, true);
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
@@ -249,15 +254,15 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         dt.setTime(record.getDatetimeFrom());
         tr.addView(getTextView(col, sdf.format(dt)));
         tr.addView(getTextView(col, record.getVehicleNumber()));
-        tr.addView(getTextView(col, record.getMileageFrom() + ""));
-        tr.addView(getTextView(col, record.getMileageTo() + ""));
+        tr.addView(getTextView(col, parseData(record.getMileageFrom(), decimal)));
+        tr.addView(getTextView(col, parseData(record.getMileageTo(), decimal)));
         if (record.getVehicleClass().equalsIgnoreCase("class3")) {
-            tr.addView(getTextView(col, record.getTotalMileage() + ""));
+            tr.addView(getTextView(col, parseData(record.getTotalMileage(), decimal)));
             tr.addView(getTextView(col, "-"));
             totalC3 += record.getTotalMileage();
         } else if (record.getVehicleClass().equalsIgnoreCase("class4")) {
             tr.addView(getTextView(col, "-"));
-            tr.addView(getTextView(col, record.getTotalMileage() + ""));
+            tr.addView(getTextView(col, parseData(record.getTotalMileage(), decimal)));
             totalC4 += record.getTotalMileage();
         } else return false;
         layout.addView(tr, getTblLayoutParams());
@@ -271,8 +276,8 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         tr.addView(getTextView(col, ""));
         tr.addView(getTextView(col, ""));
         tr.addView(getTextView(col, "TOTAL", true));
-        tr.addView(getTextView(col, Double.toString(totalC3)));
-        tr.addView(getTextView(col, Double.toString(totalC4)));
+        tr.addView(getTextView(col, parseData(totalC3, decimal)));
+        tr.addView(getTextView(col, parseData(totalC4, decimal)));
         layout.addView(tr, getTblLayoutParams());
     }
 

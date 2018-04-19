@@ -14,7 +14,8 @@ import java.util.Locale;
 public class FirebaseUtils {
 
     // Constants
-    public static final String FB_REC_USER = "users", FB_REC_STATS = "statistics", FB_REC_RECORDS = "records";
+    public static final String FB_REC_USER = "users", FB_REC_STATS = "statistics", FB_REC_RECORDS = "records",
+            MILEAGE_DEC = "veh_mileage_decimal";
 
     private static FirebaseDatabase firebaseDatabase;
 
@@ -48,5 +49,10 @@ public class FirebaseUtils {
         dt.setTime(end);
         timeString += " - " + sdf.format(dt);
         return timeString;
+    }
+
+    public static String parseData(double d, boolean decimal) {
+        if (decimal) return String.format(Locale.getDefault(), "%.1f", d);
+        return String.format(Locale.getDefault(), "%d", Math.round(d));
     }
 }
