@@ -9,6 +9,7 @@ admin.initializeApp();
 exports.calculateStatistics = functions.database.ref('/users/{userid}/records').onWrite(
     (snapshot, context) => {
         console.log("Function Version: 190420181700")
+        console.log(process.versions);
         const records = snapshot.after.val();
         var stats = {totalMileage: 0}
         console.log('Processing User', context.params.userid);
