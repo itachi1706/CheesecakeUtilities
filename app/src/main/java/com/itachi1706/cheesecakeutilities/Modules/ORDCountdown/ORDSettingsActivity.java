@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -26,21 +27,22 @@ import java.util.Locale;
 
 public class ORDSettingsActivity extends AppCompatActivity {
 
-    private long enlistMS, ordMS, popMS, ptpMS, pdoption;
+    private long enlistMS, ordMS, popMS, ptpMS, milestoneMS, pdoption;
     private String pesStatusString;
-    private TextView enlistEt, ordEt, popEt, ptpEt;
+    private TextView enlistEt, ordEt, popEt, ptpEt, milestoneEt;
     private Spinner pesStatusSpinner, payDaySpinner;
-    private DatePickerDialog.OnDateSetListener pop,ord,enlist,ptp;
+    private DatePickerDialog.OnDateSetListener pop, ord, enlist, ptp, milestone;
 
     private SharedPreferences sp;
 
-    private static final int UPDATE_ORD = 1, UPDATE_POP = 2, UPDATE_ENLIST = 3, UPDATE_PTP = 4, UPDATE_NONE = 5, UPDATE_STATUS=6;
+    private static final int UPDATE_ORD = 1, UPDATE_POP = 2, UPDATE_ENLIST = 3, UPDATE_PTP = 4, UPDATE_NONE = 5, UPDATE_STATUS = 6, UPDATE_MILESTONE = 7;
 
     public static final int PES_A = 1, PES_PTP = 2, PES_BP = 3, PES_C = 4, PES_E = 5; // PES Status
     public static final int ENHANCED_BMT = 9, PTP_BMT = 17, BP_BMT = 19, E_BMT = 4; // BMT Weeks
     public static final int ENHANCED_PES = 21, NORMAL_PES = 24; // NS Weeks
     public static final String SP_ORD = "ordcalc_ord", SP_PTP = "ordcalc_ptp",
-            SP_POP = "ordcalc_pop", SP_ENLIST = "ordcalc_enlist", SP_STATUS = "ordcalc_status", SP_PAYDAY = "ordcalc_payday";
+            SP_POP = "ordcalc_pop", SP_ENLIST = "ordcalc_enlist", SP_STATUS = "ordcalc_status",
+            SP_MILESTONE = "ordcalc_milestone", SP_PAYDAY = "ordcalc_payday";
     public static final int PAYDAY_10 = 0, PAYDAY_12 = 1;
 
     @Override
@@ -55,6 +57,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         this.pop = new popListener();
         this.ord = new ordListener();
         this.enlist = new enlistListener();
+        this.milestone = new milestoneListener();
         this.ptp = new ptpListener();
 
         this.sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -63,6 +66,8 @@ public class ORDSettingsActivity extends AppCompatActivity {
         ordEt = (EditText) findViewById(R.id.etORD);
         popEt = (EditText) findViewById(R.id.etPOP);
         ptpEt = (EditText) findViewById(R.id.etPTP);
+        milestoneEt = (EditText) findViewById(R.id.etMilestone);
+        milestoneEt.setOnClickListener(this::milestoneDialog);
         popEt.setOnClickListener(this::popDialog);
         ptpEt.setOnClickListener(this::ptpDialog);
         ordEt.setOnClickListener(this::ordDialog);
@@ -80,6 +85,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         this.ptpMS = sp.getLong(SP_PTP, 0);
         this.enlistMS = sp.getLong(SP_ENLIST, 0);
         this.ordMS = sp.getLong(SP_ORD, 0);
+        this.milestoneMS = sp.getLong(SP_MILESTONE, 0);
         int statusTmp = sp.getInt("ordcalc_status_pos", -2);
         if (statusTmp != 0) {
             this.pesStatusSpinner.setSelection(statusTmp, true);
@@ -124,6 +130,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.putLong(SP_ORD, this.ordMS);
         edit.putString(SP_STATUS, this.pesStatusString);
         edit.putLong(SP_PAYDAY, this.pdoption);
+        edit.putLong(SP_MILESTONE, this.milestoneMS);
         edit.putInt("ordcalc_status_pos", this.pesStatusSpinner.getSelectedItemPosition());
         edit.apply();
         Toast.makeText(this, "Settings Saved", Toast.LENGTH_LONG).show();
@@ -136,6 +143,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.remove(SP_ENLIST);
         edit.remove(SP_ORD);
         edit.remove(SP_STATUS);
+        edit.remove(SP_MILESTONE);
         edit.remove("ordcalc_status_pos");
         edit.apply();
 
@@ -145,6 +153,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         this.ordMS = 0;
         this.popMS = 0;
         this.ptpMS = 0;
+        this.milestoneMS = 0;
         this.pesStatusString = this.pesStatusSpinner.getSelectedItem().toString();
 
         this.updateText(UPDATE_NONE);
@@ -178,6 +187,17 @@ public class ORDSettingsActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         if (this.popMS > 0) calendar.setTimeInMillis(this.popMS);
         new DatePickerDialog(this, this.pop, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public void milestoneDialog(View v) {
+        Calendar calendar = Calendar.getInstance();
+        if (this.milestoneMS > 0) calendar.setTimeInMillis(this.milestoneMS);
+        DatePickerDialog mDialog = new DatePickerDialog(this, this.milestone, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        mDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Clear", (dialog, which) -> {
+            milestoneMS = 0;
+            ORDSettingsActivity.this.updateText(UPDATE_MILESTONE);
+        });
+        mDialog.show();
     }
 
     private class popListener implements DatePickerDialog.OnDateSetListener {
@@ -220,6 +240,16 @@ public class ORDSettingsActivity extends AppCompatActivity {
         }
     }
 
+    private class milestoneListener implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+            Calendar calendar = getCal(i, i1, i2);
+            ORDSettingsActivity.this.milestoneMS = calendar.getTimeInMillis();
+            ORDSettingsActivity.this.updateText(UPDATE_MILESTONE);
+        }
+    }
+
     public static Calendar getCal(int year, int month, int day) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
@@ -242,12 +272,18 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
     public static int getPesStatus(String pes) {
         switch (pes) {
-            case "A/B": return PES_A;
-            case "A/B PTP": return PES_PTP;
-            case "BP": return PES_BP;
-            case "C": return PES_C;
-            case "E": return PES_E;
-            default: return PES_A;
+            case "A/B":
+                return PES_A;
+            case "A/B PTP":
+                return PES_PTP;
+            case "BP":
+                return PES_BP;
+            case "C":
+                return PES_C;
+            case "E":
+                return PES_E;
+            default:
+                return PES_A;
         }
     }
 
@@ -261,9 +297,14 @@ public class ORDSettingsActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.enlistMS);
         switch (pesStatus) {
-            case PES_BP: cal.add(Calendar.WEEK_OF_YEAR, (BP_BMT - ENHANCED_BMT)); break;
-            case PES_PTP: cal.add(Calendar.WEEK_OF_YEAR, (PTP_BMT - ENHANCED_BMT)); break;
-            default: return;
+            case PES_BP:
+                cal.add(Calendar.WEEK_OF_YEAR, (BP_BMT - ENHANCED_BMT));
+                break;
+            case PES_PTP:
+                cal.add(Calendar.WEEK_OF_YEAR, (PTP_BMT - ENHANCED_BMT));
+                break;
+            default:
+                return;
         }
         this.ptpMS = cal.getTimeInMillis();
     }
@@ -286,11 +327,20 @@ public class ORDSettingsActivity extends AppCompatActivity {
         cal.setTimeInMillis(this.enlistMS);
         switch (getPesStatus()) {
             case PES_A:
-            case PES_C: cal.add(Calendar.WEEK_OF_YEAR, ENHANCED_BMT); break;
-            case PES_PTP: cal.add(Calendar.WEEK_OF_YEAR, PTP_BMT); break;
-            case PES_BP: cal.add(Calendar.WEEK_OF_YEAR, BP_BMT); break;
-            case PES_E: cal.add(Calendar.WEEK_OF_YEAR, E_BMT); break;
-            default: return;
+            case PES_C:
+                cal.add(Calendar.WEEK_OF_YEAR, ENHANCED_BMT);
+                break;
+            case PES_PTP:
+                cal.add(Calendar.WEEK_OF_YEAR, PTP_BMT);
+                break;
+            case PES_BP:
+                cal.add(Calendar.WEEK_OF_YEAR, BP_BMT);
+                break;
+            case PES_E:
+                cal.add(Calendar.WEEK_OF_YEAR, E_BMT);
+                break;
+            default:
+                return;
         }
         this.popMS = cal.getTimeInMillis();
     }
@@ -326,6 +376,10 @@ public class ORDSettingsActivity extends AppCompatActivity {
             cal.setTimeInMillis(this.ordMS);
             ordEt.setText(dateFormat.format(cal.getTime()));
         } else ordEt.setText("");
+        if (this.milestoneMS != 0) {
+            cal.setTimeInMillis(this.milestoneMS);
+            milestoneEt.setText(dateFormat.format(cal.getTime()));
+        } else milestoneEt.setText("");
     }
 
     @Override
@@ -337,11 +391,16 @@ public class ORDSettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save: saveAndExit(); return true;
-            case R.id.clear: new AlertDialog.Builder(this).setTitle("Clearing options")
-                    .setMessage("This will clear all of your settings. Are you sure you want to continue?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> clearSettings()).setNegativeButton(android.R.string.no, null).show(); return true;
-            default: return super.onOptionsItemSelected(item);
+            case R.id.save:
+                saveAndExit();
+                return true;
+            case R.id.clear:
+                new AlertDialog.Builder(this).setTitle("Clearing options")
+                        .setMessage("This will clear all of your settings. Are you sure you want to continue?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> clearSettings()).setNegativeButton(android.R.string.no, null).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

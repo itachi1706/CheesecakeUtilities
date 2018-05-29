@@ -44,7 +44,7 @@ public class ORDActivity extends BaseActivity {
     RecyclerView recyclerView;
     TextView ordCounter, ordDaysLabel, ordProgress;
     ArcProgress progressBar;
-    long ordDays, ptpDays, popDays, pdoption;
+    long ordDays, ptpDays, popDays, milestoneDays, pdoption;
 
     private static final String ORD_HOLIDAY_PREF = "ord_sg_holidays";
     private static final long ORD_HOLIDAY_TIMEOUT = 86400000; // 24 hours timeout
@@ -82,6 +82,7 @@ public class ORDActivity extends BaseActivity {
         long ptp = sp.getLong(ORDSettingsActivity.SP_PTP, 0);
         long pop = sp.getLong(ORDSettingsActivity.SP_POP, 0);
         long enlist = sp.getLong(ORDSettingsActivity.SP_ENLIST, 0);
+        long milestone = sp.getLong(ORDSettingsActivity.SP_MILESTONE, 0);
         pdoption = sp.getLong(ORDSettingsActivity.SP_PAYDAY, -1);
         long currentTime = System.currentTimeMillis();
         List<String> menuItems = new ArrayList<>();
@@ -106,6 +107,16 @@ public class ORDActivity extends BaseActivity {
             }
         } else {
             menuItems.add("POP Date not defined. Please define in settings");
+        }
+
+        if (milestone != 0) {
+            if (currentTime > milestone) {
+                menuItems.add("Completed Milestone Parade"); // PTP LOH
+            } else {
+                long duration = milestone - currentTime;
+                milestoneDays = TimeUnit.MILLISECONDS.toDays(duration) + 1;
+                menuItems.add(getResources().getQuantityString(R.plurals.ord_days_countdown, (int) milestoneDays, milestoneDays, "Milestone Parade"));
+            }
         }
 
         if (ord != 0) {
