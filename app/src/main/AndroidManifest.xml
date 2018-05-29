@@ -105,6 +105,32 @@
             android:name=".Modules.ORDCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
 
+        <activity android:name=".Modules.ORDCountdown.WidgetProviders.ORDWidgetConfigurationActivity"
+            android:label="Configure ORD Event Countdown Widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".Modules.ORDCountdown.WidgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
+            android:exported="true"
+            android:label="Update ORD Widgets"
+            tools:ignore="InnerclassSeparator" />
+        
+        <receiver
+            android:name=".Modules.ORDCountdown.WidgetProviders.EventCountdownWidgetProvider"
+            android:label="ORD Event Countdown"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/eventcountdown_widget_provider_info" />
+        </receiver>
+
         <receiver
             android:name=".Modules.ORDCountdown.WidgetProviders.ORDCountdownWidgetProvider"
             android:label="ORD Countdown"
