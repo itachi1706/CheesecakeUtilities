@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.itachi1706.cheesecakeutilities.MainMenuActivity;
@@ -28,7 +27,7 @@ import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
 public class EventCountdownWidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, Intent parentIntent) {
+                                int appWidgetId) {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.eventcountdown_widget_provider);
@@ -39,24 +38,21 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
 
         long time = 0;
         String completeMain = "???", completeSub = "LOH";
-        int pluralToUse;
+        int pluralToUse = R.plurals.ord_event_days;
 
         switch (type.toUpperCase()) {
             case "POP":
                 time = sp.getLong(ORDSettingsActivity.SP_POP, 0);
                 completeMain = "POP";
-                pluralToUse = R.plurals.ord_event_days;
                 break;
             case "ORD":
                 time = sp.getLong(ORDSettingsActivity.SP_ORD, 0);
                 completeMain = "ORD";
-                pluralToUse = R.plurals.ord_event_days;
                 break;
             case "MILESTONE":
                 time = sp.getLong(ORDSettingsActivity.SP_MILESTONE, 0);
                 completeMain = "M. Parade";
                 completeSub = "Completed";
-                pluralToUse = R.plurals.ord_event_days;
                 break;
             default: pluralToUse = -1; break;
         }
@@ -73,7 +69,7 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
             } else {
                 long duration = time - currentTime;
                 long daysTaken = TimeUnit.MILLISECONDS.toDays(duration) + 1;
-                views.setTextViewText(R.id.wid_ord_counter, daysTaken + "");
+                views.setTextViewText(R.id.wid_ord_counter, Long.toString(daysTaken));
                 views.setTextViewText(R.id.wid_ord_days_counter, context.getResources().getQuantityString(R.plurals.ord_event_days, (int) daysTaken, completeMain));
             }
         } else {
@@ -99,10 +95,7 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         if (appWidgetIds != null) {
-            int N = appWidgetIds.length;
-
             for (int mAppWidgetId : appWidgetIds) {
-
                 Intent intent = new Intent(context, UpdateWidgetService.class);
                 intent.putExtra(EXTRA_APPWIDGET_ID, mAppWidgetId);
                 intent.setAction("FROM WIDGET PROVIDER");
@@ -129,8 +122,9 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
 
             if (incomingAppWidgetId != INVALID_APPWIDGET_ID) {
                 try {
-                    updateAppWidget(getApplicationContext(), appWidgetManager, incomingAppWidgetId, intent);
+                    updateAppWidget(getApplicationContext(), appWidgetManager, incomingAppWidgetId);
                 } catch (NullPointerException ignored) {
+                    // Ignore exception
                 }
 
             }
