@@ -60,10 +60,6 @@ public class ORDWidgetConfigurationActivity extends AppCompatActivity {
             mAppWidgetId = extras.getInt(EXTRA_APPWIDGET_ID,
                     INVALID_APPWIDGET_ID);
 
-            AppWidgetProviderInfo providerInfo = AppWidgetManager.getInstance(
-                    getBaseContext()).getAppWidgetInfo(mAppWidgetId);
-            String appWidgetLabel = providerInfo.label;
-
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("ord_widgetid_" + mAppWidgetId, type).apply();
 
             Intent startService = new Intent(this,
