@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Implementation of App Widget functionality.
  */
+@Deprecated
 public class POPCountdownWidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
