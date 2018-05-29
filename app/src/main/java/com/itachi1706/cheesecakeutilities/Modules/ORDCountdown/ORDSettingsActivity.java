@@ -54,11 +54,11 @@ public class ORDSettingsActivity extends AppCompatActivity {
         this.ordMS = 0;
         this.popMS = 0;
         this.ptpMS = 0;
-        this.pop = new popListener();
-        this.ord = new ordListener();
-        this.enlist = new enlistListener();
-        this.milestone = new milestoneListener();
-        this.ptp = new ptpListener();
+        this.pop = new dateListener(UPDATE_POP);
+        this.ord = new dateListener(UPDATE_ORD);
+        this.enlist = new dateListener(UPDATE_ENLIST);
+        this.milestone = new dateListener(UPDATE_MILESTONE);
+        this.ptp = new dateListener(UPDATE_PTP);
 
         this.sp = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -200,53 +200,24 @@ public class ORDSettingsActivity extends AppCompatActivity {
         mDialog.show();
     }
 
-    private class popListener implements DatePickerDialog.OnDateSetListener {
+    private class dateListener implements DatePickerDialog.OnDateSetListener {
+        private int type;
 
-        @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            Calendar calendar = getCal(i, i1, i2);
-            ORDSettingsActivity.this.popMS = calendar.getTimeInMillis();
-            ORDSettingsActivity.this.updateText(UPDATE_POP);
+        public dateListener(int type) {
+            this.type = type;
         }
-    }
-
-    private class enlistListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
             Calendar calendar = getCal(i, i1, i2);
-            ORDSettingsActivity.this.enlistMS = calendar.getTimeInMillis();
-            ORDSettingsActivity.this.updateText(UPDATE_ENLIST);
-        }
-    }
-
-    private class ptpListener implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            Calendar calendar = getCal(i, i1, i2);
-            ORDSettingsActivity.this.ptpMS = calendar.getTimeInMillis();
-            ORDSettingsActivity.this.updateText(UPDATE_PTP);
-        }
-    }
-
-    private class ordListener implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            Calendar calendar = getCal(i, i1, i2);
-            ORDSettingsActivity.this.ordMS = calendar.getTimeInMillis();
-            ORDSettingsActivity.this.updateText(UPDATE_ORD);
-        }
-    }
-
-    private class milestoneListener implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-            Calendar calendar = getCal(i, i1, i2);
-            ORDSettingsActivity.this.milestoneMS = calendar.getTimeInMillis();
-            ORDSettingsActivity.this.updateText(UPDATE_MILESTONE);
+            switch (type) {
+                case UPDATE_MILESTONE: ORDSettingsActivity.this.milestoneMS = calendar.getTimeInMillis(); break;
+                case UPDATE_POP: ORDSettingsActivity.this.popMS = calendar.getTimeInMillis(); break;
+                case UPDATE_ENLIST: ORDSettingsActivity.this.enlistMS = calendar.getTimeInMillis(); break;
+                case UPDATE_PTP: ORDSettingsActivity.this.ptpMS = calendar.getTimeInMillis(); break;
+                case UPDATE_ORD: ORDSettingsActivity.this.ordMS = calendar.getTimeInMillis(); break;
+            }
+            ORDSettingsActivity.this.updateText(type);
         }
     }
 
@@ -272,18 +243,12 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
     public static int getPesStatus(String pes) {
         switch (pes) {
-            case "A/B":
-                return PES_A;
-            case "A/B PTP":
-                return PES_PTP;
-            case "BP":
-                return PES_BP;
-            case "C":
-                return PES_C;
-            case "E":
-                return PES_E;
-            default:
-                return PES_A;
+            case "A/B": return PES_A;
+            case "A/B PTP": return PES_PTP;
+            case "BP": return PES_BP;
+            case "C": return PES_C;
+            case "E": return PES_E;
+            default: return PES_A;
         }
     }
 
@@ -297,14 +262,9 @@ public class ORDSettingsActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.enlistMS);
         switch (pesStatus) {
-            case PES_BP:
-                cal.add(Calendar.WEEK_OF_YEAR, (BP_BMT - ENHANCED_BMT));
-                break;
-            case PES_PTP:
-                cal.add(Calendar.WEEK_OF_YEAR, (PTP_BMT - ENHANCED_BMT));
-                break;
-            default:
-                return;
+            case PES_BP: cal.add(Calendar.WEEK_OF_YEAR, (BP_BMT - ENHANCED_BMT)); break;
+            case PES_PTP: cal.add(Calendar.WEEK_OF_YEAR, (PTP_BMT - ENHANCED_BMT)); break;
+            default: return;
         }
         this.ptpMS = cal.getTimeInMillis();
     }
@@ -327,20 +287,11 @@ public class ORDSettingsActivity extends AppCompatActivity {
         cal.setTimeInMillis(this.enlistMS);
         switch (getPesStatus()) {
             case PES_A:
-            case PES_C:
-                cal.add(Calendar.WEEK_OF_YEAR, ENHANCED_BMT);
-                break;
-            case PES_PTP:
-                cal.add(Calendar.WEEK_OF_YEAR, PTP_BMT);
-                break;
-            case PES_BP:
-                cal.add(Calendar.WEEK_OF_YEAR, BP_BMT);
-                break;
-            case PES_E:
-                cal.add(Calendar.WEEK_OF_YEAR, E_BMT);
-                break;
-            default:
-                return;
+            case PES_C: cal.add(Calendar.WEEK_OF_YEAR, ENHANCED_BMT); break;
+            case PES_PTP: cal.add(Calendar.WEEK_OF_YEAR, PTP_BMT); break;
+            case PES_BP: cal.add(Calendar.WEEK_OF_YEAR, BP_BMT); break;
+            case PES_E: cal.add(Calendar.WEEK_OF_YEAR, E_BMT); break;
+            default: return;
         }
         this.popMS = cal.getTimeInMillis();
     }
