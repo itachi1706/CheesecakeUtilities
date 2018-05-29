@@ -117,7 +117,7 @@
             android:exported="true"
             android:label="Update ORD Widgets"
             tools:ignore="InnerclassSeparator" />
-        
+
         <receiver
             android:name=".Modules.ORDCountdown.WidgetProviders.EventCountdownWidgetProvider"
             android:label="ORD Event Countdown"
@@ -133,7 +133,7 @@
 
         <receiver
             android:name=".Modules.ORDCountdown.WidgetProviders.ORDCountdownWidgetProvider"
-            android:label="ORD Countdown"
+            android:label="ORD Countdown (Deprecated)"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -145,7 +145,7 @@
         </receiver>
         <receiver
             android:name=".Modules.ORDCountdown.WidgetProviders.POPCountdownWidgetProvider"
-            android:label="POP Countdown"
+            android:label="POP Countdown (Deprecated)"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
