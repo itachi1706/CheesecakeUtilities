@@ -4,7 +4,6 @@ package com.itachi1706.cheesecakeutilities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
@@ -21,7 +20,6 @@ import com.itachi1706.appupdater.SettingsInitializer;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.PasswordHelper;
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity;
-import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import java.security.InvalidKeyException;
@@ -77,10 +75,9 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 return false;
             });
 
-            findPreference("veh_mileage_report_rows").setSummary(((EditTextPreference)findPreference("veh_mileage_report_rows")).getText());
-            findPreference("veh_mileage_report_rows").setOnPreferenceChangeListener((preference, newValue) -> {
-                preference.setSummary(String.valueOf(newValue));
-                return true;
+            findPreference("util_settings").setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getActivity(), UtilitySettingsActivity.class));
+                return false;
             });
 
             pw.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -130,7 +127,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                     return true;
                 }
 
-                private boolean newPassword() {
+                private void newPassword() {
                     final EditText newPassword = new EditText(getActivity());
                     newPassword.setSingleLine(true);
                     newPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
@@ -153,18 +150,8 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                                 updatePasswordViews(pw, fp_pw);
                                 Toast.makeText(getActivity(), "Password Updated!", Toast.LENGTH_LONG).show();
                             }).setNegativeButton(android.R.string.cancel, null).setCancelable(false).show();
-                    return true;
                 }
             });
-
-            // Utility Specific
-            // Clear Quiet Hour Utility History
-            findPreference("quiethour_clear_hist").setOnPreferenceClickListener(preference -> {
-                sp.edit().remove(QHConstants.QH_HISTORY).apply();
-                Toast.makeText(getActivity(), "History Cleared", Toast.LENGTH_SHORT).show();
-                return false;
-            });
-
         }
 
         SharedPreferences sp;
