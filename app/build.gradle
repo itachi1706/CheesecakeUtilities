@@ -93,13 +93,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
     implementation project(':appupdater')
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$supportLibraryVersion"
-    implementation "com.google.firebase:firebase-core:$playServicesVersion"
-    implementation "com.google.firebase:firebase-config:$playServicesVersion"
-    implementation "com.google.firebase:firebase-perf:$playServicesVersion"
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-config:16.0.0'
+    implementation 'com.google.firebase:firebase-perf:16.0.0'
     implementation 'commons-io:commons-io:2.5'
     implementation 'org.apache.commons:commons-lang3:3.5'
     implementation 'com.google.code.gson:gson:2.8.2'
@@ -117,16 +117,16 @@ dependencies {
     implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
     // SafetyNet Validator
     implementation 'com.github.scottyab:safetynethelper:0.3.0'
-    implementation "com.google.android.gms:play-services-safetynet:$playServicesVersion"
+    implementation 'com.google.android.gms:play-services-safetynet:15.0.1'
     // Barcode Tools
-    implementation "com.google.android.gms:play-services-vision:$playServicesVersion"
+    implementation 'com.google.android.gms:play-services-vision:15.0.2'
     implementation 'com.google.zxing:core:3.3.1'
     // Lyric Finder
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
     // Vehicle Mileage Tracker
-    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
-    implementation "com.google.firebase:firebase-database:$playServicesVersion"
-    implementation "com.google.firebase:firebase-auth:$playServicesVersion"
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // Others
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'

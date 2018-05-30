@@ -126,9 +126,7 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
                 } catch (NullPointerException ignored) {
                     // Ignore exception
                 }
-
             }
-
         }
     }
 
