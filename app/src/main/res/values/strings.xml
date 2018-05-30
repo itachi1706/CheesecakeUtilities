@@ -215,11 +215,14 @@
     <string name="ord_hint_ptp">Start of BMT Phase (if any)</string>
     <string name="ord_hint_pop">POP</string>
     <string name="ord_hint">ORD</string>
+    <string name="ord_hint_milestone">Milestone</string>
     <string name="ord_hint_enlist">Enlist</string>
     <string name="ord_lbl_pay_day">Pay Day:</string>
     <string name="ord_widget_loading">Inf</string>
     <string name="ord_widget_days_ord">Days to ORD</string>
     <string name="ord_widget_days_pop">Days to POP</string>
+    <string name="ord_widget_days_event">Days to Event</string>
+    <string name="ord_widget_days_milestone">Days to Milestone Parade</string>
     <string name="ord_menu_modify">Modify ORD Settings</string>
     <string name="ord_menu_holiday">Holiday</string>
 
