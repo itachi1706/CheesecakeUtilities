@@ -4,6 +4,10 @@
         <item quantity="one">%1$d day to %2$s</item>
         <item quantity="other">%1$d days to %2$s</item>
     </plurals>
+    <plurals name="ord_event_days">
+        <item quantity="one">Day to %1$s</item>
+        <item quantity="other">Days to %1$s</item>
+    </plurals>
     <plurals name="ord_days">
         <item quantity="one">Day to ORD</item>
         <item quantity="other">Days to ORD</item>
