@@ -8,8 +8,9 @@ admin.initializeApp();
 // Calculate Statistics (non-training mileage only for now)
 exports.calculateStatistics = functions.database.ref('/users/{userid}/records').onWrite(
     (snapshot, context) => {
-        console.log("Function Version: 190420181700")
-        console.log(process.versions);
+        console.log("Function Version: 300520182145")
+        console.log("Dep Versions listed below");
+        console.log(process.versions)
         const records = snapshot.after.val();
         var stats = {totalMileage: 0}
         console.log('Processing User', context.params.userid);
