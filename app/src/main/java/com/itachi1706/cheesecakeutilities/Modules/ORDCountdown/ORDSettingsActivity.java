@@ -29,7 +29,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
     private long enlistMS, ordMS, popMS, ptpMS, milestoneMS, pdoption;
     private String pesStatusString;
-    private TextView enlistEt, ordEt, popEt, ptpEt, milestoneEt;
+    private TextView enlistEt, ordEt, popEt, ptpEt, milestoneEt, leaveEt, offEt;
     private Spinner pesStatusSpinner, payDaySpinner;
     private DatePickerDialog.OnDateSetListener pop, ord, enlist, ptp, milestone;
 
@@ -42,7 +42,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
     public static final int ENHANCED_PES = 21, NORMAL_PES = 24; // NS Weeks
     public static final String SP_ORD = "ordcalc_ord", SP_PTP = "ordcalc_ptp",
             SP_POP = "ordcalc_pop", SP_ENLIST = "ordcalc_enlist", SP_STATUS = "ordcalc_status",
-            SP_MILESTONE = "ordcalc_milestone", SP_PAYDAY = "ordcalc_payday";
+            SP_MILESTONE = "ordcalc_milestone", SP_PAYDAY = "ordcalc_payday", SP_LEAVE = "ordcalc_leave", SP_OFF = "ordcalc_off";
     public static final int PAYDAY_10 = 0, PAYDAY_12 = 1;
 
     @Override
@@ -62,10 +62,12 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
         this.sp = PreferenceManager.getDefaultSharedPreferences(this);
 
-        enlistEt = (EditText) findViewById(R.id.etEnlist);
-        ordEt = (EditText) findViewById(R.id.etORD);
-        popEt = (EditText) findViewById(R.id.etPOP);
-        ptpEt = (EditText) findViewById(R.id.etPTP);
+        enlistEt = findViewById(R.id.etEnlist);
+        ordEt = findViewById(R.id.etORD);
+        popEt = findViewById(R.id.etPOP);
+        ptpEt = findViewById(R.id.etPTP);
+        leaveEt = findViewById(R.id.etLeave);
+        offEt = findViewById(R.id.etOff);
         milestoneEt = (EditText) findViewById(R.id.etMilestone);
         milestoneEt.setOnClickListener(this::milestoneDialog);
         popEt.setOnClickListener(this::popDialog);
@@ -76,6 +78,8 @@ public class ORDSettingsActivity extends AppCompatActivity {
         pesStatusSpinner = findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
         payDaySpinner = findViewById(R.id.spinnerPD);
+        leaveEt.setText(sp.getInt(SP_LEAVE, 0));
+        offEt.setText(sp.getInt(SP_ORD, 0));
     }
 
     @Override
@@ -131,6 +135,8 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.putString(SP_STATUS, this.pesStatusString);
         edit.putLong(SP_PAYDAY, this.pdoption);
         edit.putLong(SP_MILESTONE, this.milestoneMS);
+        edit.putInt(SP_LEAVE, Integer.parseInt(this.leaveEt.getText().toString()));
+        edit.putInt(SP_OFF, Integer.parseInt(this.offEt.getText().toString()));
         edit.putInt("ordcalc_status_pos", this.pesStatusSpinner.getSelectedItemPosition());
         edit.apply();
         Toast.makeText(this, "Settings Saved", Toast.LENGTH_LONG).show();
@@ -144,10 +150,14 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.remove(SP_ORD);
         edit.remove(SP_STATUS);
         edit.remove(SP_MILESTONE);
+        edit.remove(SP_OFF);
+        edit.remove(SP_LEAVE);
         edit.remove("ordcalc_status_pos");
         edit.apply();
 
         this.pesStatusSpinner.setSelection(0);
+        this.offEt.setText("0");
+        this.leaveEt.setText("0");
 
         this.enlistMS = 0;
         this.ordMS = 0;
@@ -203,7 +213,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
     private class dateListener implements DatePickerDialog.OnDateSetListener {
         private int type;
 
-        public dateListener(int type) {
+        dateListener(int type) {
             this.type = type;
         }
 
