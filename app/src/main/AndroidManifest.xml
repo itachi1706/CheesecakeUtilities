@@ -134,31 +134,6 @@
                 android:resource="@xml/eventcountdown_widget_provider_info" />
         </receiver>
 
-        <receiver
-            android:name=".Modules.ORDCountdown.WidgetProviders.ORDCountdownWidgetProvider"
-            android:label="ORD Countdown (Deprecated)"
-            tools:ignore="InnerclassSeparator">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/ordcountdown_widget_provider_info" />
-        </receiver>
-        <receiver
-            android:name=".Modules.ORDCountdown.WidgetProviders.POPCountdownWidgetProvider"
-            android:label="POP Countdown (Deprecated)"
-            tools:ignore="InnerclassSeparator">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/popcountdown_widget_provider_info" />
-        </receiver>
-
         <activity
             android:name=".BmiCalculatorActivity"
             android:exported="true"
