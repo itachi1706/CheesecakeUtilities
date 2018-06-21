@@ -122,10 +122,12 @@ public class ORDActivity extends BaseActivity {
         }
 
         int weekdays = 0;
+        boolean ordloh = false;
 
         if (ord != 0) {
             if (currentTime > ord) {
                 // ORD LOH
+                ordloh = true;
                 ordDaysLabel.setText(R.string.ord_loh);
                 ordCounter.setText(R.string.ord_hint);
                 ordProgress.setText(getString(R.string.ord_complete, "100"));
@@ -145,6 +147,7 @@ public class ORDActivity extends BaseActivity {
                 menuItems.add(weekdays + " Weekdays, " + weekends + " Weekends");
             }
         } else {
+            ordloh = true;
             menuItems.add("ORD Date not defined. Please define in settings");
         }
 
@@ -163,7 +166,8 @@ public class ORDActivity extends BaseActivity {
 
         // Working days calculation
         int workingDays = weekdays - offAndLeave;
-        if (workingDays > 0) menuItems.add(getResources().getQuantityString(R.plurals.ord_wdays, (int) workingDays, workingDays));
+        if (workingDays > 0) menuItems.add(getResources().getQuantityString(R.plurals.ord_wdays, workingDays, workingDays));
+        else if (!ordloh) menuItems.add("No more working days until ORD");
 
 
         if (pdoption != -1) {
