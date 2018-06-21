@@ -78,8 +78,8 @@ public class ORDSettingsActivity extends AppCompatActivity {
         pesStatusSpinner = findViewById(R.id.spinnerPES);
         pesStatusString = pesStatusSpinner.getSelectedItem().toString();
         payDaySpinner = findViewById(R.id.spinnerPD);
-        leaveEt.setText(sp.getInt(SP_LEAVE, 0));
-        offEt.setText(sp.getInt(SP_ORD, 0));
+        leaveEt.setText(String.valueOf(sp.getInt(SP_LEAVE, 0)));
+        offEt.setText(String.valueOf(sp.getInt(SP_OFF, 0)));
     }
 
     @Override
@@ -135,8 +135,11 @@ public class ORDSettingsActivity extends AppCompatActivity {
         edit.putString(SP_STATUS, this.pesStatusString);
         edit.putLong(SP_PAYDAY, this.pdoption);
         edit.putLong(SP_MILESTONE, this.milestoneMS);
-        edit.putInt(SP_LEAVE, Integer.parseInt(this.leaveEt.getText().toString()));
-        edit.putInt(SP_OFF, Integer.parseInt(this.offEt.getText().toString()));
+        int offs = 0, leaves = 0;
+        if (!this.leaveEt.getText().toString().isEmpty()) leaves = Integer.parseInt(this.leaveEt.getText().toString());
+        if (!this.offEt.getText().toString().isEmpty()) offs = Integer.parseInt(this.offEt.getText().toString());
+        edit.putInt(SP_LEAVE, leaves);
+        edit.putInt(SP_OFF, offs);
         edit.putInt("ordcalc_status_pos", this.pesStatusSpinner.getSelectedItemPosition());
         edit.apply();
         Toast.makeText(this, "Settings Saved", Toast.LENGTH_LONG).show();
