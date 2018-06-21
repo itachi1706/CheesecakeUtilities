@@ -20,6 +20,10 @@
         <item quantity="one">%1$d day to Pay Day</item>
         <item quantity="other">%1$d days to Pay Day</item>
     </plurals>
+    <plurals name="ord_wdays">
+        <item quantity="one">%1$d Working Day* to ORD</item>
+        <item quantity="other">%1$d Working Days to ORD</item>
+    </plurals>
     <plurals name="ord_holidays">
         <item quantity="one">%1$d day to %2$s</item>
         <item quantity="other">%1$d days to %2$s</item>
