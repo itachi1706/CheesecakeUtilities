@@ -270,7 +270,8 @@ public class ORDActivity extends BaseActivity {
 
     @Override
     public String getHelpDescription() {
-        return "A Basic ORD Countdown timer for Singapore NSF";
+        return "A Basic ORD Countdown timer for Singapore NSF" +
+                "\n\n*NOTE: Working days refers to weekdays (Monday - Friday) INCLUDING holidays that happens on a weekday";
     }
 
     @Override
