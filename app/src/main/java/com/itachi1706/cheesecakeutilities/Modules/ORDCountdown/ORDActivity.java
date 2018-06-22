@@ -83,6 +83,8 @@ public class ORDActivity extends BaseActivity {
         long pop = sp.getLong(ORDSettingsActivity.SP_POP, 0);
         long enlist = sp.getLong(ORDSettingsActivity.SP_ENLIST, 0);
         long milestone = sp.getLong(ORDSettingsActivity.SP_MILESTONE, 0);
+        int off = sp.getInt(ORDSettingsActivity.SP_OFF, 0);
+        int leave = sp.getInt(ORDSettingsActivity.SP_LEAVE, 0);
         pdoption = sp.getLong(ORDSettingsActivity.SP_PAYDAY, -1);
         long currentTime = System.currentTimeMillis();
         List<String> menuItems = new ArrayList<>();
@@ -119,9 +121,13 @@ public class ORDActivity extends BaseActivity {
             }
         }
 
+        int weekdays = 0;
+        boolean ordloh = false;
+
         if (ord != 0) {
             if (currentTime > ord) {
                 // ORD LOH
+                ordloh = true;
                 ordDaysLabel.setText(R.string.ord_loh);
                 ordCounter.setText(R.string.ord_hint);
                 ordProgress.setText(getString(R.string.ord_complete, "100"));
@@ -137,13 +143,32 @@ public class ORDActivity extends BaseActivity {
                 progressBar.setProgress((int)difference);
 
                 int weekends = calculateWeekends();
-                int weekdays = calculateWeekdays(weekends);
-                menuItems.add(weekdays + " Weekdays");
-                menuItems.add(weekends + " Weekends");
+                weekdays = calculateWeekdays(weekends);
+                menuItems.add(weekdays + " Weekdays, " + weekends + " Weekends");
             }
         } else {
+            ordloh = true;
             menuItems.add("ORD Date not defined. Please define in settings");
         }
+
+        // Offs and Leaves
+        int offAndLeave = off + leave;
+        String offLeaveString = offAndLeave + " Rest Day(s)";
+        if (off > 0 || leave > 0) {
+            offLeaveString += " (";
+
+            if (leave > 0) offLeaveString += leave + " Leave";
+            else offLeaveString += off + " Off";
+            if (leave > 0 && off > 0) offLeaveString += ", " + off + " Off";
+            offLeaveString += ")";
+        }
+        menuItems.add(offLeaveString);
+
+        // Working days calculation
+        int workingDays = weekdays - offAndLeave;
+        if (workingDays > 0) menuItems.add(getResources().getQuantityString(R.plurals.ord_wdays, workingDays, workingDays));
+        else if (!ordloh) menuItems.add("No more working days until ORD");
+
 
         if (pdoption != -1) {
             Calendar cal = Calendar.getInstance();
@@ -249,7 +274,8 @@ public class ORDActivity extends BaseActivity {
 
     @Override
     public String getHelpDescription() {
-        return "A Basic ORD Countdown timer for Singapore NSF";
+        return "A Basic ORD Countdown timer for Singapore NSF" +
+                "\n\n*NOTE: Working days refers to weekdays (Monday - Friday) INCLUDING holidays that happens on a weekday";
     }
 
     @Override
