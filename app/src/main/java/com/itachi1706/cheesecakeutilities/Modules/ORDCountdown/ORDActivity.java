@@ -296,7 +296,7 @@ public class ORDActivity extends BaseActivity {
                     return true;
                 }
                 ArrayList<GCalHolidayItem> holidayList = new ArrayList<>(Arrays.asList(holiday.getOutput()));
-                Collections.sort(holidayList, (o1, o2) -> (o1.getDateInMillis() < o2.getDateInMillis()) ? -1 : ((o1.getDateInMillis() == o2.getDateInMillis()) ? 0 : 1));
+                Collections.sort(holidayList, (o1, o2) -> Long.compare(o1.getDateInMillis(), o2.getDateInMillis()));
                 StringBuilder b = new StringBuilder();
                 for (GCalHolidayItem h : holidayList) {
                     String[] tmp = h.getDate().split("-");
