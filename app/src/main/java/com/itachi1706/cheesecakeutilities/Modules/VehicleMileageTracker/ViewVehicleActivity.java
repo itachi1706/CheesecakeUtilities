@@ -1,21 +1,14 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,14 +51,20 @@ public class ViewVehicleActivity extends AppCompatActivity {
                             for (DataSnapshot d : ds.getChildren()) {
                                 Vehicle v = d.getValue(Vehicle.class);
                                 if (v == null) continue;
-                                vehicleList.add(new DualLineString(v.getName() + " (" + v.getVehicleClass().toUpperCase() + ")", v.getShortname()));
+                                vehicleList.add(new DualLineString(v.getName(), v.getShortname() + " (" + v.getVehicleClass().toUpperCase() + ")"));
                             }
                         }
                     }
                     DualLineStringRecyclerAdapter adapter = new DualLineStringRecyclerAdapter(vehicleList, false);
                     adapter.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
                         TextView test = v.findViewById(android.R.id.text2);
-                        selectEdit = test.getText().toString().replaceAll("[^A-Za-z0-9]", "");
+                        String[] tmp = test.getText().toString().split(" ");
+                        StringBuilder strBuilder = new StringBuilder();
+                        for (int i = 0; i < tmp.length - 1; i++) {
+                            strBuilder.append(tmp[i]).append(" ");
+                        }
+                        selectEdit = strBuilder.toString().trim().replaceAll("[^A-Za-z0-9]", "");
+                        selectClass = tmp[tmp.length - 1].substring(1, tmp[tmp.length - 1].length() - 1).toLowerCase();
                         menu.setHeaderTitle("Edit Vehicle " + selectEdit);
                         menu.add("Edit");
                         menu.add("Delete");
@@ -82,7 +81,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
         }
     }
 
-    private String selectEdit;
+    private String selectEdit, selectClass;
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -91,6 +90,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
             Intent editIntent = new Intent(this, AddNewVehicleActivity.class);
             editIntent.putExtra("edit", true);
             editIntent.putExtra("id", selectEdit);
+            editIntent.putExtra("class", selectClass);
             startActivity(editIntent);
             return true;
         } else if (item.getTitle().equals("Delete")) {
