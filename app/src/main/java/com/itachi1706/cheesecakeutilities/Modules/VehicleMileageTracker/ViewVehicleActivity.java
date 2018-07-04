@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -94,6 +96,13 @@ public class ViewVehicleActivity extends AppCompatActivity {
             startActivity(editIntent);
             return true;
         } else if (item.getTitle().equals("Delete")) {
+            new AlertDialog.Builder(this).setTitle("Confirm Deletion")
+                    .setMessage("Are you sure you want to delete " + selectClass + " vehicle " + selectEdit + "?\n\nTHIS ACTION CANNOT BE UNDONE!")
+                    .setNegativeButton(android.R.string.cancel, null).setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles")
+                                .child(selectClass).child(selectEdit).removeValue();
+                        Toast.makeText(getApplicationContext(), "Vehicle Deleted", Toast.LENGTH_SHORT).show();
+                    }).show();
             return true;
         }
         return false;
