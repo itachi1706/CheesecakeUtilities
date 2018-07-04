@@ -18,7 +18,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:elevation="1dp"
+        android:elevation="2dp"
         app:fab_addButtonColorNormal="@color/colorAccent"
         app:fab_addButtonColorPressed="@color/colorAccent"
         app:fab_addButtonPlusIconColor="@color/white"
@@ -53,6 +53,18 @@
             app:fab_title="Continue from Last Record" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <com.turingtechnologies.materialscrollbar.TouchScrollBar
+        android:id="@+id/scrollBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        app:msb_recyclerView="@+id/veh_mileage_main_list"
+        app:msb_lightOnTouch="true"
+        app:msb_autoHide="false"
+        app:msb_barColor="@color/transparent_gray"
+        android:elevation="1dp"
+        android:layout_height="match_parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/veh_mileage_main_list"

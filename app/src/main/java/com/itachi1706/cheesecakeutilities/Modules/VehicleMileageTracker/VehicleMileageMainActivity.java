@@ -23,6 +23,8 @@ import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.turingtechnologies.materialscrollbar.DateAndTimeIndicator;
+import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +46,8 @@ public class VehicleMileageMainActivity extends BaseActivity {
     private VehicleMileageRecordsAdapter adapter;
     private SharedPreferences sp;
     private String lastRecord;
+
+    private TouchScrollBar scrollBar;
 
 
     @Override
@@ -94,6 +98,8 @@ public class VehicleMileageMainActivity extends BaseActivity {
             adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null, sp.getBoolean(MILEAGE_DEC, true));
             recyclerView.setAdapter(adapter);
         }
+        scrollBar = findViewById(R.id.scrollBar);
+        scrollBar.setIndicator(new DateAndTimeIndicator(this, true, true, true, false), true);
     }
 
     private void launchAddRecordActivity(Context context, String userid, @Nullable String lastRecord) {
