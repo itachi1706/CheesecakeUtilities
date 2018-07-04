@@ -1,12 +1,21 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,11 +58,18 @@ public class ViewVehicleActivity extends AppCompatActivity {
                             for (DataSnapshot d : ds.getChildren()) {
                                 Vehicle v = d.getValue(Vehicle.class);
                                 if (v == null) continue;
-                                vehicleList.add(new DualLineString(v.getName(), v.getShortname() + " (" + v.getVehicleClass().toUpperCase() + ")"));
+                                vehicleList.add(new DualLineString(v.getName() + " (" + v.getVehicleClass().toUpperCase() + ")", v.getShortname()));
                             }
                         }
                     }
                     DualLineStringRecyclerAdapter adapter = new DualLineStringRecyclerAdapter(vehicleList, false);
+                    adapter.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+                        TextView test = v.findViewById(android.R.id.text2);
+                        selectEdit = test.getText().toString().replaceAll("[^A-Za-z0-9]", "");
+                        menu.setHeaderTitle("Edit Vehicle " + selectEdit);
+                        menu.add("Edit");
+                        menu.add("Delete");
+                    });
                     recyclerView.setAdapter(adapter);
                 }
 
@@ -64,6 +80,23 @@ public class ViewVehicleActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+    private String selectEdit;
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Log.d("Test", "Something is clicked");
+        if (item.getTitle().equals("Edit")) {
+            Intent editIntent = new Intent(this, AddNewVehicleActivity.class);
+            editIntent.putExtra("edit", true);
+            editIntent.putExtra("id", selectEdit);
+            startActivity(editIntent);
+            return true;
+        } else if (item.getTitle().equals("Delete")) {
+            return true;
+        }
+        return false;
     }
 
     @Override
