@@ -1,8 +1,10 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,17 +45,14 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         if (getIntent().hasExtra("edit") && getIntent().getBooleanExtra("edit", false)) {
             edit = true;
             String id = getIntent().getStringExtra("id");
-            FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+            String selClass = getIntent().getStringExtra("class");
+            FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.hasChildren()) {
-                            for (DataSnapshot d : ds.getChildren()) {
-                                if (d.getKey().equals(id)) {
-                                    editV = d.getValue(Vehicle.class);
-                                    editRef = d.getRef();
-                                }
-                            }
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot d : dataSnapshot.getChildren()) {
+                        if (d.getKey().equals(id)) {
+                            editV = d.getValue(Vehicle.class);
+                            editRef = d.getRef();
                         }
                     }
 
@@ -67,7 +66,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                     // Unused
                 }
             });
