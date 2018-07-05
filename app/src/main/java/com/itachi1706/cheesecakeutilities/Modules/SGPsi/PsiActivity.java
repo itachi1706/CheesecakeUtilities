@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.ColorUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
@@ -29,7 +30,8 @@ public class PsiActivity extends BaseActivity {
     @Override
     public String getHelpDescription() {
         return "Gives you information about the current PM2.5 and PSI data of Singapore. " +
-                "Also provides a graph to show the history of all of the said data\n" +
+                "Also provides a graph to show the history of all of the said data\n\n" +
+                "Other Weather Data coming soon\n" +
                 "\nData Credits: National Environment Agency, Singapore";
     }
 
@@ -95,20 +97,29 @@ public class PsiActivity extends BaseActivity {
     }
 
     private void processData(PsiGeneral data) {
+        tmp = data; // For updateField() method
         psiRange.setText(data.getPsirange());
-        psiNorth.setText(String.format(Locale.getDefault(), "%d", data.getNorth()));
-        psiSouth.setText(String.format(Locale.getDefault(), "%d", data.getSouth()));
-        psiEast.setText(String.format(Locale.getDefault(), "%d", data.getEast()));
-        psiWest.setText(String.format(Locale.getDefault(), "%d", data.getWest()));
-        psiCentral.setText(String.format(Locale.getDefault(), "%d", data.getCentral()));
+        updateField(psiNorth, data.getNorth());
+        updateField(psiSouth, data.getSouth());
+        updateField(psiEast, data.getEast());
+        updateField(psiWest, data.getWest());
+        updateField(psiCentral, data.getCentral());
         pmRange.setText(data.getParticlerange());
-        pmNorth.setText(String.format(Locale.getDefault(), "%d", data.getParticlenorth()));
-        pmSouth.setText(String.format(Locale.getDefault(), "%d", data.getParticlesouth()));
-        pmEast.setText(String.format(Locale.getDefault(), "%d", data.getParticleeast()));
-        pmWest.setText(String.format(Locale.getDefault(), "%d", data.getParticlewest()));
-        pmCentral.setText(String.format(Locale.getDefault(), "%d", data.getParticlecentral()));
+        updateField(pmNorth, data.getParticlenorth());
+        updateField(pmSouth, data.getParticlesouth());
+        updateField(pmEast, data.getParticleeast());
+        updateField(pmWest, data.getParticlewest());
+        updateField(pmCentral, data.getParticlecentral());
+        tmp = null; // Clear away the data to prevent memory leak
         lastUpdate.setText(data.getTime());
         refreshLayout.setRefreshing(false);
+    }
+
+    private PsiGeneral tmp;
+
+    private void updateField(TextView view, int data) {
+        view.setText(String.format(Locale.getDefault(), "%d", data));
+        view.setTextColor(ColorUtils.Companion.getColorFromVariable(this, tmp.getColor(data)));
     }
 
     static class PsiDataHandler extends Handler {
