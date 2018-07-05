@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.SGPsi
 
+import com.itachi1706.cheesecakeutilities.Util.ColorUtils
+
 /**
  * Created by Kenneth on 18/2/2018.
  * for com.itachi1706.cheesecakeutilities.Modules.SGPsi in CheesecakeUtilities
@@ -22,4 +24,12 @@ class PsiGeneral {
     val particlewest: Int = 0
     val particlecentral: Int = 0
     val rawtimestamp: Long = 0
+
+    fun getColor(value: Int): Int {
+        if (value <= 50) return ColorUtils.GREEN
+        if (value <= 100) return ColorUtils.BLUE
+        if (value <= 200) return ColorUtils.YELLOW
+        if (value <= 300) return ColorUtils.ORANGE
+        return ColorUtils.RED
+    }
 }
