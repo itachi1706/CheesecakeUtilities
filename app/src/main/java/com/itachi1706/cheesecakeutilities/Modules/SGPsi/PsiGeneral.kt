@@ -26,7 +26,7 @@ class PsiGeneral {
     val rawtimestamp: Long = 0
 
     fun getColor(value: Int): Int {
-        if (value <= 50) return ColorUtils.GREEN
+        if (value <= 50) return ColorUtils.DARK_GREEN
         if (value <= 100) return ColorUtils.BLUE
         if (value <= 200) return ColorUtils.YELLOW
         if (value <= 300) return ColorUtils.ORANGE
