@@ -22,16 +22,18 @@ class ColorUtils {
                 BLUE -> return ContextCompat.getColor(context, R.color.blue)
                 INDIGO -> return ContextCompat.getColor(context, R.color.indigo)
                 VIOLET -> return ContextCompat.getColor(context, R.color.violet)
+                DARK_GREEN -> return ContextCompat.getColor(context, R.color.dark_green)
             }
             return ContextCompat.getColor(context, R.color.black)
         }
 
         val RED = 0
         val ORANGE = 1
-        val YELLOW = 1
-        val GREEN = 1
-        val BLUE = 1
-        val INDIGO = 1
-        val VIOLET = 1
+        val YELLOW = 2
+        val GREEN = 3
+        val BLUE = 4
+        val INDIGO = 5
+        val VIOLET = 6
+        val DARK_GREEN = 7
     }
 }
