@@ -29,7 +29,8 @@ public class PsiActivity extends BaseActivity {
     @Override
     public String getHelpDescription() {
         return "Gives you information about the current PM2.5 and PSI data of Singapore. " +
-                "Also provides a graph to show the history of all of the said data\n" +
+                "Also provides a graph to show the history of all of the said data\n\n" +
+                "Other Weather Data coming soon\n" +
                 "\nData Credits: National Environment Agency, Singapore";
     }
 
