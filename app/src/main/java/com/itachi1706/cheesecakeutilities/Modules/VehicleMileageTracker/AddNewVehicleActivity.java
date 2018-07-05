@@ -1,14 +1,21 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
@@ -18,6 +25,9 @@ public class AddNewVehicleActivity extends AppCompatActivity {
     private EditText name, longname;
     private Spinner vehClass;
     private LinearLayout layout;
+    private boolean edit = false;
+    private DatabaseReference editRef;
+    private Vehicle editV = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +40,52 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         Button addVehicle = findViewById(R.id.veh_mileage_add_veh);
         layout = findViewById(R.id.veh_mileage_layout_vehicle);
         addVehicle.setOnClickListener(v -> addVehicle());
+
+        // Check if edit mode
+        if (getIntent().hasExtra("edit") && getIntent().getBooleanExtra("edit", false)) {
+            edit = true;
+            String id = getIntent().getStringExtra("id");
+            String selClass = getIntent().getStringExtra("class");
+            FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot d : dataSnapshot.getChildren()) {
+                        if (d.getKey().equals(id)) {
+                            editV = d.getValue(Vehicle.class);
+                            editRef = d.getRef();
+                        }
+                    }
+
+                    name.setText(editV.getShortname()); // Disable shortname edit
+                    name.setEnabled(false);
+                    if (getSupportActionBar() != null) getSupportActionBar().setTitle("Edit Vehicle (" + editV.getShortname() + ")");
+                    longname.setText(editV.getName());
+                    vehClass.setVisibility(View.INVISIBLE);
+                    findViewById(R.id.spinnerVehLbl).setVisibility(View.INVISIBLE);
+                    addVehicle.setText("Edit Vehicle");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Unused
+                }
+            });
+        }
     }
 
     private void addVehicle() {
         // Validation
         if (!validate()) {
             Snackbar.make(layout, "Please fill up all of the fields", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (edit) {
+            // Update record based on class
+            editV.setName(longname.getText().toString());
+            editRef.setValue(editV);
+            Toast.makeText(this, "Edit successful", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 

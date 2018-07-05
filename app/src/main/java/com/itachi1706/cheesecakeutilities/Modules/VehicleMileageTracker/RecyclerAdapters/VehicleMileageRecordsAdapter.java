@@ -19,10 +19,12 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Firebase
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.R;
+import com.turingtechnologies.materialscrollbar.IDateableAdapter;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
@@ -33,7 +35,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.F
  * Created by itachi1706 on 2/20/2016.
  * For com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters in Cheesecake Utilities.
  */
-public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMileageRecordsAdapter.VehicleMileageRecordsViewHolder> {
+public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMileageRecordsAdapter.VehicleMileageRecordsViewHolder> implements IDateableAdapter {
     private List<Record> recordsList, hidden;
     private List<String> tags, hiddenTags;
     private DataSnapshot vehicles;
@@ -113,6 +115,11 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                 inflate(R.layout.recyclerview_vehicle_mileage_record, viewGroup, false);
 
         return new VehicleMileageRecordsViewHolder(itemView);
+    }
+
+    @Override
+    public Date getDateForElement(int element) {
+        return new Date(recordsList.get(element).getDatetimeFrom());
     }
 
 
