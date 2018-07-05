@@ -24,6 +24,8 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
     private List<DualLineString> stringList;
     private boolean announce = false, htmlformat = false;
     private View.OnClickListener onClickListener = null;
+    private View.OnLongClickListener onLongClickListener = null;
+    private View.OnCreateContextMenuListener createContextMenuListener = null;
 
     public DualLineStringRecyclerAdapter(List<DualLineString> strings) {
         this(strings, true);
@@ -54,6 +56,10 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
         onClickListener = listener;
     }
 
+    public void setOnLongClickListener(View.OnLongClickListener listener) { onLongClickListener = listener; }
+
+    public void setOnCreateContextMenuListener(View.OnCreateContextMenuListener listener) { createContextMenuListener = listener; }
+
     public void update(List<DualLineString> strings) {
         this.stringList = strings;
     }
@@ -82,7 +88,7 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
                 from(viewGroup.getContext()).
                 inflate(R.layout.recyclerview_default_simple_list_item_2, viewGroup, false);
 
-        return new StringViewHolder(itemView, onClickListener);
+        return new StringViewHolder(itemView, onClickListener, onLongClickListener);
     }
 
 
@@ -90,12 +96,14 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
 
         protected TextView title, subtitle;
 
-        public StringViewHolder(View v, @Nullable View.OnClickListener listener)
+        public StringViewHolder(View v, @Nullable View.OnClickListener listener, @Nullable View.OnLongClickListener longClickListener)
         {
             super(v);
             title = v.findViewById(android.R.id.text1);
             subtitle = v.findViewById(android.R.id.text2);
             v.setOnClickListener((listener == null) ? this : listener);
+            if (longClickListener != null) v.setOnLongClickListener(longClickListener);
+            if (createContextMenuListener != null) v.setOnCreateContextMenuListener(createContextMenuListener);
         }
 
         @Override
