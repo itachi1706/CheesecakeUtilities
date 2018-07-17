@@ -43,13 +43,11 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.Backu
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.R;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,6 +55,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.itachi1706.appupdater.Util.ValidationHelper.bytesToHex;
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
@@ -330,11 +329,11 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             StringBuilder signatureList = new StringBuilder();
             try {
                 if (signatures.length == 1)
-                    signatureList = new StringBuilder(getSignatureString(signatures[0]).trim());
+                    signatureList = new StringBuilder(ValidationHelper.getSignatureString(signatures[0]).trim());
 
                 else {
                     for (Signature s : signatures) {
-                        signatureList.append(getSignatureString(s).trim()).append("\n");
+                        signatureList.append(ValidationHelper.getSignatureString(s).trim()).append("\n");
                     }
                 }
                 return signatureList.toString();
@@ -359,41 +358,6 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             return configList.toString();
         }
         return "";
-    }
-
-    private X509Certificate getCert(byte[] cert) throws CertificateException {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(cert);
-        CertificateFactory cf = CertificateFactory.getInstance("X509");
-        return (X509Certificate) cf.generateCertificate(inputStream);
-    }
-
-    private String getSignatureString(Signature sig) throws NoSuchAlgorithmException {
-        byte[] cert = sig.toByteArray();
-        try {
-            return bytesToHex(MessageDigest.getInstance("SHA1").digest(getCert(cert).getEncoded()));
-        } catch (CertificateException e) {
-            Log.e("Signature", "Cannot Create Signature, Falling back");
-            Log.e("Signature", "Error: " + e.getLocalizedMessage());
-            MessageDigest md = MessageDigest.getInstance("SHA1");
-            md.update(sig.toByteArray());
-            return bytesToHex(md.digest());
-        }
-    }
-
-    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for ( int j = 0; j < bytes.length; j++ ) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < hexChars.length; i++) {
-            if (i % 2 == 0 && i != 0) sb.append(":");
-            sb.append(hexChars[i]);
-        }
-        return sb.toString();
     }
 
     private String humanReadableByteCount(long bytes, boolean si) {
@@ -608,7 +572,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     // Get primary signature only
     private void viewCertificate(Signature signature) {
         try {
-            X509Certificate c = getCert(signature.toByteArray());
+            X509Certificate c = ValidationHelper.getCert(signature.toByteArray());
             byte[] sigCert = c.getEncoded();
 
             new AlertDialog.Builder(this).setTitle("Certificate Information for " + appName.getText())
