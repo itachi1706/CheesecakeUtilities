@@ -19,9 +19,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
-import com.scottyab.safetynet.SafetyNetHelper;
-import com.scottyab.safetynet.SafetyNetResponse;
-import com.scottyab.safetynet.Utils;
+import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetHelper;
+import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetResponse;
+import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,7 +56,7 @@ public class SafetyNetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_net);
 
-        safetyNetHelper = new SafetyNetHelper(API_KEY);
+        safetyNetHelper = new SafetyNetHelper(API_KEY, getApplicationContext());
         Log.d(TAG, "AndroidAPIKEY: " + Utils.getSigningKeyFingerprint(this) + ";" + getPackageName());
 
         resultsTV = findViewById(R.id.results);
