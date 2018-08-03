@@ -19,8 +19,8 @@ android {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 664
-        versionName "4.4.1"
+        versionCode 681
+        versionName "4.4.2"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resValue "string", "tray__authority", "${applicationId}.tray"
