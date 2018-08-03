@@ -251,6 +251,10 @@ public class ListApplicationFragment extends Fragment {
         @Override
         protected Void doInBackground(Boolean... params) {
             boolean system = params[0];
+            if (getContext() == null) {
+                Log.e("LoadApp", "An error occurred loading app list");
+                return null;
+            }
             PackageManager pm = getContext().getPackageManager();
             final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
             finalStr = new ArrayList<>();
