@@ -57,6 +57,7 @@ android {
         }
         debug {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
+            ext.alwaysUpdateBuildId = false
             // Disable Fabric Stuff (Deprecated, it is now disabled by default and enabled in runtime)
             //ext.enableCrashlytics = false
             //if (isTravis) {

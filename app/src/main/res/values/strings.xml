@@ -98,6 +98,7 @@
     <string name="sys_info_OS2">OS Codename</string>
     <string name="sys_info_OS3">OS Info</string>
     <string name="sys_info_OS4">Up time:</string>
+    <string name="sys_info_OS5">Advanced Android Features</string>
     <string name="sys_info_battery1">Battery Statistics</string>
     <string name="sys_info_batteryBarText">Level Indicator</string>
     <string name="sys_info_battery_charging">Charging</string>
