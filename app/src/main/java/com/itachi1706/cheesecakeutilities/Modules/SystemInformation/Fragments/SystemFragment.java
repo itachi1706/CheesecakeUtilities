@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -18,9 +19,14 @@ import android.widget.TextView;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SystemFragment extends Fragment {
     private static final int EVENT_TICK = 1;
@@ -74,6 +80,7 @@ public class SystemFragment extends Fragment {
         intMem.setText(getIntMem());
         TextView javaInfo = view.findViewById(R.id.javaInfoTxt);
         javaInfo.setText(getJavaInfo());
+        ((TextView) view.findViewById(R.id.adv_android_text)).setText(getAdvancedAndroidInfo());
         return view;
     }
 
@@ -168,6 +175,46 @@ public class SystemFragment extends Fragment {
         }
         return path + "\nTotal Space: " + totalSize + unitTotal + "\nAvailable: " + availableSize +
                 unitAvail + "\nUsed: " + usedSize + unitUsed;
+    }
+
+    public static String getAdvancedAndroidInfo() {
+        return "Treble Enabled: " + getBuildPropProperty("ro.treble.enabled", "Enabled")
+                + "\nSeamless Update (A/B Partitions): " + getBuildPropProperty("ro.build.ab_update", null)
+                + "\nOEM Unlock: " + getBuildPropProperty("ro.oem_unlock_supported", null)
+                + "\nMove2SD Enabled: " + getBuildPropProperty("ro.move2dcard.enable", null)
+                + "\nVerified Boot State: " + getBuildPropProperty("ro.boot.verifiedbootstate", null)
+                + "\nDM-Verity Status: " + getBuildPropProperty("ro.boot.veritymode", null)
+                + "\nSecure Boot Enabled: " + getBuildPropProperty("ro.boot.secureboot", null)
+                + "\nWaterproofed Device: " + getBuildPropProperty("ro.support.waterproof", null)
+                + "\nDolby Audio Support: " + getBuildPropProperty("audio.dolby.ds2.enabled", null);
+    }
+
+    private static String getBuildPropProperty(String key, @Nullable String trueString) {
+        String line;
+        Pattern pattern = Pattern.compile("\\[(.+)\\]: \\[(.+)\\]");
+        Matcher m;
+        try {
+            Process p = Runtime.getRuntime().exec("getprop");
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                m = pattern.matcher(line);
+                if (m.find()) {
+                    MatchResult result = m.toMatchResult();
+                    if(result.group(1).equals(key)) {
+                        if (result.group(2).equals("1") || result.group(2).equals("true"))
+                            if (trueString == null) return "Supported";
+                            else return trueString;
+                        else if (result.group(2).equals("0") || result.group(2).equals("false"))
+                            return "Not Supported";
+                        return result.group(2);
+                    }
+                }
+            }
+            input.close();
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+        return "Not Supported";
     }
 
     private static String getJavaInfo() {
