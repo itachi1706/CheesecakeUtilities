@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -47,7 +48,7 @@ public class AndroidDeviceVerifier {
         void success(boolean isValidSignature);
     }
 
-    public AndroidDeviceVerifier(@NonNull String apiKey, @NonNull String signatureToVerify) {
+    AndroidDeviceVerifier(@NonNull String apiKey, @NonNull String signatureToVerify) {
         this.apiKey = apiKey;
         this.signatureToVerify = signatureToVerify;
     }
@@ -62,10 +63,10 @@ public class AndroidDeviceVerifier {
      * Provide the trust managers for the URL connection. By Default this uses the system defaults plus the GoogleApisTrustManager (SSL pinning)
      *
      * @return array of TrustManager including system defaults plus the GoogleApisTrustManager (SSL pinning)
-     * @throws KeyStoreException
-     * @throws NoSuchAlgorithmException
+     * @throws KeyStoreException No keystore
+     * @throws NoSuchAlgorithmException No algorithm
      */
-    protected TrustManager[] getTrustManagers() throws KeyStoreException, NoSuchAlgorithmException {
+    private TrustManager[] getTrustManagers() throws KeyStoreException, NoSuchAlgorithmException {
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         //init with the default system trustmanagers
         trustManagerFactory.init((KeyStore) null);
@@ -77,6 +78,7 @@ public class AndroidDeviceVerifier {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     private class AndroidDeviceVerifierTask extends AsyncTask<Void, Void, Boolean> {
 
         private Exception error;

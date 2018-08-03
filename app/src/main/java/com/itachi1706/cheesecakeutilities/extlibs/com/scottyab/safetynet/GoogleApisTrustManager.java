@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
+import android.annotation.SuppressLint;
 import android.util.Base64;
 
 import java.security.MessageDigest;
@@ -20,10 +21,10 @@ public class GoogleApisTrustManager implements X509TrustManager {
             "sha1/Q9rWMO5T+KmAym79hfRqo3mQ4Oo=",
             "sha1/wHqYaI2J+6sFZAwRfap9ZbjKzE4="};
 
+    @SuppressLint("TrustAllX509TrustManager")
     @Override
-    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+    public void checkClientTrusted(X509Certificate[] chain, String authType) {
         //NOT IMP
-
     }
 
     @Override
@@ -45,7 +46,7 @@ public class GoogleApisTrustManager implements X509TrustManager {
     private boolean validateCertificatePin(X509Certificate certificate)
             throws CertificateException {
 
-        MessageDigest digest = null;
+        MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA1");
         } catch (NoSuchAlgorithmException e) {

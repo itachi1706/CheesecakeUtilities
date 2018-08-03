@@ -83,7 +83,7 @@ public class SafetyNetResponse {
     /**
      * If the value of "ctsProfileMatch" is true, then the profile of the device running your app matches the profile of a device that has passed Android compatibility testing.
      *
-     * @return
+     * @return true if CtsProfile matches
      */
     public boolean isCtsProfileMatch() {
         return ctsProfileMatch;
@@ -92,7 +92,7 @@ public class SafetyNetResponse {
     /**
      * If the value of "basicIntegrity" is true, then the device running your app likely wasn't tampered with, but the device has not necessarily passed Android compatibility testing.
      *
-     * @return
+     * @return true if Basic Integrity intact
      */
     public boolean isBasicIntegrity() {
         return basicIntegrity;
