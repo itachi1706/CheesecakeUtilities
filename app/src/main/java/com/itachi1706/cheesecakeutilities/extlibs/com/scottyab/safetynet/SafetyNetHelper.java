@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -9,11 +8,12 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.safetynet.SafetyNet;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -24,24 +24,16 @@ import java.util.List;
  * Doesn't handle Google play services errors, just calls error on callback.
  * <p/>
  */
-public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class SafetyNetHelper {
 
     private static final String TAG = SafetyNetHelper.class.getSimpleName();
     public static final int SAFETY_NET_API_REQUEST_UNSUCCESSFUL = 999;
     public static final int RESPONSE_ERROR_VALIDATING_SIGNATURE = 1000;
     public static final int RESPONSE_FAILED_SIGNATURE_VALIDATION = 1002;
-    public static final int RESPONSE_FAILED_SIGNATURE_VALIDATION_NO_API_KEY = 1003;
+    private static final int RESPONSE_FAILED_SIGNATURE_VALIDATION_NO_API_KEY = 1003;
     public static final int RESPONSE_VALIDATION_FAILED = 1001;
 
-
-    /**
-     * This is used to validate the payload response from the SafetyNet.API,
-     * if it exceeds this duration, the response is considered invalid.
-     */
-    private static int MAX_TIMESTAMP_DURATION = 2 * 60 * 1000;
-
     private final SecureRandom secureRandom;
-    private GoogleApiClient googleApiClient;
 
     //used for local validation of API response payload
     private byte[] requestNonce;
@@ -55,19 +47,17 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
     private SafetyNetWrapperCallback callback;
 
     private String googleDeviceVerificationApiKey;
-    private Context mContext;
     private SafetyNetResponse lastResponse;
 
     /**
      * @param googleDeviceVerificationApiKey used to validate safety net response see https://developer.android.com/google/play/safetynet/start.html#verify-compat-check
      */
-    public SafetyNetHelper(String googleDeviceVerificationApiKey, Context appContext) {
+    public SafetyNetHelper(String googleDeviceVerificationApiKey) {
         secureRandom = new SecureRandom();
         if (TextUtils.isEmpty(googleDeviceVerificationApiKey)) {
             Log.w(TAG, "Google Device Verification Api Key not defined, cannot properly validate safety net response without it. See https://developer.android.com/google/play/safetynet/start.html#verify-compat-check");
         }
         this.googleDeviceVerificationApiKey = googleDeviceVerificationApiKey;
-        this.mContext = appContext;
     }
 
     /**
@@ -79,15 +69,6 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         void success(boolean ctsProfileMatch, boolean basicIntegrity);
     }
 
-    private synchronized void buildGoogleApiClient(Context context) {
-        googleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(SafetyNet.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-    }
-
-
     /**
      * Call the SafetyNet test to check if this device profile /ROM has passed the CTS test
      *
@@ -95,8 +76,11 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
      * @param safetyNetWrapperCallback results and error handling
      */
     public void requestTest(@NonNull final Context context, final SafetyNetWrapperCallback safetyNetWrapperCallback) {
-        buildGoogleApiClient(context);
-        googleApiClient.connect();
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
+            // The SafetyNet Attestation API is not available.
+            callback.error(GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context), "Google Play services connection failed");
+            return;
+        }
         packageName = context.getPackageName();
         callback = safetyNetWrapperCallback;
 
@@ -104,26 +88,25 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         Log.d(TAG, "apkCertificateDigests:" + apkCertificateDigests);
         apkDigest = Utils.calcApkDigest(context);
         Log.d(TAG, "apkDigest:" + apkDigest);
+        runSafetyNetTest(context);
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.v(TAG, "Google play services connected");
-        runSafetyNetTest();
-    }
-
-    private void runSafetyNetTest() {
+    private void runSafetyNetTest(@NonNull final Context context) {
         Log.v(TAG, "running SafetyNet.API Test");
         requestNonce = generateOneTimeRequestNonce();
         requestTimestamp = System.currentTimeMillis();
 
-        SafetyNet.getClient(mContext).attest(requestNonce, googleDeviceVerificationApiKey)
+        SafetyNet.getClient(context).attest(requestNonce, googleDeviceVerificationApiKey)
                 .addOnSuccessListener(attestationResponse -> {
                     final String jwsResult = attestationResponse.getJwsResult();
                     final SafetyNetResponse response = parseJsonWebSignature(jwsResult);
                     lastResponse = response;
 
                     //only need to validate the response if it says we pass
+                    if (response == null) {
+                        callback.error(SAFETY_NET_API_REQUEST_UNSUCCESSFUL, "SafetyNet Response NULL");
+                        return;
+                    }
                     if (!response.isCtsProfileMatch() || !response.isBasicIntegrity()) {
                         callback.success(response.isCtsProfileMatch(), response.isBasicIntegrity());
                     } else {
@@ -165,7 +148,7 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
     /**
      * Gets the previous successful call to the safetynetAPI - this is mainly for debug purposes.
      *
-     * @return
+     * @return Last Response
      */
     public SafetyNetResponse getLastResponse() {
         return lastResponse;
@@ -193,13 +176,18 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         }
 
         long durationOfReq = response.getTimestampMs() - requestTimestamp;
+        /*
+         * This is used to validate the payload response from the SafetyNet.API,
+         * if it exceeds this duration, the response is considered invalid.
+         */
+        int MAX_TIMESTAMP_DURATION = 2 * 60 * 1000;
         if (durationOfReq > MAX_TIMESTAMP_DURATION) {
             Log.e(TAG, "Duration calculated from the timestamp of response \"" + durationOfReq + " \" exceeds permitted duration of \"" + MAX_TIMESTAMP_DURATION + "\"");
             return false;
         }
 
         if (!Arrays.equals(apkCertificateDigests.toArray(), response.getApkCertificateDigestSha256())) {
-            Log.e(TAG, "invalid apkCertificateDigest, local/expected = " + Arrays.asList(apkCertificateDigests));
+            Log.e(TAG, "invalid apkCertificateDigest, local/expected = " + Collections.singletonList(apkCertificateDigests));
             Log.e(TAG, "invalid apkCertificateDigest, response = " + Arrays.asList(response.getApkCertificateDigestSha256()));
             return false;
         }
@@ -231,22 +219,9 @@ public class SafetyNetHelper implements GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
-
     private byte[] generateOneTimeRequestNonce() {
         byte[] nonce = new byte[32];
         secureRandom.nextBytes(nonce);
         return nonce;
     }
-
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        callback.error(connectionResult.getErrorCode(), "Google Play services connection failed");
-    }
-
 }

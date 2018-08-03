@@ -56,7 +56,7 @@ public class SafetyNetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_net);
 
-        safetyNetHelper = new SafetyNetHelper(API_KEY, getApplicationContext());
+        safetyNetHelper = new SafetyNetHelper(API_KEY);
         Log.d(TAG, "AndroidAPIKEY: " + Utils.getSigningKeyFingerprint(this) + ";" + getPackageName());
 
         resultsTV = findViewById(R.id.results);
