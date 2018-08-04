@@ -9,16 +9,13 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsApiGraphActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
@@ -260,26 +258,8 @@ public class ListApplicationFragment extends Fragment {
                 });
             } else {
                 final File fileToShare = f;
-                builder.setPositiveButton("Share", (dialog1, which2) -> {
-                    Intent shareFileIntent = new Intent(Intent.ACTION_SEND);
-                    if (appName || appVersion)
-                        shareFileIntent.setType("text/csv");
-                    else
-                        shareFileIntent.setType("text/plain");
-                    Uri shareUri;
-                    // Android O Strict Mode crash fix
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        Log.i("ShareAppList", "Post-Oreo: Using new Content URI method");
-                        Log.i("ShareAppList", "Invoking Content Provider " + getContext().getPackageName() + ".appupdater.provider");
-                        shareUri = FileProvider.getUriForFile(getContext(), getContext().getPackageName()
-                                + ".appupdater.provider", fileToShare);
-                    } else {
-                        Log.i("ShareAppList", "Pre-Oreo: Fallbacking to old method as it worked previously");
-                        shareUri = Uri.fromFile(fileToShare);
-                    }
-                    shareFileIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
-                    startActivity(Intent.createChooser(shareFileIntent, "Share App List File with"));
-                });
+                builder.setPositiveButton("Share", (dialog1, which2) -> BackupHelper.shareFile("ShareAppList", getContext(),
+                        fileToShare, "Share App List File with", (appName || appVersion) ? "text/csv" : "text/plain"));
             }
             builder.show();
             return false;
