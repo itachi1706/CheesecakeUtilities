@@ -3,17 +3,22 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,13 +45,16 @@ import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+import static org.apache.commons.lang3.StringEscapeUtils.escapeCsv;
 
 /**
  * Created by Kenneth on 18/4/2018.
@@ -115,6 +123,7 @@ public class ListApplicationFragment extends Fragment {
     private boolean sortByApi = false;
     private String appCountString = "";
     private List<String> appPackageNamesInstalled = new ArrayList<>();
+    private List<String> appPackageNamesCleaned = new ArrayList<>();
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -134,6 +143,9 @@ public class ListApplicationFragment extends Fragment {
                                 "left behind by applications no longer installed on your device")
                         .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton("Scan", (dialog, which) -> hasStoragePermissionCheck()).show();
+                break;
+            case R.id.generate_package_list:
+                generatePackageList();
                 break;
             default: return super.onOptionsItemSelected(item);
         }
@@ -185,6 +197,129 @@ public class ListApplicationFragment extends Fragment {
                         " for ghost directories or perform ghost directories cleanup for you", grantResults, getActivity());
                 break;
         }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void generatePackageList() {
+        if (getContext() == null) {
+            Log.e("ListApp", "Error getting context to generate package list");
+            return;
+        }
+        if (appPackageNamesCleaned.isEmpty()) {
+            Toast.makeText(getContext(), "No Apps Installed. Let the scan complete if it have not", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String[] options = {"Include App Name", "Include App Version", "Share as .txt/.csv file"};
+        new MaterialDialog.Builder(getContext()).title("Generate App List")
+                .items(options).itemsCallbackMultiChoice(null, (dialog, which, text) -> {
+            boolean appName = checkIfSelectedOption(text, options[0]);
+            boolean appVersion = checkIfSelectedOption(text, options[1]);
+            boolean isFile = checkIfSelectedOption(text, options[2]);
+
+            String fileOrCsv = generatePackageListString(appName, appVersion);
+
+            File f = null;
+            if (isFile) {
+                String fileExt = ".txt"; // Default create txt file
+                if (appName || appVersion) fileExt = ".csv"; // Create CSV file instead
+                f = new File(getContext().getCacheDir().getAbsolutePath() + "/applist/applist" + fileExt);
+                if (f.exists()) f.delete();
+                try {
+                    f.getParentFile().mkdirs();
+                    f.createNewFile();
+                    FileWriter fw = new FileWriter(f);
+                    fw.append(fileOrCsv);
+                    fw.flush();
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    f = null;
+                    Toast.makeText(getContext(), "Failed to generate file, allowing copy to clipboard instead", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle("Application List")
+                    .setMessage(fileOrCsv).setNeutralButton(R.string.dialog_action_positive_close, null)
+                    .setNegativeButton("Copy", (dialog12, which12) -> {
+                        assert getActivity() != null;
+                        ClipboardManager manager = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                        assert manager != null;
+                        ClipData data = ClipData.newPlainText("applist", fileOrCsv);
+                        manager.setPrimaryClip(data);
+                        Toast.makeText(getContext(), "Copied App List to clipboard", Toast.LENGTH_SHORT).show();
+                    });
+
+            if (f == null) {
+                builder.setPositiveButton("Share", (dialog1, which1) -> {
+                    Intent shareTextIntent = new Intent(Intent.ACTION_SEND);
+                    shareTextIntent.setType("text/plain");
+                    shareTextIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Application List");
+                    shareTextIntent.putExtra(Intent.EXTRA_TEXT, fileOrCsv);
+                    startActivity(Intent.createChooser(shareTextIntent, "Share App List with"));
+                });
+            } else {
+                final File fileToShare = f;
+                builder.setPositiveButton("Share", (dialog1, which2) -> {
+                    Intent shareFileIntent = new Intent(Intent.ACTION_SEND);
+                    if (appName || appVersion)
+                        shareFileIntent.setType("text/csv");
+                    else
+                        shareFileIntent.setType("text/plain");
+                    Uri shareUri;
+                    // Android O Strict Mode crash fix
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        Log.i("ShareAppList", "Post-Oreo: Using new Content URI method");
+                        Log.i("ShareAppList", "Invoking Content Provider " + getContext().getPackageName() + ".appupdater.provider");
+                        shareUri = FileProvider.getUriForFile(getContext(), getContext().getPackageName()
+                                + ".appupdater.provider", fileToShare);
+                    } else {
+                        Log.i("ShareAppList", "Pre-Oreo: Fallbacking to old method as it worked previously");
+                        shareUri = Uri.fromFile(fileToShare);
+                    }
+                    shareFileIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
+                    startActivity(Intent.createChooser(shareFileIntent, "Share App List File with"));
+                });
+            }
+            builder.show();
+            return false;
+        }).positiveText(android.R.string.ok).negativeText(android.R.string.cancel).show();
+    }
+
+    private String generatePackageListString(boolean appName, boolean appVersion) {
+        assert getContext() != null;
+        if (!appName && !appVersion) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : appPackageNamesCleaned) {
+                sb.append(s).append("\n");
+            }
+            return sb.toString().trim();
+        }
+        StringBuilder csv = new StringBuilder();
+        PackageManager pm = getContext().getPackageManager();
+        for (String packageName : appPackageNamesCleaned) {
+            try {
+                PackageInfo packageInfo = pm.getPackageInfo(packageName, 0);
+                if (appName) csv.append(escapeCsv(packageInfo.applicationInfo.loadLabel(pm).toString())).append(",");
+                csv.append(escapeCsv(packageName));
+                if (appVersion) csv.append(",").append(escapeCsv(packageInfo.versionName));
+                csv.append("\n");
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                if (appName) csv.append("Unknown App,");
+                csv.append(escapeCsv(packageName));
+                if (appVersion) csv.append(",").append("Unknown Version");
+                csv.append("\n");
+            }
+        }
+        return csv.toString().trim();
+    }
+
+    private boolean checkIfSelectedOption(CharSequence[] listToCheck, String selection) {
+        for (CharSequence sel : listToCheck) {
+            if (sel.equals(selection)) return true;
+        }
+        return false;
     }
 
     private void scanGhostDir() {
@@ -258,12 +393,14 @@ public class ListApplicationFragment extends Fragment {
             PackageManager pm = getContext().getPackageManager();
             final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
             finalStr = new ArrayList<>();
+            appPackageNamesCleaned.clear();
             for (ApplicationInfo i : pkgAppsList) {
                 appPackageNamesInstalled.add(i.packageName);
                 if (isSystemApp(i) && !system) continue;
+                appPackageNamesCleaned.add(i.packageName);
                 String version = "Unknown";
                 try {
-                    PackageInfo pInfo = getContext().getPackageManager().getPackageInfo(i.packageName, PackageManager.GET_PERMISSIONS);
+                    PackageInfo pInfo = getContext().getPackageManager().getPackageInfo(i.packageName, 0);
                     version = pInfo.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
