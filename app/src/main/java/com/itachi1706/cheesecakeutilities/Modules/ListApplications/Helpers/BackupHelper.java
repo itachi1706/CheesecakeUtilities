@@ -1,5 +1,10 @@
 package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
@@ -60,5 +65,23 @@ public class BackupHelper {
             return folder.mkdir();
         }
         return !folder.isDirectory() && folder.delete() && folder.mkdir();
+    }
+
+    public static void shareFile(String TAG, Context context, File shareFile, String shareIntentTitle, String mime) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType(mime);
+        Uri shareUri;
+        // Android O Strict Mode crash fix
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.i(TAG, "Post-Oreo: Using new Content URI method");
+            Log.i(TAG, "Invoking Content Provider " + context.getPackageName() + ".appupdater.provider");
+            shareUri = FileProvider.getUriForFile(context, context.getPackageName()
+                    + ".appupdater.provider", shareFile);
+        } else {
+            Log.i(TAG, "Pre-Oreo: Fallbacking to old method as it worked previously");
+            shareUri = Uri.fromFile(shareFile);
+        }
+        shareIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
+        context.startActivity(Intent.createChooser(shareIntent, shareIntentTitle));
     }
 }
