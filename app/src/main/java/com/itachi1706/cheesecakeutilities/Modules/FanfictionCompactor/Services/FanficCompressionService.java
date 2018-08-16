@@ -250,7 +250,7 @@ public class FanficCompressionService extends IntentService{
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "fanfic_compress_channel")
                     .setContentTitle(obj.getTitle()).setContentText(obj.getNotificationMessage()).setOngoing(!obj.isCancellable())
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.notification_icon)
                     .setContentIntent(pendingIntent)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(obj.getNotificationMessage()))
                     .setProgress(obj.getMax(), obj.getProgress(), obj.isIndeterminate());
