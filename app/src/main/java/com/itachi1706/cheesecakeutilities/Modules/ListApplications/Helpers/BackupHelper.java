@@ -82,6 +82,6 @@ public class BackupHelper {
             shareUri = Uri.fromFile(shareFile);
         }
         shareIntent.putExtra(Intent.EXTRA_STREAM, shareUri);
-        context.startActivity(Intent.createChooser(shareIntent, shareIntentTitle));
+        context.startActivity(Intent.createChooser(shareIntent, shareIntentTitle).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }
