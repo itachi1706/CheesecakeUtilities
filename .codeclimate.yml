@@ -23,4 +23,6 @@ plugins:
 ratings:
   paths:
   - "**.java"
-exclude_patterns: []
+exclude_patterns: [
+  "References/"
+]
