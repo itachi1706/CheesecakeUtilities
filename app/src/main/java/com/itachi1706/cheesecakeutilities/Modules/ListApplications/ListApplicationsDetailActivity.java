@@ -66,6 +66,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     LinearLayout creator;
     Button backup, launchApp;
 
+    private boolean isSystem = false, isUpdate = false;
     private ApplicationInfo info;
     private String signature;
     private String version;
@@ -96,6 +97,8 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         PackageManager pm = getPackageManager();
         try {
             info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            isSystem = ((info.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+            isUpdate = ((info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             Log.e("ListAppDetail", "Failed to get info for " + packageName + ". Exiting");
@@ -581,11 +584,18 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (isUpdate) menu.findItem(R.id.uninstall).setTitle("Uninstall Updates");
+        else if (isSystem) menu.findItem(R.id.uninstall).setEnabled(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Uri uri = Uri.fromParts("package", info.packageName, null);
         switch (item.getItemId()) {
             case R.id.appsettings: Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", info.packageName, null);
                 intent.setData(uri);
                 Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
                 startActivity(intent); return true;
@@ -603,6 +613,14 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 return true;
             case R.id.share_apk:
                 hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version, true);
+                return true;
+            case R.id.uninstall:
+                Intent uninstallIntent = new Intent();
+                uninstallIntent.setAction(Intent.ACTION_UNINSTALL_PACKAGE);
+                uninstallIntent.setData(uri);
+                Log.v("AppsAdapter", "Uri: " + uri);
+                Log.v("AppsAdapter", "Attempting to uninstall " + appName.getText());
+                startActivity(uninstallIntent);
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
