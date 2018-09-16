@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class PsiGraphFragment extends Fragment {
         String filename = key + "graph.html";
 
         webView.getSettings().setJavaScriptEnabled(true);
+        Log.i("WebView", "UA String: " + webView.getSettings().getUserAgentString());
         webView.loadUrl("file:///android_asset/sgpsi/" + filename);
         return view;
     }
