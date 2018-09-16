@@ -273,6 +273,7 @@
     <string name="list_app_menu_view_store">View in Play Store</string>
     <string name="list_app_menu_copy_sig">Copy Signature</string>
     <string name="list_app_menu_view_cert">View Certificate Info</string>
+    <string name="list_app_menu_uninstall_apk">Uninstall App</string>
     <string name="list_app_menu_share_apk">Share APK File</string>
 
 ***REMOVED*** Barcode Tools -->

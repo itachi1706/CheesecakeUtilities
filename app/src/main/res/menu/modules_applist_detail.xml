@@ -11,4 +11,6 @@
         android:orderInCategory="52" app:showAsAction="never" />
     <item android:id="@+id/viewcert" android:title="@string/list_app_menu_view_cert"
         android:orderInCategory="52" app:showAsAction="never" />
+    <item android:id="@+id/uninstall" android:title="@string/list_app_menu_uninstall_apk"
+        android:orderInCategory="52" app:showAsAction="never" />
 </menu>
