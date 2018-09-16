@@ -40,6 +40,7 @@ import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.File;
@@ -597,7 +598,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             case R.id.appsettings: Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.setData(uri);
-                Log.v("AppsAdapter", "Attempting to launch for " + appName.getText());
+                Log.v(AppsAdapter.TAG, "Attempting to launch for " + appName.getText());
                 startActivity(intent); return true;
             case R.id.playstore:
                 startActivity(new Intent(Intent.ACTION_VIEW,
@@ -618,8 +619,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 Intent uninstallIntent = new Intent();
                 uninstallIntent.setAction(Intent.ACTION_UNINSTALL_PACKAGE);
                 uninstallIntent.setData(uri);
-                Log.v("AppsAdapter", "Uri: " + uri);
-                Log.v("AppsAdapter", "Attempting to uninstall " + appName.getText());
+                Log.v(AppsAdapter.TAG, "Attempting to uninstall " + appName.getText());
                 startActivity(uninstallIntent);
                 return true;
             default: return super.onOptionsItemSelected(item);
