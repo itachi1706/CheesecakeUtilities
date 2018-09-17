@@ -21,6 +21,8 @@ import android.graphics.RectF;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
 
+import java.util.Objects;
+
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
  * overlay view.
@@ -35,8 +37,21 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     private final Paint barcodePaint;
     private final FirebaseVisionBarcode barcode;
 
-    public BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode) {
-        this(overlay, barcode, false);
+    BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode) {
+        super(overlay);
+
+        this.barcode = barcode;
+
+        rectPaint = new Paint();
+        rectPaint.setColor(TEXT_COLOR);
+        rectPaint.setStyle(Paint.Style.STROKE);
+        rectPaint.setStrokeWidth(STROKE_WIDTH);
+
+        barcodePaint = new Paint();
+        barcodePaint.setColor(TEXT_COLOR);
+        barcodePaint.setTextSize(TEXT_SIZE);
+        // Redraw the overlay, as this graphic has been added.
+        postInvalidate();
     }
 
     /**
@@ -57,37 +72,11 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         canvas.drawRect(rect, rectPaint);
 
         // Renders the barcode at the bottom of the box.
-        canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom, barcodePaint);
+        canvas.drawText(Objects.requireNonNull(barcode.getRawValue()), rect.left, rect.bottom, barcodePaint);
     }
 
     // EXTRA METHODS
-    private static final int COLOR_CHOICES[] = {
-            Color.BLUE,
-            Color.CYAN,
-            Color.GREEN
-    };
-    private static int mCurrentColorIndex = 0;
-
     public FirebaseVisionBarcode getBarcode() {
         return barcode;
-    }
-
-    public BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode, boolean colorMode) {
-        super(overlay);
-
-        this.barcode = barcode;
-        mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
-        final int selectedColor = COLOR_CHOICES[mCurrentColorIndex];
-
-        rectPaint = new Paint();
-        rectPaint.setColor((colorMode) ? selectedColor : TEXT_COLOR);
-        rectPaint.setStyle(Paint.Style.STROKE);
-        rectPaint.setStrokeWidth(STROKE_WIDTH);
-
-        barcodePaint = new Paint();
-        barcodePaint.setColor((colorMode) ? selectedColor : TEXT_COLOR);
-        barcodePaint.setTextSize(TEXT_SIZE);
-        // Redraw the overlay, as this graphic has been added.
-        postInvalidate();
     }
 }

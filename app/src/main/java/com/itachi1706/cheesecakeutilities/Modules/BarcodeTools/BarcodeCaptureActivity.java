@@ -34,12 +34,12 @@ import android.view.View;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeScanningProcessor;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSource;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSourcePreview;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
-import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.IOException;
 
@@ -226,7 +226,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         // Find the barcode whose center is closest to the tapped point.
         FirebaseVisionBarcode best = null;
         float bestDistance = Float.MAX_VALUE;
-        for (GraphicOverlay.Graphic mGraphic : mGraphicOverlay.getGraphics()) {
+        for (Object mGraphic : mGraphicOverlay.getGraphics()) {
             if (!(mGraphic instanceof BarcodeGraphic)) continue;
             BarcodeGraphic graphic = (BarcodeGraphic) mGraphic;
             FirebaseVisionBarcode barcode = graphic.getBarcode();
