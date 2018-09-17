@@ -18,6 +18,7 @@ class PsiGeneral {
     val east: Int = 0
     val west: Int = 0
     val central: Int = 0
+    val global: Int = 0
     val particlenorth: Int = 0
     val particlesouth: Int = 0
     val particleeast: Int = 0

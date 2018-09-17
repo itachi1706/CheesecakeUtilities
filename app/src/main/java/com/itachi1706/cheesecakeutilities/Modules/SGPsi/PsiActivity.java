@@ -22,7 +22,7 @@ import java.util.Locale;
 
 public class PsiActivity extends BaseActivity {
     
-    private TextView psiRange, psiNorth, psiSouth, psiEast, psiWest, psiCentral;
+    private TextView psiRange, psiNorth, psiSouth, psiEast, psiWest, psiCentral, psiNational;
     private TextView pmRange, pmNorth, pmSouth, pmEast, pmWest, pmCentral;
     private TextView lastUpdate;
     private SwipeRefreshLayout refreshLayout;
@@ -46,6 +46,7 @@ public class PsiActivity extends BaseActivity {
         psiEast = findViewById(R.id.psi_psi_east);
         psiWest = findViewById(R.id.psi_psi_west);
         psiCentral = findViewById(R.id.psi_psi_cen);
+        psiNational = findViewById(R.id.psi_psi_nat);
         pmRange = findViewById(R.id.psi_pm_range);
         pmNorth = findViewById(R.id.psi_pm_north);
         pmSouth = findViewById(R.id.psi_pm_south);
@@ -104,6 +105,7 @@ public class PsiActivity extends BaseActivity {
         updateField(psiEast, data.getEast());
         updateField(psiWest, data.getWest());
         updateField(psiCentral, data.getCentral());
+        updateField(psiNational, data.getGlobal());
         pmRange.setText(data.getParticlerange());
         updateField(pmNorth, data.getParticlenorth());
         updateField(pmSouth, data.getParticlesouth());
