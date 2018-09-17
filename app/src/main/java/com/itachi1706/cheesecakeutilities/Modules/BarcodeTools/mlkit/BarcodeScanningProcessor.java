@@ -13,7 +13,6 @@
 // limitations under the License.
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -27,7 +26,6 @@ import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.Graphic
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Kenneth on 17/9/2018.
@@ -70,10 +68,7 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
         for (int i = 0; i < barcodes.size(); ++i) {
             FirebaseVisionBarcode barcode = barcodes.get(i);
 
-            int col = getColor();
-            BarcodeGraphic barcodeGraphic;
-            if (col == Color.LTGRAY) barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode);
-            else barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, col);
+            BarcodeGraphic barcodeGraphic = new BarcodeGraphic(graphicOverlay, barcode, true);
             graphicOverlay.add(barcodeGraphic);
         }
     }
@@ -81,17 +76,5 @@ public class BarcodeScanningProcessor extends VisionProcessorBase<List<FirebaseV
     @Override
     protected void onFailure(@NonNull Exception e) {
         Log.e(TAG, "Barcode detection failed " + e);
-    }
-
-    // EXTRA METHODS
-    private int getColor() {
-        Random r = new Random();
-        int random = r.nextInt(4); // 0 - WHITE, 1 - RED, 2 - BLUE, 3 - GREEN
-        switch (random) {
-            case 1: return Color.RED;
-            case 2: return Color.BLUE;
-            case 3: return Color.GREEN;
-            default: return Color.LTGRAY;
-        }
     }
 }
