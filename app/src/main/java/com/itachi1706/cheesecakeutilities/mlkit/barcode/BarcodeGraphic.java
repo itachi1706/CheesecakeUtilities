@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.mitations under the License.
-package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit;
+package com.itachi1706.cheesecakeutilities.mlkit.barcode;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,7 +19,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.GraphicOverlay;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
 
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic

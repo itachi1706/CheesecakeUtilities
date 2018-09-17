@@ -34,11 +34,11 @@ import android.view.View;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit.BarcodeGraphic;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit.BarcodeScanningProcessor;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.CameraSource;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.CameraSourcePreview;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.GraphicOverlay;
+import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeGraphic;
+import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeScanningProcessor;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSource;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSourcePreview;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.IOException;
