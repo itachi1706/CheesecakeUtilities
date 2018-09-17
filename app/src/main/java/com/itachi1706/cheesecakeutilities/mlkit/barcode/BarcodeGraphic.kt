@@ -19,7 +19,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay
-import java.util.*
 
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
@@ -62,7 +61,8 @@ class BarcodeGraphic internal constructor(overlay: GraphicOverlay, // EXTRA METH
         canvas.drawRect(rect, rectPaint)
 
         // Renders the barcode at the bottom of the box.
-        canvas.drawText(Objects.requireNonNull<String>(barcode.rawValue), rect.left, rect.bottom, barcodePaint)
+        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+        canvas.drawText(barcode.rawValue, rect.left, rect.bottom, barcodePaint)
     }
 
     companion object {
