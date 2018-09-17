@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit;
+package com.itachi1706.cheesecakeutilities.mlkit;
 
 import android.graphics.Bitmap;
 import android.media.Image;
@@ -24,9 +24,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.FrameMetadata;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.GraphicOverlay;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.VisionImageProcessor;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.FrameMetadata;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
+import com.itachi1706.cheesecakeutilities.mlkit.camera.VisionImageProcessor;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicBoolean;
