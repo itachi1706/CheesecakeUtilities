@@ -15,20 +15,21 @@
  */
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -42,8 +43,8 @@ import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.Graphic
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
@@ -54,7 +55,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     private static final String TAG = "Barcode-reader";
 
     // permission request codes need to be < 256
-    private static final int PERMISSION_REQUESTS = 1;
+    private static final int RC_CAMERA_PERMISSION = 1;
 
     // constants used to pass extra data in the intent
     public static final String BARCODE_OBJECT = "Barcode";
@@ -81,14 +82,12 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
-        if (allPermissionsGranted()) {
-            // TODO: Remove arg
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             createCameraSource(); // Barcode Detected
         } else {
-            getRuntimePermissions();
+            requestCameraPermission();
         }
 
-        // TODO: Might not be needed
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
 
         Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
@@ -158,68 +157,53 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         }
     }
 
-    private String[] getRequiredPermissions() {
-        try {
-            PackageInfo info =
-                    this.getPackageManager()
-                            .getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
-            String[] ps = info.requestedPermissions;
-            if (ps != null && ps.length > 0) {
-                return ps;
-            } else {
-                return new String[0];
-            }
-        } catch (Exception e) {
-            return new String[0];
-        }
-    }
+    private void requestCameraPermission() {
+        Log.w(TAG, "Camera permission is not granted. Requesting permission");
 
-    private boolean allPermissionsGranted() {
-        for (String permission : getRequiredPermissions()) {
-            if (!isPermissionGranted(this, permission)) {
-                return false;
-            }
-        }
-        return true;
-    }
+        final String[] permissions = new String[]{Manifest.permission.CAMERA};
 
-    private void getRuntimePermissions() {
-        List<String> allNeededPermissions = new ArrayList<>();
-        for (String permission : getRequiredPermissions()) {
-            if (!isPermissionGranted(this, permission)) {
-                allNeededPermissions.add(permission);
-            }
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.CAMERA)) {
+            ActivityCompat.requestPermissions(this, permissions, RC_CAMERA_PERMISSION);
+            return;
         }
 
-        if (!allNeededPermissions.isEmpty()) {
-            ActivityCompat.requestPermissions(
-                    this, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
-        }
+        final Activity thisActivity = this;
+
+        View.OnClickListener listener = view -> ActivityCompat.requestPermissions(thisActivity, permissions,
+                RC_CAMERA_PERMISSION);
+
+        findViewById(R.id.topLayout).setOnClickListener(listener);
+        Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.ok, listener)
+                .show();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.i(TAG, "Permission granted!");
-        if (allPermissionsGranted()) {
-            createCameraSource();
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Barcode Scanner")
-                    .setMessage(R.string.no_camera_permission)
-                    .setPositiveButton(R.string.ok, (dialog, id) -> finish())
-                    .show();
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != RC_CAMERA_PERMISSION) {
+            Log.d(TAG, "Got unexpected permission result: " + requestCode);
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            return;
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
-    private static boolean isPermissionGranted(Context context, String permission) {
-        if (ContextCompat.checkSelfPermission(context, permission)
-                == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission granted: " + permission);
-            return true;
+        if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Camera permission granted - initialize the camera source");
+            // we have permission, so create the camerasource
+            createCameraSource();
+            return;
         }
-        Log.i(TAG, "Permission NOT granted: " + permission);
-        return false;
+
+        logPermError(grantResults);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Barcode Scanner")
+                .setMessage(R.string.no_camera_permission)
+                .setPositiveButton(R.string.ok, (dialog, id) -> finish())
+                .show();
     }
 
     /**
