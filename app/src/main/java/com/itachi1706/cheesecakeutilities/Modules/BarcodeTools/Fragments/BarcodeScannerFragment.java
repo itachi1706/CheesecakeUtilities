@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class BarcodeScannerFragment extends Fragment {
 
         statusMessage = v.findViewById(R.id.status_message);
         barcodeValue = v.findViewById(R.id.barcode_value);
+        barcodeValue.setMovementMethod(new ScrollingMovementMethod());
         useFlash = v.findViewById(R.id.use_flash);
         scan = v.findViewById(R.id.read_barcode);
         scan.setOnClickListener(view -> {
