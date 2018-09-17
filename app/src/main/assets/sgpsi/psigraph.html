@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test JS</title>
+    <title>PSI Graph</title>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>
         function processGraph(a){$.ajax({url:"http://api.itachi1706.com/api/internal/dbPSIToGChart.php?type=24HR&limit=1",dataType:"json",async:!0,success:function(t){a(t)}})}function drawChart(){processGraph(function(a){var t=new google.visualization.DataTable(a);new google.visualization.LineChart(document.getElementById("chart_div")).draw(t,{title:"24 Hour PSI Values (Past 60 Days)",height:500})})}google.charts.load("current",{packages:["corechart"]}),google.charts.setOnLoadCallback(drawChart);
     </script>
