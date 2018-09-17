@@ -118,7 +118,6 @@ dependencies {
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:15.0.1'
     // Barcode Tools
-    implementation 'com.google.android.gms:play-services-vision:15.0.2' // Deprecated
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
     implementation 'com.google.zxing:core:3.3.1'
     // Lyric Finder
