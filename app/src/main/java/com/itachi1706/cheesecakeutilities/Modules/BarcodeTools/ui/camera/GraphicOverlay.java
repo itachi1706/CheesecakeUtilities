@@ -21,7 +21,9 @@ import android.view.View;
 import com.google.android.gms.vision.CameraSource;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 /**
  * A view which renders a series of custom graphics to be overlayed on top of an associated preview
@@ -173,6 +175,31 @@ public class GraphicOverlay extends View {
             for (Graphic graphic : graphics) {
                 graphic.draw(canvas);
             }
+        }
+    }
+
+    // EXTRA METHODS
+    /**
+     * Returns the horizontal scale factor.
+     */
+    public float getWidthScaleFactor() {
+        return widthScaleFactor;
+    }
+
+    /**
+     * Returns the vertical scale factor.
+     */
+    public float getHeightScaleFactor() {
+        return heightScaleFactor;
+    }
+
+    /**
+     * Returns a copy (as a list) of the set of all active graphics.
+     * @return list of all active graphics.
+     */
+    public List<Graphic> getGraphics() {
+        synchronized (lock) {
+            return new Vector(graphics);
         }
     }
 }

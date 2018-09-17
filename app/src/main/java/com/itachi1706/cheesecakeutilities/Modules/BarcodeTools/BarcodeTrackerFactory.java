@@ -20,18 +20,18 @@ import android.content.Context;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.GraphicOverlay;
 
 /**
  * Factory for creating a tracker and associated graphic to be associated with a new barcode.  The
  * multi-processor uses this factory to create barcode trackers as needed -- one for each barcode.
  */
+@Deprecated
 class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
-    private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
+    private GraphicOverlay mGraphicOverlay;
     private Context mContext;
 
-    BarcodeTrackerFactory(GraphicOverlay<BarcodeGraphic> mGraphicOverlay,
+    BarcodeTrackerFactory(GraphicOverlay mGraphicOverlay,
                           Context mContext) {
         this.mGraphicOverlay = mGraphicOverlay;
         this.mContext = mContext;
@@ -39,8 +39,9 @@ class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
 
     @Override
     public Tracker<Barcode> create(Barcode barcode) {
-        BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay);
-        return new BarcodeGraphicTracker(mGraphicOverlay, graphic, mContext);
+        //BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay, (FirebaseVisionBarcode) barcode);
+        //return new BarcodeGraphicTracker(mGraphicOverlay, graphic, mContext);
+        return null;
     }
 
 }

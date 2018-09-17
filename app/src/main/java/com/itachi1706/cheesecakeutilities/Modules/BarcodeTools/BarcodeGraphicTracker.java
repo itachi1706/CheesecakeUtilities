@@ -30,8 +30,9 @@ import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.Graphic
  * to an overlay, update the graphics as the item changes, and remove the graphics when the item
  * goes away.
  */
+@Deprecated
 public class BarcodeGraphicTracker extends Tracker<Barcode> {
-    private GraphicOverlay<BarcodeGraphic> mOverlay;
+    private GraphicOverlay mOverlay;
     private BarcodeGraphic mGraphic;
 
     private BarcodeUpdateListener mBarcodeUpdateListener;
@@ -45,7 +46,7 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
         void onBarcodeDetected(Barcode barcode);
     }
 
-    BarcodeGraphicTracker(GraphicOverlay<BarcodeGraphic> mOverlay, BarcodeGraphic mGraphic,
+    BarcodeGraphicTracker(GraphicOverlay mOverlay, BarcodeGraphic mGraphic,
                           Context context) {
         this.mOverlay = mOverlay;
         this.mGraphic = mGraphic;
@@ -61,7 +62,7 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
      */
     @Override
     public void onNewItem(int id, Barcode item) {
-        mGraphic.setId(id);
+        //mGraphic.setId(id);
         mBarcodeUpdateListener.onBarcodeDetected(item);
     }
 
@@ -71,7 +72,7 @@ public class BarcodeGraphicTracker extends Tracker<Barcode> {
     @Override
     public void onUpdate(Detector.Detections<Barcode> detectionResults, Barcode item) {
         mOverlay.add(mGraphic);
-        mGraphic.updateItem(item);
+        //mGraphic.updateItem(item);
     }
 
     /**
