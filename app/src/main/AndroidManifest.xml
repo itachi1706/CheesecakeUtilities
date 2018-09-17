@@ -266,6 +266,10 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="barcode" />
+
         <activity
             android:name=".Modules.BarcodeTools.BarcodeParentActivity"
             android:label="Barcode Tools"

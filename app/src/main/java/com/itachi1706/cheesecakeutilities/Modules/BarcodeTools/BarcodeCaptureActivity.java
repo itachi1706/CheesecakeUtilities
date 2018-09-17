@@ -44,6 +44,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.CameraSource;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.CameraSourcePreview;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.GraphicOverlay;
