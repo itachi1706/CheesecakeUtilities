@@ -36,7 +36,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     private final FirebaseVisionBarcode barcode;
 
     public BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode) {
-        this(overlay, barcode, TEXT_COLOR);
+        this(overlay, barcode, false);
     }
 
     /**
@@ -61,22 +61,31 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     }
 
     // EXTRA METHODS
+    private static final int COLOR_CHOICES[] = {
+            Color.BLUE,
+            Color.CYAN,
+            Color.GREEN
+    };
+    private static int mCurrentColorIndex = 0;
+
     public FirebaseVisionBarcode getBarcode() {
         return barcode;
     }
 
-    public BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode, Integer color) {
+    public BarcodeGraphic(GraphicOverlay overlay, FirebaseVisionBarcode barcode, boolean colorMode) {
         super(overlay);
 
         this.barcode = barcode;
+        mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
+        final int selectedColor = COLOR_CHOICES[mCurrentColorIndex];
 
         rectPaint = new Paint();
-        rectPaint.setColor(color);
+        rectPaint.setColor((colorMode) ? selectedColor : TEXT_COLOR);
         rectPaint.setStyle(Paint.Style.STROKE);
         rectPaint.setStrokeWidth(STROKE_WIDTH);
 
         barcodePaint = new Paint();
-        barcodePaint.setColor(color);
+        barcodePaint.setColor((colorMode) ? selectedColor : TEXT_COLOR);
         barcodePaint.setTextSize(TEXT_SIZE);
         // Redraw the overlay, as this graphic has been added.
         postInvalidate();
