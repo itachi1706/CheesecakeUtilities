@@ -200,10 +200,10 @@ public class BarcodeHelper {
                 result.append("Addresses: \n");
                 for (FirebaseVisionBarcode.Address a : contactInfo.getAddresses()) {
                     switch (a.getType()) {
-                        case FirebaseVisionBarcode.Address.TYPE_WORK: result.append("Work: ");
-                        case FirebaseVisionBarcode.Address.TYPE_HOME: result.append("Home: ");
-                        case FirebaseVisionBarcode.Address.TYPE_UNKNOWN: result.append("Unknown: ");
-                        default:
+                        case FirebaseVisionBarcode.Address.TYPE_WORK: result.append("Work: "); break;
+                        case FirebaseVisionBarcode.Address.TYPE_HOME: result.append("Home: "); break;
+                        case FirebaseVisionBarcode.Address.TYPE_UNKNOWN:
+                        default: result.append("Unknown: "); break;
                     }
                     if (a.getAddressLines().length > 0) {
                         for (String s : a.getAddressLines()) {

@@ -119,9 +119,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             try {
                 if (mPreview == null) {
                     Log.d(TAG, "resume: Preview is null");
+                    return;
                 }
                 if (mGraphicOverlay == null) {
                     Log.d(TAG, "resume: graphOverlay is null");
+                    return;
                 }
                 mPreview.start(mCameraSource, mGraphicOverlay);
             } catch (IOException e) {
