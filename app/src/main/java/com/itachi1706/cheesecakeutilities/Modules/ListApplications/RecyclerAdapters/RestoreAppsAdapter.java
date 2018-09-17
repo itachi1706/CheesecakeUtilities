@@ -192,7 +192,8 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+            intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
             Log.d("DEBUG", "Retrieving from " + fullpath);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Log.i("RestoreApps", "Post-Nougat: Using new Content URI method");

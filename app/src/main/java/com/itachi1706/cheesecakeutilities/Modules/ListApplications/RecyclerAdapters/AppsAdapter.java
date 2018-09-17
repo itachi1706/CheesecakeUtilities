@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.AppsViewHolder> implements ICustomAdapter {
     private List<AppsItem> appsList;
+    public static final String TAG = "AppsAdapter";
 
     private static final int SORT_NAME = 0;
     public static final int SORT_API = 1;
