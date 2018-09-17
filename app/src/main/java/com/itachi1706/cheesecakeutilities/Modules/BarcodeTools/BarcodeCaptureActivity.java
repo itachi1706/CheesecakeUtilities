@@ -32,7 +32,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit.BarcodeGraphic;
@@ -51,7 +50,7 @@ import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
  * size, and ID of each barcode.
  */
-public final class BarcodeCaptureActivity extends AppCompatActivity implements BarcodeGraphicTracker.BarcodeUpdateListener {
+public final class BarcodeCaptureActivity extends AppCompatActivity {
     private static final String TAG = "Barcode-reader";
 
     // permission request codes need to be < 256
@@ -258,10 +257,5 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         public boolean onSingleTapConfirmed(MotionEvent e) {
             return onTap(e.getRawX(), e.getRawY()) || super.onSingleTapConfirmed(e);
         }
-    }
-
-    @Override
-    public void onBarcodeDetected(Barcode barcode) {
-        //do something with barcode data returned
     }
 }
