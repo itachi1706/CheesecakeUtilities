@@ -1,6 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools;
 
-import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.zxing.BarcodeFormat;
 
 /**
@@ -15,31 +15,31 @@ public class BarcodeHelper {
 
     public static String getFormatName(int format) {
         switch (format) {
-            case Barcode.CODE_128:
+            case FirebaseVisionBarcode.FORMAT_CODE_128:
                 return "CODE_128";
-            case Barcode.CODE_39:
+            case FirebaseVisionBarcode.FORMAT_CODE_39:
                 return "CODE_39";
-            case Barcode.CODE_93:
+            case FirebaseVisionBarcode.FORMAT_CODE_93:
                 return "CODE_93";
-            case Barcode.CODABAR:
+            case FirebaseVisionBarcode.FORMAT_CODABAR:
                 return "CODABAR";
-            case Barcode.DATA_MATRIX:
+            case FirebaseVisionBarcode.FORMAT_DATA_MATRIX:
                 return "DATA_MATRIX";
-            case Barcode.EAN_13:
+            case FirebaseVisionBarcode.FORMAT_EAN_13:
                 return "EAN_13";
-            case Barcode.EAN_8:
+            case FirebaseVisionBarcode.FORMAT_EAN_8:
                 return "EAN_8";
-            case Barcode.ITF:
+            case FirebaseVisionBarcode.FORMAT_ITF:
                 return "ITF";
-            case Barcode.QR_CODE:
+            case FirebaseVisionBarcode.FORMAT_QR_CODE:
                 return "QR_CODE";
-            case Barcode.UPC_A:
+            case FirebaseVisionBarcode.FORMAT_UPC_A:
                 return "UPC_A";
-            case Barcode.UPC_E:
+            case FirebaseVisionBarcode.FORMAT_UPC_E:
                 return "UPC_E";
-            case Barcode.PDF417:
+            case FirebaseVisionBarcode.FORMAT_PDF417:
                 return "PDF417";
-            case Barcode.AZTEC:
+            case FirebaseVisionBarcode.FORMAT_AZTEC:
                 return "AZTEC";
             default:
                 return "Unknown (" + format + ")";
@@ -132,5 +132,26 @@ public class BarcodeHelper {
             default: break;
         }
         return result;
+    }
+
+    public static String getValueFormat(int valueFormat) {
+        String type;
+        switch (valueFormat) {
+            case FirebaseVisionBarcode.TYPE_CONTACT_INFO: type = "Contact Info"; break;
+            case FirebaseVisionBarcode.TYPE_EMAIL: type = "Email"; break;
+            case FirebaseVisionBarcode.TYPE_ISBN: type = "ISBN No"; break;
+            case FirebaseVisionBarcode.TYPE_PHONE: type = "Phone No"; break;
+            case FirebaseVisionBarcode.TYPE_PRODUCT: type = "Product"; break;
+            case FirebaseVisionBarcode.TYPE_SMS: type = "SMS"; break;
+            case FirebaseVisionBarcode.TYPE_TEXT: type = "Text"; break;
+            case FirebaseVisionBarcode.TYPE_URL: type = "URL"; break;
+            case FirebaseVisionBarcode.TYPE_WIFI: type = "Wi-Fi Details"; break;
+            case FirebaseVisionBarcode.TYPE_GEO: type = "Geo Points"; break;
+            case FirebaseVisionBarcode.TYPE_CALENDAR_EVENT: type = "Calendar Event"; break;
+            case FirebaseVisionBarcode.TYPE_DRIVER_LICENSE: type = "Driver License"; break;
+            case FirebaseVisionBarcode.TYPE_UNKNOWN:
+            default: type = "Unknown";
+        }
+        return type;
     }
 }
