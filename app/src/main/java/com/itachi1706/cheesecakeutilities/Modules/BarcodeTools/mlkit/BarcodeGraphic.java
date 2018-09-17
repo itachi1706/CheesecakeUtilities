@@ -72,4 +72,9 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
         // Renders the barcode at the bottom of the box.
         canvas.drawText(barcode.getRawValue(), rect.left, rect.bottom, barcodePaint);
     }
+
+    // EXTRA METHODS
+    public FirebaseVisionBarcode getBarcode() {
+        return barcode;
+    }
 }
