@@ -17,7 +17,7 @@ class GCalHoliday {
     val output: Array<GCalHolidayItem>? = null
 
     val timestampLong: Long
-        get() = java.lang.Long.parseLong(timestamp)
+        get() = timestamp?.toLong() ?: 0
 
 
 }
