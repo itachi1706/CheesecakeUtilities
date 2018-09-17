@@ -20,6 +20,7 @@ import android.content.Context;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.mlkit.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera.GraphicOverlay;
 
 /**
