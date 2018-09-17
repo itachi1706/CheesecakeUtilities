@@ -21,7 +21,6 @@ import android.view.View;
 import com.google.android.gms.vision.CameraSource;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -197,7 +196,7 @@ public class GraphicOverlay extends View {
      * Returns a copy (as a list) of the set of all active graphics.
      * @return list of all active graphics.
      */
-    public List<Graphic> getGraphics() {
+    public Vector getGraphics() {
         synchronized (lock) {
             return new Vector(graphics);
         }

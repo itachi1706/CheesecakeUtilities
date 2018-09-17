@@ -13,11 +13,6 @@
 // limitations under the License.
 package com.itachi1706.cheesecakeutilities.mlkit.camera;
 
-/**
- * Created by Kenneth on 17/9/2018.
- * for com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.ui.camera in CheesecakeUtilities
- */
-
 import android.graphics.Bitmap;
 import android.media.Image;
 

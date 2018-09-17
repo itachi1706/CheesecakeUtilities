@@ -19,8 +19,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
@@ -45,8 +43,7 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
     // the model can handle.
     private final AtomicBoolean shouldThrottle = new AtomicBoolean(false);
 
-    public VisionProcessorBase() {
-    }
+    protected VisionProcessorBase() { }
 
     @Override
     public void process(
@@ -79,8 +76,6 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
 
     /**
      * Detects feature from given media.Image
-     *
-     * @return created FirebaseVisionImage
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -101,22 +96,14 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
             final FrameMetadata metadata,
             final GraphicOverlay graphicOverlay) {
         detectInImage(image)
-                .addOnSuccessListener(
-                        new OnSuccessListener<T>() {
-                            @Override
-                            public void onSuccess(T results) {
-                                shouldThrottle.set(false);
-                                VisionProcessorBase.this.onSuccess(results, metadata,
-                                        graphicOverlay);
-                            }
+                .addOnSuccessListener(results -> {
+                            shouldThrottle.set(false);
+                            VisionProcessorBase.this.onSuccess(results, metadata,
+                                    graphicOverlay);
                         })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                shouldThrottle.set(false);
-                                VisionProcessorBase.this.onFailure(e);
-                            }
+                .addOnFailureListener(e -> {
+                            shouldThrottle.set(false);
+                            VisionProcessorBase.this.onFailure(e);
                         });
         // Begin throttling until this frame of input has been processed, either in onSuccess or
         // onFailure.
