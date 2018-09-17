@@ -58,6 +58,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
 
     // constants used to pass extra data in the intent
     public static final String BARCODE_OBJECT = "Barcode";
+    public static final String USE_FLASH = "UseFlash";
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
@@ -65,6 +66,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
 
     // helper objects for detecting taps and pinches.
     private GestureDetector gestureDetector;
+
+    private boolean useFlash;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -79,26 +82,28 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
         if (mGraphicOverlay == null) Log.d(TAG, "graphicOverlay is null");
 
+        useFlash = getIntent().getBooleanExtra(USE_FLASH, false);
+
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource(); // Barcode Detected
+            createCameraSource(useFlash); // Barcode Detected
         } else {
             requestCameraPermission();
         }
 
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
+        Snackbar.make(mGraphicOverlay, "Tap to select a barcode",
                 Snackbar.LENGTH_LONG)
                 .show();
     }
 
     @SuppressLint("InlinedApi")
-    private void createCameraSource() {
+    private void createCameraSource(boolean useFlash) {
         // If there's no existing cameraSource, create one.
         if (mCameraSource == null) {
-            mCameraSource = new CameraSource(this, mGraphicOverlay);
+            mCameraSource = new CameraSource(this, mGraphicOverlay, useFlash);
         }
 
         mCameraSource.setMachineLearningFrameProcessor(new BarcodeScanningProcessor());
@@ -161,8 +166,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
 
         final String[] permissions = new String[]{Manifest.permission.CAMERA};
 
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             ActivityCompat.requestPermissions(this, permissions, RC_CAMERA_PERMISSION);
             return;
         }
@@ -192,7 +196,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
-            createCameraSource();
+            createCameraSource(useFlash);
             return;
         }
 
