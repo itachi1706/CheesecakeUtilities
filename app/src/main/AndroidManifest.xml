@@ -263,7 +263,7 @@
             android:theme="@style/AppTheme.NoAppBar" />
 
         <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
 
         <activity

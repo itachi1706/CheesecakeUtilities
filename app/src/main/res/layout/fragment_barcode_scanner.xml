@@ -19,13 +19,14 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/barcode_value"
         android:layout_below="@+id/status_message"
+        android:scrollbars="vertical"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="50dp"
         android:layout_alignRight="@+id/status_message"
         android:layout_alignEnd="@+id/status_message" />
 
@@ -43,7 +44,7 @@
         android:text="@string/use_flash"
         android:id="@+id/use_flash"
         android:layout_below="@+id/barcode_value"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:checked="false" />
