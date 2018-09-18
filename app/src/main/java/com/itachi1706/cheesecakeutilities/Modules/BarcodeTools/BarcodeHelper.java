@@ -1,6 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.BarcodeTools;
 
-import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.zxing.BarcodeFormat;
 
 /**
@@ -15,31 +15,31 @@ public class BarcodeHelper {
 
     public static String getFormatName(int format) {
         switch (format) {
-            case Barcode.CODE_128:
+            case FirebaseVisionBarcode.FORMAT_CODE_128:
                 return "CODE_128";
-            case Barcode.CODE_39:
+            case FirebaseVisionBarcode.FORMAT_CODE_39:
                 return "CODE_39";
-            case Barcode.CODE_93:
+            case FirebaseVisionBarcode.FORMAT_CODE_93:
                 return "CODE_93";
-            case Barcode.CODABAR:
+            case FirebaseVisionBarcode.FORMAT_CODABAR:
                 return "CODABAR";
-            case Barcode.DATA_MATRIX:
+            case FirebaseVisionBarcode.FORMAT_DATA_MATRIX:
                 return "DATA_MATRIX";
-            case Barcode.EAN_13:
+            case FirebaseVisionBarcode.FORMAT_EAN_13:
                 return "EAN_13";
-            case Barcode.EAN_8:
+            case FirebaseVisionBarcode.FORMAT_EAN_8:
                 return "EAN_8";
-            case Barcode.ITF:
+            case FirebaseVisionBarcode.FORMAT_ITF:
                 return "ITF";
-            case Barcode.QR_CODE:
+            case FirebaseVisionBarcode.FORMAT_QR_CODE:
                 return "QR_CODE";
-            case Barcode.UPC_A:
+            case FirebaseVisionBarcode.FORMAT_UPC_A:
                 return "UPC_A";
-            case Barcode.UPC_E:
+            case FirebaseVisionBarcode.FORMAT_UPC_E:
                 return "UPC_E";
-            case Barcode.PDF417:
+            case FirebaseVisionBarcode.FORMAT_PDF417:
                 return "PDF417";
-            case Barcode.AZTEC:
+            case FirebaseVisionBarcode.FORMAT_AZTEC:
                 return "AZTEC";
             default:
                 return "Unknown (" + format + ")";
@@ -132,5 +132,189 @@ public class BarcodeHelper {
             default: break;
         }
         return result;
+    }
+
+    public static String getValueFormat(int valueFormat) {
+        String type;
+        switch (valueFormat) {
+            case FirebaseVisionBarcode.TYPE_CONTACT_INFO: type = "Contact Info"; break;
+            case FirebaseVisionBarcode.TYPE_EMAIL: type = "Email"; break;
+            case FirebaseVisionBarcode.TYPE_ISBN: type = "ISBN No"; break;
+            case FirebaseVisionBarcode.TYPE_PHONE: type = "Phone No"; break;
+            case FirebaseVisionBarcode.TYPE_PRODUCT: type = "Product"; break;
+            case FirebaseVisionBarcode.TYPE_SMS: type = "SMS"; break;
+            case FirebaseVisionBarcode.TYPE_TEXT: type = "Text"; break;
+            case FirebaseVisionBarcode.TYPE_URL: type = "URL"; break;
+            case FirebaseVisionBarcode.TYPE_WIFI: type = "Wi-Fi Details"; break;
+            case FirebaseVisionBarcode.TYPE_GEO: type = "Geo Points"; break;
+            case FirebaseVisionBarcode.TYPE_CALENDAR_EVENT: type = "Calendar Event"; break;
+            case FirebaseVisionBarcode.TYPE_DRIVER_LICENSE: type = "Driver License"; break;
+            case FirebaseVisionBarcode.TYPE_UNKNOWN:
+            default: type = "Unknown";
+        }
+        return type;
+    }
+
+    public static String handleSpecialBarcodes(FirebaseVisionBarcode barcode) {
+        StringBuilder result = new StringBuilder();
+        // Get all special stuff that may be null if its invalid
+        FirebaseVisionBarcode.CalendarEvent calendarEvent = barcode.getCalendarEvent();
+        FirebaseVisionBarcode.ContactInfo contactInfo = barcode.getContactInfo();
+        FirebaseVisionBarcode.DriverLicense driverLicense = barcode.getDriverLicense();
+        FirebaseVisionBarcode.Email email = barcode.getEmail();
+        FirebaseVisionBarcode.GeoPoint geoPoint = barcode.getGeoPoint();
+        FirebaseVisionBarcode.Phone phone = barcode.getPhone();
+        FirebaseVisionBarcode.Sms sms = barcode.getSms();
+        FirebaseVisionBarcode.UrlBookmark urlBookmark = barcode.getUrl();
+        FirebaseVisionBarcode.WiFi wiFi = barcode.getWifi();
+        if (calendarEvent != null) {
+            result.append("\nCalendar Event\n");
+            result.append("Summary: ").append(calendarEvent.getSummary()).append("\n");
+            result.append("Description: ").append(calendarEvent.getDescription()).append("\n");
+            result.append("Organizer: ").append(calendarEvent.getOrganizer()).append("\n");
+            result.append("Location: ").append(calendarEvent.getLocation()).append("\n");
+            result.append("Status: ").append(calendarEvent.getStatus()).append("\n");
+            if (calendarEvent.getStart() != null) result.append("Start: ").append(getCalString(calendarEvent.getStart())).append("\n");
+            if (calendarEvent.getEnd() != null) result.append("End: ").append(getCalString(calendarEvent.getEnd())).append("\n");
+        }
+        if (contactInfo != null) {
+            result.append("\nContact Info\n");
+            result.append("From: ").append(contactInfo.getTitle()).append("\n");
+            result.append("From: ").append(contactInfo.getName()).append("\n");
+            result.append("From: ").append(contactInfo.getOrganization()).append("\n");
+            if (contactInfo.getPhones().size() > 0) {
+                result.append("Phone Numbers: \n");
+                for (FirebaseVisionBarcode.Phone p : contactInfo.getPhones()) {
+                    result.append("Number: ").append(p.getNumber()).append(" | Type: ");
+                    switch (p.getType()) {
+                        case FirebaseVisionBarcode.Phone.TYPE_FAX: result.append("Fax\n"); break;
+                        case FirebaseVisionBarcode.Phone.TYPE_HOME: result.append("Home\n"); break;
+                        case FirebaseVisionBarcode.Phone.TYPE_WORK: result.append("Work\n"); break;
+                        case FirebaseVisionBarcode.Phone.TYPE_MOBILE: result.append("Mobile\n"); break;
+                        case FirebaseVisionBarcode.Phone.TYPE_UNKNOWN:
+                        default: result.append("Unknown Type\n"); break;
+                    }
+                }
+            }
+            if (contactInfo.getAddresses().size() > 0) {
+                result.append("Addresses: \n");
+                for (FirebaseVisionBarcode.Address a : contactInfo.getAddresses()) {
+                    switch (a.getType()) {
+                        case FirebaseVisionBarcode.Address.TYPE_WORK: result.append("Work: "); break;
+                        case FirebaseVisionBarcode.Address.TYPE_HOME: result.append("Home: "); break;
+                        case FirebaseVisionBarcode.Address.TYPE_UNKNOWN:
+                        default: result.append("Unknown: "); break;
+                    }
+                    if (a.getAddressLines().length > 0) {
+                        for (String s : a.getAddressLines()) {
+                            result.append(s).append(" ");
+                        }
+                    } else {
+                        result.append("Empty");
+                    }
+                    result.append("\n");
+                }
+            }
+            if (contactInfo.getEmails().size() > 0) {
+                result.append("Emails: \n");
+                for (FirebaseVisionBarcode.Email e : contactInfo.getEmails()) {
+                    result.append("Type: ");
+                    switch (e.getType()) {
+                        case FirebaseVisionBarcode.Email.TYPE_HOME: result.append("Home\n"); break;
+                        case FirebaseVisionBarcode.Email.TYPE_WORK: result.append("Work\n"); break;
+                        case FirebaseVisionBarcode.Email.TYPE_UNKNOWN:
+                        default: result.append("Unknown\n"); break;
+                    }
+                    result.append("From: ").append(e.getAddress()).append("\n");
+                    result.append("Title: ").append(e.getSubject()).append("\n");
+                    result.append("Message: ").append(e.getBody()).append("\n");
+                    result.append("\n");
+                }
+            }
+            if (contactInfo.getUrls() != null && contactInfo.getUrls().length > 0) {
+                result.append("Websites: \n");
+                for (String s : contactInfo.getUrls()) {
+                    result.append(s).append("\n");
+                }
+            }
+        }
+        if (driverLicense != null) {
+            result.append("\nDriver License\n");
+            result.append("License No: ").append(driverLicense.getLicenseNumber()).append("\n");
+            result.append("First Name: ").append(driverLicense.getFirstName()).append("\n");
+            result.append("Middle Name: ").append(driverLicense.getMiddleName()).append("\n");
+            result.append("Last Name: ").append(driverLicense.getLastName()).append("\n");
+            result.append("Gender: ").append(driverLicense.getGender()).append("\n");
+            result.append("Date of Birth: ").append(driverLicense.getBirthDate()).append("\n");
+            result.append("Address: ").append(driverLicense.getAddressStreet()).append("\n");
+            result.append("City: ").append(driverLicense.getAddressCity()).append("\n");
+            result.append("State: ").append(driverLicense.getAddressState()).append("\n");
+            result.append("Zip: ").append(driverLicense.getAddressZip()).append("\n");
+            result.append("Document Type: ").append(driverLicense.getDocumentType()).append("\n");
+            result.append("Date of Issue: ").append(driverLicense.getIssueDate()).append("\n");
+            result.append("Issued By: ").append(driverLicense.getIssuingCountry()).append("\n");
+            result.append("Expiry: ").append(driverLicense.getExpiryDate()).append("\n");
+        }
+        if (email != null) {
+            result.append("\nEmail Message\n");
+            result.append("Type: ");
+            switch (email.getType()) {
+                case FirebaseVisionBarcode.Email.TYPE_HOME: result.append("Home\n"); break;
+                case FirebaseVisionBarcode.Email.TYPE_WORK: result.append("Work\n"); break;
+                case FirebaseVisionBarcode.Email.TYPE_UNKNOWN:
+                default: result.append("Unknown\n"); break;
+            }
+            result.append("From: ").append(email.getAddress()).append("\n");
+            result.append("Title: ").append(email.getSubject()).append("\n");
+            result.append("Message: ").append(email.getBody()).append("\n");
+        }
+        if (geoPoint != null) {
+            result.append("\nGeolocation Point\n");
+            result.append("Latitude: ").append(geoPoint.getLat()).append("\n");
+            result.append("Longitude: ").append(geoPoint.getLng()).append("\n");
+        }
+        if (phone != null) {
+            result.append("\nPhone Number\n");
+            result.append("Phone Number: ").append(phone.getNumber()).append("\n");
+            result.append("Type: ");
+            switch (phone.getType()) {
+                case FirebaseVisionBarcode.Phone.TYPE_FAX: result.append("Fax\n"); break;
+                case FirebaseVisionBarcode.Phone.TYPE_HOME: result.append("Home\n"); break;
+                case FirebaseVisionBarcode.Phone.TYPE_WORK: result.append("Work\n"); break;
+                case FirebaseVisionBarcode.Phone.TYPE_MOBILE: result.append("Mobile\n"); break;
+                case FirebaseVisionBarcode.Phone.TYPE_UNKNOWN:
+                default: result.append("Unknown Type\n"); break;
+            }
+        }
+        if (sms != null) {
+            result.append("\nSMS Message\n");
+            result.append("Phone Number: ").append(sms.getPhoneNumber()).append("\n");
+            result.append("Message: ").append(sms.getMessage()).append("\n");
+        }
+        if (urlBookmark != null) {
+            result.append("\nURL Bookmarks\n");
+            result.append("Title: ").append(urlBookmark.getTitle()).append("\n");
+            result.append("URL: ").append(urlBookmark.getUrl()).append("\n");
+        }
+        if (wiFi != null) {
+            result.append("\nWIFI Details\n");
+            result.append("SSID: ").append(wiFi.getSsid()).append("\n");
+            result.append("Password: ").append(wiFi.getPassword()).append("\n");
+            result.append("Encryption Type: ");
+            switch (wiFi.getEncryptionType()) {
+                case FirebaseVisionBarcode.WiFi.TYPE_OPEN: result.append("Open"); break;
+                case FirebaseVisionBarcode.WiFi.TYPE_WEP: result.append("WEP"); break;
+                case FirebaseVisionBarcode.WiFi.TYPE_WPA: result.append("WPA2"); break;
+                default: result.append("Unknown"); break;
+            }
+            result.append("\n");
+        }
+
+        return result.toString();
+    }
+
+    private static String getCalString(FirebaseVisionBarcode.CalendarDateTime dateTime) {
+        return dateTime.getDay() + "/" + dateTime.getMonth() + "/" + dateTime.getYear() + " " + dateTime.getHours()
+                + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
     }
 }

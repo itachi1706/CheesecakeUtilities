@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.barcode.Barcode;
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
@@ -51,6 +53,7 @@ public class BarcodeScannerFragment extends Fragment {
 
         statusMessage = v.findViewById(R.id.status_message);
         barcodeValue = v.findViewById(R.id.barcode_value);
+        barcodeValue.setMovementMethod(new ScrollingMovementMethod());
         useFlash = v.findViewById(R.id.use_flash);
         scan = v.findViewById(R.id.read_barcode);
         scan.setOnClickListener(view -> {
@@ -86,32 +89,36 @@ public class BarcodeScannerFragment extends Fragment {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BARCODE_OBJECT);
+                    Gson gson = new Gson();
+                    String json = data.getStringExtra(BarcodeCaptureActivity.BARCODE_OBJECT);
+                    FirebaseVisionBarcode barcode = gson.fromJson(json, FirebaseVisionBarcode.class);
                     statusMessage.setText(R.string.barcode_success);
                     StringBuilder result = new StringBuilder();
-                    result.append("Format: ").append(BarcodeHelper.getFormatName(barcode.format)).append("\n\n");
-                    result.append("Content: ").append(barcode.displayValue).append("\n\n");
-                    result.append("Raw Value: ").append(barcode.rawValue).append("\n");
+                    result.append("Format: ").append(BarcodeHelper.getFormatName(barcode.getFormat())).append("\n");
+                    result.append("Type: ").append(BarcodeHelper.getValueFormat(barcode.getValueType())).append("\n\n");
+                    result.append("Content: ").append(barcode.getDisplayValue()).append("\n\n");
+                    result.append("Raw Value: ").append(barcode.getRawValue()).append("\n");
+                    result.append(BarcodeHelper.handleSpecialBarcodes(barcode)).append("\n");
                     barcodeValue.setText(result);
                     barcodeValue.setClickable(true);
                     barcodeValue.setOnClickListener(v -> {
                         ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         if (clipboard != null) {
-                            ClipData clip = ClipData.newPlainText("barcode", barcode.displayValue);
+                            ClipData clip = ClipData.newPlainText("barcode", barcode.getDisplayValue());
                             clipboard.setPrimaryClip(clip);
                             Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
                         }
                     });
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         barcodeValue.setOnLongClickListener(v1 -> {
-                            ClipData clip = ClipData.newPlainText("barcode", barcode.displayValue);
+                            ClipData clip = ClipData.newPlainText("barcode", barcode.getDisplayValue());
                             View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v1);
                             v1.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL | View.DRAG_FLAG_GLOBAL_URI_READ |
                                     View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
                             return true;
                         });
                     }
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    Log.d(TAG, "Barcode read: " + barcode.getDisplayValue());
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     barcodeValue.setClickable(false);
