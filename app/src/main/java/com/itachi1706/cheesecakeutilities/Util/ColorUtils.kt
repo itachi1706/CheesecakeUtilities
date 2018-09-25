@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Util
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 
 import com.itachi1706.cheesecakeutilities.R
 

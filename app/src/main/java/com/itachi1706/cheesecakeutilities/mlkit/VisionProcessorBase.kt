@@ -16,7 +16,7 @@ package com.itachi1706.cheesecakeutilities.mlkit
 import android.graphics.Bitmap
 import android.media.Image
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.common.FirebaseVisionImage

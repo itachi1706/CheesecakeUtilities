@@ -2,9 +2,9 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.collection.ArrayMap;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.Toast;

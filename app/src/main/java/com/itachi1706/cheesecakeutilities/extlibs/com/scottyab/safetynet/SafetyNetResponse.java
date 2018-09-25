@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONArray;

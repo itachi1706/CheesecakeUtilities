@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/htc_sn_id_btn_search" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_htc_sn_serialField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,14 +28,14 @@
         android:layout_alignRight="@+id/tv_htc_sn_result"
         android:layout_marginTop="61dp">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/htc_sn_serialField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
             android:hint="@string/htc_sn_id_serial_field_hint"
             android:inputType="textNoSuggestions" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_htc_sn_serial"

@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONObject;
