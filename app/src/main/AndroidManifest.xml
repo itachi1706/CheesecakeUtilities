@@ -21,7 +21,7 @@
 
     <application
         android:allowBackup="true"
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name="androidx.multidex.MultiDexApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -187,7 +187,7 @@
             android:label="Utilities Management" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.appupdater.provider"
             android:exported="false"
             android:grantUriPermissions="true">

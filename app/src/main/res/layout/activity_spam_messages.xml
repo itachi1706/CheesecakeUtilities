@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.itachi1706.cheesecakeutilities.SpamMessages"
     android:orientation="vertical">
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -18,9 +18,9 @@
             android:nextFocusRight="@+id/edit_messagespam_text"
             android:maxLines="1"
             android:hint="@string/msg_spam_hint_contact_number"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -31,9 +31,9 @@
             android:nextFocusDown="@+id/edit_messagespam_times"
             android:nextFocusRight="@+id/edit_messagespam_times"
             android:hint="@string/msg_spam_hint_message"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <EditText
@@ -46,7 +46,7 @@
             android:nextFocusRight="@+id/btn_messagespam_send"
             android:maxLines="1"
             android:hint="@string/msg_spam_hint_number_times"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <RelativeLayout

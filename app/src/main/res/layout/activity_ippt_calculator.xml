@@ -27,7 +27,7 @@
     </LinearLayout>
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:focusableInTouchMode="false"
@@ -37,7 +37,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/til_etRunSec"
         android:layout_alignEnd="@+id/til_etRunSec">
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"
@@ -45,9 +45,9 @@
             android:id="@+id/etRun"
             android:maxLength="2"
             android:hint="@string/ippt_hint_run_min" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:focusableInTouchMode="false"
@@ -57,7 +57,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/til_etPushUps"
         android:layout_alignEnd="@+id/til_etPushUps">
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"
@@ -65,9 +65,9 @@
             android:id="@+id/etRunSec"
             android:hint="@string/ippt_hint_run_sec"
             android:maxLength="2" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/til_etPushUps"
@@ -76,7 +76,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"
@@ -84,9 +84,9 @@
             android:id="@+id/etPushUps"
             android:maxLength="2"
             android:hint="@string/ippt_hint_push_ups" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/til_etSitUps"
@@ -95,7 +95,7 @@
         android:layout_alignEnd="@+id/btnCalculate"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-    <android.support.design.widget.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inputType="number"
@@ -103,7 +103,7 @@
         android:maxLength="2"
         android:id="@+id/etSitUps"
         android:hint="@string/ippt_hint_sit_ups" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:layout_width="wrap_content"

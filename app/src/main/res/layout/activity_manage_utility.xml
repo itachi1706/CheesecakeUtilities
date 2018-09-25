@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:id="@+id/hide_util_recycler"

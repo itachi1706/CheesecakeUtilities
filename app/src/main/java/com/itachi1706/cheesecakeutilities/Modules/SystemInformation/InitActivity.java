@@ -9,8 +9,8 @@ import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
