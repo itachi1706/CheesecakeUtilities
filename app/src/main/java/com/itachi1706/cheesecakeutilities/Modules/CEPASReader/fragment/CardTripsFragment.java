@@ -31,10 +31,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.LocaleSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,22 +44,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.CardInfoActivity;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.TripGMapsActivity;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitCurrency;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitData;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.Trip;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.TripObfuscator;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
+import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import androidx.annotation.StringRes;
@@ -92,15 +87,6 @@ public class CardTripsFragment extends ListFragment {
         Collections.sort(trips, new Trip.Comparator());
 
         if (trips.size() > 0) {
-            if (SGCardReaderApplication.obfuscateTripDates() ||
-                    SGCardReaderApplication.obfuscateTripTimes() ||
-                    SGCardReaderApplication.obfuscateTripFares()) {
-                trips = TripObfuscator.obfuscateTrips(trips,
-                        SGCardReaderApplication.obfuscateTripDates(),
-                        SGCardReaderApplication.obfuscateTripTimes(),
-                        SGCardReaderApplication.obfuscateTripFares());
-                Collections.sort(trips, new Trip.Comparator());
-            }
             setListAdapter(new UseLogListAdapter(getActivity(), trips.toArray(new Trip[0]), mTransitData));
         } else {
             view.findViewById(android.R.id.list).setVisibility(View.GONE);
@@ -150,7 +136,6 @@ public class CardTripsFragment extends ListFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             Activity activity = (Activity) getContext();
             LayoutInflater inflater = activity.getLayoutInflater();
-            boolean localisePlaces = SGCardReaderApplication.localisePlaces();
 
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.trip_item, parent, false);
@@ -170,13 +155,7 @@ public class CardTripsFragment extends ListFragment {
                 Spanned headerDate = Utils.longDateFormat(date);
                 TextView headerText = listHeader.findViewById(android.R.id.text1);
 
-                if (localisePlaces && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    SpannableString ss = new SpannableString(headerDate);
-                    ss.setSpan(new LocaleSpan(Locale.getDefault()), 0, ss.length(), 0);
-                    headerText.setText(ss);
-                } else {
-                    headerText.setText(headerDate);
-                }
+                headerText.setText(headerDate);
 
                 ((TextView) listHeader.findViewById(android.R.id.text1)).setText(Utils.longDateFormat(date));
             } else {
@@ -232,13 +211,7 @@ public class CardTripsFragment extends ListFragment {
             if (iconArray != null)
                 iconArray.recycle();
             String s = Utils.localizeString(modeContentDescriptionRes);
-            if (localisePlaces && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                SpannableString ss = new SpannableString(s);
-                ss.setSpan(new LocaleSpan(Locale.getDefault()), 0, ss.length(), 0);
-                iconImageView.setContentDescription(ss);
-            } else {
-                iconImageView.setContentDescription(s);
-            }
+            iconImageView.setContentDescription(s);
 
             Calendar end = trip.getEndTimestamp();
             if (trip.hasTime() && (start != null || end != null)) {
@@ -259,34 +232,10 @@ public class CardTripsFragment extends ListFragment {
                 routeText.append(trip.getAgencyName(true))
                         .append(" ")
                         .setSpan(new StyleSpan(Typeface.BOLD), 0, trip.getAgencyName(true).length(), 0);
-                if (localisePlaces && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    routeText.setSpan(new LocaleSpan(Locale.getDefault()), 0, routeText.length(), 0);
-                }
             }
 
             if (trip.getRouteName() != null) {
-                int oldLength = routeText.length();
                 routeText.append(trip.getRouteName());
-                if (localisePlaces && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (trip.getRouteLanguage() != null) {
-                        // SUICA HACK:
-                        // If there's something that looks like "#2" at the start, then mark
-                        // that as the default language.
-                        Matcher m = LINE_NUMBER.matcher(trip.getRouteName());
-                        if (!m.find() || m.group(1) == null) {
-                            // No line number
-                            //Log.d(TAG, "no line number");
-                            routeText.setSpan(new LocaleSpan(Locale.forLanguageTag(trip.getRouteLanguage())), oldLength, routeText.length(), 0);
-                        } else {
-                            // There is a line number
-                            //Log.d(TAG, String.format("num = %s, line = %s", m.group(1), m.group(2)));
-                            routeText.setSpan(new LocaleSpan(Locale.getDefault()), oldLength, oldLength + m.end(1), 0);
-                            routeText.setSpan(new LocaleSpan(Locale.forLanguageTag(trip.getRouteLanguage())), oldLength + m.start(2), routeText.length(), 0);
-                        }
-                    } else {
-                        routeText.setSpan(new LocaleSpan(Locale.getDefault()), 0, routeText.length(), 0);
-                    }
-                }
             }
 
             if (routeText.length() > 0) {

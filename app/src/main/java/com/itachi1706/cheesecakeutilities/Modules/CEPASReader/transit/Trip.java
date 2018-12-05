@@ -24,17 +24,14 @@ import android.os.Build;
 import android.os.Parcelable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.LocaleSpan;
 import android.text.style.TtsSpan;
 import android.util.Log;
 
-import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.HiddenSpan;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
+import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -51,7 +48,6 @@ public abstract class Trip implements Parcelable {
     public static Spannable formatStationNames(Trip trip) {
         String startStationName = null, endStationName = null;
         String startLanguage = null;
-        boolean localisePlaces = SGCardReaderApplication.localisePlaces();
 
         if (trip.getStartStation() != null) {
             startStationName = trip.getStartStation().getShortStationName();
@@ -71,13 +67,7 @@ public abstract class Trip implements Parcelable {
 
         // If only the start station is available, just return that.
         if (startStationName != null && endStationName == null) {
-            SpannableStringBuilder b = new SpannableStringBuilder(startStationName);
-
-            if (localisePlaces && startLanguage != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                b.setSpan(new LocaleSpan(Locale.forLanguageTag(startLanguage)), 0, b.length(), 0);
-            }
-
-            return b;
+            return new SpannableStringBuilder(startStationName);
         }
 
         // Both the start and end station are known.
@@ -136,7 +126,6 @@ public abstract class Trip implements Parcelable {
 
             x = end;
         }
-        boolean localeSpanUsed;
 
         if (startStationName != null) {
             // Finally, insert the actual station names back in the data.
@@ -147,22 +136,7 @@ public abstract class Trip implements Parcelable {
             }
             b.replace(x, x + startPlaceholder.length(), startStationName);
 
-            localeSpanUsed = false;
-            // Annotate the start station name with the appropriate Locale data.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Station startStation = trip.getStartStation();
-                if (localisePlaces && startStation != null && startStation.getLanguage() != null) {
-                    b.setSpan(new LocaleSpan(Locale.forLanguageTag(startStation.getLanguage())), x, x + startStationName.length(), 0);
-
-                    // Set the start of the string to the default language, so that the localised
-                    // TTS for the station name doesn't take over everything.
-                    b.setSpan(new LocaleSpan(Locale.getDefault()), 0, x, 0);
-
-                    localeSpanUsed = true;
-                }
-            }
         } else {
-            localeSpanUsed = true;
             x = 0;
         }
 
@@ -172,32 +146,6 @@ public abstract class Trip implements Parcelable {
             return null;
         }
         b.replace(y, y + endPlaceholder.length(), endStationName);
-
-        // Annotate the end station name with the appropriate Locale data.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Station endStation = trip.getEndStation();
-            if (localisePlaces) {
-                if (endStation != null && endStation.getLanguage() != null) {
-                    b.setSpan(new LocaleSpan(Locale.forLanguageTag(endStation.getLanguage())), y, y + endStationName.length(), 0);
-
-                    if (localeSpanUsed) {
-                        // Set the locale of the string between the start and end station names.
-                        b.setSpan(new LocaleSpan(Locale.getDefault()), x + startStationName.length(), y, 0);
-                    } else {
-                        // Set the locale of the string from the start of the string to the end station
-                        // name.
-                        b.setSpan(new LocaleSpan(Locale.getDefault()), 0, y, 0);
-                    }
-
-                    // Set the segment from the end of the end station name to the end of the string
-                    b.setSpan(new LocaleSpan(Locale.getDefault()), y + endStationName.length(), b.length(), 0);
-                } else {
-                    // No custom language information for end station
-                    // Set default locale from the end of the start station to the end of the string.
-                    b.setSpan(new LocaleSpan(Locale.getDefault()), x + startStationName.length(), b.length(), 0);
-                }
-            }
-        }
 
         return b;
     }

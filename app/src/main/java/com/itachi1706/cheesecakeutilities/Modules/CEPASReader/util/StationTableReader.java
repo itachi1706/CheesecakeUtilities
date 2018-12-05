@@ -187,14 +187,6 @@ public class StationTableReader {
         else
             local = isShort ? localShort : localFull;
 
-        if (showBoth() && english != null && !english.equals("")
-                && local != null && !local.equals("")) {
-            if (english.equals(local))
-                return local;
-            if (useEnglishName())
-                return english + " (" + local + ")";
-            return local + " (" + english + ")";
-        }
         if (useEnglishName() && english != null && !english.equals("")) {
             return english;
         }
@@ -206,10 +198,6 @@ public class StationTableReader {
             // Local unavailable, use English
             return english;
         }
-    }
-
-    private boolean showBoth() {
-        return SGCardReaderApplication.showBothLocalAndEnglish();
     }
 
     /**

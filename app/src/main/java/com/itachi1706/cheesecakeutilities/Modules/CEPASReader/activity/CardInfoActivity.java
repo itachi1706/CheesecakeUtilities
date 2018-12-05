@@ -23,13 +23,8 @@ package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,18 +32,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.Card;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.fragment.CardBalanceFragment;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.fragment.CardInfoFragment;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.fragment.CardTripsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.fragment.UnauthorizedCardFragment;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitBalance;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitData;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.unknown.UnauthorizedTransitData;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.TabPagerAdapter;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
+import com.itachi1706.cheesecakeutilities.R;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -57,7 +51,6 @@ import androidx.viewpager.widget.ViewPager;
  */
 public class CardInfoActivity extends SGCardReaderActivity {
     public static final String EXTRA_TRANSIT_DATA = "transit_data";
-    public static final String SPEAK_BALANCE_EXTRA = "com.itachi1706.sgcardreader.speak_balance";
     public static final String EXTRA_CARD = "com.itachi1706.sgcardreader.EXTRA_CARD";
 
     private static final String KEY_SELECTED_TAB = "selected_tab";
@@ -65,22 +58,10 @@ public class CardInfoActivity extends SGCardReaderActivity {
     private Card mCard;
     private TransitData mTransitData;
     private TabPagerAdapter mTabsAdapter;
-    private TextToSpeech mTTS;
 
     private boolean mShowOnlineServices = false;
     private boolean mShowMoreInfo = false;
     private Menu mMenu = null;
-
-    private OnInitListener mTTSInitListener = new OnInitListener() {
-        public void onInit(int status) {
-            if (status == TextToSpeech.SUCCESS && mTransitData.getBalances() != null) {
-                for (TransitBalance balanceVal : mTransitData.getBalances()) {
-                    Spanned balance = balanceVal.getBalance().formatCurrencyString(true);
-                    mTTS.speak(getString(R.string.balance_speech, balance), TextToSpeech.QUEUE_FLUSH, null);
-                }
-            }
-        }
-    };
 
 
     @SuppressLint("StaticFieldLeak")
@@ -97,7 +78,6 @@ public class CardInfoActivity extends SGCardReaderActivity {
         actionBar.setTitle(R.string.loading);
 
         new AsyncTask<Void, Void, Void>() {
-            public boolean mSpeakBalanceEnabled;
             private Exception mException;
 
             @Override
@@ -106,9 +86,6 @@ public class CardInfoActivity extends SGCardReaderActivity {
                     String xml = getIntent().getStringExtra("card");
                     mCard = Card.fromXml(SGCardReaderApplication.getInstance().getSerializer(), xml);
                     mTransitData = mCard.parseTransitData();
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CardInfoActivity.this);
-                    mSpeakBalanceEnabled = prefs.getBoolean("pref_key_speak_balance", false);
                 } catch (Exception ex) {
                     mException = ex;
                 }
@@ -140,10 +117,6 @@ public class CardInfoActivity extends SGCardReaderActivity {
                 try {
 
                     String titleSerial = "";
-                    if (!SGCardReaderApplication.hideCardNumbers()) {
-                        titleSerial = (mTransitData.getSerialNumber() != null) ? mTransitData.getSerialNumber()
-                                : Utils.getHexString(mCard.getTagId(), "");
-                    }
                     actionBar.setTitle(mTransitData.getCardName());
                     actionBar.setSubtitle(titleSerial);
 
@@ -199,11 +172,6 @@ public class CardInfoActivity extends SGCardReaderActivity {
                         mMenu.findItem(R.id.more_info).setVisible(mShowMoreInfo);
                     }
 
-                    boolean speakBalanceRequested = getIntent().getBooleanExtra(SPEAK_BALANCE_EXTRA, false);
-                    if (mSpeakBalanceEnabled && speakBalanceRequested) {
-                        mTTS = new TextToSpeech(CardInfoActivity.this, mTTSInitListener);
-                    }
-
                     if (savedInstanceState != null) {
                         viewPager.setCurrentItem(savedInstanceState.getInt(KEY_SELECTED_TAB, 0));
                     }
@@ -218,6 +186,7 @@ public class CardInfoActivity extends SGCardReaderActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
         bundle.putInt(KEY_SELECTED_TAB, ((ViewPager) findViewById(R.id.pager)).getCurrentItem());
     }
 

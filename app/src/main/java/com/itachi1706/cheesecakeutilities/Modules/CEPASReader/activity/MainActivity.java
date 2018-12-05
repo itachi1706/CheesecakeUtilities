@@ -22,7 +22,6 @@
 
 package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity;
 
-import android.app.ActionBar;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -35,7 +34,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -51,17 +49,9 @@ public class MainActivity extends SGCardReaderActivity {
     };
 
     @Override
-    protected Integer getThemeVariant() {
-        return R.attr.MainActivityTheme;
-    }
-
-    @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_main);
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setHomeButtonEnabled(false);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
@@ -95,19 +85,9 @@ public class MainActivity extends SGCardReaderActivity {
     }
 
     private void updateObfuscationNotice(boolean hasNfc) {
-        int obfuscationFlagsOn =
-                (SGCardReaderApplication.hideCardNumbers() ? 1 : 0) +
-                        (SGCardReaderApplication.obfuscateBalance() ? 1 : 0) +
-                        (SGCardReaderApplication.obfuscateTripDates() ? 1 : 0) +
-                        (SGCardReaderApplication.obfuscateTripFares() ? 1 : 0) +
-                        (SGCardReaderApplication.obfuscateTripTimes() ? 1 : 0);
-
         TextView directions = findViewById(R.id.directions);
 
-        if (obfuscationFlagsOn > 0) {
-            directions.setText(Utils.localizePlural(R.plurals.obfuscation_mode_notice,
-                    obfuscationFlagsOn, obfuscationFlagsOn));
-        } else if (!hasNfc) {
+        if (!hasNfc) {
             directions.setText(R.string.nfc_unavailable);
         } else {
             directions.setText(R.string.directions);

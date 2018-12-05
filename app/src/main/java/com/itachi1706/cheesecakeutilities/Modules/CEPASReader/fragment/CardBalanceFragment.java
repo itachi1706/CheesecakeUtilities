@@ -39,7 +39,6 @@ import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitBal
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitCurrency;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitData;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.ListItem;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.TripObfuscator;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 
 import org.simpleframework.xml.Serializer;
@@ -106,12 +105,12 @@ public class CardBalanceFragment extends ListFragment {
 
             TextView validView = view.findViewById(R.id.valid);
             if (balance.getValidFrom() != null && balance.getValidTo() != null) {
-                Spanned validFrom = Utils.dateFormat(TripObfuscator.maybeObfuscateTS(balance.getValidFrom()));
-                Spanned validTo = Utils.dateFormat(TripObfuscator.maybeObfuscateTS(balance.getValidTo()));
+                Spanned validFrom = Utils.dateFormat(balance.getValidFrom());
+                Spanned validTo = Utils.dateFormat(balance.getValidTo());
                 validView.setText(getString(R.string.valid_format, validFrom, validTo));
                 validView.setVisibility(View.VISIBLE);
             } else if (balance.getValidTo() != null) {
-                Spanned validTo = Utils.dateFormat(TripObfuscator.maybeObfuscateTS(balance.getValidTo()));
+                Spanned validTo = Utils.dateFormat(balance.getValidTo());
                 validView.setText(getString(R.string.valid_to_format, validTo));
                 validView.setVisibility(View.VISIBLE);
             } else {
@@ -144,7 +143,7 @@ public class CardBalanceFragment extends ListFragment {
             } else
                 nameView.setVisibility(View.GONE);
             if (balanceCur != null) {
-                balanceView.setText(balanceCur.maybeObfuscateBalance().formatCurrencyString(true));
+                balanceView.setText(balanceCur.formatCurrencyString(true));
                 balanceView.setVisibility(View.VISIBLE);
             } else
                 balanceView.setVisibility(View.GONE);
