@@ -22,7 +22,6 @@ package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.TtsSpan;
@@ -32,7 +31,7 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import androidx.annotation.NonNull;
 
 public class TransitCurrency extends TransitBalance implements Parcelable {
     public static final Creator<TransitCurrency> CREATOR = new Creator<TransitCurrency>() {
@@ -190,22 +189,6 @@ public class TransitCurrency extends TransitBalance implements Parcelable {
             }
         }
         return s;
-    }
-
-    public TransitCurrency maybeObfuscateBalance() {
-        if (!SGCardReaderApplication.obfuscateBalance()) {
-            return this;
-        }
-
-        return obfuscate();
-    }
-
-    public TransitCurrency maybeObfuscateFare() {
-        if (!SGCardReaderApplication.obfuscateTripFares()) {
-            return this;
-        }
-
-        return obfuscate();
     }
 
     public TransitCurrency negate() {

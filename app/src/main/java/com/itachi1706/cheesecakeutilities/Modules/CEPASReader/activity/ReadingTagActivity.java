@@ -219,7 +219,6 @@ public class ReadingTagActivity extends SGCardReaderActivity implements TagReade
         private void showCard(String cardXml) {
             Intent intent = new Intent(ReadingTagActivity.this, CardInfoActivity.class);
             intent.putExtra("card", cardXml);
-            intent.putExtra(CardInfoActivity.SPEAK_BALANCE_EXTRA, true);
             startActivity(intent);
             finish();
         }

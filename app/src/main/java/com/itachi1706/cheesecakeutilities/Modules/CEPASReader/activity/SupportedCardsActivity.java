@@ -24,8 +24,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,13 +34,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.CardType;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.CardInfo;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
+import com.itachi1706.cheesecakeutilities.R;
+
+import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 
 /**
  * @author Eric Butler, Michael Farrell
@@ -52,7 +53,7 @@ public class SupportedCardsActivity extends SGCardReaderActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supported_cards);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ((ListView) findViewById(R.id.gallery)).setAdapter(new CardsAdapter(this));
     }

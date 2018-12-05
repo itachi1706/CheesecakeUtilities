@@ -35,7 +35,6 @@ import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.ezlink.EZL
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.HeaderListItem;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.ListItem;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.ListItemRecursive;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.TripObfuscator;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.xml.Base64String;
 import com.itachi1706.cheesecakeutilities.R;
@@ -185,10 +184,8 @@ public class CEPASApplication extends ISO7816Application {
             items.add(new ListItem(R.string.cepas_purse_status, Byte.toString(purse.getPurseStatus())));
             items.add(new ListItem(R.string.cepas_purse_balance, NumberFormat.getCurrencyInstance(Locale.US).format(purse.getPurseBalance() / 100.0)));
 
-            items.add(new ListItem(R.string.cepas_purse_creation_date,
-                    Utils.longDateFormat(TripObfuscator.maybeObfuscateTS(purse.getPurseCreationDate()))));
-            items.add(new ListItem(R.string.expiry_date,
-                    Utils.longDateFormat(TripObfuscator.maybeObfuscateTS(purse.getPurseExpiryDate()))));
+            items.add(new ListItem(R.string.cepas_purse_creation_date, Utils.longDateFormat(purse.getPurseCreationDate())));
+            items.add(new ListItem(R.string.expiry_date, Utils.longDateFormat(purse.getPurseExpiryDate())));
             items.add(new ListItem(R.string.cepas_autoload_amount, Integer.toString(purse.getAutoLoadAmount())));
             items.add(new ListItem(new SpannableString("CAN"), Utils.getHexDump(purse.getCAN(), "<Error>")));
             items.add(new ListItem(new SpannableString("CSN"), Utils.getHexDump(purse.getCSN(), "<Error>")));
