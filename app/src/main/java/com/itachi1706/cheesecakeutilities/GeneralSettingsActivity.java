@@ -87,7 +87,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 return false;
             });
 
-            CheckBoxPreference mPreferenceLaunchFromBackground = (CheckBoxPreference) getPreferenceManager().findPreference("pref_launch_from_background");
+            CheckBoxPreference mPreferenceLaunchFromBackground = (CheckBoxPreference) findPreference("pref_launch_from_background");
             mPreferenceLaunchFromBackground.setChecked(isLaunchFromBgEnabled());
             mPreferenceLaunchFromBackground.setOnPreferenceChangeListener((preference, newValue) -> {
                 setLaunchFromBgEnabled((Boolean) newValue);

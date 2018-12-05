@@ -112,7 +112,7 @@ public class SupportedCardsActivity extends SGCardReaderActivity {
             String notes = "";
 
             SGCardReaderApplication app = SGCardReaderApplication.getInstance();
-            NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(app);
+            NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
             boolean nfcAvailable = nfcAdapter != null;
 
             if (nfcAvailable) {

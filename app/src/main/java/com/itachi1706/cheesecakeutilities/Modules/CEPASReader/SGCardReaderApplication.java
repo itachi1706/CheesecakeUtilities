@@ -94,13 +94,9 @@ public class SGCardReaderApplication extends Application {
         return sInstance;
     }
 
-    protected static boolean getBooleanPref(String preference, boolean default_setting) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getInstance());
-        return prefs.getBoolean(preference, default_setting);
-    }
-
     public static boolean convertTimezones() {
-        return getBooleanPref(PREF_CONVERT_TIMEZONES, false);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getInstance());
+        return prefs.getBoolean(SGCardReaderApplication.PREF_CONVERT_TIMEZONES, false);
     }
 
     public Serializer getSerializer() {

@@ -34,10 +34,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 import com.itachi1706.cheesecakeutilities.R;
 
-public class MainActivity extends SGCardReaderActivity {
+public class MainActivity extends BaseActivity {
     private NfcAdapter mNfcAdapter;
     private PendingIntent mPendingIntent;
     private String[][] mTechLists = new String[][]{
@@ -47,6 +48,11 @@ public class MainActivity extends SGCardReaderActivity {
             new String[]{NfcA.class.getName()},
             new String[]{NfcF.class.getName()},
     };
+
+    @Override
+    public String getHelpDescription() {
+        return "A Card reader that supports CEPAS cards. Click on View Supported Cards to learn more";
+    }
 
     @Override
     protected void onCreate(Bundle bundle) {
