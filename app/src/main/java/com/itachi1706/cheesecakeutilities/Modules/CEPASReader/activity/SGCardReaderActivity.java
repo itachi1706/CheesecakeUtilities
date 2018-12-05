@@ -1,15 +1,20 @@
 package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity;
 
-import android.app.Activity;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 
+import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
 
 import androidx.annotation.Nullable;
 
-public abstract class SGCardReaderActivity extends Activity {
+public abstract class SGCardReaderActivity extends BaseActivity {
     int mAppliedTheme;
+
+    @Override
+    public String getHelpDescription() {
+        return "A Card reader that supports CEPAS cards. Click on View Supported Cards to learn more";
+    }
 
     protected Integer getThemeVariant() {
         return null;
