@@ -17,12 +17,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="CEPAS Card Reader">
-        <CheckBoxPreference
+        <SwitchPreference
             android:title="@string/launch_from_background"
             android:persistent="false"
             android:key="pref_launch_from_background"/>
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:title="@string/convert_timezones"
             android:summary="@string/convert_timezones_summary"
             android:key="pref_convert_timezones"

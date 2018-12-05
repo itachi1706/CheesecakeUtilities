@@ -4,10 +4,10 @@ import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.BackgroundTagActivity;
@@ -57,7 +57,7 @@ public class UtilitySettingsActivity extends AppCompatActivity {
                 return true;
             });
 
-            CheckBoxPreference mPreferenceLaunchFromBackground = (CheckBoxPreference) findPreference("pref_launch_from_background");
+            SwitchPreference mPreferenceLaunchFromBackground = (SwitchPreference) findPreference("pref_launch_from_background");
             mPreferenceLaunchFromBackground.setChecked(isLaunchFromBgEnabled());
             mPreferenceLaunchFromBackground.setOnPreferenceChangeListener((preference, newValue) -> {
                 setLaunchFromBgEnabled((Boolean) newValue);
