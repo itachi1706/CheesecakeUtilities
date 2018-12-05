@@ -61,7 +61,7 @@ public class UtilitySettingsActivity extends AppCompatActivity {
             mPreferenceLaunchFromBackground.setChecked(isLaunchFromBgEnabled());
             mPreferenceLaunchFromBackground.setOnPreferenceChangeListener((preference, newValue) -> {
                 setLaunchFromBgEnabled((Boolean) newValue);
-                return false;
+                return true;
             });
         }
 

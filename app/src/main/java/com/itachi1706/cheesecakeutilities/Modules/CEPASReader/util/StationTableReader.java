@@ -5,7 +5,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.sgcardreader.proto.Stations;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.Station;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.Trip;
@@ -47,7 +47,7 @@ public class StationTableReader {
         }
 
         try {
-            StationTableReader str = new StationTableReader(SGCardReaderApplication.getInstance(),
+            StationTableReader str = new StationTableReader(CheesecakeUtilitiesApplication.getInstance(),
                     name + ".mdst");
             synchronized (mSTRs) {
                 mSTRs.put(name, str);

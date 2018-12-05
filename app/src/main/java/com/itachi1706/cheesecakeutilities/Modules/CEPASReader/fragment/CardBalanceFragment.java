@@ -32,7 +32,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.CardInfoActivity;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.Card;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.TransitBalance;
@@ -117,7 +117,7 @@ public class CardBalanceFragment extends ListFragment {
                 validView.setVisibility(View.GONE);
 
                 // Get card and see if card expiry is there
-                Serializer serializer = SGCardReaderApplication.getInstance().getSerializer();
+                Serializer serializer = CheesecakeUtilitiesApplication.getInstance().getSerializer();
                 Card mCard = Card.fromXml(serializer, getArguments().getString(CardInfoActivity.EXTRA_CARD));
                 if (mCard != null) {
                     List<ListItem> cardInfo = mCard.getManufacturingInfo();

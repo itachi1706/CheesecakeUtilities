@@ -21,7 +21,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +31,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.Card;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.fragment.CardBalanceFragment;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.fragment.CardInfoFragment;
@@ -44,6 +43,7 @@ import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.TabPagerAdapter
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 import com.itachi1706.cheesecakeutilities.R;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.viewpager.widget.ViewPager;
 
 /**
@@ -73,7 +73,7 @@ public class CardInfoActivity extends SGCardReaderActivity {
         final ViewPager viewPager = findViewById(R.id.pager);
         mTabsAdapter = new TabPagerAdapter(this, viewPager);
 
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.loading);
 
@@ -84,7 +84,7 @@ public class CardInfoActivity extends SGCardReaderActivity {
             protected Void doInBackground(Void... voids) {
                 try {
                     String xml = getIntent().getStringExtra("card");
-                    mCard = Card.fromXml(SGCardReaderApplication.getInstance().getSerializer(), xml);
+                    mCard = Card.fromXml(CheesecakeUtilitiesApplication.getInstance().getSerializer(), xml);
                     mTransitData = mCard.parseTransitData();
                 } catch (Exception ex) {
                     mException = ex;
@@ -122,7 +122,7 @@ public class CardInfoActivity extends SGCardReaderActivity {
 
                     Bundle args = new Bundle();
                     args.putString(EXTRA_CARD,
-                            mCard.toXml(SGCardReaderApplication.getInstance().getSerializer()));
+                            mCard.toXml(CheesecakeUtilitiesApplication.getInstance().getSerializer()));
                     args.putParcelable(EXTRA_TRANSIT_DATA, mTransitData);
 
                     if (mTransitData instanceof UnauthorizedTransitData) {

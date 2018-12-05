@@ -23,7 +23,7 @@
 
     <application
         android:allowBackup="true"
-        android:name="androidx.multidex.MultiDexApplication"
+        android:name=".CheesecakeUtilitiesApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -309,6 +309,7 @@
             android:name=".Modules.CEPASReader.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="sensorPortrait"
+            android:label="CEPAS Reader"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
