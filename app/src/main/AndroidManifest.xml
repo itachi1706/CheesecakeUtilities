@@ -326,12 +326,14 @@
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTop"
             android:noHistory="true"
+            android:label="Scanning Card..."
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".Modules.CEPASReader.activity.BackgroundTagActivity"
             android:configChanges="keyboardHidden|orientation"
             android:enabled="false"
             android:launchMode="singleTop"
+            android:label="Scan EZ-Link Card"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
