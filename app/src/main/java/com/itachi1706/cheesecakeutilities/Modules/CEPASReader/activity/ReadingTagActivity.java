@@ -49,7 +49,9 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.GregorianCalendar;
 
-public class ReadingTagActivity extends SGCardReaderActivity implements TagReaderFeedbackInterface {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ReadingTagActivity extends AppCompatActivity implements TagReaderFeedbackInterface {
     private static final String TAG = ReadingTagActivity.class.getSimpleName();
     boolean mIndeterminite = true;
     int mMaximum = 0;

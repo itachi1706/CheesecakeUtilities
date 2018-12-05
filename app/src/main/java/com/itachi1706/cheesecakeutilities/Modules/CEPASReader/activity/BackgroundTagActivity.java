@@ -21,10 +21,12 @@ package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * @author Eric Butler
  */
-public class BackgroundTagActivity extends SGCardReaderActivity {
+public class BackgroundTagActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
