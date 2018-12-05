@@ -32,9 +32,11 @@ import android.widget.LinearLayout;
 
 import com.itachi1706.cheesecakeutilities.R;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-public abstract class FragmentWrapperActivity extends SGCardReaderActivity {
+public abstract class FragmentWrapperActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

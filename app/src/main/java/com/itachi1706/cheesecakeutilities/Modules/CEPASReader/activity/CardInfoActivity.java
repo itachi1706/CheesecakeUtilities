@@ -44,12 +44,13 @@ import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 import com.itachi1706.cheesecakeutilities.R;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 /**
  * @author Eric Butler
  */
-public class CardInfoActivity extends SGCardReaderActivity {
+public class CardInfoActivity extends AppCompatActivity {
     public static final String EXTRA_TRANSIT_DATA = "transit_data";
     public static final String EXTRA_CARD = "com.itachi1706.sgcardreader.EXTRA_CARD";
 

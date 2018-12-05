@@ -43,12 +43,13 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 /**
  * @author Eric Butler, Michael Farrell
  */
-public class SupportedCardsActivity extends SGCardReaderActivity {
+public class SupportedCardsActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supported_cards);
