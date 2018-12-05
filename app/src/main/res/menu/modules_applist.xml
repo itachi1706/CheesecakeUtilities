@@ -11,4 +11,6 @@
         android:orderInCategory="52"/>
     <item android:id="@+id/generate_package_list" app:showAsAction="never" android:title="@string/list_app_menu_generate_package_list"
         android:orderInCategory="53"/>
+    <item android:id="@+id/view_gps" app:showAsAction="never" android:title="View Play Services"
+        android:orderInCategory="54" android:enabled="false" />
 </menu>
