@@ -12,14 +12,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.collection.ArrayMap;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,6 +26,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsApiGraphActivity;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsDetailActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
@@ -48,6 +41,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
@@ -77,7 +79,7 @@ public class ListApplicationFragment extends Fragment {
         recyclerView = v.findViewById(R.id.list_app_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         scrollBar = v.findViewById(R.id.scrollBar);
@@ -107,6 +109,14 @@ public class ListApplicationFragment extends Fragment {
 
     private boolean isSystemApp(ApplicationInfo i) {
         return (i.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (appPackageNamesInstalled.size() == 0) return;
+
+        if (appPackageNamesInstalled.contains("com.google.android.gms")) menu.findItem(R.id.view_gps).setEnabled(true);
     }
 
     @Override
@@ -144,6 +154,11 @@ public class ListApplicationFragment extends Fragment {
                 break;
             case R.id.generate_package_list:
                 generatePackageList();
+                break;
+            case R.id.view_gps:
+                Intent gpsIntent = new Intent(getActivity(), ListApplicationsDetailActivity.class);
+                gpsIntent.putExtra("packageName", "com.google.android.gms");
+                startActivity(gpsIntent);
                 break;
             default: return super.onOptionsItemSelected(item);
         }
@@ -408,6 +423,7 @@ public class ListApplicationFragment extends Fragment {
                 recyclerView.setAdapter(finalAdapter);
                 bar.setVisibility(View.GONE);
                 label.setVisibility(View.GONE);
+                getActivity().invalidateOptionsMenu();
             });
             return null;
         }
