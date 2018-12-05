@@ -1,12 +1,9 @@
 package com.itachi1706.cheesecakeutilities;
 
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -20,7 +17,6 @@ import com.itachi1706.appupdater.SettingsInitializer;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.PasswordHelper;
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.BackgroundTagActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import java.security.InvalidKeyException;
@@ -29,9 +25,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import de.psdev.licensesdialog.LicensesDialog;
-
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 
 
 public class GeneralSettingsActivity extends AppCompatActivity {
@@ -84,13 +77,6 @@ public class GeneralSettingsActivity extends AppCompatActivity {
 
             findPreference("util_settings").setOnPreferenceClickListener(preference -> {
                 startActivity(new Intent(getActivity(), UtilitySettingsActivity.class));
-                return false;
-            });
-
-            CheckBoxPreference mPreferenceLaunchFromBackground = (CheckBoxPreference) findPreference("pref_launch_from_background");
-            mPreferenceLaunchFromBackground.setChecked(isLaunchFromBgEnabled());
-            mPreferenceLaunchFromBackground.setOnPreferenceChangeListener((preference, newValue) -> {
-                setLaunchFromBgEnabled((Boolean) newValue);
                 return false;
             });
 
@@ -184,20 +170,6 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 pw.setSummary("No Password Set");
                 pw.setTitle("Set Password");
             }
-        }
-
-        private boolean isLaunchFromBgEnabled() {
-            ComponentName componentName = new ComponentName(getActivity(), BackgroundTagActivity.class);
-            PackageManager packageManager = getActivity().getPackageManager();
-            int componentEnabledSetting = packageManager.getComponentEnabledSetting(componentName);
-            return componentEnabledSetting == COMPONENT_ENABLED_STATE_ENABLED;
-        }
-
-        private void setLaunchFromBgEnabled(boolean enabled) {
-            ComponentName componentName = new ComponentName(getActivity(), BackgroundTagActivity.class);
-            PackageManager packageManager = getActivity().getPackageManager();
-            int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
-            packageManager.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
         }
 
         @Override
