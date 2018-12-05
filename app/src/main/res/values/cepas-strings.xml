@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  strings.xml
+
+  Copyright 2011-2013 Eric Butler
+  Copyright 2015-2018 Michael Farrell
+
+  Authors:
+  Eric Butler <eric@codebutler.com>
+  Michael Farrell <micolous+git@gmail.com>
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+***REMOVED*** General application strings -->
+    <string name="directions">Tap a card.</string>
+    <string name="reading_card">Reading card…</string>
+    <string name="dont_move">Do not move card</string>
+    <string name="locked_mfc_card">Locked MIFARE Classic card</string>
+    <string name="locked_mfu_card">Locked MIFARE Ultralight card</string>
+    <string name="locked_mfd_card">Locked MIFARE DESFire card</string>
+    <string name="history">History</string>
+    <string name="no_trip_data">No trips found. Has this card been used?</string>
+    <string name="export">Export</string>
+    <string name="export_filename">Export Filename</string>
+    <string name="preferences">Preferences</string>
+    <string name="balance_speech">Balance <xliff:g example="$13.37" id="balance">%s</xliff:g></string>
+    <string name="loading">Loading…</string>
+    <string name="supported_cards">Supported Cards</string>
+***REMOVED***
+    Translators: This is used for a total number of transactions that have been performed on the
+    card. This is slightly different to a "trip counter", as many tickets count both the tap-on
+    (entry) and tap-off (exit), as well as top-ups as different transactions.
+***REMOVED***
+    <string name="fully_locked_desc">
+        No part of this card is freely readable without a key. You have no valid keys installed for it.\n\n
+        If supported by SGCardReader, the card will work once keys are installed for it. These are generally different for each card. More info about acquiring and installing keys can be found in the documentation.\n\n
+        If your card is not supported by SGCardReader, it is unlikely it will ever be, unless the key for it is deciphered.\n\n
+        Please lobby the card issuer to allow open data access on issued cards. It is safe to permit open, read-only access to data with modern smartcard technology. Some agencies even provide open documentation about the data format!
+    </string>
+    <string name="fully_locked_title">Fully locked card.</string>
+    <string name="nfc_off_error">NFC off</string>
+    <string name="turn_on_nfc">Please enable NFC to read card info.</string>
+    <string name="wireless_settings">Wireless Settings</string>
+***REMOVED*** Translators: "Machine ID" is arbitrary. It could be a decimal number, or hexadecimal… -->
+    <string name="machine_id_format">Machine ID %s</string>
+***REMOVED*** Translators: "Machine ID" is arbitrary. It could be a decimal number, or hexadecimal… -->
+
+***REMOVED*** TRANSLATORS: This is used on a list item, which will direct users to SGCardReader's website when touched. -->
+
+
+    <string name="block_title_format">Block: %s</string>
+    <string name="page_title_format">Page: 0x%s</string>
+    <string name="application_title_format">Application: %s</string>
+    <string name="file_title_format">File: %s</string>
+    <string name="unauthorized_file_title_format">File: %s (unauthorized)</string>
+    <string name="invalid_file_title_format">File: %1$s (invalid: %2$s)</string>
+    <string name="unauthorized_page_title_format">Page: 0x%s (unauthorized)</string>
+    <string name="sector_title_format">Sector: 0x%s</string>
+    <string name="unauthorized_sector_title_format">Sector: 0x%s (unauthorized)</string>
+    <string name="sector_title_format_empty">Sector: 0x%s (empty)</string>
+    <string name="invalid_sector_title_format">Sector: 0x%1$s (invalid: %2$s)</string>
+***REMOVED*** Translators: the first parameter is a hexadecimal number. -->
+    <string name="record_title_format">Record: %s</string>
+    <string name="binary_title_format">Binary data</string>
+    <string name="info">Info</string>
+***REMOVED*** Translators: These are both dates, eg: "Valid from 3/12/2017 to 3/3/2018". Dates are
+     formatted according to user preferences. -->
+    <string name="valid_format">Valid %1$s to %2$s</string>
+***REMOVED*** Translators: This is an end date, eg: "Valid until 3/3/2018". Dates are formatted according
+     to user preferences. -->
+    <string name="valid_to_format">Valid until %1$s</string>
+***REMOVED*** Translators: This is a start date, eg: "Valid from 3/12/2017". Dates are formatted according
+     to user preferences. -->
+    <string name="unknown_format">Unknown (%s)</string>
+    <string name="unknown">Unknown</string>
+    <string name="keys_required">Encryption keys are required to read this card.</string>
+    <string name="card_keys_not_supported">SGCardReader does not support keys for this type of card.</string>
+    <string name="add_key">Add Key</string>
+    <string name="error">Error</string>
+    <string name="keys">Keys</string>
+    <string name="delete">Delete</string>
+    <string name="delete_key_confirm_title">Really delete key?</string>
+***REMOVED***
+    Translators:
+    %1$s is a user supplied name for an encryption key.
+    %2$s is a description of the type of key. This will be populated with a localised string (keytype_mfc or keytype_mfc_static).
+***REMOVED***
+    <string name="delete_key_confirm_message">The key file "<xliff:g example="a1b2c3d4" id="description">%1$s</xliff:g>" (containing <xliff:g example="1 MIFARE Classic key" id="key_type">%2$s</xliff:g>) will be gone forever.</string>
+***REMOVED*** Translators: in this context, "key" refers to an encryption key -->
+    <string name="cant_delete_with_obfuscation">Deleting keys is currently unavailable</string>
+***REMOVED*** Translators: in this context, "key" refers to an encryption key -->
+    <string name="cant_delete_with_obfuscation_message">For safety reasons, you can\'t delete keys while card number obfuscation is enabled. Turn it off if you want to delete keys.</string>
+    <string name="no_keys">No keys.</string>
+    <string name="nfc_unavailable">NFC Unavailable</string>
+    <string name="general">General</string>
+    <string name="launch_from_background">Launch from background</string>
+    <string name="card_not_supported_on_device">This card is not supported by your device.</string>
+    <string name="need_stations">Some station names are unknown.</string>
+    <string name="need_stations_submit">Report</string>
+    <string name="card_preview_reader">Beta version of card reader.</string>
+***REMOVED*** Translators: This is used to label a card's product name. For example, "Opal". -->
+
+    <string name="select_file">Select file</string>
+    <string name="file_exported">File exported successfully.</string>
+
+    <string name="about_card_format">About this card format</string>
+    <string name="online_services">Online services</string>
+    <string name="mifare_classic">MIFARE Classic</string>
+    <string name="auth_retries">Authentication retries</string>
+    <string name="auth_retries_summary">Number of times to attempt authentication for each sector</string>
+
+    <string name="mfc_fallback_desc">Some agencies have no identifying magic on their card. To read them, you must select an agency explicitly.</string>
+    <string name="mfc_fallback">Fallback reader</string>
+***REMOVED*** Shown as a preference description when a feature needs Android 5.0 or later. -->
+    <string name="requires_android_21">Requires Android 5.0 or later.</string>
+
+***REMOVED*** Obfuscation options -->
+    <string name="obfuscation_title">Obfuscation</string>
+    <string name="obfuscation_card_numbers">Hide card numbers</string>
+    <string name="obfuscation_card_numbers_desc">Don\'t show card numbers anywhere</string>
+
+    <string name="obfuscation_balance">Obfuscate balance</string>
+    <string name="obfuscation_balance_desc">Change the balance shown by a random amount</string>
+
+    <string name="obfuscation_dates">Obfuscate dates</string>
+    <string name="obfuscation_dates_desc">Show trip, expiry and scan dates as different, random days</string>
+
+    <string name="obfuscation_times">Obfuscate times</string>
+***REMOVED*** TRANSLATORS: The meaning of "fuzz" in this context is "to randomise" -->
+    <string name="obfuscation_times_desc">Fuzz and reduce resolution of timestamps on trips, and scans</string>
+
+    <string name="obfuscation_fares">Obfuscate fares</string>
+    <string name="obfuscation_fares_desc">Change fares shown by a random amount</string>
+
+***REMOVED*** Accessibility options -->
+    <string name="accessibility">Accessibility</string>
+
+    <string name="speak_balance">Speak balance aloud</string>
+    <string name="speak_balance_summary">When you scan a card, the balance will be automatically read aloud. This works even when a screen reader is not running.</string>
+
+***REMOVED***
+    TRANSLATORS: "Place names" are proper nouns, eg: "Beijing", "Los Angeles", "Sydney", "Tokyo".
+***REMOVED***
+    <string name="localise_places">Add language hints to place names</string>
+
+***REMOVED***
+    TRANSLATORS: "LocaleSpan" is the name of an Android API, and should not be translated.
+
+    "station" in this context refers to a railway (train, light rail, tram, metro, subway) station.
+    "stop" refers to a bus or ferry stop. "line" refers to the name of a railway (train, light rail,
+    tram, metro, subway) line. "route name" refers to a name or identifier of a route that a bus or
+    ferry follows.
+
+    This option is automatically disabled on Android versions that don't support it.
+***REMOVED***
+    <string name="localise_places_desc">Adds language hints (LocaleSpan) to place names, such as station, stop, line and route names. This alters the pronunciation used by screen readers and other accessibility software.</string>
+
+***REMOVED***
+    TRANSLATORS: This directs users to a dialog with "localise_places_longdesc" showing more
+    information about the option.
+***REMOVED***
+    <string name="localise_places_longdesc_button">About language hints…</string>
+
+***REMOVED***
+    TRANSLATORS: This is shown as the title of the dialog for localise_places_longdesc.
+***REMOVED***
+    <string name="localise_places_longdesc_title">About language hints</string>
+
+***REMOVED***
+    TRANSLATORS: Shown in a pop-up dialog, when "localise_places_longdesc_button" is pressed.
+    "LocaleSpan" is the name of an Android API, and should not be translated. "Google TalkBack" is
+    the name of Android's standard screen-reader software.
+***REMOVED***
+    <string name="localise_places_longdesc">Text-to-speech voices normally only work well for one language.\n\nLocaleSpan hints are used to mark text as being in a different language. When applied to a station, stop, line or route name, a screen reader that supports these hints will pronounce the name using synthesized voices from the place\'s native language, rather than the language you have configured Android to use.\n\nEnabling this option generally improves the pronunciation of foreign place names that are not internationally renowned, but you might find it more difficult to understand.\n\nThis does not normally change the on-screen display of place names, but some devices may use a different font.\n\nThis requires accessibility software that supports the LocaleSpan API (such as Google TalkBack), and that you have appropriate voices installed.</string>
+
+***REMOVED*** Translators: This is shown when an unsupported type of card is scanned, and that we were unable to read it at all, let alone parse its content. -->
+    <string name="unsupported_tag">Unsupported NFC card media</string>
+
+    <string name="saving_card">Saving card…</string>
+
+    <string name="mfc_reading">Reading MIFARE Classic card…</string>
+    <string name="mfc_have_key">Trying user-supplied key for sector %d…</string>
+    <string name="mfc_other_key">Trying alternate user-supplied keys for sector %d…</string>
+    <string name="mfc_default_key">Trying well-known keys for sector %d…</string>
+    <string name="mfc_reading_blocks">Reading sector %d…</string>
+
+    <string name="iso14a_detect">Detecting ISO 14443 card type…</string>
+    <string name="mfd_reading">Reading MIFARE DESFire card…</string>
+***REMOVED*** Translators: This is substituted with the name of a card, like "Reading Opal…" or "Reading Suica…" -->
+    <string name="card_reading_type">Reading <xliff:g example="EZ-Link" id="card_name">%s</xliff:g>…</string>
+
+    <string name="mfu_detect">Detecting MIFARE Ultralight card type…</string>
+    <string name="mfu_reading">Reading MIFARE Ultralight card…</string>
+***REMOVED*** Translators: This is substituted with the name of a card, like "Unlocking Leap card…" -->
+    <string name="mfd_unlocking">Unlocking <xliff:g example="EZ-Link" id="card_name">%s</xliff:g> card…</string>
+
+    <string name="iso7816_probing">Probing ISO7816 card…</string>
+
+    <string name="card_partial_read_title">Card partially read!</string>
+    <string name="card_partial_read_desc">
+        The card went out of range while reading.\n\n
+        Some data was read, but it might not be enough to get useful data.\n\n
+        Thick cases and metal can interfere with NFC operation. Failure could also indicate that the card or your device\'s NFC antenna is damaged.
+    </string>
+    <string name="show_partial_data">Show incomplete data</string>
+
+***REMOVED*** Translators: this is a short suffix for milliseconds, "%s" will display the number to
+    one decimal place (in localized form). -->
+
+***REMOVED***
+    Translators: shown in place of a real card number in some lists when obfuscation is enabled.
+***REMOVED***
+    <string name="hidden_card_number">Hidden card number</string>
+    <plurals name="hidden_key_data">
+        <item quantity="one">Hidden key data (<xliff:g example="1" id="count">%d</xliff:g> byte)</item>
+        <item quantity="other">Hidden key data (<xliff:g example="3" id="count">%d</xliff:g> bytes)</item>
+    </plurals>
+***REMOVED*** Translators: "key" is an encryption key, which is displayed below this label. -->
+    <string name="key_data">Key data</string>
+
+***REMOVED***
+    Translators: There is an obfuscation mode, with many flags (options) available. The value
+    "count" passed is the number of flags (options) that are turned on.
+
+    This is shown on the main window, instead of the "directions" string.
+***REMOVED***
+    <plurals name="obfuscation_mode_notice">
+        <item quantity="one"><xliff:g example="1" id="count">%d</xliff:g> obfuscation flag on</item>
+        <item quantity="other"><xliff:g example="3" id="count">%d</xliff:g> obfuscation flags on</item>
+    </plurals>
+
+    <string-array name="mfc_fallbacks">
+        <item>None (disabled)</item>
+        <item>SmartRider (WA, Australia), MyWay (ACT, Australia)</item>
+    </string-array>
+
+    <string-array name="mfc_fallback_values" translatable="false">
+        <item>null</item>
+        <item>smartrider</item>
+    </string-array>
+
+    <string name="pref_theme">Theme</string>
+    <string name="pref_theme_desc">Choose look and feel</string>
+
+    <string-array name="themes">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>FareBot</item>
+    </string-array>
+
+***REMOVED*** Translators: do not translate -->
+    <string-array name="theme_values" translatable="false">
+        <item>dark</item>
+        <item>light</item>
+        <item>farebot</item>
+    </string-array>
+
+***REMOVED***
+    This tile server gives "retina" tiles which are much nicer on modern
+    smartphones.
+
+    Metrodroid has been granted permission to use the tile server by
+    the tile server operator. Other projects will need to explicitly seek
+    permission from the tile server operator.
+
+    The tile stylesheets are available under an open source license at:
+    https://github.com/stackunderflow-stackptr/stackptr_tools/tree/master/osm-bright
+
+    You may wish to replace this in other translations with a localised tile server in place of
+    this one.
+***REMOVED***
+
+    <string name="pref_show_local_and_english_title">Show both local and English station names</string>
+    <string name="pref_show_local_and_english_desc">If enabled, both local and English names will be shown regardless of locale. If disabled, the most appropriate variant is chosen.</string>
+
+***REMOVED*** Translators: "block" is referring to a block of storage. -->
+
+***REMOVED*** Translators: "record" is referring to structured unit of storage. -->
+    <plurals name="record_count">
+        <item quantity="one">%d record</item>
+        <item quantity="other">%d records</item>
+    </plurals>
+
+***REMOVED*** Translators: Felica divides cards up into a hierarchy with each card containing 1 or many
+    system codes. Each system code contains 1 or many service codes. Each service code contains 1
+    or many blocks of data. -->
+
+***REMOVED*** Translators: used as an accessibility label for a passengers icon -->
+    <plurals name="passengers">
+        <item quantity="one">passenger</item>
+        <item quantity="other">passengers</item>
+    </plurals>
+
+***REMOVED*** DESFire -->
+    <string name="desfire_standard_file">Standard file</string>
+    <string name="desfire_backup_file">Backup file</string>
+    <string name="desfire_value_file">Value file</string>
+    <string name="desfire_linear_record">Linear record</string>
+    <string name="desfire_cyclic_record">Cyclic record</string>
+    <string name="desfire_unknown_file">Unknown file type</string>
+    <string name="desfire_challenge">Challenge</string>
+    <string name="desfire_response">Response</string>
+    <string name="desfire_confirmation">Confirmation</string>
+    <string name="desfire_keyex">Key exchange</string>
+    <string name="desfire_key_number">Key %s</string>
+
+***REMOVED*** Type: Standard file, Length: 16 bytes -->
+    <plurals name="desfire_standard_format">
+        <item quantity="one">Type: %1$s, Length: %2$s byte</item>
+        <item quantity="other">Type: %1$s, Length: %2$s bytes</item>
+    </plurals>
+
+***REMOVED*** Type: Linear record, Records: 4 (6 maximum), Record size: 40 -->
+    <plurals name="desfire_record_format">
+        <item quantity="one">Type: %1$s, Record: %2$s (%3$s maximum), Record Size: %4$s</item>
+        <item quantity="other">Type: %1$s, Records: %2$s (%3$s maximum), Record Size: %4$s</item>
+    </plurals>
+
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+
+***REMOVED*** Type: Value file, Range: 0 - 2300, Limited credit: 400 (Enabled) -->
+    <string name="desfire_value_format">Type: %1$s, Range: %2$s - %3$s, Limited credit: %4$s (%5$s)</string>
+
+    <string name="hardware_information">Hardware Info</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+
+***REMOVED*** CEPAS hardware information -->
+    <string name="cepas_version">CEPAS Version</string>
+    <string name="cepas_purse_id">Purse ID</string>
+    <string name="cepas_purse_status">Purse Status</string>
+    <string name="cepas_purse_balance">Purse Balance</string>
+    <string name="cepas_purse_creation_date">Date of Purse Creation</string>
+    <string name="cepas_autoload_amount">Autoload Amount</string>
+    <string name="cepas_last_txn_info">Info About Last Transaction</string>
+    <string name="cepas_credit_header">Credit Header</string>
+    <string name="cepas_debit_options">Debit Options</string>
+    <string name="cepas_other_purse_info">Other Purse Info</string>
+    <string name="cepas_logfile_record_count">Logfile Record Count</string>
+    <string name="cepas_issuer_data_length">Issuer Data Length</string>
+    <string name="cepas_issuer_data">Issuer-specific Data</string>
+    <string name="cepas_purse_info">Purse Info</string>
+
+***REMOVED***
+    Translators: This is shown below a trip entry to describe the start and end stations of a trip.
+
+    The %1$s is the starting station. The %2$s is the ending station.
+
+    Text within parentheses: ( )
+      Hidden on the display, and only sent to screen readers.
+      This works with all supported versions of Android, and most screen readers.
+      You can use this any number of times.
+
+    Text within square brackets: [ ]
+      Shown on the display, and not sent to screen readers.
+      This only works with Android 5.0 or later.
+      It works with Talkback, but does not work with Select to Speak.
+      Do not put words in here.
+      You can use this any number of times.
+
+    Example:
+      Source: "(From )Tokyo [→] (to )Osaka"
+      Written: "Tokyo → Osaka"
+      Spoken: "From Tokyo  to Osaka"
+***REMOVED***
+    <string name="trip_description">(From )<xliff:g example="Tokyo" id="start_station">%1$s</xliff:g> [→] (to )<xliff:g example="Osaka" id="end_station">%2$s</xliff:g></string>
+***REMOVED*** Translators: it's used when departure point isn't known, eg: "to Central Station" -->
+    <string name="trip_description_unknown_start">to %s</string>
+***REMOVED***
+    Translators: it's used to show time in trip listing e.g. 12:35 - 12:51.
+    The time will be formatted according to user preferences.
+***REMOVED***
+    <string name="time_from_to"><xliff:g example="12:35" id="start_time">%1$s</xliff:g> → <xliff:g example="12:51" id="end_time">%2$s</xliff:g></string>
+***REMOVED***
+    Translators: it's used when departure time isn't known.
+    If "?" is the first character, it must be prefixed with "\".
+***REMOVED***
+    <string name="time_from_unknown_to">\??:?? → <xliff:g example="12:51" id="end_time">%s</xliff:g></string>
+
+
+***REMOVED*** Locations -->
+    <string name="location_singapore">Singapore</string>
+
+***REMOVED***
+    These strings are used for content descriptions (accessibility), for modes of transport.
+    Using them for custom pages on individual operators is discouraged (eg: Opal), as strings and
+    translations should match the terminology of the operator (eg: light rail vs. tram).
+***REMOVED***
+
+***REMOVED*** Used as descriptive text for the bus icon. -->
+    <string name="mode_bus">Bus</string>
+***REMOVED*** Used as descriptive text for the train icon. -->
+    <string name="mode_train">Train</string>
+***REMOVED*** Used as descriptive text for the tram icon. -->
+    <string name="mode_tram">Tram</string>
+***REMOVED*** Used as descriptive text for the metro icon. -->
+    <string name="mode_metro">Metro</string>
+***REMOVED*** Used as descriptive text for the ferry icon. -->
+    <string name="mode_ferry">Ferry</string>
+***REMOVED*** Used as descriptive text for the ticket machine icon. -->
+    <string name="mode_ticket_machine">Ticket Machine</string>
+***REMOVED*** Used as descriptive text for the vending machine icon. -->
+    <string name="mode_vending_machine">Vending Machine</string>
+***REMOVED*** Used as descriptive text for the point of sale icon. -->
+    <string name="mode_pos">Point of Sale</string>
+***REMOVED*** Used as descriptive text for the banned icon. -->
+    <string name="mode_banned">Banned</string>
+***REMOVED*** Used as descriptive text for the trolleybus icon. -->
+    <string name="mode_trolleybus">Trolleybus</string>
+***REMOVED*** Used as descriptive text for the unknown transit mode icon. -->
+    <string name="mode_unknown">Unknown</string>
+
+    <string name="ez_bus_number">Bus #%s</string>
+    <string name="ez_bus_refund">Bus Refund</string>
+    <string name="ez_mrt">MRT</string>
+    <string name="ez_topup">Top-up</string>
+    <string name="ez_first_use">First use</string>
+    <string name="ez_retail_purchase">Retail Purchase</string>
+    <string name="ez_service_charge">Service Charge</string>
+
+***REMOVED***
+        Go Card (South East Queensland/Brisbane, AU)
+        These are deliberately separated strings in order to match the terminology of the agency.
+***REMOVED***
+    <string name="seqgo_ticket_type_regular">Regular</string>
+
+***REMOVED***
+        Myki (Victoria, AU)
+        These are deliberately separated strings in order to match the terminology of the agency.
+***REMOVED***
+    <string name="software_information">Software Info</string>
+    <string name="convert_timezones">Convert times to current timezone</string>
+    <string name="convert_timezones_summary">By default, SGCardReader displays travel times in the timezone of the transit agency. If this option is enabled, SGCardReader will convert travel times to your device\'s current timezone.</string>
+
+    <string name="expiry_date">Expiry date</string>
+
+***REMOVED***
+    Translators: Some cards record the cardholder's gender, this is used to label the field.
+***REMOVED***
+
+***REMOVED*** En1545 and related cards -->
+
+***REMOVED*** Translators: The name of the transit agency who sold a subscription -->
+***REMOVED*** Translators: Attribute to describe the number of remaining trips on the card or subscription. -->
+
+***REMOVED*** Translators: Used to describe a subscription (travel pass) made of single trips. -->
+
+***REMOVED*** Translators "Last used" is a date, time or date+time attribute -->
+***REMOVED*** Translators: Free as in "gratis" (costing no money) -->
+
+***REMOVED*** Translators: This refers to a person's name. -->
+
+***REMOVED***
+    Translators: This is used to describe whether a card is personalised (registered to an
+    individual) or anonymous (not registered).
+ ***REMOVED***
+    <string name="card_type">Card type</string>
+
+***REMOVED*** Translators: Used to describe a card that is not registered to any individual. -->
+***REMOVED*** Translators: Used to describe a card that has been registered in an individual's name. -->
+
+***REMOVED***
+    Translators: This should never be translated as "ZIP code".
+    This string should not be used for ticketing systems in USA.
+***REMOVED***
+    <string name="blank_mfu_card">Blank MIFARE Ultralight card</string>
+    <string name="blank_mfc_card">Blank MIFARE Classic card</string>
+    <string name="fully_blank_desc">
+        This card is completely blank as far as we can tell. It is formatted
+        but without any data written to it. It still has a serial number by which it can be
+        uniquely identified and linked to a database but card itself contains no other data.
+    </string>
+    <string name="fully_blank_title">Blank card</string>
+
+***REMOVED*** Translators: T-money is Korean payment/transit system. Korean: 티머니
+    May be transliterated -->
+
+    <string name="app_version">Version: %s</string>
+    <string name="device_model">Model: <xliff:g example="Pixel 2" id="model_name">%1$s</xliff:g> (<xliff:g example="walleye" id="model_codename">%2$s</xliff:g>)</string>
+    <string name="device_manufacturer">Manufacturer: <xliff:g example="HTC" id="manufacturer">%1$s</xliff:g> (<xliff:g example="Google" id="brand">%2$s</xliff:g>)</string>
+    <string name="android_os">Android OS: <xliff:g example="9.0" id="version">%1$s</xliff:g> (<xliff:g example="PPR2.180905.006" id="build_id">%2$s</xliff:g>)</string>
+    <string name="nfc_enabled">NFC: enabled</string>
+    <string name="nfc_disabled">NFC: disabled</string>
+    <string name="nfc_not_available">NFC: not available</string>
+    <string name="mfc_supported">MIFARE Classic: supported</string>
+    <string name="mfc_not_supported">MIFARE Classic: not supported</string>
+    <string name="balances_and_subscriptions">Tickets</string>
+    <string name="pref_show_raw_station_ids">Show raw station IDs</string>
+    <string name="pref_show_raw_station_ids_desc">If true, a raw station ID is shown in addition to station name</string>
+    <string name="station_database">Station database</string>
+
+***REMOVED*** Translators: Used as a menu title in the preferences screen -->
+    <string name="advanced_options">Advanced options</string>
+
+***REMOVED*** Translators: Used as a submenu title in the preferences screen -->
+    <string name="developer_options">Developer options</string>
+***REMOVED*** Translators: Used as a description for the Developer options submenu -->
+    <string name="developer_options_desc">Use of station databases, obfuscation modes…</string>
+
+***REMOVED*** Translators: Used as a submenu title in the preferences screen -->
+    <string name="nfc">Near Field Communication</string>
+***REMOVED*** Translators: Used as a description for the Near Field Communication options submenu -->
+    <string name="nfc_options_desc">Fallback reader for MIFARE Classic, physical card interface settings…</string>
+
+***REMOVED*** Translators: FCI = File Control Information. Used in the context of ISO 7816 cards. -->
+    <string name="file_fci">File FCI</string>
+***REMOVED*** Translators: FCI = File Control Information. Used in the context of ISO 7816 cards. -->
+    <string name="app_fci">App FCI</string>
+    <string name="classic_key">MIFARE Classic key</string>
+***REMOVED***
+    Translators: MIFARE Classic has two keys: key "A" and key "B".
+    "Key" can be translated, but do not transliterate "A" or "B".
+***REMOVED***
+    <string name="classic_key_a">Key A</string>
+***REMOVED***
+    Translators: MIFARE Classic has two keys: key "A" and key "B".
+    "Key" can be translated, but do not transliterate "A" or "B".
+***REMOVED***
+    <string name="classic_key_b">Key B</string>
+
+
+    <string name="classic_key_format_a">Key (A): %s</string>
+    <string name="classic_key_format_b">Key (B): %s</string>
+    <string name="classic_key_format">Key: %s</string>
+
+***REMOVED***
+    Translators: This button will open a web page with technical descriptions of the file formats,
+    written in English.
+***REMOVED***
+    <string name="about_key_formats">About key formats…</string>
+    <string name="invalid_json">Invalid JSON</string>
+    <string name="invalid_key_file">Invalid key file</string>
+***REMOVED*** Translators: "key file" is a file containing encryption keys. -->
+    <string name="key_file_empty">Key file is empty!</string>
+
+***REMOVED*** Translators: Shown as a label for a group of keys that does not have any label or description. -->
+    <string name="untitled_key_group">Untitled key group</string>
+
+    <plurals name="keytype_mfc_static">
+        <item quantity="one">%d static MIFARE Classic key</item>
+        <item quantity="other">%d static MIFARE Classic keys</item>
+    </plurals>
+
+    <string name="no_static_key_assignment">Static keys cannot be assigned to a single card.</string>
+
+***REMOVED***
+    Translators: This is used to describe a vehicle number/ID. It doesn't have to be a number.
+
+    eg: "Vehicle 1024", "Vehicle 2A10"
+***REMOVED***
+    <string name="vehicle_number">Vehicle %s</string>
+    <string name="card_id">Card ID</string>
+***REMOVED*** Translators: used as a preference category label, for settings related to the display of maps -->
+    <string name="title_activity_trip_gmaps">Map</string>
+***REMOVED***

@@ -16,6 +16,10 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature android:name="android.hardware.nfc" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -299,6 +303,83 @@
         <activity android:name=".Modules.SGPsi.PsiGraphActivity"
             android:label="SG PSI Graphs"
             android:theme="@style/AppTheme.NoAppBar"/>
+
+
+        <activity
+            android:name=".Modules.CEPASReader.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/${applicationId}.card" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Modules.CEPASReader.activity.ReadingTagActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".Modules.CEPASReader.activity.BackgroundTagActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:enabled="false"
+            android:launchMode="singleTop"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/filter_nfc" />
+        </activity>
+        <activity
+            android:name=".Modules.CEPASReader.activity.CardInfoActivity"
+            android:configChanges="keyboardHidden|orientation">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/${applicationId}.card" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Modules.CEPASReader.activity.PreferencesActivity"
+            android:label="@string/preferences" />
+        <activity
+            android:name=".Modules.CEPASReader.activity.SupportedCardsActivity"
+            android:label="@string/supported_cards"
+            android:screenOrientation="sensorPortrait" />
+
+    ***REMOVED***
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+    ***REMOVED***
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".Modules.CEPASReader.activity.TripGMapsActivity"
+            android:label="@string/title_activity_trip_gmaps" />
     </application>
 
 </manifest>

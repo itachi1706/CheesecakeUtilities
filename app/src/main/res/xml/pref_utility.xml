@@ -16,4 +16,25 @@
             android:key="veh_mileage_decimal" android:defaultValue="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="CEPAS Card Reader">
+        <CheckBoxPreference
+            android:title="@string/launch_from_background"
+            android:persistent="false"
+            android:key="pref_launch_from_background"/>
+
+        <CheckBoxPreference
+            android:title="@string/convert_timezones"
+            android:summary="@string/convert_timezones_summary"
+            android:key="pref_convert_timezones"
+            android:defaultValue="false"/>
+
+        <ListPreference
+            android:key="pref_theme"
+            android:title="@string/pref_theme"
+            android:summary="@string/pref_theme_desc"
+            android:defaultValue="dark"
+            android:entries="@array/themes"
+            android:entryValues="@array/theme_values" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
