@@ -20,30 +20,31 @@
 package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.View;
-
-import java.util.ArrayList;
 
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.util.ArrayList;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 public class TabPagerAdapter extends PagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-    private final Activity mActivity;
+    private final AppCompatActivity mActivity;
     private final ActionBar mActionBar;
     private final ViewPager mViewPager;
     private final ArrayList<TabInfo> mTabs = new ArrayList<>();
     private FragmentTransaction mCurTransaction = null;
 
-    public TabPagerAdapter(Activity activity, ViewPager pager) {
+    public TabPagerAdapter(AppCompatActivity activity, ViewPager pager) {
         mActivity = activity;
-        mActionBar = activity.getActionBar();
+        mActionBar = activity.getSupportActionBar();
         mViewPager = pager;
         mViewPager.setAdapter(this);
         mViewPager.setOnPageChangeListener(this);
@@ -127,7 +128,8 @@ public class TabPagerAdapter extends PagerAdapter implements ActionBar.TabListen
     public void onPageScrollStateChanged(int state) {
     }
 
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, androidx.fragment.app.FragmentTransaction ft) {
         Object tag = tab.getTag();
         for (int i = 0; i < mTabs.size(); i++) {
             if (mTabs.get(i) == tag) {
@@ -136,10 +138,14 @@ public class TabPagerAdapter extends PagerAdapter implements ActionBar.TabListen
         }
     }
 
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, androidx.fragment.app.FragmentTransaction ft) {
+
     }
 
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, androidx.fragment.app.FragmentTransaction ft) {
+
     }
 
     private static final class TabInfo {

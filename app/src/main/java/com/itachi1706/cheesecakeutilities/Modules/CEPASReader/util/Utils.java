@@ -49,7 +49,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -330,7 +330,7 @@ public class Utils {
     }
 
     public static String getDeviceInfoString() {
-        SGCardReaderApplication app = SGCardReaderApplication.getInstance();
+        CheesecakeUtilitiesApplication app = CheesecakeUtilitiesApplication.getInstance();
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(app);
         boolean nfcAvailable = nfcAdapter != null;
         boolean nfcEnabled = false;
@@ -367,7 +367,7 @@ public class Utils {
 
     private static PackageInfo getPackageInfo() {
         try {
-            SGCardReaderApplication app = SGCardReaderApplication.getInstance();
+            CheesecakeUtilitiesApplication app = CheesecakeUtilitiesApplication.getInstance();
             return app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
@@ -493,7 +493,7 @@ public class Utils {
      * @return Localized string
      */
     public static String localizeString(@StringRes int stringResource, Object... formatArgs) {
-        Resources res = SGCardReaderApplication.getInstance().getResources();
+        Resources res = CheesecakeUtilitiesApplication.getInstance().getResources();
         return res.getString(stringResource, formatArgs);
     }
 
@@ -507,12 +507,12 @@ public class Utils {
      * @return Localized string
      */
     public static String localizePlural(@PluralsRes int pluralResource, int quantity, Object... formatArgs) {
-        Resources res = SGCardReaderApplication.getInstance().getResources();
+        Resources res = CheesecakeUtilitiesApplication.getInstance().getResources();
         return res.getQuantityString(pluralResource, quantity, formatArgs);
     }
 
     private static String formatCalendar(java.text.DateFormat df, Calendar c) {
-        if (!SGCardReaderApplication.convertTimezones()) {
+        if (!CheesecakeUtilitiesApplication.convertTimezones()) {
             df.setTimeZone(c.getTimeZone());
         } else {
             df.setTimeZone(TimeZone.getDefault());
@@ -522,7 +522,7 @@ public class Utils {
     }
 
     private static Calendar maybeConvertTimezone(Calendar input) {
-        if (SGCardReaderApplication.convertTimezones()) {
+        if (CheesecakeUtilitiesApplication.convertTimezones()) {
             Calendar o = new GregorianCalendar(TimeZone.getDefault());
             o.setTimeInMillis(input.getTimeInMillis());
             return o;
@@ -537,7 +537,7 @@ public class Utils {
     // TODO: Investigate using Joda Time or something else that sucks less than Java at handling dates.
     public static Spanned longDateFormat(Calendar date) {
         if (date == null) return new SpannableString("");
-        String s = formatCalendar(DateFormat.getLongDateFormat(SGCardReaderApplication.getInstance()), date);
+        String s = formatCalendar(DateFormat.getLongDateFormat(CheesecakeUtilitiesApplication.getInstance()), date);
 
         SpannableString b = new SpannableString(s);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -556,7 +556,7 @@ public class Utils {
 
     public static Spanned dateFormat(Calendar date) {
         if (date == null) return new SpannableString("");
-        String s = formatCalendar(DateFormat.getDateFormat(SGCardReaderApplication.getInstance()), date);
+        String s = formatCalendar(DateFormat.getDateFormat(CheesecakeUtilitiesApplication.getInstance()), date);
 
         SpannableString b = new SpannableString(s);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -574,7 +574,7 @@ public class Utils {
 
     public static Spanned timeFormat(Calendar date) {
         if (date == null) return new SpannableString("");
-        String s = formatCalendar(DateFormat.getTimeFormat(SGCardReaderApplication.getInstance()), date);
+        String s = formatCalendar(DateFormat.getTimeFormat(CheesecakeUtilitiesApplication.getInstance()), date);
 
         SpannableString b = new SpannableString(s);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -589,8 +589,8 @@ public class Utils {
 
     public static Spanned dateTimeFormat(Calendar date) {
         if (date == null) return new SpannableString("");
-        String d = formatCalendar(DateFormat.getDateFormat(SGCardReaderApplication.getInstance()), date);
-        String t = formatCalendar(DateFormat.getTimeFormat(SGCardReaderApplication.getInstance()), date);
+        String d = formatCalendar(DateFormat.getDateFormat(CheesecakeUtilitiesApplication.getInstance()), date);
+        String t = formatCalendar(DateFormat.getTimeFormat(CheesecakeUtilitiesApplication.getInstance()), date);
 
         SpannableStringBuilder b = new SpannableStringBuilder(d);
         b.append(" ");

@@ -23,7 +23,7 @@ package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit;
 import android.net.Uri;
 import android.os.Parcelable;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.ui.ListItem;
 
 import java.util.Collections;
@@ -95,7 +95,7 @@ public abstract class TransitData implements Parcelable {
      * Note: in order to support obfuscation / hiding behaviour, if you implement this method, you
      * also need to use some other functionality:
      * <ul>
-     * <li>Check for {@link SGCardReaderApplication#hideCardNumbers()} whenever you show a card
+     * <li>Check for {@link CheesecakeUtilitiesApplication#hideCardNumbers()} whenever you show a card
      * number, or other mark (such as a name) that could be used to identify this card or its
      * holder.</li>
      *

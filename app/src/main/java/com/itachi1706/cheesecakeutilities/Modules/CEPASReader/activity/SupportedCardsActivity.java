@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.CardType;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit.CardInfo;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
@@ -111,7 +111,7 @@ public class SupportedCardsActivity extends SGCardReaderActivity {
 
             String notes = "";
 
-            SGCardReaderApplication app = SGCardReaderApplication.getInstance();
+            CheesecakeUtilitiesApplication app = CheesecakeUtilitiesApplication.getInstance();
             NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(getContext());
             boolean nfcAvailable = nfcAdapter != null;
 

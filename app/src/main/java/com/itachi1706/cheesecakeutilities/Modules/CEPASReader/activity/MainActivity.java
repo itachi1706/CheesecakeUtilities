@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public String getHelpDescription() {
-        return "A Card reader that supports CEPAS cards. Click on View Supported Cards to learn more";
+        return "A Card reader that supports CEPAS cards. Click on Supported Cards to learn more";
     }
 
     @Override

@@ -22,7 +22,7 @@ package com.itachi1706.cheesecakeutilities.Modules.CEPASReader.transit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.StationTableReader;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
 import com.itachi1706.cheesecakeutilities.R;
@@ -96,7 +96,7 @@ public class Station implements Parcelable {
     }
 
     private boolean showRawId() {
-        return SGCardReaderApplication.showRawStationIds();
+        return CheesecakeUtilitiesApplication.showRawStationIds();
     }
 
     public String getShortStationName() {

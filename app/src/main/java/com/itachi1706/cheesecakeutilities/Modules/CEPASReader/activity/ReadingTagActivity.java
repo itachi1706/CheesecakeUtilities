@@ -39,7 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.BuildConfig;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.Card;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.TagReaderFeedbackInterface;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.UnsupportedTagException;
@@ -143,8 +143,8 @@ public class ReadingTagActivity extends SGCardReaderActivity implements TagReade
             final byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String lastReadId = prefs.getString(SGCardReaderApplication.PREF_LAST_READ_ID, "");
-            long lastReadAt = prefs.getLong(SGCardReaderApplication.PREF_LAST_READ_AT, 0);
+            String lastReadId = prefs.getString(CheesecakeUtilitiesApplication.PREF_LAST_READ_ID, "");
+            long lastReadAt = prefs.getLong(CheesecakeUtilitiesApplication.PREF_LAST_READ_AT, 0);
 
             // Prevent reading the same card again right away.
             // This was especially a problem with FeliCa cards.
@@ -188,7 +188,7 @@ public class ReadingTagActivity extends SGCardReaderActivity implements TagReade
 
                 ReadingTagActivity.this.updateStatusText(Utils.localizeString(R.string.saving_card));
 
-                String cardXml = card.toXml(SGCardReaderApplication.getInstance().getSerializer());
+                String cardXml = card.toXml(CheesecakeUtilitiesApplication.getInstance().getSerializer());
 
                 if (BuildConfig.DEBUG) {
                     if (card.isPartialRead()) {
@@ -204,8 +204,8 @@ public class ReadingTagActivity extends SGCardReaderActivity implements TagReade
                 String tagIdString = Utils.getHexString(card.getTagId());
 
                 SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(ReadingTagActivity.this).edit();
-                prefs.putString(SGCardReaderApplication.PREF_LAST_READ_ID, tagIdString);
-                prefs.putLong(SGCardReaderApplication.PREF_LAST_READ_AT, GregorianCalendar.getInstance().getTimeInMillis());
+                prefs.putString(CheesecakeUtilitiesApplication.PREF_LAST_READ_ID, tagIdString);
+                prefs.putLong(CheesecakeUtilitiesApplication.PREF_LAST_READ_AT, GregorianCalendar.getInstance().getTimeInMillis());
                 prefs.apply();
 
                 mPartialRead = card.isPartialRead();

@@ -1,6 +1,5 @@
-package com.itachi1706.cheesecakeutilities.Modules.CEPASReader;
+package com.itachi1706.cheesecakeutilities;
 
-import android.app.Application;
 import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.os.StrictMode;
@@ -36,8 +35,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDexApplication;
 
-public class SGCardReaderApplication extends Application {
+public class CheesecakeUtilitiesApplication extends MultiDexApplication {
     private static final String TAG = "SGCardReaderApplication";
     public static final String PREF_LAST_READ_ID = "last_read_id";
     public static final String PREF_LAST_READ_AT = "last_read_at";
@@ -52,12 +52,12 @@ public class SGCardReaderApplication extends Application {
         devicesMifareWorks.add("Pixel 2");
     }
 
-    private static SGCardReaderApplication sInstance;
+    private static CheesecakeUtilitiesApplication sInstance;
 
     private final Serializer mSerializer;
     private boolean mMifareClassicSupport = false;
 
-    public SGCardReaderApplication() {
+    public CheesecakeUtilitiesApplication() {
         sInstance = this;
 
         try {
@@ -90,13 +90,13 @@ public class SGCardReaderApplication extends Application {
         }
     }
 
-    public static SGCardReaderApplication getInstance() {
+    public static CheesecakeUtilitiesApplication getInstance() {
         return sInstance;
     }
 
     public static boolean convertTimezones() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getInstance());
-        return prefs.getBoolean(SGCardReaderApplication.PREF_CONVERT_TIMEZONES, false);
+        return prefs.getBoolean(CheesecakeUtilitiesApplication.PREF_CONVERT_TIMEZONES, false);
     }
 
     public Serializer getSerializer() {
@@ -156,7 +156,7 @@ public class SGCardReaderApplication extends Application {
     }
 
     public static boolean showRawStationIds() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SGCardReaderApplication.getInstance());
-        return prefs.getBoolean(SGCardReaderApplication.PREF_SHOW_RAW_IDS, false);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CheesecakeUtilitiesApplication.getInstance());
+        return prefs.getBoolean(CheesecakeUtilitiesApplication.PREF_SHOW_RAW_IDS, false);
     }
 }
