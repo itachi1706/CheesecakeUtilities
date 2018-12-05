@@ -32,15 +32,12 @@ import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
-
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.SGCardReaderApplication;
+import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.util.Utils;
+import com.itachi1706.cheesecakeutilities.R;
 
 public class MainActivity extends SGCardReaderActivity {
     private NfcAdapter mNfcAdapter;
@@ -127,23 +124,5 @@ public class MainActivity extends SGCardReaderActivity {
 
     public void onSupportedCardsClick(View view) {
         startActivity(new Intent(this, SupportedCardsActivity.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.module_cepas_main, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.prefs:
-                startActivity(new Intent(this, PreferencesActivity.class));
-                break;
-        }
-
-        return false;
     }
 }
