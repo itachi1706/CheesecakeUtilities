@@ -4,4 +4,5 @@
     <external-cache-path path="images_cache/" name="image" />
     <cache-path path="applist/" name="applist" />
     <external-path path="AndroidAppBackup/" name="backup" />
+    <cache-path name="share" path="share"/>
 </paths>

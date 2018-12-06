@@ -89,4 +89,10 @@
         <copyright>Copyright © 2010 ZXing authors</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
+    <notice>
+        <name>Simple XML</name>
+        <url>http://simple.sourceforge.net/home.php</url>
+        <copyright>Copyright © 2013 Niall Gallagher (niallg@users.sf.net)</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
 </notices>
