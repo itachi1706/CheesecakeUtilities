@@ -21,6 +21,7 @@ env:
   - ADB_INSTALL_TIMEOUT=20
   - ANDROID_TARGET=android-23
   - ANDROID_TAG=google_apis
+  - DISCORD_URL=https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
 android:
   components:
   - tools
@@ -53,9 +54,15 @@ after_success:
 - mv ./app/build/outputs/apk/debug/app-debug.apk ./app/build/outputs/apk/debug/CheesecakeUtilities-debug.apk
 - ls ./app/build/outputs/apk/
 - ls ./app/build/outputs/apk/debug/
+- wget $DISCORD_URL
+- chmod +x send.sh
+- ./send.sh success $WEBHOOK_URL
 after_failure:
 - ls $TRAVIS_BUILD_DIR/app/build/outputs/androidTest-results/connected/
 - cat $TRAVIS_BUILD_DIR/app/build/outputs/androidTest-results/connected/TEST-*.xml
+- wget $DISCORD_URL
+- chmod +x send.sh
+- ./send.sh failure $WEBHOOK_URL
 deploy:
   provider: releases
   api_key: "$OAUTH_KEY"
