@@ -51,3 +51,5 @@ app/key.properties
 app/google-services.json
 Cloud Functions/functions/node_modules/
 app/release/
+secrets.tar
+app/src/main/res/values/google_maps_api.xml
