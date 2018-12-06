@@ -134,7 +134,7 @@ dependencies {
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
