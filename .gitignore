@@ -49,5 +49,7 @@ fabric.properties
 *.iml
 app/key.properties
 app/google-services.json
+app/src/main/res/values/google_maps_api.xml
+secrets.tar
 Cloud Functions/functions/node_modules/
 app/release/

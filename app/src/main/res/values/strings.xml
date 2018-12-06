@@ -1,7 +1,7 @@
-***REMOVED***
+<resources>
     <string name="app_name">Cheesecake Utilities</string>
 
-***REMOVED*** String to Binary/Hex Converter -->
+    <!-- String to Binary/Hex Converter -->
     <string name="bin_hex_title">BIN/HEX CONVERTER</string>
     <string name="bin_hex_title_full">Binary/Hex Converter</string>
     <string name="bin_hex_hint_enter_message">ENTER MESSAGE:</string>
@@ -18,7 +18,7 @@
     <string name="bin_hex_btn_send_caps">SEND</string>
     <string name="bin_hex_btn_clear">CLEAR</string>
 
-***REMOVED*** Spam Messages -->
+    <!-- Spam Messages -->
     <string name="msg_spam_title">Message Spam</string>
     <string name="msg_spam_btn_send">Send</string>
     <string name="msg_spam_btn_contacts">Contacts</string>
@@ -26,31 +26,31 @@
     <string name="msg_spam_hint_message">Message:</string>
     <string name="msg_spam_hint_contact_number">Contact Phone Number:</string>
 
-***REMOVED*** HTC Serial ID -->
+    <!-- HTC Serial ID -->
     <string name="htc_sn_id_serial_field_hint">Enter Serial Number</string>
     <string name="htc_sn_id_button_phone_serial">Use Phone Serial</string>
     <string name="htc_sn_id_btn_search">Search</string>
 
-***REMOVED*** Menu Items -->
+    <!-- Menu Items -->
     <string name="menu_settings">Settings</string>
     <string name="menu_exit">Exit</string>
     <string name="menu_about">About</string>
 
-***REMOVED*** Strings related to Settings -->
+    <!-- Strings related to Settings -->
     <string name="title_activity_general_settings">Settings</string>
     <string name="pref_hint_util_visibility">Hide/Show Utility</string>
     <string name="pref_hint_util_lock">Lock/Unlock utility</string>
 
-***REMOVED*** Fingerprint -->
+    <!-- Fingerprint -->
     <string name="dialog_authenticated">Authenticated</string>
     <string name="dialog_cancelled">Authentication cancelled</string>
 
-***REMOVED*** Example General settings -->
+    <!-- Example General settings -->
     <string name="pref_header_general">General</string>
     <string name="link_updates">https://github.com/itachi1706/CheesecakeUtilities/releases/latest</string>
     <string name="link_legacy">https://github.com/itachi1706/CheesecakeUtilities/releases</string>
 
-***REMOVED*** Fanfic Compactor Strings -->
+    <!-- Fanfic Compactor Strings -->
     <string name="ff_compat_query_placeholder">Querying…</string>
     <string name="ff_compat_lbl_stories_count">Stories Count:&#160;</string>
     <string name="ff_compat_lbl_folder_size">Folder Size:&#160;</string>
@@ -63,7 +63,7 @@
     <string name="ff_compat_result_fanfic_story_count">DB: %1$d stories | SD: %2$d stories</string>
     <string name="ff_compat_btn_dup_scan">Scan for Duplicates</string>
 
-***REMOVED*** Camera Disable Device Administrator -->
+    <!-- Camera Disable Device Administrator -->
     <string name="camera_disable_desc">Allows Cheesecake Utilities to control the device\'s camera</string>
     <string name="camera_disable_explaination">This allows the app to control whether or not the camera on the device should be disabled</string>
     <string name="camera_disable_explaination_disclosure">In order to control the camera capabilities of the device, it requires the use of a Device Administrator Policy that grants the capability to enable or disable the camera capabilities of the device.\n\nIf you still wish to continue, click the \"Grant Permission\" button. Otherwise click the \"Cancel\" button to return to the main screen</string>
@@ -86,7 +86,7 @@
     <string name="camera_disable_enabled_toast">Device Administrator Enabled</string>
     <string name="camera_disable_enabled_message">You are now able to control the camera capabilities of your device.\n\nNote: If you wish to revoke the Device Administrator permission from the app, simply click on the \"Disable Device Admin\" button</string>
 
-***REMOVED*** System Information -->
+    <!-- System Information -->
     <string name="sys_info_CPU1">Processor</string>
     <string name="sys_info_CPU2">CPU Type</string>
     <string name="sys_info_CPU3">CPU Instructions</string>
@@ -160,7 +160,7 @@
     <string name="sys_info_cpucores">CPU Cores: %s</string>
     <string name="sys_info_cpufreq">Current Frequency: %s</string>
 
-***REMOVED*** Nav Bar Customization -->
+    <!-- Nav Bar Customization -->
     <string name="nav_bar_image">Navigation Bar image</string>
     <string name="nav_bar_activate_svc">Activate Navigation Bar Service</string>
     <string name="nav_bar_activate_svc_app_name">Show current Application Name</string>
@@ -176,7 +176,7 @@
     <string name="nav_bar_config">Configurations</string>
     <string name="nav_bar_svc_enable">Enable Service</string>
 
-***REMOVED*** Tic Tac Toe Game -->
+    <!-- Tic Tac Toe Game -->
     <string name="tic_tac_toe_btn_placeholder">New Button</string>
     <string name="tic_tac_toe_btn_start">Start Game</string>
     <string name="tic_tac_toe_btn_reset">Reset Game</string>
@@ -190,12 +190,12 @@
     <string name="tic_tac_toe_hud">Current Turn: %1$s \t Turn: %2$d</string>
     <string name="tic_tac_toe_hint_hud">%1$s Starts First! Turn: %2$d</string>
 
-***REMOVED*** App Shortcuts -->
+    <!-- App Shortcuts -->
     <string name="featured_util_label">Featured Utility</string>
     <string name="featured_util_long_label">Displays a Featured Utility from the app</string>
     <string name="featured_util_disabled_label">The Featured Utility shortcut is disabled</string>
 
-***REMOVED*** SafetyNet -->
+    <!-- SafetyNet -->
     <string name="safetynet_info_details">Running the test verify if the device and ROM has passed the Android Compatibility Test Suite (CTS).</string>
     <string name="safetynet_results">SafetyNet response success!\nCTS profile match: %1$b\nBasic Integrity: %2$b</string>
     <string name="safetynet_results_note">Note: The "basicIntegrity" field is a weaker check than "ctsProfileMatch". Use the result from "ctsProfileMatch" if you need to be absolutely sure that the device passes CTS.</string>
@@ -206,7 +206,7 @@
     <string name="safetynet_run_safetynet_test_button">Run SafetyNet test</string>
     <string name="safetynet_error">Error Msg:\n%1$s</string>
 
-***REMOVED*** ORD Countdown -->
+    <!-- ORD Countdown -->
     <string name="ord_pes_status">PES Status:</string>
     <string name="ord_settings_label">ORD Countdown Settings</string>
     <string name="ord_placeholder_complete">\?.??\% Completed</string>
@@ -229,14 +229,14 @@
     <string name="ord_menu_modify">Modify ORD Settings</string>
     <string name="ord_menu_holiday">Holiday</string>
 
-***REMOVED*** BMI Calculator -->
+    <!-- BMI Calculator -->
     <string name="bmi_hint_height">Height (cm)</string>
     <string name="bmi_hint_weight">Weight (kg)</string>
     <string name="bmi_btn_calculate">Calculate BMI</string>
     <string name="bmi_btn_table">BMI Table</string>
     <string name="bmi_val_placeholder">BMI Value: 0.0</string>
 
-***REMOVED*** Connectivity Quiet Hours -->
+    <!-- Connectivity Quiet Hours -->
     <string name="connectivity_wifi_snooze">Wi-Fi Snooze Configuration</string>
     <string name="connectivity_start_time">Start Time</string>
     <string name="connectivity_end_time">End Time</string>
@@ -244,7 +244,7 @@
     <string name="connectivity_bluetooth_snooze">Bluetooth Snooze Configuration</string>
     <string name="connectivity_trigger_history">Trigger History</string>
 
-***REMOVED*** IPPT Calculator -->
+    <!-- IPPT Calculator -->
     <string name="ippt_hint_run_min">2.4km Run (min)</string>
     <string name="ippt_hint_run_sec">2.4km Run (sec)</string>
     <string name="ippt_hint_push_ups">Push Ups</string>
@@ -253,7 +253,7 @@
     <string name="ippt_hint_score_table">View Scoring System</string>
     <string name="ippt_menu_score_board">View IPPT Scoring Board</string>
 
-***REMOVED*** App List/Restore -->
+    <!-- App List/Restore -->
     <string name="list_app_desc_app_icon">App Icon</string>
     <string name="list_app_backup">Backup</string>
     <string name="list_app_launch">Launch</string>
@@ -276,7 +276,7 @@
     <string name="list_app_menu_uninstall_apk">Uninstall App</string>
     <string name="list_app_menu_share_apk">Share APK File</string>
 
-***REMOVED*** Barcode Tools -->
+    <!-- Barcode Tools -->
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">This utility cannot run because it does not have the camera permission.  The utility will now exit.</string>
@@ -289,7 +289,7 @@
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
 
-***REMOVED*** Unsorted/Misc/General -->
+    <!-- Unsorted/Misc/General -->
     <string name="loading_label">Loading…</string>
     <string name="placeholder_text">Text Here</string>
     <string name="enable">Enable</string>
@@ -300,4 +300,4 @@
     <string name="number">%1$d</string>
     <string name="title_activity_vehicle_mileage_tracker_login">Sign in Required</string>
 
-***REMOVED***
+</resources>

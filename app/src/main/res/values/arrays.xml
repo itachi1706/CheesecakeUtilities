@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-***REMOVED***
+<resources>
     <string-array name="mainmenu">
         <item>String to Binary/Hex Converter</item>
         <item>Message Spam</item>
@@ -126,4 +126,4 @@
         <item>Must be 7 numbers long</item>
         <item>No Restrictions</item>
     </string-array>
-***REMOVED***
+</resources>
