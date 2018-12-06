@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context=".fragment.BlankCardFragment">
 
-***REMOVED*** TODO: Update blank fragment layout -->
+    <!-- TODO: Update blank fragment layout -->
 
     <ScrollView
         android:layout_width="fill_parent"

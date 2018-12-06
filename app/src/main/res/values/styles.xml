@@ -50,7 +50,8 @@
         <item>@drawable/banned</item>
         <item>@drawable/trolleybus</item>
     </integer-array>
-    
+
+    <!-- Base application theme. -->
     <style name="DarkTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
