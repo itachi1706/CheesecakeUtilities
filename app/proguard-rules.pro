@@ -25,6 +25,7 @@
 -dontwarn com.squareup.picasso.**
 -dontwarn com.scottyab.safetynet.**
 -dontwarn com.itachi1706.cheesecakeutilities.**
+-dontwarn javax.xml.stream.**
 -keep public class com.itachi1706.cheesecakeutilities.**
 -keepattributes Signature
 -keepattributes InnerClasses
