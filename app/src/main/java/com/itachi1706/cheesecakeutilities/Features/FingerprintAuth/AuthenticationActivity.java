@@ -8,14 +8,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.itachi1706.appupdater.extlib.fingerprint.FingerprintDialog;
 import com.itachi1706.cheesecakeutilities.R;
 
-import java.security.InvalidKeyException;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometrics.BiometricPrompt;
 
-public class AuthenticationActivity extends AppCompatActivity implements FingerprintDialog.Callback {
+public class AuthenticationActivity extends AppCompatActivity {
 
     SharedPreferences sp;
     FirebaseAnalytics mFirebaseAnalytics;
@@ -27,55 +26,46 @@ public class AuthenticationActivity extends AppCompatActivity implements Fingerp
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!PasswordHelper.hasPassword(sp)) {
-            // No password, treat as authenticated
-            Log.i("Authentication", "No Password Found. Presuming Authenticated");
-            setResult(RESULT_OK);
-            finish();
-        }
-        // TODO: Migrate to FP Authentication with BiometricPromptCompat
         PasswordHelper.migrateToBiometric(sp);
-        FingerprintDialog.show(this, getString(R.string.app_name), 10);
+        if (BiometricCompatHelper.isBiometricFPRegistered(this) && BiometricCompatHelper.requireFPAuth(sp)) {
+            // Has Fingerprint and requested for fingerprint auth
+            BiometricPrompt.PromptInfo promptInfo = BiometricCompatHelper.createPromptObject();
+            BiometricPrompt p = new BiometricPrompt(this, BiometricCompatHelper.getBiometricExecutor(), callback);
+            p.authenticate(promptInfo);
+        }
     }
 
-    @Override
-    public void onFingerprintDialogAuthenticated() {
-        Toast.makeText(this, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
-        Log.i("Authentication", "User Authenticated");
-        setResult(RESULT_OK);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
-        finish();
-    }
-
-    @Override
-    public void onFingerprintDialogVerifyPassword(final FingerprintDialog dialog, final String password) {
-        boolean result;
-        try {
-            result = PasswordHelper.verifyPassword(sp, password);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Invalid Password saved. Your data may have been tampered or corrupted. Please clear app data if you cannot advance", Toast.LENGTH_LONG).show();
+    private BiometricPrompt.AuthenticationCallback callback = new BiometricPrompt.AuthenticationCallback() {
+        @Override
+        public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+            super.onAuthenticationError(errorCode, errString);
+            Toast.makeText(getApplicationContext(), R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+            Log.e("Authentication", "Authentication Error (" + errorCode + "): " + errString);
             Intent intent = new Intent();
-            intent.putExtra("message", "Invalid Password");
+            intent.putExtra("message", "Auth Error");
             setResult(RESULT_CANCELED, intent);
             finish();
-            return;
         }
-        dialog.notifyPasswordValidation(result);
-    }
 
-    @Override
-    public void onFingerprintDialogStageUpdated(FingerprintDialog dialog, FingerprintDialog.Stage stage) {
-        Log.d("Authentication", "Dialog stage: " + stage.name());
-    }
+        @Override
+        public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+            super.onAuthenticationSucceeded(result);
+            Toast.makeText(getApplicationContext(), R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
+            Log.i("Authentication", "User Authenticated");
+            setResult(RESULT_OK);
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
+            finish();
+        }
 
-    @Override
-    public void onFingerprintDialogCancelled() {
-        Toast.makeText(this, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-        Log.i("Authentication", "User Cancelled Authentication");
-        Intent intent = new Intent();
-        intent.putExtra("message", "Dialog Cancelled");
-        setResult(RESULT_CANCELED, intent);
-        finish();
-    }
+        @Override
+        public void onAuthenticationFailed() {
+            super.onAuthenticationFailed();
+            Toast.makeText(getApplicationContext(), R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+            Log.i("Authentication", "User Cancelled Authentication");
+            Intent intent = new Intent();
+            intent.putExtra("message", "Dialog Cancelled");
+            setResult(RESULT_CANCELED, intent);
+            finish();
+        }
+    };
 }

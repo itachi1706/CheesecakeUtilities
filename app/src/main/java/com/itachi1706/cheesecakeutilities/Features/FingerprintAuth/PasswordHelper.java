@@ -3,8 +3,6 @@ package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.itachi1706.appupdater.extlib.fingerprint.BiometricCompatHelper;
-
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
