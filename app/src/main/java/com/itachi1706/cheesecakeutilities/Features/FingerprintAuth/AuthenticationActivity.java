@@ -35,7 +35,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         mContext = this;
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
-        PasswordHelper.migrateToBiometric(sp);
+        migrateToBiometric();
         if (BiometricCompatHelper.isBiometricFPRegistered(this) && BiometricCompatHelper.requireFPAuth(sp)) {
             // Has Fingerprint and requested for fingerprint auth
             Executor executor = BiometricCompatHelper.getBiometricExecutor();
@@ -46,6 +46,16 @@ public class AuthenticationActivity extends AppCompatActivity {
             // No fingerprints
             setResult(RESULT_OK);
             finish();
+        }
+    }
+
+    private void migrateToBiometric() {
+        if (sp.contains("app_pw_unlock_enc")) {
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putBoolean(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED, true).apply();
+            edit.remove("app_pw_unlock_enc").apply();
+            edit.remove("app_pw_unlock_key").apply();
+            edit.apply();
         }
     }
 
