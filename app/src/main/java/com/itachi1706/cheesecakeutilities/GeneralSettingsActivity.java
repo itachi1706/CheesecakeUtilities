@@ -59,7 +59,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             });
 
             // Authentication processing
-            final Preference pw = findPreference("password");
+            @Deprecated final Preference pw = findPreference("password");
             final Preference fp_pw = findPreference("password_fp");
 
             sp = PreferenceManager.getDefaultSharedPreferences(getActivity());

@@ -47,12 +47,7 @@ public class BiometricCompatHelper {
     }
 
     public static Executor getBiometricExecutor() {
-        return new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        };
+        return Runnable::run;
     }
 
     public static boolean isBiometricAuthFPAvailable(Context context) {
