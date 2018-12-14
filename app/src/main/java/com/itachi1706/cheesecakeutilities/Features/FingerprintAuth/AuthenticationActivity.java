@@ -27,6 +27,8 @@ public class AuthenticationActivity extends AppCompatActivity {
     FirebaseAnalytics mFirebaseAnalytics;
     Context mContext;
 
+    private static final String TAG = "Authentication", INTENT_MSG = "message";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             p.authenticate(promptInfo);
         } else {
             // No biometric data, treat as authenticated
-            Log.i("Authentication", "No Biometric Authentication Found. Presuming Authenticated");
+            Log.i(TAG, "No Biometric Authentication Found. Presuming Authenticated");
             setResult(RESULT_OK);
             finish();
         }
@@ -72,16 +74,16 @@ public class AuthenticationActivity extends AppCompatActivity {
                     case BiometricConstants.ERROR_USER_CANCELED:
                     case BiometricConstants.ERROR_CANCELED:
                         Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                        Log.i("Authentication", "User Cancelled Authentication");
-                        intent.putExtra("message", "Dialog Cancelled");
+                        Log.i(TAG, "User Cancelled Authentication");
+                        intent.putExtra(INTENT_MSG, "Dialog Cancelled");
                         setResult(RESULT_CANCELED, intent);
                         finish();
                         return;
                     case BiometricConstants.ERROR_LOCKOUT:
                     case BiometricConstants.ERROR_LOCKOUT_PERMANENT:
                         Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                        Log.i("Authentication", "User Lock out");
-                        intent.putExtra("message", "Lockout");
+                        Log.i(TAG, "User Lock out");
+                        intent.putExtra(INTENT_MSG, "Lockout");
                         new AlertDialog.Builder(mContext).setTitle("Fingerprint sensor disabled (Locked out)")
                                 .setMessage("You have scanned an invalid fingerprint too many times and your fingerprint sensor has been disabled. \n\n" +
                                         "Please re-authenticate by unlocking or rebooting your phone again or disable fingerprints on your device")
@@ -95,8 +97,8 @@ public class AuthenticationActivity extends AppCompatActivity {
                         return;
                     default:
                         Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                        Log.e("Authentication", "Authentication Error (" + errorCode + "): " + errString);
-                        intent.putExtra("message", "Authentication Error: " + errString);
+                        Log.e(TAG, "Authentication Error (" + errorCode + "): " + errString);
+                        intent.putExtra(INTENT_MSG, "Authentication Error: " + errString);
                         setResult(RESULT_CANCELED, intent);
                         finish();
                 }
@@ -108,7 +110,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             super.onAuthenticationSucceeded(result);
             runOnUiThread(() -> {
                 Toast.makeText(mContext, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
-                Log.i("Authentication", "User Authenticated");
+                Log.i(TAG, "User Authenticated");
                 setResult(RESULT_OK);
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
                 finish();
@@ -118,7 +120,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         @Override
         public void onAuthenticationFailed() {
             super.onAuthenticationFailed();
-            Log.i("Authentication", "Wrong Biometric detected");
+            Log.i(TAG, "Wrong Biometric detected");
         }
     };
 }

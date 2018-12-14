@@ -21,6 +21,10 @@ import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
  */
 public class BiometricCompatHelper {
 
+    private BiometricCompatHelper() {
+        throw new IllegalStateException("Utility class. Do not instantiate");
+    }
+
     public static final String APP_BIOMETRIC_COMPAT_ENABLED = "app_bio_compat_enable";
 
     /**
