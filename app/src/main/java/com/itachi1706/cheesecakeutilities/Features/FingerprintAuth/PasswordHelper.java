@@ -3,6 +3,8 @@ package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.itachi1706.appupdater.extlib.fingerprint.BiometricCompatHelper;
+
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -12,21 +14,22 @@ import java.util.UUID;
  * Created by Kenneth on 5/10/2016.
  * for com.itachi1706.cheesecakeutilities.Features.FingerprintAuth in CheesecakeUtilities
  */
-
-/**
- * Flow for password create/update
- * 1) Check for existing password {@link PasswordHelper#hasPassword(SharedPreferences)}
- * 1.1) If no existing password, let user create password {@link PasswordHelper#savePassword(SharedPreferences, String)}
- * 2) Prompt user for existing password and verify its correct {@link PasswordHelper#verifyPassword(SharedPreferences, String)}
- * 3) Let user update password {@link PasswordHelper#savePassword(SharedPreferences, String)} or delete it {@link PasswordHelper#deletePassword(SharedPreferences)}
- */
 public class PasswordHelper {
-    private static final String APP_PASSWORD = "app_pw_unlock_enc", APP_KEY = "app_pw_unlock_key";
+    /**
+     * Flow for password create/update
+     * 1) Check for existing password {@link PasswordHelper#hasPassword(SharedPreferences)}
+     * 1.1) If no existing password, let user create password {@link PasswordHelper#savePassword(SharedPreferences, String)}
+     * 2) Prompt user for existing password and verify its correct {@link PasswordHelper#verifyPassword(SharedPreferences, String)}
+     * 3) Let user update password {@link PasswordHelper#savePassword(SharedPreferences, String)} or delete it {@link PasswordHelper#deletePassword(SharedPreferences)}
+     */
+    @Deprecated private static final String APP_PASSWORD = "app_pw_unlock_enc", APP_KEY = "app_pw_unlock_key";
 
+    @Deprecated
     public static boolean hasPassword(SharedPreferences sp) {
         return sp.contains(APP_PASSWORD);
     }
 
+    @Deprecated
     private static String getPassword(SharedPreferences sp) {
         if (!hasPassword(sp)) {
             return "";
@@ -34,6 +37,15 @@ public class PasswordHelper {
         return sp.getString(APP_PASSWORD, "");
     }
 
+    public static void migrateToBiometric(SharedPreferences sp) {
+        if (hasPassword(sp)) {
+            sp.edit().putBoolean(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED, true).apply();
+            sp.edit().remove(APP_PASSWORD).apply();
+            sp.edit().remove(APP_KEY).apply();
+        }
+    }
+
+    @Deprecated
     private static void generateKeyIfNotExists(SharedPreferences sp) throws GeneralSecurityException {
         if (!sp.contains(APP_KEY)) {
             AesCbcWithIntegrity.SecretKeys keys = AesCbcWithIntegrity.generateKeyFromPassword(UUID.randomUUID().toString(), AesCbcWithIntegrity.generateSalt());
@@ -41,6 +53,7 @@ public class PasswordHelper {
         }
     }
 
+    @Deprecated
     private static AesCbcWithIntegrity.SecretKeys retrieveKey(SharedPreferences sp) throws InvalidKeyException {
         try {
             generateKeyIfNotExists(sp);
@@ -54,6 +67,7 @@ public class PasswordHelper {
         return AesCbcWithIntegrity.keys(s);
     }
 
+    @Deprecated
     public static boolean verifyPassword(SharedPreferences sp, String passwordEntered) throws InvalidKeyException {
         AesCbcWithIntegrity.SecretKeys secretKeys = retrieveKey(sp);
         if (secretKeys == null) {
@@ -71,6 +85,7 @@ public class PasswordHelper {
         }
     }
 
+    @Deprecated
     public static boolean savePassword(SharedPreferences sp, String newPassword) {
         AesCbcWithIntegrity.SecretKeys secretKeys;
         try {
@@ -94,6 +109,7 @@ public class PasswordHelper {
         return true;
     }
 
+    @Deprecated
     public static boolean deletePassword(SharedPreferences sp) {
         if (hasPassword(sp)) {
             sp.edit().remove(APP_PASSWORD).apply();

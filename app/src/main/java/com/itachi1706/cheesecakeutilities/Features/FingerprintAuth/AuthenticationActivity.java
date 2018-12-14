@@ -4,15 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.itachi1706.appupdater.extlib.fingerprint.FingerprintDialog;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.itachi1706.appupdater.extlib.fingerprint.FingerprintDialog;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.security.InvalidKeyException;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AuthenticationActivity extends AppCompatActivity implements FingerprintDialog.Callback {
 
@@ -32,6 +33,8 @@ public class AuthenticationActivity extends AppCompatActivity implements Fingerp
             setResult(RESULT_OK);
             finish();
         }
+        // TODO: Migrate to FP Authentication with BiometricPromptCompat
+        PasswordHelper.migrateToBiometric(sp);
         FingerprintDialog.show(this, getString(R.string.app_name), 10);
     }
 
