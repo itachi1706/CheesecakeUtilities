@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,10 +50,10 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     private BiometricPrompt.AuthenticationCallback callback = new BiometricPrompt.AuthenticationCallback() {
+        @SuppressLint("SwitchIntDef")
         @Override
         public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
             super.onAuthenticationError(errorCode, errString);
-            // TODO: Handle error 7
             runOnUiThread(() -> {
                 Intent intent = new Intent();
                 switch (errorCode) {
