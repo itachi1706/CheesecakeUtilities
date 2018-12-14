@@ -53,41 +53,40 @@ public class AuthenticationActivity extends AppCompatActivity {
         public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
             super.onAuthenticationError(errorCode, errString);
             // TODO: Handle error 7
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent();
-                    switch (errorCode) {
-                        case BiometricPrompt.ERROR_NEGATIVE_BUTTON:
-                            Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                            Log.i("Authentication", "User Cancelled Authentication");
-                            intent.putExtra("message", "Dialog Cancelled");
-                            setResult(RESULT_CANCELED, intent);
-                            finish();
-                            return;
-                        case BiometricConstants.ERROR_LOCKOUT:
-                            Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                            Log.i("Authentication", "User Lock out");
-                            intent.putExtra("message", "Lockout");
-                            new AlertDialog.Builder(mContext).setTitle("Fingerprint sensor disabled (Locked out)")
-                                    .setMessage("You have scanned an invalid fingerprint too many times and your fingerprint sensor has been disabled. \n\n" +
-                                            "Please re-authenticate by unlocking or rebooting your phone again or disable fingerprints on your device")
-                                    .setCancelable(false).setPositiveButton(R.string.dialog_action_positive_close, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    setResult(RESULT_CANCELED, intent);
-                                    finish();
-                                }
-                            }).show();
-                            return;
-                        default:
-                            Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                            Log.e("Authentication", "Authentication Error (" + errorCode + "): " + errString);
-                            intent.putExtra("message", "Auth Error");
-                            setResult(RESULT_CANCELED, intent);
-                            finish();
-                            return;
-                    }
+            runOnUiThread(() -> {
+                Intent intent = new Intent();
+                switch (errorCode) {
+                    case BiometricConstants.ERROR_NEGATIVE_BUTTON:
+                    case BiometricConstants.ERROR_USER_CANCELED:
+                    case BiometricConstants.ERROR_CANCELED:
+                        Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+                        Log.i("Authentication", "User Cancelled Authentication");
+                        intent.putExtra("message", "Dialog Cancelled");
+                        setResult(RESULT_CANCELED, intent);
+                        finish();
+                        return;
+                    case BiometricConstants.ERROR_LOCKOUT:
+                    case BiometricConstants.ERROR_LOCKOUT_PERMANENT:
+                        Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+                        Log.i("Authentication", "User Lock out");
+                        intent.putExtra("message", "Lockout");
+                        new AlertDialog.Builder(mContext).setTitle("Fingerprint sensor disabled (Locked out)")
+                                .setMessage("You have scanned an invalid fingerprint too many times and your fingerprint sensor has been disabled. \n\n" +
+                                        "Please re-authenticate by unlocking or rebooting your phone again or disable fingerprints on your device")
+                                .setCancelable(false).setPositiveButton(R.string.dialog_action_positive_close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setResult(RESULT_CANCELED, intent);
+                                finish();
+                            }
+                        }).show();
+                        return;
+                    default:
+                        Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+                        Log.e("Authentication", "Authentication Error (" + errorCode + "): " + errString);
+                        intent.putExtra("message", "Authentication Error: " + errString);
+                        setResult(RESULT_CANCELED, intent);
+                        finish();
                 }
             });
         }
