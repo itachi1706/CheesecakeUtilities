@@ -43,7 +43,8 @@ public class AuthenticationActivity extends AppCompatActivity {
             BiometricPrompt.PromptInfo promptInfo = BiometricCompatHelper.createPromptObject();
             p.authenticate(promptInfo);
         } else {
-            // No fingerprints
+            // No biometric data, treat as authenticated
+            Log.i("Authentication", "No Biometric Authentication Found. Presuming Authenticated");
             setResult(RESULT_OK);
             finish();
         }
