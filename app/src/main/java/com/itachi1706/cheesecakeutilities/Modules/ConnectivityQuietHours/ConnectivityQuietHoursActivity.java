@@ -103,35 +103,35 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Init On Click for Time
-        initOnClick(wifiStart, true, wifiConnectivity, wifiStartTxt, QH_WIFI_TIME, true);
-        initOnClick(wifiEnd, false, wifiConnectivity, wifiEndTxt, QH_WIFI_TIME, true);
-        initOnClick(btStart, true, btConnectivity, btStartTxt, QH_BT_TIME, false);
-        initOnClick(btEnd, false, btConnectivity, btEndTxt, QH_BT_TIME, false);
+        initConnectivityObjects();
+        initOnClick(wifiStart, true, wifiStartTxt, QH_WIFI_TIME, true);
+        initOnClick(wifiEnd, false, wifiEndTxt, QH_WIFI_TIME, true);
+        initOnClick(btStart, true, btStartTxt, QH_BT_TIME, false);
+        initOnClick(btEnd, false, btEndTxt, QH_BT_TIME, false);
 
         // Init Enable toggle
         btSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             sharedPreferences.edit().putBoolean(QH_BT_STATE, isChecked).apply();
-            toggleBtSwitch();
+            toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, btConnectivity, BluetoothToggleReceiver.class);
         });
         wifiSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             sharedPreferences.edit().putBoolean(QH_WIFI_STATE, isChecked).apply();
-            toggleWifiSwitch();
+            toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, wifiConnectivity, WifiToggleReceiver.class);
         });
         // Init Notification Toggle
         initItemSelected(btNotification, QH_BT_NOTIFICATION);
         initItemSelected(wifiNotification, QH_WIFI_NOTIFICATION);
     }
 
-    private void toggleBtSwitch() {
-        toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, btConnectivity, BluetoothToggleReceiver.class);
+    private void initConnectivityObjects() {
+        String defBt = sharedPreferences.getString(QH_BT_TIME, "");
+        String defWifi = sharedPreferences.getString(QH_WIFI_TIME, "");
+        btConnectivity = (defBt.isEmpty()) ? new ConnectivityPeriod(0,0,0,0) : new ConnectivityPeriod(defBt);
+        wifiConnectivity = (defWifi.isEmpty()) ? new ConnectivityPeriod(0,0,0,0) : new ConnectivityPeriod(defWifi);
     }
 
-    private void toggleWifiSwitch() {
-        toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, wifiConnectivity, WifiToggleReceiver.class);
-    }
-
-    private void toggleConnectivitySwitch(int startIntent, int endIntent, String name, SwitchCompat mSwitch,
-                                          ConnectivityPeriod period, Class className) {
+    private void toggleConnectivitySwitch(int startIntent, int endIntent, String name, SwitchCompat mSwitch, ConnectivityPeriod period, Class className) {
+        initConnectivityObjects(); // Refresh
         PendingIntent connStartIntent = PendingIntent.getBroadcast(this, startIntent, new Intent(this, className).putExtra("status", true), 0);
         PendingIntent connEndIntent = PendingIntent.getBroadcast(this, endIntent, new Intent(this, className).putExtra("status", false), 0);
         // Cancel all possible pending intents
@@ -202,12 +202,9 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        String defBt = sharedPreferences.getString(QH_BT_TIME, "");
-        String defWifi = sharedPreferences.getString(QH_WIFI_TIME, "");
+        initConnectivityObjects();
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        btConnectivity = (defBt.isEmpty()) ? new ConnectivityPeriod(0,0,0,0) : new ConnectivityPeriod(defBt);
-        wifiConnectivity = (defWifi.isEmpty()) ? new ConnectivityPeriod(0,0,0,0) : new ConnectivityPeriod(defWifi);
         btSwitch.setChecked(sharedPreferences.getBoolean(QH_BT_STATE, false));
         wifiSwitch.setChecked(sharedPreferences.getBoolean(QH_WIFI_STATE, false));
         btNotification.setSelection(sharedPreferences.getInt(QH_BT_NOTIFICATION, 0));
@@ -306,21 +303,24 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         return hr + ":" + minStr + " am";
     }
 
-    private void initOnClick(LinearLayout layout, boolean isStart, ConnectivityPeriod period, TextView tv, String prefKey, boolean isWifi) {
+    private void initOnClick(LinearLayout layout, boolean isStart, TextView tv, String prefKey, boolean isWifi) {
+        ConnectivityPeriod period;
+        if (isWifi) period = wifiConnectivity;
+        else period = btConnectivity;
         int hr = (isStart) ? period.getStartHr() : period.getEndHr();
         int min = (isStart) ? period.getStartMin() : period.getEndMin();
         layout.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
             tv.setText(get12HrTime(hourOfDay, minute));
             if (isStart) {
                 period.setStartHr(hourOfDay);
-                period.setEndHr(minute);
+                period.setStartMin(minute);
             } else {
                 period.setEndHr(hourOfDay);
                 period.setEndMin(minute);
             }
             sharedPreferences.edit().putString(prefKey, period.serialize()).apply();
-            if (isWifi) toggleWifiSwitch();
-            else toggleBtSwitch();
+            if (isWifi) toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, period, WifiToggleReceiver.class);
+            else toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, period, BluetoothToggleReceiver.class);
         }, hr, min, false).show());
     }
 
