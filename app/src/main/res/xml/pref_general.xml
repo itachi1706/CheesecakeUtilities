@@ -11,6 +11,8 @@
         <Preference android:title="Authentication Status" android:selectable="false" android:key="password_fp" android:summary="Unprotected" />
         <SwitchPreference android:title="Use Fingerprint Authentication" android:key="app_bio_compat_enable"
             android:summary="Enable fingerprint authentication (if supported)" android:defaultValue="false" />
+        <SwitchPreference android:title="Screen Lock Authentication" android:key="app_screen_lock_protection"
+            android:summary="Authenticate the application with your device screen lock (if screen lock is enabled)" android:defaultValue="false" />
         <SwitchPreference android:title="Global Lock" android:key="global_applock"
             android:summary="Protects the whole application. Disable to selectively protect a utility instead (through Utilities Management)"
             android:defaultValue="true" />
