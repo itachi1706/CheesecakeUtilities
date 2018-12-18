@@ -43,13 +43,13 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         sp = PreferenceManager.getDefaultSharedPreferences(this);
         migrateToBiometric();
-        if (BiometricCompatHelper.isBiometricFPRegistered(this) && BiometricCompatHelper.requireFPAuth(sp)) {
+        if (BiometricCompatHelper.Companion.isBiometricFPRegistered(this) && BiometricCompatHelper.Companion.requireFPAuth(sp)) {
             // Has Fingerprint and requested for fingerprint auth
-            Executor executor = BiometricCompatHelper.getBiometricExecutor();
+            Executor executor = BiometricCompatHelper.Companion.getBiometricExecutor();
             BiometricPrompt p = new BiometricPrompt(this, executor, callback);
-            BiometricPrompt.PromptInfo promptInfo = BiometricCompatHelper.createPromptObject();
+            BiometricPrompt.PromptInfo promptInfo = BiometricCompatHelper.Companion.createPromptObject();
             p.authenticate(promptInfo);
-        } else if (BiometricCompatHelper.isScreenLockProtectionEnabled(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        } else if (BiometricCompatHelper.Companion.isScreenLockProtectionEnabled(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             authWithScreenLock();
         } else {
             // No biometric data, treat as authenticated
@@ -104,7 +104,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                         return;
                     case BiometricConstants.ERROR_LOCKOUT:
                     case BiometricConstants.ERROR_LOCKOUT_PERMANENT:
-                        if (BiometricCompatHelper.isScreenLockProtectionEnabled(mContext) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (BiometricCompatHelper.Companion.isScreenLockProtectionEnabled(mContext) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             authWithScreenLock();
                         } else {
                             Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
