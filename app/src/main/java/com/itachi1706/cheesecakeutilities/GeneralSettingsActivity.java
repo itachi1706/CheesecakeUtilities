@@ -81,6 +81,16 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             });
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+
+            updatePasswordViews(findPreference("password_fp"));
+            boolean hasSL = BiometricCompatHelper.isScreenLockEnabled(getActivity());
+            findPreference(BiometricCompatHelper.SCREEN_LOCK_ENABLED).setEnabled(hasSL);
+            findPreference(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED).setEnabled(hasSL);
+        }
+
         SharedPreferences sp;
 
         private void updatePasswordViews(Preference fp_pw) {
