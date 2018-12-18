@@ -9,11 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,6 +34,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_START_INTENT;
@@ -102,34 +103,10 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Init On Click for Time
-        wifiStart.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
-            wifiStartTxt.setText(get12HrTime(hourOfDay, minute));
-            wifiConnectivity.setStartHr(hourOfDay);
-            wifiConnectivity.setStartMin(minute);
-            sharedPreferences.edit().putString(QH_WIFI_TIME, wifiConnectivity.serialize()).apply();
-            toggleWifiSwitch();
-        }, wifiConnectivity.getStartHr(), wifiConnectivity.getStartMin(), false).show());
-        wifiEnd.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
-            wifiEndTxt.setText(get12HrTime(hourOfDay, minute));
-            wifiConnectivity.setEndHr(hourOfDay);
-            wifiConnectivity.setEndMin(minute);
-            sharedPreferences.edit().putString(QH_WIFI_TIME, wifiConnectivity.serialize()).apply();
-            toggleWifiSwitch();
-        }, wifiConnectivity.getEndHr(), wifiConnectivity.getEndMin(), false).show());
-        btStart.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
-            btStartTxt.setText(get12HrTime(hourOfDay, minute));
-            btConnectivity.setStartHr(hourOfDay);
-            btConnectivity.setStartMin(minute);
-            sharedPreferences.edit().putString(QH_BT_TIME, btConnectivity.serialize()).apply();
-            toggleBtSwitch();
-        }, btConnectivity.getStartHr(), btConnectivity.getStartMin(), false).show());
-        btEnd.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
-            btEndTxt.setText(get12HrTime(hourOfDay, minute));
-            btConnectivity.setEndHr(hourOfDay);
-            btConnectivity.setEndMin(minute);
-            sharedPreferences.edit().putString(QH_BT_TIME, btConnectivity.serialize()).apply();
-            toggleBtSwitch();
-        }, btConnectivity.getEndHr(), btConnectivity.getEndMin(), false).show());
+        initOnClick(wifiStart, true, wifiConnectivity, wifiStartTxt, QH_WIFI_TIME, true);
+        initOnClick(wifiEnd, false, wifiConnectivity, wifiEndTxt, QH_WIFI_TIME, true);
+        initOnClick(btStart, true, btConnectivity, btStartTxt, QH_BT_TIME, false);
+        initOnClick(btEnd, false, btConnectivity, btEndTxt, QH_BT_TIME, false);
 
         // Init Enable toggle
         btSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -141,108 +118,56 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
             toggleWifiSwitch();
         });
         // Init Notification Toggle
-        btNotification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sharedPreferences.edit().putInt(QH_BT_NOTIFICATION, position).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        wifiNotification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sharedPreferences.edit().putInt(QH_WIFI_NOTIFICATION, position).apply();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        initItemSelected(btNotification, QH_BT_NOTIFICATION);
+        initItemSelected(wifiNotification, QH_WIFI_NOTIFICATION);
     }
 
     private void toggleBtSwitch() {
-        PendingIntent btStartIntent = PendingIntent.getBroadcast(this, BT_START_INTENT, new Intent(this, BluetoothToggleReceiver.class).putExtra("status", true), 0);
-        PendingIntent btEndIntent = PendingIntent.getBroadcast(this, BT_END_INTENT, new Intent(this, BluetoothToggleReceiver.class).putExtra("status", false), 0);
-        // Cancel all possible pending intents
-        alarmManager.cancel(btStartIntent);
-        alarmManager.cancel(btEndIntent);
-        Log.i("QH", "Cleared existing BT Schedules");
-        if (btSwitch.isChecked()) { // Enabled
-            // Set Alarm
-            long millis = System.currentTimeMillis();
-            Calendar startCal = Calendar.getInstance();
-            startCal.setTimeInMillis(millis);
-            startCal.set(Calendar.HOUR_OF_DAY, btConnectivity.getStartHr());
-            startCal.set(Calendar.MINUTE, btConnectivity.getStartMin());
-            startCal.set(Calendar.SECOND, 0);
-
-            Calendar endCal = Calendar.getInstance();
-            endCal.setTimeInMillis(millis);
-            endCal.set(Calendar.HOUR_OF_DAY, btConnectivity.getEndHr());
-            endCal.set(Calendar.MINUTE, btConnectivity.getEndMin());
-            endCal.set(Calendar.SECOND, 0);
-
-            if (millis > startCal.getTimeInMillis()) startCal.add(Calendar.DAY_OF_YEAR, 1);
-            if (millis > endCal.getTimeInMillis()) endCal.add(Calendar.DAY_OF_YEAR, 1);
-
-            if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-                Log.d("QH", "Same Time Found. Not doing anything for BT Scheduling");
-                return;
-            }
-
-            Log.i("QH", "BT Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
-            Log.i("QH", "BT End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
-
-            // Update Alarms
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, btStartIntent);
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, btEndIntent);
-            Log.i("QH", "Updated BT Toggle State");
-        }
-        toggleBootReceiver();
+        toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, btConnectivity, BluetoothToggleReceiver.class);
     }
 
     private void toggleWifiSwitch() {
-        PendingIntent wifiStartIntent = PendingIntent.getBroadcast(this, WIFI_START_INTENT, new Intent(this, WifiToggleReceiver.class).putExtra("status", true), 0);
-        PendingIntent wifiEndIntent = PendingIntent.getBroadcast(this, WIFI_END_INTENT, new Intent(this, WifiToggleReceiver.class).putExtra("status", false), 0);
+        toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, wifiConnectivity, WifiToggleReceiver.class);
+    }
+
+    private void toggleConnectivitySwitch(int startIntent, int endIntent, String name, SwitchCompat mSwitch,
+                                          ConnectivityPeriod period, Class className) {
+        PendingIntent connStartIntent = PendingIntent.getBroadcast(this, startIntent, new Intent(this, className).putExtra("status", true), 0);
+        PendingIntent connEndIntent = PendingIntent.getBroadcast(this, endIntent, new Intent(this, className).putExtra("status", false), 0);
         // Cancel all possible pending intents
-        alarmManager.cancel(wifiStartIntent);
-        alarmManager.cancel(wifiEndIntent);
-        Log.i("QH", "Cleared existing Wifi Schedules");
-        if (wifiSwitch.isChecked()) { // Enabled
+        alarmManager.cancel(connStartIntent);
+        alarmManager.cancel(connEndIntent);
+        Log.i("QH", "Cleared existing " + name + " Schedules");
+        if (mSwitch.isChecked()) { // Enabled
             // Set Alarm
             long millis = System.currentTimeMillis();
             Calendar startCal = Calendar.getInstance();
             startCal.setTimeInMillis(millis);
-            startCal.set(Calendar.HOUR_OF_DAY, wifiConnectivity.getStartHr());
-            startCal.set(Calendar.MINUTE, wifiConnectivity.getStartMin());
+            startCal.set(Calendar.HOUR_OF_DAY, period.getStartHr());
+            startCal.set(Calendar.MINUTE, period.getStartMin());
             startCal.set(Calendar.SECOND, 0);
 
             Calendar endCal = Calendar.getInstance();
             endCal.setTimeInMillis(millis);
-            endCal.set(Calendar.HOUR_OF_DAY, wifiConnectivity.getEndHr());
-            endCal.set(Calendar.MINUTE, wifiConnectivity.getEndMin());
+            endCal.set(Calendar.HOUR_OF_DAY, period.getEndHr());
+            endCal.set(Calendar.MINUTE, period.getEndMin());
             endCal.set(Calendar.SECOND, 0);
 
             if (millis > startCal.getTimeInMillis()) startCal.add(Calendar.DAY_OF_YEAR, 1);
             if (millis > endCal.getTimeInMillis()) endCal.add(Calendar.DAY_OF_YEAR, 1);
 
             if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-                Log.d("QH", "Same Time Found. Not doing anything for Wifi Scheduling");
+                Log.d("QH", "Same Time Found. Not doing anything for " + name + " Scheduling");
                 return;
             }
 
-            Log.i("QH", "Wifi Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
-            Log.i("QH", "Wifi End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
+            Log.i("QH", name + " Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
+            Log.i("QH", name + " End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
 
             // Update Alarms
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, wifiStartIntent);
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, wifiEndIntent);
-            Log.i("QH", "Updated Wifi Toggle State");
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, connStartIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, connEndIntent);
+            Log.i("QH", "Updated " + name + " Toggle State");
         }
         toggleBootReceiver();
     }
@@ -336,7 +261,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         // Setup the recyclerview
         historyRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         historyRecyclerView.setLayoutManager(linearLayoutManager);
         historyRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -374,10 +299,42 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
 
     private static String get12HrTime(int hr, int min) {
         // Parse Min String
-        String minStr = (min < 10) ? "0" + min : "" + min;
+        String minStr = (min < 10) ? "0" + min : Integer.toString(min);
         if (hr > 12) return (hr - 12) + ":" + minStr + " pm";
         if (hr == 12) return "12:" + minStr + " pm";
         if (hr == 0) return "12:" + minStr + " am";
         return hr + ":" + minStr + " am";
+    }
+
+    private void initOnClick(LinearLayout layout, boolean isStart, ConnectivityPeriod period, TextView tv, String prefKey, boolean isWifi) {
+        int hr = (isStart) ? period.getStartHr() : period.getEndHr();
+        int min = (isStart) ? period.getStartMin() : period.getEndMin();
+        layout.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
+            tv.setText(get12HrTime(hourOfDay, minute));
+            if (isStart) {
+                period.setStartHr(hourOfDay);
+                period.setEndHr(minute);
+            } else {
+                period.setEndHr(hourOfDay);
+                period.setEndMin(minute);
+            }
+            sharedPreferences.edit().putString(prefKey, period.serialize()).apply();
+            if (isWifi) toggleWifiSwitch();
+            else toggleBtSwitch();
+        }, hr, min, false).show());
+    }
+
+    private void initItemSelected(Spinner spinner, String prefKey) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sharedPreferences.edit().putInt(prefKey, position).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Option will remain the same
+            }
+        });
     }
 }
