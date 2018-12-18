@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.concurrent.Executor;
@@ -25,7 +26,7 @@ public class BiometricCompatHelper {
         throw new IllegalStateException("Utility class. Do not instantiate");
     }
 
-    public static final String APP_BIOMETRIC_COMPAT_ENABLED = "app_bio_compat_enable";
+    public static final String APP_BIOMETRIC_COMPAT_ENABLED = "app_bio_compat_enable", SCREEN_LOCK_ENABLED = "app_screen_lock_protection";
 
     /**
      * Check if we need to authenticate with Fingerprint through the BiometricPromptCompat API
@@ -77,5 +78,25 @@ public class BiometricCompatHelper {
 
     public static BiometricPrompt.PromptInfo createPromptObject(String title, String subtitle, String description, String negativeBtn) {
         return new BiometricPrompt.PromptInfo.Builder().setTitle(title).setSubtitle(subtitle).setDescription(description).setNegativeButtonText(negativeBtn).build();
+    }
+
+    public static boolean isScreenLockEnabled(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return false; // Not supported prior to Lollipop
+
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        if (km == null) {
+            Log.e("BioCompat", "Keyguard died!");
+            return false;
+        }
+
+        return km.isKeyguardSecure();
+    }
+
+    public static boolean isScreenLockProtectionEnabled(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return false; // Not supported prior to Lollipop
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        if (!sp.contains(SCREEN_LOCK_ENABLED) || !sp.getBoolean(SCREEN_LOCK_ENABLED, false)) return false;
+        return isScreenLockEnabled(context);
     }
 }
