@@ -198,35 +198,16 @@ class ComputerAI {
     private static int getGameBoardNum(int lastRow, int lastCol)
     {
         int num;
-        switch (lastRow)
-        {
-            case 0:
-                switch (lastCol)
-                {
-                    case 0: num = 0; break;
-                    case 1: num = 1; break;
-                    case 2: num = 2; break;
-                    default: num = -1; break;
-                }
-                break;
-            case 1:
-                switch (lastCol)
-                {
-                    case 0: num = 3; break;
-                    case 1: num = 4; break;
-                    case 2: num = 5; break;
-                    default: num = -1; break;
-                }
-                break;
-            case 2:
-                switch (lastCol)
-                {
-                    case 0: num = 6; break;
-                    case 1: num = 7; break;
-                    case 2: num = 8; break;
-                    default: num = -1; break;
-                }
-                break;
+        switch (lastRow + "" + lastCol) {
+            case "00": num = 0; break;
+            case "01": num = 1; break;
+            case "02": num = 2; break;
+            case "10": num = 3; break;
+            case "11": num = 4; break;
+            case "12": num = 5; break;
+            case "20": num = 6; break;
+            case "21": num = 7; break;
+            case "22": num = 8; break;
             default: num = -1; break;
         }
         return num;
