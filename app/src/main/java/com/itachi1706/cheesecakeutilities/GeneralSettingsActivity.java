@@ -70,8 +70,13 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 return false;
             });
 
-            findPreference("app_bio_compat_enable").setOnPreferenceChangeListener((preference, newValue) -> {
-                updatePasswordViews(fp_pw, (boolean) newValue);
+            findPreference(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
+                updatePasswordViews(fp_pw, (boolean) newValue, 0);
+                return true;
+            });
+
+            findPreference(BiometricCompatHelper.SCREEN_LOCK_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
+                updatePasswordViews(fp_pw, (boolean) newValue, 1);
                 return true;
             });
         }
@@ -79,17 +84,32 @@ public class GeneralSettingsActivity extends AppCompatActivity {
         SharedPreferences sp;
 
         private void updatePasswordViews(Preference fp_pw) {
-            updatePasswordViews(fp_pw, BiometricCompatHelper.requireFPAuth(sp));
+            updatePasswordViews(fp_pw, BiometricCompatHelper.requireFPAuth(sp), -1);
         }
 
-        private void updatePasswordViews(Preference fp_pw, boolean val) {
-            if (val) {
-                if (BiometricCompatHelper.isBiometricFPRegistered(getActivity()))
-                    fp_pw.setSummary("Protected with fingerprint");
-                else
-                    fp_pw.setSummary("Unprotected (No fingerprint found on device)");
-            } else
-                fp_pw.setSummary("Unprotected");
+        private void updatePasswordViews(Preference fp_pw, boolean val, int type) {
+            boolean isScreenLock = BiometricCompatHelper.isScreenLockProtectionEnabled(getActivity()), isFP = BiometricCompatHelper.requireFPAuth(sp);
+            switch (type) {
+                case 0: isFP = val; break;
+                case 1: isScreenLock = val; break;
+            }
+            String summary = "Unprotected";
+            if (isScreenLock) {
+                if (BiometricCompatHelper.isScreenLockEnabled(getActivity())) {
+                    summary = "Protected with device screen lock";
+                    if (isFP) {
+                        if (BiometricCompatHelper.isBiometricFPRegistered(getActivity())) summary = "Protected with fingerprint + screen lock";
+                        else summary += " (No fingerprint found on device)";
+                    }
+                }
+                else summary = "Unprotected (No screen lock found)";
+            } else if (isFP) {
+                if (!BiometricCompatHelper.isScreenLockEnabled(getActivity())) summary = "Unprotected (No screen lock found)"; // No FP without a screen lock
+                else if (BiometricCompatHelper.isBiometricFPRegistered(getActivity())) summary = "Protected with fingerprint";
+                else summary = "Unprotected (No fingerprint found on device)";
+            }
+
+            fp_pw.setSummary(summary);
         }
 
         @Override
