@@ -62,7 +62,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
     TextView wifiStartTxt, wifiEndTxt, btStartTxt, btEndTxt; // Show time itself
     SwitchCompat btSwitch, wifiSwitch; // To schedule or not
 
-    ConnectivityPeriod wifiConnectivity, btConnectivity;
+    static ConnectivityPeriod wifiConnectivity, btConnectivity;
     SharedPreferences sharedPreferences;
     AlarmManager alarmManager;
 
@@ -103,35 +103,44 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Init On Click for Time
-        initConnectivityObjects();
+        initOrRefreshConnectivityObjects();
         initOnClick(wifiStart, true, wifiStartTxt, QH_WIFI_TIME, true);
         initOnClick(wifiEnd, false, wifiEndTxt, QH_WIFI_TIME, true);
         initOnClick(btStart, true, btStartTxt, QH_BT_TIME, false);
         initOnClick(btEnd, false, btEndTxt, QH_BT_TIME, false);
 
         // Init Enable toggle
-        btSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferences.edit().putBoolean(QH_BT_STATE, isChecked).apply();
-            toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, btConnectivity, BluetoothToggleReceiver.class);
-        });
-        wifiSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferences.edit().putBoolean(QH_WIFI_STATE, isChecked).apply();
-            toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, wifiConnectivity, WifiToggleReceiver.class);
-        });
+        initEnableToggles(btSwitch, false);
+        initEnableToggles(wifiSwitch, true);
         // Init Notification Toggle
         initItemSelected(btNotification, QH_BT_NOTIFICATION);
         initItemSelected(wifiNotification, QH_WIFI_NOTIFICATION);
     }
 
-    private void initConnectivityObjects() {
+    private void initEnableToggles(SwitchCompat mSwitch, boolean isWifi) {
+        initOrRefreshConnectivityObjects();
+        int start = (isWifi) ? WIFI_START_INTENT : BT_START_INTENT;
+        int end = (isWifi) ? WIFI_END_INTENT : BT_END_INTENT;
+        String text = (isWifi) ? "Wifi" : "BT";
+        Class className = (isWifi) ? WifiToggleReceiver.class : BluetoothToggleReceiver.class;
+        String prefName = (isWifi) ? QH_WIFI_STATE : QH_BT_STATE;
+
+        mSwitch.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean(prefName, isChecked).apply();
+            toggleConnectivitySwitch(start, end, text, mSwitch, (isWifi) ? wifiConnectivity : btConnectivity, className);
+        }));
+    }
+
+    private void initOrRefreshConnectivityObjects() {
         String defBt = sharedPreferences.getString(QH_BT_TIME, "");
         String defWifi = sharedPreferences.getString(QH_WIFI_TIME, "");
+        if (btConnectivity != null) btConnectivity = null;
+        if (wifiConnectivity != null) wifiConnectivity = null;
         btConnectivity = (defBt.isEmpty()) ? new ConnectivityPeriod(0,0,0,0) : new ConnectivityPeriod(defBt);
         wifiConnectivity = (defWifi.isEmpty()) ? new ConnectivityPeriod(0,0,0,0) : new ConnectivityPeriod(defWifi);
     }
 
     private void toggleConnectivitySwitch(int startIntent, int endIntent, String name, SwitchCompat mSwitch, ConnectivityPeriod period, Class className) {
-        initConnectivityObjects(); // Refresh
         PendingIntent connStartIntent = PendingIntent.getBroadcast(this, startIntent, new Intent(this, className).putExtra("status", true), 0);
         PendingIntent connEndIntent = PendingIntent.getBroadcast(this, endIntent, new Intent(this, className).putExtra("status", false), 0);
         // Cancel all possible pending intents
@@ -202,7 +211,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        initConnectivityObjects();
+        initOrRefreshConnectivityObjects();
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         btSwitch.setChecked(sharedPreferences.getBoolean(QH_BT_STATE, false));
@@ -303,13 +312,15 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         return hr + ":" + minStr + " am";
     }
 
+    private ConnectivityPeriod getConnPeriod(boolean isWifi) {
+        initOrRefreshConnectivityObjects();
+        if (isWifi) return wifiConnectivity;
+        else return btConnectivity;
+    }
+
     private void initOnClick(LinearLayout layout, boolean isStart, TextView tv, String prefKey, boolean isWifi) {
-        ConnectivityPeriod period;
-        if (isWifi) period = wifiConnectivity;
-        else period = btConnectivity;
-        int hr = (isStart) ? period.getStartHr() : period.getEndHr();
-        int min = (isStart) ? period.getStartMin() : period.getEndMin();
         layout.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
+            ConnectivityPeriod period = getConnPeriod(isWifi);
             tv.setText(get12HrTime(hourOfDay, minute));
             if (isStart) {
                 period.setStartHr(hourOfDay);
@@ -321,7 +332,8 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
             sharedPreferences.edit().putString(prefKey, period.serialize()).apply();
             if (isWifi) toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, period, WifiToggleReceiver.class);
             else toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, period, BluetoothToggleReceiver.class);
-        }, hr, min, false).show());
+        }, (isWifi) ? ((isStart) ? wifiConnectivity.getStartHr() : wifiConnectivity.getEndHr()) : ((isStart) ? btConnectivity.getStartHr() : btConnectivity.getEndHr())
+                , (isWifi) ? ((isStart) ? wifiConnectivity.getStartMin() : wifiConnectivity.getEndMin()) : ((isStart) ? btConnectivity.getStartMin() : btConnectivity.getEndMin()), false).show());
     }
 
     private void initItemSelected(Spinner spinner, String prefKey) {
