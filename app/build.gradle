@@ -20,8 +20,8 @@ android {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 731
-        versionName "4.4.3"
+        versionCode 783
+        versionName "4.5.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resValue "string", "tray__authority", "${applicationId}.tray"
@@ -126,7 +126,7 @@ dependencies {
     // Vehicle Mileage Tracker
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.5'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
     implementation('org.simpleframework:simple-xml:2.7.1') {
@@ -139,7 +139,7 @@ dependencies {
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.biometric:biometric:1.0.0-alpha02'
 }
