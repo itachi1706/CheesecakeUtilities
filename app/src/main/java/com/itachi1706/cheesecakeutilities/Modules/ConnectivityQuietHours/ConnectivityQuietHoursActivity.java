@@ -62,7 +62,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
     TextView wifiStartTxt, wifiEndTxt, btStartTxt, btEndTxt; // Show time itself
     SwitchCompat btSwitch, wifiSwitch; // To schedule or not
 
-    static ConnectivityPeriod wifiConnectivity, btConnectivity;
+    ConnectivityPeriod wifiConnectivity, btConnectivity;
     SharedPreferences sharedPreferences;
     AlarmManager alarmManager;
 
@@ -318,6 +318,15 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         else return btConnectivity;
     }
 
+    private int getTime(boolean isWifi, boolean isStart, boolean isHour) {
+        ConnectivityPeriod p = (isWifi) ? wifiConnectivity : btConnectivity;
+
+        if (isHour && isStart) return p.getStartHr();
+        else if (isHour) return p.getEndHr();
+        else if (isStart) return p.getStartMin();
+        else return p.getEndMin();
+    }
+
     private void initOnClick(LinearLayout layout, boolean isStart, TextView tv, String prefKey, boolean isWifi) {
         layout.setOnClickListener(v -> new TimePickerDialog(v.getContext(), (view, hourOfDay, minute) -> {
             ConnectivityPeriod period = getConnPeriod(isWifi);
@@ -332,8 +341,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
             sharedPreferences.edit().putString(prefKey, period.serialize()).apply();
             if (isWifi) toggleConnectivitySwitch(WIFI_START_INTENT, WIFI_END_INTENT, "Wifi", wifiSwitch, period, WifiToggleReceiver.class);
             else toggleConnectivitySwitch(BT_START_INTENT, BT_END_INTENT, "BT", btSwitch, period, BluetoothToggleReceiver.class);
-        }, (isWifi) ? ((isStart) ? wifiConnectivity.getStartHr() : wifiConnectivity.getEndHr()) : ((isStart) ? btConnectivity.getStartHr() : btConnectivity.getEndHr())
-                , (isWifi) ? ((isStart) ? wifiConnectivity.getStartMin() : wifiConnectivity.getEndMin()) : ((isStart) ? btConnectivity.getStartMin() : btConnectivity.getEndMin()), false).show());
+        }, getTime(isWifi, isStart, true), getTime(isWifi, isStart, false), false).show());
     }
 
     private void initItemSelected(Spinner spinner, String prefKey) {
