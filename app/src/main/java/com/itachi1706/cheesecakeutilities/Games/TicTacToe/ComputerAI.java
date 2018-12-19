@@ -198,7 +198,7 @@ class ComputerAI {
     private static int getGameBoardNum(int lastRow, int lastCol)
     {
         int num;
-        switch (lastRow + "" + lastCol) {
+        switch (Integer.toString(lastRow) + Integer.toString(lastCol)) {
             case "00": num = 0; break;
             case "01": num = 1; break;
             case "02": num = 2; break;
