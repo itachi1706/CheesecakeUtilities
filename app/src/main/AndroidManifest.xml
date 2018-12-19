@@ -163,7 +163,7 @@
         <activity
             android:name=".Modules.SystemInformation.ParentFragmentActivity"
             android:label="System Information"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoAppBar" />
 
         <service
             android:name=".Modules.NavbarCustomization.NavBarService"
