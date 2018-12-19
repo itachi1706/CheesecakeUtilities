@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
@@ -56,7 +57,7 @@ public abstract class VehicleMileageFragmentBase extends Fragment {
             adapter = new DualLineStringRecyclerAdapter(placeholder, false);
             recyclerView.setAdapter(adapter);
 
-            sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            sp = PrefHelper.getDefaultSharedPreferences(getActivity().getApplicationContext());
             decimal = sp.getBoolean(MILEAGE_DEC, true);
         }
         refreshLayout = v.findViewById(R.id.pull_to_refresh);

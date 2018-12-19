@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver;
@@ -100,7 +100,7 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         historyRecyclerView = findViewById(R.id.rv_qh_history);
         CommonMethods.disableAutofill(getWindow().getDecorView());
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PrefHelper.getDefaultSharedPreferences(this);
 
         // Init On Click for Time
         initOrRefreshConnectivityObjects();

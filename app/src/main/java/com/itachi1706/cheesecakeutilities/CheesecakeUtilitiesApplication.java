@@ -3,9 +3,9 @@ package com.itachi1706.cheesecakeutilities;
 import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.Card;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.CardType;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.iso7816.ISO7816Application;
@@ -95,7 +95,7 @@ public class CheesecakeUtilitiesApplication extends MultiDexApplication {
     }
 
     public static boolean convertTimezones() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getInstance());
+        SharedPreferences prefs = PrefHelper.getDefaultSharedPreferences(getInstance());
         return prefs.getBoolean(CheesecakeUtilitiesApplication.PREF_CONVERT_TIMEZONES, false);
     }
 
@@ -156,7 +156,7 @@ public class CheesecakeUtilitiesApplication extends MultiDexApplication {
     }
 
     public static boolean showRawStationIds() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(CheesecakeUtilitiesApplication.getInstance());
+        SharedPreferences prefs = PrefHelper.getDefaultSharedPreferences(CheesecakeUtilitiesApplication.getInstance());
         return prefs.getBoolean(CheesecakeUtilitiesApplication.PREF_SHOW_RAW_IDS, false);
     }
 }

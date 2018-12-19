@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.database.DatabaseReference;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageGeneralStatsFragment;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageMonthStatsFragment;
@@ -52,7 +53,7 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         // Keep Firebase synced
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         String user_id = sp.getString("firebase_uid", "nien");
         if (!user_id.equals("nien")) {
             DatabaseReference dbRef = FirebaseUtils.getFirebaseDatabase().getReference();

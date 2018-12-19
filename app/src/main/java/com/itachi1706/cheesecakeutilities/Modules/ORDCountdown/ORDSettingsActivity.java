@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
@@ -60,7 +61,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         this.milestone = new dateListener(UPDATE_MILESTONE);
         this.ptp = new dateListener(UPDATE_PTP);
 
-        this.sp = PreferenceManager.getDefaultSharedPreferences(this);
+        this.sp = PrefHelper.getDefaultSharedPreferences(this);
 
         enlistEt = findViewById(R.id.etEnlist);
         ordEt = findViewById(R.id.etORD);

@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.widget.Toast;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.BackgroundTagActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 
@@ -41,7 +41,7 @@ public class UtilitySettingsActivity extends AppCompatActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_utility);
 
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(getActivity());
 
             // Utility Specific
             // Clear Quiet Hour Utility History

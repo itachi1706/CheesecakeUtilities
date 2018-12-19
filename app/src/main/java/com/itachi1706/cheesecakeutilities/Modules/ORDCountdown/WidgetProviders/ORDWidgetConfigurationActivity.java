@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
@@ -59,7 +60,7 @@ public class ORDWidgetConfigurationActivity extends AppCompatActivity {
             mAppWidgetId = extras.getInt(EXTRA_APPWIDGET_ID,
                     INVALID_APPWIDGET_ID);
 
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("ord_widgetid_" + mAppWidgetId, type).apply();
+            PrefHelper.getDefaultSharedPreferences(this).edit().putString("ord_widgetid_" + mAppWidgetId, type).apply();
 
             Intent startService = new Intent(this,
                     EventCountdownWidgetProvider.UpdateWidgetService.class);

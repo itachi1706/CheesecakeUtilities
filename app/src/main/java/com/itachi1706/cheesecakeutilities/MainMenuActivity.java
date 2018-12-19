@@ -3,25 +3,25 @@ package com.itachi1706.cheesecakeutilities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.appupdater.Objects.CAAnalytics;
 import com.itachi1706.appupdater.Util.AnalyticsHelper;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Fragments.GamesFragment;
 import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 import io.fabric.sdk.android.Fabric;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -53,7 +53,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PrefHelper.getDefaultSharedPreferences(this);
 
         pager = findViewById(R.id.main_viewpager);
         tabLayout = findViewById(R.id.main_tablayout);

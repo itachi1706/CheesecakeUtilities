@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.gson.Gson;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHoliday;
@@ -77,7 +78,7 @@ public class ORDActivity extends BaseActivity {
     }
 
     private void repopulateAdapter() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         long ord = sp.getLong(ORDSettingsActivity.SP_ORD, 0);
         long ptp = sp.getLong(ORDSettingsActivity.SP_PTP, 0);
         long pop = sp.getLong(ORDSettingsActivity.SP_POP, 0);
@@ -237,7 +238,7 @@ public class ORDActivity extends BaseActivity {
      * @return GCalHoliday Holiday list object
      */
     private GCalHoliday getHolidays() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         String t = sp.getString(ORD_HOLIDAY_PREF, "---");
         if (t.equals("---") || !JSONHelper.isJsonValid(t)) {
             new CalendarHolidayTask().execute();
@@ -340,7 +341,7 @@ public class ORDActivity extends BaseActivity {
                 in.close();
                 tmp = str.toString();
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(getApplicationContext());
                 sp.edit().putString(ORD_HOLIDAY_PREF, tmp).apply();
 
                 runOnUiThread(ORDActivity.this::repopulateAdapter);

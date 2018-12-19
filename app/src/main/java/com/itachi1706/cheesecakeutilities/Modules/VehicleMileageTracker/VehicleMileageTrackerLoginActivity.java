@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -55,7 +56,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseActivity implements 
         progress = findViewById(R.id.sign_in_progress);
         progress.setIndeterminate(true);
         progress.setVisibility(View.GONE);
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PrefHelper.getDefaultSharedPreferences(this);
         SignInButton mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE);
         mEmailSignInButton.setOnClickListener(v -> {

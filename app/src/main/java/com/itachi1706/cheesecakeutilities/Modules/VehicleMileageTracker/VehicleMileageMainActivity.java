@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
@@ -61,7 +62,7 @@ public class VehicleMileageMainActivity extends BaseActivity {
         setContentView(R.layout.activity_vehicle_mileage_main_activty);
 
         // Do Firebase Setup
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PrefHelper.getDefaultSharedPreferences(this);
         final String user_id = sp.getString("firebase_uid", "nien");
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity

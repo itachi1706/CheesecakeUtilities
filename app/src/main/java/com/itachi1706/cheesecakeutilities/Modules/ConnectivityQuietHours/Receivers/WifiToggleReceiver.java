@@ -8,10 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
-import android.preference.PreferenceManager;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.R;
@@ -19,6 +18,8 @@ import com.itachi1706.cheesecakeutilities.R;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Random;
+
+import androidx.core.app.NotificationCompat;
 
 public class WifiToggleReceiver extends BroadcastReceiver {
 
@@ -28,7 +29,7 @@ public class WifiToggleReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "Waking up");
         boolean state = intent.getExtras().getBoolean("status");
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         if (!sp.getBoolean(QHConstants.QH_WIFI_STATE, false)) return; // Not enabled
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI)) return; // No Hardware
 

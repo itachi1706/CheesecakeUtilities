@@ -30,7 +30,6 @@ import android.nfc.TagLostException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -38,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.CheesecakeUtilitiesApplication;
 import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.card.Card;
@@ -144,7 +144,7 @@ public class ReadingTagActivity extends AppCompatActivity implements TagReaderFe
             final Tag tag = intent.getParcelableExtra("android.nfc.extra.TAG");
             final byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences prefs = PrefHelper.getDefaultSharedPreferences(this);
             String lastReadId = prefs.getString(CheesecakeUtilitiesApplication.PREF_LAST_READ_ID, "");
             long lastReadAt = prefs.getLong(CheesecakeUtilitiesApplication.PREF_LAST_READ_AT, 0);
 
@@ -205,7 +205,7 @@ public class ReadingTagActivity extends AppCompatActivity implements TagReaderFe
 
                 String tagIdString = Utils.getHexString(card.getTagId());
 
-                SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(ReadingTagActivity.this).edit();
+                SharedPreferences.Editor prefs = PrefHelper.getDefaultSharedPreferences(ReadingTagActivity.this).edit();
                 prefs.putString(CheesecakeUtilitiesApplication.PREF_LAST_READ_ID, tagIdString);
                 prefs.putLong(CheesecakeUtilitiesApplication.PREF_LAST_READ_AT, GregorianCalendar.getInstance().getTimeInMillis());
                 prefs.apply();

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
 
@@ -37,7 +38,7 @@ public class UtilityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
-        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp = PrefHelper.getDefaultSharedPreferences(getActivity());
 
         RecyclerView recyclerView = v.findViewById(R.id.main_menu_recycler_view);
         if (recyclerView != null) {

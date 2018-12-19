@@ -3,10 +3,6 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Recycle
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.AddNewMileageRecordActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
@@ -26,6 +23,10 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
@@ -166,14 +167,14 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                             .setMessage("Are you sure you want to delete this record? This cannot be reversed!" +
                                     "\nID: " + tag)
                             .setPositiveButton("Delete Anyway", (dialog1, which1) -> {
-                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                                SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v1.getContext());
                                 FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER)
                                         .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
                                         .child(tag).removeValue();
                                 Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
 
                             }).setNegativeButton("No", null).show()).setNegativeButton("Edit", (dialogInterface, i) -> {
-                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(v1.getContext());
+                        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v1.getContext());
                         String uid = sp.getString("firebase_uid", "");
                         Intent intent = new Intent(v1.getContext(), AddNewMileageRecordActivity.class);
                         intent.putExtra("edit", tag);

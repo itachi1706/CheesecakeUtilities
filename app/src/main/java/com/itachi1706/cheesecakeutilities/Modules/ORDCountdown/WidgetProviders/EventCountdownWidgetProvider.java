@@ -7,16 +7,17 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import androidx.core.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.MainMenuActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.ORDActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.ORDSettingsActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.concurrent.TimeUnit;
+
+import androidx.core.app.TaskStackBuilder;
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -33,7 +34,7 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.eventcountdown_widget_provider);
 
         // Calculate ORD
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         String type = sp.getString("ord_widgetid_" + appWidgetId, "-");
 
         long time = 0;
@@ -143,7 +144,7 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
 
         for (int appWidget : appWidgetIds) {
             sp.edit().remove("ord_widgetid_" + appWidget).apply();

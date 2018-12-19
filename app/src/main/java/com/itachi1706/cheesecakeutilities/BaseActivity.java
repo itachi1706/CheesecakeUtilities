@@ -5,16 +5,16 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
+import androidx.appcompat.app.AppCompatActivity;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -37,7 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         boolean checkGlobal = this.getIntent().hasExtra("globalcheck") && this.getIntent().getExtras().getBoolean("globalcheck");
         boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
         if (!authagain) return;
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         if (!(menuitem == null || menuitem.isEmpty() || menuitem.equals(""))) {
             if (!CommonMethods.isGlobalLocked(sp) && CommonMethods.isUtilityLocked(sp, menuitem)) {
                 Log.i("Authentication", "Requesting Utility Authentication for " + menuitem);

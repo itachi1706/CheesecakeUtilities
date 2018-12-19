@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 
 import com.itachi1706.appupdater.EasterEggResMusicPrefFragment;
 import com.itachi1706.appupdater.SettingsInitializer;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.BiometricCompatHelper;
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity;
@@ -52,7 +52,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             // Authentication processing
             final Preference fp_pw = findPreference("password_fp");
 
-            sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sp = PrefHelper.getDefaultSharedPreferences(getActivity());
             updatePasswordViews(fp_pw);
 
             findPreference("testpw").setOnPreferenceClickListener(preference -> {

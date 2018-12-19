@@ -7,9 +7,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
@@ -40,7 +40,7 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (!intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) return; // Not Boot Action
-        sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp = PrefHelper.getDefaultSharedPreferences(context);
         if (sp.getBoolean(QHConstants.QH_BT_STATE, false))
             scheduleConnectivity(context, "BT", BT_START_INTENT, BT_END_INTENT, QH_BT_TIME, QH_BT_NOTIFICATION);
         if (sp.getBoolean(QHConstants.QH_WIFI_STATE, false))

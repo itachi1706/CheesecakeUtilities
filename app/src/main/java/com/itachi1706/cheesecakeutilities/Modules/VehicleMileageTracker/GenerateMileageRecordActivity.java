@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -64,7 +65,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         hScroll = findViewById(R.id.hscroll);
         vScroll = findViewById(R.id.vscroll);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         maxPerRecord = Integer.parseInt(sp.getString("veh_mileage_report_rows", "38"));
         user_id = sp.getString("firebase_uid", "nien");
         decimal = sp.getBoolean(MILEAGE_DEC, true);

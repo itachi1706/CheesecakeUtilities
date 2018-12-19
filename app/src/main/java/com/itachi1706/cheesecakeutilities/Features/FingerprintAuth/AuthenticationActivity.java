@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.concurrent.Executor;
@@ -41,7 +42,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mContext = this;
 
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PrefHelper.getDefaultSharedPreferences(this);
         migrateToBiometric();
         if (BiometricCompatHelper.Companion.isBiometricFPRegistered(this) && BiometricCompatHelper.Companion.requireFPAuth(sp)) {
             // Has Fingerprint and requested for fingerprint auth
