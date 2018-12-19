@@ -80,48 +80,47 @@ class ComputerAI {
     private static Boolean checkForPossibleAIWinOrBlock(String[][] gameBoard, String moveVal)
     {
         tmpGameBoard = gameBoard;
+        boolean move = true;
 
         // Check Rows
-        if (checkMatch(0, 1, moveVal) && isValidMove(2)) { makeMove(2); return true; }
-        if (checkMatch(0, 2, moveVal) && isValidMove(1)) { makeMove(1); return true; }
-        if (checkMatch(1, 2, moveVal) && isValidMove(0)) { makeMove(0); return true; }
-        if (checkMatch(3, 4, moveVal) && isValidMove(5)) { makeMove(5); return true; }
-        if (checkMatch(3, 5, moveVal) && isValidMove(4)) { makeMove(4); return true; }
-        if (checkMatch(4, 5, moveVal) && isValidMove(3)) { makeMove(3); return true; }
-        if (checkMatch(6, 7, moveVal) && isValidMove(8)) { makeMove(8); return true; }
-        if (checkMatch(6, 8, moveVal) && isValidMove(7)) { makeMove(7); return true; }
-        if (checkMatch(7, 8, moveVal) && isValidMove(6)) { makeMove(6); return true; }
+        if (checkMatch(0, 1, moveVal) && isValidMove(2)) makeMove(2);
+        else if (checkMatch(0, 2, moveVal) && isValidMove(1)) makeMove(1);
+        else if (checkMatch(1, 2, moveVal) && isValidMove(0)) makeMove(0);
+        else if (checkMatch(3, 4, moveVal) && isValidMove(5)) makeMove(5);
+        else if (checkMatch(3, 5, moveVal) && isValidMove(4)) makeMove(4);
+        else if (checkMatch(4, 5, moveVal) && isValidMove(3)) makeMove(3);
+        else if (checkMatch(6, 7, moveVal) && isValidMove(8)) makeMove(8);
+        else if (checkMatch(6, 8, moveVal) && isValidMove(7)) makeMove(7);
+        else if (checkMatch(7, 8, moveVal) && isValidMove(6)) makeMove(6);
 
         // Check Columns
-        if (checkMatch(0, 3, moveVal) && isValidMove(6)) { makeMove(6); return true; }
-        if (checkMatch(0, 6, moveVal) && isValidMove(3)) { makeMove(3); return true; }
-        if (checkMatch(3, 6, moveVal) && isValidMove(0)) { makeMove(0); return true; }
-        if (checkMatch(1, 4, moveVal) && isValidMove(7)) { makeMove(7); return true; }
-        if (checkMatch(1, 7, moveVal) && isValidMove(4)) { makeMove(4); return true; }
-        if (checkMatch(4, 7, moveVal) && isValidMove(1)) { makeMove(1); return true; }
-        if (checkMatch(2, 5, moveVal) && isValidMove(8)) { makeMove(8); return true; }
-        if (checkMatch(2, 8, moveVal) && isValidMove(5)) { makeMove(5); return true; }
-        if (checkMatch(5, 8, moveVal) && isValidMove(2)) { makeMove(2); return true; }
+        else if (checkMatch(0, 3, moveVal) && isValidMove(6)) makeMove(6);
+        else if (checkMatch(0, 6, moveVal) && isValidMove(3)) makeMove(3);
+        else if (checkMatch(3, 6, moveVal) && isValidMove(0)) makeMove(0);
+        else if (checkMatch(1, 4, moveVal) && isValidMove(7)) makeMove(7);
+        else if (checkMatch(1, 7, moveVal) && isValidMove(4)) makeMove(4);
+        else if (checkMatch(4, 7, moveVal) && isValidMove(1)) makeMove(1);
+        else if (checkMatch(2, 5, moveVal) && isValidMove(8)) makeMove(8);
+        else if (checkMatch(2, 8, moveVal) && isValidMove(5)) makeMove(5);
+        else if (checkMatch(5, 8, moveVal) && isValidMove(2)) makeMove(2);
 
         // Check Diagonal
-        if (checkMatch(0, 4, moveVal) && isValidMove(8)) { makeMove(8); return true; }
-        if (checkMatch(0, 8, moveVal) && isValidMove(4)) { makeMove(4); return true; }
-        if (checkMatch(4, 8, moveVal) && isValidMove(0)) { makeMove(0); return true; }
-        if (checkMatch(2, 4, moveVal) && isValidMove(6)) { makeMove(6); return true; }
-        if (checkMatch(2, 6, moveVal) && isValidMove(4)) { makeMove(4); return true; }
-        if (checkMatch(4, 6, moveVal) && isValidMove(2)) { makeMove(2); return true; }
+        else if (checkMatch(0, 4, moveVal) && isValidMove(8)) makeMove(8);
+        else if (checkMatch(0, 8, moveVal) && isValidMove(4)) makeMove(4);
+        else if (checkMatch(4, 8, moveVal) && isValidMove(0)) makeMove(0);
+        else if (checkMatch(2, 4, moveVal) && isValidMove(6)) makeMove(6);
+        else if (checkMatch(2, 6, moveVal) && isValidMove(4)) makeMove(4);
+        else if (checkMatch(4, 6, moveVal) && isValidMove(2)) makeMove(2);
+        else move = false;
 
         // Cannot Win/Block
-        return false;
+        return move;
     }
 
     private static Boolean checkMatch(int gameMove1, int gameMove2, String value)
     {
         if (getValueAtSlot(tmpGameBoard, gameMove1).equals(getValueAtSlot(tmpGameBoard, gameMove2)))
-        {
-            if (getValueAtSlot(tmpGameBoard, gameMove1).equals(value))
-                return true;
-        }
+            return getValueAtSlot(tmpGameBoard, gameMove1).equals(value);
         return false;
     }
 
@@ -198,34 +197,20 @@ class ComputerAI {
 
     private static int getGameBoardNum(int lastRow, int lastCol)
     {
-        switch (lastRow)
-        {
-            case 0:
-                switch (lastCol)
-                {
-                    case 0: return 0;
-                    case 1: return 1;
-                    case 2: return 2;
-                }
-                break;
-            case 1:
-                switch (lastCol)
-                {
-                    case 0: return 3;
-                    case 1: return 4;
-                    case 2: return 5;
-                }
-                break;
-            case 2:
-                switch (lastCol)
-                {
-                    case 0: return 6;
-                    case 1: return 7;
-                    case 2: return 8;
-                }
-                break;
+        int num;
+        switch (Integer.toString(lastRow) + Integer.toString(lastCol)) {
+            case "00": num = 0; break;
+            case "01": num = 1; break;
+            case "02": num = 2; break;
+            case "10": num = 3; break;
+            case "11": num = 4; break;
+            case "12": num = 5; break;
+            case "20": num = 6; break;
+            case "21": num = 7; break;
+            case "22": num = 8; break;
+            default: num = -1; break;
         }
-        return -1;
+        return num;
     }
 
     private static Boolean isValidMove(int nextMove) {
@@ -240,44 +225,17 @@ class ComputerAI {
         return !(row == -1 || col == -1) && gameBoard[row][col].equals(TicTacToeValues.EMPTY);
     }
 
-    private static int getRow(int nextMove)
-    {
-        switch (nextMove)
-        {
-            case 0:
-            case 1:
-            case 2: return 0;
-            case 3:
-            case 4:
-            case 5: return 1;
-            case 6:
-            case 7:
-            case 8: return 2;
-        }
-        return -1;
+    private static int getRow(int nextMove) {
+        return (nextMove / 3);
     }
 
-    private static int getCol(int nextMove)
-    {
-        switch (nextMove)
-        {
-            case 0:
-            case 3:
-            case 6: return 0;
-            case 1:
-            case 4:
-            case 7: return 1;
-            case 2:
-            case 5:
-            case 8: return 2;
-        }
-        return -1;
+    private static int getCol(int nextMove) {
+        return (nextMove % 3);
     }
 
 
     //Make a move
-    private static void makeMove(int nextMove)
-    {
+    private static void makeMove(int nextMove) {
         switch (nextMove)
         {
             case 0: TicTacToeActivity.updateAIMove(0, 0); break;
@@ -289,6 +247,7 @@ class ComputerAI {
             case 6: TicTacToeActivity.updateAIMove(2, 0); break;
             case 7: TicTacToeActivity.updateAIMove(2, 1); break;
             case 8: TicTacToeActivity.updateAIMove(2, 2); break;
+            default: throw new UnsupportedOperationException("Invalid Move");
         }
     }
 }

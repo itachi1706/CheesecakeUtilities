@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
@@ -21,10 +20,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import androidx.core.app.NotificationCompat;
+
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_START_INTENT;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_BT_TIME;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_NOTIFICATION_CHANNEL;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_TIME;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_END_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
@@ -38,41 +41,43 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (!intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) return; // Not Boot Action
         sp = PreferenceManager.getDefaultSharedPreferences(context);
-        if (sp.getBoolean(QHConstants.QH_BT_STATE, false)) scheduleBt(context);
-        if (sp.getBoolean(QHConstants.QH_WIFI_STATE, false)) scheduleWifi(context);
+        if (sp.getBoolean(QHConstants.QH_BT_STATE, false))
+            scheduleConnectivity(context, "BT", BT_START_INTENT, BT_END_INTENT, QH_BT_TIME, QH_BT_NOTIFICATION);
+        if (sp.getBoolean(QHConstants.QH_WIFI_STATE, false))
+            scheduleConnectivity(context, "Wifi", WIFI_START_INTENT, WIFI_END_INTENT, QH_WIFI_TIME, QH_WIFI_NOTIFICATION);
 
         Log.i(TAG, "Job Done");
     }
 
-    // Presume Enabled. Do Check first
-    private void scheduleBt(Context context) {
-        Log.i(TAG, "Start schedule of BT");
-        String defBt = sp.getString(QH_BT_TIME, "");
-        if (defBt.isEmpty()) return; // Cannot schedule dude
-        ConnectivityPeriod btConnectivity = new ConnectivityPeriod(defBt);
+    // Presume enabled, do check first
+    private void scheduleConnectivity(Context context, String name, int startIntent, int endIntent, String timePref, String notification) {
+        Log.i(TAG, "Start schedule of " + name);
+        String defConn = sp.getString(timePref, "");
+        if (defConn.isEmpty()) return; // Cannot schedule dude
+        ConnectivityPeriod connectivityPeriod = new ConnectivityPeriod(defConn);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent btSI = new Intent(context, BluetoothToggleReceiver.class).putExtra("status", true);
-        Intent btEI = new Intent(context, BluetoothToggleReceiver.class).putExtra("status", false);
-        PendingIntent btStartIntent = PendingIntent.getBroadcast(context, BT_START_INTENT, btSI, 0);
-        PendingIntent btEndIntent = PendingIntent.getBroadcast(context, BT_END_INTENT, btEI, 0);
+        Intent connSI = new Intent(context, BluetoothToggleReceiver.class).putExtra("status", true);
+        Intent connEI = new Intent(context, BluetoothToggleReceiver.class).putExtra("status", false);
+        PendingIntent connStartIntent = PendingIntent.getBroadcast(context, startIntent, connSI, 0);
+        PendingIntent connEndIntent = PendingIntent.getBroadcast(context, endIntent, connEI, 0);
         // Cancel all possible pending intents
-        alarmManager.cancel(btStartIntent);
-        alarmManager.cancel(btEndIntent);
-        Log.i(TAG, "Cleared existing BT Schedules");
+        alarmManager.cancel(connStartIntent);
+        alarmManager.cancel(connEndIntent);
+        Log.i(TAG, "Cleared existing " + name + " Schedules");
 
         // Set Alarm
         long millis = System.currentTimeMillis();
         Calendar startCal = Calendar.getInstance();
         startCal.setTimeInMillis(millis);
-        startCal.set(Calendar.HOUR_OF_DAY, btConnectivity.getStartHr());
-        startCal.set(Calendar.MINUTE, btConnectivity.getStartMin());
+        startCal.set(Calendar.HOUR_OF_DAY, connectivityPeriod.getStartHr());
+        startCal.set(Calendar.MINUTE, connectivityPeriod.getStartMin());
         startCal.set(Calendar.SECOND, 0);
 
         Calendar endCal = Calendar.getInstance();
         endCal.setTimeInMillis(millis);
-        endCal.set(Calendar.HOUR_OF_DAY, btConnectivity.getEndHr());
-        endCal.set(Calendar.MINUTE, btConnectivity.getEndMin());
+        endCal.set(Calendar.HOUR_OF_DAY, connectivityPeriod.getEndHr());
+        endCal.set(Calendar.MINUTE, connectivityPeriod.getEndMin());
         endCal.set(Calendar.SECOND, 0);
 
         boolean started = false, ended = false;
@@ -87,107 +92,32 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
         }
 
         // Do some logic in case we need to toggle shit
-        if ((started && ended) || (!started && ended)) {
-            // Presume ended
-            context.sendBroadcast(btEI);
-            Log.i(TAG, "Fired BT QH End Intent");
-            sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "BT QH End", true, -1);
-        } else if (started) {
-            // Presume started
-            context.sendBroadcast(btSI);
-            Log.i(TAG, "Fired BT QH Start Intent");
-            sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "BT QH End", true, -1);
-        }
+        if ((started && ended) || (!started && ended)) processNotification(context, connEI, name, "End", notification);
+        else if (started) processNotification(context, connSI, name, "Start", notification);
 
         if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-            Log.d(TAG, "Same Time Found. Not doing anything for BT Scheduling");
+            Log.d(TAG, "Same Time Found. Not doing anything for " + name + " Scheduling");
             return;
         }
 
-        Log.i(TAG, "BT Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
-        Log.i(TAG, "BT End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
+        Log.i(TAG, name + " Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
+        Log.i(TAG, name + " End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
 
         // Update Alarms
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, btStartIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, btEndIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, connStartIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, connEndIntent);
 
-        sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "BT QH Enabled", false, startCal.getTimeInMillis());
-        sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "BT QH Disabled", false, endCal.getTimeInMillis());
+        sendNotification(context, sp.getInt(notification, QHConstants.QH_NOTIFY_NEVER), name + " QH Enabled", false, startCal.getTimeInMillis());
+        sendNotification(context, sp.getInt(notification, QHConstants.QH_NOTIFY_NEVER), name + " QH Disabled", false, endCal.getTimeInMillis());
 
-        Log.i(TAG, "Scheduled BT Quiet Hours after boot");
+        Log.i(TAG, "Scheduled " + name + " Quiet Hours after boot");
     }
 
-    // Presume Enabled. Do Check first
-    private void scheduleWifi(Context context) {
-        Log.i(TAG, "Start schedule of Wifi");
-        String defWifi = sp.getString(QH_WIFI_TIME, "");
-        if (defWifi.isEmpty()) return; // Cannot schedule dude
-        ConnectivityPeriod wifiConnectivity = new ConnectivityPeriod(defWifi);
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent wSI = new Intent(context, WifiToggleReceiver.class).putExtra("status", true);
-        Intent wEI = new Intent(context, WifiToggleReceiver.class).putExtra("status", false);
-        PendingIntent wifiStartIntent = PendingIntent.getBroadcast(context, WIFI_START_INTENT, wSI, 0);
-        PendingIntent wifiEndIntent = PendingIntent.getBroadcast(context, WIFI_END_INTENT, wEI, 0);
-        // Cancel all possible pending intents
-        alarmManager.cancel(wifiStartIntent);
-        alarmManager.cancel(wifiEndIntent);
-        Log.i(TAG, "Cleared existing Wifi Schedules");
-
-        // Set Alarm
-        long millis = System.currentTimeMillis();
-        Calendar startCal = Calendar.getInstance();
-        startCal.setTimeInMillis(millis);
-        startCal.set(Calendar.HOUR_OF_DAY, wifiConnectivity.getStartHr());
-        startCal.set(Calendar.MINUTE, wifiConnectivity.getStartMin());
-        startCal.set(Calendar.SECOND, 0);
-
-        Calendar endCal = Calendar.getInstance();
-        endCal.setTimeInMillis(millis);
-        endCal.set(Calendar.HOUR_OF_DAY, wifiConnectivity.getEndHr());
-        endCal.set(Calendar.MINUTE, wifiConnectivity.getEndMin());
-        endCal.set(Calendar.SECOND, 0);
-
-        boolean started = false, ended = false;
-
-        if (millis > startCal.getTimeInMillis()) {
-            startCal.add(Calendar.DAY_OF_YEAR, 1);
-            started = true;
-        }
-        if (millis > endCal.getTimeInMillis()) {
-            endCal.add(Calendar.DAY_OF_YEAR, 1);
-            ended = true;
-        }
-
-        // Do some logic in case we need to toggle shit
-        if ((started && ended) || (!started && ended)) {
-            // Presume ended
-            context.sendBroadcast(wEI);
-            Log.i(TAG, "Fired Wifi QH End Intent");
-            sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "Wifi QH End", true, -1);
-        } else if (started) {
-            // Presume started
-            context.sendBroadcast(wSI);
-            Log.i(TAG, "Fired Wifi QH Start Intent");
-            sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "Wifi QH Start", true, -1);
-        }
-
-        if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-            Log.d(TAG, "Same Time Found. Not doing anything for Wifi Scheduling");
-            return;
-        }
-
-        Log.i(TAG, "Wifi Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
-        Log.i(TAG, "Wifi End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
-
-        // Update Alarms
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, wifiStartIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, wifiEndIntent);
-
-        sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "Wifi QH Enabled", false, startCal.getTimeInMillis());
-        sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), "Wifi QH Disabled", false, endCal.getTimeInMillis());
-
-        Log.i(TAG, "Scheduled Wifi Quiet Hours after boot");
+    private void processNotification(Context context, Intent connection, String name, String status, String notification) {
+        // Presume started/ended
+        context.sendBroadcast(connection);
+        Log.i(TAG, "Fired " + name + " QH " + status + " Intent");
+        sendNotification(context, sp.getInt(notification, QHConstants.QH_NOTIFY_NEVER), name + " QH " + status, true, -1);
     }
 
     private void sendNotification(Context context, int notificationLevel, String state, boolean prefire, long newtime) {
