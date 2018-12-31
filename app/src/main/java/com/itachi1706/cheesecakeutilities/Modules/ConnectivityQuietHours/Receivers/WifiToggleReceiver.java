@@ -1,7 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,15 +9,8 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
+import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.NotificationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
-import com.itachi1706.cheesecakeutilities.R;
-
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Random;
-
-import androidx.core.app.NotificationCompat;
 
 public class WifiToggleReceiver extends BroadcastReceiver {
 
@@ -54,31 +45,9 @@ public class WifiToggleReceiver extends BroadcastReceiver {
                 workDone = true;
             }
         }
-        sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state);
+        NotificationHelper.sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Wi-Fi");
         if (workDone) logResult(sp, state);
         Log.i(TAG, "Job Done");
-    }
-
-    private void sendNotification(Context context, int notificationLevel, boolean workDone, boolean wifiState) {
-        String time = DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
-        mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Wi-Fi Quiet Hour " + ((wifiState) ? "Enabled" : "Disabled"))
-                .setContentText("Wi-Fi state toggled on " + time)
-                .setAutoCancel(true)
-                .setGroup("connectivityqh")
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
-        Random random = new Random();
-
-        switch (notificationLevel) {
-            case QHConstants.QH_NOTIFY_ALWAYS:
-            case QHConstants.QH_NOTIFY_DEBUG:
-                notificationManager.notify(random.nextInt(), mBuilder.build()); break;
-            case QHConstants.QH_NOTIFY_WHEN_TRIGGERED: if (workDone) notificationManager.notify(random.nextInt(), mBuilder.build()); break;
-            case QHConstants.QH_NOTIFY_NEVER:
-            default: break;
-        }
     }
 
     private void logResult(SharedPreferences sp, boolean state) {
