@@ -121,13 +121,16 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
     }
 
     private void sendNotification(Context context, int notificationLevel, String state, boolean prefire, long newtime) {
+        if (notificationLevel != QHConstants.QH_NOTIFY_DEBUG) return; // Will never send a notification
         String time = DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) return; // No notification manager
         QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QH_NOTIFICATION_CHANNEL);
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Boot Quiet Hour Scheduling")
                 .setAutoCancel(true)
                 .setGroup("connectivityqh")
+                .setGroupSummary(true)
                 .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         if (prefire) {
             mBuilder.setContentText("Pre-Fired " + state + " trigger on " + time);
@@ -138,13 +141,6 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
                     time + " to " + DateFormat.getDateTimeInstance().format(newtime)));
         }
         Random random = new Random();
-
-        switch (notificationLevel) {
-            case QHConstants.QH_NOTIFY_DEBUG:
-                notificationManager.notify(random.nextInt(), mBuilder.build());
-                break;
-            default:
-                break;
-        }
+        notificationManager.notify(random.nextInt(), mBuilder.build());
     }
 }
