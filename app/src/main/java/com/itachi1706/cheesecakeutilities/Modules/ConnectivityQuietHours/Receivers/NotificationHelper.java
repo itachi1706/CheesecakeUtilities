@@ -43,7 +43,7 @@ public class NotificationHelper {
                 .setContentText(connection + " state toggled on " + time)
                 .setAutoCancel(true)
                 .setGroup(NOTIFICATION_GROUP)
-                .setDeleteIntent(createDeleteIntent(context, NOTIFICATION_SUM_CANCEL, contentTitle))
+                .setDeleteIntent(createDeleteIntent(context, NOTIFICATION_CANCEL, contentTitle))
                 .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         Random random = new Random();
         if (lines == null) lines = new ArrayList<>();
@@ -68,7 +68,7 @@ public class NotificationHelper {
     public static void createSummaryNotification(Context context, NotificationManager manager) {
         if (lines == null || lines.size() <= 0) return; // Don't do anything if there is no intent
         NotificationCompat.Builder summaryNotification = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
-        NotificationCompat.InboxStyle summaryBuilder = new NotificationCompat.InboxStyle().setSummaryText("Global").setBigContentTitle(lines.size() + " changes");
+        NotificationCompat.InboxStyle summaryBuilder = new NotificationCompat.InboxStyle().setSummaryText(lines.size() + " changes toggled").setBigContentTitle(lines.size() + " changes");
         for (String s : lines) {
             summaryBuilder.addLine(s);
         }
