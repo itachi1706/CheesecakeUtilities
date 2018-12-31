@@ -129,7 +129,7 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QH_NOTIFICATION_CHANNEL);
         mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Boot Quiet Hour Scheduling")
                 .setAutoCancel(true)
-                .setGroup("connectivityqh")
+                .setGroup(NotificationHelper.NOTIFICATION_GROUP)
                 .setGroupSummary(true)
                 .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         if (prefire) {
