@@ -29,8 +29,8 @@ public class NotificationHelper {
         if (notificationManager == null) return;
         QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
-        mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle(connection + "Quiet Hour " + ((state) ? "Enabled" : "Disabled"))
-                .setContentText(connection + "state toggled on " + time)
+        mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle(connection + " Quiet Hour " + ((state) ? "Enabled" : "Disabled"))
+                .setContentText(connection + " state toggled on " + time)
                 .setAutoCancel(true)
                 .setGroup("connectivityqh")
                 .setGroupSummary(true)
