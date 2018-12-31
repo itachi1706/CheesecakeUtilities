@@ -83,6 +83,7 @@ public class NotificationHelper {
         Intent del = new Intent(context, DeleteNotificationIntent.class);
         del.setAction(action);
         if (content != null) del.putExtra("data", content);
-        return PendingIntent.getBroadcast(context, 0, del, PendingIntent.FLAG_CANCEL_CURRENT);
+        Random random = new Random();
+        return PendingIntent.getBroadcast(context, random.nextInt(5000), del, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }
