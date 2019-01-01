@@ -31,6 +31,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.QH_WIFI_TIME;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_END_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
+import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.NotificationHelper.NOTIFICATION_CANCEL;
 
 public class BootRescheduleToggleReceiver extends BroadcastReceiver {
 
@@ -127,10 +128,11 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
         if (notificationManager == null) return; // No notification manager
         QHConstants.createNotificationChannel(notificationManager); // Create the Notification Channel
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, QH_NOTIFICATION_CHANNEL);
-        mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle("Boot Quiet Hour Scheduling")
+        String contentTitle = "Boot Quiet Hour Scheduling";
+        mBuilder.setSmallIcon(R.drawable.notification_icon).setContentTitle(contentTitle)
                 .setAutoCancel(true)
                 .setGroup(NotificationHelper.NOTIFICATION_GROUP)
-                .setGroupSummary(true)
+                .setDeleteIntent(NotificationHelper.Companion.createDeleteIntent(context, NOTIFICATION_CANCEL, contentTitle))
                 .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
         if (prefire) {
             mBuilder.setContentText("Pre-Fired " + state + " trigger on " + time);
@@ -141,6 +143,9 @@ public class BootRescheduleToggleReceiver extends BroadcastReceiver {
                     time + " to " + DateFormat.getDateTimeInstance().format(newtime)));
         }
         Random random = new Random();
+        NotificationHelper.Companion.addToLines(contentTitle);
+        if (NotificationHelper.Companion.getSummaryId() == -9999) NotificationHelper.Companion.setSummaryId(random.nextInt());
+        NotificationHelper.Companion.createSummaryNotification(context, notificationManager);
         notificationManager.notify(random.nextInt(), mBuilder.build());
     }
 }

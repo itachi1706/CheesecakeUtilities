@@ -11,6 +11,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConst
 import com.itachi1706.cheesecakeutilities.R
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Kenneth on 1/1/2019.
@@ -73,7 +74,12 @@ internal class NotificationHelper private constructor() {
             manager.notify(summaryId, summaryNotification.build())
         }
 
-        private fun createDeleteIntent(context: Context, action: String, @Nullable content: String?): PendingIntent {
+        fun addToLines(text: String) {
+            if (lines == null) lines = ArrayList()
+            lines!!.add(text)
+        }
+
+        fun createDeleteIntent(context: Context, action: String, @Nullable content: String?): PendingIntent {
             val del = Intent(context, DeleteNotificationIntent::class.java)
             del.action = action
             if (content != null) del.putExtra("data", content)
