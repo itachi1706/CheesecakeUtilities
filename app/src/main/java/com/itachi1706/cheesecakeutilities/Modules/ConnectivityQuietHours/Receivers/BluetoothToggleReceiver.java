@@ -44,7 +44,7 @@ public class BluetoothToggleReceiver extends BroadcastReceiver {
                 workDone = true;
             }
         }
-        NotificationHelper.sendNotification(context, sp.getInt(QHConstants.QH_BT_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Bluetooth");
+        NotificationHelper.Companion.sendNotification(context, sp.getInt(QHConstants.QH_BT_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Bluetooth");
         if (workDone) logResult(sp, state);
         Log.i(TAG, "Job Done");
     }

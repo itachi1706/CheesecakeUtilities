@@ -21,18 +21,18 @@ public class DeleteNotificationIntent extends BroadcastReceiver {
         Log.i(TAG, "Received Notification Removal Intent (" + action + ")");
         if (action.equalsIgnoreCase(NotificationHelper.NOTIFICATION_SUM_CANCEL)) {
             Log.i(TAG, "Removing all notifications");
-            NotificationHelper.lines.clear();
-            NotificationHelper.lines = null;
-            NotificationHelper.summaryId = -9999;
+            NotificationHelper.Companion.getLines().clear();
+            NotificationHelper.Companion.setLines(null);
+            NotificationHelper.Companion.setSummaryId(-9999);
         } else if (action.equalsIgnoreCase(NotificationHelper.NOTIFICATION_CANCEL)) {
-            if (NotificationHelper.lines == null || NotificationHelper.lines.size() <= 0) return;
+            if (NotificationHelper.Companion.getLines() == null || NotificationHelper.Companion.getLines().size() <= 0) return;
             String data = intent.getStringExtra("data");
-            Log.i(TAG, "Size: " + NotificationHelper.lines.size() + " | Removing " + data);
-            NotificationHelper.lines.remove(intent.getStringExtra("data"));
-            Log.i(TAG, "Removed and updating notification. New Size: " + NotificationHelper.lines.size());
+            Log.i(TAG, "Size: " + NotificationHelper.Companion.getLines().size() + " | Removing " + data);
+            NotificationHelper.Companion.getLines().remove(intent.getStringExtra("data"));
+            Log.i(TAG, "Removed and updating notification. New Size: " + NotificationHelper.Companion.getLines().size());
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (manager == null) return;
-            NotificationHelper.createSummaryNotification(context, manager);
+            NotificationHelper.Companion.createSummaryNotification(context, manager);
         }
     }
 }

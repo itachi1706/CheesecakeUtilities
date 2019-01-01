@@ -44,7 +44,7 @@ public class WifiToggleReceiver extends BroadcastReceiver {
                 workDone = true;
             }
         }
-        NotificationHelper.sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Wi-Fi");
+        NotificationHelper.Companion.sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Wi-Fi");
         if (workDone) logResult(sp, state);
         Log.i(TAG, "Job Done");
     }
