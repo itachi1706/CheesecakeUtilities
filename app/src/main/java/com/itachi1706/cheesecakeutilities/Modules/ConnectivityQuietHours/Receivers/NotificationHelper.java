@@ -21,18 +21,18 @@ import androidx.core.app.NotificationCompat;
  * Created by Kenneth on 1/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours in CheesecakeUtilities
  */
-public class NotificationHelper {
+class NotificationHelper {
 
     private NotificationHelper() {
         throw new IllegalStateException("Utility class. Do not instantiate like this");
     }
 
-    public static ArrayList<String> lines = null;
-    public static int summaryId = -9999;
-    public static final String NOTIFICATION_SUM_CANCEL = "summary_cancelled", NOTIFICATION_CANCEL = "subitem_cancelled";
-    public static final String NOTIFICATION_GROUP = "connectivityqh";
+    static ArrayList<String> lines = null;
+    static int summaryId = -9999;
+    static final String NOTIFICATION_SUM_CANCEL = "summary_cancelled", NOTIFICATION_CANCEL = "subitem_cancelled";
+    static final String NOTIFICATION_GROUP = "connectivityqh";
 
-    public static void sendNotification(Context context, int notificationLevel, boolean workDone, boolean state, String connection) {
+    static void sendNotification(Context context, int notificationLevel, boolean workDone, boolean state, String connection) {
         String time = DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager == null) return;
@@ -65,7 +65,7 @@ public class NotificationHelper {
         }
     }
 
-    public static void createSummaryNotification(Context context, NotificationManager manager) {
+    static void createSummaryNotification(Context context, NotificationManager manager) {
         if (lines == null || lines.size() <= 0) return; // Don't do anything if there is no intent
         NotificationCompat.Builder summaryNotification = new NotificationCompat.Builder(context, QHConstants.QH_NOTIFICATION_CHANNEL);
         NotificationCompat.InboxStyle summaryBuilder = new NotificationCompat.InboxStyle().setSummaryText(lines.size() + " changes toggled").setBigContentTitle(lines.size() + " changes");
