@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,10 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.collection.ArrayMap;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +23,7 @@ import android.widget.Toast;
 
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
@@ -40,6 +36,11 @@ import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.collection.ArrayMap;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
@@ -335,11 +336,13 @@ public class FanfictionCompactorActivity extends BaseActivity {
     ProgressDialog progressDialog;
     ResponseReceiver receiver;
 
-    private class ResponseReceiver extends BroadcastReceiver {
+    private class ResponseReceiver extends BaseBroadcastReceiver {
         private ResponseReceiver() {
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
             if (intent.getBooleanExtra(FanficBroadcast.BROADCAST_DATA_DONE, false)) {
                 if (progressDialog != null)
                     progressDialog.dismiss();

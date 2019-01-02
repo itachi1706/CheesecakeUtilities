@@ -20,10 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.palette.graphics.Palette;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +31,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
@@ -42,6 +39,11 @@ import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
 
 public class LyricFinderActivity extends BaseActivity {
 
@@ -202,13 +204,14 @@ public class LyricFinderActivity extends BaseActivity {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private class DataReceiver extends BroadcastReceiver {
+    private class DataReceiver extends BaseBroadcastReceiver {
 
         DataReceiver() {
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
             Log.i(TAG, "Receieved broadcast");
             NowPlaying obj = new NowPlaying(intent);
             album.setText(obj.getAlbum());

@@ -4,7 +4,6 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -21,8 +20,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.provider.Settings;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -36,12 +33,15 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.squareup.picasso.Picasso;
 
 import net.grandcentrix.tray.AppPreferences;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import io.fabric.sdk.android.Fabric;
 
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
@@ -293,11 +293,13 @@ public class NavBarService extends AccessibilityService {
 
     ResponseReceiver receiver;
 
-    private class ResponseReceiver extends BroadcastReceiver {
+    private class ResponseReceiver extends BaseBroadcastReceiver {
         private ResponseReceiver() {
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
             tryRemovingNavView();
             addNavView();
         }

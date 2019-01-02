@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities.Modules.LyricFinder;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,13 +15,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 
 import java.io.File;
@@ -30,6 +26,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 import io.fabric.sdk.android.Fabric;
 
 @SuppressLint("OverrideAbstract")
@@ -142,12 +142,13 @@ public class LyricNotificationListener extends NotificationListenerService {
         }
     }
 
-    private class UpdateReceiver extends BroadcastReceiver {
+    private class UpdateReceiver extends BaseBroadcastReceiver {
 
         UpdateReceiver(){}
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
             Log.i(TAG, "Receieved broadcast, updating metadata");
             sendBroadcastData();
         }

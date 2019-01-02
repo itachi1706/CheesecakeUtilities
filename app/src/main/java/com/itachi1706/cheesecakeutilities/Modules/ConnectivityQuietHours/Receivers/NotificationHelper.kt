@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 internal class NotificationHelper private constructor() {
 
     init {
-        throw IllegalStateException("Utility class. Do not instantiate like this")
+        throw java.lang.IllegalStateException("Utility class. Do not instantiate like this")
     }
 
     companion object {

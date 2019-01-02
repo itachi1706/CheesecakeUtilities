@@ -1,6 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,14 +8,16 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 
-public class WifiToggleReceiver extends BroadcastReceiver {
+public class WifiToggleReceiver extends BaseBroadcastReceiver {
 
     private static final String TAG = "QuietHour-Wifi";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
         Log.i(TAG, "Waking up");
         boolean state = intent.getExtras().getBoolean("status");
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);

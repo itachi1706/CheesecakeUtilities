@@ -1,18 +1,19 @@
 package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers
 
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver
 
 /**
  * Created by Kenneth on 1/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers in CheesecakeUtilities
  */
-class DeleteNotificationIntent : BroadcastReceiver() {
+class DeleteNotificationIntent : BaseBroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         val action = intent.action ?: return
         Log.i(TAG, "Received Notification Removal Intent ($action)")
         when (action) {

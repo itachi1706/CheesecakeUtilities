@@ -3,13 +3,13 @@ package com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receiv
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
@@ -33,13 +33,14 @@ import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.NotificationHelper.NOTIFICATION_CANCEL;
 
-public class BootRescheduleToggleReceiver extends BroadcastReceiver {
+public class BootRescheduleToggleReceiver extends BaseBroadcastReceiver {
 
     public static final String TAG = "QuietHour-Boot";
     private SharedPreferences sp;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
         if (!intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) return; // Not Boot Action
         sp = PrefHelper.getDefaultSharedPreferences(context);
         if (sp.getBoolean(QHConstants.QH_BT_STATE, false))

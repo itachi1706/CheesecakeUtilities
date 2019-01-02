@@ -1,19 +1,19 @@
 package com.itachi1706.cheesecakeutilities;
 
 import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class CameraDisablerActivity extends BaseActivity {
 
@@ -161,11 +161,13 @@ public class CameraDisablerActivity extends BaseActivity {
         }
     }
 
-    private class ResponseReceiver extends BroadcastReceiver {
+    private class ResponseReceiver extends BaseBroadcastReceiver {
         private ResponseReceiver() {
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
             Log.i("CameraDisabler", "Received Update Broadcast");
             updateResources();
         }

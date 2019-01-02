@@ -5,26 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.R;
+
+import androidx.fragment.app.Fragment;
 
 public class BatteryFragment extends Fragment {
     private TextView batteryInfo;
     BroadcastReceiver batteryStatusReceiver;
     private ProgressBar pb;
 
-    class BatteryReceiver extends BroadcastReceiver {
+    class BatteryReceiver extends BaseBroadcastReceiver {
         BatteryReceiver() {
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
             int level = intent.getIntExtra("level", -1);
             int voltage = intent.getIntExtra("voltage", -1);
             int status = intent.getIntExtra("status", -1);

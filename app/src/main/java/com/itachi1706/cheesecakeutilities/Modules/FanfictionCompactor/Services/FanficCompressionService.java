@@ -4,16 +4,14 @@ import android.app.IntentService;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FanfictionCompactorActivity;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
+import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.FanfictionCompactorActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficNotificationObject;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
@@ -33,6 +31,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by Kenneth on 1/6/2016.
@@ -273,12 +274,13 @@ public class FanficCompressionService extends IntentService{
         }
     }
 
-    private class ResponseReceiver extends BroadcastReceiver {
+    private class ResponseReceiver extends BaseBroadcastReceiver {
         private ResponseReceiver() {
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
-
+            super.onReceive(context, intent);
             lastStatusCode = intent.getIntExtra(FanficBroadcast.BROADCAST_STATUS, -99);
 
             switch (lastStatusCode) {
