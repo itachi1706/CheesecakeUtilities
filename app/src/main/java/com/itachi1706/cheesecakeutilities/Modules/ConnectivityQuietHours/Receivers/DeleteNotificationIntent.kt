@@ -18,6 +18,7 @@ class DeleteNotificationIntent : BroadcastReceiver() {
         when (action) {
             NotificationHelper.NOTIFICATION_SUM_CANCEL -> {
                 Log.i(TAG, "Removing all notifications")
+                if (NotificationHelper.lines == null) return
                 NotificationHelper.lines!!.clear()
                 NotificationHelper.lines = null
                 NotificationHelper.summaryId = -9999
