@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/msl_how-to" android:title="How-to get token"
+        app:showAsAction="never" />
+    <item android:id="@+id/msl_signout" android:title="Sign Out"
+        android:enabled="false" app:showAsAction="never" />
+</menu>
