@@ -138,6 +138,8 @@ dependencies {
     }
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    // MSL Sync Integration
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev364-1.25.0' exclude module: "httpClient"
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     testImplementation 'junit:junit:4.12'
