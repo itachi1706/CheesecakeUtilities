@@ -70,7 +70,7 @@ public class CardInfoActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_card_info);
+        setContentView(R.layout.activity_cepas_card_info);
         final ViewPager viewPager = findViewById(R.id.pager);
         mTabsAdapter = new TabPagerAdapter(this, viewPager);
 

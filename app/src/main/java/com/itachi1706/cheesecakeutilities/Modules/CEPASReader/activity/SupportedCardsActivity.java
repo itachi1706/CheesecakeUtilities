@@ -52,7 +52,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 public class SupportedCardsActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supported_cards);
+        setContentView(R.layout.activity_cepas_supported_cards);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

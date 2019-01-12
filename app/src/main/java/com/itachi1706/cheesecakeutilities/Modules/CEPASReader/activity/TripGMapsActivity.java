@@ -34,7 +34,7 @@ public class TripGMapsActivity extends FragmentActivity implements OnMapReadyCal
             finish();
             return;
         }
-        setContentView(R.layout.activity_trip_gmaps);
+        setContentView(R.layout.activity_cepas_trip_gmaps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

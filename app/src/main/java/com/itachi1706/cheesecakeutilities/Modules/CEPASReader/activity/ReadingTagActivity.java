@@ -129,7 +129,7 @@ public class ReadingTagActivity extends AppCompatActivity implements TagReaderFe
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.activity_reading_tag);
+        setContentView(R.layout.activity_cepas_reading_tag);
 
         resolveIntent(getIntent());
     }
