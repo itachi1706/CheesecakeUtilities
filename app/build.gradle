@@ -56,6 +56,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             proguardFile 'proguard-simple-xml.pro'
+            proguardFile 'proguard-google-api-client.pro'
         }
         debug {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
@@ -139,7 +140,17 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
     // MSL Sync Integration
-    implementation 'com.google.apis:google-api-services-calendar:v3-rev364-1.25.0' exclude module: "httpClient"
+    implementation 'com.google.api-client:google-api-client-android:1.23.0', {
+        exclude group: "org.apache.httpcomponents"
+        exclude module: 'google-http-client'
+    }
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev364-1.25.0', {
+        exclude group: "org.apache.httpcomponents"
+        exclude module: 'google-http-client'
+    }
+    implementation 'com.google.http-client:google-http-client-gson:1.23.0', {
+        exclude group: "org.apache.httpcomponents"
+    }
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     testImplementation 'junit:junit:4.12'

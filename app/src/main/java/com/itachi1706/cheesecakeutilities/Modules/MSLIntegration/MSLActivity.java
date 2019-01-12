@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
 
+import android.accounts.AccountManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,13 +9,22 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.CalendarScopes;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+
+import java.util.Collections;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -31,6 +42,13 @@ public class MSLActivity extends BaseActivity {
     SharedPreferences sp;
 
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
+    public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
+
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1;
+
+    // Google OAuth
+    GoogleAccountCredential credential;
+    Calendar client;
 
     @Override
     public String getHelpDescription() {
@@ -72,13 +90,17 @@ public class MSLActivity extends BaseActivity {
         forceSync.setOnClickListener(v -> btnSync());
         syncTask.setOnCheckedChangeListener((buttonView, isChecked) -> toggleTask(isChecked));
         syncCal.setOnCheckedChangeListener((buttonView, isChecked) -> toggleCal(isChecked));
+
+        // Setup Google Stuff
+        credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
+        credential.setSelectedAccountName(sp.getString(MSL_SP_GOOGLE_OAUTH, null));
+        client = new Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("MSLIntegration/1.0").build();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        googleSignIn.setEnabled(true); // TODO: Disable button if valid
         updateToggles();
     }
 
@@ -91,7 +113,7 @@ public class MSLActivity extends BaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // TODO: enable sign out if logged in
+        menu.findItem(R.id.msl_signout).setEnabled(hasGoogleOAuth());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -102,21 +124,32 @@ public class MSLActivity extends BaseActivity {
                 Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); // TODO: Implement
                 return true;
             case R.id.msl_signout:
-                Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); // TODO: Implement
+                credential.setSelectedAccountName(null);
+                sp.edit().remove(MSL_SP_GOOGLE_OAUTH).apply();
+                updateToggles();
+                Toast.makeText(this, "Signed out successfully", Toast.LENGTH_LONG).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    // Checks
     private boolean hasToken() {
         return sp.contains(MSL_SP_ACCESS_TOKEN);
     }
 
+    private boolean hasGoogleOAuth() {
+        return sp.contains(MSL_SP_GOOGLE_OAUTH);
+    }
+
+    // On Click Listeners
     private void updateToggles() {
         // Only update if OAuth AND access token is found
         syncTask.setEnabled(false);
         syncCal.setEnabled(false);
-        if (hasToken()) {
+        googleSignIn.setEnabled(!hasGoogleOAuth());
+        if (hasToken() && hasGoogleOAuth()) {
             // TODO: Add Sync Calendar when implemented
             // TODO: Add check for OAuth token as well
             syncTask.setEnabled(true);
@@ -146,7 +179,7 @@ public class MSLActivity extends BaseActivity {
     }
 
     private void btnLogin() {
-
+        if (checkGooglePlayServicesAvailable()) haveGooglePlayServices();
     }
 
     private void toggleTask(boolean isChecked) {
@@ -163,5 +196,52 @@ public class MSLActivity extends BaseActivity {
         }
         Toast.makeText(this, "Will be implemented in a future release", Toast.LENGTH_LONG).show();
         // TODO: Note
+    }
+
+    // GPS Stuff
+    private boolean checkGooglePlayServicesAvailable() {
+        final int connectionStatusCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        if (connectionStatusCode != ConnectionResult.SUCCESS && GoogleApiAvailability.getInstance().isUserResolvableError(connectionStatusCode)) {
+            runOnUiThread(() -> GoogleApiAvailability.getInstance().getErrorDialog(this, connectionStatusCode, REQUEST_GOOGLE_PLAY_SERVICES).show());
+            return false;
+        }
+        return true;
+    }
+
+    private void chooseAccount() {
+        startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+    }
+
+    private void haveGooglePlayServices() {
+        // check if there is already an account selected
+        if (credential.getSelectedAccountName() == null) {
+            // ask user to choose account
+            chooseAccount();
+        } else {
+            // load calendars
+            // TODO: Do stuff with calendars
+            //AsyncLoadCalendars.run(this);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_GOOGLE_PLAY_SERVICES:
+                if (resultCode == RESULT_OK) haveGooglePlayServices();
+                else checkGooglePlayServicesAvailable();
+                break;
+            case REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                    String accountName = data.getExtras().getString(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        credential.setSelectedAccountName(accountName);
+                        sp.edit().putString(MSL_SP_GOOGLE_OAUTH, accountName).apply();
+                        // TODO: Do stuff with calendars
+                    }
+                }
+                break;
+        }
     }
 }
