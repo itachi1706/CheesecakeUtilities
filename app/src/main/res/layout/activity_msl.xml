@@ -20,7 +20,7 @@
             android:id="@+id/et_msl_AT"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="MSL Authentication Token" />
+            android:hint="MSL Access Token" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
