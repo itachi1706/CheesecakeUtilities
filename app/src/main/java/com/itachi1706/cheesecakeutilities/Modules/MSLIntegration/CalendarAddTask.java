@@ -18,6 +18,11 @@ public class CalendarAddTask extends CalendarAsyncTask {
     }
 
     @Override
+    String getTaskAction() {
+        return "ADD";
+    }
+
+    @Override
     protected void doInBackground() throws IOException {
         Calendar calendar = client.calendars().insert(cal).setFields(CalendarInfo.FIELDS).execute();
         model.add(calendar);

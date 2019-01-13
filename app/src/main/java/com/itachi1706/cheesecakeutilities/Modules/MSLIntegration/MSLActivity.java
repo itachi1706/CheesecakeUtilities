@@ -210,10 +210,14 @@ public class MSLActivity extends BaseActivity {
         // TODO: Note
     }
 
-    public void update(boolean success) {
+    public void update(boolean success, String taskAction) {
         // TODO: Implement if async tasks are true
-        Toast.makeText(this, "Calendar Inserted Asynchronously", Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
+        switch (taskAction.toUpperCase()) {
+            case "ADD":
+                Toast.makeText(this, "Calendar Inserted Asynchronously", Toast.LENGTH_LONG).show();
+                break;
+            default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
+        }
     }
 
     // GPS Stuff

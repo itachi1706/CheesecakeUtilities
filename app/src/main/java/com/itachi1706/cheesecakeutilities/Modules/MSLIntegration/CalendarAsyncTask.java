@@ -72,10 +72,12 @@ abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
             //progressBar.setVisibility(View.GONE);
             //}
             if (success) {
-                activity.update(success);
+                activity.update(success, getTaskAction());
             }
         }
     }
+
+    abstract String getTaskAction();
 
     abstract protected void doInBackground() throws IOException;
 }
