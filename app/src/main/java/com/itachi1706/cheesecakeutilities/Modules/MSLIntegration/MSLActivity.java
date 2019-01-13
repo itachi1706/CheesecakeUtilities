@@ -4,6 +4,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
@@ -47,6 +49,8 @@ public class MSLActivity extends BaseActivity {
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
 
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2;
+
+    private static final String TAG = "MSL-SYNC";
 
     // Google OAuth
     GoogleAccountCredential credential;
@@ -94,6 +98,9 @@ public class MSLActivity extends BaseActivity {
         forceSync.setOnClickListener(v -> btnSync());
         syncTask.setOnCheckedChangeListener((buttonView, isChecked) -> toggleTask(isChecked));
         syncCal.setOnCheckedChangeListener((buttonView, isChecked) -> toggleCal(isChecked));
+
+        // TODO: Sync toggles state
+        // TODO: Store toggle state in SharedPreferences for sync
 
         // Setup Google Stuff
         credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
@@ -155,7 +162,7 @@ public class MSLActivity extends BaseActivity {
         googleSignIn.setEnabled(!hasGoogleOAuth());
         if (hasToken() && hasGoogleOAuth()) {
             // TODO: Add Sync Calendar when implemented
-            // TODO: Add check for OAuth token as well
+            // TODO: Load calendars, check and update
             syncTask.setEnabled(true);
         }
     }
@@ -192,15 +199,12 @@ public class MSLActivity extends BaseActivity {
             return;
         }
 
-        // Test, if toggled, create calendar
-        // TODO: Test code to remove
-        com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
-        calendar.setSummary("Test Calendar Summary");
-        calendar.setTimeZone("Asia/Singapore");
-
-        new CalendarAddTask(this, calendar).execute();
-        Toast.makeText(this, "Calendar Inserting Asynchronously", Toast.LENGTH_LONG).show();
-
+        // if enabled, check that calendar exists, otherwise create it
+        Log.d(TAG, "toggleTask(): " + isChecked);
+        if (isChecked) {
+            CalendarLoadTask.run(this, "TASK");
+        }
+            // TODO: If unchecked, add an alertbox prompting user that we will not delete the calendar and give a direct URL to calendar settings if users want to delete it
     }
 
     private void toggleCal(boolean isChecked) {
@@ -214,9 +218,27 @@ public class MSLActivity extends BaseActivity {
 
     public void update(boolean success, String taskAction) {
         // TODO: Implement if async tasks are true
+        Log.i(TAG, "Task Completed: " + taskAction);
         switch (taskAction.toUpperCase()) {
             case "ADD":
                 Toast.makeText(this, "Calendar Inserted Asynchronously", Toast.LENGTH_LONG).show();
+                break;
+            case "LOAD-TASK":
+                String id = sp.getString("msl-cal-task-id", "");
+                if (id.isEmpty() || model.get(id) == null) {
+                    Log.w(TAG, "Calendar MSL Task not found, creating calendar");
+                    com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
+                    calendar.setSummary("MSL Task Calendar Sync");
+                    calendar.setDescription("Calendar used by CheesecakeUtilities to store tasks obtained from MSL and updated");
+                    calendar.setTimeZone("Asia/Singapore");
+                    calendar.setLocation("Singapore");
+                    new CalendarAddTask(this, calendar, "msl-cal-task-id").execute();
+                    Toast.makeText(this, "Creating calendar for tasks sync", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                // TODO: Calendar found, launch task synchronization service
+                Log.i(TAG, "MSL Task Calendar found. doing synchronization");
+                Log.e(TAG, "Task Sync Unimplemented");
                 break;
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
         }
@@ -248,7 +270,7 @@ public class MSLActivity extends BaseActivity {
         } else {
             // load calendars
             // TODO: Do stuff with calendars
-            //AsyncLoadCalendars.run(this);
+            CalendarLoadTask.run(this, "");
         }
     }
 
@@ -273,6 +295,7 @@ public class MSLActivity extends BaseActivity {
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
                     // Load calendars
+                    CalendarLoadTask.run(this, "");
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
                 } else chooseAccount();
         }

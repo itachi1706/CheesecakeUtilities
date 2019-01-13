@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
-    final MSLActivity activity;
+    public final MSLActivity activity;
     public final CalendarModel model;
     public final com.google.api.services.calendar.Calendar client;
     //private final View progressBar;
@@ -68,13 +68,11 @@ public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
     protected final void onPostExecute(Boolean success) {
         super.onPostExecute(success);
         --activity.numAsyncTasks;
-        if (0 == --activity.numAsyncTasks) {
-            //if (0 == --activity.numAsyncTasks) {
-            //progressBar.setVisibility(View.GONE);
-            //}
-            if (success) {
-                activity.update(success, getTaskAction());
-            }
+        //if (0 == --activity.numAsyncTasks) {
+        //progressBar.setVisibility(View.GONE);
+        //}
+        if (success) {
+            activity.update(success, getTaskAction());
         }
     }
 
