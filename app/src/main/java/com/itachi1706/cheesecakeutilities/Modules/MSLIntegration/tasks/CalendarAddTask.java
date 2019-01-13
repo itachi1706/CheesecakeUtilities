@@ -1,6 +1,9 @@
-package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
+package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks;
 
 import com.google.api.services.calendar.model.Calendar;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarInfo;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity;
 
 import java.io.IOException;
 
@@ -12,13 +15,13 @@ public class CalendarAddTask extends CalendarAsyncTask {
 
     private final Calendar cal;
 
-    CalendarAddTask(MSLActivity activity, Calendar mCal) {
+    public CalendarAddTask(MSLActivity activity, Calendar mCal) {
         super(activity);
         this.cal = mCal;
     }
 
     @Override
-    String getTaskAction() {
+    public String getTaskAction() {
         return "ADD";
     }
 

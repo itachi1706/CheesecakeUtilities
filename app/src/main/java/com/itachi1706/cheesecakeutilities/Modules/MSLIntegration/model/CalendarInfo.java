@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
+package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model;
 
 import com.google.android.gms.common.internal.Objects;
 import com.google.api.services.calendar.model.Calendar;
@@ -8,10 +8,10 @@ import com.google.api.services.calendar.model.CalendarListEntry;
  * Created by Kenneth on 13/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
  */
-class CalendarInfo implements Comparable<CalendarInfo>, Cloneable {
+public class CalendarInfo implements Comparable<CalendarInfo>, Cloneable {
 
-    static final String FIELDS = "id,summary";
-    static final String FEED_FIELDS = "items(" + FIELDS + ")";
+    public static final String FIELDS = "id,summary";
+    public static final String FEED_FIELDS = "items(" + FIELDS + ")";
 
     String id;
     String summary;
@@ -49,12 +49,12 @@ class CalendarInfo implements Comparable<CalendarInfo>, Cloneable {
         }
     }
 
-    void update(Calendar calendar) {
+    public void update(Calendar calendar) {
         id = calendar.getId();
         summary = calendar.getSummary();
     }
 
-    void update(CalendarListEntry calendar) {
+    public void update(CalendarListEntry calendar) {
         id = calendar.getId();
         summary = calendar.getSummary();
     }

@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 
 import java.io.IOException;
 
@@ -27,14 +28,14 @@ import java.io.IOException;
  *
  * @author Yaniv Inbar
  */
-abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
+public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     final MSLActivity activity;
-    final CalendarModel model;
-    final com.google.api.services.calendar.Calendar client;
+    public final CalendarModel model;
+    public final com.google.api.services.calendar.Calendar client;
     //private final View progressBar;
 
-    CalendarAsyncTask(MSLActivity activity) {
+    public CalendarAsyncTask(MSLActivity activity) {
         this.activity = activity;
         model = activity.model;
         client = activity.client;
@@ -77,7 +78,7 @@ abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
-    abstract String getTaskAction();
+    public abstract String getTaskAction();
 
     abstract protected void doInBackground() throws IOException;
 }

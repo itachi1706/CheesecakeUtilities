@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
+package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model;
 
 import com.google.api.services.calendar.model.Calendar;
 import com.google.api.services.calendar.model.CalendarListEntry;
@@ -13,29 +13,29 @@ import java.util.Map;
  * Created by Kenneth on 13/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
  */
-class CalendarModel {
+public class CalendarModel {
 
     private final Map<String, CalendarInfo> calendars = new HashMap<String, CalendarInfo>();
 
-    int size() {
+    public int size() {
         synchronized (calendars) {
             return calendars.size();
         }
     }
 
-    void remove(String id) {
+    public void remove(String id) {
         synchronized (calendars) {
             calendars.remove(id);
         }
     }
 
-    CalendarInfo get(String id) {
+    public CalendarInfo get(String id) {
         synchronized (calendars) {
             return calendars.get(id);
         }
     }
 
-    void add(Calendar calendarToAdd) {
+    public void add(Calendar calendarToAdd) {
         synchronized (calendars) {
             CalendarInfo found = get(calendarToAdd.getId());
             if (found == null) {
@@ -46,7 +46,7 @@ class CalendarModel {
         }
     }
 
-    void add(CalendarListEntry calendarToAdd) {
+    public void add(CalendarListEntry calendarToAdd) {
         synchronized (calendars) {
             CalendarInfo found = get(calendarToAdd.getId());
             if (found == null) {
@@ -57,7 +57,7 @@ class CalendarModel {
         }
     }
 
-    void reset(List<CalendarListEntry> calendarsToAdd) {
+    public void reset(List<CalendarListEntry> calendarsToAdd) {
         synchronized (calendars) {
             calendars.clear();
             for (CalendarListEntry calendarToAdd : calendarsToAdd) {
