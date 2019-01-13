@@ -44,11 +44,13 @@ public class MSLActivity extends BaseActivity {
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
 
-    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1;
+    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2;
 
     // Google OAuth
     GoogleAccountCredential credential;
     Calendar client;
+    CalendarModel model = new CalendarModel();
+    int numAsyncTasks;
 
     @Override
     public String getHelpDescription() {
@@ -187,6 +189,16 @@ public class MSLActivity extends BaseActivity {
             Toast.makeText(this, "Please enter an Access Token to sync your tasks to Google Calendar", Toast.LENGTH_LONG).show();
             return;
         }
+
+        // Test, if toggled, create calendar
+        // TODO: Test code to remove
+        com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
+        calendar.setSummary("Test Calendar Summary");
+        calendar.setTimeZone("Asia/Singapore");
+
+        new CalendarAddTask(this, calendar).execute();
+        Toast.makeText(this, "Calendar Inserting Asynchronously", Toast.LENGTH_LONG).show();
+
     }
 
     private void toggleCal(boolean isChecked) {
@@ -198,14 +210,24 @@ public class MSLActivity extends BaseActivity {
         // TODO: Note
     }
 
+    public void update(boolean success) {
+        // TODO: Implement if async tasks are true
+        Toast.makeText(this, "Calendar Inserted Asynchronously", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
+    }
+
     // GPS Stuff
     private boolean checkGooglePlayServicesAvailable() {
         final int connectionStatusCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (connectionStatusCode != ConnectionResult.SUCCESS && GoogleApiAvailability.getInstance().isUserResolvableError(connectionStatusCode)) {
-            runOnUiThread(() -> GoogleApiAvailability.getInstance().getErrorDialog(this, connectionStatusCode, REQUEST_GOOGLE_PLAY_SERVICES).show());
+            showGPSError(connectionStatusCode);
             return false;
         }
         return true;
+    }
+
+    public void showGPSError(final int connectionStatusCode) {
+        runOnUiThread(() -> GoogleApiAvailability.getInstance().getErrorDialog(this, connectionStatusCode, REQUEST_GOOGLE_PLAY_SERVICES).show());
     }
 
     private void chooseAccount() {
@@ -242,6 +264,11 @@ public class MSLActivity extends BaseActivity {
                     }
                 }
                 break;
+            case REQUEST_AUTHORIZATION:
+                if (resultCode == RESULT_OK) {
+                    // Load calendars
+                    Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
+                } else chooseAccount();
         }
     }
 }
