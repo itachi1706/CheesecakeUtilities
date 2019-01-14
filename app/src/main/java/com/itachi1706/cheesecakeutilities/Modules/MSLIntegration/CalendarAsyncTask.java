@@ -14,6 +14,8 @@ package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
  * the License.
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
@@ -21,6 +23,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 
 import java.io.IOException;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Asynchronous task that also takes care of common needs, such as displaying progress,
@@ -30,23 +34,21 @@ import java.io.IOException;
  */
 public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
-    public final MSLActivity activity;
+    public final Context context;
     public final CalendarModel model;
     public final com.google.api.services.calendar.Calendar client;
-    //private final View progressBar;
 
-    public CalendarAsyncTask(MSLActivity activity) {
-        this.activity = activity;
-        model = activity.model;
-        client = activity.client;
-        //progressBar = activity.findViewById(R.id.title_refresh_progress);
+    public static final String BROADCAST_MSL_ASYNC = "com.itachi1706.cheesecakeutilities.MSL_ASYNC_MSG";
+
+    public CalendarAsyncTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client) {
+        this.context = context;
+        this.model = model;
+        this.client = client;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        activity.numAsyncTasks++;
-        //progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -55,11 +57,24 @@ public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
             doInBackground();
             return true;
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
-            activity.showGPSError(availabilityException.getConnectionStatusCode());
+            Intent except = new Intent(BROADCAST_MSL_ASYNC);
+            except.putExtra("exception", true);
+            except.putExtra("error", availabilityException);
+            except.putExtra("data", availabilityException.getConnectionStatusCode());
+            LocalBroadcastManager.getInstance(context).sendBroadcast(except);
         } catch (UserRecoverableAuthIOException userRecoverableException) {
-            activity.startActivityForResult(userRecoverableException.getIntent(), MSLActivity.REQUEST_AUTHORIZATION);
+            Intent except = new Intent(BROADCAST_MSL_ASYNC);
+            except.putExtra("exception", true);
+            except.putExtra("error", userRecoverableException);
+            except.putExtra("data", userRecoverableException.getIntent());
+            LocalBroadcastManager.getInstance(context).sendBroadcast(except);
         } catch (IOException e) {
-            Utils.logAndShow(activity, "GCal-Async", e);
+            Intent except = new Intent(BROADCAST_MSL_ASYNC);
+            except.putExtra("exception", true);
+            except.putExtra("error", e);
+            except.putExtra("data", e);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(except);
+
         }
         return false;
     }
@@ -67,13 +82,11 @@ public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected final void onPostExecute(Boolean success) {
         super.onPostExecute(success);
-        --activity.numAsyncTasks;
-        //if (0 == --activity.numAsyncTasks) {
-        //progressBar.setVisibility(View.GONE);
-        //}
-        if (success) {
-            activity.update(success, getTaskAction());
-        }
+        if (!success) return;
+        Intent except = new Intent(BROADCAST_MSL_ASYNC);
+        except.putExtra("success", true);
+        except.putExtra("data", getTaskAction());
+        LocalBroadcastManager.getInstance(context).sendBroadcast(except);
     }
 
     public abstract String getTaskAction();

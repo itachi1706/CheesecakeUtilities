@@ -1,11 +1,12 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.api.services.calendar.model.CalendarList;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
-import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarInfo;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 
 import java.io.IOException;
 
@@ -17,8 +18,8 @@ public class CalendarLoadTask extends CalendarAsyncTask {
 
     private String action;
 
-    CalendarLoadTask(MSLActivity calendar, String action) {
-        super(calendar);
+    CalendarLoadTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client, String action) {
+        super(context, model, client);
         this.action = (action.isEmpty()) ? "" : action;
     }
 
@@ -35,8 +36,8 @@ public class CalendarLoadTask extends CalendarAsyncTask {
         model.reset(feed.getItems());
     }
 
-    public static void run(MSLActivity calendar, String action) {
-        new CalendarLoadTask(calendar, action).execute();
+    public static void run(Context context, String action, CalendarModel model, com.google.api.services.calendar.Calendar client) {
+        new CalendarLoadTask(context, model, client, action).execute();
     }
 
 }

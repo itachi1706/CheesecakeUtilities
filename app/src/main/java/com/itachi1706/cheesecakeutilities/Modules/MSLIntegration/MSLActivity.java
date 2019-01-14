@@ -1,7 +1,9 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
 
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,20 +19,25 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
+import java.io.IOException;
 import java.util.Collections;
 
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +52,8 @@ public class MSLActivity extends BaseActivity {
     TextInputLayout til_accessToken;
     SharedPreferences sp;
 
+    MSLReceiver receiver;
+
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
 
@@ -56,7 +65,6 @@ public class MSLActivity extends BaseActivity {
     GoogleAccountCredential credential;
     Calendar client;
     CalendarModel model = new CalendarModel();
-    int numAsyncTasks;
 
     @Override
     public String getHelpDescription() {
@@ -113,6 +121,15 @@ public class MSLActivity extends BaseActivity {
         super.onResume();
 
         updateToggles();
+        receiver = new MSLReceiver();
+        IntentFilter filter = new IntentFilter(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
     @Override
@@ -202,7 +219,7 @@ public class MSLActivity extends BaseActivity {
         // if enabled, check that calendar exists, otherwise create it
         Log.d(TAG, "toggleTask(): " + isChecked);
         if (isChecked) {
-            CalendarLoadTask.run(this, "TASK");
+            CalendarLoadTask.run(this,"TASK", model, client);
         }
             // TODO: If unchecked, add an alertbox prompting user that we will not delete the calendar and give a direct URL to calendar settings if users want to delete it
     }
@@ -232,7 +249,7 @@ public class MSLActivity extends BaseActivity {
                     calendar.setDescription("Calendar used by CheesecakeUtilities to store tasks obtained from MSL and updated");
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
-                    new CalendarAddTask(this, calendar, "msl-cal-task-id").execute();
+                    new CalendarAddTask(this, model, client, calendar, "msl-cal-task-id").execute();
                     Toast.makeText(this, "Creating calendar for tasks sync", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -241,6 +258,26 @@ public class MSLActivity extends BaseActivity {
                 Log.e(TAG, "Task Sync Unimplemented");
                 break;
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
+        }
+    }
+
+    // Receivers
+    private class MSLReceiver extends BaseBroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
+            if (intent.getBooleanExtra("exception", false)) {
+                Exception e = (Exception) intent.getSerializableExtra("error");
+                if (e instanceof GooglePlayServicesAvailabilityIOException) {
+                    showGPSError(intent.getIntExtra("data", 0));
+                } else if (e instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(intent.getParcelableExtra("data"), REQUEST_AUTHORIZATION);
+                } else if (e instanceof IOException) {
+                    Utils.logAndShow(MSLActivity.this, "GCal-Async", e);
+                }
+            } else {
+                update(intent.getBooleanExtra("success", true), intent.getStringExtra("data"));
+            }
         }
     }
 
@@ -270,7 +307,7 @@ public class MSLActivity extends BaseActivity {
         } else {
             // load calendars
             // TODO: Do stuff with calendars
-            CalendarLoadTask.run(this, "");
+            CalendarLoadTask.run(this, "", model, client);
         }
     }
 
@@ -295,7 +332,7 @@ public class MSLActivity extends BaseActivity {
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
                     // Load calendars
-                    CalendarLoadTask.run(this, "");
+                    CalendarLoadTask.run(this, "", model, client);
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
                 } else chooseAccount();
         }
