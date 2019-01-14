@@ -47,6 +47,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Created by Kenneth on 12/1/2019.
+ * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
+ */
 public class MSLActivity extends BaseActivity {
 
     SignInButton googleSignIn;

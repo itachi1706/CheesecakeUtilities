@@ -1,6 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -26,6 +25,7 @@ import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.RetrieveMSLData;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Collections;
@@ -38,18 +38,17 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity.MSL_SP_ACCESS_TOKEN;
 import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity.MSL_SP_GOOGLE_OAUTH;
 
-
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions and extra parameters.
+ * Created by Kenneth on 14/1/2019.
+ * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
  */
 public class SyncMSLService extends JobService {
 
     private static final String TAG = "SyncMSL-Svc";
     private MSLServiceReceiver receiver;
     private SharedPreferences sp;
+
+    private JobParameters parameters;
 
     public static final String ACTION_SYNC_MSL = "msl-sync-task-svc";
 
@@ -65,7 +64,9 @@ public class SyncMSLService extends JobService {
         Log.i(TAG, "Starting MSL Sync Job");
         // Register receiver
         receiver = new MSLServiceReceiver();
-        IntentFilter filter = new IntentFilter(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
+        filter.addAction(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
 
         sp = PrefHelper.getDefaultSharedPreferences(this);
@@ -76,7 +77,8 @@ public class SyncMSLService extends JobService {
         client = new Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("MSLIntegration/1.0").build();
 
         handleWork(params.getExtras(), params.getTag());
-        return false;
+        parameters = params;
+        return true;
     }
 
     @Override
@@ -98,9 +100,14 @@ public class SyncMSLService extends JobService {
                     CalendarLoadTask.run(this, "TASK", model, client);
                 default:
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
+                    jobFinished(parameters, false);
                     break;
             }
         }
+
+    }
+
+    private void parseMSLData(String data) {
 
     }
 
@@ -150,23 +157,34 @@ public class SyncMSLService extends JobService {
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            if (intent.getBooleanExtra("exception", false)) {
-                Exception e = (Exception) intent.getSerializableExtra("error");
-                NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-                if (manager == null) return;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    manager.createNotificationChannel(new NotificationChannel("error-messages", "Service Errors", NotificationManager.IMPORTANCE_DEFAULT));
+            if (intent.getAction() == null) return;
+            if (intent.getAction().equalsIgnoreCase(CalendarAsyncTask.BROADCAST_MSL_ASYNC)) {
+                if (intent.getBooleanExtra("exception", false)) {
+                    Exception e = (Exception) intent.getSerializableExtra("error");
+                    NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+                    if (manager == null) return;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        manager.createNotificationChannel(new NotificationChannel("error-messages", "Service Errors", NotificationManager.IMPORTANCE_DEFAULT));
+                    }
+                    String errorMessage = "An error has occurred (" + e.getLocalizedMessage() + ")";
+                    Intent launchIntent = new Intent(context, MSLActivity.class);
+                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+                    Notification errorNotification = new NotificationCompat.Builder(context, "error-messages").setContentTitle("MSL Sync Error")
+                            .setContentText("An error has occurred (" + e.getLocalizedMessage() + ")").setSmallIcon(R.drawable.notification_icon)
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nClick to enter the application to do a manual sync")).setContentIntent(pendingIntent).build();
+                    manager.notify(new Random().nextInt(), errorNotification);
+                } else {
+                    process(intent.getStringExtra("data"));
                 }
-                String errorMessage = "An error has occurred (" + e.getLocalizedMessage() + ")";
-                Intent launchIntent = new Intent(context, MSLActivity.class);
-                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
-                Notification errorNotification = new NotificationCompat.Builder(context, "error-messages").setContentTitle("MSL Sync Error")
-                        .setContentText("An error has occurred (" + e.getLocalizedMessage() + ")").setSmallIcon(R.drawable.notification_icon)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nClick to enter the application to do a manual sync")).setContentIntent(pendingIntent).build();
-                manager.notify(new Random().nextInt(), errorNotification);
-            } else {
-                process(intent.getStringExtra("data"));
+            } else if (intent.getAction().equalsIgnoreCase(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC)) {
+                if (intent.hasExtra("error")) {
+                    Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
+                    jobFinished(parameters, false);
+                    return;
+                }
+                // Data received
+                parseMSLData(intent.getStringExtra("data"));
             }
         }
     }
