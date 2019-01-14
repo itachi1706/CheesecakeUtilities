@@ -391,8 +391,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Modules.CEPASReader.activity.TripGMapsActivity" android:label="@string/title_activity_trip_gmaps" />
-        <activity android:name=".Modules.MSLIntegration.MSLActivity" android:label="MSL Sync" />
+        <activity
+            android:name=".Modules.CEPASReader.activity.TripGMapsActivity"
+            android:label="@string/title_activity_trip_gmaps" />
+        <activity
+            android:name=".Modules.MSLIntegration.MSLActivity"
+            android:label="MSL Sync" />
+
+        <service
+            android:name=".Modules.MSLIntegration.SyncMSLService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
