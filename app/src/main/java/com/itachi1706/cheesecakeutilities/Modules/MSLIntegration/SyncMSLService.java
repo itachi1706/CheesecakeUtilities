@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
@@ -30,7 +32,6 @@ import java.util.Collections;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -44,40 +45,53 @@ import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActiv
  * <p>
  * TODO: Customize class - update intent actions and extra parameters.
  */
-public class SyncMSLService extends JobIntentService {
+public class SyncMSLService extends JobService {
 
     private static final String TAG = "SyncMSL-Svc";
-    private final Handler handler;
     private MSLServiceReceiver receiver;
     private SharedPreferences sp;
 
-    public static final String ACTION_SYNC_MSL = "com.itachi1706.cheesecakeutilities.MSL_SYNC_TASK";
+    public static final String ACTION_SYNC_MSL = "msl-sync-task-svc";
 
     // Google Stuff
     Calendar client;
     CalendarModel model = new CalendarModel();
     GoogleAccountCredential credential;
 
-    public SyncMSLService(Context context) {
-        handler = new Handler(context.getMainLooper());
-    }
+    public SyncMSLService() {}
 
     @Override
-    protected void onHandleWork(@NonNull Intent intent) {
+    public boolean onStartJob(JobParameters params) {
+        Log.i(TAG, "Starting MSL Sync Job");
         // Register receiver
         receiver = new MSLServiceReceiver();
         IntentFilter filter = new IntentFilter(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
+
+        sp = PrefHelper.getDefaultSharedPreferences(this);
 
         // Setup stuff
         credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
         credential.setSelectedAccountName(sp.getString(MSL_SP_GOOGLE_OAUTH, null));
         client = new Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("MSLIntegration/1.0").build();
 
-        sp = PrefHelper.getDefaultSharedPreferences(this);
+        handleWork(params.getExtras(), params.getTag());
+        return false;
+    }
 
+    @Override
+    public boolean onStopJob(JobParameters params) {
+        Log.i(TAG, "Stopping MSL Sync Job");
+        // Unregister receiver
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+
+        // TODO: Schedule a new job that replaces any job currently and is recurring forever
+        return false;
+    }
+
+    protected void handleWork(@NonNull Bundle intent, @NonNull String action) {
         if (intent != null && hasToken() && hasGoogleOAuth()) {
-            final String action = intent.getAction();
+            if (intent.getBoolean("manual", false)) Toast.makeText(this, "Sync Started", Toast.LENGTH_LONG).show();
             switch (action) {
                 case ACTION_SYNC_MSL:
                     // Check that calendar exists
@@ -88,13 +102,6 @@ public class SyncMSLService extends JobIntentService {
             }
         }
 
-
-        // Unregister receiver
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-    }
-
-    private void runOnUiThread(Runnable r) {
-        handler.post(r);
     }
 
     private void proceedWithSynchronization() {

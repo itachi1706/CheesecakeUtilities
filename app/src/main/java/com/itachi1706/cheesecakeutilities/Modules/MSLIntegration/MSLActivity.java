@@ -12,6 +12,11 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
@@ -206,7 +211,16 @@ public class MSLActivity extends BaseActivity {
         }
 
         // TODO: Do stuff
-        //JobIntentService.enqueueWork(this, SyncMSLService.class, );
+        Bundle manualJob = new Bundle();
+        manualJob.putBoolean("manual", true);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        dispatcher.cancel(SyncMSLService.ACTION_SYNC_MSL);
+        Job syncJob = dispatcher.newJobBuilder().setService(SyncMSLService.class).setRecurring(false)
+                .setTrigger(Trigger.NOW).setReplaceCurrent(true)
+                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).setExtras(manualJob).setTag(SyncMSLService.ACTION_SYNC_MSL).build();
+        dispatcher.mustSchedule(syncJob);
+        Toast.makeText(this, "Scheduled a sync job", Toast.LENGTH_LONG).show();
+        Log.i(TAG, "Scheduled a manual sync job");
     }
 
     private void btnLogin() {
