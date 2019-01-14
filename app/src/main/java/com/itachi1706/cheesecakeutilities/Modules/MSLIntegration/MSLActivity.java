@@ -204,6 +204,8 @@ public class MSLActivity extends BaseActivity {
             Toast.makeText(this, "No access token", Toast.LENGTH_LONG).show();
             return;
         }
+
+        // TODO: Do stuff
     }
 
     private void btnLogin() {
@@ -221,7 +223,6 @@ public class MSLActivity extends BaseActivity {
         if (isChecked) {
             CalendarLoadTask.run(this,"TASK", model, client);
         }
-            // TODO: If unchecked, add an alertbox prompting user that we will not delete the calendar and give a direct URL to calendar settings if users want to delete it
     }
 
     private void toggleCal(boolean isChecked) {
