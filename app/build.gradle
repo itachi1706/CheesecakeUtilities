@@ -151,6 +151,7 @@ dependencies {
     implementation 'com.google.http-client:google-http-client-gson:1.23.0', {
         exclude group: "org.apache.httpcomponents"
     }
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     testImplementation 'junit:junit:4.12'

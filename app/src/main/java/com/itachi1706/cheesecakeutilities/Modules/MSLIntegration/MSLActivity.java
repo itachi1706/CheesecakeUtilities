@@ -206,6 +206,7 @@ public class MSLActivity extends BaseActivity {
         }
 
         // TODO: Do stuff
+        //JobIntentService.enqueueWork(this, SyncMSLService.class, );
     }
 
     private void btnLogin() {
