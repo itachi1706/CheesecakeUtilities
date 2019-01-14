@@ -20,9 +20,12 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.RetrieveMSLData;
@@ -76,8 +79,8 @@ public class SyncMSLService extends JobService {
         credential.setSelectedAccountName(sp.getString(MSL_SP_GOOGLE_OAUTH, null));
         client = new Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("MSLIntegration/1.0").build();
 
-        handleWork(params.getExtras(), params.getTag());
         parameters = params;
+        handleWork(params.getExtras(), params.getTag());
         return true;
     }
 
@@ -108,10 +111,20 @@ public class SyncMSLService extends JobService {
     }
 
     private void parseMSLData(String data) {
+        if (data.equalsIgnoreCase("null")) {
+            Log.e(TAG, "An error occurred retrieving data. Stopping job");
+            jobFinished(parameters, false);
+            return;
+        }
+        Log.d(TAG, "JSON Data: " + data);
 
+        Gson gson = new Gson();
+        MSLData main = gson.fromJson(data, MSLData.class);
     }
 
     private void proceedWithSynchronization() {
+        new RetrieveMSLData(LocalBroadcastManager.getInstance(this), ValidationHelper.getSignatureForValidation(this),
+                this.getPackageName()).execute(sp.getString(MSLActivity.MSL_SP_ACCESS_TOKEN, "-"));
         // TODO: Get data from MSL
         // TODO: Compare with existing data
         // TODO: Get events that needs to be added/edited/removed
