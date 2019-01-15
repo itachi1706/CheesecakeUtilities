@@ -100,7 +100,7 @@ public class SyncMSLService extends JobService {
             switch (action) {
                 case ACTION_SYNC_MSL:
                     // Check that calendar exists
-                    CalendarLoadTask.run(this, "TASK", model, client);
+                    CalendarLoadTask.run(this, "TASK-SYNC", model, client);
                 default:
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
                     jobFinished(parameters, false);
@@ -140,7 +140,7 @@ public class SyncMSLService extends JobService {
                 Log.i(TAG, "MSL Task Sync Calendar created. doing synchronization");
                 proceedWithSynchronization();
                 break;
-            case "LOAD-TASK":
+            case "LOAD-TASK-SYNC":
                 String id = sp.getString("msl-cal-task-id", "");
                 if (id.isEmpty() || model.get(id) == null) {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
