@@ -37,6 +37,32 @@ public class MSLHelper {
         return task.getProgress() == otherTask.getProgress();
     }
 
+    public static boolean completeMatch(MSLData.Exam task, MSLData.Exam otherTask) {
+        if (checkNull(task.getGuid(), otherTask.getGuid()) != 0) return false;
+        if (task.getGuid() != null && !task.getGuid().equals(otherTask.getGuid())) return false;
+
+        if (checkNull(task.getModule(), otherTask.getModule()) != 0) return false;
+        if (task.getModule() != null && !task.getModule().equals(otherTask.getModule())) return false;
+
+        if (checkNull(task.getDate(), otherTask.getDate()) != 0) return false;
+        if (task.getDate() != null && !task.getDate().equals(otherTask.getDate())) return false;
+
+        if (checkNull(task.getDuration(), otherTask.getDuration()) != 0) return false;
+        if (task.getDuration() != otherTask.getDuration()) return false;
+
+        if (checkNull(task.isResit(), otherTask.isResit()) != 0) return false;
+        if (task.isResit() != otherTask.isResit()) return false;
+
+        if (checkNull(task.getSeat(), otherTask.getSeat()) != 0) return false;
+        if (task.getSeat() != null && !task.getSeat().equals(otherTask.getSeat())) return false;
+
+        if (checkNull(task.getRoom(), otherTask.getRoom()) != 0) return false;
+        if (task.getRoom() != null && !task.getRoom().equals(otherTask.getRoom())) return false;
+
+        if (checkNull(task.getSubject_guid(), otherTask.getSubject_guid()) != 0) return false;
+        return task.getSubject_guid() == null || task.getSubject_guid().equals(otherTask.getSubject_guid());
+    }
+
     /**
      * Check if either object is null
      * @param o1 First Object

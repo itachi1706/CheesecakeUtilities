@@ -143,11 +143,11 @@ public class SyncMSLService extends JobService {
             c.writeToFile(mainJson);
         }
 
-        HashMap<String, MSLData.Task> toAdd = new HashMap<>();
-        HashMap<String, MSLData.Task> toRemove = new HashMap<>();
-        HashMap<String, MSLData.Task> toUpdate = new HashMap<>(); // Old data
+        HashMap<String, MSLData.Task> taskToAdd = new HashMap<>();
+        HashMap<String, MSLData.Task> taskToRemove = new HashMap<>();
+        HashMap<String, MSLData.Task> taskToUpdate = new HashMap<>(); // Old data
         for (MSLData.Task t : main.getTasks()) {
-            toAdd.put(t.getGuid(), t);
+            taskToAdd.put(t.getGuid(), t);
         }
         if (existing != null) {
             MSLData eTask = gson.fromJson(existing, MSLData.class);
@@ -157,46 +157,89 @@ public class SyncMSLService extends JobService {
             }
 
             for (Map.Entry<String, MSLData.Task> pair : existingTasks.entrySet()) {
-                if (!toAdd.containsKey(pair.getKey())) {
+                if (!taskToAdd.containsKey(pair.getKey())) {
                     // Remove from events
-                    toRemove.put(pair.getKey(), pair.getValue());
+                    taskToRemove.put(pair.getKey(), pair.getValue());
                 } else {
                     // Check complete match
-                    MSLData.Task t1 = toAdd.get(pair.getKey());
+                    MSLData.Task t1 = taskToAdd.get(pair.getKey());
                     assert t1 != null; // Asserted in if statement
                     if (MSLHelper.completeMatch(t1, pair.getValue())) {
                         // Complete match, no change, remove from both
-                        toAdd.remove(t1.getGuid());
+                        taskToAdd.remove(t1.getGuid());
                     } else {
                         // Update value
-                        toUpdate.put(pair.getKey(), pair.getValue());
-                        toAdd.remove(t1.getGuid());
+                        taskToUpdate.put(pair.getKey(), pair.getValue());
+                        taskToAdd.remove(t1.getGuid());
                     }
                 }
             }
-
-            Log.d(TAG, "================================================");
-            Log.d(TAG, "              Results of Sync Job");
-            Log.d(TAG, "================================================");
-            Log.d(TAG, "To Add: " + toAdd.size());
-            Log.d(TAG, "To Remove: " + toRemove.size());
-            Log.d(TAG, "To Update: " + toUpdate.size());
-            Log.d(TAG, "================================================");
-
-            // TODO: Handle update (its the main object and toUpdate hashmap)
-
         }
 
-        // TODO: Get events that needs to be added/edited/removed
-        // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
+        HashMap<String, MSLData.Exam> examToAdd = new HashMap<>();
+        HashMap<String, MSLData.Exam> examToRemove = new HashMap<>();
+        HashMap<String, MSLData.Exam> examToUpdate = new HashMap<>(); // Old data
+        for (MSLData.Exam e : main.getExams()) {
+            examToAdd.put(e.getGuid(), e);
+        }
+        if (existing != null) {
+            MSLData eTask = gson.fromJson(existing, MSLData.class);
+            HashMap<String, MSLData.Exam> existingExam = new HashMap<>();
+            for (MSLData.Exam e : eTask.getExams()) {
+                existingExam.put(e.getGuid(), e);
+            }
+
+            for (Map.Entry<String, MSLData.Exam> pair : existingExam.entrySet()) {
+                if (!examToAdd.containsKey(pair.getKey())) {
+                    // Remove from events
+                    examToRemove.put(pair.getKey(), pair.getValue());
+                } else {
+                    // Check complete match
+                    MSLData.Exam t1 = examToAdd.get(pair.getKey());
+                    assert t1 != null; // Asserted in if statement
+                    if (MSLHelper.completeMatch(t1, pair.getValue())) {
+                        // Complete match, no change, remove from both
+                        examToAdd.remove(t1.getGuid());
+                    } else {
+                        // Update value
+                        examToUpdate.put(pair.getKey(), pair.getValue());
+                        examToAdd.remove(t1.getGuid());
+                    }
+                }
+            }
+        }
+
+        Log.d(TAG, "================================================");
+        Log.d(TAG, "              Results of Sync Job");
+        Log.d(TAG, "================================================");
+        Log.d(TAG, "Task To Add: " + taskToAdd.size());
+        Log.d(TAG, "Task To Remove: " + taskToRemove.size());
+        Log.d(TAG, "Task To Update: " + taskToUpdate.size());
+        Log.d(TAG, "Exam To Add: " + examToAdd.size());
+        Log.d(TAG, "Exam To Remove: " + examToRemove.size());
+        Log.d(TAG, "Exam To Update: " + examToUpdate.size());
+        Log.d(TAG, "================================================");
+
+        if (checkIfNoUpdatesNeeded(taskToAdd, taskToRemove, taskToUpdate) && checkIfNoUpdatesNeeded(examToAdd, examToRemove, examToUpdate)) {
+            Log.i(TAG, "No update required");
+            stopJob(false);
+            return;
+        }
+
+        // TODO: Handle update (its the main object and toUpdate hashmap)
+
         // TODO: Sync with calendar
+        // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
         stopJob(false); // TODO: Test only, remove if not stopping here
+    }
+
+    private boolean checkIfNoUpdatesNeeded(HashMap a1, HashMap a2, HashMap a3) {
+        return a1.isEmpty() && a2.isEmpty() && a3.isEmpty();
     }
 
     private void proceedWithSynchronization() {
         new RetrieveMSLData(LocalBroadcastManager.getInstance(this), ValidationHelper.getSignatureForValidation(this),
                 this.getPackageName()).execute(sp.getString(MSLActivity.MSL_SP_ACCESS_TOKEN, "-"));
-
     }
 
     private void process(String task) {
