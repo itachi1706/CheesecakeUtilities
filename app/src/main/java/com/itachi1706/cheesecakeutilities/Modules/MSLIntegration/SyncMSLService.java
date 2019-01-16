@@ -30,9 +30,12 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarA
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.RetrieveMSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.MSLHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
@@ -129,9 +132,54 @@ public class SyncMSLService extends JobService {
             c.writeToFile(mainJson);
         }
 
+        HashMap<String, MSLData.Task> toAdd = new HashMap<>();
+        HashMap<String, MSLData.Task> toRemove = new HashMap<>();
+        HashMap<String, MSLData.Task> toUpdate = new HashMap<>(); // Old data
+        for (MSLData.Task t : main.getTasks()) {
+            toAdd.put(t.getGuid(), t);
+        }
+        if (existing != null) {
+            MSLData eTask = gson.fromJson(existing, MSLData.class);
+            HashMap<String, MSLData.Task> existingTasks = new HashMap<>();
+            for (MSLData.Task t : eTask.getTasks()) {
+                existingTasks.put(t.getGuid(), t);
+            }
+
+            for (Map.Entry<String, MSLData.Task> pair : existingTasks.entrySet()) {
+                if (!toAdd.containsKey(pair.getKey())) {
+                    // Remove from events
+                    toRemove.put(pair.getKey(), pair.getValue());
+                } else {
+                    // Check complete match
+                    MSLData.Task t1 = toAdd.get(pair.getKey());
+                    assert t1 != null; // Asserted in if statement
+                    if (MSLHelper.completeMatch(t1, pair.getValue())) {
+                        // Complete match, no change, remove from both
+                        toAdd.remove(t1.getGuid());
+                    } else {
+                        // Update value
+                        toUpdate.put(pair.getKey(), pair.getValue());
+                        toAdd.remove(t1.getGuid());
+                    }
+                }
+            }
+
+            Log.d(TAG, "================================================");
+            Log.d(TAG, "              Results of Sync Job");
+            Log.d(TAG, "================================================");
+            Log.d(TAG, "To Add: " + toAdd.size());
+            Log.d(TAG, "To Remove: " + toRemove.size());
+            Log.d(TAG, "To Update: " + toUpdate.size());
+            Log.d(TAG, "================================================");
+
+            // TODO: Handle update (its the main object and toUpdate hashmap)
+
+        }
+
         // TODO: Get events that needs to be added/edited/removed
-        // TODO: Save new metric data to disk
+        // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
         // TODO: Sync with calendar
+        jobFinished(parameters, false); // TODO: Test only, remove if not stopping here
     }
 
     private void proceedWithSynchronization() {
