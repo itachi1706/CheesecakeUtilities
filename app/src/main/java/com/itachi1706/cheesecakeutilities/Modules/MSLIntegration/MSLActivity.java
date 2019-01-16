@@ -29,18 +29,23 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -159,16 +164,30 @@ public class MSLActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.msl_how_to:
                 Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); // TODO: Implement
-                return true;
+                break;
             case R.id.msl_signout:
                 credential.setSelectedAccountName(null);
                 sp.edit().remove(MSL_SP_GOOGLE_OAUTH).apply();
                 updateToggles();
                 Toast.makeText(this, "Signed out successfully", Toast.LENGTH_LONG).show();
-                return true;
+                break;
+            case R.id.msl_debug_view_task:
+                FileCacher c = new FileCacher(this);
+                String val = c.getStringFromFile();
+                AlertDialog.Builder alert = new AlertDialog.Builder(this).setTitle("View Existing Tasks")
+                        .setPositiveButton(R.string.dialog_action_positive_close, null);
+                if (val == null) {
+                    alert.setMessage("No Saved Tasks. Please sync first").show();
+                    break;
+                }
+                Gson gson = new Gson();
+                MSLData data = gson.fromJson(val, MSLData.class);
+                parseTasks(data, alert);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
     // Checks
@@ -279,6 +298,28 @@ public class MSLActivity extends BaseActivity {
                 break;
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
         }
+    }
+
+    // MSL Data Manipulation
+    private void parseTasks(MSLData data, AlertDialog.Builder builder) {
+        HashMap<String, String> subjects = new HashMap<>();
+        for (MSLData.Subjects s : data.getSubjects()) {
+            subjects.put(s.getGuid(), s.getName());
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("TASKS\n");
+        int i = 1;
+        for (MSLData.Task t : data.getTasks()) {
+            sb.append(i).append(") ").append("Title: ").append(t.getTitle()).append("\n")
+                    .append("Detail: ").append(t.getDetail()).append("\n")
+                    .append("Subject: ").append((subjects.containsKey(t.getSubject_guid())) ? subjects.get(t.getSubject_guid()) : "Unknown Subject").append("\n")
+                    .append("Type: ").append(t.getType()).append("\n").append("Due: ").append(t.getDue_date())
+                    .append("\nProgress: ").append(t.getProgress()).append("\nCompleted: ").append((t.getCompleted_at() == null) ? "No" : "Yes (" + t.getCompleted_at() + ")").append("\n\n");
+            i++;
+        }
+
+        builder.setMessage(sb.toString()).show();
     }
 
     // Receivers

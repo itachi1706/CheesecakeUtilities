@@ -22,14 +22,23 @@ public class MSLData {
         return exams;
     }
 
-    class Subjects {
+    public class Subjects {
         private String guid, name;
+
+        public String getGuid() {
+            return guid;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
-    class Task {
+    public class Task {
         private String guid, type, title, detail, due_date;
         private double timestamp;
         private String completed_at, subject_guid;
+        private int progress;
 
         public String getGuid() {
             return guid;
@@ -62,9 +71,13 @@ public class MSLData {
         public String getSubject_guid() {
             return subject_guid;
         }
+
+        public int getProgress() {
+            return progress;
+        }
     }
 
-    class Exam {
+    public class Exam {
         private String guid, module, date;
         private int duration;
         private boolean resit;
