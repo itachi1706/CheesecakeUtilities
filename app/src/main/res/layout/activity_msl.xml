@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sync Tasks" />
+            android:text="Sync Tasks/Exams" />
 
         <View
             android:layout_width="0dp"
