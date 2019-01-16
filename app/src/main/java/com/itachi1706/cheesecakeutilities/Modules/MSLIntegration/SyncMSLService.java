@@ -90,12 +90,22 @@ public class SyncMSLService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.i(TAG, "Stopping MSL Sync Job");
-        // Unregister receiver
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-
-        // TODO: Schedule a new job that replaces any job currently and is recurring forever
+        Log.i(TAG, "System invoked. Stopping MSL Sync Job");
+        cleanup();
         return false;
+    }
+
+    private void cleanup() {
+        // Unregister receiver
+        if (receiver != null) LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        receiver = null;
+        // TODO: Schedule a new job that replaces any job currently and is recurring forever
+    }
+    
+    private void stopJob(boolean needReschedule) {
+        Log.i(TAG, "Job finished, stopping");
+        cleanup();
+        jobFinished(parameters, needReschedule);
     }
 
     protected void handleWork(@NonNull Bundle intent, @NonNull String action) {
@@ -105,9 +115,10 @@ public class SyncMSLService extends JobService {
                 case ACTION_SYNC_MSL:
                     // Check that calendar exists
                     CalendarLoadTask.run(this, "TASK-SYNC", model, client);
+                    break;
                 default:
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
-                    jobFinished(parameters, false);
+                    stopJob(false);
                     break;
             }
         }
@@ -117,7 +128,7 @@ public class SyncMSLService extends JobService {
     private void parseMSLData(String data) {
         if (data.equalsIgnoreCase("null")) {
             Log.e(TAG, "An error occurred retrieving data. Stopping job");
-            jobFinished(parameters, false);
+            stopJob(false);
             return;
         }
         Log.d(TAG, "JSON Data: " + data);
@@ -179,7 +190,7 @@ public class SyncMSLService extends JobService {
         // TODO: Get events that needs to be added/edited/removed
         // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
         // TODO: Sync with calendar
-        jobFinished(parameters, false); // TODO: Test only, remove if not stopping here
+        stopJob(false); // TODO: Test only, remove if not stopping here
     }
 
     private void proceedWithSynchronization() {
@@ -248,7 +259,7 @@ public class SyncMSLService extends JobService {
             } else if (intent.getAction().equalsIgnoreCase(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC)) {
                 if (intent.hasExtra("error")) {
                     Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
-                    jobFinished(parameters, false);
+                    stopJob(false);
                     return;
                 }
                 // Data received

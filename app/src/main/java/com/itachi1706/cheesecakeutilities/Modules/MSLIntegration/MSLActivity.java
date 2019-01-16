@@ -296,6 +296,7 @@ public class MSLActivity extends BaseActivity {
                 Log.i(TAG, "MSL Task Calendar found. doing synchronization");
                 Log.e(TAG, "Task Sync Unimplemented");
                 break;
+            case "LOAD-TASK-SYNC": break; // Dont do anything
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
         }
     }
