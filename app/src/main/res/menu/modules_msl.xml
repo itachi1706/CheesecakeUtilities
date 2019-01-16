@@ -5,6 +5,8 @@
         app:showAsAction="never" />
     <item android:id="@+id/msl_debug_view_task" android:title="View Saved Tasks"
         app:showAsAction="never" />
+    <item android:id="@+id/msl_debug_view_exam" android:title="View Saved Exams"
+        app:showAsAction="never" />
     <item android:id="@+id/msl_signout" android:title="Sign Out"
         android:enabled="false" app:showAsAction="never" />
 </menu>

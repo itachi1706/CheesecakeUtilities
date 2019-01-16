@@ -172,17 +172,22 @@ public class MSLActivity extends BaseActivity {
                 Toast.makeText(this, "Signed out successfully", Toast.LENGTH_LONG).show();
                 break;
             case R.id.msl_debug_view_task:
+            case R.id.msl_debug_view_exam:
                 FileCacher c = new FileCacher(this);
                 String val = c.getStringFromFile();
-                AlertDialog.Builder alert = new AlertDialog.Builder(this).setTitle("View Existing Tasks")
+                String type = (item.getItemId() == R.id.msl_debug_view_task) ? "Tasks" : "Exams";
+                AlertDialog.Builder alert = new AlertDialog.Builder(this).setTitle("View Existing " + type)
                         .setPositiveButton(R.string.dialog_action_positive_close, null);
                 if (val == null) {
-                    alert.setMessage("No Saved Tasks. Please sync first").show();
+                    alert.setMessage("No Saved " + type + ". Please sync first").show();
                     break;
                 }
                 Gson gson = new Gson();
                 MSLData data = gson.fromJson(val, MSLData.class);
-                parseTasks(data, alert);
+                if (item.getItemId() == R.id.msl_debug_view_task)
+                    parseTasks(data, alert);
+                else
+                    parseExams(data, alert);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -317,6 +322,26 @@ public class MSLActivity extends BaseActivity {
                     .append("Subject: ").append((subjects.containsKey(t.getSubject_guid())) ? subjects.get(t.getSubject_guid()) : "Unknown Subject").append("\n")
                     .append("Type: ").append(t.getType()).append("\n").append("Due: ").append(t.getDue_date())
                     .append("\nProgress: ").append(t.getProgress()).append("\nCompleted: ").append((t.getCompleted_at() == null) ? "No" : "Yes (" + t.getCompleted_at() + ")").append("\n\n");
+            i++;
+        }
+
+        builder.setMessage(sb.toString()).show();
+    }
+
+    private void parseExams(MSLData data, AlertDialog.Builder builder) {
+        HashMap<String, String> subjects = new HashMap<>();
+        for (MSLData.Subjects s : data.getSubjects()) {
+            subjects.put(s.getGuid(), s.getName());
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Exams\n");
+        int i = 1;
+        for (MSLData.Exam e : data.getExams()) {
+            sb.append(i).append(") ").append("Module: ").append(e.getModule()).append("\n")
+                    .append("Subject: ").append((subjects.containsKey(e.getSubject_guid())) ? subjects.get(e.getSubject_guid()) : "Unknown Subject").append("\n")
+                    .append("Duration: ").append(e.getDuration()).append("\n").append("Is Resit: ").append(e.isResit())
+                    .append("\nSeat: ").append((e.getSeat() == null) ? "-" : e.getSeat()).append("\nRoom: ").append((e.getRoom() == null) ? "-" : e.getRoom()).append("\n\n");
             i++;
         }
 
