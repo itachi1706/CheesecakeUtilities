@@ -29,6 +29,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.RetrieveMSLData;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Collections;
@@ -120,17 +121,23 @@ public class SyncMSLService extends JobService {
 
         Gson gson = new Gson();
         MSLData main = gson.fromJson(data, MSLData.class);
+        String mainJson = gson.toJson(main);
+        FileCacher c = new FileCacher(this);
+        String existing = c.getStringFromFile();
+        if (existing == null || existing.compareTo(mainJson) != 0) {
+            // Update file
+            c.writeToFile(mainJson);
+        }
+
+        // TODO: Get events that needs to be added/edited/removed
+        // TODO: Save new metric data to disk
+        // TODO: Sync with calendar
     }
 
     private void proceedWithSynchronization() {
         new RetrieveMSLData(LocalBroadcastManager.getInstance(this), ValidationHelper.getSignatureForValidation(this),
                 this.getPackageName()).execute(sp.getString(MSLActivity.MSL_SP_ACCESS_TOKEN, "-"));
-        // TODO: Get data from MSL
-        // TODO: Compare with existing data
-        // TODO: Get events that needs to be added/edited/removed
-        // TODO: Save new data to disk
-        // TODO: Save new metric data to disk
-        // TODO: Sync with calendar
+
     }
 
     private void process(String task) {
