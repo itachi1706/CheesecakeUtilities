@@ -176,10 +176,26 @@ public class SyncMSLService extends JobService {
             c.writeToFile(mainJson);
         }
 
+        HashMap<String, String> subjects = new HashMap<>();
+        for (MSLData.Subjects s : main.getSubjects()) {
+            subjects.put(s.getGuid(), s.getName());
+        }
+
+        // Moved exam code up here as tasks MAY need exams
+        HashMap<String, MSLData.Exam> examToAdd = new HashMap<>();
+        for (MSLData.Exam e : main.getExams()) {
+            examToAdd.put(e.getGuid(), e);
+        }
+
         HashMap<String, MSLData.Task> taskToAdd = new HashMap<>();
         HashMap<String, MSLData.Task> taskToRemove = new HashMap<>();
         HashMap<String, MSLData.Task> taskToUpdate = new HashMap<>(); // Old data
         for (MSLData.Task t : main.getTasks()) {
+            if (t.getType().equalsIgnoreCase("revision")) {
+                // Handle exams
+                MSLData.Exam e = examToAdd.get(t.getExam_guid());
+                if (e != null) t.setExamString(subjects.get(e.getSubject_guid()) + ": " + e.getModule());
+            }
             taskToAdd.put(t.getGuid(), t);
         }
         if (existing != null) {
@@ -197,24 +213,14 @@ public class SyncMSLService extends JobService {
                     // Check complete match
                     MSLData.Task t1 = taskToAdd.get(pair.getKey());
                     assert t1 != null; // Asserted in if statement
-                    if (MSLHelper.completeMatch(t1, pair.getValue())) {
-                        // Complete match, no change, remove from both
-                        taskToAdd.remove(t1.getGuid());
-                    } else {
-                        // Update value
-                        taskToUpdate.put(pair.getKey(), pair.getValue());
-                        taskToAdd.remove(t1.getGuid());
-                    }
+                    taskToAdd.remove(t1.getGuid());
+                    if (!MSLHelper.completeMatch(t1, pair.getValue())) taskToUpdate.put(pair.getKey(), t1); // Update Value
                 }
             }
         }
 
-        HashMap<String, MSLData.Exam> examToAdd = new HashMap<>();
         HashMap<String, MSLData.Exam> examToRemove = new HashMap<>();
         HashMap<String, MSLData.Exam> examToUpdate = new HashMap<>(); // Old data
-        for (MSLData.Exam e : main.getExams()) {
-            examToAdd.put(e.getGuid(), e);
-        }
         if (existing != null) {
             MSLData eTask = gson.fromJson(existing, MSLData.class);
             HashMap<String, MSLData.Exam> existingExam = new HashMap<>();
@@ -228,16 +234,10 @@ public class SyncMSLService extends JobService {
                     examToRemove.put(pair.getKey(), pair.getValue());
                 } else {
                     // Check complete match
-                    MSLData.Exam t1 = examToAdd.get(pair.getKey());
-                    assert t1 != null; // Asserted in if statement
-                    if (MSLHelper.completeMatch(t1, pair.getValue())) {
-                        // Complete match, no change, remove from both
-                        examToAdd.remove(t1.getGuid());
-                    } else {
-                        // Update value
-                        examToUpdate.put(pair.getKey(), pair.getValue());
-                        examToAdd.remove(t1.getGuid());
-                    }
+                    MSLData.Exam e1 = examToAdd.get(pair.getKey());
+                    assert e1 != null; // Asserted in if statement
+                    examToAdd.remove(e1.getGuid());
+                    if (!MSLHelper.completeMatch(e1, pair.getValue())) examToUpdate.put(pair.getKey(), e1); // Update value
                 }
             }
         }
@@ -261,7 +261,7 @@ public class SyncMSLService extends JobService {
 
         // TODO: Handle update (its the main object and toUpdate hashmap)
         // TODO: Sync with calendar
-        MSLTaskSyncTask.run(this, "EXAMTASK", model, client, main, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
+        MSLTaskSyncTask.run(this, "EXAMTASK", model, client, subjects, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
         // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
         //stopJob(false, true); // TODO: Test only, remove if not stopping here
     }

@@ -37,7 +37,8 @@ public class MSLData {
     public class Task {
         private String guid, type, title, detail, due_date;
         private double timestamp;
-        private String completed_at, subject_guid;
+        private String completed_at, subject_guid, exam_guid;
+        private String examString;
         private int progress;
 
         public String getGuid() {
@@ -74,6 +75,20 @@ public class MSLData {
 
         public int getProgress() {
             return progress;
+        }
+
+        // If revision
+
+        public void setExamString(String examString) {
+            this.examString = examString;
+        }
+
+        public String getExam_guid() {
+            return exam_guid;
+        }
+
+        public String getExamString() {
+            return examString;
         }
     }
 

@@ -13,6 +13,8 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTa
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +31,12 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
     private HashMap<String, MSLData.Task> taskAdd, taskModify, taskDelete;
     private HashMap<String, MSLData.Exam> examAdd, examModify, examDelete;
     private HashMap<String, String> subjects;
-    private MSLData main;
     private int totalTasks = 0, currentState = 0;
 
     public static final String BROADCAST_MSL_NOTIFICATION = "com.itachi1706.cheesecakeutilities.MSL_ASYNC_NOTIFY";
 
     @SuppressWarnings("unchecked")
-    private MSLTaskSyncTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client, String action, MSLData mainData, Object... maps) {
+    private MSLTaskSyncTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client, String action, HashMap<String, String> subjects, Object... maps) {
         super(context, model, client);
         this.action = (action.isEmpty()) ? "" : action;
 
@@ -48,8 +49,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         examAdd = (HashMap<String, MSLData.Exam>) maps[3];
         examModify = (HashMap<String, MSLData.Exam>) maps[4];
         examDelete = (HashMap<String, MSLData.Exam>) maps[5];
-        subjects = new HashMap<>();
-        this.main = mainData;
+        this.subjects = subjects;
     }
 
     @Override
@@ -66,9 +66,6 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         if (id.isEmpty()) throw new IllegalStateException("GCal ID is missing");
         totalTasks = taskAdd.size() + taskModify.size() + taskDelete.size() + examDelete.size() + examModify.size() + examAdd.size();
 
-        for (MSLData.Subjects s : main.getSubjects()) {
-            subjects.put(s.getGuid(), s.getName());
-        }
         updateNotification("");
 
         // Add Task
@@ -87,7 +84,8 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         for (Map.Entry<String, MSLData.Task> entry : taskModify.entrySet()) {
             Event e = generateEventObject(entry.getValue());
             updateNotification("Updating Task: " + e.getSummary());
-            Log.d(TAG, "Updating: " + e.getId());
+            e.setSequence(client.events().get(id, e.getId()).execute().getSequence() + 1);
+            Log.d(TAG, "Updating " + e.getId() + " to Sequence " + e.getSequence());
             client.events().update(id, e.getId(), e).execute();
             currentState++;
         }
@@ -98,7 +96,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
             Event e = generateEventObject(entry.getValue());
             updateNotification("Deleting Task: " + e.getSummary());
             Log.d(TAG, "Removing: " + e.getId());
-            client.events().delete(id, e.getId());
+            client.events().delete(id, e.getId()).execute();
             currentState++;
         }
         // Delete Exam
@@ -110,10 +108,11 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         sanitizedId = sanitizedId.replaceAll("[^A-Za-z0-9]", "");
         Log.d(TAG, "Sanitized ID: " + sanitizedId);
         String title = "[" + item.getProgress() + "%] " + item.getTitle();
-        String description = "Subject: " + subjects.get(item.getSubject_guid()) + "\nType: " + item.getType();
+        String description = "Subject: " + subjects.get(item.getSubject_guid()) + "\nType: " + StringUtils.capitalize(item.getType());
         description += "\nTask Status: " + ((item.getCompleted_at() != null && item.getProgress() >= 100) ? "Complete (100%)" : "Incomplete (" + item.getProgress() + "%)");
+        if (item.getExamString() != null) description += "\nExam: " + item.getExamString();
         description += "\n\nDetail:\n" + ((item.getDetail() != null) ? item.getDetail() : "No detail added to task");
-        Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);
+        Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);//.setSequence(1);
         EventDateTime dueDate = new EventDateTime().setDate(new DateTime(item.getDue_date()));
         e.setStart(dueDate).setEnd(dueDate);
 
@@ -135,8 +134,8 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         i.putExtra("max", max);
     }
 
-    public static void run(Context context, String action, CalendarModel model, com.google.api.services.calendar.Calendar client, MSLData main, Object... maps) {
-        new MSLTaskSyncTask(context, model, client, action, main, maps).execute();
+    public static void run(Context context, String action, CalendarModel model, com.google.api.services.calendar.Calendar client, HashMap<String, String> subjects, Object... maps) {
+        new MSLTaskSyncTask(context, model, client, action, subjects, maps).execute();
     }
 
 }
