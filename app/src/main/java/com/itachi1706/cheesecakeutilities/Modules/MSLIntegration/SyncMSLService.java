@@ -28,6 +28,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarM
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.MSLTaskSyncTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.RetrieveMSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.MSLHelper;
@@ -259,10 +260,10 @@ public class SyncMSLService extends JobService {
         }
 
         // TODO: Handle update (its the main object and toUpdate hashmap)
-
         // TODO: Sync with calendar
+        MSLTaskSyncTask.run(this, "EXAMTASK", model, client, main, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
         // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
-        stopJob(false, true); // TODO: Test only, remove if not stopping here
+        //stopJob(false, true); // TODO: Test only, remove if not stopping here
     }
 
     private boolean checkIfNoUpdatesNeeded(HashMap a1, HashMap a2, HashMap a3) {
@@ -308,6 +309,11 @@ public class SyncMSLService extends JobService {
                 Log.i(TAG, "MSL Task Calendar found. doing synchronization");
                 proceedWithSynchronization();
                 break;
+            case "SYNC-EXAMTASK":
+                Log.i(TAG, "Sync completed");
+                updateNotification("Sync Complete. Finishing Up...", 0, 0, true);
+                stopJob(false, true);
+                break;
         }
     }
 
@@ -351,6 +357,9 @@ public class SyncMSLService extends JobService {
                 }
                 // Data received
                 parseMSLData(intent.getStringExtra("data"));
+            } else if (intent.getAction().equalsIgnoreCase(MSLTaskSyncTask.BROADCAST_MSL_NOTIFICATION)) {
+                if (intent.hasExtra("message") && intent.hasExtra("max") && intent.hasExtra("progress"))
+                    updateNotification(intent.getStringExtra("message"), intent.getIntExtra("max", 0), intent.getIntExtra("progress", 0), false);
             }
         }
     }

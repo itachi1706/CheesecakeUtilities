@@ -18,7 +18,7 @@ public class CalendarLoadTask extends CalendarAsyncTask {
 
     private String action;
 
-    CalendarLoadTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client, String action) {
+    private CalendarLoadTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client, String action) {
         super(context, model, client);
         this.action = (action.isEmpty()) ? "" : action;
     }
