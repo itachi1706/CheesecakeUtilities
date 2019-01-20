@@ -17,6 +17,8 @@ import com.itachi1706.cheesecakeutilities.R;
  */
 public class Utils {
 
+    private Utils() { throw new IllegalStateException("Utility Class"); }
+
     /**
      * Logs the given throwable and shows an error alert dialog with its message.
      *
@@ -33,7 +35,7 @@ public class Utils {
                 message = details.getMessage();
             }
         } else if (t.getCause() instanceof GoogleAuthException) {
-            message = ((GoogleAuthException) t.getCause()).getMessage();
+            message = t.getCause().getMessage();
         }
         showError(activity, message);
     }
@@ -63,11 +65,7 @@ public class Utils {
     }
 
     private static void showErrorInternal(final Activity activity, final String errorMessage) {
-        activity.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
-            }
-        });
+        activity.runOnUiThread(() -> Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show());
     }
 
     private static String getErrorMessage(Activity activity, String message) {

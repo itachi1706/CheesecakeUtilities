@@ -70,7 +70,10 @@ public class SyncMSLService extends JobService {
     CalendarModel model = new CalendarModel();
     GoogleAccountCredential credential;
 
-    public SyncMSLService() {}
+
+    public SyncMSLService() {
+        // Required for Firebase JobDispatcher API
+    }
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -335,7 +338,7 @@ public class SyncMSLService extends JobService {
             if (intent.getAction().equalsIgnoreCase(CalendarAsyncTask.BROADCAST_MSL_ASYNC)) {
                 if (intent.getBooleanExtra("exception", false)) {
                     Exception e = (Exception) intent.getSerializableExtra("error");
-                    NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+                    manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                     if (manager == null) return;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         setupNotificationChannel(manager, true);
@@ -359,10 +362,8 @@ public class SyncMSLService extends JobService {
                 }
                 // Data received
                 parseMSLData(intent.getStringExtra("data"));
-            } else if (intent.getAction().equalsIgnoreCase(MSLTaskSyncTask.BROADCAST_MSL_NOTIFICATION)) {
-                if (intent.hasExtra("message") && intent.hasExtra("max") && intent.hasExtra("progress"))
+            } else if (intent.getAction().equalsIgnoreCase(MSLTaskSyncTask.BROADCAST_MSL_NOTIFICATION) && (intent.hasExtra("message") && intent.hasExtra("max") && intent.hasExtra("progress")))
                     updateNotification(intent.getStringExtra("message"), intent.getIntExtra("max", 0), intent.getIntExtra("progress", 0), false);
-            }
         }
     }
 }
