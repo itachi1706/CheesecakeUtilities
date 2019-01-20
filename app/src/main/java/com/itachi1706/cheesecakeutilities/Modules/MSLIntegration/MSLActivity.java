@@ -59,7 +59,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MSLActivity extends BaseActivity {
 
     SignInButton googleSignIn;
-    SwitchCompat syncTask, syncCal;
+    SwitchCompat syncTask, syncCal, dismissNotification;
     RecyclerView history;
     TextInputEditText accessToken;
     Button saveToken, forceSync;
@@ -100,6 +100,7 @@ public class MSLActivity extends BaseActivity {
         accessToken = findViewById(R.id.et_msl_AT);
         googleSignIn = findViewById(R.id.btn_msl_google);
         til_accessToken = findViewById(R.id.til_et_msl_AT);
+        dismissNotification = findViewById(R.id.msl_notification_dismiss);
         sp = PrefHelper.getDefaultSharedPreferences(this);
 
         // Setup Layout
@@ -120,6 +121,7 @@ public class MSLActivity extends BaseActivity {
         forceSync.setOnClickListener(v -> btnSync());
         syncTask.setOnCheckedChangeListener((buttonView, isChecked) -> toggleTask(isChecked));
         syncCal.setOnCheckedChangeListener((buttonView, isChecked) -> toggleCal(isChecked));
+        dismissNotification.setOnCheckedChangeListener(((buttonView, isChecked) -> sp.edit().putBoolean("msl_notification_dismiss", isChecked).apply()));
 
         // TODO: Sync toggles state
         // TODO: Store toggle state in SharedPreferences for sync

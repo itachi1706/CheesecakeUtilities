@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -56,6 +57,9 @@ public class SyncMSLService extends JobService {
     private SharedPreferences sp;
 
     private JobParameters parameters;
+    private NotificationManager manager;
+    private int notificationId;
+    private NotificationCompat.Builder serviceNotification;
 
     public static final String ACTION_SYNC_MSL = "msl-sync-task-svc";
 
@@ -77,6 +81,15 @@ public class SyncMSLService extends JobService {
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
 
         sp = PrefHelper.getDefaultSharedPreferences(this);
+        manager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+
+        serviceNotification = new NotificationCompat.Builder(this, "msl-sync-service").setContentTitle("MSL Calendar Sync")
+                .setContentText("Starting sync...").setSmallIcon(R.drawable.notification_icon).setProgress(0, 0, true).setOngoing(true)
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MSLActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK), 0));
+        notificationId = new Random().nextInt();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) setupNotificationChannel(manager, false);
+        manager.notify(notificationId, serviceNotification.build());
 
         // Setup stuff
         credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
@@ -95,30 +108,48 @@ public class SyncMSLService extends JobService {
         return false;
     }
 
+    private void updateNotification(String description, int max, int progress, boolean indeterminate) {
+        serviceNotification.setContentText(description).setProgress(max, progress, indeterminate);
+        serviceNotification.setStyle(new NotificationCompat.BigTextStyle().bigText(description));
+        manager.notify(notificationId, serviceNotification.build());
+    }
+
     private void cleanup() {
         // Unregister receiver
         if (receiver != null) LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         receiver = null;
+
+        if (serviceNotification != null) {
+            serviceNotification.setProgress(0, 0, false).setOngoing(false);
+            if (sp.getBoolean("msl_notification_dismiss", false)) manager.cancel(notificationId);
+            else manager.notify(notificationId, serviceNotification.build());
+            serviceNotification = null;
+        }
         // TODO: Schedule a new job that replaces any job currently and is recurring forever
     }
     
-    private void stopJob(boolean needReschedule) {
+    private void stopJob(boolean needReschedule, boolean success) {
         Log.i(TAG, "Job finished, stopping");
+        // TODO: Get current date
+        if (success) updateNotification("Sync completed at {date}", 0, 0, false);
+        else updateNotification("Sync failed at {date}", 0, 0, false);
+
         cleanup();
         jobFinished(parameters, needReschedule);
     }
 
     protected void handleWork(@NonNull Bundle intent, @NonNull String action) {
-        if (intent != null && hasToken() && hasGoogleOAuth()) {
+        if (hasToken() && hasGoogleOAuth()) {
             if (intent.getBoolean("manual", false)) Toast.makeText(this, "Sync Started", Toast.LENGTH_LONG).show();
             switch (action) {
                 case ACTION_SYNC_MSL:
                     // Check that calendar exists
+                    updateNotification("Preparing sync... (Checking for existing calendar)", 0, 0, true);
                     CalendarLoadTask.run(this, "TASK-SYNC", model, client);
                     break;
                 default:
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
-                    stopJob(false);
+                    stopJob(false, false);
                     break;
             }
         }
@@ -128,10 +159,11 @@ public class SyncMSLService extends JobService {
     private void parseMSLData(String data) {
         if (data.equalsIgnoreCase("null")) {
             Log.e(TAG, "An error occurred retrieving data. Stopping job");
-            stopJob(false);
+            stopJob(false, false);
             return;
         }
         Log.d(TAG, "JSON Data: " + data);
+        updateNotification("Preparing Sync... (Parsing data from MSL)", 0, 0, true);
 
         Gson gson = new Gson();
         MSLData main = gson.fromJson(data, MSLData.class);
@@ -222,7 +254,7 @@ public class SyncMSLService extends JobService {
 
         if (checkIfNoUpdatesNeeded(taskToAdd, taskToRemove, taskToUpdate) && checkIfNoUpdatesNeeded(examToAdd, examToRemove, examToUpdate)) {
             Log.i(TAG, "No update required");
-            stopJob(false);
+            stopJob(false, true);
             return;
         }
 
@@ -230,7 +262,7 @@ public class SyncMSLService extends JobService {
 
         // TODO: Sync with calendar
         // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
-        stopJob(false); // TODO: Test only, remove if not stopping here
+        stopJob(false, true); // TODO: Test only, remove if not stopping here
     }
 
     private boolean checkIfNoUpdatesNeeded(HashMap a1, HashMap a2, HashMap a3) {
@@ -238,8 +270,19 @@ public class SyncMSLService extends JobService {
     }
 
     private void proceedWithSynchronization() {
+        updateNotification("Preparing Sync (Retrieving data from MSL)", 0, 0, true);
         new RetrieveMSLData(LocalBroadcastManager.getInstance(this), ValidationHelper.getSignatureForValidation(this),
                 this.getPackageName()).execute(sp.getString(MSLActivity.MSL_SP_ACCESS_TOKEN, "-"));
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void setupNotificationChannel(NotificationManager manager, boolean isErrorChannel) {
+        Log.d(TAG, "Creating notification channel");
+        NotificationChannel c;
+        if (isErrorChannel) c = new NotificationChannel("error-messages", "Service Errors", NotificationManager.IMPORTANCE_DEFAULT);
+        else c = new NotificationChannel("msl-sync-service", "MSL Sync Service", NotificationManager.IMPORTANCE_LOW);
+        c.setDescription((isErrorChannel)? "Display errors related to app services" : "MSL Sync Service notifications");
+        manager.createNotificationChannel(c);
     }
 
     private void process(String task) {
@@ -258,6 +301,7 @@ public class SyncMSLService extends JobService {
                     calendar.setDescription("Calendar used by CheesecakeUtilities to store tasks obtained from MSL and updated");
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
+                    updateNotification("Preparing Sync... (Creating new Calendar)", 0, 0, false);
                     new CalendarAddTask(this, model, client, calendar, "msl-cal-task-id").execute();
                     return;
                 }
@@ -286,7 +330,7 @@ public class SyncMSLService extends JobService {
                     NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                     if (manager == null) return;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        manager.createNotificationChannel(new NotificationChannel("error-messages", "Service Errors", NotificationManager.IMPORTANCE_DEFAULT));
+                        setupNotificationChannel(manager, true);
                     }
                     String errorMessage = "An error has occurred (" + e.getLocalizedMessage() + ")";
                     Intent launchIntent = new Intent(context, MSLActivity.class);
@@ -302,7 +346,7 @@ public class SyncMSLService extends JobService {
             } else if (intent.getAction().equalsIgnoreCase(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC)) {
                 if (intent.hasExtra("error")) {
                     Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
-                    stopJob(false);
+                    stopJob(false, false);
                     return;
                 }
                 // Data received
