@@ -16,7 +16,10 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -68,17 +71,27 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
         updateNotification("");
 
+        // TODO: Optimize all these (perhaps through queuing of task?)
         // Add Task
         Log.i(TAG, "Adding new tasks");
         for (Map.Entry<String, MSLData.Task> entry : taskAdd.entrySet()) {
             Event e = generateEventObject(entry.getValue());
             updateNotification("Inserting Task: " + e.getSummary());
             Log.d(TAG, "Adding: " + e.getId());
-            Event debug = client.events().insert(id, e).execute(); // TODO: Optimize it (maybe go towards queuing?
+            Event debug = client.events().insert(id, e).execute();
             Log.d(TAG, "Event ID: " + debug.getId());
             currentState++;
         }
         // Add Exam
+        Log.i(TAG, "Adding new exams");
+        for (Map.Entry<String, MSLData.Exam> entry : examAdd.entrySet()) {
+            Event e = generateEventObject(entry.getValue());
+            updateNotification("Inserting Exam: " + e.getSummary());
+            Log.d(TAG, "Adding: " + e.getId());
+            Event debug = client.events().insert(id, e).execute();
+            Log.d(TAG, "Event ID: " + debug.getId());
+            currentState++;
+        }
         // Modify Task
         Log.i(TAG, "Updating tasks to current values");
         for (Map.Entry<String, MSLData.Task> entry : taskModify.entrySet()) {
@@ -90,6 +103,15 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
             currentState++;
         }
         // Modify Exam
+        Log.i(TAG, "Updating exams to current values");
+        for (Map.Entry<String, MSLData.Exam> entry : examModify.entrySet()) {
+            Event e = generateEventObject(entry.getValue());
+            updateNotification("Updating Exam: " + e.getSummary());
+            e.setSequence(client.events().get(id, e.getId()).execute().getSequence() + 1);
+            Log.d(TAG, "Updating " + e.getId() + " to Sequence " + e.getSequence());
+            client.events().update(id, e.getId(), e).execute();
+            currentState++;
+        }
         // Delete Task
         Log.i(TAG, "Deleting tasks");
         for (Map.Entry<String, MSLData.Task> entry : taskDelete.entrySet()) {
@@ -100,21 +122,57 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
             currentState++;
         }
         // Delete Exam
+        Log.i(TAG, "Deleting exams");
+        for (Map.Entry<String, MSLData.Exam> entry : examDelete.entrySet()) {
+            Event e = generateEventObject(entry.getValue());
+            updateNotification("Deleting Exam: " + e.getSummary());
+            Log.d(TAG, "Removing: " + e.getId());
+            client.events().delete(id, e.getId()).execute();
+            currentState++;
+        }
+
         Log.i(TAG, "Sync Complete");
     }
 
     private Event generateEventObject(MSLData.Task item) {
         String sanitizedId = "mslccl" + item.getSubject_guid() + item.getGuid();
         sanitizedId = sanitizedId.replaceAll("[^A-Za-z0-9]", "");
-        Log.d(TAG, "Sanitized ID: " + sanitizedId);
         String title = "[" + item.getProgress() + "%] " + item.getTitle();
         String description = "Subject: " + subjects.get(item.getSubject_guid()) + "\nType: " + StringUtils.capitalize(item.getType());
         description += "\nTask Status: " + ((item.getCompleted_at() != null && item.getProgress() >= 100) ? "Complete (100%)" : "Incomplete (" + item.getProgress() + "%)");
         if (item.getExamString() != null) description += "\nExam: " + item.getExamString();
         description += "\n\nDetail:\n" + ((item.getDetail() != null) ? item.getDetail() : "No detail added to task");
-        Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);//.setSequence(1);
+        Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);
         EventDateTime dueDate = new EventDateTime().setDate(new DateTime(item.getDue_date()));
         e.setStart(dueDate).setEnd(dueDate);
+
+        // TODO: Handle Reminders
+        return e;
+    }
+
+    private Event generateEventObject(MSLData.Exam item) {
+        String sanitizedId = "mslccl" + item.getSubject_guid() + item.getGuid();
+        sanitizedId = sanitizedId.replaceAll("[^A-Za-z0-9]", "");
+
+        String module = (item.getModule() == null) ? "Exam" : item.getModule();
+
+        String title = subjects.get(item.getSubject_guid()) + " - " + module;
+        String description = "Subject: " + subjects.get(item.getSubject_guid()) + "\nModule: " + module;
+        description += "\nResit: " +  item.isResit();
+        if (item.getSeat() != null) description += "\nSeat: " + item.getSeat();
+        if (item.getRoom() != null) description += "\nExam Venue: " + item.getRoom();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy hh:mm aaa z", Locale.getDefault());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(new DateTime(item.getDate()).getValue());
+        description += "\nExam Starts: " + sdf.format(cal.getTime());
+        EventDateTime startTime = new EventDateTime().setDateTime(new DateTime(cal.getTimeInMillis()));
+        cal.add(Calendar.MINUTE, item.getDuration());
+        description += "\nExam Ends: " + sdf.format(cal.getTime());
+        EventDateTime endTime = new EventDateTime().setDateTime(new DateTime(cal.getTimeInMillis()));
+        description += "\nDuration: " + item.getDuration() + " minutes";
+
+        Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);
+        e.setStart(startTime).setEnd(endTime);
 
         // TODO: Handle Reminders
         return e;
