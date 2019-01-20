@@ -34,6 +34,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.MSLHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.text.DateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,9 +132,9 @@ public class SyncMSLService extends JobService {
     
     private void stopJob(boolean needReschedule, boolean success) {
         Log.i(TAG, "Job finished, stopping");
-        // TODO: Get current date
-        if (success) updateNotification("Sync completed at {date}", 0, 0, false);
-        else updateNotification("Sync failed at {date}", 0, 0, false);
+        String datetime = DateFormat.getDateTimeInstance().format(System.currentTimeMillis());
+        if (success) updateNotification("Sync completed at " + datetime, 0, 0, false);
+        else updateNotification("Sync failed at " + datetime, 0, 0, false);
 
         cleanup();
         jobFinished(parameters, needReschedule);
@@ -259,11 +260,12 @@ public class SyncMSLService extends JobService {
             return;
         }
 
-        // TODO: Handle update (its the main object and toUpdate hashmap)
-        // TODO: Sync with calendar
+        String newMetaData = (System.currentTimeMillis() + "," + taskToAdd.size() + examToAdd.size()) + ","
+                + (taskToUpdate.size() + examToUpdate.size()) + "," + (examToRemove.size() + taskToRemove.size()); // (time,add,remove,update:time,add,remove,update:...)
+        String oldString = sp.getString("msl-metric-history", "");
+        if (!oldString.isEmpty()) oldString += ":" + newMetaData;
+        sp.edit().putString("msl-metric-history", oldString).apply();
         MSLTaskSyncTask.run(this, "EXAMTASK", model, client, subjects, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
-        // TODO: Save new metric data to SharedPreference (add,remove,update:add,remove,update:...)
-        //stopJob(false, true); // TODO: Test only, remove if not stopping here
     }
 
     private boolean checkIfNoUpdatesNeeded(HashMap a1, HashMap a2, HashMap a3) {

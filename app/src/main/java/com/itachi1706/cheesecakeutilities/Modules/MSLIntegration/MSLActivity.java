@@ -163,6 +163,7 @@ public class MSLActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO: A way to clear all metrics
         switch (item.getItemId()) {
             case R.id.msl_how_to:
                 Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); // TODO: Implement
@@ -214,7 +215,6 @@ public class MSLActivity extends BaseActivity {
         googleSignIn.setEnabled(!hasGoogleOAuth());
         if (hasToken() && hasGoogleOAuth()) {
             // TODO: Add Sync Calendar when implemented
-            // TODO: Load calendars, check and update
             syncTask.setEnabled(true);
         }
     }
@@ -240,7 +240,6 @@ public class MSLActivity extends BaseActivity {
             return;
         }
 
-        // TODO: Do stuff
         Bundle manualJob = new Bundle();
         manualJob.putBoolean("manual", true);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
@@ -280,11 +279,15 @@ public class MSLActivity extends BaseActivity {
     }
 
     public void update(boolean success, String taskAction) {
-        // TODO: Implement if async tasks are true
+        if (!success) {
+            Toast.makeText(this, "Something went wrong, try again later", Toast.LENGTH_LONG).show();
+            return;
+        }
         Log.i(TAG, "Task Completed: " + taskAction);
         switch (taskAction.toUpperCase()) {
             case "ADD":
                 Toast.makeText(this, "Calendar Inserted Asynchronously", Toast.LENGTH_LONG).show();
+                btnSync();
                 break;
             case "LOAD-TASK":
                 String id = sp.getString("msl-cal-task-id", "");
@@ -299,11 +302,11 @@ public class MSLActivity extends BaseActivity {
                     Toast.makeText(this, "Creating calendar for tasks sync", Toast.LENGTH_LONG).show();
                     return;
                 }
-                // TODO: Calendar found, launch task synchronization service
                 Log.i(TAG, "MSL Task Calendar found. doing synchronization");
-                Log.e(TAG, "Task Sync Unimplemented");
+                btnSync();
                 break;
-            case "LOAD-TASK-SYNC": break; // Dont do anything
+            case "LOAD-TASK-SYNC":
+            case "SYNC-EXAMTASK": break; // Dont do anything
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
         }
     }
@@ -395,7 +398,6 @@ public class MSLActivity extends BaseActivity {
             chooseAccount();
         } else {
             // load calendars
-            // TODO: Do stuff with calendars
             CalendarLoadTask.run(this, "", model, client);
         }
     }
@@ -414,7 +416,7 @@ public class MSLActivity extends BaseActivity {
                     if (accountName != null) {
                         credential.setSelectedAccountName(accountName);
                         sp.edit().putString(MSL_SP_GOOGLE_OAUTH, accountName).apply();
-                        // TODO: Do stuff with calendars
+                        CalendarLoadTask.run(this, "", model, client);
                     }
                 }
                 break;
