@@ -6,6 +6,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.api.client.googleapis.batch.BatchRequest;
+import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
+import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.googleapis.json.GoogleJsonErrorContainer;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
@@ -75,25 +80,49 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
         // TODO: Optimize all these (perhaps through queuing of task?)
         // Add Task
+        BatchRequest taskBatchRequest = client.batch();
         Log.i(TAG, "Adding new tasks");
         for (Map.Entry<String, MSLData.Task> entry : taskAdd.entrySet()) {
             Event e = generateEventObject(entry.getValue());
-            updateNotification("Inserting Task: " + e.getSummary());
+            updateNotification("Processing Task: " + e.getSummary());
             Log.d(TAG, "Adding: " + e.getId());
-            Event debug = client.events().insert(id, e).execute();
-            Log.d(TAG, "Event ID: " + debug.getId());
+            client.events().insert(id, e).queue(taskBatchRequest, GoogleJsonErrorContainer.class, new JsonBatchCallback<Event>() {
+                @Override
+                public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
+                    Log.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Event event, HttpHeaders responseHeaders) {
+                    Log.d(TAG, "Task Event " + event.getId() + " added");
+                }
+            });
             currentState++;
         }
+        updateNotification("Bulk inserting task insertions to calendar");
+        taskBatchRequest.execute();
         // Add Exam
+        BatchRequest examBatchRequest = client.batch();
         Log.i(TAG, "Adding new exams");
         for (Map.Entry<String, MSLData.Exam> entry : examAdd.entrySet()) {
             Event e = generateEventObject(entry.getValue());
-            updateNotification("Inserting Exam: " + e.getSummary());
+            updateNotification("Processing Exam: " + e.getSummary());
             Log.d(TAG, "Adding: " + e.getId());
-            Event debug = client.events().insert(id, e).execute();
-            Log.d(TAG, "Event ID: " + debug.getId());
+            client.events().insert(id, e).queue(examBatchRequest, GoogleJsonErrorContainer.class, new JsonBatchCallback<Event>() {
+                @Override
+                public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
+                    Log.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Event event, HttpHeaders responseHeaders) {
+                    Log.d(TAG, "Exam Event " + event.getId() + " added");
+                }
+            });
             currentState++;
         }
+        updateNotification("Bulk sending exam insertions to calendar");
+        examBatchRequest.execute();
         // Modify Task
         Log.i(TAG, "Updating tasks to current values");
         for (Map.Entry<String, MSLData.Task> entry : taskModify.entrySet()) {
