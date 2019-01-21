@@ -147,8 +147,20 @@ public class MSLActivity extends BaseActivity {
         receiver = new MSLReceiver();
         IntentFilter filter = new IntentFilter(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
+        updateState(); // Check from preference to autofill toggles
 
         updateHistory();
+    }
+
+    private boolean isUpdatingState = false;
+
+    private void updateState() {
+        isUpdatingState = true;
+        syncCal.setChecked(sp.getBoolean("msl-toggle-cal", false));
+        syncTask.setChecked(sp.getBoolean("msl-toggle-task", false));
+        dismissNotification.setChecked(sp.getBoolean("msl_notification_dismiss", false));
+        accessToken.setText(sp.getString(MSL_SP_ACCESS_TOKEN, ""));
+        isUpdatingState = false;
     }
 
     @Override
@@ -228,12 +240,17 @@ public class MSLActivity extends BaseActivity {
         syncCal.setEnabled(false);
         googleSignIn.setEnabled(!hasGoogleOAuth());
         if (hasToken() && hasGoogleOAuth()) {
-            // TODO: Add Sync Calendar when implemented
             syncTask.setEnabled(true);
+        } else {
+            // Remove settings if any from SP
+            if (sp.contains("msl-toggle-cal")) sp.edit().remove("msl-toggle-cal").apply();
+            if (sp.contains("msl-toggle-task")) sp.edit().remove("msl-toggle-task").apply();
+            updateState();
         }
     }
 
     private void btnSave() {
+        if (isUpdatingState) return;
         til_accessToken.setErrorEnabled(false);
         if (accessToken.getText().toString().isEmpty()) {
             til_accessToken.setError("Please enter an access token");
@@ -249,21 +266,33 @@ public class MSLActivity extends BaseActivity {
     }
 
     private void btnSync() {
+        if (isUpdatingState) return;
         if (!hasToken()) {
             Toast.makeText(this, "No access token", Toast.LENGTH_LONG).show();
             return;
         }
+        if (!hasGoogleOAuth()) {
+            Toast.makeText(this, "Please login to your Google Account", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Check if sync is enabled, otherwise dont sync
+        if (!sp.getBoolean("msl-toggle-task", false) && !sp.getBoolean("msl-toggle-cal", false)) {
+            Toast.makeText(this, "Nothing is enabled to be synced. Enable a sync option to continue", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        Bundle manualJob = new Bundle();
-        manualJob.putBoolean("manual", true);
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
-        dispatcher.cancel(SyncMSLService.ACTION_SYNC_MSL);
-        Job syncJob = dispatcher.newJobBuilder().setService(SyncMSLService.class).setRecurring(false)
-                .setTrigger(Trigger.NOW).setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).setExtras(manualJob).setTag(SyncMSLService.ACTION_SYNC_MSL).build();
-        dispatcher.mustSchedule(syncJob);
-        Toast.makeText(this, "Scheduled a sync job", Toast.LENGTH_LONG).show();
-        Log.i(TAG, "Scheduled a manual sync job");
+        if (sp.getBoolean("msl-toggle-task", false)) {
+            Bundle manualJob = new Bundle();
+            manualJob.putBoolean("manual", true);
+            FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+            dispatcher.cancel(SyncMSLService.ACTION_SYNC_MSL);
+            Job syncJob = dispatcher.newJobBuilder().setService(SyncMSLService.class).setRecurring(false)
+                    .setTrigger(Trigger.NOW).setReplaceCurrent(true)
+                    .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).setExtras(manualJob).setTag(SyncMSLService.ACTION_SYNC_MSL).build();
+            dispatcher.mustSchedule(syncJob);
+            Toast.makeText(this, "Scheduled a task sync job", Toast.LENGTH_LONG).show();
+            Log.i(TAG, "Scheduled a manual sync job for tasks");
+        }
     }
 
     private void btnLogin() {
@@ -271,10 +300,13 @@ public class MSLActivity extends BaseActivity {
     }
 
     private void toggleTask(boolean isChecked) {
+        if (isUpdatingState) return;
         if (!hasToken()) {
             Toast.makeText(this, "Please enter an Access Token to sync your tasks to Google Calendar", Toast.LENGTH_LONG).show();
             return;
         }
+
+        sp.edit().putBoolean("msl-toggle-task", isChecked).apply();
 
         // if enabled, check that calendar exists, otherwise create it
         Log.d(TAG, "toggleTask(): " + isChecked);
@@ -284,10 +316,12 @@ public class MSLActivity extends BaseActivity {
     }
 
     private void toggleCal(boolean isChecked) {
+        if (isUpdatingState) return;
         if (!hasToken()) {
             Toast.makeText(this, "Please enter an Access Token to sync your schedule to Google Calendar", Toast.LENGTH_LONG).show();
             return;
         }
+        sp.edit().putBoolean("msl-toggle-cal", isChecked).apply();
         Toast.makeText(this, "Will be implemented in a future release", Toast.LENGTH_LONG).show();
         // TODO: Note
     }
@@ -320,6 +354,7 @@ public class MSLActivity extends BaseActivity {
                 btnSync();
                 break;
             case "SYNC-EXAMTASK": updateHistory(); break;
+            case "LOAD":
             case "LOAD-TASK-SYNC": break; // Dont do anything
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
         }
