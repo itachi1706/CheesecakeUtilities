@@ -74,6 +74,11 @@ class FileCacher(private val mContext: Context) {
         return true
     }
 
+    fun deleteFile(): Boolean {
+        val f = getFile() ?: return true
+        return f.delete()
+    }
+
     @Nullable
     fun getStringFromFile(): String? {
         val f = getFile() ?: return null

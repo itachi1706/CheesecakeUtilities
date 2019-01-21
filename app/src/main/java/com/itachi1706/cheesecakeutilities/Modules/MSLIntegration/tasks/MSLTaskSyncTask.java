@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 /**
  * Created by Kenneth on 20/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks in CheesecakeUtilities
@@ -190,6 +192,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         i.putExtra("progress", progress);
         i.putExtra("message", message);
         i.putExtra("max", max);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(i);
     }
 
     public static void run(Context context, String action, CalendarModel model, com.google.api.services.calendar.Calendar client, HashMap<String, String> subjects, Object... maps) {

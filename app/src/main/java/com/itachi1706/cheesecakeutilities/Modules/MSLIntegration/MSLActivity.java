@@ -218,6 +218,26 @@ public class MSLActivity extends BaseActivity {
                 Toast.makeText(this, "History cleared", Toast.LENGTH_LONG).show();
                 updateHistory();
                 break;
+            case R.id.msl_clear_all:
+                new AlertDialog.Builder(this).setTitle("Delete All Data")
+                        .setMessage("WARNING YOU ARE ABOUT TO DELETE ALL MSL DATA. THIS ACTION IS NOT REVERSIBLE!\nAre you sure you wish to continue?\n\n" +
+                                "After deletion of data, the calendar will not be deleted. If you wish to delete the calendar, head over to calendar.google.com and manually delete the calendar.\n" +
+                                "\nIf you wish to clear history instead, select the \"Clear History\" option.").setPositiveButton("YES DELETE!", (dialog, which) -> {
+                                    SharedPreferences.Editor spEdit = sp.edit();
+                                    spEdit.remove(MSL_SP_ACCESS_TOKEN);
+                                    spEdit.remove(MSL_SP_GOOGLE_OAUTH);
+                                    spEdit.remove("msl-metric-history");
+                                    spEdit.remove("msl_notification_dismiss");
+                                    spEdit.remove("msl-cal-task-id");
+                                    spEdit.apply();
+                                    credential.setSelectedAccountName(null);
+                                    FileCacher f = new FileCacher(getApplicationContext());
+                                    f.deleteFile();
+                                    Toast.makeText(getApplicationContext(), "Cleared all data", Toast.LENGTH_LONG).show();
+                                    updateToggles();
+                                    updateHistory();
+                                }).setNeutralButton("Cancel", null).show();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

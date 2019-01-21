@@ -83,6 +83,7 @@ public class SyncMSLService extends JobService {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
         filter.addAction(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC);
+        filter.addAction(MSLTaskSyncTask.BROADCAST_MSL_NOTIFICATION);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
 
         sp = PrefHelper.getDefaultSharedPreferences(this);
