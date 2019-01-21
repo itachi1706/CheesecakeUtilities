@@ -263,11 +263,14 @@ public class SyncMSLService extends JobService {
             return;
         }
 
-        String newMetaData = (System.currentTimeMillis() + "," + taskToAdd.size() + examToAdd.size()) + ","
+        String newMetaData = System.currentTimeMillis() + "," + (taskToAdd.size() + examToAdd.size()) + ","
                 + (taskToUpdate.size() + examToUpdate.size()) + "," + (examToRemove.size() + taskToRemove.size()); // (time,add,remove,update:time,add,remove,update:...)
+        Log.i(TAG, "Updating metric data: " + newMetaData);
         String oldString = sp.getString("msl-metric-history", "");
         if (!oldString.isEmpty()) oldString += ":" + newMetaData;
+        else oldString = newMetaData;
         sp.edit().putString("msl-metric-history", oldString).apply();
+        Log.i(TAG, "Metric Data Updated");
         MSLTaskSyncTask.run(this, "EXAMTASK", model, client, subjects, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
     }
 
@@ -351,6 +354,7 @@ public class SyncMSLService extends JobService {
                             .setContentText("An error has occurred (" + e.getLocalizedMessage() + ")").setSmallIcon(R.drawable.notification_icon)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nClick to enter the application to do a manual sync")).setContentIntent(pendingIntent).build();
                     manager.notify(new Random().nextInt(), errorNotification);
+                    stopJob(false, false);
                 } else {
                     process(intent.getStringExtra("data"));
                 }

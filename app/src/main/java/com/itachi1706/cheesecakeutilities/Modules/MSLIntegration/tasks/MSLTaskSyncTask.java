@@ -141,7 +141,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         String description = "Subject: " + subjects.get(item.getSubject_guid()) + "\nType: " + StringUtils.capitalize(item.getType());
         description += "\nTask Status: " + ((item.getCompleted_at() != null && item.getProgress() >= 100) ? "Complete (100%)" : "Incomplete (" + item.getProgress() + "%)");
         if (item.getExamString() != null) description += "\nExam: " + item.getExamString();
-        description += "\n\nDetail:\n" + ((item.getDetail() != null) ? item.getDetail() : "No detail added to task");
+        description += "\n\nDetail:\n" + ((item.getDetail() != null && !item.getDetail().isEmpty()) ? item.getDetail() : "No detail added to task");
         Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);
         EventDateTime dueDate = new EventDateTime().setDate(new DateTime(item.getDue_date()));
         e.setStart(dueDate).setEnd(dueDate);

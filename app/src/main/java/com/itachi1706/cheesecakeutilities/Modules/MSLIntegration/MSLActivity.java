@@ -38,12 +38,18 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher;
+import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
@@ -67,6 +73,7 @@ public class MSLActivity extends BaseActivity {
     SharedPreferences sp;
 
     MSLReceiver receiver;
+    DualLineStringRecyclerAdapter adapter;
 
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
@@ -140,6 +147,8 @@ public class MSLActivity extends BaseActivity {
         receiver = new MSLReceiver();
         IntentFilter filter = new IntentFilter(CalendarAsyncTask.BROADCAST_MSL_ASYNC);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
+
+        updateHistory();
     }
 
     @Override
@@ -191,6 +200,11 @@ public class MSLActivity extends BaseActivity {
                     parseTasks(data, alert);
                 else
                     parseExams(data, alert);
+                break;
+            case R.id.msl_clear_hist:
+                sp.edit().remove("msl-metric-history").apply();
+                Toast.makeText(this, "History cleared", Toast.LENGTH_LONG).show();
+                updateHistory();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -305,10 +319,47 @@ public class MSLActivity extends BaseActivity {
                 Log.i(TAG, "MSL Task Calendar found. doing synchronization");
                 btnSync();
                 break;
-            case "LOAD-TASK-SYNC":
-            case "SYNC-EXAMTASK": break; // Dont do anything
+            case "SYNC-EXAMTASK": updateHistory(); break;
+            case "LOAD-TASK-SYNC": break; // Dont do anything
             default: Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); break;
         }
+    }
+
+
+    private void updateHistory() {
+        Log.i(TAG, "Updating Metric History...");
+        String metrics = sp.getString("msl-metric-history", "");
+        if (metrics.isEmpty()) {
+            displayEmptyHistory();
+            return;
+        }
+
+        // Parse
+        List<DualLineString> metricData = new ArrayList<>();
+        String[] metric = metrics.split(":");
+        for (String m : metric) {
+            String[] data = m.split(",");
+            if (data.length != 4) continue; // Not valid data, skip
+            String metricMsg = "<font color=\"green\">" + data[1] + " Added</font> / <font color=\"olive\">" + data[2] + " Updated</font> / <font color=\"red\">" + data[3] + " Removed</font>";
+            // Data - Date, Add, Update, Remove
+            metricData.add(new DualLineString(DateFormat.getDateTimeInstance().format(new Date(Long.parseLong(data[0]))), metricMsg));
+        }
+
+        Collections.reverse(metricData);
+        if (adapter == null) {
+            adapter = new DualLineStringRecyclerAdapter(metricData);
+            adapter.setHtmlFormat(true);
+            history.setAdapter(adapter);
+        } else {
+            adapter.update(metricData);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void displayEmptyHistory() {
+        String[] noHist = new String[1];
+        noHist[0] = "No History";
+        history.setAdapter(new StringRecyclerAdapter(noHist));
     }
 
     // MSL Data Manipulation
