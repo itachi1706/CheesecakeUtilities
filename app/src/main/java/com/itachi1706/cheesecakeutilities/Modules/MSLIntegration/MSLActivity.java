@@ -140,9 +140,6 @@ public class MSLActivity extends BaseActivity {
         syncCal.setOnCheckedChangeListener((buttonView, isChecked) -> toggleCal(isChecked));
         dismissNotification.setOnCheckedChangeListener(((buttonView, isChecked) -> sp.edit().putBoolean("msl_notification_dismiss", isChecked).apply()));
 
-        // TODO: Sync toggles state
-        // TODO: Store toggle state in SharedPreferences for sync
-
         // Setup Google Stuff
         credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
         credential.setSelectedAccountName(sp.getString(MSL_SP_GOOGLE_OAUTH, null));

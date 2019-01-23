@@ -14,8 +14,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
@@ -109,14 +116,14 @@ public class SyncMSLService extends JobService {
         client = new Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("MSLIntegration/1.0").build();
 
         parameters = params;
-        handleWork(params.getExtras(), params.getTag());
+        handleWork((params.getExtras() == null) ? new Bundle() : params.getExtras(), params.getTag());
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
         Log.i(TAG, "System invoked. Stopping MSL Sync Job");
-        cleanup();
+        cleanup(true);
         return false;
     }
 
@@ -126,7 +133,7 @@ public class SyncMSLService extends JobService {
         manager.notify(notificationId, serviceNotification.build());
     }
 
-    private void cleanup() {
+    private void cleanup(boolean needReschedule) {
         // Unregister receiver
         if (receiver != null) LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         receiver = null;
@@ -137,17 +144,34 @@ public class SyncMSLService extends JobService {
             else manager.notify(notificationId, serviceNotification.build());
             serviceNotification = null;
         }
-        // TODO: Schedule a new job that replaces any job currently and is recurring forever
+
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        if (needReschedule) {
+            int minTime = 1800; // 1800
+            if (!parameters.isRecurring()) {
+                // Reschedules the job (every hour and when you are idle) [Every 0.5-1.5 hours] (1800-3600)
+                Job syncJob = dispatcher.newJobBuilder().setService(SyncMSLService.class).setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(minTime, 3600)).setReplaceCurrent(true).setConstraints(Constraint.ON_ANY_NETWORK, Constraint.DEVICE_IDLE)
+                        .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).setLifetime(Lifetime.FOREVER).setExtras(new Bundle()).setTag(SyncMSLService.ACTION_SYNC_MSL).build();
+                dispatcher.mustSchedule(syncJob);
+                Log.i(TAG, "Scheduled a new recurring sync task up to an hour from now");
+            }
+            Log.i(TAG, "Next recurring job will start on " + DateFormat.getDateTimeInstance().format(System.currentTimeMillis() + (minTime * 1000)) + " (estimated)");
+        } else {
+            // Make sure no job is ran
+            dispatcher.cancel(SyncMSLService.ACTION_SYNC_MSL);
+            Log.e(TAG, "Cancelled all recurring jobs as an error has occurred");
+        }
     }
     
-    private void stopJob(boolean needReschedule, boolean success) {
+    private void stopJob(boolean success, boolean rescheduleJob) {
         Log.i(TAG, "Job finished, stopping");
         String datetime = DateFormat.getDateTimeInstance().format(System.currentTimeMillis());
         if (success) updateNotification("Sync completed at " + datetime, 0, 0, false);
         else updateNotification("Sync failed at " + datetime, 0, 0, false);
 
-        cleanup();
-        jobFinished(parameters, needReschedule);
+        cleanup(rescheduleJob);
+        jobFinished(parameters, false);
     }
 
     protected void handleWork(@NonNull Bundle intent, @NonNull String action) {
@@ -172,7 +196,7 @@ public class SyncMSLService extends JobService {
     private void parseMSLData(String data) {
         if (data.equalsIgnoreCase("null")) {
             Log.e(TAG, "An error occurred retrieving data. Stopping job");
-            stopJob(false, false);
+            stopJob(false, true);
             return;
         }
         Log.d(TAG, "JSON Data: " + data);
@@ -267,7 +291,7 @@ public class SyncMSLService extends JobService {
 
         if (checkIfNoUpdatesNeeded(taskToAdd, taskToRemove, taskToUpdate) && checkIfNoUpdatesNeeded(examToAdd, examToRemove, examToUpdate)) {
             Log.i(TAG, "No update required");
-            stopJob(false, true);
+            stopJob(true, true);
             return;
         }
 
@@ -332,7 +356,7 @@ public class SyncMSLService extends JobService {
             case "SYNC-EXAMTASK":
                 Log.i(TAG, "Sync completed");
                 updateNotification("Sync Complete. Finishing Up...", 0, 0, true);
-                stopJob(false, true);
+                stopJob(true, true);
                 break;
         }
     }
@@ -386,7 +410,7 @@ public class SyncMSLService extends JobService {
                     }
                     Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
                     if (intent.hasExtra("message")) Log.e(TAG, "Error Message: " + intent.getStringExtra("message"));
-                    stopJob(false, false);
+                    stopJob(false, true);
                     return;
                 }
                 // Data received

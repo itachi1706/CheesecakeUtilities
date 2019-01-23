@@ -38,7 +38,6 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
     private String action;
     private static String TAG = "MSL-SYNC-ASYNC";
 
-    // TODO: Convert to Array Lists
     private ArrayList<Object> taskAdd, taskModify, taskDelete; // MSLData.Task
     private ArrayList<Object> examAdd, examModify, examDelete; // MSLData.Exam
     private HashMap<String, String> subjects;
