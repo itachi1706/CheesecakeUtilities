@@ -56,6 +56,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             proguardFile 'proguard-simple-xml.pro'
+            proguardFile 'proguard-google-api-client.pro'
         }
         debug {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
@@ -63,7 +64,7 @@ android {
             // Disable Fabric Stuff (Deprecated, it is now disabled by default and enabled in runtime)
             //ext.enableCrashlytics = false
             //if (isTravis) {
-                multiDexEnabled true
+            multiDexEnabled true
             //}
         }
     }
@@ -86,6 +87,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -137,6 +139,19 @@ dependencies {
     }
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    // MSL Sync Integration
+    implementation 'com.google.api-client:google-api-client-android:1.23.0', {
+        exclude group: "org.apache.httpcomponents"
+        exclude module: 'google-http-client'
+    }
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev364-1.25.0', {
+        exclude group: "org.apache.httpcomponents"
+        exclude module: 'google-http-client'
+    }
+    implementation 'com.google.http-client:google-http-client-gson:1.23.0', {
+        exclude group: "org.apache.httpcomponents"
+    }
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     testImplementation 'junit:junit:4.12'

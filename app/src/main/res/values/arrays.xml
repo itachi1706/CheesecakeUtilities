@@ -21,6 +21,7 @@
         <item>Now Playing Lyrics</item>
         <item>SG Weather</item>
         <item>CEPAS Card Reader (BETA)</item>
+        <item>MSL Calendar Sync (BETA)</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -43,6 +44,7 @@
         <item>.Modules.LyricFinder.LyricFinderActivity</item>
         <item>.Modules.SGPsi.PsiActivity</item>
         <item>.Modules.CEPASReader.activity.MainActivity</item>
+        <item>.Modules.MSLIntegration.MSLActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
