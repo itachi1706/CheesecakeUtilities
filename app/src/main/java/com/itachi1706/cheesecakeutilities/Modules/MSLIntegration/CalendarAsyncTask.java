@@ -40,6 +40,8 @@ public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     public static final String BROADCAST_MSL_ASYNC = "com.itachi1706.cheesecakeutilities.MSL_ASYNC_MSG";
 
+    public static final String INTENT_ERROR = "error", INTENT_DATA = "data", INTENT_EXCEPTION = "exception";
+
     public CalendarAsyncTask(Context context, CalendarModel model, com.google.api.services.calendar.Calendar client) {
         this.context = context;
         this.model = model;
@@ -58,21 +60,21 @@ public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
             return true;
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
             Intent except = new Intent(BROADCAST_MSL_ASYNC);
-            except.putExtra("exception", true);
-            except.putExtra("error", availabilityException);
-            except.putExtra("data", availabilityException.getConnectionStatusCode());
+            except.putExtra(INTENT_EXCEPTION, true);
+            except.putExtra(INTENT_ERROR, availabilityException);
+            except.putExtra(INTENT_DATA, availabilityException.getConnectionStatusCode());
             LocalBroadcastManager.getInstance(context).sendBroadcast(except);
         } catch (UserRecoverableAuthIOException userRecoverableException) {
             Intent except = new Intent(BROADCAST_MSL_ASYNC);
-            except.putExtra("exception", true);
-            except.putExtra("error", userRecoverableException);
-            except.putExtra("data", userRecoverableException.getIntent());
+            except.putExtra(INTENT_EXCEPTION, true);
+            except.putExtra(INTENT_ERROR, userRecoverableException);
+            except.putExtra(INTENT_DATA, userRecoverableException.getIntent());
             LocalBroadcastManager.getInstance(context).sendBroadcast(except);
         } catch (IOException e) {
             Intent except = new Intent(BROADCAST_MSL_ASYNC);
-            except.putExtra("exception", true);
-            except.putExtra("error", e);
-            except.putExtra("data", e);
+            except.putExtra(INTENT_EXCEPTION, true);
+            except.putExtra(INTENT_ERROR, e);
+            except.putExtra(INTENT_DATA, e);
             LocalBroadcastManager.getInstance(context).sendBroadcast(except);
 
         }
@@ -85,7 +87,7 @@ public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
         if (!success) return;
         Intent except = new Intent(BROADCAST_MSL_ASYNC);
         except.putExtra("success", true);
-        except.putExtra("data", getTaskAction());
+        except.putExtra(INTENT_DATA, getTaskAction());
         LocalBroadcastManager.getInstance(context).sendBroadcast(except);
     }
 

@@ -16,6 +16,7 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 
@@ -76,7 +77,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
     protected void doInBackground() throws IOException {
         Log.d(TAG, "Syncing calendars for " + action + "...");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        String id = sp.getString("msl-cal-task-id", "");
+        String id = sp.getString(MSLActivity.MSP_SP_TASK_CAL_ID, "");
         if (id.isEmpty()) throw new IllegalStateException("GCal ID is missing");
         totalTasks = taskAdd.size() + taskModify.size() + taskDelete.size() + examDelete.size() + examModify.size() + examAdd.size();
 

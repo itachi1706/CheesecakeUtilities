@@ -88,8 +88,14 @@ public class MSLActivity extends BaseActivity {
 
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
+    public static final String MSP_SP_TOGGLE_TASK = "msl-toggle-task";
+    public static final String MSP_SP_TOGGLE_CAL = "msl-toggle-cal";
+    public static final String MSP_SP_TOGGLE_NOTIF = "msl_notification_dismiss";
+    public static final String MSP_SP_METRIC_HIST = "msl-metric-history";
+    public static final String MSP_SP_TASK_CAL_ID = "msl-cal-task-id";
 
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2, REQUEST_READ_FILE = 3, REQUEST_WRITE_FILE = 4;
+
 
     private static final String TAG = "MSL-SYNC";
 
@@ -139,7 +145,7 @@ public class MSLActivity extends BaseActivity {
         forceSync.setOnClickListener(v -> btnSync());
         syncTask.setOnCheckedChangeListener((buttonView, isChecked) -> toggleTask(isChecked));
         syncCal.setOnCheckedChangeListener((buttonView, isChecked) -> toggleCal(isChecked));
-        dismissNotification.setOnCheckedChangeListener(((buttonView, isChecked) -> sp.edit().putBoolean("msl_notification_dismiss", isChecked).apply()));
+        dismissNotification.setOnCheckedChangeListener(((buttonView, isChecked) -> sp.edit().putBoolean(MSP_SP_TOGGLE_NOTIF, isChecked).apply()));
 
         // Setup Google Stuff
         credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
@@ -164,9 +170,9 @@ public class MSLActivity extends BaseActivity {
 
     private void updateState() {
         isUpdatingState = true;
-        syncCal.setChecked(sp.getBoolean("msl-toggle-cal", false));
-        syncTask.setChecked(sp.getBoolean("msl-toggle-task", false));
-        dismissNotification.setChecked(sp.getBoolean("msl_notification_dismiss", false));
+        syncCal.setChecked(sp.getBoolean(MSP_SP_TOGGLE_CAL, false));
+        syncTask.setChecked(sp.getBoolean(MSP_SP_TOGGLE_TASK, false));
+        dismissNotification.setChecked(sp.getBoolean(MSP_SP_TOGGLE_NOTIF, false));
         accessToken.setText(sp.getString(MSL_SP_ACCESS_TOKEN, ""));
         isUpdatingState = false;
     }
@@ -227,7 +233,7 @@ public class MSLActivity extends BaseActivity {
                     parseExams(data, alert);
                 break;
             case R.id.msl_clear_hist:
-                sp.edit().remove("msl-metric-history").apply();
+                sp.edit().remove(MSP_SP_METRIC_HIST).apply();
                 Toast.makeText(this, "History cleared", Toast.LENGTH_LONG).show();
                 updateHistory();
                 break;
@@ -239,9 +245,9 @@ public class MSLActivity extends BaseActivity {
                                     SharedPreferences.Editor spEdit = sp.edit();
                                     spEdit.remove(MSL_SP_ACCESS_TOKEN);
                                     spEdit.remove(MSL_SP_GOOGLE_OAUTH);
-                                    spEdit.remove("msl-metric-history");
-                                    spEdit.remove("msl_notification_dismiss");
-                                    spEdit.remove("msl-cal-task-id");
+                                    spEdit.remove(MSP_SP_METRIC_HIST);
+                                    spEdit.remove(MSP_SP_TOGGLE_NOTIF);
+                                    spEdit.remove(MSP_SP_TASK_CAL_ID);
                                     spEdit.apply();
                                     credential.setSelectedAccountName(null);
                                     FileCacher f = new FileCacher(getApplicationContext());
@@ -312,10 +318,10 @@ public class MSLActivity extends BaseActivity {
             FileCacher c = new FileCacher(this);
             if (f.getCache() != null) c.writeToFile(f.getCache());
             SharedPreferences.Editor edit = sp.edit();
-            if (f.getHistory() != null) edit.putString("msl-metric-history", f.getHistory());
-            if (f.getNotificationDismiss()) edit.putBoolean("msl_notification_dismiss", true);
-            if (f.getCalendarId() != null) edit.putString("msl-cal-task-id", f.getCalendarId());
-            if (f.getAccessToken() != null) edit.putString("msl_access_token", f.getAccessToken());
+            if (f.getHistory() != null) edit.putString(MSP_SP_METRIC_HIST, f.getHistory());
+            if (f.getNotificationDismiss()) edit.putBoolean(MSP_SP_TOGGLE_NOTIF, true);
+            if (f.getCalendarId() != null) edit.putString(MSP_SP_TASK_CAL_ID, f.getCalendarId());
+            if (f.getAccessToken() != null) edit.putString(MSL_SP_ACCESS_TOKEN, f.getAccessToken());
             edit.apply();
 
             updateHistory();
@@ -337,10 +343,10 @@ public class MSLActivity extends BaseActivity {
         ExportFile f = new ExportFile();
         FileCacher fc = new FileCacher(this);
         f.setCache(fc.getStringFromFile());
-        f.setHistory(sp.getString("msl-metric-history", null));
-        f.setNotificationDismiss(sp.getBoolean("msl_notification_dismiss", false));
-        f.setCalendarId(sp.getString("msl-cal-task-id", null));
-        f.setAccessToken(sp.getString("msl_access_token", null));
+        f.setHistory(sp.getString(MSP_SP_METRIC_HIST, null));
+        f.setNotificationDismiss(sp.getBoolean(MSP_SP_TOGGLE_NOTIF, false));
+        f.setCalendarId(sp.getString(MSP_SP_TASK_CAL_ID, null));
+        f.setAccessToken(sp.getString(MSL_SP_ACCESS_TOKEN, null));
         Gson gson = new Gson();
         String json = gson.toJson(f);
 
@@ -383,8 +389,8 @@ public class MSLActivity extends BaseActivity {
             syncTask.setEnabled(true);
         } else {
             // Remove settings if any from SP
-            if (sp.contains("msl-toggle-cal")) sp.edit().remove("msl-toggle-cal").apply();
-            if (sp.contains("msl-toggle-task")) sp.edit().remove("msl-toggle-task").apply();
+            if (sp.contains(MSP_SP_TOGGLE_CAL)) sp.edit().remove(MSP_SP_TOGGLE_CAL).apply();
+            if (sp.contains(MSP_SP_TOGGLE_TASK)) sp.edit().remove(MSP_SP_TOGGLE_TASK).apply();
             updateState();
         }
     }
@@ -416,12 +422,12 @@ public class MSLActivity extends BaseActivity {
             return;
         }
         // Check if sync is enabled, otherwise dont sync
-        if (!sp.getBoolean("msl-toggle-task", false) && !sp.getBoolean("msl-toggle-cal", false)) {
+        if (!sp.getBoolean(MSP_SP_TOGGLE_TASK, false) && !sp.getBoolean(MSP_SP_TOGGLE_CAL, false)) {
             Toast.makeText(this, "Nothing is enabled to be synced. Enable a sync option to continue", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (sp.getBoolean("msl-toggle-task", false)) {
+        if (sp.getBoolean(MSP_SP_TOGGLE_TASK, false)) {
             Bundle manualJob = new Bundle();
             manualJob.putBoolean("manual", true);
             FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
@@ -446,7 +452,7 @@ public class MSLActivity extends BaseActivity {
             return;
         }
 
-        sp.edit().putBoolean("msl-toggle-task", isChecked).apply();
+        sp.edit().putBoolean(MSP_SP_TOGGLE_TASK, isChecked).apply();
 
         // if enabled, check that calendar exists, otherwise create it
         Log.d(TAG, "toggleTask(): " + isChecked);
@@ -461,7 +467,7 @@ public class MSLActivity extends BaseActivity {
             Toast.makeText(this, "Please enter an Access Token to sync your schedule to Google Calendar", Toast.LENGTH_LONG).show();
             return;
         }
-        sp.edit().putBoolean("msl-toggle-cal", isChecked).apply();
+        sp.edit().putBoolean(MSP_SP_TOGGLE_CAL, isChecked).apply();
         Toast.makeText(this, "Will be implemented in a future release", Toast.LENGTH_LONG).show();
         // TODO: Note
     }
@@ -478,7 +484,7 @@ public class MSLActivity extends BaseActivity {
                 btnSync();
                 break;
             case "LOAD-TASK":
-                String id = sp.getString("msl-cal-task-id", "");
+                String id = sp.getString(MSP_SP_TASK_CAL_ID, "");
                 if (id.isEmpty() || model.get(id) == null) {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
@@ -487,7 +493,7 @@ public class MSLActivity extends BaseActivity {
                             + DateFormat.getDateTimeInstance().format(System.currentTimeMillis()));
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
-                    new CalendarAddTask(this, model, client, calendar, "msl-cal-task-id").execute();
+                    new CalendarAddTask(this, model, client, calendar, MSP_SP_TASK_CAL_ID).execute();
                     Toast.makeText(this, "Creating calendar for tasks sync", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -504,7 +510,7 @@ public class MSLActivity extends BaseActivity {
 
     private void updateHistory() {
         Log.i(TAG, "Updating Metric History...");
-        String metrics = sp.getString("msl-metric-history", "");
+        String metrics = sp.getString(MSP_SP_METRIC_HIST, "");
         if (metrics.isEmpty()) {
             displayEmptyHistory();
             return;
@@ -588,17 +594,17 @@ public class MSLActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            if (intent.getBooleanExtra("exception", false)) {
-                Exception e = (Exception) intent.getSerializableExtra("error");
+            if (intent.getBooleanExtra(CalendarAsyncTask.INTENT_EXCEPTION, false)) {
+                Exception e = (Exception) intent.getSerializableExtra(CalendarAsyncTask.INTENT_ERROR);
                 if (e instanceof GooglePlayServicesAvailabilityIOException) {
-                    showGPSError(intent.getIntExtra("data", 0));
+                    showGPSError(intent.getIntExtra(CalendarAsyncTask.INTENT_DATA, 0));
                 } else if (e instanceof UserRecoverableAuthIOException) {
-                    startActivityForResult(intent.getParcelableExtra("data"), REQUEST_AUTHORIZATION);
+                    startActivityForResult(intent.getParcelableExtra(CalendarAsyncTask.INTENT_DATA), REQUEST_AUTHORIZATION);
                 } else if (e instanceof IOException) {
                     Utils.logAndShow(MSLActivity.this, "GCal-Async", e);
                 }
             } else {
-                update(intent.getBooleanExtra("success", true), intent.getStringExtra("data"));
+                update(intent.getBooleanExtra("success", true), intent.getStringExtra(CalendarAsyncTask.INTENT_DATA));
             }
         }
     }
@@ -634,7 +640,6 @@ public class MSLActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode == RESULT_OK) haveGooglePlayServices();
@@ -658,21 +663,16 @@ public class MSLActivity extends BaseActivity {
                 } else chooseAccount();
                 break;
             case REQUEST_WRITE_FILE:
-                if (resultCode == RESULT_OK && data != null) {
-                    Uri uri = data.getData();
-                    if (uri == null) break;
-                    Log.i(TAG, "WRITE Uri: " + uri.toString());
-                    exportData(uri);
-                }
-                break;
             case REQUEST_READ_FILE:
                 if (resultCode == RESULT_OK && data != null) {
                     Uri uri = data.getData();
                     if (uri == null) break;
-                    Log.i(TAG, "READ Uri: " + uri.toString());
-                    importData(uri);
+                    Log.i(TAG, ((requestCode == REQUEST_READ_FILE) ? "READ" : "WRITE") + " Uri: " + uri.toString());
+                    if (requestCode == REQUEST_READ_FILE) importData(uri);
+                    else exportData(uri);
                 }
                 break;
+            default: super.onActivityResult(requestCode, resultCode, data); break;
         }
     }
 }

@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.SyncMSLService;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,7 +41,7 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
     protected Void doInBackground(String... strings) {
         Intent returnIntent = new Intent(BROADCAST_MSL_DATA_SYNC);
         if (strings.length == 0) {
-            returnIntent.putExtra("error", true);
+            returnIntent.putExtra(CalendarAsyncTask.INTENT_ERROR, true);
             returnIntent.putExtra("reason", "No auth code");
             manager.sendBroadcast(returnIntent);
             return null; // Nothing to process
@@ -64,7 +67,7 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
             in.close();
             tmp = str.toString();
 
-            returnIntent.putExtra("data", tmp);
+            returnIntent.putExtra(CalendarAsyncTask.INTENT_DATA, tmp);
             manager.sendBroadcast(returnIntent);
         } catch (IOException e) {
             if (e instanceof FileNotFoundException) {
@@ -77,7 +80,7 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
                         Log.e(TAG, "Response Message: " + conn.getResponseMessage());
                         if (conn.getResponseMessage().contains("Invalid Access Token")) {
                             // Token invalid, inform user
-                            returnIntent.putExtra("error", true);
+                            returnIntent.putExtra(CalendarAsyncTask.INTENT_ERROR, true);
                             returnIntent.putExtra("accesstokeninvalid", true);
                             manager.sendBroadcast(returnIntent);
                             return null;
@@ -90,8 +93,8 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
             e.printStackTrace();
-            returnIntent.putExtra("error", true);
-            returnIntent.putExtra("message", e.getLocalizedMessage());
+            returnIntent.putExtra(CalendarAsyncTask.INTENT_ERROR, true);
+            returnIntent.putExtra(SyncMSLService.INTENT_MESSAGE, e.getLocalizedMessage());
             manager.sendBroadcast(returnIntent);
         }
 
