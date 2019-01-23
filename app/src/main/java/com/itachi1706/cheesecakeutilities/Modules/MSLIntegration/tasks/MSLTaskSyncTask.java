@@ -14,6 +14,7 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.EventReminder;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
@@ -23,7 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -154,8 +157,8 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);
         EventDateTime dueDate = new EventDateTime().setDate(new DateTime(item.getDue_date()));
         e.setStart(dueDate).setEnd(dueDate);
-
-        // TODO: Handle Reminders
+        e.setReminders(generateReminder(item.getProgress() >= 100));
+        e.setTransparency("transparent");
         return e;
     }
 
@@ -182,11 +185,47 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
         Event e = new Event().setId(sanitizedId).setSummary(title).setDescription(description);
         e.setStart(startTime).setEnd(endTime);
-
-        // TODO: Handle Reminders
+        e.setReminders(generateReminder());
+        e.setTransparency("opaque");
         return e;
     }
 
+    // Exam
+    private Event.Reminders generateReminder() {
+        return generateReminder(false, true);
+    }
+
+    // Task
+    private Event.Reminders generateReminder(boolean done) {
+        return generateReminder(done, false);
+    }
+
+    /**
+     * Don't use directly
+     * @param done Whether the task is completed or not. Set empty reminders if this is true
+     * @param multiReminders Whether multi reminders should be created (Exam)
+     * @return Reminder object
+     */
+    private Event.Reminders generateReminder(boolean done, boolean multiReminders) {
+        Event.Reminders reminders = new Event.Reminders();
+        reminders.setUseDefault(false);
+        if (done) {
+            return reminders.setOverrides(null);
+        }
+
+        if (multiReminders) {
+            // Exam, remind 1 hour, 1 day and 1 week before
+            EventReminder[] eventReminders = new EventReminder[] {
+                    new EventReminder().setMethod("popup").setMinutes(60),
+                    new EventReminder().setMethod("popup").setMinutes(60 * 24),
+                    new EventReminder().setMethod("popup").setMinutes(60 * 24 * 7)
+            };
+            return reminders.setOverrides(Arrays.asList(eventReminders));
+        }
+
+        // Task, remind at 5PM (7 hours before actual day)
+        return reminders.setOverrides(Collections.singletonList(new EventReminder().setMethod("popup").setMinutes(7 * 60)));
+    }
 
     private void updateNotification(String extraMessage) {
         String message = "Syncing " + (currentState + 1) + " of " + totalTasks;
