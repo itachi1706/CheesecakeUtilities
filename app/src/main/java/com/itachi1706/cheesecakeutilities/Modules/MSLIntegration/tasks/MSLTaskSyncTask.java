@@ -22,10 +22,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -38,8 +38,9 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
     private String action;
     private static String TAG = "MSL-SYNC-ASYNC";
 
-    private HashMap<String, MSLData.Task> taskAdd, taskModify, taskDelete;
-    private HashMap<String, MSLData.Exam> examAdd, examModify, examDelete;
+    // TODO: Convert to Array Lists
+    private ArrayList<Object> taskAdd, taskModify, taskDelete; // MSLData.Task
+    private ArrayList<Object> examAdd, examModify, examDelete; // MSLData.Exam
     private HashMap<String, String> subjects;
     private int totalTasks = 0, currentState = 0;
 
@@ -53,12 +54,13 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         // get all hashmaps
         if (maps.length != 6) throw new ArrayIndexOutOfBoundsException("Expected 6 hashmaps, found " + maps.length);
 
-        taskAdd = (HashMap<String, MSLData.Task>) maps[0];
-        taskModify = (HashMap<String, MSLData.Task>) maps[1];
-        taskDelete = (HashMap<String, MSLData.Task>) maps[2];
-        examAdd = (HashMap<String, MSLData.Exam>) maps[3];
-        examModify = (HashMap<String, MSLData.Exam>) maps[4];
-        examDelete = (HashMap<String, MSLData.Exam>) maps[5];
+        // Convert all to arraylists (as we do not require a hashmap
+        taskAdd = new ArrayList<>(((HashMap<String, MSLData.Task>) maps[0]).values());
+        taskModify = new ArrayList<>(((HashMap<String, MSLData.Task>) maps[1]).values());
+        taskDelete = new ArrayList<>(((HashMap<String, MSLData.Task>) maps[2]).values());
+        examAdd = new ArrayList<>(((HashMap<String, MSLData.Exam>) maps[3]).values());
+        examModify = new ArrayList<>(((HashMap<String, MSLData.Exam>) maps[4]).values());
+        examDelete = new ArrayList<>(((HashMap<String, MSLData.Exam>) maps[5]).values());
         this.subjects = subjects;
     }
 
@@ -78,91 +80,68 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
         updateNotification("");
 
-        // TODO: Optimize all these (perhaps through queuing of task?)
         // Add Task
-        BatchRequest taskBatchRequest = client.batch();
         Log.i(TAG, "Adding new tasks");
-        for (Map.Entry<String, MSLData.Task> entry : taskAdd.entrySet()) {
-            Event e = generateEventObject(entry.getValue());
-            updateNotification("Processing Task: " + e.getSummary());
-            Log.d(TAG, "Adding: " + e.getId());
-            client.events().insert(id, e).queue(taskBatchRequest, GoogleJsonErrorContainer.class, new JsonBatchCallback<Event>() {
-                @Override
-                public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
-                    Log.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
-                }
-
-                @Override
-                public void onSuccess(Event event, HttpHeaders responseHeaders) {
-                    Log.d(TAG, "Task Event " + event.getId() + " added");
-                }
-            });
-            currentState++;
-        }
-        updateNotification("Bulk inserting task insertions to calendar");
-        taskBatchRequest.execute();
+        eventAdd("Task", taskAdd, id);
         // Add Exam
-        BatchRequest examBatchRequest = client.batch();
         Log.i(TAG, "Adding new exams");
-        for (Map.Entry<String, MSLData.Exam> entry : examAdd.entrySet()) {
-            Event e = generateEventObject(entry.getValue());
-            updateNotification("Processing Exam: " + e.getSummary());
-            Log.d(TAG, "Adding: " + e.getId());
-            client.events().insert(id, e).queue(examBatchRequest, GoogleJsonErrorContainer.class, new JsonBatchCallback<Event>() {
-                @Override
-                public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
-                    Log.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
-                }
-
-                @Override
-                public void onSuccess(Event event, HttpHeaders responseHeaders) {
-                    Log.d(TAG, "Exam Event " + event.getId() + " added");
-                }
-            });
-            currentState++;
-        }
-        updateNotification("Bulk sending exam insertions to calendar");
-        examBatchRequest.execute();
+        eventAdd("Exam", examAdd, id);
         // Modify Task
         Log.i(TAG, "Updating tasks to current values");
-        for (Map.Entry<String, MSLData.Task> entry : taskModify.entrySet()) {
-            Event e = generateEventObject(entry.getValue());
-            updateNotification("Updating Task: " + e.getSummary());
-            e.setSequence(client.events().get(id, e.getId()).execute().getSequence() + 1);
-            Log.d(TAG, "Updating " + e.getId() + " to Sequence " + e.getSequence());
-            client.events().update(id, e.getId(), e).execute();
-            currentState++;
-        }
+        eventUpdate("Task", taskModify, id);
         // Modify Exam
         Log.i(TAG, "Updating exams to current values");
-        for (Map.Entry<String, MSLData.Exam> entry : examModify.entrySet()) {
-            Event e = generateEventObject(entry.getValue());
-            updateNotification("Updating Exam: " + e.getSummary());
+        eventUpdate("Exam", examModify, id);
+        // Delete Task
+        Log.i(TAG, "Deleting tasks");
+        eventDelete("Task", taskDelete, id);
+        // Delete Exam
+        Log.i(TAG, "Deleting exams");
+        eventDelete("Exam", examDelete, id);
+
+        Log.i(TAG, "Sync Complete");
+    }
+
+    private void eventAdd(String type, ArrayList<Object> list, String id) throws IOException {
+        BatchRequest batchRequest = client.batch();
+        for (Object entry : list) {
+            Event e = generateEventObject(entry);
+            updateNotification("Processing " + type + ": " + e.getSummary());
+            Log.d(TAG, "Adding: " + e.getId());
+            client.events().insert(id, e).queue(batchRequest, GoogleJsonErrorContainer.class, new MSLGoogleCallback(type));
+            currentState++;
+        }
+        updateNotification("Bulk inserting " + type.toLowerCase() + " insertions to calendar");
+        if (batchRequest.size() != 0) batchRequest.execute();
+    }
+
+    private void eventUpdate(String type, ArrayList<Object> list, String id) throws IOException {
+        // Note: If stuff starts crashing because of this, we should probably just batch these as well
+        for (Object entry : list) {
+            Event e = generateEventObject(entry);
+            updateNotification("Updating " + type + ": " + e.getSummary());
             e.setSequence(client.events().get(id, e.getId()).execute().getSequence() + 1);
             Log.d(TAG, "Updating " + e.getId() + " to Sequence " + e.getSequence());
             client.events().update(id, e.getId(), e).execute();
             currentState++;
         }
-        // Delete Task
-        Log.i(TAG, "Deleting tasks");
-        for (Map.Entry<String, MSLData.Task> entry : taskDelete.entrySet()) {
-            Event e = generateEventObject(entry.getValue());
-            updateNotification("Deleting Task: " + e.getSummary());
-            Log.d(TAG, "Removing: " + e.getId());
-            client.events().delete(id, e.getId()).execute();
-            currentState++;
-        }
-        // Delete Exam
-        Log.i(TAG, "Deleting exams");
-        for (Map.Entry<String, MSLData.Exam> entry : examDelete.entrySet()) {
-            Event e = generateEventObject(entry.getValue());
-            updateNotification("Deleting Exam: " + e.getSummary());
-            Log.d(TAG, "Removing: " + e.getId());
-            client.events().delete(id, e.getId()).execute();
-            currentState++;
-        }
+    }
 
-        Log.i(TAG, "Sync Complete");
+    private void eventDelete(String type, ArrayList<Object> list, String id) throws IOException {
+        // Note: If stuff starts crashing because of this, we should probably just batch these as well
+        for (Object entry : list) {
+            Event e = generateEventObject(entry);
+            updateNotification("Deleting " + type + ": " + e.getSummary());
+            Log.d(TAG, "Removing: " + e.getId());
+            client.events().delete(id, e.getId()).execute();
+            currentState++;
+        }
+    }
+
+    private Event generateEventObject(Object o) throws IOException {
+        if (o instanceof MSLData.Task) return generateEventObject((MSLData.Task) o);
+        else if (o instanceof MSLData.Exam) return generateEventObject((MSLData.Exam) o);
+        throw new IOException("Object must either be of type Task or Exam");
     }
 
     private Event generateEventObject(MSLData.Task item) {
@@ -226,6 +205,25 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
     public static void run(Context context, String action, CalendarModel model, com.google.api.services.calendar.Calendar client, HashMap<String, String> subjects, Object... maps) {
         new MSLTaskSyncTask(context, model, client, action, subjects, maps).execute();
+    }
+
+    class MSLGoogleCallback extends JsonBatchCallback<Event> {
+
+        private String type;
+
+        MSLGoogleCallback(String eventType) {
+            this.type = eventType;
+        }
+
+        @Override
+        public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
+            Log.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
+        }
+
+        @Override
+        public void onSuccess(Event event, HttpHeaders responseHeaders) {
+            Log.d(TAG, type + " Event " + event.getId() + " added");
+        }
     }
 
 }

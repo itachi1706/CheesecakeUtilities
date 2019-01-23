@@ -363,7 +363,8 @@ public class MSLActivity extends BaseActivity {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
                     calendar.setSummary("MSL Task Calendar Sync");
-                    calendar.setDescription("Calendar used by CheesecakeUtilities to store tasks obtained from MSL and updated");
+                    calendar.setDescription("Calendar used by CheesecakeUtilities to synchronize with tasks/exams obtained from MSL\n\nCreated On: "
+                            + DateFormat.getDateTimeInstance().format(System.currentTimeMillis()));
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
                     new CalendarAddTask(this, model, client, calendar, "msl-cal-task-id").execute();
@@ -415,6 +416,7 @@ public class MSLActivity extends BaseActivity {
         String[] noHist = new String[1];
         noHist[0] = "No History";
         history.setAdapter(new StringRecyclerAdapter(noHist));
+        adapter = null;
     }
 
     // MSL Data Manipulation

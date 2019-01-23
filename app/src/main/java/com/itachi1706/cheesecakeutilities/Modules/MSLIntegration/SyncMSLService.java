@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -24,6 +25,7 @@ import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
+import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
@@ -44,6 +46,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import io.fabric.sdk.android.Fabric;
 
 import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity.MSL_SP_ACCESS_TOKEN;
 import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity.MSL_SP_GOOGLE_OAUTH;
@@ -78,6 +81,9 @@ public class SyncMSLService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.i(TAG, "Starting MSL Sync Job");
+        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
+        if (!BuildConfig.DEBUG) Fabric.with(fabric);
+
         // Register receiver
         receiver = new MSLServiceReceiver();
         IntentFilter filter = new IntentFilter();
@@ -308,7 +314,8 @@ public class SyncMSLService extends JobService {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
                     calendar.setSummary("MSL Task Calendar Sync");
-                    calendar.setDescription("Calendar used by CheesecakeUtilities to store tasks obtained from MSL and updated");
+                    calendar.setDescription("Calendar used by CheesecakeUtilities to synchronize with tasks/exams obtained from MSL\n\nCreated On: "
+                            + DateFormat.getDateTimeInstance().format(System.currentTimeMillis()));
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
                     updateNotification("Preparing Sync... (Creating new Calendar)", 0, 0, false);
