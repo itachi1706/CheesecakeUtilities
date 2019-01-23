@@ -307,6 +307,9 @@ public class SyncMSLService extends JobService {
         switch (task.toUpperCase()) {
             case "ADD":
                 Log.i(TAG, "MSL Task Sync Calendar created. doing synchronization");
+                // Since there is no calendar, make sure there are no cache
+                FileCacher fc = new FileCacher(this);
+                fc.deleteFile();
                 proceedWithSynchronization();
                 break;
             case "LOAD-TASK-SYNC":

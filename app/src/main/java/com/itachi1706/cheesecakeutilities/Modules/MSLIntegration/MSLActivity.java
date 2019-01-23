@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -30,10 +32,12 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
+import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.ExportFile;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarAddTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.CalendarLoadTask;
@@ -43,7 +47,12 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +60,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -78,7 +88,7 @@ public class MSLActivity extends BaseActivity {
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
 
-    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2;
+    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2, REQUEST_READ_FILE = 3, REQUEST_WRITE_FILE = 4;
 
     private static final String TAG = "MSL-SYNC";
 
@@ -179,12 +189,12 @@ public class MSLActivity extends BaseActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.msl_signout).setEnabled(hasGoogleOAuth());
+        menu.findItem(R.id.msl_export_import).setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO: A way to clear all metrics
         switch (item.getItemId()) {
             case R.id.msl_how_to:
                 Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); // TODO: Implement
@@ -238,10 +248,117 @@ public class MSLActivity extends BaseActivity {
                                     updateHistory();
                                 }).setNeutralButton("Cancel", null).show();
                 break;
+            case R.id.msl_export_import:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    new AlertDialog.Builder(this).setTitle("Export/Import Data")
+                            .setMessage("Please select if you wish to import or export all MSL Data to and from your device\n\n" +
+                                    "Note that sensitive data like your OAuth token and sync options will not be exported/restored")
+                            .setPositiveButton("Export", (dialog, which) -> exportDataPre()).setNegativeButton("Import", ((dialog, which) -> importDataPre()))
+                            .setNeutralButton("Cancel", null).show();
+                } else {
+                    new AlertDialog.Builder(this).setTitle("Operation Failed").setMessage("Your version of Android is too low to allow import/export")
+                            .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                }
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    // Import/Export
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void exportDataPre() {
+        Log.i(TAG, "Requesting file creation for data export");
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/json");
+        intent.putExtra(Intent.EXTRA_TITLE, "msl_sync_options.json");
+        startActivityForResult(intent, REQUEST_WRITE_FILE);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void importDataPre() {
+        Log.i(TAG, "Requestion file to read");
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/json");
+        startActivityForResult(intent, REQUEST_READ_FILE);
+    }
+
+    private void importData(Uri uri) {
+        StringBuilder data = new StringBuilder();
+        try {
+            InputStream is = getContentResolver().openInputStream(uri);
+            if (is == null) {
+                Log.e(TAG, "Data export failed");
+                Toast.makeText(this, "Data export failed!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = br.readLine()) != null) {
+                data.append(line);
+            }
+            br.close();
+            is.close();
+
+            Gson gson = new Gson();
+            ExportFile f = gson.fromJson(data.toString(), ExportFile.class);
+
+            FileCacher c = new FileCacher(this);
+            if (f.getCache() != null) c.writeToFile(f.getCache());
+            SharedPreferences.Editor edit = sp.edit();
+            if (f.getHistory() != null) edit.putString("msl-metric-history", f.getHistory());
+            if (f.getNotificationDismiss()) edit.putBoolean("msl_notification_dismiss", true);
+            if (f.getCalendarId() != null) edit.putString("msl-cal-task-id", f.getCalendarId());
+            if (f.getAccessToken() != null) edit.putString("msl_access_token", f.getAccessToken());
+            edit.apply();
+
+            updateHistory();
+            updateState();
+            updateToggles();
+            Log.i(TAG, "Data Import completed");
+            Toast.makeText(this, "Data has been imported successfully!", Toast.LENGTH_LONG).show();
+        } catch (JsonSyntaxException e1) {
+            Log.e(TAG, "Invalid JSON File Read");
+            Toast.makeText(this, "Data import failed. Please make sure the right file is selected and is not corrupted", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error Importing Data. Check logs for more details", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void exportData(Uri uri) {
+        Log.i(TAG, "Starting Data Export...");
+        ExportFile f = new ExportFile();
+        FileCacher fc = new FileCacher(this);
+        f.setCache(fc.getStringFromFile());
+        f.setHistory(sp.getString("msl-metric-history", null));
+        f.setNotificationDismiss(sp.getBoolean("msl_notification_dismiss", false));
+        f.setCalendarId(sp.getString("msl-cal-task-id", null));
+        f.setAccessToken(sp.getString("msl_access_token", null));
+        Gson gson = new Gson();
+        String json = gson.toJson(f);
+
+        // Save to file
+        try {
+            OutputStream os = getContentResolver().openOutputStream(uri);
+            if (os == null) {
+                Log.e(TAG, "Data export failed");
+                Toast.makeText(this, "Data export failed!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            osw.write(json);
+            osw.close();
+            Log.i(TAG, "Data export completed!");
+            Toast.makeText(this, "Data exported successfully", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error exporting data. Check logs for more info", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     // Checks
@@ -536,6 +653,21 @@ public class MSLActivity extends BaseActivity {
                     CalendarLoadTask.run(this, "", model, client);
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
                 } else chooseAccount();
+                break;
+            case REQUEST_WRITE_FILE:
+                if (resultCode == RESULT_OK && data != null) {
+                    Uri uri = data.getData();
+                    Log.i(TAG, "WRITE Uri: " + uri.toString());
+                    exportData(uri);
+                }
+                break;
+            case REQUEST_READ_FILE:
+                if (resultCode == RESULT_OK && data != null) {
+                    Uri uri = data.getData();
+                    Log.i(TAG, "READ Uri: " + uri.toString());
+                    importData(uri);
+                }
+                break;
         }
     }
 }

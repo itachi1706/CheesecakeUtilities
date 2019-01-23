@@ -4,6 +4,7 @@
     <item android:id="@+id/msl_how-to" android:title="How-to get token" app:showAsAction="never" />
     <item android:id="@+id/msl_clear_hist" android:title="Clear History" app:showAsAction="never" />
     <item android:id="@+id/msl_clear_all" android:title="Clear All Data" app:showAsAction="never" />
+    <item android:id="@+id/msl_export_import" android:title="Export/Import Data" app:showAsAction="never" />
     <item android:id="@+id/msl_signout" android:title="Sign Out" android:enabled="false" app:showAsAction="never" />
     <item android:id="@+id/msl_debug_view_task" android:title="View Saved Tasks" app:showAsAction="never" />
     <item android:id="@+id/msl_debug_view_exam" android:title="View Saved Exams" app:showAsAction="never" />
