@@ -168,6 +168,7 @@ public class SyncMSLService extends JobService {
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void parseMSLData(String data) {
         if (data.equalsIgnoreCase("null")) {
             Log.e(TAG, "An error occurred retrieving data. Stopping job");
@@ -225,7 +226,7 @@ public class SyncMSLService extends JobService {
                     MSLData.Task t1 = taskToAdd.get(pair.getKey());
                     assert t1 != null; // Asserted in if statement
                     taskToAdd.remove(t1.getGuid());
-                    if (!MSLHelper.completeMatch(t1, pair.getValue())) taskToUpdate.put(pair.getKey(), t1); // Update Value
+                    if (!MSLHelper.INSTANCE.completeMatch(t1, pair.getValue())) taskToUpdate.put(pair.getKey(), t1); // Update Value
                 }
             }
         }
@@ -248,7 +249,7 @@ public class SyncMSLService extends JobService {
                     MSLData.Exam e1 = examToAdd.get(pair.getKey());
                     assert e1 != null; // Asserted in if statement
                     examToAdd.remove(e1.getGuid());
-                    if (!MSLHelper.completeMatch(e1, pair.getValue())) examToUpdate.put(pair.getKey(), e1); // Update value
+                    if (!MSLHelper.INSTANCE.completeMatch(e1, pair.getValue())) examToUpdate.put(pair.getKey(), e1); // Update value
                 }
             }
         }

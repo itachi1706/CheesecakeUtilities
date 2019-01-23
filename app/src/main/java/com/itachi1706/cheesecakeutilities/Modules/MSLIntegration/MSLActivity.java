@@ -420,6 +420,7 @@ public class MSLActivity extends BaseActivity {
     }
 
     // MSL Data Manipulation
+    @SuppressWarnings("ConstantConditions")
     private void parseTasks(MSLData data, AlertDialog.Builder builder) {
         HashMap<String, String> subjects = new HashMap<>();
         for (MSLData.Subjects s : data.getSubjects()) {
@@ -441,6 +442,7 @@ public class MSLActivity extends BaseActivity {
         builder.setMessage(sb.toString()).show();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void parseExams(MSLData data, AlertDialog.Builder builder) {
         HashMap<String, String> subjects = new HashMap<>();
         for (MSLData.Subjects s : data.getSubjects()) {

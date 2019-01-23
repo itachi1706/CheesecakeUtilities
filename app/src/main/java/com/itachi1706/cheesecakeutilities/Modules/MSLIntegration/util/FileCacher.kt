@@ -1,18 +1,13 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util
 
-/**
- * Created by Kenneth on 16/1/2019.
- * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util in CheesecakeUtilities
- */
-
 import android.content.Context
 import android.util.Log
 import androidx.annotation.Nullable
 import java.io.*
 
 /**
- * Created by Kenneth on 6/12/2018.
- * for com.itachi1706.busarrivalsg.Util in SingBuses
+ * Created by Kenneth on 16/1/2019.
+ * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util in CheesecakeUtilities
  */
 class FileCacher(private val mContext: Context) {
 
