@@ -339,6 +339,10 @@ public class SyncMSLService extends JobService {
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
             if (intent.getAction() == null) return;
+            Intent launchIntent = new Intent(context, MSLActivity.class);
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+
             if (intent.getAction().equalsIgnoreCase(CalendarAsyncTask.BROADCAST_MSL_ASYNC)) {
                 if (intent.getBooleanExtra("exception", false)) {
                     Exception e = (Exception) intent.getSerializableExtra("error");
@@ -348,9 +352,6 @@ public class SyncMSLService extends JobService {
                         setupNotificationChannel(manager, true);
                     }
                     String errorMessage = "An error has occurred (" + e.getLocalizedMessage() + ")";
-                    Intent launchIntent = new Intent(context, MSLActivity.class);
-                    launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
                     Notification errorNotification = new NotificationCompat.Builder(context, "error-messages").setContentTitle("MSL Sync Error")
                             .setContentText("An error has occurred (" + e.getLocalizedMessage() + ")").setSmallIcon(R.drawable.notification_icon)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nClick to enter the application to do a manual sync")).setContentIntent(pendingIntent).build();
@@ -361,7 +362,19 @@ public class SyncMSLService extends JobService {
                 }
             } else if (intent.getAction().equalsIgnoreCase(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC)) {
                 if (intent.hasExtra("error")) {
+                    // Check if its due to invalid access token
+                    if (intent.hasExtra("accesstokeninvalid") && intent.getBooleanExtra("accesstokeninvalid", false)) {
+                        Notification errorNotification = new NotificationCompat.Builder(context, "error-messages").setContentTitle("MSL Sync Error (Token Expired)")
+                                .setContentText("Your MSL Access Token has expired").setSmallIcon(R.drawable.notification_icon)
+                                .setStyle(new NotificationCompat.BigTextStyle().bigText("Your MSL Access Token has expired!" + "\nClick to enter the application to update your token " +
+                                        "and then press the Sync button to continue syncing"))
+                                .setContentIntent(pendingIntent).build();
+                        manager.notify(new Random().nextInt(), errorNotification);
+                        stopJob(false, false);
+                        return;
+                    }
                     Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
+                    if (intent.hasExtra("message")) Log.e(TAG, "Error Message: " + intent.getStringExtra("message"));
                     stopJob(false, false);
                     return;
                 }

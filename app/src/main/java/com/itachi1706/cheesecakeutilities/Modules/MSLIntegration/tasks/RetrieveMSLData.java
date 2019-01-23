@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +23,7 @@ import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
 public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
 
     public static final String BROADCAST_MSL_DATA_SYNC = "com.itachi1706.cheesecakeutilities.MSL_ASYNC_DATA_MSG";
+    private static final String TAG = "RetrieveMSLData";
 
     private LocalBroadcastManager manager;
     private String siganture, packageName;
@@ -44,9 +46,10 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
         String url = "http://api.itachi1706.com/api/mobile/msl_api.php?authorization=" + strings[0];
         String tmp;
         url += "&sig=" + siganture + "&package=" + packageName;
+        HttpURLConnection conn = null;
         try {
             URL urlConn = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
+            conn = (HttpURLConnection) urlConn.openConnection();
             conn.setConnectTimeout(HTTP_QUERY_TIMEOUT);
             conn.setReadTimeout(HTTP_QUERY_TIMEOUT);
             InputStream in = conn.getInputStream();
@@ -64,8 +67,32 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
             returnIntent.putExtra("data", tmp);
             manager.sendBroadcast(returnIntent);
         } catch (IOException e) {
-            Log.e("RetrieveMSLData", "Exception: " + e.getMessage());
+            if (e instanceof FileNotFoundException) {
+                Log.e(TAG, "FileNotFoundException: " + e.getLocalizedMessage());
+                if (conn != null) {
+                    // Try and figure out if its a 401
+                    try {
+                        int status = conn.getResponseCode();
+                        Log.e(TAG, "Response Code: " + status);
+                        Log.e(TAG, "Response Message: " + conn.getResponseMessage());
+                        if (conn.getResponseMessage().contains("Invalid Access Token")) {
+                            // Token invalid, inform user
+                            returnIntent.putExtra("error", true);
+                            returnIntent.putExtra("accesstokeninvalid", true);
+                            manager.sendBroadcast(returnIntent);
+                            return null;
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } else {
+                Log.e(TAG, "Exception: " + e.getMessage());
+            }
             e.printStackTrace();
+            returnIntent.putExtra("error", true);
+            returnIntent.putExtra("message", e.getLocalizedMessage());
+            manager.sendBroadcast(returnIntent);
         }
 
         return null;
