@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -100,7 +101,7 @@ public class MSLActivity extends BaseActivity {
     @Override
     public String getHelpDescription() {
         return "MSL Synchronization with Google Calendar\n\nRequires manual retrieval of MSL Access Token. " +
-                "More information of how to do so coming soon™";
+                "More information of how to do so is available by selecting the \"How to obtain MSL Token\" guide in the menu";
     }
 
     @Override
@@ -194,7 +195,12 @@ public class MSLActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.msl_how_to:
-                Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show(); // TODO: Implement
+                WebView howTo = new WebView(this);
+                howTo.getSettings().setBuiltInZoomControls(true);
+                howTo.getSettings().setDisplayZoomControls(false);
+                howTo.loadUrl("file:///android_asset/msl/mslhelp.html");
+                new AlertDialog.Builder(this).setTitle("How to obtain MSL Token").setView(howTo)
+                        .setPositiveButton(R.string.dialog_action_positive_close, ((dialog, which) -> dialog.dismiss())).show();
                 break;
             case R.id.msl_signout:
                 credential.setSelectedAccountName(null);
@@ -386,7 +392,7 @@ public class MSLActivity extends BaseActivity {
     private void btnSave() {
         if (isUpdatingState) return;
         til_accessToken.setErrorEnabled(false);
-        if (accessToken.getText().toString().isEmpty()) {
+        if (accessToken.getText() == null || accessToken.getText().toString().isEmpty()) {
             til_accessToken.setError("Please enter an access token");
             til_accessToken.setErrorEnabled(true);
             if (hasToken()) sp.edit().remove(MSL_SP_ACCESS_TOKEN).apply();
@@ -654,6 +660,7 @@ public class MSLActivity extends BaseActivity {
             case REQUEST_WRITE_FILE:
                 if (resultCode == RESULT_OK && data != null) {
                     Uri uri = data.getData();
+                    if (uri == null) break;
                     Log.i(TAG, "WRITE Uri: " + uri.toString());
                     exportData(uri);
                 }
@@ -661,6 +668,7 @@ public class MSLActivity extends BaseActivity {
             case REQUEST_READ_FILE:
                 if (resultCode == RESULT_OK && data != null) {
                     Uri uri = data.getData();
+                    if (uri == null) break;
                     Log.i(TAG, "READ Uri: " + uri.toString());
                     importData(uri);
                 }
