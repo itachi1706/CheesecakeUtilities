@@ -208,6 +208,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
      * @return Reminder object
      */
     private Event.Reminders generateReminder(boolean done, boolean multiReminders) {
+        final String POPUP = "popup";
         Event.Reminders reminders = new Event.Reminders();
         reminders.setUseDefault(false);
         if (done) {
@@ -217,15 +218,15 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         if (multiReminders) {
             // Exam, remind 1 hour, 1 day and 1 week before
             EventReminder[] eventReminders = new EventReminder[] {
-                    new EventReminder().setMethod("popup").setMinutes(60),
-                    new EventReminder().setMethod("popup").setMinutes(60 * 24),
-                    new EventReminder().setMethod("popup").setMinutes(60 * 24 * 7)
+                    new EventReminder().setMethod(POPUP).setMinutes(60),
+                    new EventReminder().setMethod(POPUP).setMinutes(60 * 24),
+                    new EventReminder().setMethod(POPUP).setMinutes(60 * 24 * 7)
             };
             return reminders.setOverrides(Arrays.asList(eventReminders));
         }
 
         // Task, remind at 5PM (7 hours before actual day)
-        return reminders.setOverrides(Collections.singletonList(new EventReminder().setMethod("popup").setMinutes(7 * 60)));
+        return reminders.setOverrides(Collections.singletonList(new EventReminder().setMethod(POPUP).setMinutes(7 * 60)));
     }
 
     private void updateNotification(String extraMessage) {
