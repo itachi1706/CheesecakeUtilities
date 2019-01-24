@@ -206,6 +206,7 @@ public class MSLActivity extends BaseActivity {
                 howTo.getSettings().setDisplayZoomControls(false);
                 howTo.loadUrl("file:///android_asset/msl/mslhelp.html");
                 new AlertDialog.Builder(this).setTitle("How to obtain MSL Token").setView(howTo)
+                        .setNeutralButton("Get Key Automatically (BETA)", ((dialog, which) -> startActivity(new Intent(this, MslWebViewActivity.class))))
                         .setPositiveButton(R.string.dialog_action_positive_close, ((dialog, which) -> dialog.dismiss())).show();
                 break;
             case R.id.msl_signout:
