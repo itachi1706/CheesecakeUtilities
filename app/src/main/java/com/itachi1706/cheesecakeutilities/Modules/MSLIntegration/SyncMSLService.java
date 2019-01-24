@@ -43,6 +43,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.MSLHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -185,6 +186,7 @@ public class SyncMSLService extends JobService {
                     break;
                 default:
                     Toast.makeText(this, "Unimplemented", Toast.LENGTH_LONG).show();
+                    Crashlytics.logException(new IllegalStateException("Reached the wrong place when invoking action " + action));
                     stopJob(false, false);
                     break;
             }
@@ -196,6 +198,7 @@ public class SyncMSLService extends JobService {
     private void parseMSLData(String data) {
         if (data.equalsIgnoreCase("null")) {
             Log.e(TAG, "An error occurred retrieving data. Stopping job");
+            Crashlytics.logException(new FileNotFoundException("Data obtained from MSL is null"));
             stopJob(false, true);
             return;
         }
@@ -410,6 +413,7 @@ public class SyncMSLService extends JobService {
                         return;
                     }
                     Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
+                    Crashlytics.logException(new Exception("SyncMSLSvc: " + (intent.hasExtra(INTENT_MESSAGE) ? intent.getStringExtra(INTENT_MESSAGE) : "Exception occurred")));
                     if (intent.hasExtra(INTENT_MESSAGE)) Log.e(TAG, "Error Message: " + intent.getStringExtra(INTENT_MESSAGE));
                     stopJob(false, true);
                     return;
