@@ -378,7 +378,6 @@
             android:name=".Modules.CEPASReader.activity.SupportedCardsActivity"
             android:label="@string/supported_cards"
             android:screenOrientation="sensorPortrait" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -397,12 +396,14 @@
         <activity
             android:name=".Modules.MSLIntegration.MSLActivity"
             android:label="MSL Sync" />
+        <activity android:name=".Modules.MSLIntegration.MslWebViewActivity"
+            android:label="Attempting to retrieve key..."/>
 
         <service
             android:name=".Modules.MSLIntegration.SyncMSLService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
     </application>
