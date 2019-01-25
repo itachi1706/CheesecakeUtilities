@@ -29,6 +29,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.gson.Gson;
+import com.itachi1706.appupdater.Util.ConnectivityHelper;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
@@ -44,6 +45,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.MSLHelper;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -92,6 +94,14 @@ public class SyncMSLService extends JobService {
         Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
 
+        parameters = params;
+        // Check if network access is available before starting ANYTHING
+        if (!ConnectivityHelper.hasInternetConnection(this)) {
+            Log.e(TAG, "Network Connection not found, delegating to next job instead");
+            cleanup(true);
+            return false;
+        }
+
         // Register receiver
         receiver = new MSLServiceReceiver();
         IntentFilter filter = new IntentFilter();
@@ -116,7 +126,6 @@ public class SyncMSLService extends JobService {
         credential.setSelectedAccountName(sp.getString(MSL_SP_GOOGLE_OAUTH, null));
         client = new Calendar.Builder(AndroidHttp.newCompatibleTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("MSLIntegration/1.0").build();
 
-        parameters = params;
         handleWork((params.getExtras() == null) ? new Bundle() : params.getExtras(), params.getTag());
         return true;
     }
@@ -129,6 +138,7 @@ public class SyncMSLService extends JobService {
     }
 
     private void updateNotification(String description, int max, int progress, boolean indeterminate) {
+        if (serviceNotification == null) return;
         serviceNotification.setContentText(description).setProgress(max, progress, indeterminate);
         serviceNotification.setStyle(new NotificationCompat.BigTextStyle().bigText(description));
         manager.notify(notificationId, serviceNotification.build());
@@ -391,11 +401,18 @@ public class SyncMSLService extends JobService {
                         setupNotificationChannel(manager, true);
                     }
                     String errorMessage = "An error has occurred (" + e.getLocalizedMessage() + ")";
-                    Notification errorNotification = new NotificationCompat.Builder(context, CHANNEL_ERROR).setContentTitle("MSL Sync Error")
+                    NotificationCompat.Builder errorNotification = new NotificationCompat.Builder(context, CHANNEL_ERROR).setContentTitle("MSL Sync Error")
                             .setContentText("An error has occurred (" + e.getLocalizedMessage() + ")").setSmallIcon(R.drawable.notification_icon)
-                            .setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nClick to enter the application to do a manual sync")).setContentIntent(pendingIntent).build();
-                    manager.notify(new Random().nextInt(), errorNotification);
-                    stopJob(false, false);
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nClick to enter the application to do a manual sync\n\nException: " + e.toString()))
+                            .setContentIntent(pendingIntent);
+                    if (e instanceof IOException && e.getMessage().equalsIgnoreCase("NetworkError")) {
+                        errorNotification.setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nRetrying on next sync"));
+                        if (!sp.getBoolean(MSLActivity.MSP_SP_TOGGLE_NOTIF, false)) manager.notify(new Random().nextInt(), errorNotification.build());
+                        stopJob(false, true);
+                    } else {
+                        manager.notify(new Random().nextInt(), errorNotification.build());
+                        stopJob(false, false);
+                    }
                 } else {
                     process(intent.getStringExtra(CalendarAsyncTask.INTENT_DATA));
                 }

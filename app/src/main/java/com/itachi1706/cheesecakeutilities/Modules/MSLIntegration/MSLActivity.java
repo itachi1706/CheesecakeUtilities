@@ -106,7 +106,7 @@ public class MSLActivity extends BaseActivity {
 
     @Override
     public String getHelpDescription() {
-        return "MSL Synchronization with Google Calendar\n\nRequires manual retrieval of MSL Access Token. " +
+        return "MSL Synchronization with Google Calendar\n\nRequires an access token from MSL.\n" +
                 "More information of how to do so is available by selecting the \"How to obtain MSL Token\" guide in the menu";
     }
 
