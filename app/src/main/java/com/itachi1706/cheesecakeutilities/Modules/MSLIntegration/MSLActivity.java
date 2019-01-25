@@ -88,11 +88,11 @@ public class MSLActivity extends BaseActivity {
 
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
     public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
-    public static final String MSP_SP_TOGGLE_TASK = "msl-toggle-task";
-    public static final String MSP_SP_TOGGLE_CAL = "msl-toggle-cal";
-    public static final String MSP_SP_TOGGLE_NOTIF = "msl_notification_dismiss";
-    public static final String MSP_SP_METRIC_HIST = "msl-metric-history";
-    public static final String MSP_SP_TASK_CAL_ID = "msl-cal-task-id";
+    public static final String MSL_SP_TOGGLE_TASK = "msl-toggle-task";
+    public static final String MSL_SP_TOGGLE_CAL = "msl-toggle-cal";
+    public static final String MSL_SP_TOGGLE_NOTIF = "msl_notification_dismiss";
+    public static final String MSL_SP_METRIC_HIST = "msl-metric-history";
+    public static final String MSL_SP_TASK_CAL_ID = "msl-cal-task-id";
 
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2, REQUEST_READ_FILE = 3, REQUEST_WRITE_FILE = 4;
 
@@ -145,7 +145,7 @@ public class MSLActivity extends BaseActivity {
         forceSync.setOnClickListener(v -> btnSync());
         syncTask.setOnCheckedChangeListener((buttonView, isChecked) -> toggleTask(isChecked));
         syncCal.setOnCheckedChangeListener((buttonView, isChecked) -> toggleCal(isChecked));
-        dismissNotification.setOnCheckedChangeListener(((buttonView, isChecked) -> sp.edit().putBoolean(MSP_SP_TOGGLE_NOTIF, isChecked).apply()));
+        dismissNotification.setOnCheckedChangeListener(((buttonView, isChecked) -> sp.edit().putBoolean(MSL_SP_TOGGLE_NOTIF, isChecked).apply()));
 
         // Setup Google Stuff
         credential = GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
@@ -170,9 +170,9 @@ public class MSLActivity extends BaseActivity {
 
     private void updateState() {
         isUpdatingState = true;
-        syncCal.setChecked(sp.getBoolean(MSP_SP_TOGGLE_CAL, false));
-        syncTask.setChecked(sp.getBoolean(MSP_SP_TOGGLE_TASK, false));
-        dismissNotification.setChecked(sp.getBoolean(MSP_SP_TOGGLE_NOTIF, false));
+        syncCal.setChecked(sp.getBoolean(MSL_SP_TOGGLE_CAL, false));
+        syncTask.setChecked(sp.getBoolean(MSL_SP_TOGGLE_TASK, false));
+        dismissNotification.setChecked(sp.getBoolean(MSL_SP_TOGGLE_NOTIF, false));
         accessToken.setText(sp.getString(MSL_SP_ACCESS_TOKEN, ""));
         isUpdatingState = false;
     }
@@ -234,7 +234,7 @@ public class MSLActivity extends BaseActivity {
                     parseExams(data, alert);
                 break;
             case R.id.msl_clear_hist:
-                sp.edit().remove(MSP_SP_METRIC_HIST).apply();
+                sp.edit().remove(MSL_SP_METRIC_HIST).apply();
                 Toast.makeText(this, "History cleared", Toast.LENGTH_LONG).show();
                 updateHistory();
                 break;
@@ -246,9 +246,9 @@ public class MSLActivity extends BaseActivity {
                                     SharedPreferences.Editor spEdit = sp.edit();
                                     spEdit.remove(MSL_SP_ACCESS_TOKEN);
                                     spEdit.remove(MSL_SP_GOOGLE_OAUTH);
-                                    spEdit.remove(MSP_SP_METRIC_HIST);
-                                    spEdit.remove(MSP_SP_TOGGLE_NOTIF);
-                                    spEdit.remove(MSP_SP_TASK_CAL_ID);
+                                    spEdit.remove(MSL_SP_METRIC_HIST);
+                                    spEdit.remove(MSL_SP_TOGGLE_NOTIF);
+                                    spEdit.remove(MSL_SP_TASK_CAL_ID);
                                     spEdit.apply();
                                     credential.setSelectedAccountName(null);
                                     FileCacher f = new FileCacher(getApplicationContext());
@@ -319,9 +319,9 @@ public class MSLActivity extends BaseActivity {
             FileCacher c = new FileCacher(this);
             if (f.getCache() != null) c.writeToFile(f.getCache());
             SharedPreferences.Editor edit = sp.edit();
-            if (f.getHistory() != null) edit.putString(MSP_SP_METRIC_HIST, f.getHistory());
-            if (f.getNotificationDismiss()) edit.putBoolean(MSP_SP_TOGGLE_NOTIF, true);
-            if (f.getCalendarId() != null) edit.putString(MSP_SP_TASK_CAL_ID, f.getCalendarId());
+            if (f.getHistory() != null) edit.putString(MSL_SP_METRIC_HIST, f.getHistory());
+            if (f.getNotificationDismiss()) edit.putBoolean(MSL_SP_TOGGLE_NOTIF, true);
+            if (f.getCalendarId() != null) edit.putString(MSL_SP_TASK_CAL_ID, f.getCalendarId());
             if (f.getAccessToken() != null) edit.putString(MSL_SP_ACCESS_TOKEN, f.getAccessToken());
             edit.apply();
 
@@ -344,9 +344,9 @@ public class MSLActivity extends BaseActivity {
         ExportFile f = new ExportFile();
         FileCacher fc = new FileCacher(this);
         f.setCache(fc.getStringFromFile());
-        f.setHistory(sp.getString(MSP_SP_METRIC_HIST, null));
-        f.setNotificationDismiss(sp.getBoolean(MSP_SP_TOGGLE_NOTIF, false));
-        f.setCalendarId(sp.getString(MSP_SP_TASK_CAL_ID, null));
+        f.setHistory(sp.getString(MSL_SP_METRIC_HIST, null));
+        f.setNotificationDismiss(sp.getBoolean(MSL_SP_TOGGLE_NOTIF, false));
+        f.setCalendarId(sp.getString(MSL_SP_TASK_CAL_ID, null));
         f.setAccessToken(sp.getString(MSL_SP_ACCESS_TOKEN, null));
         Gson gson = new Gson();
         String json = gson.toJson(f);
@@ -390,8 +390,8 @@ public class MSLActivity extends BaseActivity {
             syncTask.setEnabled(true);
         } else {
             // Remove settings if any from SP
-            if (sp.contains(MSP_SP_TOGGLE_CAL)) sp.edit().remove(MSP_SP_TOGGLE_CAL).apply();
-            if (sp.contains(MSP_SP_TOGGLE_TASK)) sp.edit().remove(MSP_SP_TOGGLE_TASK).apply();
+            if (sp.contains(MSL_SP_TOGGLE_CAL)) sp.edit().remove(MSL_SP_TOGGLE_CAL).apply();
+            if (sp.contains(MSL_SP_TOGGLE_TASK)) sp.edit().remove(MSL_SP_TOGGLE_TASK).apply();
             updateState();
         }
     }
@@ -423,12 +423,12 @@ public class MSLActivity extends BaseActivity {
             return;
         }
         // Check if sync is enabled, otherwise dont sync
-        if (!sp.getBoolean(MSP_SP_TOGGLE_TASK, false) && !sp.getBoolean(MSP_SP_TOGGLE_CAL, false)) {
+        if (!sp.getBoolean(MSL_SP_TOGGLE_TASK, false) && !sp.getBoolean(MSL_SP_TOGGLE_CAL, false)) {
             Toast.makeText(this, "Nothing is enabled to be synced. Enable a sync option to continue", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (sp.getBoolean(MSP_SP_TOGGLE_TASK, false)) {
+        if (sp.getBoolean(MSL_SP_TOGGLE_TASK, false)) {
             Bundle manualJob = new Bundle();
             manualJob.putBoolean("manual", true);
             FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
@@ -453,7 +453,7 @@ public class MSLActivity extends BaseActivity {
             return;
         }
 
-        sp.edit().putBoolean(MSP_SP_TOGGLE_TASK, isChecked).apply();
+        sp.edit().putBoolean(MSL_SP_TOGGLE_TASK, isChecked).apply();
 
         // if enabled, check that calendar exists, otherwise create it
         Log.d(TAG, "toggleTask(): " + isChecked);
@@ -468,7 +468,7 @@ public class MSLActivity extends BaseActivity {
             Toast.makeText(this, "Please enter an Access Token to sync your schedule to Google Calendar", Toast.LENGTH_LONG).show();
             return;
         }
-        sp.edit().putBoolean(MSP_SP_TOGGLE_CAL, isChecked).apply();
+        sp.edit().putBoolean(MSL_SP_TOGGLE_CAL, isChecked).apply();
         Toast.makeText(this, "Will be implemented in a future release", Toast.LENGTH_LONG).show();
         // TODO: Note
     }
@@ -485,7 +485,7 @@ public class MSLActivity extends BaseActivity {
                 btnSync();
                 break;
             case "LOAD-TASK":
-                String id = sp.getString(MSP_SP_TASK_CAL_ID, "");
+                String id = sp.getString(MSL_SP_TASK_CAL_ID, "");
                 if (id.isEmpty() || model.get(id) == null) {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
@@ -494,7 +494,7 @@ public class MSLActivity extends BaseActivity {
                             + DateFormat.getDateTimeInstance().format(System.currentTimeMillis()));
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
-                    new CalendarAddTask(this, model, client, calendar, MSP_SP_TASK_CAL_ID).execute();
+                    new CalendarAddTask(this, model, client, calendar, MSL_SP_TASK_CAL_ID).execute();
                     Toast.makeText(this, "Creating calendar for tasks sync", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -511,7 +511,7 @@ public class MSLActivity extends BaseActivity {
 
     private void updateHistory() {
         Log.i(TAG, "Updating Metric History...");
-        String metrics = sp.getString(MSP_SP_METRIC_HIST, "");
+        String metrics = sp.getString(MSL_SP_METRIC_HIST, "");
         if (metrics.isEmpty()) {
             displayEmptyHistory();
             return;

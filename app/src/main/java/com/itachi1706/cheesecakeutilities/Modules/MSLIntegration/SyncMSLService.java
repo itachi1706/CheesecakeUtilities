@@ -151,7 +151,7 @@ public class SyncMSLService extends JobService {
 
         if (serviceNotification != null) {
             serviceNotification.setProgress(0, 0, false).setOngoing(false);
-            if (sp.getBoolean(MSLActivity.MSP_SP_TOGGLE_NOTIF, false)) manager.cancel(notificationId);
+            if (sp.getBoolean(MSLActivity.MSL_SP_TOGGLE_NOTIF, false)) manager.cancel(notificationId);
             else manager.notify(notificationId, serviceNotification.build());
             serviceNotification = null;
         }
@@ -311,10 +311,10 @@ public class SyncMSLService extends JobService {
         String newMetaData = System.currentTimeMillis() + "," + (taskToAdd.size() + examToAdd.size()) + ","
                 + (taskToUpdate.size() + examToUpdate.size()) + "," + (examToRemove.size() + taskToRemove.size()); // (time,add,remove,update:time,add,remove,update:...)
         Log.i(TAG, "Updating metric data: " + newMetaData);
-        String oldString = sp.getString(MSLActivity.MSP_SP_METRIC_HIST, "");
+        String oldString = sp.getString(MSLActivity.MSL_SP_METRIC_HIST, "");
         if (!oldString.isEmpty()) oldString += ":" + newMetaData;
         else oldString = newMetaData;
-        sp.edit().putString(MSLActivity.MSP_SP_METRIC_HIST, oldString).apply();
+        sp.edit().putString(MSLActivity.MSL_SP_METRIC_HIST, oldString).apply();
         Log.i(TAG, "Metric Data Updated");
         MSLTaskSyncTask.run(this, "EXAMTASK", model, client, subjects, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
     }
@@ -350,7 +350,7 @@ public class SyncMSLService extends JobService {
                 proceedWithSynchronization();
                 break;
             case "LOAD-TASK-SYNC":
-                String id = sp.getString(MSLActivity.MSP_SP_TASK_CAL_ID, "");
+                String id = sp.getString(MSLActivity.MSL_SP_TASK_CAL_ID, "");
                 if (id.isEmpty() || model.get(id) == null) {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
@@ -360,7 +360,7 @@ public class SyncMSLService extends JobService {
                     calendar.setTimeZone("Asia/Singapore");
                     calendar.setLocation("Singapore");
                     updateNotification("Preparing Sync... (Creating new Calendar)", 0, 0, false);
-                    new CalendarAddTask(this, model, client, calendar, MSLActivity.MSP_SP_TASK_CAL_ID).execute();
+                    new CalendarAddTask(this, model, client, calendar, MSLActivity.MSL_SP_TASK_CAL_ID).execute();
                     return;
                 }
                 Log.i(TAG, "MSL Task Calendar found. doing synchronization");
@@ -407,7 +407,7 @@ public class SyncMSLService extends JobService {
                             .setContentIntent(pendingIntent);
                     if (e instanceof IOException && e.getMessage().equalsIgnoreCase("NetworkError")) {
                         errorNotification.setStyle(new NotificationCompat.BigTextStyle().bigText(errorMessage + "\nRetrying on next sync"));
-                        if (!sp.getBoolean(MSLActivity.MSP_SP_TOGGLE_NOTIF, false)) manager.notify(new Random().nextInt(), errorNotification.build());
+                        if (!sp.getBoolean(MSLActivity.MSL_SP_TOGGLE_NOTIF, false)) manager.notify(new Random().nextInt(), errorNotification.build());
                         stopJob(false, true);
                     } else {
                         manager.notify(new Random().nextInt(), errorNotification.build());

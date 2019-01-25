@@ -77,7 +77,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
     protected void doInBackground() throws IOException {
         Log.d(TAG, "Syncing calendars for " + action + "...");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        String id = sp.getString(MSLActivity.MSP_SP_TASK_CAL_ID, "");
+        String id = sp.getString(MSLActivity.MSL_SP_TASK_CAL_ID, "");
         if (id.isEmpty()) throw new IllegalStateException("GCal ID is missing");
         totalTasks = taskAdd.size() + taskModify.size() + taskDelete.size() + examDelete.size() + examModify.size() + examAdd.size();
 
