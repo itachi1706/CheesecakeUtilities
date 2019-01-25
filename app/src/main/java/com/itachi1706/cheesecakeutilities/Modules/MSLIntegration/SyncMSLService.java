@@ -112,12 +112,14 @@ public class SyncMSLService extends JobService {
 
         sp = PrefHelper.getDefaultSharedPreferences(this);
         manager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        assert manager != null;
+        if (notificationId != 0 || serviceNotification != null) manager.cancel(notificationId);
 
         serviceNotification = new NotificationCompat.Builder(this, "msl-sync-service").setContentTitle("MSL Calendar Sync")
                 .setContentText("Starting sync...").setSmallIcon(R.drawable.notification_icon).setProgress(0, 0, true).setOngoing(true)
                 .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MSLActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK), 0));
-        notificationId = new Random().nextInt();
+        notificationId = new Random().nextInt(Integer.MAX_VALUE) + 1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) setupNotificationChannel(manager, false);
         manager.notify(notificationId, serviceNotification.build());
 
@@ -154,7 +156,10 @@ public class SyncMSLService extends JobService {
             if (sp.getBoolean(MSLActivity.MSL_SP_TOGGLE_NOTIF, false)) manager.cancel(notificationId);
             else manager.notify(notificationId, serviceNotification.build());
             serviceNotification = null;
+            notificationId = 0;
         }
+
+        if (notificationId != 0) manager.cancel(notificationId); // If somehow there is a notificationId still
 
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
         if (needReschedule) {
