@@ -396,8 +396,9 @@
         <activity
             android:name=".Modules.MSLIntegration.MSLActivity"
             android:label="MSL Sync" />
-        <activity android:name=".Modules.MSLIntegration.MslWebViewActivity"
-            android:label="Attempting to retrieve key..."/>
+        <activity
+            android:name=".Modules.MSLIntegration.MslWebViewActivity"
+            android:label="Attempting to retrieve key..." />
 
         <service
             android:name=".Modules.MSLIntegration.SyncMSLService"
@@ -406,6 +407,10 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name=".Modules.MSLIntegration.MSLCancelNotification"
+            android:enabled="true" />
     </application>
 
 </manifest>

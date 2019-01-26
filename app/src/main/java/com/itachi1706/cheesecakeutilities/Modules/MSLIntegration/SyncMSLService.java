@@ -46,7 +46,9 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -120,6 +122,11 @@ public class SyncMSLService extends JobService {
                 .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MSLActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK), 0));
         notificationId = new Random().nextInt(Integer.MAX_VALUE) + 1;
+
+        Intent cancel = new Intent(this, MSLCancelNotification.class);
+        cancel.putExtra("id", notificationId);
+        PendingIntent pCancel = PendingIntent.getBroadcast(this, 0, cancel, PendingIntent.FLAG_CANCEL_CURRENT);
+        serviceNotification.addAction(new NotificationCompat.Action(0, "Force Dismiss Notification", pCancel));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) setupNotificationChannel(manager, false);
         manager.notify(notificationId, serviceNotification.build());
 
@@ -153,6 +160,18 @@ public class SyncMSLService extends JobService {
 
         if (serviceNotification != null) {
             serviceNotification.setProgress(0, 0, false).setOngoing(false);
+            // Reflection to remove action (this is some next level shit)
+            try {
+                //Use reflection clean up old actions
+                Field f = serviceNotification.getClass().getDeclaredField("mActions");
+                f.setAccessible(true);
+                f.set(serviceNotification, new ArrayList<NotificationCompat.Action>());
+            } catch (NoSuchFieldException e) {
+                // no field
+            } catch (IllegalAccessException e) {
+                // wrong types
+            }
+
             if (sp.getBoolean(MSLActivity.MSL_SP_TOGGLE_NOTIF, false)) manager.cancel(notificationId);
             else manager.notify(notificationId, serviceNotification.build());
             serviceNotification = null;
