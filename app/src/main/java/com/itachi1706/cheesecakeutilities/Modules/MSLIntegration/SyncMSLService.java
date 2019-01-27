@@ -77,6 +77,7 @@ public class SyncMSLService extends JobService {
     private NotificationManager manager;
     private int notificationId;
     private NotificationCompat.Builder serviceNotification;
+    private boolean isSyncing = false;
 
     public static final String ACTION_SYNC_MSL = "msl-sync-task-svc", CHANNEL_ERROR = "error-messages", INTENT_MESSAGE = "message";
 
@@ -117,15 +118,16 @@ public class SyncMSLService extends JobService {
         assert manager != null;
         if (notificationId != 0 || serviceNotification != null) manager.cancel(notificationId);
 
+        Random random = new Random();
         serviceNotification = new NotificationCompat.Builder(this, "msl-sync-service").setContentTitle("MSL Calendar Sync")
                 .setContentText("Starting sync...").setSmallIcon(R.drawable.notification_icon).setProgress(0, 0, true).setOngoing(true)
                 .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MSLActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK), 0));
-        notificationId = new Random().nextInt(Integer.MAX_VALUE) + 1;
+        notificationId = random.nextInt(Integer.MAX_VALUE - 10) + 1;
 
         Intent cancel = new Intent(this, MSLCancelNotification.class);
         cancel.putExtra("id", notificationId);
-        PendingIntent pCancel = PendingIntent.getBroadcast(this, 0, cancel, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pCancel = PendingIntent.getBroadcast(this,  random.nextInt(5000), cancel, PendingIntent.FLAG_CANCEL_CURRENT);
         serviceNotification.addAction(new NotificationCompat.Action(0, "Force Dismiss Notification", pCancel));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) setupNotificationChannel(manager, false);
         manager.notify(notificationId, serviceNotification.build());
@@ -142,15 +144,19 @@ public class SyncMSLService extends JobService {
     @Override
     public boolean onStopJob(JobParameters params) {
         Log.i(TAG, "System invoked. Stopping MSL Sync Job");
+        if (isSyncing) updateNotification("Sync Interrupted. Not all tasks may have finished\n\nStopped at: " + lastDescription, 0, 0, false);
         cleanup(true);
         return false;
     }
+
+    private String lastDescription = "";
 
     private void updateNotification(String description, int max, int progress, boolean indeterminate) {
         if (serviceNotification == null) return;
         serviceNotification.setContentText(description).setProgress(max, progress, indeterminate);
         serviceNotification.setStyle(new NotificationCompat.BigTextStyle().bigText(description));
         manager.notify(notificationId, serviceNotification.build());
+        lastDescription = description;
     }
 
     private void cleanup(boolean needReschedule) {
@@ -201,6 +207,7 @@ public class SyncMSLService extends JobService {
     
     private void stopJob(boolean success, boolean rescheduleJob) {
         Log.i(TAG, "Job finished, stopping");
+        isSyncing = false;
         String datetime = DateFormat.getDateTimeInstance().format(System.currentTimeMillis());
         if (success) updateNotification("Sync completed at " + datetime, 0, 0, false);
         else updateNotification("Sync failed at " + datetime, 0, 0, false);
@@ -216,6 +223,7 @@ public class SyncMSLService extends JobService {
                 case ACTION_SYNC_MSL:
                     // Check that calendar exists
                     updateNotification("Preparing sync... (Checking for existing calendar)", 0, 0, true);
+                    isSyncing = true;
                     CalendarLoadTask.run(this, "TASK-SYNC", model, client);
                     break;
                 default:
@@ -340,6 +348,7 @@ public class SyncMSLService extends JobService {
         else oldString = newMetaData;
         sp.edit().putString(MSLActivity.MSL_SP_METRIC_HIST, oldString).apply();
         Log.i(TAG, "Metric Data Updated");
+        isSyncing = true;
         MSLTaskSyncTask.run(this, "EXAMTASK", model, client, subjects, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
     }
 
@@ -349,6 +358,7 @@ public class SyncMSLService extends JobService {
 
     private void proceedWithSynchronization() {
         updateNotification("Preparing Sync (Retrieving data from MSL)", 0, 0, true);
+        isSyncing = true;
         new RetrieveMSLData(LocalBroadcastManager.getInstance(this), ValidationHelper.getSignatureForValidation(this),
                 this.getPackageName()).execute(sp.getString(MSLActivity.MSL_SP_ACCESS_TOKEN, "-"));
     }
@@ -371,10 +381,12 @@ public class SyncMSLService extends JobService {
                 // Since there is no calendar, make sure there are no cache
                 FileCacher fc = new FileCacher(this);
                 fc.deleteFile();
+                isSyncing = false;
                 proceedWithSynchronization();
                 break;
             case "LOAD-TASK-SYNC":
                 String id = sp.getString(MSLActivity.MSL_SP_TASK_CAL_ID, "");
+                isSyncing = false;
                 if (id.isEmpty() || model.get(id) == null) {
                     Log.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
@@ -417,6 +429,7 @@ public class SyncMSLService extends JobService {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
 
             if (intent.getAction().equalsIgnoreCase(CalendarAsyncTask.BROADCAST_MSL_ASYNC)) {
+                isSyncing = false;
                 if (intent.getBooleanExtra(CalendarAsyncTask.INTENT_EXCEPTION, false)) {
                     Exception e = (Exception) intent.getSerializableExtra(CalendarLoadTask.INTENT_ERROR);
                     manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -441,6 +454,7 @@ public class SyncMSLService extends JobService {
                     process(intent.getStringExtra(CalendarAsyncTask.INTENT_DATA));
                 }
             } else if (intent.getAction().equalsIgnoreCase(RetrieveMSLData.BROADCAST_MSL_DATA_SYNC)) {
+                isSyncing = false;
                 if (intent.hasExtra(CalendarAsyncTask.INTENT_ERROR)) {
                     // Check if its due to invalid access token
                     if (intent.hasExtra("accesstokeninvalid") && intent.getBooleanExtra("accesstokeninvalid", false)) {
