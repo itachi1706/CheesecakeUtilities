@@ -47,6 +47,7 @@ import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -114,6 +115,7 @@ public class MSLActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_msl);
+        CommonMethods.betaInfo(this, "MSL GCalendar Sync");
 
         // Init
         syncTask = findViewById(R.id.msl_task_toggle);
@@ -459,6 +461,10 @@ public class MSLActivity extends BaseActivity {
         Log.d(TAG, "toggleTask(): " + isChecked);
         if (isChecked) {
             CalendarLoadTask.run(this,"TASK", model, client);
+        } else {
+            FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+            dispatcher.cancel(SyncMSLService.ACTION_SYNC_MSL);
+            Toast.makeText(this, "Disabled task", Toast.LENGTH_LONG).show();
         }
     }
 
