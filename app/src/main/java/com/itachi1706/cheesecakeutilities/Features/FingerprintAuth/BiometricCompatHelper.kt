@@ -9,7 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.preference.PreferenceManager
 import android.util.Log
-import androidx.biometrics.BiometricPrompt
+import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import java.util.concurrent.Executor
