@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.protobuf'
 
 repositories {
     maven { url "https://jitpack.io" }
@@ -132,13 +131,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
-    implementation('org.simpleframework:simple-xml:2.7.1') {
-        exclude module: 'stax'
-        exclude module: 'stax-api'
-        exclude module: 'xpp3'
-    }
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    implementation project(':cepaslib')
     // MSL Sync Integration
     implementation 'com.google.api-client:google-api-client-android:1.23.0', {
         exclude group: "org.apache.httpcomponents"
@@ -158,31 +151,6 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.biometric:biometric:1.0.0-alpha02'
-}
-
-protobuf {
-    protoc {
-        // You still need protoc like in the non-Android case
-        artifact = 'com.google.protobuf:protoc:3.0.0'
-    }
-    plugins {
-        javalite {
-            // The codegen for lite comes as a separate artifact
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
-        }
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                // In most cases you don't need the full Java output
-                // if you use the lite output.
-                remove java
-            }
-            task.plugins {
-                javalite {}
-            }
-        }
-    }
 }
 
 apply plugin: 'com.google.gms.google-services'

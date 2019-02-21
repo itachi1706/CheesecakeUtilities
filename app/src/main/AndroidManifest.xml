@@ -25,7 +25,6 @@
         android:required="true" />
 
     <application
-        android:name=".CheesecakeUtilitiesApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -319,65 +318,6 @@
             android:name=".Modules.SGPsi.PsiGraphActivity"
             android:label="SG PSI Graphs"
             android:theme="@style/AppTheme.NoAppBar" />
-        <activity
-            android:name=".Modules.CEPASReader.activity.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="CEPAS Reader"
-            android:screenOrientation="sensorPortrait"
-            tools:ignore="AppLinkUrlError">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="android.intent.action.PICK" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.dir/${applicationId}.card" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Modules.CEPASReader.activity.ReadingTagActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="Scanning Card..."
-            android:launchMode="singleTop"
-            android:noHistory="true"
-            android:screenOrientation="sensorPortrait" />
-        <activity
-            android:name=".Modules.CEPASReader.activity.BackgroundTagActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:enabled="false"
-            android:label="Scan EZ-Link Card"
-            android:launchMode="singleTop"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.nfc.action.TAG_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/filter_nfc" />
-        </activity>
-        <activity
-            android:name=".Modules.CEPASReader.activity.CardInfoActivity"
-            android:configChanges="keyboardHidden|orientation">
-            <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/${applicationId}.card" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Modules.CEPASReader.activity.SupportedCardsActivity"
-            android:label="@string/supported_cards"
-            android:screenOrientation="sensorPortrait" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -390,9 +330,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".Modules.CEPASReader.activity.TripGMapsActivity"
-            android:label="@string/title_activity_trip_gmaps" />
         <activity
             android:name=".Modules.MSLIntegration.MSLActivity"
             android:label="MSL Sync" />
@@ -411,6 +348,22 @@
         <receiver
             android:name=".Modules.MSLIntegration.MSLCancelNotification"
             android:enabled="true" />
+
+        <activity android:name=".Modules.CEPASReader.CEPASActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="CEPAS Reader"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/${applicationId}.card" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
