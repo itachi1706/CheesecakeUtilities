@@ -1,22 +1,16 @@
 package com.itachi1706.cheesecakeutilities;
 
-import android.content.ComponentName;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
-import android.preference.SwitchPreference;
 import android.widget.Toast;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.Modules.CEPASReader.activity.BackgroundTagActivity;
+import com.itachi1706.cepaslib.SettingsHandler;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 
 public class UtilitySettingsActivity extends AppCompatActivity {
 
@@ -40,6 +34,7 @@ public class UtilitySettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.pref_utility);
+            new SettingsHandler(getActivity()).initSettings(this);
 
             SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(getActivity());
 
@@ -56,27 +51,6 @@ public class UtilitySettingsActivity extends AppCompatActivity {
                 preference.setSummary(String.valueOf(newValue));
                 return true;
             });
-
-            SwitchPreference mPreferenceLaunchFromBackground = (SwitchPreference) findPreference("pref_launch_from_background");
-            mPreferenceLaunchFromBackground.setChecked(isLaunchFromBgEnabled());
-            mPreferenceLaunchFromBackground.setOnPreferenceChangeListener((preference, newValue) -> {
-                setLaunchFromBgEnabled((Boolean) newValue);
-                return true;
-            });
-        }
-
-        private boolean isLaunchFromBgEnabled() {
-            ComponentName componentName = new ComponentName(getActivity(), BackgroundTagActivity.class);
-            PackageManager packageManager = getActivity().getPackageManager();
-            int componentEnabledSetting = packageManager.getComponentEnabledSetting(componentName);
-            return componentEnabledSetting == COMPONENT_ENABLED_STATE_ENABLED;
-        }
-
-        private void setLaunchFromBgEnabled(boolean enabled) {
-            ComponentName componentName = new ComponentName(getActivity(), BackgroundTagActivity.class);
-            PackageManager packageManager = getActivity().getPackageManager();
-            int newState = enabled ? COMPONENT_ENABLED_STATE_ENABLED : COMPONENT_ENABLED_STATE_DISABLED;
-            packageManager.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
         }
     }
 }

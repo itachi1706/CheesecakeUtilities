@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.protobuf'
 
 repositories {
     maven { url "https://jitpack.io" }
@@ -85,9 +84,9 @@ ext {
 dependencies {
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -97,13 +96,13 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
     implementation project(':appupdater')
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-config:16.1.2'
-    implementation 'com.google.firebase:firebase-perf:16.2.2'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-config:16.3.0'
+    implementation 'com.google.firebase:firebase-perf:16.2.3'
     implementation 'commons-io:commons-io:2.5'
     implementation 'org.apache.commons:commons-lang3:3.5'
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -117,28 +116,22 @@ dependencies {
     implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar'
     // Application List Utility
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0' // TODO: 2.0.0 breaks a lot of stuff, find time to migrate shit over
     implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:16.0.0'
     // Barcode Tools
-    implementation 'com.google.firebase:firebase-ml-vision:18.0.2'
+    implementation 'com.google.firebase:firebase-ml-vision:19.0.2'
     implementation 'com.google.zxing:core:3.3.1'
     // Lyric Finder
     implementation 'androidx.palette:palette:1.0.0'
     // Vehicle Mileage Tracker
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
-    implementation('org.simpleframework:simple-xml:2.7.1') {
-        exclude module: 'stax'
-        exclude module: 'stax-api'
-        exclude module: 'xpp3'
-    }
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    implementation project(':cepaslib')
     // MSL Sync Integration
     implementation 'com.google.api-client:google-api-client-android:1.23.0', {
         exclude group: "org.apache.httpcomponents"
@@ -153,36 +146,12 @@ dependencies {
     }
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     // Others
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:rules:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.biometric:biometric:1.0.0-alpha02'
-}
-
-protobuf {
-    protoc {
-        // You still need protoc like in the non-Android case
-        artifact = 'com.google.protobuf:protoc:3.0.0'
-    }
-    plugins {
-        javalite {
-            // The codegen for lite comes as a separate artifact
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
-        }
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                // In most cases you don't need the full Java output
-                // if you use the lite output.
-                remove java
-            }
-            task.plugins {
-                javalite {}
-            }
-        }
-    }
+    implementation 'androidx.biometric:biometric:1.0.0-alpha03'
+    implementation 'com.google.guava:guava:27.0.1-android'
 }
 
 apply plugin: 'com.google.gms.google-services'

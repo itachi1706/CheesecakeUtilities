@@ -43,7 +43,7 @@
         <item>.Modules.BarcodeTools.BarcodeParentActivity</item>
         <item>.Modules.LyricFinder.LyricFinderActivity</item>
         <item>.Modules.SGPsi.PsiActivity</item>
-        <item>.Modules.CEPASReader.activity.MainActivity</item>
+        <item>.Modules.CEPASReader.CEPASActivity</item>
         <item>.Modules.MSLIntegration.MSLActivity</item>
     </string-array>
     <string-array name="gamesmenu">
