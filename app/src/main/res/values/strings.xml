@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">[DEV] Cheesecake Utilities</string>
+﻿<resources>
+    <string name="app_name">Cheesecake Utilities</string>
 
     <!-- String to Binary/Hex Converter -->
     <string name="bin_hex_title">BIN/HEX CONVERTER</string>
