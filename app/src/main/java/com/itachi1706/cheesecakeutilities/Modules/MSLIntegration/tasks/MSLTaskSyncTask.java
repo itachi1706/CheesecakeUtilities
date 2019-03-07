@@ -176,7 +176,9 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         if (item.getRoom() != null) description += "\nExam Venue: " + item.getRoom();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy hh:mm aaa z", Locale.getDefault());
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(new DateTime(item.getDate()).getValue());
+        DateTime dtWithTz = new DateTime(item.getDate());
+        cal.setTimeInMillis(dtWithTz.getValue()); // Remove Time Zone Shift in millis
+        cal.add(Calendar.MINUTE, dtWithTz.getTimeZoneShift() * -1);
         description += "\nExam Starts: " + sdf.format(cal.getTime());
         EventDateTime startTime = new EventDateTime().setDateTime(new DateTime(cal.getTimeInMillis()));
         cal.add(Calendar.MINUTE, item.getDuration());
