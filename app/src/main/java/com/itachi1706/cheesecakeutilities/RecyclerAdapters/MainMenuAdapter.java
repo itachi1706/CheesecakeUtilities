@@ -116,7 +116,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.putExtra("globalcheck", true);
                     ShortcutInfo newShortcut = new ShortcutInfo.Builder(v.getContext(), link.replace(" ", ""))
-                            .setShortLabel(link).setLongLabel("Launch this utility directly")
+                            .setShortLabel(link).setLongLabel(link)
                             .setIcon(Icon.createWithResource(v.getContext(), R.mipmap.ic_launcher_round))
                             .setIntent(intent).build();
 
