@@ -1,35 +1,22 @@
 package com.itachi1706.cheesecakeutilities.Modules.WhoisLookup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
+import java.lang.ref.WeakReference;
 
 public class WhoisLookupActivity extends BaseActivity {
 
@@ -59,6 +46,8 @@ public class WhoisLookupActivity extends BaseActivity {
         availLayout = findViewById(R.id.whois_avail_layout);
         inProgress = findViewById(R.id.whois_pb);
 
+        handler = new WhoisHandler(this);
+
         submitBtn.setOnClickListener(this::clickBtn);
     }
 
@@ -81,7 +70,7 @@ public class WhoisLookupActivity extends BaseActivity {
         if(imm != null && imm.isAcceptingText()) { // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
-        new WhoisQuery().execute(inputText);
+        new WhoisQuery(handler).execute(inputText);
     }
 
     private void processResult(String result) {
@@ -110,39 +99,26 @@ public class WhoisLookupActivity extends BaseActivity {
         inProgress.setVisibility(View.INVISIBLE);
     }
 
+    private WhoisHandler handler;
 
-    class WhoisQuery extends AsyncTask<String, Void, Void> {
+    static class WhoisHandler extends Handler {
+
+        private final WeakReference<WhoisLookupActivity> mActivity;
+
+        WhoisHandler(WhoisLookupActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
 
         @Override
-        protected Void doInBackground(String... strings) {
-            String url = "http://api.itachi1706.com/api/whois.php?domain=" + strings[0];
-            Log.i("WhoisQuery", "Querying: " + url);
-            String tmp;
-            try {
-                URL urlConn = new URL(url);
-                HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
-                conn.setConnectTimeout(HTTP_QUERY_TIMEOUT);
-                conn.setReadTimeout(HTTP_QUERY_TIMEOUT);
-                InputStream in = conn.getInputStream();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder str = new StringBuilder();
-                String line;
-                while((line = reader.readLine()) != null)
-                {
-                    str.append(line);
-                }
-                in.close();
-                tmp = str.toString();
-
-                runOnUiThread(() -> {
-                    processResult(tmp);
-                });;
-            } catch (IOException e) {
-                Log.e("WhoisQuery", "Exception: " + e.getMessage());
-                e.printStackTrace();
+        public void handleMessage(Message msg) {
+            WhoisLookupActivity activity = mActivity.get();
+            if (activity == null) return; // Don't do anything
+            switch (msg.what) {
+                case WhoisQuery.WHOIS_RESULT:
+                    activity.processResult((String) msg.obj);
+                    break;
+                default: super.handleMessage(msg); break;
             }
-            return null;
         }
     }
 }
