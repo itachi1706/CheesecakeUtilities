@@ -29,7 +29,7 @@ public class WhoisLookupActivity extends BaseActivity {
 
     @Override
     public String getHelpDescription() {
-        return "This utility queries and retrieves WHOIS data if it is available";
+        return "This utility queries and retrieves WHOIS data for domains and provide information such as domain availability and information";
     }
 
     @Override

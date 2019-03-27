@@ -367,7 +367,7 @@
         </activity>
 
         <activity android:name=".Modules.WhoisLookup.WhoisLookupActivity"
-            android:label="WHOIS Query" />
+            android:label="Domain Whois Query" />
 
     </application>
 

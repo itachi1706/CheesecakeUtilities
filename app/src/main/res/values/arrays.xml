@@ -22,7 +22,7 @@
         <item>SG Weather</item>
         <item>CEPAS Card Reader (BETA)</item>
         <item>MSL Calendar Sync (BETA)</item>
-        <item>WHOIS Query (BETA)</item>
+        <item>Domain Whois Query</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
