@@ -9,9 +9,10 @@ import com.google.gson.JsonObject
 class WhoisObject {
 
     val msg: Int = 0 // Error code
-    val isValiddomain: Boolean = false
-    val isAvailable: Boolean = false
+    val validdomain: Boolean = false
+    val available: Boolean = false
     val raw: String = "No Data"
+    val error: String ?= null
     val domain: String = ""
     val tld: String = ""
     val subdomain: String = ""

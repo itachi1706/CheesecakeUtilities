@@ -10,7 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
@@ -26,8 +29,9 @@ import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
 public class WhoisLookupActivity extends BaseActivity {
 
     private Button submitBtn;
-    private EditText input;
+    private TextInputEditText input;
     private TextView raw;
+    private TextInputLayout inputLayout;
 
     @Override
     public String getHelpDescription() {
@@ -41,16 +45,18 @@ public class WhoisLookupActivity extends BaseActivity {
 
         submitBtn = findViewById(R.id.whois_submit);
         input = findViewById(R.id.whois_entry);
-        raw = findViewById(R.id.whois_entry);
+        raw = findViewById(R.id.whois_raw_output);
+        inputLayout = findViewById(R.id.whois_entry_til);
 
         submitBtn.setOnClickListener(v -> clickBtn());
     }
 
     private void clickBtn() {
+        inputLayout.setErrorEnabled(false);
         String inputText = input.getText().toString();
         if (inputText.isEmpty()) {
-            // TODO: Error Line in edittext
-            Toast.makeText(this, "No input", Toast.LENGTH_LONG).show();
+            inputLayout.setError("No Input Detected");
+            inputLayout.setErrorEnabled(true);
             return;
         }
 
@@ -61,7 +67,21 @@ public class WhoisLookupActivity extends BaseActivity {
     private void processResult(String result) {
         Gson gson = new Gson();
         WhoisObject whois = gson.fromJson(result, WhoisObject.class);
-        raw.setText(whois.getRaw());
+        if (whois.getMsg() != 0) {
+            // Error found
+            if (whois.getError() != null) inputError(whois.getError());
+            return;
+        }
+        if (!whois.getValiddomain()) {
+            inputError("Invalid Domain Entered");
+            return;
+        }
+        raw.setText(whois.getRaw().replace("&quot;", "\"").replace("%gt;", ">").replace("&lt;", "<"));
+    }
+
+    private void inputError(String error) {
+        inputLayout.setError(error);
+        inputLayout.setErrorEnabled(true);
     }
 
 
@@ -70,6 +90,7 @@ public class WhoisLookupActivity extends BaseActivity {
         @Override
         protected Void doInBackground(String... strings) {
             String url = "http://api.itachi1706.com/api/whois.php?domain=" + strings[0];
+            Log.i("WhoisQuery", "Querying: " + url);
             String tmp;
             try {
                 URL urlConn = new URL(url);
