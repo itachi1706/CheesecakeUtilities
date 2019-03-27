@@ -349,7 +349,8 @@
             android:name=".Modules.MSLIntegration.MSLCancelNotification"
             android:enabled="true" />
 
-        <activity android:name=".Modules.CEPASReader.CEPASActivity"
+        <activity
+            android:name=".Modules.CEPASReader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="CEPAS Reader"
             android:screenOrientation="sensorPortrait"
@@ -364,6 +365,10 @@
                 <data android:mimeType="vnd.android.cursor.dir/${applicationId}.card" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Modules.WhoisLookup.WhoisLookupActivity"
+            android:label="WHOIS Query" />
+
     </application>
 
 </manifest>
