@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +32,9 @@ public class WhoisLookupActivity extends BaseActivity {
 
     private Button submitBtn;
     private TextInputEditText input;
-    private TextView raw;
+    private TextView raw, general, availability;
     private TextInputLayout inputLayout;
+    private LinearLayout availLayout;
 
     @Override
     public String getHelpDescription() {
@@ -46,7 +49,10 @@ public class WhoisLookupActivity extends BaseActivity {
         submitBtn = findViewById(R.id.whois_submit);
         input = findViewById(R.id.whois_entry);
         raw = findViewById(R.id.whois_raw_output);
+        general = findViewById(R.id.whois_search);
         inputLayout = findViewById(R.id.whois_entry_til);
+        availability = findViewById(R.id.whois_availability);
+        availLayout = findViewById(R.id.whois_avail_layout);
 
         submitBtn.setOnClickListener(v -> clickBtn());
     }
@@ -61,6 +67,9 @@ public class WhoisLookupActivity extends BaseActivity {
         }
 
         // Query
+        raw.setText(""); // Clear stuff
+        general.setText("");
+        availLayout.setVisibility(View.GONE);
         new WhoisQuery().execute(inputText);
     }
 
@@ -76,7 +85,11 @@ public class WhoisLookupActivity extends BaseActivity {
             inputError("Invalid Domain Entered");
             return;
         }
-        raw.setText(whois.getRaw().replace("&quot;", "\"").replace("%gt;", ">").replace("&lt;", "<"));
+        general.setText("Found " + whois.getDomain() + " from " + whois.getWhoisserver());
+        availability.setText((whois.getAvailable()) ? "AVAILABLE" : "UNAVAILABLE");
+        availability.setTextColor((whois.getAvailable()) ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
+        availLayout.setVisibility(View.VISIBLE);
+        raw.setText(whois.getRaw().replace("&quot;", "\"").replace("&gt;", ">").replace("&lt;", "<"));
     }
 
     private void inputError(String error) {
