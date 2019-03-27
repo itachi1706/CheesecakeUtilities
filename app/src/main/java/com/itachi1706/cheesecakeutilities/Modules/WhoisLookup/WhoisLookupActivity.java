@@ -2,13 +2,16 @@ package com.itachi1706.cheesecakeutilities.Modules.WhoisLookup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class WhoisLookupActivity extends BaseActivity {
     private TextView raw, general, availability;
     private TextInputLayout inputLayout;
     private LinearLayout availLayout;
+    private ProgressBar inProgress;
 
     @Override
     public String getHelpDescription() {
@@ -53,11 +57,12 @@ public class WhoisLookupActivity extends BaseActivity {
         inputLayout = findViewById(R.id.whois_entry_til);
         availability = findViewById(R.id.whois_availability);
         availLayout = findViewById(R.id.whois_avail_layout);
+        inProgress = findViewById(R.id.whois_pb);
 
-        submitBtn.setOnClickListener(v -> clickBtn());
+        submitBtn.setOnClickListener(this::clickBtn);
     }
 
-    private void clickBtn() {
+    private void clickBtn(View v) {
         inputLayout.setErrorEnabled(false);
         String inputText = input.getText().toString();
         if (inputText.isEmpty()) {
@@ -70,6 +75,12 @@ public class WhoisLookupActivity extends BaseActivity {
         raw.setText(""); // Clear stuff
         general.setText("");
         availLayout.setVisibility(View.GONE);
+        inProgress.setVisibility(View.VISIBLE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+        if(imm != null && imm.isAcceptingText()) { // verify if the soft keyboard is open
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
         new WhoisQuery().execute(inputText);
     }
 
@@ -89,12 +100,14 @@ public class WhoisLookupActivity extends BaseActivity {
         availability.setText((whois.getAvailable()) ? "AVAILABLE" : "UNAVAILABLE");
         availability.setTextColor((whois.getAvailable()) ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
         availLayout.setVisibility(View.VISIBLE);
+        inProgress.setVisibility(View.INVISIBLE);
         raw.setText(whois.getRaw().replace("&quot;", "\"").replace("&gt;", ">").replace("&lt;", "<"));
     }
 
     private void inputError(String error) {
         inputLayout.setError(error);
         inputLayout.setErrorEnabled(true);
+        inProgress.setVisibility(View.INVISIBLE);
     }
 
 
