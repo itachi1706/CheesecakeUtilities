@@ -64,6 +64,7 @@
             android:id="@+id/whois_availability"/>
     </LinearLayout>
     <ScrollView
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
@@ -80,7 +81,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:id="@+id/whois_raw_output"/>
         </RelativeLayout>
     </ScrollView>
