@@ -22,6 +22,7 @@
         <item>SG Weather</item>
         <item>CEPAS Card Reader (BETA)</item>
         <item>MSL Calendar Sync (BETA)</item>
+        <item>Domain Whois Query</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -45,6 +46,7 @@
         <item>.Modules.SGPsi.PsiActivity</item>
         <item>.Modules.CEPASReader.CEPASActivity</item>
         <item>.Modules.MSLIntegration.MSLActivity</item>
+        <item>.Modules.WhoisLookup.WhoisLookupActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
