@@ -85,7 +85,9 @@ public class WhoisLookupActivity extends BaseActivity {
             inputError("Invalid Domain Entered");
             return;
         }
-        general.setText("Found " + whois.getDomain() + " from " + whois.getWhoisserver());
+        String genText = "Found " + whois.getDomain() + " from " + whois.getWhoisserver();
+        if (whois.getSubwhois() != null) genText += " with additional data from " + whois.getSubwhois();
+        general.setText(genText);
         availability.setText((whois.getAvailable()) ? "AVAILABLE" : "UNAVAILABLE");
         availability.setTextColor((whois.getAvailable()) ? getResources().getColor(R.color.green) : getResources().getColor(R.color.red));
         availLayout.setVisibility(View.VISIBLE);
