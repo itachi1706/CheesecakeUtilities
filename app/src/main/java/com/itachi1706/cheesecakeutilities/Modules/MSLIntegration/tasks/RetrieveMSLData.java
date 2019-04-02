@@ -46,13 +46,14 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
             manager.sendBroadcast(returnIntent);
             return null; // Nothing to process
         }
-        String url = "http://api.itachi1706.com/api/mobile/msl_api.php?authorization=" + strings[0];
+        String url = "http://api.itachi1706.com/api/mobile/msl_api.php";
         String tmp;
-        url += "&sig=" + siganture + "&package=" + packageName;
+        url += "?sig=" + siganture + "&package=" + packageName;
         HttpURLConnection conn = null;
         try {
             URL urlConn = new URL(url);
             conn = (HttpURLConnection) urlConn.openConnection();
+            conn.setRequestProperty("MSL-Auth", strings[0]);
             conn.setConnectTimeout(HTTP_QUERY_TIMEOUT);
             conn.setReadTimeout(HTTP_QUERY_TIMEOUT);
             InputStream in = conn.getInputStream();

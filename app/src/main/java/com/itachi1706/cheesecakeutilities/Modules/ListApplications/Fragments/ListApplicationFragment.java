@@ -399,6 +399,9 @@ public class ListApplicationFragment extends Fragment {
                     version = pInfo.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    Log.e("PInfoQuery", "Null pointer encountered (" + e.getLocalizedMessage() + ")");
                 }
 
                 AppsItem item = new AppsItem(getContext());

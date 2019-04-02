@@ -144,6 +144,8 @@ public class ConnectivityQuietHoursActivity extends BaseActivity {
         PendingIntent connStartIntent = PendingIntent.getBroadcast(this, startIntent, new Intent(this, className).putExtra("status", true), 0);
         PendingIntent connEndIntent = PendingIntent.getBroadcast(this, endIntent, new Intent(this, className).putExtra("status", false), 0);
         // Cancel all possible pending intents
+        if (alarmManager == null) alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        assert alarmManager != null;
         alarmManager.cancel(connStartIntent);
         alarmManager.cancel(connEndIntent);
         Log.i("QH", "Cleared existing " + name + " Schedules");

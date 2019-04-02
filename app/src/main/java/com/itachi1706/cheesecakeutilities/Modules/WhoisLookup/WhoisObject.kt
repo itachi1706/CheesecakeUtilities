@@ -17,5 +17,6 @@ class WhoisObject {
     val tld: String = ""
     val subdomain: String = ""
     val whoisservers: JsonObject ?= null
-    val whoisserver: String ?= "Unknwon WHOIS Server"
+    val whoisserver: String = "Unknwon WHOIS Server"
+    val subwhois: String ?= null
 }
