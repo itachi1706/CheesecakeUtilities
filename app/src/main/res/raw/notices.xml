@@ -107,4 +107,10 @@
         <copyright>Copyright © 2012 Google Inc.</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
+    <notice>
+        <name>Farebot</name>
+        <url>https://github.com/codebutler/farebot</url>
+        <copyright>Copyright © 2017 Eric Butler (eric@codebutler.com)</copyright>
+        <license>GNU General Public License 3.0</license>
+    </notice>
 </notices>
