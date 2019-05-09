@@ -49,6 +49,8 @@ class BiometricCompatHelper private constructor() {
                 Log.e("BioCompat", "Keyguard died!")
                 return false
             }
+            // TODO: Replace with https://stackoverflow.com/questions/50968732/determine-if-biometric-hardware-is-present-and-the-user-has-enrolled-biometrics for Android Q when we target Q
+            // TODO: Replace deprecated method check if possible if the androidx library releases it, otherwise we will just ignore check for below Q
             val fpCompat = FingerprintManagerCompat.from(context)
             return km.isKeyguardSecure && fpCompat.hasEnrolledFingerprints()
         }
@@ -58,15 +60,12 @@ class BiometricCompatHelper private constructor() {
 
         private fun isBiometricAuthFPAvailable(context: Context): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
-            val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val granted2 = ContextCompat.checkSelfPermission(context, Manifest.permission.USE_BIOMETRIC)
                 if (granted2 != PackageManager.PERMISSION_GRANTED) return false
             }
-            if (granted != PackageManager.PERMISSION_GRANTED) return false
 
-            val fpCompat = FingerprintManagerCompat.from(context)
-            return fpCompat.isHardwareDetected && fpCompat.hasEnrolledFingerprints()
+            return context.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
         }
 
         @JvmOverloads
@@ -76,14 +75,7 @@ class BiometricCompatHelper private constructor() {
 
         fun isScreenLockEnabled(context: Context): Boolean {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return false // Not supported prior to Lollipop
-
-            val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            if (km == null) {
-                Log.e("BioCompat", "Keyguard died!")
-                return false
-            }
-
-            return km.isKeyguardSecure
+            return (context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager).isKeyguardSecure
         }
 
         fun isScreenLockProtectionEnabled(context: Context): Boolean {
