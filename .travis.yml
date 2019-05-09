@@ -32,8 +32,17 @@ env:
     #- ANDROID_TARGET=android-23 ANDROID_ABI=google_apis/armeabi-v7a ANDROID_EMULATOR_API_LEVEL=23
     #- ANDROID_TARGET=android-24 ANDROID_ABI=google_apis/armeabi-v7a ANDROID_EMULATOR_API_LEVEL=24
     #- ANDROID_TARGET=android-24 ANDROID_ABI=arm64-v8a ANDROID_EMULATOR_API_LEVEL=24
-    - ANDROID_TARGET=android-25 ANDROID_ABI=google_apis/armeabi-v7a ANDROID_EMULATOR_API_LEVEL=25
-    - ANDROID_TARGET=android-25 ANDROID_ABI=arm64-v8a ANDROID_EMULATOR_API_LEVEL=25
+    #- ANDROID_TARGET=android-25 ANDROID_ABI=google_apis/armeabi-v7a ANDROID_EMULATOR_API_LEVEL=25
+    #- ANDROID_TARGET=android-25 ANDROID_ABI=arm64-v8a ANDROID_EMULATOR_API_LEVEL=25
+    - ANDROID_TARGET=android-16 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=16
+    - ANDROID_TARGET=android-17 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=17
+    - ANDROID_TARGET=android-18 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=18
+    - ANDROID_TARGET=android-19 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=19
+    - ANDROID_TARGET=android-21 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=21
+    - ANDROID_TARGET=android-22 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=22
+    - ANDROID_TARGET=android-23 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=23
+    - ANDROID_TARGET=android-24 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=24
+    - ANDROID_TARGET=android-25 ANDROID_ABI=google_apis/x86 ANDROID_EMULATOR_API_LEVEL=25
 android:
   components:
     - tools
@@ -45,7 +54,8 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-$ANDROID_EMULATOR_API_LEVEL
-    - sys-img-armeabi-v7a-google_apis-$ANDROID_EMULATOR_API_LEVEL
+    #- sys-img-armeabi-v7a-google_apis-$ANDROID_EMULATOR_API_LEVEL
+    - sys-img-x86-google_apis-$ANDROID_EMULATOR_API_LEVEL
 before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
@@ -55,8 +65,11 @@ before_install:
   - tar xvf secrets.tar
   - android list targets
   - chmod +x gradlew
+  #- travis_retry ./gradlew assembleDebug
+  #- travis_retry ./gradlew assembleDebugAndroidTest
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI --tag $ANDROID_TAG
-  - emulator -avd test -no-skin -no-window &
+  #- emulator -avd test -no-skin -no-window &
+  - emulator -avd test -memory 1500 -no-accel -gpu swiftshader -camera-back none -camera-front none -no-boot-anim -no-snapshot-save -no-snapstorage &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
   - travis_retry ./gradlew assembleDebug
