@@ -86,7 +86,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha03'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -96,15 +96,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
     implementation project(':appupdater')
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-config:16.4.1'
-    implementation 'com.google.firebase:firebase-perf:16.2.4'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-config:17.0.0'
+    implementation 'com.google.firebase:firebase-perf:17.0.0'
     implementation 'commons-io:commons-io:2.5'
-    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
     // Specific Utility Dependencies
@@ -121,14 +121,14 @@ dependencies {
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:16.0.0'
     // Barcode Tools
-    implementation 'com.google.firebase:firebase-ml-vision:19.0.3'
+    implementation 'com.google.firebase:firebase-ml-vision:20.0.0'
     implementation 'com.google.zxing:core:3.3.1'
     // Lyric Finder
     implementation 'androidx.palette:palette:1.0.0'
     // Vehicle Mileage Tracker
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-database:16.1.0'
-    implementation 'com.google.firebase:firebase-auth:16.2.0'
+    implementation 'com.google.firebase:firebase-database:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
     implementation project(':cepaslib')
@@ -146,7 +146,7 @@ dependencies {
     }
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     // Others
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:rules:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
