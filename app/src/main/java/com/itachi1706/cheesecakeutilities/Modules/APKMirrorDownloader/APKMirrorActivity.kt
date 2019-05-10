@@ -30,12 +30,19 @@ import com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.`interface
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.itachi1706.cheesecakeutilities.BaseActivity
 import com.itachi1706.cheesecakeutilities.BuildConfig
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity
 import im.delight.android.webview.AdvancedWebView
 
-class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncResponse {
+class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncResponse {
+
+    // TODO: Error on splash screen now due to base activity. We need to update it
+
+    override fun getHelpDescription(): String {
+        return "A downloader utility to download APK files from APKMirror"
+    }
 
     companion object {
         private const val APKMIRROR_URL = "https://www.apkmirror.com/"
