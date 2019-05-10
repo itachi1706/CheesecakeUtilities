@@ -129,7 +129,7 @@
 
         <fragment
             android:id="@+id/settings_fragment_main"
-            android:name="cf.vojtechh.apkmirror.fragments.PreferencesFragment"
+            android:name="com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.fragment.PreferencesFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/settings_toolbar"
