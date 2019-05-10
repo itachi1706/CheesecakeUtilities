@@ -104,7 +104,7 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
-            setTheme(R.style.AppTheme)
+            setTheme(R.style.AppTheme_NoActionBar)
             setContentView(R.layout.activity_main_apkmirror)
 
             //Views

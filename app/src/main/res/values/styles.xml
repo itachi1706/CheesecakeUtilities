@@ -54,7 +54,7 @@
         <item name="android:textColorPrimary">@color/apkmirrorPrimary</item>
     </style>
 
-    <style name="ApkMirrorSplashTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="ApkMirrorSplashTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@drawable/apkmirror_splash</item>
         <item name="colorPrimary">@color/apkmirrorPrimary</item>
         <item name="colorPrimaryDark">@color/apkmirrorPrimaryDark</item>
