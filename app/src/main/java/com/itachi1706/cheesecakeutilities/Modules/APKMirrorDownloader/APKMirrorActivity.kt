@@ -105,7 +105,7 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
         super.onCreate(savedInstanceState)
         try {
             setTheme(R.style.AppTheme)
-            setContentView(R.layout.activity_main)
+            setContentView(R.layout.activity_main_apkmirror)
 
             //Views
             refreshLayout = findViewById(R.id.refresh_layout)
