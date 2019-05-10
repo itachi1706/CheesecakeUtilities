@@ -32,6 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.itachi1706.cheesecakeutilities.BuildConfig
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity
 import im.delight.android.webview.AdvancedWebView
 
 class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncResponse {
@@ -73,14 +74,7 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
             when (menuItem.itemId) {
                 R.id.navigation_home -> selectNavigationItem(APKMIRROR_URL) //Home pressed
                 R.id.navigation_upload -> selectNavigationItem(APKMIRROR_UPLOAD_URL) //Upload pressed
-                R.id.navigation_settings //Settings pressed
-                -> {
-                    if (firstLoadingView!!.visibility == View.VISIBLE)
-                        firstLoadingView!!.visibility = View.GONE
-                    crossFade(webContainer!!, settingsLayoutFragment!!)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        changeUIColor(ContextCompat.getColor(this@APKMirrorActivity, R.color.apkmirrorPrimary))
-                }
+                R.id.navigation_settings -> startActivity(Intent(this@APKMirrorActivity, UtilitySettingsActivity::class.java)) //Settings pressed
                 R.id.navigation_exit -> finish()
             }
         }
@@ -130,37 +124,12 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
             val link = intent
             val data = link.data
 
-            if (data != null)
-                url = data.toString() //App was opened from browser
-            else {
-                //data is null which means it was either launched from shortcuts or normally
-                val bundle = link.extras
-                if (bundle == null) {
-                    //Normal start from launcher
-                    url = if (saveUrl)
-                        sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!!
-                    else
-                        APKMIRROR_URL
-                } else {
-                    //Ok it was shortcuts, check if it was settings
-                    val bundleUrl = bundle.getString("url")
-                    if (bundleUrl != null) {
-                        if (bundleUrl == "apkmirror://settings") {
-                            //It was settings
-                            url = APKMIRROR_URL
-                            navigation!!.selectedItemId = R.id.navigation_settings
-                            crossFade(webContainer!!, settingsLayoutFragment!!)
-                            settingsShortcut = true
-                        } else
-                            url = bundleUrl
-                    } else {
-                        url = if (saveUrl)
-                            sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!!
-                        else
-                            APKMIRROR_URL
-                    }
-                }
-            }
+            url = data?.toString() //App was opened from browser
+                    ?: //data is null which means it was launched normally
+                            if (saveUrl)
+                                sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!!
+                            else
+                                APKMIRROR_URL
             initWebView(url)
             //I know not the best solution xD
             if (!settingsShortcut) {
