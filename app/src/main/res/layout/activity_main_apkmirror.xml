@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cf.vojtechh.apkmirror.activities.MainActivity">
+    tools:context="com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.APKMirrorActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
@@ -16,7 +16,7 @@
         app:itemIconTint="@color/bottom_bar_selector"
         app:itemTextColor="@color/bottom_bar_selector"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/navigation" />
+        app:menu="@menu/modules_apkmirror_navigation" />
 
     <LinearLayout
         android:id="@+id/first_loading_view"
@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:background="@color/apkmirrorPrimary"
             android:elevation="8dp"
-            app:title="@string/settings"
+            app:title="@string/menu_settings"
             app:titleTextColor="#FFFFFF"
             tools:targetApi="lollipop" />
 

@@ -367,6 +367,21 @@
         <activity android:name=".Modules.WhoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
 
+        <activity android:name=".Modules.APKMirrorDownloader.APKMirrorActivity" android:configChanges="orientation|screenSize" android:hardwareAccelerated="true" android:resizeableActivity="false"
+            android:supportsPictureInPicture="false" android:theme="@style/ApkMirrorSplashTheme" android:label="APKMirror Downloader" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="www.apkmirror.com" />
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="orientation|screenSize" android:theme="@style/ApkMirrorSearch" android:name=".Modules.APKMirrorDownloader.SearchActivity" />
+
     </application>
 
 </manifest>

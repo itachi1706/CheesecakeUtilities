@@ -34,7 +34,7 @@ import com.itachi1706.cheesecakeutilities.BuildConfig
 import com.itachi1706.cheesecakeutilities.R
 import im.delight.android.webview.AdvancedWebView
 
-class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncResponse {
+class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncResponse {
 
     companion object {
         private const val APKMIRROR_URL = "https://www.apkmirror.com/"
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
                         firstLoadingView!!.visibility = View.GONE
                     crossFade(webContainer!!, settingsLayoutFragment!!)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        changeUIColor(ContextCompat.getColor(this@MainActivity, R.color.apkmirrorPrimary))
+                        changeUIColor(ContextCompat.getColor(this@APKMirrorActivity, R.color.apkmirrorPrimary))
                 }
                 R.id.navigation_exit -> finish()
             }
@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun runAsync(url: String) {
         //getting apps
         val pageAsync = PageAsync()
-        pageAsync.response = this@MainActivity
+        pageAsync.response = this@APKMirrorActivity
         pageAsync.execute(url)
     }
 
@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
             if (dialog.inputEditText != null)
                 webView!!.loadUrl("https://www.apkmirror.com/?s=" + dialog.inputEditText!!.text)
             else
-                Toast.makeText(this@MainActivity, getString(R.string.search_error), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@APKMirrorActivity, getString(R.string.search_error), Toast.LENGTH_SHORT).show()
         }.negativeText(android.R.string.cancel).show()
     }
 
@@ -309,9 +309,9 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun download(url: String, name: String) {
         if (!sharedPreferences!!.getBoolean("apkmirror_external_download", false)) {
             if (AdvancedWebView.handleDownload(this, url, name))
-                Toast.makeText(this@MainActivity, getString(R.string.download_started), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@APKMirrorActivity, getString(R.string.download_started), Toast.LENGTH_SHORT).show()
             else
-                Toast.makeText(this@MainActivity, getString(R.string.cant_download), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@APKMirrorActivity, getString(R.string.cant_download), Toast.LENGTH_SHORT).show()
         } else
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
@@ -353,7 +353,7 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         } else
             clr = Color.parseColor("#F47D20")
 
-        val window = this@MainActivity.window
+        val window = this@APKMirrorActivity.window
         window.statusBarColor = clr
     }
 
@@ -427,9 +427,9 @@ class MainActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRespons
         if (isWritePermissionGranted)
             download(url, suggestedFilename)
         else
-            MaterialDialog.Builder(this@MainActivity).title(R.string.write_permission).content(R.string.storage_access)
+            MaterialDialog.Builder(this@APKMirrorActivity).title(R.string.write_permission).content(R.string.storage_access)
                     .positiveText(R.string.request_permission).negativeText(android.R.string.cancel)
-                    .onPositive { _, _ -> ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1) }
+                    .onPositive { _, _ -> ActivityCompat.requestPermissions(this@APKMirrorActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1) }
                     .show()
     }
 

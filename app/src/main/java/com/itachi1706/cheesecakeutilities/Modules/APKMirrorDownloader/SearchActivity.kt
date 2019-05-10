@@ -18,7 +18,7 @@ class SearchActivity : AppCompatActivity() {
         MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).theme(Theme.LIGHT)
                 .negativeText(android.R.string.cancel).input(R.string.search, R.string.nothing) { _, _ -> }
                 .onPositive { dialog, _ ->
-                    val i = Intent(this@SearchActivity, MainActivity::class.java)
+                    val i = Intent(this@SearchActivity, APKMirrorActivity::class.java)
                     if (dialog.inputEditText != null)
                         i.putExtra("url", "https://www.apkmirror.com/?s=" + dialog.inputEditText!!.text)
                     else
