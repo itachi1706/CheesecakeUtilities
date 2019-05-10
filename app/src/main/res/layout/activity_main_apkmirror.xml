@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
+        android:visibility="gone"
         app:itemBackground="@color/white"
         app:itemIconTint="@color/bottom_bar_selector"
         app:itemTextColor="@color/bottom_bar_selector"
@@ -107,36 +108,6 @@
             app:fabSize="normal"
             app:useCompatPadding="true"
             tools:ignore="RelativeOverlap" />
-
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/settings_layout_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/navigation"
-        android:visibility="gone">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/settings_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/apkmirrorPrimary"
-            android:elevation="8dp"
-            app:title="@string/menu_settings"
-            app:titleTextColor="#FFFFFF"
-            tools:targetApi="lollipop" />
-
-        <fragment
-            android:id="@+id/settings_fragment_main"
-            android:name="com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.fragment.PreferencesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/settings_toolbar"
-            tools:layout="@android:layout/preference_category" />
-
-
-    </RelativeLayout>
-
 
 </RelativeLayout>

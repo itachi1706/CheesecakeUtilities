@@ -50,7 +50,6 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
     private var fabSearch: FloatingActionButton? = null
 
     private var refreshLayout: SwipeRefreshLayout? = null
-    private var settingsLayoutFragment: RelativeLayout? = null
     private var webContainer: RelativeLayout? = null
     private var progressBarContainer: FrameLayout? = null
     private var firstLoadingView: LinearLayout? = null
@@ -59,7 +58,6 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
     private var previsionThemeColor: Int = Color.parseColor("#FF8B14")
     private var sharedPreferences: SharedPreferences? = null
 
-    private var settingsShortcut = false
     private var triggerAction = true
 
     private var nfcAdapter: NfcAdapter? = null
@@ -105,7 +103,6 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
             refreshLayout = findViewById(R.id.refresh_layout)
             progressBar = findViewById(R.id.main_progress_bar)
             navigation = findViewById(R.id.navigation)
-            settingsLayoutFragment = findViewById(R.id.settings_layout_fragment)
             webContainer = findViewById(R.id.web_container)
             firstLoadingView = findViewById(R.id.first_loading_view)
             webView = findViewById(R.id.main_webview)
@@ -131,14 +128,16 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
                             else
                                 APKMIRROR_URL
             initWebView(url)
-            //I know not the best solution xD
-            if (!settingsShortcut) {
-                firstLoadingView!!.visibility = View.VISIBLE
-                Handler().postDelayed({
-                    if (firstLoadingView!!.visibility == View.VISIBLE)
-                        crossFade(firstLoadingView!!, webContainer!!)
-                }, 2000)
-            }
+
+            // Load Splash Screen (Hacky yes)
+            firstLoadingView!!.visibility = View.VISIBLE
+            firstLoadingView!!.bringToFront()
+            Handler().postDelayed({
+                if (firstLoadingView!!.visibility == View.VISIBLE) {
+                    crossFade(firstLoadingView!!, webContainer!!)
+                    crossFade(null, navigation!!)
+                }
+            }, 2000)
         } catch (e: RuntimeException) {
             if (BuildConfig.DEBUG) e.printStackTrace()
             MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
@@ -176,6 +175,9 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
     override fun onResume() {
         super.onResume()
         webView!!.onResume()
+
+        if (navigation!!.selectedItemId == R.id.navigation_settings)
+            navigation!!.selectedItemId = R.id.navigation_home
     }
 
     override fun onPause() {
@@ -210,20 +212,15 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
     }
 
     override fun onBackPressed() {
-        if (settingsLayoutFragment!!.visibility != View.VISIBLE) {
-            if (!webView!!.onBackPressed()) return
-        } else {
-            crossFade(settingsLayoutFragment!!, webContainer!!)
-            if (webView != null && webView!!.url == APKMIRROR_UPLOAD_URL) {
-                triggerAction = false
-                navigation!!.selectedItemId = R.id.navigation_upload
-            } else {
-                triggerAction = false
-                navigation!!.selectedItemId = R.id.navigation_home
-            }
-            return
+        if (webView != null && webView!!.url == APKMIRROR_UPLOAD_URL) navigation!!.selectedItemId = R.id.navigation_home // Go back to main
+        else if (webView != null && webView!!.url == APKMIRROR_URL) super.onBackPressed() // Base URL so lets exit
+        else if (webView != null) webView!!.goBack() // Back 1 page
+        else {
+            // Go back to main
+            triggerAction = false
+            navigation!!.selectedItemId = R.id.navigation_home
         }
-        super.onBackPressed()
+        return
     }
 
 
@@ -252,23 +249,14 @@ class APKMirrorActivity : AppCompatActivity(), AdvancedWebView.Listener, AsyncRe
     }
 
     private fun selectNavigationItem(url: String) {
-        if (settingsLayoutFragment!!.visibility != View.VISIBLE)
-            webView!!.loadUrl(url) //settings is not visible, Load url
-        else {
-            //settings is visible, gonna hide it
-            if (webView!!.url != url)
-                webView!!.loadUrl(url)
-            crossFade(settingsLayoutFragment!!, webContainer!!)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                changeUIColor(previsionThemeColor)
-        }
+        webView!!.loadUrl(url)
     }
 
-    private fun crossFade(toHide: View, toShow: View) {
+    private fun crossFade(toHide: View?, toShow: View) {
         toShow.alpha = 0f
         toShow.visibility = View.VISIBLE
         toShow.animate().alpha(1f).setDuration(shortAnimDuration!!.toLong()).setListener(null)
-        toHide.animate().alpha(0f).setDuration(shortAnimDuration!!.toLong()).setListener(object : AnimatorListenerAdapter() {
+        toHide?.animate()?.alpha(0f)?.setDuration(shortAnimDuration!!.toLong())?.setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 toHide.visibility = View.GONE
             }
