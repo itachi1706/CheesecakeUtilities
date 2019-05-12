@@ -18,6 +18,7 @@ import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.FirebaseApp;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 
@@ -47,6 +48,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     @Override
     public void onCreate() {
         super.onCreate();
+        FirebaseApp.initializeApp(this);
         Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
         mm = (MediaSessionManager) this.getSystemService(Context.MEDIA_SESSION_SERVICE);

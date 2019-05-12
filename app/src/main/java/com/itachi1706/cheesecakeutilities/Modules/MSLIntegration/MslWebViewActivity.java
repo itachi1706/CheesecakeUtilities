@@ -48,7 +48,8 @@ public class MslWebViewActivity extends AppCompatActivity {
                     Log.d(TAG, "Key found! (" + key + ")");
                     new AlertDialog.Builder(MslWebViewActivity.this).setTitle("Key found")
                             .setMessage("Key detected! Your Access Key is: " + key + "\n\n" +
-                                    "Click OK to save the key and exit, otherwise click cancel to just exit\nIf this is not the correct key, click Continue to go on")
+                                    "Click OK to save the key and exit, otherwise click cancel to just exit\nIf this is not the correct key or if you received the expired key notification and has" +
+                                    " yet to relog into the site, click Continue to go on")
                             .setPositiveButton(android.R.string.ok, ((dialog, which) -> {
                                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                 sp.edit().putString(MSLActivity.MSL_SP_ACCESS_TOKEN, key).apply();

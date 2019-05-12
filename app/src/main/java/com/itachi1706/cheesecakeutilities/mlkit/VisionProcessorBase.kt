@@ -69,13 +69,13 @@ abstract class VisionProcessorBase<T> protected constructor() : VisionImageProce
      * Detects feature from given media.Image
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    override fun process(image: Image, rotation: Int, graphicOverlay: GraphicOverlay) {
+    override fun process(bitmap: Image, rotation: Int, graphicOverlay: GraphicOverlay) {
         if (shouldThrottle.get()) {
             return
         }
         // This is for overlay display's usage
-        val frameMetadata = FrameMetadata.Builder().setWidth(image.width).setHeight(image.height).build()
-        val fbVisionImage = FirebaseVisionImage.fromMediaImage(image, rotation)
+        val frameMetadata = FrameMetadata.Builder().setWidth(bitmap.width).setHeight(bitmap.height).build()
+        val fbVisionImage = FirebaseVisionImage.fromMediaImage(bitmap, rotation)
         detectInVisionImage(fbVisionImage, frameMetadata, graphicOverlay)
     }
 

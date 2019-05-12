@@ -132,13 +132,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         @Override
         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
             super.onAuthenticationSucceeded(result);
-            runOnUiThread(() -> {
-                Toast.makeText(mContext, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
-                Log.i(TAG, "User Authenticated");
-                setResult(RESULT_OK);
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
-                finish();
-            });
+            runOnUiThread(() -> authenticatedMessage());
         }
 
         @Override
@@ -148,24 +142,25 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
     };
 
+    private void authenticatedMessage() {
+        Toast.makeText(mContext, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
+        Log.i(TAG, "User Authenticated");
+        setResult(RESULT_OK);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == INTENT_AUTH_SL) {
-            switch (resultCode) {
-                case RESULT_OK:
-                    Toast.makeText(mContext, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
-                    Log.i(TAG, "User Authenticated");
-                    setResult(RESULT_OK);
-                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
-                    finish();
-                    break;
-                default:
-                    Intent intent = new Intent();
-                    Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Authentication Error (" + resultCode + "): ACTION_FAILED_OR_CANCELLED");
-                    intent.putExtra(INTENT_MSG, "Authentication Error: ACTION_FAILED_OR_CANCELLED");
-                    setResult(RESULT_CANCELED, intent);
-                    finish();
+            if (resultCode == RESULT_OK) authenticatedMessage();
+            else {
+                Intent intent = new Intent();
+                Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Authentication Error (" + resultCode + "): ACTION_FAILED_OR_CANCELLED");
+                intent.putExtra(INTENT_MSG, "Authentication Error: ACTION_FAILED_OR_CANCELLED");
+                setResult(RESULT_CANCELED, intent);
+                finish();
             }
         } else super.onActivityResult(requestCode, resultCode, data);
     }
