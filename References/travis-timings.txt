@@ -1,0 +1,56 @@
+Ideally what works right now, get total time:
+#906.6: armeabi-v7a - 22 - after: 37 mins 6 seconds (retry 2)
+#906.7: armeabi-v7a - 23 - after: 
+#914.1: arm64-v8a - 23 - after: 30 mins 44 seconds (retry 1)
+#914.2: arm64-v8a - 24 - after: 28 mins 19 seconds (retry 1)
+
+#907.6: armeabi-v7a - 22 - before: 45 mins 19 seconds (retry 3)
+#907.7: armeabi-v7a - 23 - before: 
+#915.1: arm64-v8a - 23 - before: 26 mins 11 seconds (retry 2)
+#915.2: arm64-v8a - 24 - before: 28 mins 29 seconds (retry 1)
+
+
+Format: API: [after emu start] Job # - Time (s) - Status (P/F/E) - Error/OK | [before emu start] Job# - Time (s) - Status (P/F/E) - Error/OK 
+
+Note: Installation fails, Root Hierachy Errors might be normal?
+Note: Emulation Creation Error dies at "emulator: WARNING: x86_64 emulation may not work without hardware acceleration!"
+
+armeabi-v7a
+16: 906.1 - 175.41 - F - Unknown Option "pm install -d"		| 907.1 - 152.50 - F - Unknown Option "pm install -d"
+17: 906.2 - 184.79 - F - No Test Found?				| 907.2 - 166.60 - F - No Test Found
+18: 906.3 - Unknown - E - Cannot start emu			| 907.3 - Unknown - E - Cannot Start Emu
+19: 906.4 - 282 - F - No Test Found?				| 907.4 - 248.71 - F - No Test Found
+21: 906.5 - 564.96 - E - Emu Timeout				| 907.5 - 553.26 - F - Emu Timeout
+22: 906.6 - 365.51 - P - OK					| 907.6 - 389.58 - P - OK
+23: 906.7 - 4501.3 - F - Waited for the root hierachy Error	| 907.7 - 448.15 - F - Waited for the root hierachy Error
+24: 906.8 - Unknown - E - Cannot start emu (1 Try)		| 907.8 - Unknown - E - Cannot start emu
+25: 908.1 - Unknown - E - Cannot start emu			| 909.1 - Unknown - E - Cannot start emu
+
+arm64-v8a
+24: 914.1 - 230.74 - P - OK		| 915.1 - 167.3 - P - OK
+25: 914.2 - 198.22 - P - OK		| 915.2 - 196.53 - P - OK
+
+# Says support from here: https://travis-ci.community/t/add-kvm-support/1406/9
+x86
+16: 910.1 - Unknown - E - Emulator Creation		| 911.1 - Unknown - E - Emulator Creation
+17: 910.2 - Unknown - E - Emulator Creation		| 911.2 - Unknown - E - Emulator Creation
+18: 910.3 - Unknown - E - Emulator Creation		| 911.3 - Unknown - E - Emulator Creation
+19: 910.4 - Unknown - E - Emulator Creation		| 911.4 - Unknown - E - Emulator Creation
+21: 910.5 - Unknown - E - Emulator Creation		| 911.5 - Unknown - E - Emulator Creation
+22: 910.6 - Unknown - E - Emulator Creation		| 911.6 - Unknown - E - Emulator Creation
+23: 910.7 - Unknown - E - Emulator Creation		| 911.7 - Unknown - E - Emulator Creation
+24: 910.8 - Unknown - E - Emulator Creation		| 911.8 - Unknown - E - Emulator Creation
+25: 910.9 - Unknown - E - Emulator Creation		| 911.9 - Unknown - E - Emulator Creation
+26: 912.1 - Unknown - E - Emulator Creation		| 913.1 - Unknown - E - Emulator Creation
+27: 912.2 - Unknown - E - Emulator missing kernel	| 913.2 - Unknown - E - Emulator missing kernel
+28: 912.3 - Unknown - E - Emulator missing kernel	| 913.2 - Unknown - E - Emulator missing kernel
+
+x86_64
+21: 916.1 - Unknown - E - Emulator Creation		| 917.1 - Unknown - E - Emulator Creation
+22: 916.2 - Unknown - E - Emulator Creation		| 917.2 - Unknown - E - Emulator Creation
+23: 916.3 - Unknown - E - Emulator Creation		| 917.3 - Unknown - E - Emulator Creation
+24: 916.4 - Unknown - E - Emulator Creation		| 917.4 - Unknown - E - Emulator Creation
+25: 916.5 - Unknown - E - Emulator Creation		| 917.5 - Unknown - E - Emulator Creation
+26: 916.6 - Unknown - E - Emulator Creation		| 917.6 - Unknown - E - Emulator Creation
+27: 916.7 - Unknown - E - Invalid ABI			| 917.7 - Unknown - E - Invalid ABI
+28: 916.8 - Unknown - E - Emulator Creation		| 917.8 - Unknown - E - Emulator Creation
