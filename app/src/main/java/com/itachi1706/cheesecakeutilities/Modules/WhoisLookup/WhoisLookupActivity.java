@@ -13,12 +13,12 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.lang.ref.WeakReference;
 
-public class WhoisLookupActivity extends BaseActivity {
+public class WhoisLookupActivity extends BaseModuleActivity {
 
     private Button submitBtn;
     private TextInputEditText input;

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetHelper;
@@ -29,7 +29,7 @@ import java.util.Locale;
 
 import static com.google.android.gms.common.GoogleApiAvailability.GOOGLE_PLAY_SERVICES_VERSION_CODE;
 
-public class SafetyNetActivity extends BaseActivity {
+public class SafetyNetActivity extends BaseModuleActivity {
 
     private static final String API_KEY = BuildConfig.GOOGLE_VERIFICATION_API_KEY;
 

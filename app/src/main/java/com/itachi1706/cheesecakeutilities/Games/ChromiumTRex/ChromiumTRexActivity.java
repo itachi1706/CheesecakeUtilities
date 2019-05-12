@@ -6,10 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
-public class ChromiumTRexActivity extends BaseActivity {
+public class ChromiumTRexActivity extends BaseModuleActivity {
 
     WebView webView;
 

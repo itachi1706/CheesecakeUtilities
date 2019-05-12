@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.appupdater.Util.DeprecationHelper;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
@@ -44,7 +44,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
-public class FanfictionCompactorActivity extends BaseActivity {
+public class FanfictionCompactorActivity extends BaseModuleActivity {
 
     TextView folder, database, folderSize, storyCount;
     Button startServiceBtn, storyButton, duplicateButton;

@@ -2,16 +2,17 @@ package com.itachi1706.cheesecakeutilities;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
-public class BmiCalculatorActivity extends BaseActivity {
+public class BmiCalculatorActivity extends BaseModuleActivity {
 
     EditText height, weight;
     Button table, calculate;

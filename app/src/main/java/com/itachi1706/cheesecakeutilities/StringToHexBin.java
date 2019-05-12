@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 
-public class StringToHexBin extends BaseActivity implements View.OnClickListener {
+public class StringToHexBin extends BaseModuleActivity implements View.OnClickListener {
 
     TextView input, result;
 

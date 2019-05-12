@@ -13,14 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.ColorUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-public class PsiActivity extends BaseActivity {
+public class PsiActivity extends BaseModuleActivity {
     
     private TextView psiRange, psiNorth, psiSouth, psiEast, psiWest, psiCentral, psiNational;
     private TextView pmRange, pmNorth, pmSouth, pmEast, pmWest, pmCentral;

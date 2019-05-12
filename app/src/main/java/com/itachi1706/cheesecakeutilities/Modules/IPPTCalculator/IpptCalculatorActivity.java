@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Main;
@@ -28,7 +28,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.SITUP;
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.UNKNOWN;
 
-public class IpptCalculatorActivity extends BaseActivity {
+public class IpptCalculatorActivity extends BaseModuleActivity {
 
     private Spinner genderSpinner, ageSpinner;
     private EditText runMin, runSec, pushup, situp;

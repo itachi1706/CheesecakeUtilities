@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
@@ -24,14 +24,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 /**
  * Created by Kenneth on 28/7/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker in CheesecakeUtilities
  */
-public class VehicleMileageTrackerLoginActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private ProgressBar progress;
     private static final String TAG = "VehicleMileageLogin";

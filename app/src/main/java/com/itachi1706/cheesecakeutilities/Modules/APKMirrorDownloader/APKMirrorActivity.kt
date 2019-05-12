@@ -22,27 +22,20 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.`interface`.AsyncResponse
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.itachi1706.cheesecakeutilities.BaseActivity
-import com.itachi1706.cheesecakeutilities.BuildConfig
-import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity
+import com.itachi1706.cheesecakeutilities.*
 import im.delight.android.webview.AdvancedWebView
 
 class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncResponse {
+    override val helpDescription: String
+        get() = "A downloader utility to download APK files from APKMirror"
 
     // TODO: Error on splash screen now due to base activity. We need to update it
-
-    override fun getHelpDescription(): String {
-        return "A downloader utility to download APK files from APKMirror"
-    }
 
     companion object {
         private const val APKMIRROR_URL = "https://www.apkmirror.com/"
