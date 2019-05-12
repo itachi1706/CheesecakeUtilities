@@ -38,7 +38,7 @@
             android:maxHeight="130dp"
             android:minWidth="130dp"
             android:minHeight="130dp"
-            android:contentDescription="@string/splash_image_desc"
+            android:contentDescription="@string/apkmirror_splash_image_desc"
             android:src="@drawable/apkmirror_splash_image" />
 
         <ProgressBar

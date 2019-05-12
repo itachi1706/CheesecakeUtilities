@@ -24,11 +24,14 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.`interface`.AsyncResponse
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.itachi1706.cheesecakeutilities.*
+import com.itachi1706.cheesecakeutilities.BaseActivity
+import com.itachi1706.cheesecakeutilities.BuildConfig
+import com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.`interface`.AsyncResponse
+import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity
 import im.delight.android.webview.AdvancedWebView
 
 class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncResponse {
@@ -140,8 +143,8 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
             }, 2000)
         } catch (e: RuntimeException) {
             if (BuildConfig.DEBUG) e.printStackTrace()
-            MaterialDialog.Builder(this).title(R.string.error).content(R.string.runtime_error_dialog_content)
-                    .positiveText(android.R.string.ok).neutralText(R.string.copy_log).onPositive { _, _ -> finish() }.onNeutral { _, _ ->
+            MaterialDialog.Builder(this).title(R.string.apkmirror_error).content(R.string.apkmirror_runtime_error_dialog_content)
+                    .positiveText(android.R.string.ok).neutralText(R.string.apkmirror_copy_log).onPositive { _, _ -> finish() }.onNeutral { _, _ ->
                         // Gets a handle to the clipboard service.
                         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         // Creates a new text clip to put on the clipboard
@@ -196,9 +199,9 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
         super.onStop()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        super.onActivityResult(requestCode, resultCode, intent)
-        webView!!.onActivityResult(requestCode, resultCode, intent)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        webView!!.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -232,11 +235,11 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
     }
 
     private fun search() {
-        MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).input(R.string.search, R.string.nothing) { _, _ -> }.onPositive { dialog, _ ->
+        MaterialDialog.Builder(this).title(R.string.apkmirror_search).inputRange(1, 100).input(R.string.apkmirror_search, R.string.apkmirror_nothing) { _, _ -> }.onPositive { dialog, _ ->
             if (dialog.inputEditText != null)
                 webView!!.loadUrl("https://www.apkmirror.com/?s=" + dialog.inputEditText!!.text)
             else
-                Toast.makeText(this@APKMirrorActivity, getString(R.string.search_error), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@APKMirrorActivity, getString(R.string.apkmirror_search_error), Toast.LENGTH_SHORT).show()
         }.negativeText(android.R.string.cancel).show()
     }
 
@@ -266,9 +269,9 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun download(url: String, name: String) {
         if (!sharedPreferences!!.getBoolean("apkmirror_external_download", false)) {
             if (AdvancedWebView.handleDownload(this, url, name))
-                Toast.makeText(this@APKMirrorActivity, getString(R.string.download_started), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@APKMirrorActivity, getString(R.string.apkmirror_download_started), Toast.LENGTH_SHORT).show()
             else
-                Toast.makeText(this@APKMirrorActivity, getString(R.string.cant_download), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@APKMirrorActivity, getString(R.string.apkmirror_cant_download), Toast.LENGTH_SHORT).show()
         } else
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
@@ -372,8 +375,8 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
 
     override fun onPageError(errorCode: Int, description: String, failingUrl: String) {
         if (errorCode == -2) {
-            MaterialDialog.Builder(this).title(R.string.error).content(getString(R.string.error_while_loading_page) + " " + failingUrl + "(" + errorCode + " " + description + ")")
-                    .positiveText(R.string.refresh).negativeText(android.R.string.cancel).neutralText("Dismiss").onPositive { dialog, _ ->
+            MaterialDialog.Builder(this).title(R.string.apkmirror_error).content(getString(R.string.apkmirror_error_while_loading_page) + " " + failingUrl + "(" + errorCode + " " + description + ")")
+                    .positiveText(R.string.apkmirror_refresh).negativeText(android.R.string.cancel).neutralText("Dismiss").onPositive { dialog, _ ->
                         webView!!.reload()
                         dialog.dismiss()
                     }.onNegative { _, _ -> finish() }.onNeutral { materialDialog, _ -> materialDialog.dismiss() }.show()
@@ -384,8 +387,8 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
         if (isWritePermissionGranted)
             download(url, suggestedFilename)
         else
-            MaterialDialog.Builder(this@APKMirrorActivity).title(R.string.write_permission).content(R.string.storage_access)
-                    .positiveText(R.string.request_permission).negativeText(android.R.string.cancel)
+            MaterialDialog.Builder(this@APKMirrorActivity).title(R.string.apkmirror_write_permission).content(R.string.apkmirror_storage_access)
+                    .positiveText(R.string.apkmirror_request_permission).negativeText(android.R.string.cancel)
                     .onPositive { _, _ -> ActivityCompat.requestPermissions(this@APKMirrorActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1) }
                     .show()
     }

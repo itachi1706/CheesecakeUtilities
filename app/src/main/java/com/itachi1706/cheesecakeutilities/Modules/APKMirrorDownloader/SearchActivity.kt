@@ -15,14 +15,14 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        MaterialDialog.Builder(this).title(R.string.search).inputRange(1, 100).theme(Theme.LIGHT)
-                .negativeText(android.R.string.cancel).input(R.string.search, R.string.nothing) { _, _ -> }
+        MaterialDialog.Builder(this).title(R.string.apkmirror_search).inputRange(1, 100).theme(Theme.LIGHT)
+                .negativeText(android.R.string.cancel).input(R.string.apkmirror_search, R.string.apkmirror_nothing) { _, _ -> }
                 .onPositive { dialog, _ ->
                     val i = Intent(this@SearchActivity, APKMirrorActivity::class.java)
                     if (dialog.inputEditText != null)
                         i.putExtra("url", "https://www.apkmirror.com/?s=" + dialog.inputEditText!!.text)
                     else
-                        Toast.makeText(this@SearchActivity, getString(R.string.search_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SearchActivity, getString(R.string.apkmirror_search_error), Toast.LENGTH_SHORT).show()
                     startActivity(i)
                     finish()
                 }.onNegative { _, _ -> finish() }.show()
