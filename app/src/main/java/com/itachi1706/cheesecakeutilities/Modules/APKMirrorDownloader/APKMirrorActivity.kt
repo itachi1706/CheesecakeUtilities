@@ -20,13 +20,17 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.itachi1706.appupdater.Util.NotifyUserUtil
 import com.itachi1706.cheesecakeutilities.BaseActivity
 import com.itachi1706.cheesecakeutilities.BuildConfig
 import com.itachi1706.cheesecakeutilities.Modules.APKMirrorDownloader.`interface`.AsyncResponse
@@ -37,8 +41,6 @@ import im.delight.android.webview.AdvancedWebView
 class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncResponse {
     override val helpDescription: String
         get() = "A downloader utility to download APK files from APKMirror"
-
-    // TODO: Error on splash screen now due to base activity. We need to update it
 
     companion object {
         private const val APKMIRROR_URL = "https://www.apkmirror.com/"
@@ -239,7 +241,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
             if (dialog.inputEditText != null)
                 webView!!.loadUrl("https://www.apkmirror.com/?s=" + dialog.inputEditText!!.text)
             else
-                Toast.makeText(this@APKMirrorActivity, getString(R.string.apkmirror_search_error), Toast.LENGTH_SHORT).show()
+                NotifyUserUtil.createShortToast(this@APKMirrorActivity, getString(R.string.apkmirror_search_error))
         }.negativeText(android.R.string.cancel).show()
     }
 
@@ -269,9 +271,9 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
     private fun download(url: String, name: String) {
         if (!sharedPreferences!!.getBoolean("apkmirror_external_download", false)) {
             if (AdvancedWebView.handleDownload(this, url, name))
-                Toast.makeText(this@APKMirrorActivity, getString(R.string.apkmirror_download_started), Toast.LENGTH_SHORT).show()
+                NotifyUserUtil.createShortToast(this@APKMirrorActivity, getString(R.string.apkmirror_download_started))
             else
-                Toast.makeText(this@APKMirrorActivity, getString(R.string.apkmirror_cant_download), Toast.LENGTH_SHORT).show()
+                NotifyUserUtil.createShortToast(this@APKMirrorActivity, getString(R.string.apkmirror_cant_download))
         } else
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }

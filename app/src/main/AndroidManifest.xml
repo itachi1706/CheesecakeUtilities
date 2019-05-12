@@ -380,7 +380,6 @@
                 <data android:host="www.apkmirror.com" />
             </intent-filter>
         </activity>
-        <activity android:configChanges="orientation|screenSize" android:theme="@style/ApkMirrorSearch" android:name=".Modules.APKMirrorDownloader.SearchActivity" />
 
     </application>
 
