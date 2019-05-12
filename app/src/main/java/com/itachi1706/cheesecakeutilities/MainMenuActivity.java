@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -19,9 +23,6 @@ import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 import io.fabric.sdk.android.Fabric;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -39,14 +40,14 @@ public class MainMenuActivity extends AppCompatActivity {
         Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         AnalyticsHelper helper = new AnalyticsHelper(this, true);
-        CAAnalytics analytics = helper.getData();
-        if (analytics != null) {
-            // Update Firebase Analytics User Properties
-            setAnalyticsData(true, firebaseAnalytics, analytics);
-        } else {
-            setAnalyticsData(false, firebaseAnalytics, null);
-        }
+        final Runnable analyticsRunner = () -> {
+            CAAnalytics analytics = helper.getData();
+            if (analytics != null) setAnalyticsData(true, firebaseAnalytics, analytics); // Update Firebase Analytics User Properties
+            else setAnalyticsData(false, firebaseAnalytics, null);
+        };
+        analyticsRunner.run();
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
 
         setContentView(R.layout.activity_main_menu_tabbed);
@@ -64,7 +65,7 @@ public class MainMenuActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         // Do Authentication
-        boolean authagain = !this.getIntent().hasExtra("authagain") || this.getIntent().getExtras().getBoolean("authagain");
+        boolean authagain = this.getIntent().getBooleanExtra("authagain", false);
         if (!authagain) {
             checkForUpdate();
             return;
@@ -106,7 +107,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void checkForUpdate() {
-        new AppUpdateInitializer(this, sp, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL, true).checkForUpdate(true);
+        new AppUpdateInitializer(this, sp, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL, true).setOnlyOnWifiCheck(true).checkForUpdate();
     }
 
     @Override
