@@ -43,13 +43,7 @@ class BmiCalculatorModuleActivityTest {
 
     @Before
     fun unlockScreen() {
-        val activity = mActivityTestRule.activity
-        val wakeUpDevice = {
-            activity.setTurnScreenOn(true)
-            activity.setShowWhenLocked(true)
-            activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-        activity.runOnUiThread(wakeUpDevice)
+        TestHelper.wakeUpDevice(mActivityTestRule)
     }
 
     @Test
