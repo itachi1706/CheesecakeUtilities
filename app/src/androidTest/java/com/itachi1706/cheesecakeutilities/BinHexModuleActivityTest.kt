@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
