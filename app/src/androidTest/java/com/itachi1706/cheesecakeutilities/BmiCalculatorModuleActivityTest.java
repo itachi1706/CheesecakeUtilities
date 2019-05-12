@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeutilities;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;

@@ -82,20 +82,19 @@ ext {
 }
 
 dependencies {
+    // Espresso Test Dependencies
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1-beta01'
+    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0-beta01'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    // JUnit Test Dependencies
+    testImplementation 'junit:junit:4.12'
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0-alpha4', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'design'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-    }
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
     implementation project(':appupdater')
     implementation 'com.google.android.material:material:1.0.0'
@@ -147,8 +146,6 @@ dependencies {
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.biometric:biometric:1.0.0-alpha04'
     implementation 'com.google.guava:guava:27.0.1-android'
