@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -37,45 +36,34 @@ class BmiCalculatorModuleActivityTest {
     @Test
     fun bmiCalculatorModuleActivityTest() {
         val appCompatTextView = onView(allOf(withId(R.id.text1), withText("BMI Calculator"), childAtPosition(allOf(withId(R.id.main_menu_recycler_view),
-                childAtPosition(ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")), 0)), 7), isDisplayed()))
+                childAtPosition(withClassName(Matchers.`is`("android.widget.LinearLayout")), 0)), 7), isDisplayed()))
         appCompatTextView.perform(click())
 
-        val textInputEditText = onView(
-                allOf(withId(R.id.etHeight), isDisplayed()))
+        val textInputEditText = onView(allOf(withId(R.id.etHeight), isDisplayed()))
         textInputEditText.perform(click())
 
-        val textInputEditText2 = onView(
-                allOf(withId(R.id.etHeight), isDisplayed()))
+        val textInputEditText2 = onView(allOf(withId(R.id.etHeight), isDisplayed()))
         textInputEditText2.perform(replaceText("179"), closeSoftKeyboard())
 
-        val textInputEditText3 = onView(
-                allOf(withId(R.id.etWeight), isDisplayed()))
+        val textInputEditText3 = onView(allOf(withId(R.id.etWeight), isDisplayed()))
         textInputEditText3.perform(replaceText("80"), closeSoftKeyboard())
 
-        val appCompatButton = onView(
-                allOf(withId(R.id.btnCalculate), withText("Calculate BMI"), isDisplayed()))
+        val appCompatButton = onView(allOf(withId(R.id.btnCalculate), withText("Calculate BMI"), isDisplayed()))
         appCompatButton.perform(click())
 
-        val textView = onView(
-                allOf(withId(R.id.tvResults),
-                        isDisplayed()))
+        val textView = onView(allOf(withId(R.id.tvResults), isDisplayed()))
         textView.check(matches(withText("BMI Value: 24.97\nStatus: Normal")))
 
-        val textInputEditText4 = onView(
-                allOf(withId(R.id.etWeight), withText("80"), isDisplayed()))
+        val textInputEditText4 = onView(allOf(withId(R.id.etWeight), withText("80"), isDisplayed()))
         textInputEditText4.perform(click())
 
-        val textInputEditText5 = onView(
-                allOf(withId(R.id.etWeight), isDisplayed()))
+        val textInputEditText5 = onView(allOf(withId(R.id.etWeight), isDisplayed()))
         textInputEditText5.perform(replaceText("90"), closeSoftKeyboard())
 
-        val appCompatButton2 = onView(
-                allOf(withId(R.id.btnCalculate), withText("Calculate BMI"), isDisplayed()))
+        val appCompatButton2 = onView(allOf(withId(R.id.btnCalculate), withText("Calculate BMI"), isDisplayed()))
         appCompatButton2.perform(click())
 
-        val textView2 = onView(
-                allOf(withId(R.id.tvResults),
-                        isDisplayed()))
+        val textView2 = onView(allOf(withId(R.id.tvResults), isDisplayed()))
         textView2.check(matches(withText("BMI Value: 28.09\nStatus: Overweight")))
 
     }
