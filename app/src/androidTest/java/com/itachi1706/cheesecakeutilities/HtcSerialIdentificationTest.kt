@@ -35,24 +35,22 @@ class HtcSerialIdentificationTest {
 
     @Test
     fun htcSerialIdentificationTest() {
-        val appCompatTextView = onView(allOf(withId(R.id.text1), withText("HTC Serial Number Identification"), childAtPosition(allOf(withId(R.id.main_menu_recycler_view),
+        val mainMenu = onView(allOf(withId(R.id.text1), withText("HTC Serial Number Identification"), childAtPosition(allOf(withId(R.id.main_menu_recycler_view),
                 childAtPosition(withClassName(Matchers.`is`("android.widget.LinearLayout")), 0)), 2), isDisplayed()))
-        appCompatTextView.perform(click())
+        mainMenu.perform(click())
 
-        val textInputEditText = onView(allOf(withId(R.id.htc_sn_serialField), isDisplayed()))
-        textInputEditText.perform(click())
+        val inputEditText = onView(allOf(withId(R.id.htc_sn_serialField), isDisplayed()))
+        inputEditText.perform(click())
+        inputEditText.perform(replaceText("SH1111111111"), closeSoftKeyboard())
 
-        val textInputEditText2 = onView(allOf(withId(R.id.htc_sn_serialField), isDisplayed()))
-        textInputEditText2.perform(replaceText("SH1111111111"), closeSoftKeyboard())
+        val searchButton = onView(allOf(withId(R.id.btn_htc_sn_search), withText("Search"), isDisplayed()))
+        searchButton.perform(click())
 
-        val appCompatButton = onView(allOf(withId(R.id.btn_htc_sn_search), withText("Search"), isDisplayed()))
-        appCompatButton.perform(click())
+        val serialEditText = onView(allOf(withId(R.id.htc_sn_serialField), childAtPosition(childAtPosition(withId(R.id.til_htc_sn_serialField), 0), 0), isDisplayed()))
+        serialEditText.check(matches(withText("SH1111111111")))
 
-        val editText = onView(allOf(withId(R.id.htc_sn_serialField), childAtPosition(childAtPosition(withId(R.id.til_htc_sn_serialField), 0), 0), isDisplayed()))
-        editText.check(matches(withText("SH1111111111")))
-
-        val textView = onView(allOf(withId(R.id.tv_htc_sn_result), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 3), isDisplayed()))
-        textView.check(matches(withText("Result for S/N SH1111111111\nManufactured At: Shanghai, China\nHtcSerialNumberDates of Manufacture: 1 January 2011")))
+        val resultTextView = onView(allOf(withId(R.id.tv_htc_sn_result), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 3), isDisplayed()))
+        resultTextView.check(matches(withText("Result for S/N SH1111111111\nManufactured At: Shanghai, China\nHtcSerialNumberDates of Manufacture: 1 January 2011")))
     }
 
     private fun childAtPosition(
