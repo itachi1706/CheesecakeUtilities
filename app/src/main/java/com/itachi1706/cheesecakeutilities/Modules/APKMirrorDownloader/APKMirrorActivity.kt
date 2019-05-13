@@ -126,12 +126,12 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
             val link = intent
             val data = link.data
 
-            url = data?.toString() //App was opened from browser
-                    ?: //data is null which means it was launched normally
+            url = data?.toString()
+                    ?:
                             if (saveUrl)
-                                sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!!
+                                sharedPreferences!!.getString("apkmirror_last_url", APKMIRROR_URL)!! //App was opened from browser
                             else
-                                APKMIRROR_URL
+                                APKMIRROR_URL //data is null which means it was launched normally
             initWebView(url)
 
             // Load Splash Screen (Hacky yes)

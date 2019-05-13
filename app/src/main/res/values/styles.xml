@@ -50,10 +50,6 @@
     </style>
 
     <!-- Special Module Themes -->
-    <style name="ApkMirrorSearch" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:textColorPrimary">@color/apkmirrorPrimary</item>
-    </style>
-
     <style name="ApkMirrorSplashTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowBackground">@drawable/apkmirror_splash</item>
         <item name="colorPrimary">@color/apkmirrorPrimary</item>
