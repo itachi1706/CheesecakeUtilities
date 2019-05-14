@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.itachi1706.appupdater.EasterEggResMusicPrefFragment;
 import com.itachi1706.appupdater.SettingsInitializer;
 import com.itachi1706.appupdater.Util.PrefHelper;
@@ -14,7 +16,6 @@ import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.BiometricComp
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
-import androidx.appcompat.app.AppCompatActivity;
 import de.psdev.licensesdialog.LicensesDialog;
 
 
@@ -32,17 +33,14 @@ public class GeneralSettingsActivity extends AppCompatActivity {
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
      */
-    @SuppressWarnings("ConstantConditions")
     public static class GeneralPreferenceFragment extends EasterEggResMusicPrefFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
 
-            new SettingsInitializer(getActivity(), R.drawable.notification_icon,
-                    CommonVariables.BASE_SERVER_URL, getResources().getString(R.string.link_legacy),
-                    getResources().getString(R.string.link_updates), true)
-                    .explodeUpdaterSettings(this);
+            new SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(getActivity(), R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL,
+                    getResources().getString(R.string.link_legacy), getResources().getString(R.string.link_updates), this);
             super.addEggMethods(true, preference -> {
                 new LicensesDialog.Builder(getActivity()).setNotices(R.raw.notices)
                         .setIncludeOwnLicense(true).build().show();

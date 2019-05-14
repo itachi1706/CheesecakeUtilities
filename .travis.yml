@@ -48,7 +48,6 @@ before_install:
   - chmod +x gradlew
   - chmod +x ./travisscript/startemu.sh
   - ./travisscript/startemu.sh
-  - adb shell input keyevent 82 &
   - travis_retry ./gradlew assembleDebug
   - travis_retry ./gradlew assembleDebugAndroidTest
 script: if [ $ESPRESSO -eq 1 ]; then travis_retry travis_wait ./gradlew connectedAndroidTest -x assembleDebug -x assembleDebugAndroidTest; else travis_retry travis_wait ./gradlew test -x assembleDebug -x assembleDebugAndroidTest; fi
