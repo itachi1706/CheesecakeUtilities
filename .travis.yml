@@ -25,6 +25,9 @@ env:
   matrix:
     - ESPRESSO=1 # Espresso Instrumentation Tests
     - ESPRESSO=0 # Unit Tests
+matrix:
+    allow_failures:
+        - env: ESPRESSO=1
 android:
   components:
     - tools
