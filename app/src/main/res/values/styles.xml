@@ -49,4 +49,12 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <!-- Special Module Themes -->
+    <style name="ApkMirrorSplashTheme" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/apkmirror_splash</item>
+        <item name="colorPrimary">@color/apkmirrorPrimary</item>
+        <item name="colorPrimaryDark">@color/apkmirrorPrimaryDark</item>
+        <item name="colorAccent">@color/apkmirrorAccent</item>
+    </style>
+
 </resources>

@@ -22,7 +22,7 @@ import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
-public class SpamMessages extends BaseActivity implements View.OnClickListener {
+public class SpamMessages extends BaseModuleActivity implements View.OnClickListener {
 
     private EditText messageText, teleText, numberText;
 

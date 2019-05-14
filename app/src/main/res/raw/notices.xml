@@ -6,6 +6,12 @@
         <license>Apache Software License 2.0</license>
     </notice>
     <notice>
+        <name>Jetpack Libraries (androidx)</name>
+        <url>https://developer.android.com/jetpack/androidx</url>
+        <copyright>Copyright © 2015 The Android Open Source Project</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
         <name>Apache Commons IO</name>
         <url>http://commons.apache.org/io/</url>
         <copyright>Copyright © 2002-2017 The Apache Software Foundation</copyright>
@@ -112,5 +118,17 @@
         <url>https://github.com/codebutler/farebot</url>
         <copyright>Copyright © 2017 Eric Butler (eric@codebutler.com)</copyright>
         <license>GNU General Public License 3.0</license>
+    </notice>
+    <notice>
+        <name>AdvancedWebView</name>
+        <url>https://github.com/delight-im/Android-AdvancedWebView</url>
+        <copyright>Copyright (c) delight.im (https://www.delight.im/)</copyright>
+        <license>MIT License</license>
+    </notice>
+    <notice>
+        <name>jsoup: Java HTML Parser</name>
+        <url>https://github.com/jhy/jsoup/</url>
+        <copyright>Copyright © Jonathan Hedley (jonathan@hedley.net)</copyright>
+        <license>MIT License</license>
     </notice>
 </notices>

@@ -6,13 +6,13 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Fragments.ListApplicationFragment;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Fragments.RestoreAppFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
-public class ListApplicationsActivity extends BaseActivity {
+public class ListApplicationsActivity extends BaseModuleActivity {
 
     @Override
     public String getHelpDescription() {

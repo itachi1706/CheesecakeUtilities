@@ -8,12 +8,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Random;
 
-public class TicTacToeActivity extends BaseActivity implements Button.OnClickListener {
+public class TicTacToeActivity extends BaseModuleActivity implements Button.OnClickListener {
 
     //Init Stuff
     private Button r11,r12,r13,r21,r22,r23,r31,r32,r33,btnStart,btnReset;

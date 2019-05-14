@@ -289,6 +289,27 @@
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
 
+    <!-- APKMirror -->
+    <string name="apkmirror_upload">Upload</string>
+    <string name="apkmirror_browse">Browse</string>
+    <string name="apkmirror_storage_access">This app needs to have a permission to write to external storage in order to save files. (You need to click the download button again)</string>
+    <string name="apkmirror_request_permission">Request permission</string>
+    <string name="apkmirror_write_permission">Write permission</string>
+    <string name="apkmirror_error">Error</string>
+    <string name="apkmirror_error_while_loading_page">An error occurred while loading this page: </string>
+    <string name="apkmirror_download_started">Download started…</string>
+    <string name="apkmirror_search">Search</string>
+    <string name="apkmirror_splash_image_desc">The Splash Image</string>
+    <string name="apkmirror_cant_download">Can\'t start download, please make sure you have download manager installed.</string>
+    <string name="apkmirror_save_url_pref">Remember last url</string>
+    <string name="apkmirror_refresh">Refresh</string>
+    <string name="apkmirror_nothing" translatable="false" />
+    <string name="apkmirror_external_download_summ">Use apps like ADM or Download Accelerator to download apks</string>
+    <string name="apkmirror_external_download_pref">Use external download app</string>
+    <string name="apkmirror_runtime_error_dialog_content">A Runtime error occurred,make sure you have webview package installed.</string>
+    <string name="apkmirror_copy_log">Copy log</string>
+    <string name="apkmirror_search_error">Error while getting text from search dialog</string>
+
     <!-- Unsorted/Misc/General -->
     <string name="loading_label">Loading…</string>
     <string name="placeholder_text">Text Here</string>

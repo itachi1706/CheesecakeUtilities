@@ -11,7 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
 import android.view.WindowManager;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.SystemInformation.Fragments.BatteryFragment;
 import com.itachi1706.cheesecakeutilities.Modules.SystemInformation.Fragments.DeviceFragment;
 import com.itachi1706.cheesecakeutilities.Modules.SystemInformation.Fragments.GpuFragment;
@@ -23,7 +23,7 @@ import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Locale;
 
-public class ParentFragmentActivity extends BaseActivity {
+public class ParentFragmentActivity extends BaseModuleActivity {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;

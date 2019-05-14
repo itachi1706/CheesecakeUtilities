@@ -35,7 +35,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.ExportFile;
@@ -74,7 +74,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Created by Kenneth on 12/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
  */
-public class MSLActivity extends BaseActivity {
+public class MSLActivity extends BaseModuleActivity {
 
     SignInButton googleSignIn;
     SwitchCompat syncTask, syncCal, dismissNotification;

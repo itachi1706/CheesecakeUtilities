@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class CameraDisablerActivity extends BaseActivity {
+public class CameraDisablerActivity extends BaseModuleActivity {
 
     public static final String DEVICE_ADMIN_BROADCAST = "com.itachi1706.cheesecakeutilities.DEVICE_ADMIN_BROADCAST";
     private static final int DEVICE_ADMIN_REQUEST = 4;

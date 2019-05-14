@@ -21,4 +21,8 @@
     <color name="blue">#0000FF</color>
     <color name="indigo">#4B0082</color>
     <color name="violet">#9400D3</color>
+    <color name="apkmirrorPrimary">#FF8B14</color>
+    <color name="apkmirrorPrimaryDark">#F47D20</color>
+    <color name="apkmirrorAccent">#FF8B14</color>
+    <color name="inactive_tabs">#747474</color>
 </resources>

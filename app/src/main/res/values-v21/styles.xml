@@ -13,4 +13,13 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="ApkMirrorSplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/apkmirror_splash</item>
+        <item name="colorPrimary">@color/apkmirrorPrimary</item>
+        <item name="colorPrimaryDark">@color/apkmirrorPrimaryDark</item>
+        <item name="colorAccent">@color/apkmirrorAccent</item>
+        <item name="android:navigationBarColor">#7f7f7f</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
 </resources>

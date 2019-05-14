@@ -16,4 +16,17 @@
             android:key="veh_mileage_decimal" android:defaultValue="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="APKMirror Downloader">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="apkmirror_save_url"
+            android:title="@string/apkmirror_save_url_pref" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="apkmirror_external_download"
+            android:summary="@string/apkmirror_external_download_summ"
+            android:title="@string/apkmirror_external_download_pref" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

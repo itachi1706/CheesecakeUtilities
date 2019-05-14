@@ -22,7 +22,7 @@ import android.widget.Spinner;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -37,7 +37,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Uti
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
-public class NavbarConfigurationActivity extends BaseActivity {
+public class NavbarConfigurationActivity extends BaseModuleActivity {
 
     private final int OVERLAY_PERMISSION_REQ_CODE = 1234;
     private SwitchCompat navbarToggle;

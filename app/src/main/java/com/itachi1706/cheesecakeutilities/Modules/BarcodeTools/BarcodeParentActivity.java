@@ -5,7 +5,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeGeneratorFragment;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeScannerFragment;
 import com.itachi1706.cheesecakeutilities.R;
@@ -17,7 +17,7 @@ import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
  * for com.itachi1706.cheesecakeutilities.Modules.BarcodeTools in CheesecakeUtilities
  */
 
-public class BarcodeParentActivity extends BaseActivity {
+public class BarcodeParentActivity extends BaseModuleActivity {
 
     Toolbar toolbar;
     ViewPager pager;

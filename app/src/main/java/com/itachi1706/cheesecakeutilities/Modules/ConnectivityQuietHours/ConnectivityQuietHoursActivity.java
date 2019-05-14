@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.BootRescheduleToggleReceiver;
@@ -54,7 +54,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_END_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
 
-public class ConnectivityQuietHoursActivity extends BaseActivity {
+public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
 
     LinearLayout btLayout, wifiLayout; // Main Layouts
     Spinner btNotification, wifiNotification; // Notification Spinners

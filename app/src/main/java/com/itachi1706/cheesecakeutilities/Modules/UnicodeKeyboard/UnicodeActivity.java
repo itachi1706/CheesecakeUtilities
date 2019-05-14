@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itachi1706.cheesecakeutilities.BaseActivity;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.UnicodeKeyboard.RecyclerAdapters.UnicodeMenuAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
-public class UnicodeActivity extends BaseActivity {
+public class UnicodeActivity extends BaseModuleActivity {
 
     @Override
     public String getHelpDescription() {
