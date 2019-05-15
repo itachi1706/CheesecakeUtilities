@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,7 @@ public class BackupHelper {
 
         File outFile = new File(getFolder().getAbsolutePath() + "/" + apkFileName);
         if (outFile.exists()) {
-            Log.i("Backup", "Existing file exists, removing " + apkFileName + "from directory");
+            LogHelper.i("Backup", "Existing file exists, removing " + apkFileName + "from directory");
             if (!outFile.delete()) {
                 throw new IOException("File exists and cannot be deleted");
             }
@@ -74,11 +74,11 @@ public class BackupHelper {
         Uri shareUri;
         // Android O Strict Mode crash fix
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.i(TAG, "Post-Oreo: Using new Content URI method");
-            Log.i(TAG, "Invoking Content Provider " + context.getPackageName() + ".provider");
+            LogHelper.i(TAG, "Post-Oreo: Using new Content URI method");
+            LogHelper.i(TAG, "Invoking Content Provider " + context.getPackageName() + ".provider");
             shareUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", shareFile);
         } else {
-            Log.i(TAG, "Pre-Oreo: Fallbacking to old method as it worked previously");
+            LogHelper.i(TAG, "Pre-Oreo: Fallbacking to old method as it worked previously");
             shareUri = Uri.fromFile(shareFile);
         }
         shareIntent.putExtra(Intent.EXTRA_STREAM, shareUri);

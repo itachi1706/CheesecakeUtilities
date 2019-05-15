@@ -1,15 +1,16 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments;
 
 
-import androidx.collection.ArrayMap;
-import android.util.Log;
 import android.widget.Toast;
+
+import androidx.collection.ArrayMap;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.e("VehicleMileageStats", "Error in Firebase DB call (General-Legend): " + databaseError.getDetails());
+                    LogHelper.e("VehicleMileageStats", "Error in Firebase DB call (General-Legend): " + databaseError.getDetails());
                 }
             });
         } else {
@@ -80,7 +81,7 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("VehicleMileageStats", "Error in Firebase DB call (General-Data): " + databaseError.getDetails());
+                LogHelper.e("VehicleMileageStats", "Error in Firebase DB call (General-Data): " + databaseError.getDetails());
             }
         });
     }

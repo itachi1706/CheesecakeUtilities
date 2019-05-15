@@ -4,7 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class RetrievePsiData extends AsyncTask<Void, Void, Void> {
             msg.setData(bundle);
             handler.sendMessage(msg);
         } catch (IOException e) {
-            Log.e("RetrievePsiData", "Exception: " + e.getMessage());
+            LogHelper.e("RetrievePsiData", "Exception: " + e.getMessage());
             e.printStackTrace();
         }
 

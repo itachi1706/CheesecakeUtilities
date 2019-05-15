@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
@@ -19,6 +20,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTa
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,8 +32,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by Kenneth on 20/1/2019.
@@ -75,7 +75,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
     @Override
     protected void doInBackground() throws IOException {
-        Log.d(TAG, "Syncing calendars for " + action + "...");
+        LogHelper.d(TAG, "Syncing calendars for " + action + "...");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String id = sp.getString(MSLActivity.MSL_SP_TASK_CAL_ID, "");
         if (id.isEmpty()) throw new IllegalStateException("GCal ID is missing");
@@ -84,25 +84,25 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         updateNotification("");
 
         // Add Task
-        Log.i(TAG, "Adding new tasks");
+        LogHelper.i(TAG, "Adding new tasks");
         eventAdd("Task", taskAdd, id);
         // Add Exam
-        Log.i(TAG, "Adding new exams");
+        LogHelper.i(TAG, "Adding new exams");
         eventAdd("Exam", examAdd, id);
         // Modify Task
-        Log.i(TAG, "Updating tasks to current values");
+        LogHelper.i(TAG, "Updating tasks to current values");
         eventUpdate("Task", taskModify, id);
         // Modify Exam
-        Log.i(TAG, "Updating exams to current values");
+        LogHelper.i(TAG, "Updating exams to current values");
         eventUpdate("Exam", examModify, id);
         // Delete Task
-        Log.i(TAG, "Deleting tasks");
+        LogHelper.i(TAG, "Deleting tasks");
         eventDelete("Task", taskDelete, id);
         // Delete Exam
-        Log.i(TAG, "Deleting exams");
+        LogHelper.i(TAG, "Deleting exams");
         eventDelete("Exam", examDelete, id);
 
-        Log.i(TAG, "Sync Complete");
+        LogHelper.i(TAG, "Sync Complete");
     }
 
     private void eventAdd(String type, ArrayList<Object> list, String id) throws IOException {
@@ -110,7 +110,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         for (Object entry : list) {
             Event e = generateEventObject(entry);
             updateNotification("Processing " + type + ": " + e.getSummary());
-            Log.d(TAG, "Adding: " + e.getId());
+            LogHelper.d(TAG, "Adding: " + e.getId());
             client.events().insert(id, e).queue(batchRequest, GoogleJsonErrorContainer.class, new MSLGoogleCallback(type));
             currentState++;
         }
@@ -124,7 +124,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
             Event e = generateEventObject(entry);
             updateNotification("Updating " + type + ": " + e.getSummary());
             e.setSequence(client.events().get(id, e.getId()).execute().getSequence() + 1);
-            Log.d(TAG, "Updating " + e.getId() + " to Sequence " + e.getSequence());
+            LogHelper.d(TAG, "Updating " + e.getId() + " to Sequence " + e.getSequence());
             client.events().update(id, e.getId(), e).execute();
             currentState++;
         }
@@ -135,7 +135,7 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
         for (Object entry : list) {
             Event e = generateEventObject(entry);
             updateNotification("Deleting " + type + ": " + e.getSummary());
-            Log.d(TAG, "Removing: " + e.getId());
+            LogHelper.d(TAG, "Removing: " + e.getId());
             client.events().delete(id, e.getId()).execute();
             currentState++;
         }
@@ -259,12 +259,12 @@ public class MSLTaskSyncTask extends CalendarAsyncTask {
 
         @Override
         public void onFailure(GoogleJsonError e, HttpHeaders responseHeaders) {
-            Log.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
+            LogHelper.e(TAG, "GoogleJsonError occurred: " + e.getMessage());
         }
 
         @Override
         public void onSuccess(Event event, HttpHeaders responseHeaders) {
-            Log.d(TAG, type + " Event " + event.getId() + " added");
+            LogHelper.d(TAG, type + " Event " + event.getId() + " added");
         }
     }
 

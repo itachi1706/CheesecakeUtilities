@@ -1,7 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -9,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -141,14 +141,14 @@ public class JsonHelper {
 
     public static int calculateScore(int pushup, int situp, int runMin, int runSec, int age, int gender, Main object) {
         Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
-        Log.i("IPPTCalc", "Age Group: " + age);
+        LogHelper.i("IPPTCalc", "Age Group: " + age);
 
         int situpScore = getSitUpScore(situp, age, exercisesScore);
         int pushupScore = getPushUpScore(pushup, age, exercisesScore);
         int runScore = getRunScore(runMin, runSec, age, exercisesScore);
-        Log.i("IPPTCalc", "Situp Score: " + situp + " (" + situpScore + ")");
-        Log.i("IPPTCalc", "Pushup Score: " + pushup + " (" + pushupScore + ")");
-        Log.i("IPPTCalc", "Run Score: " + runMin + ":" + runSec + " (" + runScore + ")");
+        LogHelper.i("IPPTCalc", "Situp Score: " + situp + " (" + situpScore + ")");
+        LogHelper.i("IPPTCalc", "Pushup Score: " + pushup + " (" + pushupScore + ")");
+        LogHelper.i("IPPTCalc", "Run Score: " + runMin + ":" + runSec + " (" + runScore + ")");
         return situpScore+pushupScore+runScore;
     }
 
@@ -158,14 +158,14 @@ public class JsonHelper {
 
     public static int calculateIncompleteScore(int pushup, int situp, int runMin, int runSec, int age, int gender, Main object) {
         Gender exercisesScore = (gender == FEMALE) ? object.getDataFemale() : object.getDataMale();
-        Log.i("IPPTCalc", "Age Group: " + age);
+        LogHelper.i("IPPTCalc", "Age Group: " + age);
 
         int situpScore = (situp != -1) ? getSitUpScore(situp, age, exercisesScore) : -1;
         int pushupScore = (pushup != -1) ? getPushUpScore(pushup, age, exercisesScore) : -1;
         int runScore = (runMin != -1) ? getRunScore(runMin, runSec, age, exercisesScore) : -1;
-        Log.i("IPPTCalc", "Situp Score: " + situp + " (" + situpScore + ")");
-        Log.i("IPPTCalc", "Pushup Score: " + pushup + " (" + pushupScore + ")");
-        Log.i("IPPTCalc", "Run Score: " + runMin + ":" + runSec + " (" + runScore + ")");
+        LogHelper.i("IPPTCalc", "Situp Score: " + situp + " (" + situpScore + ")");
+        LogHelper.i("IPPTCalc", "Pushup Score: " + pushup + " (" + pushupScore + ")");
+        LogHelper.i("IPPTCalc", "Run Score: " + runMin + ":" + runSec + " (" + runScore + ")");
 
         int totalScore = 0;
         if (situpScore != -1) totalScore += situpScore;

@@ -7,14 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.R;
-
-import java.util.concurrent.Executor;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +16,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricConstants;
 import androidx.biometric.BiometricPrompt;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+
+import java.util.concurrent.Executor;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
@@ -53,7 +53,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             authWithScreenLock();
         } else {
             // No biometric data, treat as authenticated
-            Log.i(TAG, "No Biometric Authentication Found. Presuming Authenticated");
+            LogHelper.i(TAG, "No Biometric Authentication Found. Presuming Authenticated");
             setResult(RESULT_OK);
             finish();
         }
@@ -65,7 +65,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         if (km == null) {
             Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
-            Log.e(TAG, "Authentication Error (KEYGUARD NULL): KeyGuard is not ready");
+            LogHelper.e(TAG, "Authentication Error (KEYGUARD NULL): KeyGuard is not ready");
             intent.putExtra(INTENT_MSG, "Authentication Error: KeyGuard is not ready");
             setResult(RESULT_CANCELED, intent);
             finish();
@@ -97,7 +97,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                     case BiometricConstants.ERROR_USER_CANCELED:
                     case BiometricConstants.ERROR_CANCELED:
                         Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                        Log.i(TAG, "User Cancelled Authentication");
+                        LogHelper.i(TAG, "User Cancelled Authentication");
                         intent.putExtra(INTENT_MSG, "Dialog Cancelled");
                         setResult(RESULT_CANCELED, intent);
                         finish();
@@ -108,7 +108,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                             authWithScreenLock();
                         } else {
                             Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                            Log.i(TAG, "User Lock out");
+                            LogHelper.i(TAG, "User Lock out");
                             intent.putExtra(INTENT_MSG, "Lockout");
                             new AlertDialog.Builder(mContext).setTitle("Fingerprint sensor disabled (Locked out)")
                                     .setMessage("You have scanned an invalid fingerprint too many times and your fingerprint sensor has been disabled. \n\n" +
@@ -121,7 +121,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                         return;
                     default:
                         Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Authentication Error (" + errorCode + "): " + errString);
+                        LogHelper.e(TAG, "Authentication Error (" + errorCode + "): " + errString);
                         intent.putExtra(INTENT_MSG, "Authentication Error: " + errString);
                         setResult(RESULT_CANCELED, intent);
                         finish();
@@ -138,13 +138,13 @@ public class AuthenticationActivity extends AppCompatActivity {
         @Override
         public void onAuthenticationFailed() {
             super.onAuthenticationFailed();
-            Log.i(TAG, "Wrong Biometric detected");
+            LogHelper.i(TAG, "Wrong Biometric detected");
         }
     };
 
     private void authenticatedMessage() {
         Toast.makeText(mContext, R.string.dialog_authenticated, Toast.LENGTH_LONG).show();
-        Log.i(TAG, "User Authenticated");
+        LogHelper.i(TAG, "User Authenticated");
         setResult(RESULT_OK);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, null);
         finish();
@@ -157,7 +157,7 @@ public class AuthenticationActivity extends AppCompatActivity {
             else {
                 Intent intent = new Intent();
                 Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "Authentication Error (" + resultCode + "): ACTION_FAILED_OR_CANCELLED");
+                LogHelper.e(TAG, "Authentication Error (" + resultCode + "): ACTION_FAILED_OR_CANCELLED");
                 intent.putExtra(INTENT_MSG, "Authentication Error: ACTION_FAILED_OR_CANCELLED");
                 setResult(RESULT_CANCELED, intent);
                 finish();

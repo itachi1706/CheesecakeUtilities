@@ -3,11 +3,7 @@ package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +14,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -104,7 +104,7 @@ public class ORDSettingsActivity extends AppCompatActivity {
         pesStatusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("PES UPDATE", pesStatusSpinner.getSelectedItem().toString());
+                LogHelper.d("PES UPDATE", pesStatusSpinner.getSelectedItem().toString());
                 ORDSettingsActivity.this.pesStatusString = pesStatusSpinner.getSelectedItem().toString();
                 ORDSettingsActivity.this.updateText(UPDATE_STATUS);
             }

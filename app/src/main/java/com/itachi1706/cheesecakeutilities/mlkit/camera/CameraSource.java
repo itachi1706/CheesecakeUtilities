@@ -21,14 +21,15 @@ import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresPermission;
-import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+
 import com.google.android.gms.common.images.Size;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.IOException;
 import java.lang.Thread.State;
@@ -235,7 +236,7 @@ public class CameraSource {
                 // quickly after stop).
                 processingThread.join();
             } catch (InterruptedException e) {
-                Log.d(TAG, "Frame processing thread interrupted on release.");
+                LogHelper.d(TAG, "Frame processing thread interrupted on release.");
             }
             processingThread = null;
         }
@@ -250,7 +251,7 @@ public class CameraSource {
                     camera.setPreviewDisplay(null);
                 }
             } catch (Exception e) {
-                Log.e(TAG, "Failed to clear camera preview: " + e);
+                LogHelper.e(TAG, "Failed to clear camera preview: " + e);
             }
             camera.release();
             camera = null;
@@ -328,7 +329,7 @@ public class CameraSource {
                     .contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
             } else {
-                Log.i(TAG, "Camera auto focus is not supported on this device.");
+                LogHelper.i(TAG, "Camera auto focus is not supported on this device.");
             }
         }
 
@@ -470,7 +471,7 @@ public class CameraSource {
         // of the preview sizes and hope that the camera can handle it.  Probably unlikely, but we
         // still account for it.
         if (validPreviewSizes.size() == 0) {
-            Log.w(TAG, "No preview sizes have a corresponding same-aspect-ratio picture size");
+            LogHelper.w(TAG, "No preview sizes have a corresponding same-aspect-ratio picture size");
             for (android.hardware.Camera.Size previewSize : supportedPreviewSizes) {
                 // The null picture size will let us know that we shouldn't set a picture size.
                 validPreviewSizes.add(new SizePair(previewSize, null));
@@ -538,7 +539,7 @@ public class CameraSource {
                 degrees = 270;
                 break;
             default:
-                Log.e(TAG, "Bad rotation value: " + rotation);
+                LogHelper.e(TAG, "Bad rotation value: " + rotation);
         }
 
         CameraInfo cameraInfo = new CameraInfo();
@@ -659,7 +660,7 @@ public class CameraSource {
                 }
 
                 if (!bytesToByteBuffer.containsKey(data)) {
-                    Log.d(
+                    LogHelper.d(
                             TAG,
                             "Skipping frame. Could not find ByteBuffer associated with the image "
                                     + "data from the camera.");
@@ -700,7 +701,7 @@ public class CameraSource {
                             // don't have it yet.
                             lock.wait();
                         } catch (InterruptedException e) {
-                            Log.d(TAG, "Frame processing loop terminated.", e);
+                            LogHelper.d(TAG, "Frame processing loop terminated.", e);
                             return;
                         }
                     }
@@ -726,7 +727,7 @@ public class CameraSource {
 
                 try {
                     synchronized (processorLock) {
-                        Log.d(TAG, "Process an image");
+                        LogHelper.d(TAG, "Process an image");
                         frameProcessor.process(
                                 data,
                                 new FrameMetadata.Builder()
@@ -738,7 +739,7 @@ public class CameraSource {
                                 graphicOverlay);
                     }
                 } catch (Throwable t) {
-                    Log.e(TAG, "Exception thrown from receiver.", t);
+                    LogHelper.e(TAG, "Exception thrown from receiver.", t);
                 } finally {
                     camera.addCallbackBuffer(data.array());
                 }

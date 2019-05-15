@@ -8,12 +8,19 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -35,8 +42,8 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.ExportFile;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData;
@@ -48,6 +55,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,14 +69,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Kenneth on 12/1/2019.
@@ -281,7 +281,7 @@ public class MSLActivity extends BaseModuleActivity {
     // Import/Export
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void exportDataPre() {
-        Log.i(TAG, "Requesting file creation for data export");
+        LogHelper.i(TAG, "Requesting file creation for data export");
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/json");
@@ -291,7 +291,7 @@ public class MSLActivity extends BaseModuleActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void importDataPre() {
-        Log.i(TAG, "Requestion file to read");
+        LogHelper.i(TAG, "Requestion file to read");
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/json");
@@ -303,7 +303,7 @@ public class MSLActivity extends BaseModuleActivity {
         try {
             InputStream is = getContentResolver().openInputStream(uri);
             if (is == null) {
-                Log.e(TAG, "Data export failed");
+                LogHelper.e(TAG, "Data export failed");
                 Toast.makeText(this, "Data export failed!", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -330,10 +330,10 @@ public class MSLActivity extends BaseModuleActivity {
             updateHistory();
             updateState();
             updateToggles();
-            Log.i(TAG, "Data Import completed");
+            LogHelper.i(TAG, "Data Import completed");
             Toast.makeText(this, "Data has been imported successfully!", Toast.LENGTH_LONG).show();
         } catch (JsonSyntaxException e1) {
-            Log.e(TAG, "Invalid JSON File Read");
+            LogHelper.e(TAG, "Invalid JSON File Read");
             Toast.makeText(this, "Data import failed. Please make sure the right file is selected and is not corrupted", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -342,7 +342,7 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     private void exportData(Uri uri) {
-        Log.i(TAG, "Starting Data Export...");
+        LogHelper.i(TAG, "Starting Data Export...");
         ExportFile f = new ExportFile();
         FileCacher fc = new FileCacher(this);
         f.setCache(fc.getStringFromFile());
@@ -357,14 +357,14 @@ public class MSLActivity extends BaseModuleActivity {
         try {
             OutputStream os = getContentResolver().openOutputStream(uri);
             if (os == null) {
-                Log.e(TAG, "Data export failed");
+                LogHelper.e(TAG, "Data export failed");
                 Toast.makeText(this, "Data export failed!", Toast.LENGTH_LONG).show();
                 return;
             }
             OutputStreamWriter osw = new OutputStreamWriter(os);
             osw.write(json);
             osw.close();
-            Log.i(TAG, "Data export completed!");
+            LogHelper.i(TAG, "Data export completed!");
             Toast.makeText(this, "Data exported successfully", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -440,7 +440,7 @@ public class MSLActivity extends BaseModuleActivity {
                     .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).setExtras(manualJob).setTag(SyncMSLService.ACTION_SYNC_MSL).build();
             dispatcher.mustSchedule(syncJob);
             Toast.makeText(this, "Scheduled a task sync job", Toast.LENGTH_LONG).show();
-            Log.i(TAG, "Scheduled a manual sync job for tasks");
+            LogHelper.i(TAG, "Scheduled a manual sync job for tasks");
         }
     }
 
@@ -458,7 +458,7 @@ public class MSLActivity extends BaseModuleActivity {
         sp.edit().putBoolean(MSL_SP_TOGGLE_TASK, isChecked).apply();
 
         // if enabled, check that calendar exists, otherwise create it
-        Log.d(TAG, "toggleTask(): " + isChecked);
+        LogHelper.d(TAG, "toggleTask(): " + isChecked);
         if (isChecked) {
             CalendarLoadTask.run(this,"TASK", model, client);
         } else {
@@ -484,7 +484,7 @@ public class MSLActivity extends BaseModuleActivity {
             Toast.makeText(this, "Something went wrong, try again later", Toast.LENGTH_LONG).show();
             return;
         }
-        Log.i(TAG, "Task Completed: " + taskAction);
+        LogHelper.i(TAG, "Task Completed: " + taskAction);
         switch (taskAction.toUpperCase()) {
             case "ADD":
                 Toast.makeText(this, "Calendar Inserted Asynchronously", Toast.LENGTH_LONG).show();
@@ -493,7 +493,7 @@ public class MSLActivity extends BaseModuleActivity {
             case "LOAD-TASK":
                 String id = sp.getString(MSL_SP_TASK_CAL_ID, "");
                 if (id.isEmpty() || model.get(id) == null) {
-                    Log.w(TAG, "Calendar MSL Task not found, creating calendar");
+                    LogHelper.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
                     calendar.setSummary("MSL Task Calendar Sync");
                     calendar.setDescription("Calendar used by CheesecakeUtilities to synchronize with tasks/exams obtained from MSL\n\nCreated On: "
@@ -504,7 +504,7 @@ public class MSLActivity extends BaseModuleActivity {
                     Toast.makeText(this, "Creating calendar for tasks sync", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Log.i(TAG, "MSL Task Calendar found. doing synchronization");
+                LogHelper.i(TAG, "MSL Task Calendar found. doing synchronization");
                 btnSync();
                 break;
             case "SYNC-EXAMTASK": updateHistory(); break;
@@ -516,7 +516,7 @@ public class MSLActivity extends BaseModuleActivity {
 
 
     private void updateHistory() {
-        Log.i(TAG, "Updating Metric History...");
+        LogHelper.i(TAG, "Updating Metric History...");
         String metrics = sp.getString(MSL_SP_METRIC_HIST, "");
         if (metrics.isEmpty()) {
             displayEmptyHistory();
@@ -674,7 +674,7 @@ public class MSLActivity extends BaseModuleActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     Uri uri = data.getData();
                     if (uri == null) break;
-                    Log.i(TAG, ((requestCode == REQUEST_READ_FILE) ? "READ" : "WRITE") + " Uri: " + uri.toString());
+                    LogHelper.i(TAG, ((requestCode == REQUEST_READ_FILE) ? "READ" : "WRITE") + " Uri: " + uri.toString());
                     if (requestCode == REQUEST_READ_FILE) importData(uri);
                     else exportData(uri);
                 }

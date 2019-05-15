@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +32,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -111,7 +111,7 @@ public class BarcodeGeneratorFragment extends Fragment {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, s);
             s.close();
         } catch (IOException e) {
-            Log.e(TAG, "Failed to create temp barcode file");
+            LogHelper.e(TAG, "Failed to create temp barcode file");
             e.printStackTrace();
             return null;
         }
@@ -120,7 +120,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         Uri contentUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName() + ".provider", shareFile);
 
         if (contentUri == null) {
-            Log.e(TAG, "Failed to share file, invalid contentUri");
+            LogHelper.e(TAG, "Failed to share file, invalid contentUri");
             return null;
         }
 
@@ -129,7 +129,7 @@ public class BarcodeGeneratorFragment extends Fragment {
 
     private void share() {
         if (bitmap == null) {
-            Log.e(TAG, "Cannot share an empty image");
+            LogHelper.e(TAG, "Cannot share an empty image");
             Toast.makeText(getActivity(), "Invalid Action", Toast.LENGTH_SHORT).show();
             return;
         }

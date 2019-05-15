@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 public class WifiToggleReceiver extends BaseBroadcastReceiver {
 
@@ -18,7 +18,7 @@ public class WifiToggleReceiver extends BaseBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.i(TAG, "Waking up");
+        LogHelper.i(TAG, "Waking up");
         boolean state = intent.getExtras().getBoolean("status");
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         if (!sp.getBoolean(QHConstants.QH_WIFI_STATE, false)) return; // Not enabled
@@ -29,25 +29,25 @@ public class WifiToggleReceiver extends BaseBroadcastReceiver {
 
         boolean workDone = false;
         boolean enabled = wifiManager.isWifiEnabled();
-        Log.i(TAG, "Quiet Hour: " + state + " | Adapter Enabled: " + enabled);
+        LogHelper.i(TAG, "Quiet Hour: " + state + " | Adapter Enabled: " + enabled);
         if (state) {
             // Quiet Mode Enabled, Turn off Wifi
             if (enabled) {
                 wifiManager.setWifiEnabled(false);
-                Log.i(TAG, "Disabled Wifi at " + System.currentTimeMillis());
+                LogHelper.i(TAG, "Disabled Wifi at " + System.currentTimeMillis());
                 workDone = true;
             }
         } else {
             // Quiet Mode Disabled, Turn On Wifi
             if (!enabled) {
                 wifiManager.setWifiEnabled(true);
-                Log.i(TAG, "Enabled Wifi at " + System.currentTimeMillis());
+                LogHelper.i(TAG, "Enabled Wifi at " + System.currentTimeMillis());
                 workDone = true;
             }
         }
         NotificationHelper.Companion.sendNotification(context, sp.getInt(QHConstants.QH_WIFI_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Wi-Fi");
         if (workDone) logResult(sp, state);
-        Log.i(TAG, "Job Done");
+        LogHelper.i(TAG, "Job Done");
     }
 
     private void logResult(SharedPreferences sp, boolean state) {

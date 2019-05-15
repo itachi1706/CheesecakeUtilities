@@ -3,7 +3,8 @@ package com.itachi1706.cheesecakeutilities.Modules.WhoisLookup;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +12,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
 
@@ -33,7 +32,7 @@ public class WhoisQuery extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... strings) {
         String url = "http://api.itachi1706.com/api/whois.php?domain=" + strings[0];
-        Log.i("WhoisQuery", "Querying: " + url);
+        LogHelper.i("WhoisQuery", "Querying: " + url);
         String tmp;
         try {
             URL urlConn = new URL(url);
@@ -57,7 +56,7 @@ public class WhoisQuery extends AsyncTask<String, Void, Void> {
             msg.obj = tmp;
             handler.sendMessage(msg);
         } catch (IOException e) {
-            Log.e("WhoisQuery", "Exception: " + e.getMessage());
+            LogHelper.e("WhoisQuery", "Exception: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

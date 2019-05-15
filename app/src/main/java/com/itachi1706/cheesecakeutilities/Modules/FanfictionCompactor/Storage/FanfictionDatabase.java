@@ -4,9 +4,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
-import android.util.Log;
 
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class FanfictionDatabase {
             cursor.close();
             return result;
         } catch (SQLiteException e) {
-            Log.e("FanficDB", "Error: " + e.getLocalizedMessage());
+            LogHelper.e("FanficDB", "Error: " + e.getLocalizedMessage());
             return new ArrayList<>();
         }
     }

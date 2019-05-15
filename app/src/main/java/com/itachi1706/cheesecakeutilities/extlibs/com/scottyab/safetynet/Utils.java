@@ -6,7 +6,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.util.Base64;
-import android.util.Log;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -35,7 +36,7 @@ public class Utils {
             byte[] publicKey = md.digest(certEncoded);
             result = byte2HexFormatted(publicKey);
         } catch (Exception e) {
-            Log.w(TAG, e);
+            LogHelper.w(TAG, e);
         }
         return result;
     }
@@ -63,7 +64,7 @@ public class Utils {
 
             }
         } catch (Exception e) {
-            Log.w(TAG, e);
+            LogHelper.w(TAG, e);
         }
         return null;
     }

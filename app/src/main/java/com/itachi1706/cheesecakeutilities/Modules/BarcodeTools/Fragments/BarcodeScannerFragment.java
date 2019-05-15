@@ -8,10 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +17,16 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
 
@@ -118,11 +119,11 @@ public class BarcodeScannerFragment extends Fragment {
                             return true;
                         });
                     }
-                    Log.d(TAG, "Barcode read: " + barcode.getDisplayValue());
+                    LogHelper.d(TAG, "Barcode read: " + barcode.getDisplayValue());
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     barcodeValue.setClickable(false);
-                    Log.d(TAG, "No barcode captured, intent data is null");
+                    LogHelper.d(TAG, "No barcode captured, intent data is null");
                 }
             } else {
                 statusMessage.setText(String.format(getString(R.string.barcode_error),

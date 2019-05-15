@@ -2,20 +2,20 @@ package com.itachi1706.cheesecakeutilities.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,11 +58,11 @@ public class UtilityFragment extends Fragment {
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
         mFirebaseRemoteConfig.fetch(FIREBASE_REFRESH_TIME).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.i("RemoteConfig", "Values Updated from server");
+                LogHelper.i("RemoteConfig", "Values Updated from server");
                 mFirebaseRemoteConfig.activateFetched();
                 updateAdapter();
             } else
-                Log.i("RemoteConfig", "Values failed to update");
+                LogHelper.i("RemoteConfig", "Values failed to update");
         });
 
         return v;

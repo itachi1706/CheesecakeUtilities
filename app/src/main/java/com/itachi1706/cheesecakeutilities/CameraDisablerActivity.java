@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 public class CameraDisablerActivity extends BaseModuleActivity {
 
@@ -168,7 +169,7 @@ public class CameraDisablerActivity extends BaseModuleActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            Log.i("CameraDisabler", "Received Update Broadcast");
+            LogHelper.i("CameraDisabler", "Received Update Broadcast");
             updateResources();
         }
     }

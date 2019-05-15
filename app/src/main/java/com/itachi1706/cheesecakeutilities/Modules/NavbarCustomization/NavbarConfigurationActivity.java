@@ -9,21 +9,22 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -244,13 +245,13 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
                     mContext.getApplicationContext().getContentResolver(),
                     android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
         } catch (Settings.SettingNotFoundException e) {
-            Log.e(TAG, "Error finding setting, default accessibility to not found: "
+            LogHelper.e(TAG, "Error finding setting, default accessibility to not found: "
                     + e.getMessage());
         }
         TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
 
         if (accessibilityEnabled == 1) {
-            Log.v(TAG, "Accessibility Status: Enabled");
+            LogHelper.v(TAG, "Accessibility Status: Enabled");
             String settingValue = Settings.Secure.getString(
                     mContext.getApplicationContext().getContentResolver(),
                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
@@ -259,14 +260,14 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
                 while (mStringColonSplitter.hasNext()) {
                     String accessibilityService = mStringColonSplitter.next();
 
-                    Log.v(TAG, "Accessibility Service: " + accessibilityService + " | " + service);
+                    LogHelper.v(TAG, "Accessibility Service: " + accessibilityService + " | " + service);
                     if (accessibilityService.equalsIgnoreCase(service)) {
                         return true;
                     }
                 }
             }
         } else {
-            Log.v(TAG, "Accessibility Status: Disabled");
+            LogHelper.v(TAG, "Accessibility Status: Disabled");
         }
 
         return false;

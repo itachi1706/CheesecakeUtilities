@@ -4,25 +4,26 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsBase;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsFooter;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsHeader;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.RestoreAppsAdapter;
-import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import org.apache.commons.io.FileUtils;
 
@@ -83,12 +84,12 @@ public class RestoreAppFragment extends Fragment {
         @Override
         protected Void doInBackground(Boolean... params) {
             if (!BackupHelper.createFolder()) {
-                Log.e("RestoreApp", "Unable to initialize backup folder. Exiting...");
+                LogHelper.e("RestoreApp", "Unable to initialize backup folder. Exiting...");
                 return null;
             }
             File backupFolder = BackupHelper.getFolder();
             if (!backupFolder.isDirectory()) {
-                Log.e("RestoreApp", "Invalid Backup Folder. Is not a directory");
+                LogHelper.e("RestoreApp", "Invalid Backup Folder. Is not a directory");
                 return null;
             }
 
@@ -97,7 +98,7 @@ public class RestoreAppFragment extends Fragment {
             PackageManager pm = getContext().getPackageManager();
             items = new HashMap<>();
             for (File f : apkfiles) {
-                Log.d("File", f.getName());
+                LogHelper.d("File", f.getName());
 
                 PackageInfo info = pm.getPackageArchiveInfo(f.getAbsolutePath(), PackageManager.GET_META_DATA);
                 info.applicationInfo.sourceDir = f.getAbsolutePath();

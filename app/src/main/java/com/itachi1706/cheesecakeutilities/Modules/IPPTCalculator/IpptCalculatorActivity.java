@@ -2,9 +2,6 @@ package com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.appcompat.app.AlertDialog;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +12,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.FEMALE;
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.PUSHUP;
@@ -55,7 +56,7 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String g = genderSpinner.getSelectedItem().toString();
-                Log.d("IPPT UPDATE", g);
+                LogHelper.d("IPPT UPDATE", g);
                 int gender = JsonHelper.getGender(g);
                 if (gender == FEMALE) pushupLayout.setHint("Bent Knee Push-Ups");
                 else pushupLayout.setHint("Push-Ups");

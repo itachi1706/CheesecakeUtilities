@@ -4,18 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.CreateShortcutsAdapter;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class CreateShortcuts extends AppCompatActivity {
     }
 
     private void createShortcut(String className, String link) {
-        Log.i("CreateShortcuts", "Attempting to create shortcut for " + className);
+        LogHelper.i("CreateShortcuts", "Attempting to create shortcut for " + className);
         try {
             Class classObj = Class.forName(className);
             Intent intent = new Intent(this, classObj);
@@ -75,18 +76,18 @@ public class CreateShortcuts extends AppCompatActivity {
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, link);
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "launcher_shortcut_created");
             analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            Log.i("Firebase", "Logged Event Utility Shortcut Created: " + link);
+            LogHelper.i("Firebase", "Logged Event Utility Shortcut Created: " + link);
 
-            Log.i("CreateShortcuts", "Shortcut Creation success");
+            LogHelper.i("CreateShortcuts", "Shortcut Creation success");
 
             setResult(RESULT_OK, shortcutIntent);
             finish();
             return;
         } catch (ClassNotFoundException e) {
-            Log.e("CreateShortcutAdapter", "Class Not Found: " + className);
+            LogHelper.e("CreateShortcutAdapter", "Class Not Found: " + className);
             e.printStackTrace();
         }
-        Log.e("CreateShortcuts", "Shortcut Creation failed error");
+        LogHelper.e("CreateShortcuts", "Shortcut Creation failed error");
         setResult(RESULT_CANCELED);
         finish();
     }
@@ -113,7 +114,7 @@ public class CreateShortcuts extends AppCompatActivity {
                     act.createShortcut(cn, title);
                     break;
                 case CREATE_SHORTCUT_ADAPTER_FAIL:
-                    Log.e("CreateShortcuts", "Shortcut Creation failed");
+                    LogHelper.e("CreateShortcuts", "Shortcut Creation failed");
                     act.setResult(RESULT_CANCELED);
                     act.finish();
                     break;

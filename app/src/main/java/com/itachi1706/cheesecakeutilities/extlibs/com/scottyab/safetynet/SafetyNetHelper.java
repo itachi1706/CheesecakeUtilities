@@ -1,15 +1,16 @@
 package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.safetynet.SafetyNet;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class SafetyNetHelper {
     public SafetyNetHelper(String googleDeviceVerificationApiKey) {
         secureRandom = new SecureRandom();
         if (TextUtils.isEmpty(googleDeviceVerificationApiKey)) {
-            Log.w(TAG, "Google Device Verification Api Key not defined, cannot properly validate safety net response without it. See https://developer.android.com/google/play/safetynet/start.html#verify-compat-check");
+            LogHelper.w(TAG, "Google Device Verification Api Key not defined, cannot properly validate safety net response without it. See https://developer.android.com/google/play/safetynet/start.html#verify-compat-check");
         }
         this.googleDeviceVerificationApiKey = googleDeviceVerificationApiKey;
     }
@@ -85,14 +86,14 @@ public class SafetyNetHelper {
         callback = safetyNetWrapperCallback;
 
         apkCertificateDigests = Utils.calcApkCertificateDigests(context, packageName);
-        Log.d(TAG, "apkCertificateDigests:" + apkCertificateDigests);
+        LogHelper.d(TAG, "apkCertificateDigests:" + apkCertificateDigests);
         apkDigest = Utils.calcApkDigest(context);
-        Log.d(TAG, "apkDigest:" + apkDigest);
+        LogHelper.d(TAG, "apkDigest:" + apkDigest);
         runSafetyNetTest(context);
     }
 
     private void runSafetyNetTest(@NonNull final Context context) {
-        Log.v(TAG, "running SafetyNet.API Test");
+        LogHelper.v(TAG, "running SafetyNet.API Test");
         requestNonce = generateOneTimeRequestNonce();
         requestTimestamp = System.currentTimeMillis();
 
@@ -132,7 +133,7 @@ public class SafetyNetHelper {
                                     }
                                 });
                             } else {
-                                Log.w(TAG, "No google Device Verification ApiKey defined");
+                                LogHelper.w(TAG, "No google Device Verification ApiKey defined");
                                 callback.error(RESPONSE_FAILED_SIGNATURE_VALIDATION_NO_API_KEY, "No Google Device Verification ApiKey defined. Marking as failed. SafetyNet CtsProfileMatch: " + response.isCtsProfileMatch());
                             }
                         } else {
@@ -156,7 +157,7 @@ public class SafetyNetHelper {
 
     private boolean validateSafetyNetResponsePayload(SafetyNetResponse response) {
         if (response == null) {
-            Log.e(TAG, "SafetyNetResponse is null.");
+            LogHelper.e(TAG, "SafetyNetResponse is null.");
             return false;
         }
 
@@ -164,14 +165,14 @@ public class SafetyNetHelper {
         final String requestNonceBase64 = Base64.encodeToString(requestNonce, Base64.DEFAULT).trim();
 
         if (!requestNonceBase64.equals(response.getNonce())) {
-            Log.e(TAG, "invalid nonce, expected = \"" + requestNonceBase64 + "\"");
-            Log.e(TAG, "invalid nonce, response   = \"" + response.getNonce() + "\"");
+            LogHelper.e(TAG, "invalid nonce, expected = \"" + requestNonceBase64 + "\"");
+            LogHelper.e(TAG, "invalid nonce, response   = \"" + response.getNonce() + "\"");
             return false;
         }
 
         if (!packageName.equalsIgnoreCase(response.getApkPackageName())) {
-            Log.e(TAG, "invalid packageName, expected = \"" + packageName + "\"");
-            Log.e(TAG, "invalid packageName, response = \"" + response.getApkPackageName() + "\"");
+            LogHelper.e(TAG, "invalid packageName, expected = \"" + packageName + "\"");
+            LogHelper.e(TAG, "invalid packageName, response = \"" + response.getApkPackageName() + "\"");
             return false;
         }
 
@@ -182,19 +183,19 @@ public class SafetyNetHelper {
          */
         int MAX_TIMESTAMP_DURATION = 2 * 60 * 1000;
         if (durationOfReq > MAX_TIMESTAMP_DURATION) {
-            Log.e(TAG, "Duration calculated from the timestamp of response \"" + durationOfReq + " \" exceeds permitted duration of \"" + MAX_TIMESTAMP_DURATION + "\"");
+            LogHelper.e(TAG, "Duration calculated from the timestamp of response \"" + durationOfReq + " \" exceeds permitted duration of \"" + MAX_TIMESTAMP_DURATION + "\"");
             return false;
         }
 
         if (!Arrays.equals(apkCertificateDigests.toArray(), response.getApkCertificateDigestSha256())) {
-            Log.e(TAG, "invalid apkCertificateDigest, local/expected = " + Collections.singletonList(apkCertificateDigests));
-            Log.e(TAG, "invalid apkCertificateDigest, response = " + Arrays.asList(response.getApkCertificateDigestSha256()));
+            LogHelper.e(TAG, "invalid apkCertificateDigest, local/expected = " + Collections.singletonList(apkCertificateDigests));
+            LogHelper.e(TAG, "invalid apkCertificateDigest, response = " + Arrays.asList(response.getApkCertificateDigestSha256()));
             return false;
         }
 
         if (!apkDigest.equals(response.getApkDigestSha256())) {
-            Log.e(TAG, "invalid ApkDigest, local/expected = \"" + apkDigest + "\"");
-            Log.e(TAG, "invalid ApkDigest, response = \"" + response.getApkDigestSha256() + "\"");
+            LogHelper.e(TAG, "invalid ApkDigest, local/expected = \"" + apkDigest + "\"");
+            LogHelper.e(TAG, "invalid ApkDigest, response = \"" + response.getApkDigestSha256() + "\"");
             return false;
         }
 

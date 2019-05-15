@@ -2,10 +2,12 @@ package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.SyncMSLService;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -14,8 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
 
@@ -72,13 +72,13 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
             manager.sendBroadcast(returnIntent);
         } catch (IOException e) {
             if (e instanceof FileNotFoundException) {
-                Log.e(TAG, "FileNotFoundException: " + e.getLocalizedMessage());
+                LogHelper.e(TAG, "FileNotFoundException: " + e.getLocalizedMessage());
                 if (conn != null) {
                     // Try and figure out if its a 401
                     try {
                         int status = conn.getResponseCode();
-                        Log.e(TAG, "Response Code: " + status);
-                        Log.e(TAG, "Response Message: " + conn.getResponseMessage());
+                        LogHelper.e(TAG, "Response Code: " + status);
+                        LogHelper.e(TAG, "Response Message: " + conn.getResponseMessage());
                         if (conn.getResponseMessage().contains("Invalid Access Token")) {
                             // Token invalid, inform user
                             returnIntent.putExtra(CalendarAsyncTask.INTENT_ERROR, true);
@@ -91,7 +91,7 @@ public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
                     }
                 }
             } else {
-                Log.e(TAG, "Exception: " + e.getMessage());
+                LogHelper.e(TAG, "Exception: " + e.getMessage());
             }
             e.printStackTrace();
             returnIntent.putExtra(CalendarAsyncTask.INTENT_ERROR, true);

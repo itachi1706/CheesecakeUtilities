@@ -2,13 +2,13 @@ package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 /**
  * Common utilities.
@@ -27,7 +27,7 @@ public class Utils {
      * @param t throwable to log and show
      */
     public static void logAndShow(Activity activity, String tag, Throwable t) {
-        Log.e(tag, "Error", t);
+        LogHelper.e(tag, "Error", t);
         String message = t.getMessage();
         if (t instanceof GoogleJsonResponseException) {
             GoogleJsonError details = ((GoogleJsonResponseException) t).getDetails();
@@ -49,7 +49,7 @@ public class Utils {
      */
     public static void logAndShowError(Activity activity, String tag, String message) {
         String errorMessage = getErrorMessage(activity, message);
-        Log.e(tag, errorMessage);
+        LogHelper.e(tag, errorMessage);
         showErrorInternal(activity, errorMessage);
     }
 

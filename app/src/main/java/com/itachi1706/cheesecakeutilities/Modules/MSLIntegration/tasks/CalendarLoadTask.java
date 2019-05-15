@@ -1,12 +1,12 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.api.services.calendar.model.CalendarList;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarInfo;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class CalendarLoadTask extends CalendarAsyncTask {
 
     @Override
     protected void doInBackground() throws IOException {
-        Log.d("MSL-LOAD", "Loading calendars for " + action + "...");
+        LogHelper.d("MSL-LOAD", "Loading calendars for " + action + "...");
         CalendarList feed = client.calendarList().list().setFields(CalendarInfo.FEED_FIELDS).execute();
         model.reset(feed.getItems());
     }

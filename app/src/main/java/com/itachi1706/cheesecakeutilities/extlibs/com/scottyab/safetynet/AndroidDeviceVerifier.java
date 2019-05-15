@@ -2,8 +2,10 @@ package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+
 import androidx.annotation.NonNull;
-import android.util.Log;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import org.json.JSONObject;
 
@@ -86,7 +88,7 @@ public class AndroidDeviceVerifier {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            //Log.d(TAG, "signatureToVerify:" + signatureToVerify);
+            //LogHelper.d(TAG, "signatureToVerify:" + signatureToVerify);
 
             try {
                 URL verifyApiUrl = new URL(GOOGLE_VERIFICATION_URL + apiKey);
@@ -125,7 +127,7 @@ public class AndroidDeviceVerifier {
             } catch (Exception e) {
                 //something went wrong requesting validation of the JWS Message
                 error = e;
-                Log.e(TAG, "problem validating JWS Message :" + e.getMessage(), e);
+                LogHelper.e(TAG, "problem validating JWS Message :" + e.getMessage(), e);
                 return false;
             }
             return false;

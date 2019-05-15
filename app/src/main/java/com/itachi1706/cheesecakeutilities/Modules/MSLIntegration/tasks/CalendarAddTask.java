@@ -2,12 +2,12 @@ package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.api.services.calendar.model.Calendar;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.CalendarAsyncTask;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarInfo;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ public class CalendarAddTask extends CalendarAsyncTask {
     protected void doInBackground() throws IOException {
         Calendar calendar = client.calendars().insert(cal).setFields(CalendarInfo.FIELDS).execute();
         model.add(calendar);
-        Log.i("MSL-ADD", "Created calendar with ID: " + calendar.getId());
+        LogHelper.i("MSL-ADD", "Created calendar with ID: " + calendar.getId());
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(pref, calendar.getId()).apply();
     }
 }
