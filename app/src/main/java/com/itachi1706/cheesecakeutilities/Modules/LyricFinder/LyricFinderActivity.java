@@ -29,9 +29,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
+
 import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
@@ -39,11 +44,6 @@ import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.palette.graphics.Palette;
 
 public class LyricFinderActivity extends BaseModuleActivity {
 
@@ -220,7 +220,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
             state.setText(obj.getStateString());
             if (intent.hasExtra(NowPlaying.Companion.getLYRIC_ALBUMART())) {
                 // Retrieve bitmap #hardcoded yay :D
-                String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
+                String uri = "content://com.itachi1706.cheesecakeutilities.provider/image/albumart.png";
                 if (intent.getBooleanExtra(NowPlaying.Companion.getLYRIC_ALBUMART(), false)) {
                     Uri bitmapUri = Uri.parse(uri);
                     Drawable newImage, defaultImage = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_old));

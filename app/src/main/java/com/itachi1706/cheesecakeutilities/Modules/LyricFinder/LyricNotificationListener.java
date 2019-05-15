@@ -17,6 +17,11 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
@@ -27,10 +32,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 import io.fabric.sdk.android.Fabric;
 
 @SuppressLint("OverrideAbstract")
@@ -183,7 +184,7 @@ public class LyricNotificationListener extends NotificationListenerService {
 
         File shareFile = new File(cache, "albumart.png");
         Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName()
-                + ".appupdater.provider", shareFile);
+                + ".provider", shareFile);
 
         if (contentUri == null) {
             Log.e(TAG, "Failed to share file, invalid contentUri");
