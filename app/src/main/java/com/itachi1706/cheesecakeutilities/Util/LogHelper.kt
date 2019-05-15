@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Util
 
 import android.util.Log
 import com.crashlytics.android.Crashlytics
+import com.itachi1706.cheesecakeutilities.BuildConfig
 
 /**
  * Created by Kenneth on 15/5/2019.
@@ -10,7 +11,7 @@ import com.crashlytics.android.Crashlytics
 object LogHelper {
 
     private fun log(logLevel: Int, tag: String, message: String) {
-        Crashlytics.log(logLevel, tag, message)
+        if (!BuildConfig.DEBUG) Crashlytics.log(logLevel, tag, message)
         Log.println(logLevel, tag, message)
     }
 

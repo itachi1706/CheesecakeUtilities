@@ -74,7 +74,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void setAnalyticsData(boolean enabled, FirebaseAnalytics firebaseAnalytics, CAAnalytics analytics) {
-        Crashlytics.setUserIdentifier(FirebaseInstanceId.getInstance().getId());
+        if (!BuildConfig.DEBUG) Crashlytics.setUserIdentifier(FirebaseInstanceId.getInstance().getId());
         firebaseAnalytics.setUserProperty("debug_mode", (enabled) ? analytics.isDebug() + "" : null);
         firebaseAnalytics.setUserProperty("device_manufacturer", (enabled) ? analytics.getdManufacturer() : null);
         firebaseAnalytics.setUserProperty("device_codename", (enabled) ? analytics.getdCodename() : null);

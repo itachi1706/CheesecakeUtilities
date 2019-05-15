@@ -94,9 +94,9 @@ public class SyncMSLService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        LogHelper.i(TAG, "Starting MSL Sync Job");
         Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        LogHelper.i(TAG, "Starting MSL Sync Job");
 
         parameters = params;
         // Check if network access is available before starting ANYTHING
