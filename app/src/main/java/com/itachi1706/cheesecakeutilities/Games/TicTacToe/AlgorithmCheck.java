@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Games.TicTacToe;
 
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+
 /**
  * Created by Kenneth on 19/5/2015
  * for CheesecakeUtilities in package com.itachi1706.cheesecakeutilities.Games.TicTacToe
@@ -15,7 +17,7 @@ class AlgorithmCheck {
         gameBoardCheck = gameBoard;
         if (wonVert(value) || wonHorizontal(value) || wonDiagonal(value))
             winValue = true;
-        LoggingClass.logInfo("WIN-Check", "Has Won Value: " + winValue);
+        LogHelper.i("WIN-Check", "Has Won Value: " + winValue);
         return winValue;
     }
 

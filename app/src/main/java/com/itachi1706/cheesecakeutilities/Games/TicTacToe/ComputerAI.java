@@ -3,6 +3,8 @@ package com.itachi1706.cheesecakeutilities.Games.TicTacToe;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+
 import java.util.Random;
 
 /**
@@ -26,25 +28,25 @@ class ComputerAI {
         //Check if first turn and is middle
         if (turn == 1)
         {
-            LoggingClass.logInfo("AI", "First Move Execute");
+            LogHelper.i("AI", "First Move Execute");
             firstMove(gameBoard, lastRow, lastCol, context);
         }
         else if (turn > 8)
         {
-            LoggingClass.logInfo("AI", "Game Ended");
+            LogHelper.i("AI", "Game Ended");
         }
         else
         {
-            LoggingClass.logInfo("AI", "Check Win");
+            LogHelper.i("AI", "Check Win");
             //See if AI can win
             if (checkForPossibleAIWinOrBlock(gameBoard, TicTacToeValues.O))
                 return;
-            LoggingClass.logInfo("AI", "Check Block");
+            LogHelper.i("AI", "Check Block");
             //Check if I can block
             if (checkForPossibleAIWinOrBlock(gameBoard, TicTacToeValues.X))
                 return;
             //Randomize
-            LoggingClass.logInfo("AI", "Randomize");
+            LogHelper.i("AI", "Randomize");
             randomlyChuckValue(context);
         }
     }
@@ -54,7 +56,7 @@ class ComputerAI {
         new AlertDialog.Builder(context).setTitle("ERROR")
                 .setMessage(errorMsg)
                 .setPositiveButton(android.R.string.ok, null).show();
-        LoggingClass.logError("ERROR", errorMsg);
+        LogHelper.e("ERROR", errorMsg);
     }
 
     @SuppressWarnings("ConstantConditions")
