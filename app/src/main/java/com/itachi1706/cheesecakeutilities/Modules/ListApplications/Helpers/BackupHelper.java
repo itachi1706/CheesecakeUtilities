@@ -76,8 +76,7 @@ public class BackupHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG, "Post-Oreo: Using new Content URI method");
             Log.i(TAG, "Invoking Content Provider " + context.getPackageName() + ".provider");
-            shareUri = FileProvider.getUriForFile(context, context.getPackageName()
-                    + ".provider", shareFile);
+            shareUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", shareFile);
         } else {
             Log.i(TAG, "Pre-Oreo: Fallbacking to old method as it worked previously");
             shareUri = Uri.fromFile(shareFile);

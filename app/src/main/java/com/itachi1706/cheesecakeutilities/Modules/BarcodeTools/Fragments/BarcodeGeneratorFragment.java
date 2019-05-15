@@ -7,11 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -116,8 +117,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         }
 
         File shareFile = new File(cache, "barcode_share.png");
-        Uri contentUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName()
-                + ".appupdater.provider", shareFile);
+        Uri contentUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName() + ".provider", shareFile);
 
         if (contentUri == null) {
             Log.e(TAG, "Failed to share file, invalid contentUri");
@@ -145,7 +145,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
         //noinspection ConstantConditions
-        shareIntent.setDataAndType(contentUri, getActivity().getContentResolver().getType(contentUri));
+        shareIntent.setType(getActivity().getContentResolver().getType(contentUri));
         shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         startActivity(Intent.createChooser(shareIntent, "Choose an app to share the image to"));
     }

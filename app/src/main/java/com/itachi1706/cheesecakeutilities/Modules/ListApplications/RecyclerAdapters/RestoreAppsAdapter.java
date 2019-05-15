@@ -199,8 +199,7 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Log.i("RestoreApps", "Post-Nougat: Using new Content URI method");
                 Log.i("Downloader", "Invoking Content Provider " + v.getContext().getPackageName() + ".provider");
-                Uri contentUri = FileProvider.getUriForFile(v.getContext(), v.getContext().getPackageName()
-                        + ".provider", new File(fullpath));
+                Uri contentUri = FileProvider.getUriForFile(v.getContext(), v.getContext().getPackageName() + ".provider", new File(fullpath));
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {

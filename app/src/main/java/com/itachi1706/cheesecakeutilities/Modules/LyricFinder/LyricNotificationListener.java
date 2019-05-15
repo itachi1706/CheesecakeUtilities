@@ -183,8 +183,7 @@ public class LyricNotificationListener extends NotificationListenerService {
         }
 
         File shareFile = new File(cache, "albumart.png");
-        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName()
-                + ".provider", shareFile);
+        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName() + ".provider", shareFile);
 
         if (contentUri == null) {
             Log.e(TAG, "Failed to share file, invalid contentUri");
