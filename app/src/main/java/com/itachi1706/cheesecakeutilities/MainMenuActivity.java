@@ -66,7 +66,7 @@ public class MainMenuActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         // Do Authentication
-        if (!this.getIntent().getBooleanExtra("authagain", false)) {
+        if (!this.getIntent().getBooleanExtra("authagain", true)) {
             checkForUpdate();
             return;
         }
