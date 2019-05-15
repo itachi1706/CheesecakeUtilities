@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import androidx.core.content.FileProvider;
 import android.util.Log;
+
+import androidx.core.content.FileProvider;
 
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 
@@ -74,9 +75,9 @@ public class BackupHelper {
         // Android O Strict Mode crash fix
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i(TAG, "Post-Oreo: Using new Content URI method");
-            Log.i(TAG, "Invoking Content Provider " + context.getPackageName() + ".appupdater.provider");
+            Log.i(TAG, "Invoking Content Provider " + context.getPackageName() + ".provider");
             shareUri = FileProvider.getUriForFile(context, context.getPackageName()
-                    + ".appupdater.provider", shareFile);
+                    + ".provider", shareFile);
         } else {
             Log.i(TAG, "Pre-Oreo: Fallbacking to old method as it worked previously");
             shareUri = Uri.fromFile(shareFile);
