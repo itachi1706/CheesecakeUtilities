@@ -3,13 +3,12 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,6 +25,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 /**
  * Created by Kenneth on 28/7/2017.
@@ -86,12 +86,12 @@ public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity imple
         findViewById(R.id.test_account).setOnClickListener(v -> mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 // Sign in success, update UI with the signed-in user's information
-                Log.d(TAG, "signInTestEmail:success");
+                LogHelper.d(TAG, "signInTestEmail:success");
                 FirebaseUser user = mAuth.getCurrentUser();
                 updateUI(user);
             } else {
                 // If sign in fails, display a message to the user.
-                Log.w(TAG, "signInTestEmail:failure", task.getException());
+                LogHelper.w(TAG, "signInTestEmail:failure", task.getException());
                 Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
                         Toast.LENGTH_SHORT).show();
                 updateUI(null);
@@ -115,7 +115,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity imple
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            Log.d(TAG, "Sign In Result:" + result.isSuccess());
+            LogHelper.d(TAG, "Sign In Result:" + result.isSuccess());
             if (result.isSuccess()) {
                 // Signed in successfully, show authenticated UI.
                 GoogleSignInAccount acct = result.getSignInAccount();
@@ -128,7 +128,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity imple
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        LogHelper.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         progress.setVisibility(View.VISIBLE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -136,12 +136,12 @@ public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity imple
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithGoogle:success");
+                        LogHelper.d(TAG, "signInWithGoogle:success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithGoogle:failure", task.getException());
+                        LogHelper.w(TAG, "signInWithGoogle:failure", task.getException());
                         Toast.makeText(VehicleMileageTrackerLoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                         updateUI(null);
@@ -170,7 +170,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity imple
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        LogHelper.d(TAG, "onConnectionFailed:" + connectionResult);
         if (mAuth.getCurrentUser() == null)
             new AlertDialog.Builder(this).setTitle("Unable to connect to Google Servers")
                     .setMessage("We are unable to connect to Google Servers to sign you in, therefore this utility cannot be used")

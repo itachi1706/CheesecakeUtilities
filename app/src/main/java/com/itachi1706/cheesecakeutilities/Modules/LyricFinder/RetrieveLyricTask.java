@@ -4,10 +4,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class RetrieveLyricTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... strings) {
         if (strings.length < 2) {
-            Log.e(TAG, "Error retrieving lyrics. Insufficient params");
+            LogHelper.e(TAG, "Error retrieving lyrics. Insufficient params");
             Message msg = Message.obtain();
             msg.what = LYRIC_TASK_COMPLETE;
             Bundle bundle = new Bundle();

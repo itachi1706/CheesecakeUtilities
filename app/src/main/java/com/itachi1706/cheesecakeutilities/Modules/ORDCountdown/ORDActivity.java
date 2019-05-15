@@ -4,16 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.gson.Gson;
@@ -26,6 +25,7 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Firebase
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.Util.JSONHelper;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -214,7 +214,7 @@ public class ORDActivity extends BaseModuleActivity {
 
         // Get closest upcoming date
         for (GCalHolidayItem h : holidays) {
-            Log.d("Holiday", h.getName() + ": " + h.getDateInMillis() + " (" + h.getDate() + ") | " + holidayChecker);
+            LogHelper.d("Holiday", h.getName() + ": " + h.getDateInMillis() + " (" + h.getDate() + ") | " + holidayChecker);
             if (h.getDateInMillis() >= holidayChecker) {
                 // Upcoming
                 if (upcoming == null) upcoming= h;

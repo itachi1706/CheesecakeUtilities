@@ -5,17 +5,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.ColorUtils;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
@@ -144,7 +145,7 @@ public class PsiActivity extends BaseModuleActivity {
                         Toast.makeText(activity.getApplicationContext(), "An error occurred retrieving data", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    Log.d("PsiActivity", "JSON Data: " + psiData);
+                    LogHelper.d("PsiActivity", "JSON Data: " + psiData);
 
                     Gson gson = new Gson();
                     PsiGeneral psi = gson.fromJson(psiData, PsiGeneral.class);

@@ -7,15 +7,16 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -82,11 +83,11 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
         @Override
         public void onClick(View v) {
             String link = title.getText().toString();
-            Log.i("MainMenuAdapter", "Clicked on " + link);
+            LogHelper.i("MainMenuAdapter", "Clicked on " + link);
             int index = Arrays.asList(v.getContext().getResources().getStringArray(R.array.mainmenu)).indexOf(link);
             String className = v.getContext().getResources().getStringArray(R.array.mainmenulink)[index];
             if (className.startsWith(".")) className = "com.itachi1706.cheesecakeutilities" + className;
-            Log.i("MainMenuAdapter", "Attempting to navigate to " + className);
+            LogHelper.i("MainMenuAdapter", "Attempting to navigate to " + className);
             try {
                 Class classObj = Class.forName(className);
                 Intent intent = new Intent(mActivity, classObj);
@@ -99,7 +100,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, link);
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "utility_launched");
                 analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                Log.i("Firebase", "Logged Event Utility Launched: " + link);
+                LogHelper.i("Firebase", "Logged Event Utility Launched: " + link);
 
                 // Add dynamic shortcuts
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
@@ -107,7 +108,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                     LinkedList<ShortcutInfo> infos = new LinkedList<>(shortcutManager.getDynamicShortcuts());
                     final int shortcutCount = shortcutManager.getMaxShortcutCountPerActivity() - 2;
                     if (infos.size() >= shortcutCount) {
-                        Log.i("ShortcutManager", "Dynamic Shortcuts more than " + shortcutCount
+                        LogHelper.i("ShortcutManager", "Dynamic Shortcuts more than " + shortcutCount
                                 + ". Removing extras");
                         do {
                             infos.removeLast();
@@ -124,7 +125,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter<MainMenuAdapter.MainMe
                     shortcutManager.setDynamicShortcuts(infos);
                 }
             } catch (ClassNotFoundException e) {
-                Log.e("MainMenuAdapter", "Class Not Found: " + className);
+                LogHelper.e("MainMenuAdapter", "Class Not Found: " + className);
                 e.printStackTrace();
             }
         }

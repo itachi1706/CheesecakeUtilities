@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,21 +28,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
-import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
-import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.palette.graphics.Palette;
+
+import com.google.gson.Gson;
+import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
+import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
+import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
 
 public class LyricFinderActivity extends BaseModuleActivity {
 
@@ -199,7 +199,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
         if (receiver == null) receiver = new DataReceiver();
         IntentFilter filter = new IntentFilter(NowPlaying.Companion.getLYRIC_DATA());
         this.registerReceiver(receiver, filter);
-        Log.i(TAG, "Request metadata update");
+        LogHelper.i(TAG, "Request metadata update");
         sendBroadcast(new Intent(NowPlaying.Companion.getLYRIC_UPDATE()));
     }
 
@@ -212,7 +212,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            Log.i(TAG, "Receieved broadcast");
+            LogHelper.i(TAG, "Receieved broadcast");
             NowPlaying obj = new NowPlaying(intent);
             album.setText(obj.getAlbum());
             artist.setText(obj.getArtist());
@@ -220,7 +220,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
             state.setText(obj.getStateString());
             if (intent.hasExtra(NowPlaying.Companion.getLYRIC_ALBUMART())) {
                 // Retrieve bitmap #hardcoded yay :D
-                String uri = "content://com.itachi1706.cheesecakeutilities.appupdater.provider/image/albumart.png";
+                String uri = "content://com.itachi1706.cheesecakeutilities.provider/image/albumart.png";
                 if (intent.getBooleanExtra(NowPlaying.Companion.getLYRIC_ALBUMART(), false)) {
                     Uri bitmapUri = Uri.parse(uri);
                     Drawable newImage, defaultImage = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_old));
@@ -254,7 +254,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
                                 bgColor = ((ColorDrawable) nowPlayingLayout.getBackground()).getColor();
 
                             if (selectedColors == null) {
-                                Log.e(TAG, "Unable to get colors, defaulting");
+                                LogHelper.e(TAG, "Unable to get colors, defaulting");
                                 selectedColors = new Palette.Swatch(Color.rgb(255, 255, 255), 1);
                             }
 
@@ -361,7 +361,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             String cmd = intent.getStringExtra("command");
-            Log.v(TAG, action + " / " + cmd);
+            LogHelper.v(TAG, action + " / " + cmd);
             String artists;
             String tracks;
             if (action.equals("com.amazon.mp3.metachanged")) {
@@ -373,7 +373,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
 
             }
             String albums = intent.getStringExtra("album");
-            Log.v(TAG, artists + ":" + albums + ":" + tracks);
+            LogHelper.v(TAG, artists + ":" + albums + ":" + tracks);
             Toast.makeText(getApplicationContext(), tracks, Toast.LENGTH_SHORT).show();
             artist.setText(artists);
             title.setText(tracks);

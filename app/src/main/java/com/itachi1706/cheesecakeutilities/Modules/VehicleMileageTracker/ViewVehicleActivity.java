@@ -2,15 +2,15 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +19,7 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Log.d("Test", "Something is clicked");
+        LogHelper.d("Test", "Something is clicked");
         if (item.getTitle().equals("Edit")) {
             Intent editIntent = new Intent(this, AddNewVehicleActivity.class);
             editIntent.putExtra("edit", true);
@@ -124,7 +125,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w("ViewVehicleAct", "loadVehicles:onCancelled", databaseError.toException());
+                LogHelper.w("ViewVehicleAct", "loadVehicles:onCancelled", databaseError.toException());
             }
         });
     }

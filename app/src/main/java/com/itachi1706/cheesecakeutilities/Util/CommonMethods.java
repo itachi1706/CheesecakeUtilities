@@ -8,9 +8,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class CommonMethods {
     }
 
     public static void logPermError(@NonNull int[] grantResults) {
-        Log.e(PERM_MAN_TAG, "Permission not granted: results len = " + grantResults.length +
+        LogHelper.e(PERM_MAN_TAG, "Permission not granted: results len = " + grantResults.length +
                 " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
     }
 

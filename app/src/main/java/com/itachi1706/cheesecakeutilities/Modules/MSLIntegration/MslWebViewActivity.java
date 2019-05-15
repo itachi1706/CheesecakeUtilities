@@ -5,18 +5,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.util.Log;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MslWebViewActivity extends AppCompatActivity {
 
@@ -41,11 +42,11 @@ public class MslWebViewActivity extends AppCompatActivity {
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.d(TAG, "Console Msg: " + consoleMessage.message());
+                LogHelper.d(TAG, "Console Msg: " + consoleMessage.message());
 
                 if (consoleMessage.message().startsWith("Key: ") && !consoleMessage.message().contains("null")) {
                     String key = consoleMessage.message().substring(5);
-                    Log.d(TAG, "Key found! (" + key + ")");
+                    LogHelper.d(TAG, "Key found! (" + key + ")");
                     new AlertDialog.Builder(MslWebViewActivity.this).setTitle("Key found")
                             .setMessage("Key detected! Your Access Key is: " + key + "\n\n" +
                                     "Click OK to save the key and exit, otherwise click cancel to just exit\nIf this is not the correct key or if you received the expired key notification and has" +
@@ -70,10 +71,10 @@ public class MslWebViewActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                Log.i(TAG, "Finished Loading: " + url);
+                LogHelper.i(TAG, "Finished Loading: " + url);
 
                 if (url.contains(URL)) {
-                    Log.i(TAG, "Found MSL URL");
+                    LogHelper.i(TAG, "Found MSL URL");
                     injectScriptFile(view); // see below ...
 
                     // test if the script was loaded

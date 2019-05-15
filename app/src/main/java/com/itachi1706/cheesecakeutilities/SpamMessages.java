@@ -8,16 +8,17 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
@@ -66,10 +67,10 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
                 if (c.getCount() == 1) {
                     if (c.moveToFirst()) {
                         String phoneNumber = c.getString(c.getColumnIndex(Phone.NUMBER));
-                        Log.i("ContactPicker", "Phone Number: " + phoneNumber);
+                        LogHelper.i("ContactPicker", "Phone Number: " + phoneNumber);
                         this.teleText.setText(phoneNumber);
                     } else
-                        Log.w("ContactPicker", "No Numbers Found");
+                        LogHelper.w("ContactPicker", "No Numbers Found");
                 }
                 c.close();
         }
@@ -91,7 +92,7 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
         try {
             if (teleNum.equals("")) {
                 Toast.makeText(getApplicationContext(), "Enter phone number", Toast.LENGTH_LONG).show();
-                Log.e("Spammer", "Enter Phone Number");
+                LogHelper.e("Spammer", "Enter Phone Number");
                 return;
             }
             try {
@@ -103,19 +104,19 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
                     }
                     finish();
                     Toast.makeText(getApplicationContext(), "Message sent " + num + " times.", Toast.LENGTH_LONG).show();
-                    Log.i("Spammer", "Message sent " + num + " times");
+                    LogHelper.i("Spammer", "Message sent " + num + " times");
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter a number greater than zero.", Toast.LENGTH_LONG).show();
-                    Log.e("Spammer", "Enter Number greated than zero. Number entered: " + num);
+                    LogHelper.e("Spammer", "Enter Number greated than zero. Number entered: " + num);
                 }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Enter a number greater than zero.", Toast.LENGTH_LONG).show();
-                Log.e("Spammer", "Exception occurred: " + e.getLocalizedMessage());
+                LogHelper.e("Spammer", "Exception occurred: " + e.getLocalizedMessage());
                 e.printStackTrace();
             }
         } catch (Exception e2) {
             Toast.makeText(getApplicationContext(), "Enter phone number no symbols.", Toast.LENGTH_LONG).show();
-            Log.e("Spammer", "Exception occurred: " + e2.getLocalizedMessage());
+            LogHelper.e("Spammer", "Exception occurred: " + e2.getLocalizedMessage());
             e2.printStackTrace();
         }
     }
@@ -134,7 +135,7 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
     private static final int RC_HANDLE_REQUEST_MESSAGING = 2;
 
     private void requestContactsPermission() {
-        Log.w(PERM_MAN_TAG, "Contacts permission is not granted. Requesting permission");
+        LogHelper.w(PERM_MAN_TAG, "Contacts permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)){
@@ -150,7 +151,7 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
     }
 
     private void requestMessagingPermission() {
-        Log.w(PERM_MAN_TAG, "Messaging permission is not granted. Requesting permission");
+        LogHelper.w(PERM_MAN_TAG, "Messaging permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.SEND_SMS};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)){
@@ -188,7 +189,7 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
         switch (requestCode) {
             case RC_HANDLE_REQUEST_MESSAGING:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(PERM_MAN_TAG, "Messaging Permission Granted. Sending SMS");
+                    LogHelper.d(PERM_MAN_TAG, "Messaging Permission Granted. Sending SMS");
                     canSendSMS();
                     return;
                 }
@@ -196,7 +197,7 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
                 break;
             case RC_HANDLE_REQUEST_CONTACTS:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(PERM_MAN_TAG, "Contacts Permission Granted. Launching Contacts Picker");
+                    LogHelper.d(PERM_MAN_TAG, "Contacts Permission Granted. Launching Contacts Picker");
                     // we have permission, so create the camerasource
                     startActivityForResult(new Intent(Intent.ACTION_PICK, Phone.CONTENT_URI), 2);
                     return;
@@ -205,7 +206,7 @@ public class SpamMessages extends BaseModuleActivity implements View.OnClickList
                         "Please enter the phone number manually or grant the app permission to read your contacts", grantResults, this);
                 break;
             default:
-                Log.d(PERM_MAN_TAG, "Got unexpected permission result: " + requestCode);
+                LogHelper.d(PERM_MAN_TAG, "Got unexpected permission result: " + requestCode);
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

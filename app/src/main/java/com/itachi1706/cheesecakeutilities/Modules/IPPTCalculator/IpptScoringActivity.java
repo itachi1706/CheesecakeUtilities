@@ -2,11 +2,6 @@ package com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,9 +9,15 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +53,7 @@ public class IpptScoringActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String g = genderSpinner.getSelectedItem().toString();
-                Log.d("IPPT UPDATE", g);
+                LogHelper.d("IPPT UPDATE", g);
                 int gender = JsonHelper.getGender(g);
                 if (gender == JsonHelper.FEMALE)
                     exerciseSpinner.setAdapter(new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
@@ -97,9 +98,9 @@ public class IpptScoringActivity extends AppCompatActivity {
         int gender = JsonHelper.getGender(genderSpinner.getSelectedItem().toString());
         int ageGroup = JsonHelper.getAgeGroup(ageSpinner.getSelectedItem().toString(), this);
         int exercise = JsonHelper.getExercise(exerciseSpinner.getSelectedItem().toString());
-        Log.i("IpptScore", "Gender: " + gender);
-        Log.i("IpptScore", "Age Group: " + ageGroup);
-        Log.i("IpptScore", "Exercise: " + exercise);
+        LogHelper.i("IpptScore", "Gender: " + gender);
+        LogHelper.i("IpptScore", "Age Group: " + ageGroup);
+        LogHelper.i("IpptScore", "Exercise: " + exercise);
         StringRecyclerAdapter adapter = new StringRecyclerAdapter(new String[0]);
         recyclerView.setAdapter(adapter);
         bar.setVisibility(View.VISIBLE);

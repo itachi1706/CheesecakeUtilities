@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +23,7 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.turingtechnologies.materialscrollbar.DateAndTimeIndicator;
 import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
@@ -119,13 +119,13 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
         if (listener != null) {
             FirebaseDatabase.getInstance().getReference().removeEventListener(listener);
             listener = null;
-            Log.i(TAG, "Firebase DB Listeners exist when it should not, force terminating it");
+            LogHelper.i(TAG, "Firebase DB Listeners exist when it should not, force terminating it");
         }
-        Log.i(TAG, "Registering Firebase DB listeners");
+        LogHelper.i(TAG, "Registering Firebase DB listeners");
         listener = userdata.child(FB_REC_RECORDS).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "Records has been updated. Processing...");
+                LogHelper.i(TAG, "Records has been updated. Processing...");
                 final List<Record> records = new ArrayList<>();
                 final List<String> tags = new ArrayList<>();
                 HashMap<String, Object> migratedRecords = null;
@@ -144,7 +144,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
                 }
                 if (migratedRecords != null)
                     userdata.child(FB_REC_RECORDS).updateChildren(migratedRecords);
-                Log.i(TAG, "Records: " + records.size());
+                LogHelper.i(TAG, "Records: " + records.size());
                 Collections.reverse(records);
                 Collections.reverse(tags);
                 if (tags.size() > 0) lastRecord = tags.get(0);
@@ -159,14 +159,14 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.w("VehMileageAdapter", "loadVehicles:onCancelled", databaseError.toException());
+                        LogHelper.w("VehMileageAdapter", "loadVehicles:onCancelled", databaseError.toException());
                     }
                 });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadRecords:onCancelled", databaseError.toException());
+                LogHelper.w(TAG, "loadRecords:onCancelled", databaseError.toException());
             }
         });
     }
@@ -176,7 +176,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
         super.onStop();
         if (listener != null) {
             FirebaseDatabase.getInstance().getReference().removeEventListener(listener);
-            Log.i(TAG, "Unregistered Firebase Listeners");
+            LogHelper.i(TAG, "Unregistered Firebase Listeners");
             listener = null;
         }
     }

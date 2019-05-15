@@ -22,7 +22,6 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,16 +31,18 @@ import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+
 import com.crashlytics.android.Crashlytics;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.squareup.picasso.Picasso;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import io.fabric.sdk.android.Fabric;
 
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
@@ -72,7 +73,7 @@ public class NavBarService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
 
-        Log.i(TAG, "NavBarService connected");
+        LogHelper.i(TAG, "NavBarService connected");
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(Broadcasts.BROADCAST_ACTION);
         this.registerReceiver(receiver, filter);
@@ -156,8 +157,8 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.i(TAG, "onConfigurationChanged");
-        Log.i(TAG, "Orientation is: "
+        LogHelper.i(TAG, "onConfigurationChanged");
+        LogHelper.i(TAG, "Orientation is: "
                 + (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT ? "portrait"
                 : (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? "landscape"
                 : "unknown")));
@@ -279,14 +280,14 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "NavBarService destroyed");
+        LogHelper.i(TAG, "NavBarService destroyed");
         tryRemovingNavView();
         this.unregisterReceiver(receiver);
     }
 
     @Override
     public void onInterrupt() {
-        Log.i(TAG, "NavBarService interrupted");
+        LogHelper.i(TAG, "NavBarService interrupted");
         tryRemovingNavView();
         this.unregisterReceiver(receiver);
     }

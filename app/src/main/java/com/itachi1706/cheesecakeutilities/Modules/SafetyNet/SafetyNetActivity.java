@@ -8,17 +8,18 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetHelper;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetResponse;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.Utils;
@@ -57,7 +58,7 @@ public class SafetyNetActivity extends BaseModuleActivity {
         setContentView(R.layout.activity_safety_net);
 
         safetyNetHelper = new SafetyNetHelper(API_KEY);
-        Log.d(TAG, "AndroidAPIKEY: " + Utils.getSigningKeyFingerprint(this) + ";" + getPackageName());
+        LogHelper.d(TAG, "AndroidAPIKEY: " + Utils.getSigningKeyFingerprint(this) + ";" + getPackageName());
 
         resultsTV = findViewById(R.id.results);
         nonceTV = findViewById(R.id.nonce);
@@ -78,9 +79,9 @@ public class SafetyNetActivity extends BaseModuleActivity {
 
     private void runTest() {
         showLoading(true);
-        Log.d(TAG, "Package: " + this.getPackageName());
+        LogHelper.d(TAG, "Package: " + this.getPackageName());
 
-        Log.d(TAG, "SafetyNet start request");
+        LogHelper.d(TAG, "SafetyNet start request");
         safetyNetHelper.requestTest(this, new SafetyNetHelper.SafetyNetWrapperCallback() {
             @Override
             public void error(int errorCode, String errorMessage) {
@@ -90,7 +91,7 @@ public class SafetyNetActivity extends BaseModuleActivity {
 
             @Override
             public void success(boolean ctsProfileMatch, boolean basicIntegrity) {
-                Log.d(TAG, "SafetyNet req success: ctsProfileMatch:" + ctsProfileMatch + " and basicIntegrity, " + basicIntegrity);
+                LogHelper.d(TAG, "SafetyNet req success: ctsProfileMatch:" + ctsProfileMatch + " and basicIntegrity, " + basicIntegrity);
                 showLoading(false);
                 updateUIWithSuccessfulResult(safetyNetHelper.getLastResponse());
 
@@ -99,7 +100,7 @@ public class SafetyNetActivity extends BaseModuleActivity {
     }
 
     private void handleError(int errorCode, String errorMsg) {
-        Log.e(TAG, errorMsg);
+        LogHelper.e(TAG, errorMsg);
 
         StringBuilder b = new StringBuilder();
 

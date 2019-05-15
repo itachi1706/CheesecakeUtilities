@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 public class BluetoothToggleReceiver extends BaseBroadcastReceiver {
 
@@ -18,7 +18,7 @@ public class BluetoothToggleReceiver extends BaseBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.i(TAG, "Waking up");
+        LogHelper.i(TAG, "Waking up");
         boolean state = intent.getExtras().getBoolean("status");
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(context);
         if (!sp.getBoolean(QHConstants.QH_BT_STATE, false)) return; // Not enabled
@@ -29,25 +29,25 @@ public class BluetoothToggleReceiver extends BaseBroadcastReceiver {
 
         boolean workDone = false;
         boolean enabled = bluetoothAdapter.isEnabled();
-        Log.i(TAG, "Quiet Hour: " + state + " | Adapter Enabled: " + enabled);
+        LogHelper.i(TAG, "Quiet Hour: " + state + " | Adapter Enabled: " + enabled);
         if (state) {
             // Quiet Mode Enabled, Turn off BT
             if (enabled) {
                 bluetoothAdapter.disable();
-                Log.i(TAG, "Disabled Bluetooth at " + System.currentTimeMillis());
+                LogHelper.i(TAG, "Disabled Bluetooth at " + System.currentTimeMillis());
                 workDone = true;
             }
         } else {
             // Quiet Mode Disabled, Turn On BT
             if (!enabled) {
                 bluetoothAdapter.enable();
-                Log.i(TAG, "Enabled Bluetooth at " + System.currentTimeMillis());
+                LogHelper.i(TAG, "Enabled Bluetooth at " + System.currentTimeMillis());
                 workDone = true;
             }
         }
         NotificationHelper.Companion.sendNotification(context, sp.getInt(QHConstants.QH_BT_NOTIFICATION, QHConstants.QH_NOTIFY_NEVER), workDone, state, "Bluetooth");
         if (workDone) logResult(sp, state);
-        Log.i(TAG, "Job Done");
+        LogHelper.i(TAG, "Job Done");
     }
 
     private void logResult(SharedPreferences sp, boolean state) {

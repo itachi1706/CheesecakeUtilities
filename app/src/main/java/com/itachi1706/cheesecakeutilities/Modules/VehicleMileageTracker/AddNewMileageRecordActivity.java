@@ -3,10 +3,6 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +15,10 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +28,7 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.itachi1706.cheesecakeutilities.Util.TextInputAutoCompleteTextView;
 
 import java.util.ArrayList;
@@ -151,7 +152,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
                 switch (type) {
                     case TYPE_EDIT: processEdit(dataSnapshot.getValue(Record.class)); break;
                     case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class)); break;
-                    default: Log.e("AddNewRecord", "Not supposed to be here!"); break;
+                    default: LogHelper.e("AddNewRecord", "Not supposed to be here!"); break;
                 }
             }
 
@@ -394,7 +395,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w("VehMileageAddRec", "loadVehicles:" + vehicles.getKey() + ":onCancelled", databaseError.toException());
+                LogHelper.w("VehMileageAddRec", "loadVehicles:" + vehicles.getKey() + ":onCancelled", databaseError.toException());
             }
         });
     }

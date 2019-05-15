@@ -3,11 +3,6 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.Gravity;
 import android.view.Menu;
@@ -24,6 +19,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -31,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                 hScroll.scrollBy((int) (mx - curX), (int) (my - curY));
                 break;
             default:
-                Log.e(TAG, "Invalid case");
+                LogHelper.e(TAG, "Invalid case");
                 break;
         }
         return true;
@@ -123,7 +123,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                     SimpleDateFormat sd = new SimpleDateFormat("MMMM yyyy", Locale.US);
                     monthData.put(key, sd.format(d));
                 }
-                Log.d(TAG, "Month Data Size: " + monthData.size());
+                LogHelper.d(TAG, "Month Data Size: " + monthData.size());
                 List<String> tmp = new ArrayList<>();
                 for (int i = 0; i < monthData.size(); i++) {
                     tmp.add(monthData.valueAt(i));
@@ -137,7 +137,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view1, int position, long id) {
                         if (position >= monthData.size()) {
                             // Error
-                            Log.e(TAG, "Position #" + position + " exceeds dataset size of " + monthData.size());
+                            LogHelper.e(TAG, "Position #" + position + " exceeds dataset size of " + monthData.size());
                             return;
                         }
                         long date = monthData.keyAt(position);
@@ -187,7 +187,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                     if (recList == null || recList.getTrainingMileage()) continue;
                     records.add(recList);
                 }
-                Log.i(TAG, "Records: " + records.size());
+                LogHelper.i(TAG, "Records: " + records.size());
                 processRecordsGeneral(records);
             }
 
@@ -204,7 +204,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         layout.removeAllViews();
         List<List<Record>> tmp = new ArrayList<>();
         List<Record> tmpRec = records;
-        Log.d(TAG, "Size check, Size: " + tmpRec.size() + " | Max: " + maxPerRecord);
+        LogHelper.d(TAG, "Size check, Size: " + tmpRec.size() + " | Max: " + maxPerRecord);
         if (tmpRec.size() > maxPerRecord) {
             while (tmpRec.size() > maxPerRecord) {
                 // Split records
@@ -212,7 +212,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                 tmpRec = tmpRec.subList(maxPerRecord, tmpRec.size());
             }
             tmp.add(tmpRec);
-            Log.d(TAG, "Total count of reports: " + tmp.size());
+            LogHelper.d(TAG, "Total count of reports: " + tmp.size());
             int offsetMax = maxPerRecord + 2;
             for (int i = 0; i < tmp.size(); i++) {
                 processRecords(tmp.get(i), i * offsetMax);

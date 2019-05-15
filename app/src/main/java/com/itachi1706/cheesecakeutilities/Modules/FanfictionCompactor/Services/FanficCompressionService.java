@@ -7,7 +7,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
@@ -17,6 +19,7 @@ import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.Fa
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.FanfictionDatabase;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -31,9 +34,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by Kenneth on 1/6/2016.
@@ -63,7 +63,7 @@ public class FanficCompressionService extends IntentService{
         receiver = new ResponseReceiver();
         IntentFilter filter = new IntentFilter(FanficBroadcast.BROADCAST_NOTIFY);
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
-        Log.i(FANFIC_COMPRESSION_TAG, "Registered Broadcast Receiver");
+        LogHelper.i(FANFIC_COMPRESSION_TAG, "Registered Broadcast Receiver");
     }
 
     @Override
@@ -71,7 +71,7 @@ public class FanficCompressionService extends IntentService{
         super.onDestroy();
 
         // Destroy Response Handler
-        Log.i(FANFIC_COMPRESSION_TAG, "Unregistering Broadcast Receiver");
+        LogHelper.i(FANFIC_COMPRESSION_TAG, "Unregistering Broadcast Receiver");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
     }
 
@@ -83,7 +83,7 @@ public class FanficCompressionService extends IntentService{
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            Log.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
+            LogHelper.e(FANFIC_COMPRESSION_TAG, "Cannot sleep D:");
         }
 
         updateNotification("Backing Up Existing Files...", "Backup", false, 0, 0, true);
@@ -91,7 +91,7 @@ public class FanficCompressionService extends IntentService{
         try {
             zipFiles();
         } catch (IOException e) {
-            Log.e(FANFIC_COMPRESSION_TAG, "Failed to zip files!");
+            LogHelper.e(FANFIC_COMPRESSION_TAG, "Failed to zip files!");
             updateNotification("File Backup failed", "File Backup Error", true, 0, 0, false);
             sendCompleteIntent();
             return;
@@ -139,14 +139,14 @@ public class FanficCompressionService extends IntentService{
 
         for (File file : files) {
             if (file.isDirectory()) {
-                Log.i(FANFIC_COMPRESSION_TAG, "Zipping folder " + file.getAbsolutePath());
+                LogHelper.i(FANFIC_COMPRESSION_TAG, "Zipping folder " + file.getAbsolutePath());
                 addDir(file, out);
                 continue;
             }
             FileInputStream in = new FileInputStream(file.getAbsolutePath());
             fanficObj = new FanficNotificationObject("Backing Up to " + zipfile + ":\n " + file.getAbsolutePath(), "Backup", false, currentFile, totalFiles, false, "Backing up files...");
             updateNotification();
-            Log.d(FANFIC_COMPRESSION_TAG, "Zipping: " + file.getAbsolutePath());
+            LogHelper.d(FANFIC_COMPRESSION_TAG, "Zipping: " + file.getAbsolutePath());
             out.putNextEntry(new ZipEntry(mainfile.toURI().relativize(file.toURI()).getPath()));
             int len;
             while ((len = in.read(tmpBuf)) > 0) {
@@ -179,7 +179,7 @@ public class FanficCompressionService extends IntentService{
             boolean toDelete = true;
             String filename = FilenameUtils.getBaseName(file.getName());
 
-            Log.d(FANFIC_COMPRESSION_TAG, "Checking " + filename + " (" + file.getAbsolutePath() + ")");
+            LogHelper.d(FANFIC_COMPRESSION_TAG, "Checking " + filename + " (" + file.getAbsolutePath() + ")");
             fanficObj = new FanficNotificationObject("Checking " + filename, "Pruning", false, count, max, false, "Pruning files...");
             updateNotification();
             for (FanficStories s : stories) {
@@ -194,7 +194,7 @@ public class FanficCompressionService extends IntentService{
                 continue;
             }
 
-            Log.i(FANFIC_COMPRESSION_TAG, "Pruning " + filename + " (" + file.getAbsolutePath() + ")");
+            LogHelper.i(FANFIC_COMPRESSION_TAG, "Pruning " + filename + " (" + file.getAbsolutePath() + ")");
             fanficObj = new FanficNotificationObject("Deleting " + filename, "Pruning", false, count, max, false, "Pruning files...");
             updateNotification();
 
@@ -202,7 +202,7 @@ public class FanficCompressionService extends IntentService{
                 FileUtils.deleteDirectory(file);
                 deleted++;
             } catch (IOException e) {
-                Log.w(FANFIC_COMPRESSION_TAG, "Unable to delete " + filename + " (" + file.getAbsolutePath() + ")");
+                LogHelper.w(FANFIC_COMPRESSION_TAG, "Unable to delete " + filename + " (" + file.getAbsolutePath() + ")");
             }
             count++;
 
@@ -256,7 +256,7 @@ public class FanficCompressionService extends IntentService{
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(obj.getNotificationMessage()))
                     .setProgress(obj.getMax(), obj.getProgress(), obj.isIndeterminate());
 
-            Log.d(FANFIC_COMPRESSION_TAG, "Updating notification");
+            LogHelper.d(FANFIC_COMPRESSION_TAG, "Updating notification");
             notificationManager.notify(NOTIFY_ID, builder.build());
         }
 
@@ -284,10 +284,10 @@ public class FanficCompressionService extends IntentService{
             lastStatusCode = intent.getIntExtra(FanficBroadcast.BROADCAST_STATUS, -99);
 
             switch (lastStatusCode) {
-                case 1: Log.i(FANFIC_COMPRESSION_TAG, "Activity Connected, sending dialog..."); updateNotification(); break;
-                case 0: Log.i(FANFIC_COMPRESSION_TAG, "Activity Disconnected"); break;
-                case 2: Log.i(FANFIC_COMPRESSION_TAG, "Activity Requested No Reminder"); break;
-                default: Log.e(FANFIC_COMPRESSION_TAG, "Weird Status Code (" + lastStatusCode + "), ignoring"); break;
+                case 1: LogHelper.i(FANFIC_COMPRESSION_TAG, "Activity Connected, sending dialog..."); updateNotification(); break;
+                case 0: LogHelper.i(FANFIC_COMPRESSION_TAG, "Activity Disconnected"); break;
+                case 2: LogHelper.i(FANFIC_COMPRESSION_TAG, "Activity Requested No Reminder"); break;
+                default: LogHelper.e(FANFIC_COMPRESSION_TAG, "Weird Status Code (" + lastStatusCode + "), ignoring"); break;
             }
         }
     }

@@ -3,18 +3,18 @@ package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.WidgetProviders;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.widget.TextView;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -72,7 +72,7 @@ public class ORDWidgetConfigurationActivity extends AppCompatActivity {
             finish();
         }
         if (mAppWidgetId == INVALID_APPWIDGET_ID) {
-            Log.i("I am invalid", "I am invalid");
+            LogHelper.i("I am invalid", "I am invalid");
             finish();
         }
     }

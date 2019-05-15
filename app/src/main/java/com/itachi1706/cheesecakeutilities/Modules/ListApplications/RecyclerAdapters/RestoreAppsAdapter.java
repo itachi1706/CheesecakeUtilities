@@ -3,19 +3,20 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdap
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsBase;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsFooter;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.RestoreAppsItemsHeader;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.util.Arrays;
@@ -166,7 +167,7 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             int position = this.getLayoutPosition();
             RestoreAppsItemsHeader item = (RestoreAppsItemsHeader) appsList.get(position);
 
-            Log.d("RestoreAppsAdapter", "App Name: " + appName.getText() + " isExpanded: " + item.isExpanded());
+            LogHelper.d("RestoreAppsAdapter", "App Name: " + appName.getText() + " isExpanded: " + item.isExpanded());
 
             if (item.isExpanded()){
                 retract(item);
@@ -194,16 +195,15 @@ public class RestoreAppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
-            Log.d("DEBUG", "Retrieving from " + fullpath);
+            LogHelper.d("DEBUG", "Retrieving from " + fullpath);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Log.i("RestoreApps", "Post-Nougat: Using new Content URI method");
-                Log.i("Downloader", "Invoking Content Provider " + v.getContext().getPackageName() + ".appupdater.provider");
-                Uri contentUri = FileProvider.getUriForFile(v.getContext(), v.getContext().getPackageName()
-                        + ".appupdater.provider", new File(fullpath));
+                LogHelper.i("RestoreApps", "Post-Nougat: Using new Content URI method");
+                LogHelper.i("Downloader", "Invoking Content Provider " + v.getContext().getPackageName() + ".provider");
+                Uri contentUri = FileProvider.getUriForFile(v.getContext(), v.getContext().getPackageName() + ".provider", new File(fullpath));
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
-                Log.i("RestoreApps", "Pre-Nougat: Fallbacking to old method as they dont support contenturis");
+                LogHelper.i("RestoreApps", "Pre-Nougat: Fallbacking to old method as they dont support contenturis");
                 intent.setDataAndType(Uri.fromFile(new File(fullpath)), "application/vnd.android.package-archive");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }

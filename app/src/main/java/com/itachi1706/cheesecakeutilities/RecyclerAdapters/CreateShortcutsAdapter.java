@@ -3,15 +3,16 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.itachi1706.cheesecakeutilities.CreateShortcuts;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,7 +68,7 @@ public class CreateShortcutsAdapter extends RecyclerView.Adapter<CreateShortcuts
         @Override
         public void onClick(View v) {
             String link = title.getText().toString();
-            Log.i("CreateShortcutsAdapter", "Clicked on " + link);
+            LogHelper.i("CreateShortcutsAdapter", "Clicked on " + link);
             int index = Arrays.asList(v.getContext().getResources().getStringArray(R.array.mainmenu)).indexOf(link);
             boolean isGame = false;
             if (index == -1) {

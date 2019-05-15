@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.Random;
 
@@ -83,7 +84,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
     }
 
     private void initializeGame(){
-        LoggingClass.logInfo("SYSTEM", "Init Game");
+        LogHelper.i("SYSTEM", "Init Game");
         r11.setText(TicTacToeValues.EMPTY);
         r12.setText(TicTacToeValues.EMPTY);
         r13.setText(TicTacToeValues.EMPTY);
@@ -99,11 +100,11 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
                 gameBoard[x][y] = TicTacToeValues.EMPTY;
             }
         }
-        LoggingClass.logInfo("SYSTEM", "Init Complete");
+        LogHelper.i("SYSTEM", "Init Complete");
     }
 
     private void disableGame(){
-        LoggingClass.logInfo("SYSTEM", "Game Area Disabled");
+        LogHelper.i("SYSTEM", "Game Area Disabled");
         gameStart = 0;
         timerDuration = 0;
         counter.setText(R.string.tic_tac_toe_placeholder_time);
@@ -116,7 +117,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
     }
 
     private void promptReset(){
-        LoggingClass.logInfo("SYSTEM", "Init Reset Prompt");
+        LogHelper.i("SYSTEM", "Init Reset Prompt");
         gameStart = 2;
         updateGamePlayArea(false);
     }
@@ -125,7 +126,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
     {
         if (AlgorithmCheck.hasWon(TicTacToeValues.X, gameBoard))
         {
-            LoggingClass.logInfo("GAME-WIN", "X WON");
+            LogHelper.i("GAME-WIN", "X WON");
             gameStart = 3;
             new AlertDialog.Builder(this).setTitle("X Won!").setMessage("X has won the game!\nTime Taken: " + timerDuration + " seconds")
                     .setPositiveButton(android.R.string.ok, null).show();
@@ -133,7 +134,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
         }
         else if (AlgorithmCheck.hasWon(TicTacToeValues.O, gameBoard))
         {
-            LoggingClass.logInfo("GAME-WIN", "O WON");
+            LogHelper.i("GAME-WIN", "O WON");
             gameStart = 3;
             new AlertDialog.Builder(this).setTitle("O Won!").setMessage("O has won the game!\n" +
                     "Time Taken: " + timerDuration + " seconds")
@@ -152,9 +153,9 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
     {
         if (isSinglePlayer())
         {
-            LoggingClass.logInfo("GAME", "Single Player Mode");
+            LogHelper.i("GAME", "Single Player Mode");
             turnNo++;
-            LoggingClass.logInfo("GAME", "Incremented Turn No");
+            LogHelper.i("GAME", "Incremented Turn No");
             if (currentPlayer.equals(TicTacToeValues.X))
             {
                 //AI's Turn
@@ -176,7 +177,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
             {
                 if (gameStart == 2)
                 {
-                    LoggingClass.logInfo("SYSTEM", "Already prompted Draw Message");
+                    LogHelper.i("SYSTEM", "Already prompted Draw Message");
                 }
                 else
                 {
@@ -184,7 +185,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
                     new AlertDialog.Builder(this).setTitle("Game Drawn").setMessage("This game is a draw!\n" +
                             "Time Taken: " + timerDuration + " seconds")
                                     .setPositiveButton(android.R.string.ok, null).show();
-                    LoggingClass.logInfo("SYSTEM", "Game Drawn");
+                    LogHelper.i("SYSTEM", "Game Drawn");
                     promptReset();
                 }
             }
@@ -192,9 +193,9 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
         }
         else
         {
-            LoggingClass.logInfo("GAME", "Multiplayer Mode");
+            LogHelper.i("GAME", "Multiplayer Mode");
             turnNo++;
-            LoggingClass.logInfo("GAME", "Incremented Turn No");
+            LogHelper.i("GAME", "Incremented Turn No");
             if (currentPlayer.equals(TicTacToeValues.X))
                 currentPlayer = TicTacToeValues.O;
             else
@@ -208,7 +209,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
                 new AlertDialog.Builder(this).setTitle("Game Drawn").setMessage("This game is a draw!\n" +
                         "Time Taken: " + timerDuration + " seconds")
                         .setPositiveButton(android.R.string.ok, null).show();
-                LoggingClass.logInfo("SYSTEM", "Game Drawn");
+                LogHelper.i("SYSTEM", "Game Drawn");
                 promptReset();
             }
         }
@@ -216,7 +217,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
 
     private void startGameSP()
     {
-        LoggingClass.logInfo("SYSTEM", "Game Start (SP)");
+        LogHelper.i("SYSTEM", "Game Start (SP)");
         instructions.setText(getString(R.string.tic_tac_toe_hint_hud, "Player", 0));
         currentPlayer = TicTacToeValues.X;
         turnNo = 0;
@@ -224,10 +225,10 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
 
     private void startGameMultiplayer()
     {
-        LoggingClass.logInfo("SYSTEM", "Game Start (MP)");
+        LogHelper.i("SYSTEM", "Game Start (MP)");
         Random random = new Random();
         int whoStartsFirst = random.nextInt(2);
-        LoggingClass.logInfo("Random", "Rolled " + whoStartsFirst);
+        LogHelper.i("Random", "Rolled " + whoStartsFirst);
         if (whoStartsFirst == 1)
         {
             //X
@@ -247,7 +248,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
     private void resetGame()
     {
         gameStart = 3;
-        LoggingClass.logInfo("SYSTEM", "Game Reset");
+        LogHelper.i("SYSTEM", "Game Reset");
         initializeGame();
         disableGame();
         btnStart.setEnabled(true);
@@ -274,7 +275,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
     {
         if (checkValid(row, col))
         {
-            LoggingClass.logInfo("Player Move", "Turn " + turnNo + ": Placed at " + row + ":" + col);
+            LogHelper.i("Player Move", "Turn " + turnNo + ": Placed at " + row + ":" + col);
             gameBoard[row][col] = currentPlayer;
             updateButtons();
             lastCol = col;
@@ -285,20 +286,20 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
 
     public static void updateAIMove(int row, int col)
     {
-        LoggingClass.logInfo("AI Move", "Turn " + turnNo + ": Placed at " + row + ":" + col);
+        LogHelper.i("AI Move", "Turn " + turnNo + ": Placed at " + row + ":" + col);
         gameBoard[row][col] = TicTacToeValues.O;
     }
 
     private void updateAIRefreshes()
     {
-        LoggingClass.logInfo("Refresh AI", "Refreshing AI");
+        LogHelper.i("Refresh AI", "Refreshing AI");
         updateButtons();
         checkWon();
     }
 
     private void updateButtons()
     {
-        LoggingClass.logInfo("Update Button", "Updating Button");
+        LogHelper.i("Update Button", "Updating Button");
         r11.setText(gameBoard[0][0]);
         r12.setText(gameBoard[0][1]);
         r13.setText(gameBoard[0][2]);
@@ -308,7 +309,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
         r31.setText(gameBoard[2][0]);
         r32.setText(gameBoard[2][1]);
         r33.setText(gameBoard[2][2]);
-        LoggingClass.logInfo("Update Button", "Update Complete");
+        LogHelper.i("Update Button", "Update Complete");
     }
 
     private Boolean checkValid(int row, int col){
@@ -339,7 +340,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
 
         CountupTimer(){
             this.start = System.currentTimeMillis();
-            LoggingClass.logInfo("Timer", "Timer started");
+            LogHelper.i("Timer", "Timer started");
         }
 
         @Override
@@ -362,7 +363,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
                     break;
                 }
             }
-            LoggingClass.logInfo("Timer", "Timer stopped");
+            LogHelper.i("Timer", "Timer stopped");
         }
     }
 
@@ -407,7 +408,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
             return;
         }
         if (v.getId() == btnStart.getId()){
-            LoggingClass.logInfo("Timer", "Creating new Timer thread");
+            LogHelper.i("Timer", "Creating new Timer thread");
             if (counterThread != null) {
                 if (counterThread.isAlive()) {
                     counterThread.interrupt();
@@ -415,7 +416,7 @@ public class TicTacToeActivity extends BaseModuleActivity implements Button.OnCl
             }
             counterThread = new Thread(new CountupTimer());
             counterThread.start();
-            LoggingClass.logInfo("Timer", "Calling start of thread");
+            LogHelper.i("Timer", "Calling start of thread");
             if (isSinglePlayer())
             {
                 //Single Player

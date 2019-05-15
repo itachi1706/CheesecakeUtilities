@@ -6,15 +6,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.fragment.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -115,9 +116,9 @@ public class GpuFragment extends Fragment {
             freq = new RandomAccessFile("/sys/class/kgsl/kgsl-3d0/gpuclk", "r").readLine();
         } catch (IOException ex) {
             if (err_gpu_clock_count <= SUPRESS_WARNINGS)
-                Log.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+                LogHelper.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
             if (err_gpu_clock_count == SUPRESS_WARNINGS)
-                Log.e("GPU-READ", "Supressing warnings for this exception due to repeated throwing");
+                LogHelper.e("GPU-READ", "Supressing warnings for this exception due to repeated throwing");
             err_gpu_clock_count++;
         }
         if (freq == null) {
@@ -131,7 +132,7 @@ public class GpuFragment extends Fragment {
         try {
             freq = new RandomAccessFile("/sys/class/kgsl/kgsl-3d0/max_gpuclk", "r").readLine();
         } catch (IOException ex) {
-            Log.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+            LogHelper.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
         }
         if (freq == null) {
             return BuildConfig.FLAVOR;
@@ -145,9 +146,9 @@ public class GpuFragment extends Fragment {
             freq = new RandomAccessFile("/sys/devices/platform/gpusysfs/gpu_clock", "r").readLine();
         } catch (IOException ex) {
             if (err_gpu_clock1_count <= SUPRESS_WARNINGS)
-                Log.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+                LogHelper.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
             if (err_gpu_clock1_count == SUPRESS_WARNINGS)
-                Log.e("GPU-READ", "Supressing warnings for this exception due to repeated throwing");
+                LogHelper.e("GPU-READ", "Supressing warnings for this exception due to repeated throwing");
             err_gpu_clock1_count++;
         }
         if (freq == null) {
@@ -161,7 +162,7 @@ public class GpuFragment extends Fragment {
         try {
             freq = new RandomAccessFile("/sys/devices/platform/gpusysfs/gpu_max_clock", "r").readLine();
         } catch (IOException ex) {
-            Log.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+            LogHelper.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
         }
         if (freq == null) {
             return BuildConfig.FLAVOR;

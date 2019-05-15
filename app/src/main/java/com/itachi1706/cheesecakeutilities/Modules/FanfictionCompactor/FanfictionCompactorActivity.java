@@ -16,14 +16,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.collection.ArrayMap;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.itachi1706.appupdater.Util.DeprecationHelper;
-import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
+import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts.FanficBroadcast;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Objects.FanficStories;
@@ -32,15 +36,11 @@ import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage.Fa
 import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Tasks.ScanStorageDetails;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.collection.ArrayMap;
-import androidx.core.app.ActivityCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
@@ -153,7 +153,7 @@ public class FanfictionCompactorActivity extends BaseModuleActivity {
         }
 
         float freespace = FileHelper.megabytesAvailable(file);
-        Log.i("MemoryCheck", "Free Space: " + freespace + " | Total Size: " + CommonMethods.readableFileSize(totalSize) + " (" + totalSize + ")");
+        LogHelper.i("MemoryCheck", "Free Space: " + freespace + " | Total Size: " + CommonMethods.readableFileSize(totalSize) + " (" + totalSize + ")");
         freespace = freespace * 1024 * 1024; // Convert from MB to Bytes
         if (freespace < totalSize) {
             // Not enough memory
@@ -221,14 +221,14 @@ public class FanfictionCompactorActivity extends BaseModuleActivity {
                     .show();
             return;
         }
-        Log.i("FanficCompactor", "Database exists. Continuing...");
+        LogHelper.i("FanficCompactor", "Database exists. Continuing...");
         new ScanStorageDetails(new FanficHandler(this)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
 
     private void requestStoragePermission() {
-        Log.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
+        LogHelper.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -267,7 +267,7 @@ public class FanfictionCompactorActivity extends BaseModuleActivity {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
+                    LogHelper.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
                     processPruningDetails();
                     return;
                 }

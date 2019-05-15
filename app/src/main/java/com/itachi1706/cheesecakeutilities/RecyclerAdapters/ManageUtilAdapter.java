@@ -2,18 +2,18 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,13 +100,13 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
                     hiddenUtil = convertHiddenOrLockedArrayToString(utils);
                     sp.edit().putString("utilHidden", hiddenUtil).apply();
                     isVisible = false;
-                    Log.i("ManageUtilAdapter", link + " hidden");
+                    LogHelper.i("ManageUtilAdapter", link + " hidden");
                 } else {
                     List<String> utils = getHiddenAsArray();
                     utils.remove(link);
                     hiddenUtil = convertHiddenOrLockedArrayToString(utils);
                     sp.edit().putString("utilHidden", hiddenUtil).apply();
-                    Log.i("ManageUtilAdapter", link + " shown");
+                    LogHelper.i("ManageUtilAdapter", link + " shown");
                     isVisible = true;
                 }
                 updateIcon();
@@ -120,13 +120,13 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
                     lockedUtil = convertHiddenOrLockedArrayToString(utils);
                     sp.edit().putString("utilLocked", lockedUtil).apply();
                     isLocked = true;
-                    Log.i("ManageUtilAdapter", link + " protected");
+                    LogHelper.i("ManageUtilAdapter", link + " protected");
                 } else {
                     List<String> utils = getLockedAsArray();
                     utils.remove(link);
                     lockedUtil = convertHiddenOrLockedArrayToString(utils);
                     sp.edit().putString("utilLocked", lockedUtil).apply();
-                    Log.i("ManageUtilAdapter", link + " unprotected");
+                    LogHelper.i("ManageUtilAdapter", link + " unprotected");
                     isLocked = false;
                 }
                 updateIcon();

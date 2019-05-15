@@ -3,15 +3,16 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,16 +74,16 @@ public class GamesMenuAdapter extends RecyclerView.Adapter<GamesMenuAdapter.Game
         @Override
         public void onClick(View v) {
             String link = title.getText().toString();
-            Log.i("GamesMenuAdapter", "Clicked on " + link);
+            LogHelper.i("GamesMenuAdapter", "Clicked on " + link);
             int index = Arrays.asList(v.getContext().getResources().getStringArray(R.array.gamesmenu)).indexOf(link);
             String className = v.getContext().getResources().getStringArray(R.array.gamesmenulink)[index];
             if (className.startsWith(".")) className = "com.itachi1706.cheesecakeutilities" + className;
-            Log.i("GamesMenuAdapter", "Attempting to navigate to " + className);
+            LogHelper.i("GamesMenuAdapter", "Attempting to navigate to " + className);
             try {
                 Class classObj = Class.forName(className);
                 mActivity.startActivity(new Intent(mActivity, classObj));
             } catch (ClassNotFoundException e) {
-                Log.e("GamesMenuAdapter", "Class Not Found: " + className);
+                LogHelper.e("GamesMenuAdapter", "Class Not Found: " + className);
                 e.printStackTrace();
             }
 
@@ -92,7 +93,7 @@ public class GamesMenuAdapter extends RecyclerView.Adapter<GamesMenuAdapter.Game
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, link);
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "game_launched");
             analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            Log.i("Firebase", "Logged Event Game Launched: " + link);
+            LogHelper.i("Firebase", "Logged Event Game Launched: " + link);
         }
 
     }

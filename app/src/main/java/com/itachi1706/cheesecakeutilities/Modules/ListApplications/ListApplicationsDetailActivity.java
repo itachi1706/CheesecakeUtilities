@@ -21,11 +21,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -35,6 +30,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
@@ -42,6 +42,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.Backu
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +83,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
         String packageName = getIntent().getStringExtra("packageName");
         if (packageName == null) {
-            Log.e("ListAppDetail", "Invalid Package Name. Exiting...");
+            LogHelper.e("ListAppDetail", "Invalid Package Name. Exiting...");
             finish();
             return;
         }
@@ -93,7 +94,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, packageName);
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "utility_listapp_viewdetail");
         analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-        Log.i("Firebase", "Logged Viewing of Detailed App Info Launched: " + packageName);
+        LogHelper.i("Firebase", "Logged Viewing of Detailed App Info Launched: " + packageName);
 
         PackageManager pm = getPackageManager();
         try {
@@ -102,7 +103,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             isUpdate = ((info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            Log.e("ListAppDetail", "Failed to get info for " + packageName + ". Exiting");
+            LogHelper.e("ListAppDetail", "Failed to get info for " + packageName + ". Exiting");
             Toast.makeText(this, "Failed to get app info!", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -148,7 +149,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            Log.e("ListAppDetail", "Failed to get package info for " + packageName + ". Some info might not be available");
+            LogHelper.e("ListAppDetail", "Failed to get package info for " + packageName + ". Some info might not be available");
         }
 
         signature = generateSignatureList(signatures);
@@ -191,7 +192,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             errorbundle.putString(FirebaseAnalytics.Param.ITEM_ID, packageName);
             errorbundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "utility_listapp_viewdetail");
             analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, errorbundle);
-            Log.i("Firebase", "Logged Error Processing Detailed App Info: " + packageName);
+            LogHelper.i("Firebase", "Logged Error Processing Detailed App Info: " + packageName);
             creator.addView(generateSingleColumn("Error", "An error occurred while retrieving app information, Providing truncated results"));
         }
     }
@@ -434,7 +435,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
 
     private void processBackup(final String appName, final String appPath, String packageName, String appVersion, boolean shareApk) {
         final String filepath = appName + "_" + packageName + "-" + appVersion + ".apk";
-        Log.i("Backup", "Starting Backup Process for " + packageName);
+        LogHelper.i("Backup", "Starting Backup Process for " + packageName);
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setTitle("Backing up");
@@ -442,7 +443,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         dialog.setMessage("Backing up " + appName + "...");
         dialog.show();
         new BackupAppThread(dialog, shareApk).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
-        Log.i("Backup", "Stopping Backup Process for " + packageName);
+        LogHelper.i("Backup", "Stopping Backup Process for " + packageName);
     }
 
     private class BackupAppThread extends AsyncTask<String, Void, Void> {
@@ -497,7 +498,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
 
     private void requestStoragePermission() {
-        Log.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
+        LogHelper.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -536,7 +537,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
+                    LogHelper.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
                     new AlertDialog.Builder(this).setTitle("Permission Granted")
                             .setMessage("Please request the backup of the app again")
                             .setPositiveButton(android.R.string.ok, null).show();
@@ -598,7 +599,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             case R.id.appsettings: Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.setData(uri);
-                Log.v(AppsAdapter.TAG, "Attempting to launch for " + appName.getText());
+                LogHelper.v(AppsAdapter.TAG, "Attempting to launch for " + appName.getText());
                 startActivity(intent); return true;
             case R.id.playstore:
                 startActivity(new Intent(Intent.ACTION_VIEW,
@@ -619,7 +620,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                 Intent uninstallIntent = new Intent();
                 uninstallIntent.setAction(Intent.ACTION_UNINSTALL_PACKAGE);
                 uninstallIntent.setData(uri);
-                Log.v(AppsAdapter.TAG, "Attempting to uninstall " + appName.getText());
+                LogHelper.v(AppsAdapter.TAG, "Attempting to uninstall " + appName.getText());
                 startActivity(uninstallIntent);
                 return true;
             default: return super.onOptionsItemSelected(item);

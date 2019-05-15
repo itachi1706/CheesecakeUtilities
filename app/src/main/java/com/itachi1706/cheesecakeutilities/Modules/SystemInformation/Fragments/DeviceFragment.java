@@ -5,20 +5,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.core.view.PointerIconCompat;
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.view.PointerIconCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.fragment.app.Fragment;
+
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -134,7 +135,7 @@ public class DeviceFragment extends Fragment {
         try {
             load = new RandomAccessFile("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq", "r").readLine();
         } catch (IOException ex) {
-            Log.e("CPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+            LogHelper.e("CPU-READ", "Error reading file: " + ex.getLocalizedMessage());
         }
         if (load == null) {
             return "Minimum Frequency: unknown";
@@ -149,9 +150,9 @@ public class DeviceFragment extends Fragment {
             load = new RandomAccessFile("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq", "r").readLine();
         } catch (IOException ex) {
             if (err_cpu_min_count <= SUPRESS_WARNINGS)
-                Log.e("CPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+                LogHelper.e("CPU-READ", "Error reading file: " + ex.getLocalizedMessage());
             if (err_cpu_min_count == SUPRESS_WARNINGS)
-                Log.e("CPU-READ", "Supressing warnings for this exception due to repeated throwing");
+                LogHelper.e("CPU-READ", "Supressing warnings for this exception due to repeated throwing");
             err_cpu_min_count++;
         }
         if (load == null) {
@@ -189,9 +190,9 @@ public class DeviceFragment extends Fragment {
             freq = new RandomAccessFile("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq", "r").readLine();
         } catch (IOException ex) {
             if (err_cpu_freq_count <= SUPRESS_WARNINGS)
-                Log.e("CPU-READ", "Error reading file: " + ex.getLocalizedMessage());
+                LogHelper.e("CPU-READ", "Error reading file: " + ex.getLocalizedMessage());
             if (err_cpu_freq_count == SUPRESS_WARNINGS)
-                Log.e("CPU-READ", "Supressing warnings for this exception due to repeated throwing");
+                LogHelper.e("CPU-READ", "Supressing warnings for this exception due to repeated throwing");
             err_cpu_freq_count++;
         }
         if (freq == null) {

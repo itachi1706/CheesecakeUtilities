@@ -10,8 +10,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.firebase.jobdispatcher.Constraint;
@@ -43,6 +47,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks.RetrieveM
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.FileCacher;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util.MSLHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -54,10 +59,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import io.fabric.sdk.android.Fabric;
 
 import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActivity.MSL_SP_ACCESS_TOKEN;
@@ -93,14 +94,14 @@ public class SyncMSLService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.i(TAG, "Starting MSL Sync Job");
         Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        LogHelper.i(TAG, "Starting MSL Sync Job");
 
         parameters = params;
         // Check if network access is available before starting ANYTHING
         if (!ConnectivityHelper.hasInternetConnection(this)) {
-            Log.e(TAG, "Network Connection not found, delegating to next job instead");
+            LogHelper.e(TAG, "Network Connection not found, delegating to next job instead");
             cleanup(true);
             return false;
         }
@@ -143,7 +144,7 @@ public class SyncMSLService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.i(TAG, "System invoked. Stopping MSL Sync Job");
+        LogHelper.i(TAG, "System invoked. Stopping MSL Sync Job");
         if (isSyncing) updateNotification("Sync Interrupted. Not all tasks may have finished\n\nStopped at: " + lastDescription, 0, 0, false);
         cleanup(true);
         return false;
@@ -195,18 +196,18 @@ public class SyncMSLService extends JobService {
                         .setTrigger(Trigger.executionWindow(minTime, 3600)).setReplaceCurrent(true).setConstraints(Constraint.ON_ANY_NETWORK, Constraint.DEVICE_IDLE)
                         .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).setLifetime(Lifetime.FOREVER).setExtras(new Bundle()).setTag(SyncMSLService.ACTION_SYNC_MSL).build();
                 dispatcher.mustSchedule(syncJob);
-                Log.i(TAG, "Scheduled a new recurring sync task up to an hour from now");
+                LogHelper.i(TAG, "Scheduled a new recurring sync task up to an hour from now");
             }
-            Log.i(TAG, "Next recurring job will start on " + DateFormat.getDateTimeInstance().format(System.currentTimeMillis() + (minTime * 1000)) + " (estimated)");
+            LogHelper.i(TAG, "Next recurring job will start on " + DateFormat.getDateTimeInstance().format(System.currentTimeMillis() + (minTime * 1000)) + " (estimated)");
         } else {
             // Make sure no job is ran
             dispatcher.cancel(SyncMSLService.ACTION_SYNC_MSL);
-            Log.e(TAG, "Cancelled all recurring jobs as an error has occurred");
+            LogHelper.e(TAG, "Cancelled all recurring jobs as an error has occurred");
         }
     }
     
     private void stopJob(boolean success, boolean rescheduleJob) {
-        Log.i(TAG, "Job finished, stopping");
+        LogHelper.i(TAG, "Job finished, stopping");
         isSyncing = false;
         String datetime = DateFormat.getDateTimeInstance().format(System.currentTimeMillis());
         if (success) updateNotification("Sync completed at " + datetime, 0, 0, false);
@@ -239,12 +240,12 @@ public class SyncMSLService extends JobService {
     @SuppressWarnings("ConstantConditions")
     private void parseMSLData(String data) {
         if (data.equalsIgnoreCase("null")) {
-            Log.e(TAG, "An error occurred retrieving data. Stopping job");
+            LogHelper.e(TAG, "An error occurred retrieving data. Stopping job");
             Crashlytics.logException(new FileNotFoundException("Data obtained from MSL is null"));
             stopJob(false, true);
             return;
         }
-        Log.d(TAG, "JSON Data: " + data);
+        LogHelper.d(TAG, "JSON Data: " + data);
         updateNotification("Preparing Sync... (Parsing data from MSL)", 0, 0, true);
 
         Gson gson = new Gson();
@@ -323,31 +324,31 @@ public class SyncMSLService extends JobService {
             }
         }
 
-        Log.d(TAG, "================================================");
-        Log.d(TAG, "              Results of Sync Job");
-        Log.d(TAG, "================================================");
-        Log.d(TAG, "Task To Add: " + taskToAdd.size());
-        Log.d(TAG, "Task To Remove: " + taskToRemove.size());
-        Log.d(TAG, "Task To Update: " + taskToUpdate.size());
-        Log.d(TAG, "Exam To Add: " + examToAdd.size());
-        Log.d(TAG, "Exam To Remove: " + examToRemove.size());
-        Log.d(TAG, "Exam To Update: " + examToUpdate.size());
-        Log.d(TAG, "================================================");
+        LogHelper.d(TAG, "================================================");
+        LogHelper.d(TAG, "              Results of Sync Job");
+        LogHelper.d(TAG, "================================================");
+        LogHelper.d(TAG, "Task To Add: " + taskToAdd.size());
+        LogHelper.d(TAG, "Task To Remove: " + taskToRemove.size());
+        LogHelper.d(TAG, "Task To Update: " + taskToUpdate.size());
+        LogHelper.d(TAG, "Exam To Add: " + examToAdd.size());
+        LogHelper.d(TAG, "Exam To Remove: " + examToRemove.size());
+        LogHelper.d(TAG, "Exam To Update: " + examToUpdate.size());
+        LogHelper.d(TAG, "================================================");
 
         if (checkIfNoUpdatesNeeded(taskToAdd, taskToRemove, taskToUpdate) && checkIfNoUpdatesNeeded(examToAdd, examToRemove, examToUpdate)) {
-            Log.i(TAG, "No update required");
+            LogHelper.i(TAG, "No update required");
             stopJob(true, true);
             return;
         }
 
         String newMetaData = System.currentTimeMillis() + "," + (taskToAdd.size() + examToAdd.size()) + ","
                 + (taskToUpdate.size() + examToUpdate.size()) + "," + (examToRemove.size() + taskToRemove.size()); // (time,add,remove,update:time,add,remove,update:...)
-        Log.i(TAG, "Updating metric data: " + newMetaData);
+        LogHelper.i(TAG, "Updating metric data: " + newMetaData);
         String oldString = sp.getString(MSLActivity.MSL_SP_METRIC_HIST, "");
         if (!oldString.isEmpty()) oldString += ":" + newMetaData;
         else oldString = newMetaData;
         sp.edit().putString(MSLActivity.MSL_SP_METRIC_HIST, oldString).apply();
-        Log.i(TAG, "Metric Data Updated");
+        LogHelper.i(TAG, "Metric Data Updated");
         isSyncing = true;
         MSLTaskSyncTask.run(this, "EXAMTASK", model, client, subjects, taskToAdd, taskToUpdate, taskToRemove, examToAdd, examToUpdate, examToRemove);
     }
@@ -365,7 +366,7 @@ public class SyncMSLService extends JobService {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private void setupNotificationChannel(NotificationManager manager, boolean isErrorChannel) {
-        Log.d(TAG, "Creating notification channel");
+        LogHelper.d(TAG, "Creating notification channel");
         NotificationChannel c;
         if (isErrorChannel) c = new NotificationChannel(CHANNEL_ERROR, "Service Errors", NotificationManager.IMPORTANCE_DEFAULT);
         else c = new NotificationChannel("msl-sync-service", "MSL Sync Service", NotificationManager.IMPORTANCE_LOW);
@@ -374,10 +375,10 @@ public class SyncMSLService extends JobService {
     }
 
     private void process(String task) {
-        Log.i(TAG, "Task Completed: " + task);
+        LogHelper.i(TAG, "Task Completed: " + task);
         switch (task.toUpperCase()) {
             case "ADD":
-                Log.i(TAG, "MSL Task Sync Calendar created. doing synchronization");
+                LogHelper.i(TAG, "MSL Task Sync Calendar created. doing synchronization");
                 // Since there is no calendar, make sure there are no cache
                 FileCacher fc = new FileCacher(this);
                 fc.deleteFile();
@@ -388,7 +389,7 @@ public class SyncMSLService extends JobService {
                 String id = sp.getString(MSLActivity.MSL_SP_TASK_CAL_ID, "");
                 isSyncing = false;
                 if (id.isEmpty() || model.get(id) == null) {
-                    Log.w(TAG, "Calendar MSL Task not found, creating calendar");
+                    LogHelper.w(TAG, "Calendar MSL Task not found, creating calendar");
                     com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
                     calendar.setSummary("MSL Task Calendar Sync");
                     calendar.setDescription("Calendar used by CheesecakeUtilities to synchronize with tasks/exams obtained from MSL\n\nCreated On: "
@@ -399,11 +400,11 @@ public class SyncMSLService extends JobService {
                     new CalendarAddTask(this, model, client, calendar, MSLActivity.MSL_SP_TASK_CAL_ID).execute();
                     return;
                 }
-                Log.i(TAG, "MSL Task Calendar found. doing synchronization");
+                LogHelper.i(TAG, "MSL Task Calendar found. doing synchronization");
                 proceedWithSynchronization();
                 break;
             case "SYNC-EXAMTASK":
-                Log.i(TAG, "Sync completed");
+                LogHelper.i(TAG, "Sync completed");
                 updateNotification("Sync Complete. Finishing Up...", 0, 0, true);
                 stopJob(true, true);
                 break;
@@ -467,9 +468,9 @@ public class SyncMSLService extends JobService {
                         stopJob(false, false);
                         return;
                     }
-                    Log.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
+                    LogHelper.e(TAG, "Error occurred, stopping task now and hope its fixed in the future");
                     Crashlytics.logException(new Exception("SyncMSLSvc: " + (intent.hasExtra(INTENT_MESSAGE) ? intent.getStringExtra(INTENT_MESSAGE) : "Exception occurred")));
-                    if (intent.hasExtra(INTENT_MESSAGE)) Log.e(TAG, "Error Message: " + intent.getStringExtra(INTENT_MESSAGE));
+                    if (intent.hasExtra(INTENT_MESSAGE)) LogHelper.e(TAG, "Error Message: " + intent.getStringExtra(INTENT_MESSAGE));
                     stopJob(false, true);
                     return;
                 }

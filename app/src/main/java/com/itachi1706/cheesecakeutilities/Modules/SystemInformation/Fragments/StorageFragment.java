@@ -4,17 +4,18 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -80,7 +81,7 @@ public class StorageFragment extends Fragment {
                 if (line != null && !line.isEmpty()) {
                     mountsTmp.add(line);
                 } else {
-                    Log.i("Read Mount file", "Finished reading mount file");
+                    LogHelper.i("Read Mount file", "Finished reading mount file");
                     break;
                 }
             }

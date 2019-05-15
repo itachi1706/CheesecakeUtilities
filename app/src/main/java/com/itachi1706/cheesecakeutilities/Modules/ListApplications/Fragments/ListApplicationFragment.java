@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +22,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsApiGraphActivity;
@@ -30,6 +38,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicati
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.turingtechnologies.materialscrollbar.CustomIndicator;
 import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
@@ -41,15 +50,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.collection.ArrayMap;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
@@ -177,7 +177,7 @@ public class ListApplicationFragment extends Fragment {
     private static final int RC_HANDLE_REQUEST_STORAGE = 4;
 
     private void requestStoragePermission() {
-        Log.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
+        LogHelper.w(PERM_MAN_TAG, "Storage permission is not granted. Requesting permission");
         final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         assert getActivity() != null;
@@ -202,7 +202,7 @@ public class ListApplicationFragment extends Fragment {
         switch (requestCode) {
             case RC_HANDLE_REQUEST_STORAGE:
                 if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
+                    LogHelper.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
                     scanGhostDir();
                     return;
                 }
@@ -215,7 +215,7 @@ public class ListApplicationFragment extends Fragment {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void generatePackageList() {
         if (getContext() == null) {
-            Log.e("ListApp", "Error getting context to generate package list");
+            LogHelper.e("ListApp", "Error getting context to generate package list");
             return;
         }
         if (appPackageNamesCleaned.isEmpty()) {
@@ -359,7 +359,7 @@ public class ListApplicationFragment extends Fragment {
                         FileUtils.deleteDirectory(del);
                         count++;
                     } catch (IOException e) {
-                        Log.e("GhostCleanup", "Unable to remove " + t);
+                        LogHelper.e("GhostCleanup", "Unable to remove " + t);
                         removeMan.append(t).append("\n");
                     }
                 }
@@ -382,7 +382,7 @@ public class ListApplicationFragment extends Fragment {
         protected Void doInBackground(Boolean... params) {
             boolean system = params[0];
             if (getContext() == null) {
-                Log.e("LoadApp", "An error occurred loading app list");
+                LogHelper.e("LoadApp", "An error occurred loading app list");
                 return null;
             }
             PackageManager pm = getContext().getPackageManager();
@@ -401,7 +401,7 @@ public class ListApplicationFragment extends Fragment {
                     e.printStackTrace();
                 } catch (NullPointerException e) {
                     e.printStackTrace();
-                    Log.e("PInfoQuery", "Null pointer encountered (" + e.getLocalizedMessage() + ")");
+                    LogHelper.e("PInfoQuery", "Null pointer encountered (" + e.getLocalizedMessage() + ")");
                 }
 
                 AppsItem item = new AppsItem(getContext());

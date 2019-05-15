@@ -2,7 +2,8 @@ package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Log;
+
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,7 +108,7 @@ public class SafetyNetResponse {
     @Nullable
     public static SafetyNetResponse parse(@NonNull String decodedJWTPayload) {
 
-        Log.d(TAG, "decodedJWTPayload json:" + decodedJWTPayload);
+        LogHelper.d(TAG, "decodedJWTPayload json:" + decodedJWTPayload);
 
         SafetyNetResponse response = new SafetyNetResponse();
         try {
@@ -149,7 +150,7 @@ public class SafetyNetResponse {
 
             return response;
         } catch (JSONException e) {
-            Log.e(TAG, "problem parsing decodedJWTPayload:" + e.getMessage(), e);
+            LogHelper.e(TAG, "problem parsing decodedJWTPayload:" + e.getMessage(), e);
         }
         return null;
     }

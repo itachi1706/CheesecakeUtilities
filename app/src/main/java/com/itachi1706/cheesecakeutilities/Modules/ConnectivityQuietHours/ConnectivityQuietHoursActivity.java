@@ -8,13 +8,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
@@ -28,18 +33,13 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
 import static com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants.BT_START_INTENT;
@@ -148,7 +148,7 @@ public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
         assert alarmManager != null;
         alarmManager.cancel(connStartIntent);
         alarmManager.cancel(connEndIntent);
-        Log.i("QH", "Cleared existing " + name + " Schedules");
+        LogHelper.i("QH", "Cleared existing " + name + " Schedules");
         if (mSwitch.isChecked()) { // Enabled
             // Set Alarm
             long millis = System.currentTimeMillis();
@@ -168,17 +168,17 @@ public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
             if (millis > endCal.getTimeInMillis()) endCal.add(Calendar.DAY_OF_YEAR, 1);
 
             if (startCal.getTimeInMillis() == endCal.getTimeInMillis()) {
-                Log.d("QH", "Same Time Found. Not doing anything for " + name + " Scheduling");
+                LogHelper.d("QH", "Same Time Found. Not doing anything for " + name + " Scheduling");
                 return;
             }
 
-            Log.i("QH", name + " Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
-            Log.i("QH", name + " End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
+            LogHelper.i("QH", name + " Start Scheduled at " + DateFormat.getDateTimeInstance().format(startCal.getTimeInMillis()));
+            LogHelper.i("QH", name + " End Scheduled at " + DateFormat.getDateTimeInstance().format(endCal.getTimeInMillis()));
 
             // Update Alarms
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, startCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, connStartIntent);
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, endCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, connEndIntent);
-            Log.i("QH", "Updated " + name + " Toggle State");
+            LogHelper.i("QH", "Updated " + name + " Toggle State");
         }
         toggleBootReceiver();
     }
@@ -190,20 +190,20 @@ public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
         // COMPONENT_ENABLED_STATE_DISABLED - Disabled
         // COMPONENT_ENABLED_STATE_ENABLED - Enabled
         if (pm.getComponentEnabledSetting(receiver) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
-            Log.i("QH", "Boot Receiver Status: Enabled");
+            LogHelper.i("QH", "Boot Receiver Status: Enabled");
             // Enabled. Check if I should be disabling it
             if (!btSwitch.isChecked() && !wifiSwitch.isChecked()) {
                 // No service running, disable boot receiver
-                Log.i("QH", "No toggles toggled, disabling boot receiver to save CPU time");
+                LogHelper.i("QH", "No toggles toggled, disabling boot receiver to save CPU time");
                 pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                Log.i("QH", "Boot Receiver disabled");
+                LogHelper.i("QH", "Boot Receiver disabled");
             }
         } else {
-            Log.i("QH", "Boot Receiver Status: Disabled");
+            LogHelper.i("QH", "Boot Receiver Status: Disabled");
             if (btSwitch.isChecked() || wifiSwitch.isChecked()) {
-                Log.i("QH", "One of the toggle is toggled, enabling boot receiver...");
+                LogHelper.i("QH", "One of the toggle is toggled, enabling boot receiver...");
                 pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                Log.i("QH", "Boot Receiver enabled");
+                LogHelper.i("QH", "Boot Receiver enabled");
 
             }
         }
@@ -274,7 +274,7 @@ public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
         historyRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         String historyLines = sharedPreferences.getString(QHConstants.QH_HISTORY, "");
-        Log.d("QH", "History: " + historyLines);
+        LogHelper.d("QH", "History: " + historyLines);
         if (historyLines.isEmpty()) {
             // Show no history
             String[] s = new String[1];

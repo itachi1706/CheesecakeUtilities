@@ -22,19 +22,20 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeScanningProcessor;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSource;
@@ -78,9 +79,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         setContentView(R.layout.barcode_capture);
 
         mPreview = findViewById(R.id.preview);
-        if (mPreview == null) Log.d(TAG, "Preview is null");
+        if (mPreview == null) LogHelper.d(TAG, "Preview is null");
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
-        if (mGraphicOverlay == null) Log.d(TAG, "graphicOverlay is null");
+        if (mGraphicOverlay == null) LogHelper.d(TAG, "graphicOverlay is null");
 
         useFlash = getIntent().getBooleanExtra(USE_FLASH, false);
 
@@ -118,16 +119,16 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         if (mCameraSource != null) {
             try {
                 if (mPreview == null) {
-                    Log.d(TAG, "resume: Preview is null");
+                    LogHelper.d(TAG, "resume: Preview is null");
                     return;
                 }
                 if (mGraphicOverlay == null) {
-                    Log.d(TAG, "resume: graphOverlay is null");
+                    LogHelper.d(TAG, "resume: graphOverlay is null");
                     return;
                 }
                 mPreview.start(mCameraSource, mGraphicOverlay);
             } catch (IOException e) {
-                Log.e(TAG, "Unable to start camera source.", e);
+                LogHelper.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();
                 mCameraSource = null;
             }
@@ -144,7 +145,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
+        LogHelper.d(TAG, "onResume");
         startCameraSource();
     }
 
@@ -164,7 +165,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     }
 
     private void requestCameraPermission() {
-        Log.w(TAG, "Camera permission is not granted. Requesting permission");
+        LogHelper.w(TAG, "Camera permission is not granted. Requesting permission");
 
         final String[] permissions = new String[]{Manifest.permission.CAMERA};
 
@@ -190,13 +191,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode != RC_CAMERA_PERMISSION) {
-            Log.d(TAG, "Got unexpected permission result: " + requestCode);
+            LogHelper.d(TAG, "Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
         }
 
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Camera permission granted - initialize the camera source");
+            LogHelper.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
             createCameraSource(useFlash);
             return;

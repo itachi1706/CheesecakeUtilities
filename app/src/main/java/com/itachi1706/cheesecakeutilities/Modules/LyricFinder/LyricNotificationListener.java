@@ -15,22 +15,23 @@ import android.net.Uri;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
+import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 import io.fabric.sdk.android.Fabric;
 
 @SuppressLint("OverrideAbstract")
@@ -61,7 +62,7 @@ public class LyricNotificationListener extends NotificationListenerService {
 
     private void scanForControllers() {
         List<MediaController> controllers = mm.getActiveSessions(new ComponentName(this, LyricNotificationListener.class));
-        Log.d(TAG, "Found " + controllers.size() + " controllers");
+        LogHelper.d(TAG, "Found " + controllers.size() + " controllers");
         if (controllers.size() >= 1) processController(controllers.get(0));
         else processing = false;
         //noinspection UnusedAssignment
@@ -85,13 +86,13 @@ public class LyricNotificationListener extends NotificationListenerService {
         updateData();
         processing = false;
 
-        Log.d(TAG, "Data Retrival Complete");
+        LogHelper.d(TAG, "Data Retrival Complete");
     }
 
     private static NowPlaying nowPlaying = null;
 
     private void updateData() {
-        Log.i(TAG, nowPlaying.getArtist() + " | " + nowPlaying.getTitle() + " | " + nowPlaying.getAlbum()
+        LogHelper.i(TAG, nowPlaying.getArtist() + " | " + nowPlaying.getTitle() + " | " + nowPlaying.getAlbum()
                 + " | " + nowPlaying.getStateString());
         sendBroadcastData();
     }
@@ -132,7 +133,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     }
 
     private void processNotification(StatusBarNotification sbn, String state) {
-        Log.i(TAG,"Notification " + state + " ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
+        LogHelper.i(TAG,"Notification " + state + " ID: " + sbn.getId() + " | Time: " + sbn.getPostTime() + " | " + sbn.getPackageName());
         if (sbn.getPackageName().equals(getPackageName())) return; // Don't process own notifications
         // Dont process ongoing notifications beside media notification
         if (!sbn.isClearable() && sbn.getNotification() != null && sbn.getNotification().extras != null
@@ -151,7 +152,7 @@ public class LyricNotificationListener extends NotificationListenerService {
         @Override
         public void onReceive(Context context, Intent intent) {
             super.onReceive(context, intent);
-            Log.i(TAG, "Receieved broadcast, updating metadata");
+            LogHelper.i(TAG, "Receieved broadcast, updating metadata");
             sendBroadcastData();
         }
     }
@@ -163,7 +164,7 @@ public class LyricNotificationListener extends NotificationListenerService {
             intent.putExtra(NowPlaying.Companion.getLYRIC_ALBUMART(), saveImageTmpAndGetUri() != null);
         }
         sendBroadcast(intent);
-        Log.i(TAG, "Metadata Update Broadcast Sent");
+        LogHelper.i(TAG, "Metadata Update Broadcast Sent");
     }
 
     private Uri saveImageTmpAndGetUri() {
@@ -176,17 +177,16 @@ public class LyricNotificationListener extends NotificationListenerService {
             nowPlaying.getAlbumart().compress(Bitmap.CompressFormat.PNG, 100, s);
             s.close();
         } catch (IOException e) {
-            Log.e(TAG, "Failed to create temp barcode file");
+            LogHelper.e(TAG, "Failed to create temp barcode file");
             e.printStackTrace();
             return null;
         }
 
         File shareFile = new File(cache, "albumart.png");
-        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName()
-                + ".appupdater.provider", shareFile);
+        Uri contentUri = FileProvider.getUriForFile(this, this.getPackageName() + ".provider", shareFile);
 
         if (contentUri == null) {
-            Log.e(TAG, "Failed to share file, invalid contentUri");
+            LogHelper.e(TAG, "Failed to share file, invalid contentUri");
             return null;
         }
 
