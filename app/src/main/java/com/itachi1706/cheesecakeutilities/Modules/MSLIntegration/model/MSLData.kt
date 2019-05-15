@@ -1,5 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model
 
+import androidx.annotation.Keep
+
 /**
  * Created by Kenneth on 14/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model in CheesecakeUtilities
@@ -10,6 +12,7 @@ class MSLData {
     val tasks: Array<Task>? = null
     val exams: Array<Exam>? = null
 
+    @Keep
     inner class Subjects {
         val guid: String? = null
         val name: String? = null
