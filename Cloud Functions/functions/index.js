@@ -6,9 +6,9 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 // Calculate Statistics (non-training mileage only for now)
-exports.calculateStatistics = functions.database.ref('/users/{userid}/records').onWrite(
+exports.calculateStatistics = functions.database.ref('/vehmileage/users/{userid}/records').onWrite(
     (snapshot, context) => {
-        console.log("Function Version: 150220190235")
+        console.log("Function Version: 030620191912")
         console.log("Dep Versions listed below");
         console.log(process.versions)
         const records = snapshot.after.val();
