@@ -19,7 +19,11 @@ public class VehMileageFirebaseUtils extends FirebaseUtils {
 
     static final int RECORDS_VERSION = 4;
 
-    public DatabaseReference getVehicleMileageDatabase(FirebaseDatabase database) {
+    public static DatabaseReference getVehicleMileageDatabase(FirebaseDatabase database) {
+        return Companion.getDatabaseReference("vehmileage", database);
+    }
+
+    public static DatabaseReference getVehicleMileageDatabase() {
         return Companion.getDatabaseReference("vehmileage");
     }
 }

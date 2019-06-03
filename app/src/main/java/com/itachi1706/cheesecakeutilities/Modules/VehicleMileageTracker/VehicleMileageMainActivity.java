@@ -16,7 +16,6 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
@@ -74,8 +73,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
             return;
         }
 
-        final FirebaseDatabase database = VehMileageFirebaseUtils.Companion.getFirebaseDatabase();
-        userdata = database.getReference().child(FB_REC_USER).child(user_id);
+        userdata = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id);
 
         findViewById(R.id.veh_mileage_fab_car).setOnClickListener(v -> startActivity(new Intent(v.getContext(), AddNewVehicleActivity.class)));
         findViewById(R.id.veh_mileage_fab_record).setOnClickListener(v -> launchAddRecordActivity(v.getContext(), user_id, null));
@@ -117,7 +115,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
         super.onStart();
         // Listen to changes and update accordingly
         if (listener != null) {
-            FirebaseDatabase.getInstance().getReference().removeEventListener(listener);
+            VehMileageFirebaseUtils.Companion.removeListener(listener);
             listener = null;
             LogHelper.i(TAG, "Firebase DB Listeners exist when it should not, force terminating it");
         }
@@ -148,7 +146,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
                 Collections.reverse(records);
                 Collections.reverse(tags);
                 if (tags.size() > 0) lastRecord = tags.get(0);
-                VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+                VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         adapter.updateRecords(records, tags);
@@ -175,7 +173,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
     protected void onStop() {
         super.onStop();
         if (listener != null) {
-            FirebaseDatabase.getInstance().getReference().removeEventListener(listener);
+            VehMileageFirebaseUtils.Companion.removeListener(listener);
             LogHelper.i(TAG, "Unregistered Firebase Listeners");
             listener = null;
         }

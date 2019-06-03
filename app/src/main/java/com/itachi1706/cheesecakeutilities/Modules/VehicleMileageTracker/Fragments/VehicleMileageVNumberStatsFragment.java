@@ -31,7 +31,7 @@ public class VehicleMileageVNumberStatsFragment extends VehicleMileageFragmentBa
             return;
         }
         refreshLayout.setRefreshing(true);
-        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
                 .child("vehicleNumberRecords").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

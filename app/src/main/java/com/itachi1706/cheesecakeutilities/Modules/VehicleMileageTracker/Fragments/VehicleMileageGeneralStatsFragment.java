@@ -35,7 +35,7 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
         super.onResume();
         if (legend == null) {
             refreshLayout.setRefreshing(true);
-            VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     legend = new ArrayMap<>();
@@ -66,7 +66,7 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
             return;
         }
         if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
-        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS).addListenerForSingleValueEvent(new ValueEventListener() {
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();

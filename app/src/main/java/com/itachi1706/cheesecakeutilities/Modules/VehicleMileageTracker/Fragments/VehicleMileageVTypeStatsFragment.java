@@ -35,7 +35,7 @@ public class VehicleMileageVTypeStatsFragment extends VehicleMileageFragmentBase
         super.onResume();
         if (vehicles == null) {
             refreshLayout.setRefreshing(true);
-            VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     vehicles = new ArrayMap<>();
@@ -72,7 +72,7 @@ public class VehicleMileageVTypeStatsFragment extends VehicleMileageFragmentBase
             return;
         }
         if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
-        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
                 .child("vehicleTypes").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

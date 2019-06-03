@@ -46,7 +46,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
             edit = true;
             String id = getIntent().getStringExtra("id");
             String selClass = getIntent().getStringExtra("class");
-            VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
@@ -99,7 +99,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         v.setShortname(name.getText().toString());
         v.setVehicleClass(classV.getId());
 
-        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("vehicles").child(v.getVehicleClass()).child(nameNoSpace).setValue(v);
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").child(v.getVehicleClass()).child(nameNoSpace).setValue(v);
         Toast.makeText(this, "Vehicle Added", Toast.LENGTH_SHORT).show();
         finish();
     }

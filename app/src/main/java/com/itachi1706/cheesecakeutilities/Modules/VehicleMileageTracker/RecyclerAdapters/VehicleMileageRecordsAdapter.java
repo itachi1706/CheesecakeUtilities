@@ -168,7 +168,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                                     "\nID: " + tag)
                             .setPositiveButton("Delete Anyway", (dialog1, which1) -> {
                                 SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v1.getContext());
-                                VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER)
+                                VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
                                         .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
                                         .child(tag).removeValue();
                                 Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();

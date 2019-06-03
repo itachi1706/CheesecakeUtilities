@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Util
 
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,6 +15,10 @@ abstract class FirebaseUtils {
     companion object {
 
         private var firebaseDatabase: FirebaseDatabase? = null
+
+        fun removeListener(listener: ValueEventListener) {
+            getFirebaseDatabase().reference.removeEventListener(listener)
+        }
 
         fun getFirebaseDatabase(): FirebaseDatabase {
             if (firebaseDatabase == null) {

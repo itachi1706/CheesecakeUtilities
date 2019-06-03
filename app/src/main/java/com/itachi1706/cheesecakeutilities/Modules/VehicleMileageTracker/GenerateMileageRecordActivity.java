@@ -112,7 +112,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.menuMonth);
         monthSel = (Spinner) menuItem.getActionView();
 
-        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("users").child(user_id).child("statistics")
                 .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,7 +175,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
         long endDate = cal.getTimeInMillis();
 
-        Query specificMonth = VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("users").child(user_id).child("records")
+        Query specificMonth = VehMileageFirebaseUtils.getVehicleMileageDatabase().child("users").child(user_id).child("records")
                 .orderByChild("datetimeFrom").startAt(startDate).endAt(endDate);
         specificMonth.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
