@@ -1,10 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +8,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +46,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
             edit = true;
             String id = getIntent().getStringExtra("id");
             String selClass = getIntent().getStringExtra("class");
-            FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
@@ -99,7 +99,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
         v.setShortname(name.getText().toString());
         v.setVehicleClass(classV.getId());
 
-        FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").child(v.getVehicleClass()).child(nameNoSpace).setValue(v);
+        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child("vehicles").child(v.getVehicleClass()).child(nameNoSpace).setValue(v);
         Toast.makeText(this, "Vehicle Added", Toast.LENGTH_SHORT).show();
         finish();
     }

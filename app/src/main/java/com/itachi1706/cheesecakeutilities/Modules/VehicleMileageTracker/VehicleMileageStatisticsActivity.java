@@ -3,15 +3,15 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
@@ -22,8 +22,8 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragment
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 
 public class VehicleMileageStatisticsActivity extends AppCompatActivity {
 
@@ -56,7 +56,7 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         String user_id = sp.getString("firebase_uid", "nien");
         if (!user_id.equals("nien")) {
-            DatabaseReference dbRef = FirebaseUtils.getFirebaseDatabase().getReference();
+            DatabaseReference dbRef = VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference();
             dbRef.child(FB_REC_USER).child(user_id).child(FB_REC_STATS).keepSynced(true);
             dbRef.child("stat-legend").keepSynced(true);
             dbRef.child("vehicles").keepSynced(true);

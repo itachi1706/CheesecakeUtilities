@@ -21,7 +21,7 @@ import com.itachi1706.appupdater.Util.UpdaterHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHolidayItem;
-import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.Util.JSONHelper;
@@ -304,7 +304,7 @@ public class ORDActivity extends BaseModuleActivity {
                     b.append(h.getName()).append(": ").append(tmp[2]).append("-").append(tmp[1]).append("-").append(tmp[0]).append("\n");
                 }
 
-                b.append("\nLast Updated: ").append(FirebaseUtils.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
+                b.append("\nLast Updated: ").append(VehMileageFirebaseUtils.Companion.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
                 b.append("\nServer Cached Data: ").append(holiday.isCache());
                 new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
                         .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)

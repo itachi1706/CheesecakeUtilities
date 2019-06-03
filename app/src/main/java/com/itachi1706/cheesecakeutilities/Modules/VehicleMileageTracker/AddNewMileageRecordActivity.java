@@ -38,9 +38,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.formatTime;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
 
@@ -85,7 +85,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         addRecord = findViewById(R.id.veh_mileage_add_veh);
         trainingMileage = findViewById(R.id.cbTraining);
         layout = findViewById(R.id.veh_mileage_add_veh_layout);
-        database = FirebaseUtils.getFirebaseDatabase();
+        database = VehMileageFirebaseUtils.Companion.getFirebaseDatabase();
 
         // Init Spinner
         classType.setSelection(1); // Set to Class 3/3A default
@@ -115,7 +115,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         addRecord.setOnClickListener(v -> addRecordToFirebase());
 
         // Handle autocomplete
-        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
+        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 processAutoComplete(dataSnapshot);
@@ -145,7 +145,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     private static final int TYPE_EDIT = 0, TYPE_CONT = 1;
 
     private void processEditOrCont(int type, @NonNull String record_id) {
-        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id)
+        VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id)
                 .child(FB_REC_RECORDS).child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -179,14 +179,14 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         r.setTimezone((long) TimeZone.getDefault().getOffset(System.currentTimeMillis()));
         r.updateMileage();
         r.updateTotalTime();
-        r.setVersion(FirebaseUtils.RECORDS_VERSION);
+        r.setVersion(VehMileageFirebaseUtils.RECORDS_VERSION);
 
         if (record_id == null) {
-            DatabaseReference newRec = FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).push();
+            DatabaseReference newRec = VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).push();
             newRec.setValue(r);
             Toast.makeText(this, "Record Added", Toast.LENGTH_SHORT).show();
         } else {
-            FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).child(record_id).setValue(r);
+            VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_RECORDS).child(record_id).setValue(r);
             Toast.makeText(this, "Record Edited successfully", Toast.LENGTH_SHORT).show();
         }
         updateAutocomplete(r.getDestination(), r.getPurpose(), r.getVehicleNumber());
@@ -218,7 +218,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void updateAutocomplete(String location, String purpose, String vehicleNumber) {
-        DatabaseReference ref = FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill");
+        DatabaseReference ref = VehMileageFirebaseUtils.Companion.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child("autofill");
         if (!locationAutofill.contains(location)) {
             DatabaseReference newRef = ref.child("location").push();
             newRef.setValue(location);
@@ -309,7 +309,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void processFromTime() {
-        timeFrom.setText(formatTime(fromTimeVal) + " hrs");
+        timeFrom.setText(Companion.formatTime(fromTimeVal) + " hrs");
     }
 
     private class FromTimeDate implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -348,7 +348,7 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void processToTime() {
-        timeTo.setText(formatTime(toTimeVal) + " hrs");
+        timeTo.setText(Companion.formatTime(toTimeVal) + " hrs");
     }
 
     private class ToTimeDate implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
