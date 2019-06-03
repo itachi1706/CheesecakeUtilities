@@ -9,12 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.AddNewMileageRecordActivity;
-import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
 import com.turingtechnologies.materialscrollbar.IDateableAdapter;
 
@@ -24,13 +28,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_RECORDS;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
 
 /**
  * Created by itachi1706 on 2/20/2016.
@@ -101,11 +101,11 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         recordsViewHolder.vehicleNumber.setText(s.getVehicleNumber());
         // Calculate distance time
         String distanceTime = DurationFormatUtils.formatDurationWords(s.getTotalTimeInMs(), true, true);
-        distanceTime += " (" + parseData(s.getTotalMileage(), decimal) + " km)";
+        distanceTime += " (" + Companion.parseData(s.getTotalMileage(), decimal) + " km)";
         recordsViewHolder.totalTimeDistance.setText(distanceTime);
         if (s.getTrainingMileage()) recordsViewHolder.totalTimeDistance.setTextColor(Color.RED);
         else recordsViewHolder.totalTimeDistance.setTextColor(recordsViewHolder.defaultTextColor);
-        recordsViewHolder.datetime.setText(FirebaseUtils.formatTimeDuration(s.getDatetimeFrom(), s.getDateTimeTo()));
+        recordsViewHolder.datetime.setText(VehMileageFirebaseUtils.Companion.formatTimeDuration(s.getDatetimeFrom(), s.getDateTimeTo()));
         recordsViewHolder.datetime.setSelected(true);
     }
 
@@ -152,12 +152,12 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             message += "Vehicle: " + vehicle.getText().toString() + "\n";
             message += "Vehicle Full Name: " + fullVehicleName + "\n";
             message += "Vehicle License Plate: " + r.getVehicleNumber() + "\n";
-            message += "From: " + FirebaseUtils.formatTime(r.getDatetimeFrom()) + " hrs\n";
-            message += "To: " + FirebaseUtils.formatTime(r.getDateTimeTo()) + " hrs\n";
+            message += "From: " + VehMileageFirebaseUtils.Companion.formatTime(r.getDatetimeFrom()) + " hrs\n";
+            message += "To: " + VehMileageFirebaseUtils.Companion.formatTime(r.getDateTimeTo()) + " hrs\n";
             message += "Time Taken: " + DurationFormatUtils.formatDurationWords(r.getTotalTimeInMs(), true, true) + "\n";
-            message += "Mileage From: " + parseData(r.getMileageFrom(), decimal) + " km\n";
-            message += "Mileage To: " + parseData(r.getMileageTo(), decimal) + " km\n";
-            message += "Total Mileage: " + parseData(r.getTotalMileage(), decimal) + " km\n";
+            message += "Mileage From: " + Companion.parseData(r.getMileageFrom(), decimal) + " km\n";
+            message += "Mileage To: " + Companion.parseData(r.getMileageTo(), decimal) + " km\n";
+            message += "Total Mileage: " + Companion.parseData(r.getTotalMileage(), decimal) + " km\n";
             message += "Training Mileage: " + ((r.getTrainingMileage()) ? "true" : "false") + "\n";
             final View v1 = v;
             new AlertDialog.Builder(v.getContext())
@@ -168,7 +168,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                                     "\nID: " + tag)
                             .setPositiveButton("Delete Anyway", (dialog1, which1) -> {
                                 SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v1.getContext());
-                                FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER)
+                                VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
                                         .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
                                         .child(tag).removeValue();
                                 Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();

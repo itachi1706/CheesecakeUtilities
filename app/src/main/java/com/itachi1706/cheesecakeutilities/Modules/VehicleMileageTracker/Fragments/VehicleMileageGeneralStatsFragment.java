@@ -8,7 +8,7 @@ import androidx.collection.ArrayMap;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils;
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_STATS;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
 
 /**
  * Created by Kenneth on 31/8/2017.
@@ -35,7 +35,7 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
         super.onResume();
         if (legend == null) {
             refreshLayout.setRefreshing(true);
-            FirebaseUtils.getFirebaseDatabase().getReference().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("stat-legend").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     legend = new ArrayMap<>();
@@ -66,13 +66,13 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
             return;
         }
         if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
-        FirebaseUtils.getFirebaseDatabase().getReference().child(FB_REC_USER).child(user_id).child(FB_REC_STATS).addListenerForSingleValueEvent(new ValueEventListener() {
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
                 for (Map.Entry<String, String> i : legend.entrySet()) {
                     if (!dataSnapshot.hasChild(i.getKey())) continue;
-                    stats.add(new DualLineString(i.getValue(), parseData(dataSnapshot.child(i.getKey()).getValue(Double.class), decimal) + " km"));
+                    stats.add(new DualLineString(i.getValue(), Companion.parseData(dataSnapshot.child(i.getKey()).getValue(Double.class), decimal) + " km"));
                 }
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);

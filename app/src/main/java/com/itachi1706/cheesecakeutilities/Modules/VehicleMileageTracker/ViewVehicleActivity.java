@@ -70,8 +70,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
             new AlertDialog.Builder(this).setTitle("Confirm Deletion")
                     .setMessage("Are you sure you want to delete " + selectClass + " vehicle " + selectEdit + "?\n\nTHIS ACTION CANNOT BE UNDONE!")
                     .setNegativeButton(android.R.string.cancel, null).setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles")
-                                .child(selectClass).child(selectEdit).removeValue();
+                        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").child(selectClass).child(selectEdit).removeValue();
                         Toast.makeText(getApplicationContext(), "Vehicle Deleted", Toast.LENGTH_SHORT).show();
                         updateRecords(recyclerView);
                     }).show();
@@ -92,7 +91,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
     }
 
     private void updateRecords(RecyclerView recyclerView) {
-        FirebaseUtils.getFirebaseDatabase().getReference().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return;

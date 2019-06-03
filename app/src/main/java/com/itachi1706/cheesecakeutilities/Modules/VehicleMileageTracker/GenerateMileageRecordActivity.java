@@ -39,8 +39,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.MILEAGE_DEC;
-import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.FirebaseUtils.parseData;
+import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
+import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
 
 public class GenerateMileageRecordActivity extends AppCompatActivity {
 
@@ -112,7 +112,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         MenuItem menuItem = menu.findItem(R.id.menuMonth);
         monthSel = (Spinner) menuItem.getActionView();
 
-        FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("statistics")
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("users").child(user_id).child("statistics")
                 .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,7 +175,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         cal.set(Calendar.MILLISECOND, cal.getActualMaximum(Calendar.MILLISECOND));
         long endDate = cal.getTimeInMillis();
 
-        Query specificMonth = FirebaseUtils.getFirebaseDatabase().getReference().child("users").child(user_id).child("records")
+        Query specificMonth = VehMileageFirebaseUtils.getVehicleMileageDatabase().child("users").child(user_id).child("records")
                 .orderByChild("datetimeFrom").startAt(startDate).endAt(endDate);
         specificMonth.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -255,15 +255,15 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         dt.setTime(record.getDatetimeFrom());
         tr.addView(getTextView(col, sdf.format(dt)));
         tr.addView(getTextView(col, record.getVehicleNumber()));
-        tr.addView(getTextView(col, parseData(record.getMileageFrom(), decimal)));
-        tr.addView(getTextView(col, parseData(record.getMileageTo(), decimal)));
+        tr.addView(getTextView(col, Companion.parseData(record.getMileageFrom(), decimal)));
+        tr.addView(getTextView(col, Companion.parseData(record.getMileageTo(), decimal)));
         if (record.getVehicleClass().equalsIgnoreCase("class3")) {
-            tr.addView(getTextView(col, parseData(record.getTotalMileage(), decimal)));
+            tr.addView(getTextView(col, Companion.parseData(record.getTotalMileage(), decimal)));
             tr.addView(getTextView(col, "-"));
             totalC3 += record.getTotalMileage();
         } else if (record.getVehicleClass().equalsIgnoreCase("class4")) {
             tr.addView(getTextView(col, "-"));
-            tr.addView(getTextView(col, parseData(record.getTotalMileage(), decimal)));
+            tr.addView(getTextView(col, Companion.parseData(record.getTotalMileage(), decimal)));
             totalC4 += record.getTotalMileage();
         } else return false;
         layout.addView(tr, getTblLayoutParams());
@@ -277,8 +277,8 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         tr.addView(getTextView(col, ""));
         tr.addView(getTextView(col, ""));
         tr.addView(getTextView(col, "TOTAL", true));
-        tr.addView(getTextView(col, parseData(totalC3, decimal)));
-        tr.addView(getTextView(col, parseData(totalC4, decimal)));
+        tr.addView(getTextView(col, Companion.parseData(totalC3, decimal)));
+        tr.addView(getTextView(col, Companion.parseData(totalC4, decimal)));
         layout.addView(tr, getTblLayoutParams());
     }
 
