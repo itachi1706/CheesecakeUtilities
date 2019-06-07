@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.itachi1706.cheesecakeutilities.FirebaseLoginActivity
 
@@ -13,6 +14,7 @@ class VehicleMileageTrackerInitActivity : AppCompatActivity() {
 
         val i = Intent(this, FirebaseLoginActivity::class.java)
         if (intent.extras != null) i.putExtras(intent.extras!!)
+        Log.i("VehMileageInit", "Redirecting login activity to VehicleMileageMainActivity")
 
         val forwardIntent = Intent(this, VehicleMileageMainActivity::class.java)
         i.putExtra(FirebaseLoginActivity.CONTINUE_INTENT, forwardIntent)

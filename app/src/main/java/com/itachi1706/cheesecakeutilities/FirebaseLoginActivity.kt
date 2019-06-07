@@ -155,7 +155,10 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
                 if (intent.hasExtra("globalcheck")) continueIntent!!.putExtra("globalcheck", intent.getBooleanExtra("globalcheck", false))
                 startActivity(continueIntent!!)
                 finish()
-            } else Log.e(TAG, "No continue intent found")
+            } else {
+                Log.e(TAG, "No continue intent found. Exiting by default")
+                finish()
+            }
         } else {
             Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
             sp.edit().remove(FB_UID).apply()
