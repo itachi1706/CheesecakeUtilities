@@ -66,7 +66,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show();
-            Intent logoutIntent = new Intent(this, VehicleMileageTrackerLoginActivity.class);
+            Intent logoutIntent = new Intent(this, VehicleMileageTrackerInitActivity.class);
             logoutIntent.putExtra("logout", true);
             startActivity(logoutIntent);
             finish();
@@ -217,7 +217,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
-                Intent logoutIntent = new Intent(this, VehicleMileageTrackerLoginActivity.class);
+                Intent logoutIntent = new Intent(this, VehicleMileageTrackerInitActivity.class);
                 logoutIntent.putExtra("logout", true);
                 startActivity(logoutIntent);
                 finish();

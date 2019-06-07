@@ -32,7 +32,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".FirebaseLoginActivity"></activity>
+        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity"></activity>
+        <activity android:name=".FirebaseLoginActivity" />
 
         <meta-data
             android:name="android.allow_multiple_resumed_activities"

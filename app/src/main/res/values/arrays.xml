@@ -35,7 +35,7 @@
         <item>.Modules.ORDCountdown.ORDActivity</item>
         <item>.BmiCalculatorActivity</item>
         <item>.Modules.IPPTCalculator.IpptCalculatorActivity</item>
-        <item>.Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity</item>
+        <item>.Modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity</item>
         <item>.Modules.SystemInformation.InitActivity</item>
         <item>.Modules.UnicodeKeyboard.UnicodeActivity</item>
         <item>.Modules.NavbarCustomization.NavbarConfigurationActivity</item>
