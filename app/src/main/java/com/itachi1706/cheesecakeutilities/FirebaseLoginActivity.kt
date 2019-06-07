@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -21,7 +22,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
-class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListener {
+class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnectionFailedListener {
 
     companion object {
         private const val TAG: String = "FirebaseLoginActivity"
@@ -37,7 +38,7 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
     private lateinit var progress: ProgressBar
     private lateinit var mGoogleApiClient: GoogleApiClient
     private val mAuth = FirebaseAuth.getInstance()
-    private val sp: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+    private lateinit var sp: SharedPreferences
 
     private var continueIntent: Intent? = null
 
@@ -56,9 +57,13 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE)
         mEmailSignInButton.setOnClickListener {
             // Attempts to sign in with Google
+            Log.d(TAG, "Signing in with Google")
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
+        sp = PreferenceManager.getDefaultSharedPreferences(this)
+
+        // Setup Google Signin
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build()
@@ -105,7 +110,7 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (resultCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             LogHelper.d(TAG, "Sign In Result: " + result.isSuccess)
             if (result.isSuccess) {
@@ -150,7 +155,7 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
                 if (intent.hasExtra("globalcheck")) continueIntent!!.putExtra("globalcheck", intent.getBooleanExtra("globalcheck", false))
                 startActivity(continueIntent!!)
                 finish()
-            }
+            } else Log.e(TAG, "No continue intent found")
         } else {
             Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
             sp.edit().remove(FB_UID).apply()

@@ -319,6 +319,6 @@
     <string name="save">Save</string>
     <string name="clear">Clear</string>
     <string name="number">%1$d</string>
-    <string name="title_activity_vehicle_mileage_tracker_login">Sign in Required</string>
+    <string name="label_firebase_sign_in">Sign in to Firebase</string>
 
 </resources>

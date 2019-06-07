@@ -32,8 +32,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity"></activity>
-        <activity android:name=".FirebaseLoginActivity" />
 
         <meta-data
             android:name="android.allow_multiple_resumed_activities"
@@ -207,8 +205,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/app_restore_provider_paths"
-                tools:replace="android:resource" />
+                android:resource="@xml/app_restore_provider_paths" />
         </provider>
 
         <activity
@@ -264,7 +261,7 @@
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_vehicle_mileage_tracker_login" />
+            android:label="Sign in required" />
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
@@ -390,6 +387,9 @@
                 <data android:host="www.apkmirror.com" />
             </intent-filter>
         </activity>
+        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity" />
+        <activity android:name=".FirebaseLoginActivity" android:label="@string/label_firebase_sign_in" />
+
     </application>
 
 </manifest>
