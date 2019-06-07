@@ -27,14 +27,19 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
         private const val TAG: String = "FirebaseLoginActivity"
         private const val RC_SIGN_IN: Int = 9001
         private const val FB_UID: String = "firebase_uid"
+
+        const val CONTINUE_INTENT: String = "forwardTo"
+        const val HELP_EXTRA: String = "helpMessage"
     }
 
-    private val message : String = "Firebase Login Activity"
+    private var message : String = "Firebase Login Activity"
 
     private lateinit var progress: ProgressBar
     private lateinit var mGoogleApiClient: GoogleApiClient
     private val mAuth = FirebaseAuth.getInstance()
     private val sp: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+
+    private var continueIntent: Intent? = null
 
     override val helpDescription: String
         get() = message
@@ -59,10 +64,12 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
                 .requestEmail().build()
         mGoogleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build()
 
-        if (intent.hasExtra("logout") && intent.getBooleanExtra("logout", false)) {
+        if (intent.hasExtra("logout") && intent.getBooleanExtra("logout",  false)) {
             mAuth.signOut()
             if (sp.contains(FB_UID)) sp.edit().remove(FB_UID).apply()
         }
+        if (intent.hasExtra(CONTINUE_INTENT)) continueIntent = intent.getParcelableExtra(CONTINUE_INTENT)
+        if (intent.hasExtra(HELP_EXTRA)) message = intent.getStringExtra(HELP_EXTRA)
 
         val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults)
@@ -139,13 +146,11 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
             // There's a user
             Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show()
             sp.edit().putString(FB_UID, user.uid).apply()
-            // TODO: Update this to reflect being from the parent activity whatever it may be
-            /*
-            Intent i = new Intent(this, VehicleMileageMainActivity.class);
-            if (getIntent().hasExtra("globalcheck")) i.putExtra("globalcheck", getIntent().getBooleanExtra("globalcheck", false));
-            startActivity(i);
-            finish();
-             */
+            if (continueIntent != null) {
+                if (intent.hasExtra("globalcheck")) continueIntent!!.putExtra("globalcheck", intent.getBooleanExtra("globalcheck", false))
+                startActivity(continueIntent!!)
+                finish()
+            }
         } else {
             Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
             sp.edit().remove(FB_UID).apply()
