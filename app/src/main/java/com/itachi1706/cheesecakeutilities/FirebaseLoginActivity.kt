@@ -23,16 +23,18 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
 class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListener {
 
-    private val RC_SIGN_IN: Int = 9001
-    private val TAG: String = "FirebaseLoginActivity"
-    private val FB_UID: String = "firebase_uid"
+    companion object {
+        private const val TAG: String = "FirebaseLoginActivity"
+        private const val RC_SIGN_IN: Int = 9001
+        private const val FB_UID: String = "firebase_uid"
+    }
 
-    val message : String = "Firebase Login Activity"
+    private val message : String = "Firebase Login Activity"
 
-    lateinit var progress: ProgressBar
-    lateinit var mGoogleApiClient: GoogleApiClient
-    val mAuth = FirebaseAuth.getInstance()
-    val sp: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+    private lateinit var progress: ProgressBar
+    private lateinit var mGoogleApiClient: GoogleApiClient
+    private val mAuth = FirebaseAuth.getInstance()
+    private val sp: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
     override val helpDescription: String
         get() = message
@@ -47,7 +49,7 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
         progress.visibility = View.GONE
         val mEmailSignInButton = findViewById<SignInButton>(R.id.email_sign_in_button)
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE)
-        mEmailSignInButton.setOnClickListener { v ->
+        mEmailSignInButton.setOnClickListener {
             // Attempts to sign in with Google
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -68,7 +70,8 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
         if (firebaseRemoteConfig.getBoolean("firebase_login_debug"))
             testAccount.visibility = View.VISIBLE
 
-        testAccount.setOnClickListener{ v -> mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task ->
+        testAccount.setOnClickListener{
+            mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Sign in successful, update UI with the signed-in user's information
                 LogHelper.d(TAG, "signInTestEmail:success")
@@ -101,7 +104,7 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
             if (result.isSuccess) {
                 // Signed in successfully, show authenticated UI
                 val acct = result.signInAccount
-                firebaseAuthWithGoogle(acct)
+                firebaseAuthWithGoogle(acct!!)
             } else {
                 // Signed out, show unauthenticated UI
                 updateUI(null)
@@ -151,10 +154,10 @@ class FirebaseLoginActivity : BaseActivity(), GoogleApiClient.OnConnectionFailed
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In will not be available.
-        LogHelper.d(TAG, "onConnectionFailed:" + connectionResult)
+        LogHelper.d(TAG, "onConnectionFailed: $connectionResult")
         if (mAuth.currentUser == null)
             AlertDialog.Builder(this).setTitle("Unable to connect to Google Servers")
                     .setMessage("We are unable to connect to Google Servers to sign you in, therefore login cannot be conducted")
-                    .setCancelable(false).setPositiveButton(android.R.string.ok) { dialog, which -> finish()}.show()
+                    .setCancelable(false).setPositiveButton(android.R.string.ok) { _, _ -> finish()}.show()
     }
 }
