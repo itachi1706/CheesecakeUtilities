@@ -31,6 +31,7 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper;
  * Created by Kenneth on 28/7/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker in CheesecakeUtilities
  */
+@Deprecated
 public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private ProgressBar progress;
