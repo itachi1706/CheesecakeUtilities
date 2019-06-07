@@ -52,7 +52,7 @@ public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity imple
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vehicle_mileage_tracker_login);
+        setContentView(R.layout.activity_firebase_login);
         // Set up the login form.
         progress = findViewById(R.id.sign_in_progress);
         progress.setIndeterminate(true);

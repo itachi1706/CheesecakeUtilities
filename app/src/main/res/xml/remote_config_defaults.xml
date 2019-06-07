@@ -13,7 +13,7 @@
         <value>false</value>
     </entry>
     <entry>
-        <key>veh_mileage_debug</key>
+        <key>firebase_login_debug</key>
         <value>false</value>
     </entry>
 </defaultsMap>
