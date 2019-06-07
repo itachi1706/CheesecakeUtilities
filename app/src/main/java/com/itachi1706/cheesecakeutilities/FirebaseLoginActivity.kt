@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.auth.api.Auth
@@ -40,6 +41,13 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
     private val mAuth = FirebaseAuth.getInstance()
     private lateinit var sp: SharedPreferences
 
+    private lateinit var signout: Button
+    private lateinit var signinAs: TextView
+    private lateinit var mEmailSignInButton: SignInButton
+    private lateinit var testAccount: Button
+
+    private var showDebug: Boolean = false
+
     private var continueIntent: Intent? = null
 
     override val helpDescription: String
@@ -53,7 +61,10 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         progress = findViewById(R.id.sign_in_progress)
         progress.isIndeterminate = true
         progress.visibility = View.GONE
-        val mEmailSignInButton = findViewById<SignInButton>(R.id.email_sign_in_button)
+        signout = findViewById(R.id.sign_out)
+        signinAs = findViewById(R.id.sign_in_as)
+
+        mEmailSignInButton = findViewById(R.id.email_sign_in_button)
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE)
         mEmailSignInButton.setOnClickListener {
             // Attempts to sign in with Google
@@ -78,9 +89,14 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
 
         val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults)
-        val testAccount = findViewById<Button>(R.id.test_account)
+        testAccount = findViewById(R.id.test_account)
         if (firebaseRemoteConfig.getBoolean("firebase_login_debug"))
-            testAccount.visibility = View.VISIBLE
+            showDebug = true
+
+        showHideLogin(true)
+
+        // TODO: Implement sign out
+        // TODO: Implement sign in as textview
 
         testAccount.setOnClickListener{
             mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task ->
@@ -96,6 +112,20 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
                 updateUI(null)
             }
         } }
+    }
+
+    fun showHideLogin(show: Boolean) {
+        if (show) {
+            mEmailSignInButton.visibility = View.VISIBLE
+            if (showDebug) testAccount.visibility = View.VISIBLE
+            signinAs.visibility = View.GONE
+            signout.visibility = View.GONE
+        } else {
+            mEmailSignInButton.visibility = View.GONE
+            testAccount.visibility = View.GONE
+            signinAs.visibility = View.VISIBLE
+            signout.visibility = View.VISIBLE
+        }
     }
 
     override fun onStart() {
@@ -156,12 +186,14 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
                 startActivity(continueIntent!!)
                 finish()
             } else {
-                Log.e(TAG, "No continue intent found. Exiting by default")
-                finish()
+                Log.e(TAG, "No continue intent found. Exiting by default unless specified not to")
+                if (!intent.getBooleanExtra("persist", false)) finish()
+                showHideLogin(false)
             }
         } else {
             Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
             sp.edit().remove(FB_UID).apply()
+            showHideLogin(true)
         }
     }
 

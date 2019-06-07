@@ -30,9 +30,12 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 /**
  * Created by Kenneth on 28/7/2017.
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker in CheesecakeUtilities
+ * @deprecated Use {@link com.itachi1706.cheesecakeutilities.FirebaseLoginActivity} instead
  */
 @Deprecated
 public class VehicleMileageTrackerLoginActivity extends BaseModuleActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    // TODO: Remove when FirebaseLoginActivity is completed
 
     private ProgressBar progress;
     private static final String TAG = "VehicleMileageLogin";

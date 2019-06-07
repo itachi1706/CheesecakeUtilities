@@ -27,4 +27,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Signed in as"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/sign_in_as" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sign_out"
+        android:visibility="gone"
+        android:text="Sign Out" />
 </LinearLayout>
