@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.itachi1706.appupdater.Util.NotifyUserUtil
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
 class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnectionFailedListener {
@@ -184,7 +185,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
     private fun updateUI(user: FirebaseUser?, supress: Boolean) {
         progress.visibility = View.GONE
         if (user != null) { // There's a user
-            if (!supress) Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show()
+            if (!supress) NotifyUserUtil.createShortToast(this, "Signed in!")
             sp.edit().putString(FB_UID, user.uid).apply()
             var login = user.displayName
             if (login == null) login = user.email
@@ -199,7 +200,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
                 showHideLogin(false)
             }
         } else {
-            if (!supress) Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
+            if (!supress) NotifyUserUtil.createShortToast(this, "Currently Logged Out")
             sp.edit().remove(FB_UID).apply()
             tvSignInAs.text = "Currently Logged Out"
             showHideLogin(true)
