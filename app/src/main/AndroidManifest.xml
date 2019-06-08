@@ -259,10 +259,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
-            android:exported="true"
-            android:label="Sign in required" />
-        <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
         <activity
