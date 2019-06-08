@@ -5,6 +5,8 @@
             android:key="hide_util" />
         <Preference android:title="Utility Specific Settings" android:summary="Modify Utility Specific Settings"
             android:key="util_settings" />
+        <Preference android:title="Firebase Account Management" android:summary="Click here to validate if you are signed in to Firebase (some utilities requires this)"
+            android:key="firebase_signin" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Authentication">

@@ -77,6 +77,13 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 updatePasswordViews(fp_pw, (boolean) newValue, 1);
                 return true;
             });
+
+            findPreference("firebase_signin").setOnPreferenceClickListener(preference -> {
+                Intent i = new Intent(getActivity(), FirebaseLoginActivity.class);
+                i.putExtra("persist", true);
+                startActivity(i);
+                return false;
+            });
         }
 
         @Override

@@ -200,7 +200,7 @@ public class NavBarService extends AccessibilityService {
         assert res != null;
         switch (res) {
             case NAVBAR_IMAGE_TYPE_RANDOM_IMG:
-                Picasso.with(this).load(imageLink).into(ivImage);
+                Picasso.get().load(imageLink).into(ivImage);
                 useAppColor = false;
                 break; // Load Image
             case NAVBAR_IMAGE_TYPE_STATIC:

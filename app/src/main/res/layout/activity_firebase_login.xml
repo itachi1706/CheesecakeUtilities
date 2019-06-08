@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity">
+    tools:context="com.itachi1706.cheesecakeutilities.FirebaseLoginActivity">
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/email_sign_in_button"
@@ -27,4 +27,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Signed in as"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/sign_in_as" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sign_out"
+        android:visibility="gone"
+        android:text="Sign Out" />
 </LinearLayout>

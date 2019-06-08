@@ -87,9 +87,9 @@ ext {
 
 dependencies {
     // Espresso Test Dependencies
-    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     // JUnit Test Dependencies
     testImplementation 'junit:junit:4.12'
     // Global Dependencies
@@ -97,20 +97,20 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation project(':appupdater')
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation 'com.google.firebase:firebase-config:17.0.0'
-    implementation 'com.google.firebase:firebase-perf:17.0.0'
-    implementation 'commons-io:commons-io:2.5'
+    implementation 'com.google.firebase:firebase-perf:17.0.2'
+    implementation 'commons-io:commons-io:2.6' // 20030203 is NOT a newer version
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
+    implementation 'de.psdev.licensesdialog:licensesdialog:2.0.0'
     // Specific Utility Dependencies
     // Navbar Utility
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'net.grandcentrix.tray:tray:0.11.0'
     implementation 'com.github.QuadFlask:colorpicker:0.0.12'
     // ORD Countdown Utility
@@ -123,7 +123,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-safetynet:16.0.0'
     // Barcode Tools
     implementation 'com.google.firebase:firebase-ml-vision:20.0.0'
-    implementation 'com.google.zxing:core:3.3.1'
+    implementation 'com.google.zxing:core:3.4.0'
     // Lyric Finder
     implementation 'androidx.palette:palette:1.0.0'
     // Vehicle Mileage Tracker
@@ -134,28 +134,28 @@ dependencies {
     // CEPAS Reader
     implementation project(':cepaslib')
     // MSL Sync Integration
-    implementation 'com.google.api-client:google-api-client-android:1.23.0', {
+    implementation 'com.google.api-client:google-api-client-android:1.29.2', {
         exclude group: "org.apache.httpcomponents"
         exclude module: 'google-http-client'
     }
-    implementation 'com.google.apis:google-api-services-calendar:v3-rev364-1.25.0', {
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev99-1.19.0', {
         exclude group: "org.apache.httpcomponents"
         exclude module: 'google-http-client'
     }
-    implementation 'com.google.http-client:google-http-client-gson:1.23.0', {
+    implementation 'com.google.http-client:google-http-client-gson:1.30.1', {
         exclude group: "org.apache.httpcomponents"
     }
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     // APKMirror Downloader
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0' //WebView
-    implementation 'org.jsoup:jsoup:1.10.2' //HTML Parser
+    implementation 'org.jsoup:jsoup:1.12.1' //HTML Parser
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.core:core-ktx:1.0.2"
     implementation 'androidx.preference:preference:1.0.0'
     implementation 'androidx.biometric:biometric:1.0.0-alpha04'
-    implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'com.google.guava:guava:27.1-android'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -20,7 +20,9 @@
     <uses-permission android:name="android.permission.NFC" />
 
     <uses-feature android:name="android.hardware.nfc" />
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+
         <meta-data
             android:name="android.allow_multiple_resumed_activities"
             android:value="true" />
@@ -202,8 +205,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/app_restore_provider_paths"
-                tools:replace="android:resource" />
+                android:resource="@xml/app_restore_provider_paths" />
         </provider>
 
         <activity
@@ -256,10 +258,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerLoginActivity"
-            android:exported="true"
-            android:label="@string/title_activity_vehicle_mileage_tracker_login" />
         <activity
             android:name=".Modules.VehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
@@ -363,12 +361,17 @@
                 <data android:mimeType="vnd.android.cursor.dir/${applicationId}.card" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Modules.WhoisLookup.WhoisLookupActivity"
+        <activity
+            android:name=".Modules.WhoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
-
-        <activity android:name=".Modules.APKMirrorDownloader.APKMirrorActivity" android:configChanges="orientation|screenSize" android:hardwareAccelerated="true" android:resizeableActivity="false"
-            android:supportsPictureInPicture="false" android:theme="@style/ApkMirrorSplashTheme" android:label="APKMirror Downloader" >
+        <activity
+            android:name=".Modules.APKMirrorDownloader.APKMirrorActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:label="APKMirror Downloader"
+            android:resizeableActivity="false"
+            android:supportsPictureInPicture="false"
+            android:theme="@style/ApkMirrorSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -380,6 +383,8 @@
                 <data android:host="www.apkmirror.com" />
             </intent-filter>
         </activity>
+        <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity" />
+        <activity android:name=".FirebaseLoginActivity" android:label="@string/label_firebase_sign_in" />
 
     </application>
 

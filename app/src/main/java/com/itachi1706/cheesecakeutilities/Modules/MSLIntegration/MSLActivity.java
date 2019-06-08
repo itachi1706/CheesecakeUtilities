@@ -476,7 +476,7 @@ public class MSLActivity extends BaseModuleActivity {
         }
         sp.edit().putBoolean(MSL_SP_TOGGLE_CAL, isChecked).apply();
         Toast.makeText(this, "Will be implemented in a future release", Toast.LENGTH_LONG).show();
-        // TODO: Note
+        // TODO: Implement toggle calendar
     }
 
     public void update(boolean success, String taskAction) {
