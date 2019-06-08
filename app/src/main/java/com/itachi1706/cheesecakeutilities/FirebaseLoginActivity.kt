@@ -17,6 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -30,19 +32,26 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         private const val RC_SIGN_IN: Int = 9001
         private const val FB_UID: String = "firebase_uid"
 
+        /**
+         * Intent to forward to after successful sign in
+         */
         const val CONTINUE_INTENT: String = "forwardTo"
+        /**
+         * Help message to replace the current activity's message
+         * Will be shown via Overflow > About from the activity
+         */
         const val HELP_EXTRA: String = "helpMessage"
     }
 
-    private var message : String = "Firebase Login Activity"
+    private var message: String = "This is a place to manage Firebase Logins\n\nSome utilities make use of Firebase to persist your user data"
 
     private lateinit var progress: ProgressBar
     private lateinit var mGoogleApiClient: GoogleApiClient
     private val mAuth = FirebaseAuth.getInstance()
     private lateinit var sp: SharedPreferences
 
-    private lateinit var signout: Button
-    private lateinit var signinAs: TextView
+    private lateinit var btnSignOut: Button
+    private lateinit var tvSignInAs: TextView
     private lateinit var mEmailSignInButton: SignInButton
     private lateinit var testAccount: Button
 
@@ -61,8 +70,8 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         progress = findViewById(R.id.sign_in_progress)
         progress.isIndeterminate = true
         progress.visibility = View.GONE
-        signout = findViewById(R.id.sign_out)
-        signinAs = findViewById(R.id.sign_in_as)
+        btnSignOut = findViewById(R.id.sign_out)
+        tvSignInAs = findViewById(R.id.sign_in_as)
 
         mEmailSignInButton = findViewById(R.id.email_sign_in_button)
         mEmailSignInButton.setSize(SignInButton.SIZE_WIDE)
@@ -75,56 +84,59 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         sp = PreferenceManager.getDefaultSharedPreferences(this)
 
         // Setup Google Signin
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build()
         mGoogleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build()
 
-        if (intent.hasExtra("logout") && intent.getBooleanExtra("logout",  false)) {
-            mAuth.signOut()
-            if (sp.contains(FB_UID)) sp.edit().remove(FB_UID).apply()
-        }
+        if (intent.hasExtra("logout") && intent.getBooleanExtra("logout", false)) signout(true)
         if (intent.hasExtra(CONTINUE_INTENT)) continueIntent = intent.getParcelableExtra(CONTINUE_INTENT)
         if (intent.hasExtra(HELP_EXTRA)) message = intent.getStringExtra(HELP_EXTRA)
 
         val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults)
         testAccount = findViewById(R.id.test_account)
-        if (firebaseRemoteConfig.getBoolean("firebase_login_debug"))
-            showDebug = true
+        if (firebaseRemoteConfig.getBoolean("firebase_login_debug")) showDebug = true
 
         showHideLogin(true)
 
-        // TODO: Implement sign out
-        // TODO: Implement sign in as textview
+        btnSignOut.setOnClickListener { signout(false) }
 
-        testAccount.setOnClickListener{
-            mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // Sign in successful, update UI with the signed-in user's information
-                LogHelper.d(TAG, "signInTestEmail:success")
-                val user = mAuth.currentUser
-                updateUI(user)
-            } else {
-                // If sign in fails, display a message to the user
-                LogHelper.w(TAG, "signInTestEmail:failure", task.exception!!)
-                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                updateUI(null)
-            }
-        } }
+        testAccount.setOnClickListener {
+            mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task -> processSignIn("signInTestEmail", task) }
+        }
     }
 
-    fun showHideLogin(show: Boolean) {
+    private fun processSignIn(log: String, task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            // Sign in successful, update UI with the signed-in user's information
+            LogHelper.d(TAG, "$log:success")
+            val user = mAuth.currentUser
+            updateUI(user)
+        } else {
+            // If sign in fails, display a message to the user
+            LogHelper.w(TAG, "$log:failure", task.exception!!)
+            Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+            updateUI(null)
+        }
+    }
+
+    private fun signout(supress: Boolean) {
+        mAuth.signOut()
+        if (sp.contains(FB_UID)) sp.edit().remove(FB_UID).apply()
+        updateUI(null, supress)
+    }
+
+    private fun showHideLogin(show: Boolean) {
         if (show) {
             mEmailSignInButton.visibility = View.VISIBLE
             if (showDebug) testAccount.visibility = View.VISIBLE
-            signinAs.visibility = View.GONE
-            signout.visibility = View.GONE
+            tvSignInAs.visibility = View.GONE
+            btnSignOut.visibility = View.GONE
         } else {
             mEmailSignInButton.visibility = View.GONE
             testAccount.visibility = View.GONE
-            signinAs.visibility = View.VISIBLE
-            signout.visibility = View.VISIBLE
+            tvSignInAs.visibility = View.VISIBLE
+            btnSignOut.visibility = View.VISIBLE
         }
     }
 
@@ -160,27 +172,23 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         mAuth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
-                LogHelper.d(TAG, "signInWithGoogle:success")
-                val user = mAuth.currentUser
-                updateUI(user)
-            } else {
-                // If sign in fails, display a message to the user
-                LogHelper.w(TAG, "signInWithGoogle:failure", task.exception!!)
-                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                updateUI(null)
-            }
+            processSignIn("signInWithGoogle", task)
             progress.visibility = View.GONE
         }
     }
 
     private fun updateUI(user: FirebaseUser?) {
+        updateUI(user, false)
+    }
+
+    private fun updateUI(user: FirebaseUser?, supress: Boolean) {
         progress.visibility = View.GONE
-        if (user != null) {
-            // There's a user
-            Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show()
+        if (user != null) { // There's a user
+            if (!supress) Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show()
             sp.edit().putString(FB_UID, user.uid).apply()
+            var login = user.displayName
+            if (login == null) login = user.email
+            tvSignInAs.text = "Signed in as $login"
             if (continueIntent != null) {
                 if (intent.hasExtra("globalcheck")) continueIntent!!.putExtra("globalcheck", intent.getBooleanExtra("globalcheck", false))
                 startActivity(continueIntent!!)
@@ -191,8 +199,9 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
                 showHideLogin(false)
             }
         } else {
-            Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
+            if (!supress) Toast.makeText(this, "Currently Logged Out", Toast.LENGTH_SHORT).show()
             sp.edit().remove(FB_UID).apply()
+            tvSignInAs.text = "Currently Logged Out"
             showHideLogin(true)
         }
     }
@@ -203,6 +212,6 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         if (mAuth.currentUser == null)
             AlertDialog.Builder(this).setTitle("Unable to connect to Google Servers")
                     .setMessage("We are unable to connect to Google Servers to sign you in, therefore login cannot be conducted")
-                    .setCancelable(false).setPositiveButton(android.R.string.ok) { _, _ -> finish()}.show()
+                    .setCancelable(false).setPositiveButton(android.R.string.ok) { _, _ -> finish() }.show()
     }
 }
