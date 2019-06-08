@@ -38,6 +38,9 @@ import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Uti
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
+/**
+ * Note: Deprecated past Android Oreo
+ */
 public class NavbarConfigurationActivity extends BaseModuleActivity {
 
     private final int OVERLAY_PERMISSION_REQ_CODE = 1234;
@@ -178,11 +181,10 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: See if there is a fix for devices with API 26 and above
         if (Utils.IS_OREO_AND_ABOVE)
             new AlertDialog.Builder(this).setCancelable(false)
-                    .setTitle("Not supported in Android Oreo")
-                    .setMessage("Due to API changes in Android Oreo, this feature is no longer supported as of now until a fix can be found. The utility will now exit")
+                    .setTitle("Not supported since Android Oreo")
+                    .setMessage("API changes since Android Oreo makes in unfeasible to continue supporting this utility. Therefore this feature has been removed on those versions of Android")
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> finish()).show();
 
         AppPreferences sp = new AppPreferences(this);
