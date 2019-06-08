@@ -55,6 +55,9 @@ import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Uti
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
 import static com.itachi1706.cheesecakeutilities.Modules.NavbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
+/**
+ * Note: Deprecated past Android Oreo
+ */
 public class NavBarService extends AccessibilityService {
 
     private static final String TAG = "NavBarService";
@@ -72,6 +75,13 @@ public class NavBarService extends AccessibilityService {
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
+
+        // Check if >= oreo and disable
+        if (Utils.IS_OREO_AND_ABOVE) {
+            LogHelper.e(TAG, "Android SDK Version is Android Oreo and above, disabling service");
+            setServiceInfo(new AccessibilityServiceInfo());
+            return;
+        }
 
         LogHelper.i(TAG, "NavBarService connected");
         receiver = new ResponseReceiver();
@@ -195,17 +205,21 @@ public class NavBarService extends AccessibilityService {
         ivImage = mNavBarView.findViewById(R.id.iv_image); // Image Label (retrieve from lorempixel.com)
         clock = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) ? (TextClock) mNavBarView.findViewById(R.id.tc_clock) : null;
 
+        mNavBarView.setClickable(false);
+        mNavBarView.setFocusable(false);
+
         // See Image Type and do stuff with it
         String res = sharedPreferences.getString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
         assert res != null;
         switch (res) {
             case NAVBAR_IMAGE_TYPE_RANDOM_IMG:
-                Picasso.get().load(imageLink).into(ivImage);
+                new Picasso.Builder(this).build().load(imageLink).into(ivImage);
                 useAppColor = false;
                 break; // Load Image
             case NAVBAR_IMAGE_TYPE_STATIC:
                 useAppColor = false;
                 ivImage.setImageDrawable(new ColorDrawable(sharedPreferences.getInt(NAVBAR_SHOW_STATIC_COLOR, Color.BLUE)));
+                ivImage.setZ(-9999);
                 break;
             case NAVBAR_IMAGE_TYPE_APP:
             default:
@@ -223,8 +237,9 @@ public class NavBarService extends AccessibilityService {
         lpNavView.format = PixelFormat.TRANSLUCENT;
         //noinspection deprecation
         lpNavView.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY; // we need this to draw over other apps
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) lpNavView.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         // Lets us draw outside screen bounds
-        lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        lpNavView.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
 
         // Since we are using Gravity.BOTTOM to position the view,
         // any value we specify to WindowManager.LayoutParams#y
@@ -273,8 +288,10 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
-        if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        if (!Utils.IS_OREO_AND_ABOVE) {
+            Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
+            if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        }
     }
 
     @Override
