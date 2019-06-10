@@ -88,27 +88,25 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             });
 
             findPreference("app_theme").setOnPreferenceChangeListener((preference, newValue) -> {
-                switch (String.valueOf(newValue)) {
-                    case "light":
-                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_NO, "Light");
-                        break;
-                    case "dark":
-                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_YES, "Dark");
-                        break;
-                    case "battery":
-                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, "Battery Saver");
-                        break;
-                    case "default":
-                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, "System Default");
-                        break;
-                    default:
-                        // Set as battery saver default if P and below
-                        PrefHelper.changeDarkModeTheme((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
-                                "Unknown mode, falling back to default");
-                        break;
-                }
+                updateDarkModeSetting(String.valueOf(newValue));
                 return true;
             });
+        }
+
+        public static void updateDarkModeSetting(String newValue) {
+            switch (String.valueOf(newValue)) {
+                case "light":
+                    PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_NO, "Light");
+                    break;
+                case "dark":
+                    PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_YES, "Dark");
+                    break;
+                default:
+                    // Set as battery saver default if P and below
+                    PrefHelper.changeDarkModeTheme((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                            "default " + ((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? "battery" : "system"));
+                    break;
+            }
         }
 
         @Override
