@@ -61,7 +61,7 @@
             android:name=".SpamMessages"
             android:exported="true"
             android:label="@string/msg_spam_title"
-            android:theme="@style/DarkTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".GeneralSettingsActivity"
             android:label="@string/title_activity_general_settings" />
