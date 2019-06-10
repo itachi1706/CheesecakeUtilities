@@ -7,6 +7,8 @@
             android:key="util_settings" />
         <Preference android:title="Firebase Account Management" android:summary="Click here to validate if you are signed in to Firebase (some utilities requires this)"
             android:key="firebase_signin" />
+        <ListPreference android:title="Application Theme" android:summary="%s" android:defaultValue="light" android:entries="@array/dark_mode_selector"
+            android:entryValues="@array/dark_mode_selector_option" android:key="app_theme" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Authentication">

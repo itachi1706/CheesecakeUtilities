@@ -2,12 +2,12 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.collection.ArrayMap;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.ArrayMap;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -19,6 +19,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
@@ -79,6 +81,7 @@ public class ListApplicationsApiGraphActivity extends AppCompatActivity implemen
         Legend legend = chart.getLegend();
         legend.setWordWrapEnabled(true);
         legend.setTextSize(15f);
+        legend.setTextColor(PrefHelper.isNightModeEnabled(this) ? Color.WHITE : Color.BLACK);
         PieData data = new PieData(dataSet);
         chart.setData(data);
         chart.setOnChartValueSelectedListener(this);

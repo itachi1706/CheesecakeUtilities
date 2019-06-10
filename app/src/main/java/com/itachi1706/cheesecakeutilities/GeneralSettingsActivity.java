@@ -3,10 +3,12 @@ package com.itachi1706.cheesecakeutilities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.itachi1706.appupdater.EasterEggResMusicPrefFragment;
 import com.itachi1706.appupdater.SettingsInitializer;
@@ -84,6 +86,29 @@ public class GeneralSettingsActivity extends AppCompatActivity {
                 startActivity(i);
                 return false;
             });
+
+            findPreference("app_theme").setOnPreferenceChangeListener((preference, newValue) -> {
+                switch (String.valueOf(newValue)) {
+                    case "light":
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_NO, "Light");
+                        break;
+                    case "dark":
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_YES, "Dark");
+                        break;
+                    case "battery":
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, "Battery Saver");
+                        break;
+                    case "default":
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, "System Default");
+                        break;
+                    default:
+                        // Set as battery saver default if P and below
+                        PrefHelper.changeDarkModeTheme((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                                "Unknown mode, falling back to default");
+                        break;
+                }
+                return true;
+            });
         }
 
         @Override
@@ -105,22 +130,28 @@ public class GeneralSettingsActivity extends AppCompatActivity {
         private void updatePasswordViews(Preference fp_pw, boolean val, int type) {
             boolean isScreenLock = BiometricCompatHelper.Companion.isScreenLockProtectionEnabled(getActivity()), isFP = BiometricCompatHelper.Companion.requireFPAuth(sp);
             switch (type) {
-                case 0: isFP = val; break;
-                case 1: isScreenLock = val; break;
+                case 0:
+                    isFP = val;
+                    break;
+                case 1:
+                    isScreenLock = val;
+                    break;
             }
             String summary = "Unprotected";
             if (isScreenLock) {
                 if (BiometricCompatHelper.Companion.isScreenLockEnabled(getActivity())) {
                     summary = "Protected with device screen lock";
                     if (isFP) {
-                        if (BiometricCompatHelper.Companion.isBiometricFPRegistered(getActivity())) summary = "Protected with fingerprint + screen lock";
+                        if (BiometricCompatHelper.Companion.isBiometricFPRegistered(getActivity()))
+                            summary = "Protected with fingerprint + screen lock";
                         else summary += " (No fingerprint found on device)";
                     }
-                }
-                else summary = "Unprotected (No screen lock found)";
+                } else summary = "Unprotected (No screen lock found)";
             } else if (isFP) {
-                if (!BiometricCompatHelper.Companion.isScreenLockEnabled(getActivity())) summary = "Unprotected (No screen lock found)"; // No FP without a screen lock
-                else if (BiometricCompatHelper.Companion.isBiometricFPRegistered(getActivity())) summary = "Protected with fingerprint";
+                if (!BiometricCompatHelper.Companion.isScreenLockEnabled(getActivity()))
+                    summary = "Unprotected (No screen lock found)"; // No FP without a screen lock
+                else if (BiometricCompatHelper.Companion.isBiometricFPRegistered(getActivity()))
+                    summary = "Protected with fingerprint";
                 else summary = "Unprotected (No fingerprint found on device)";
             }
 

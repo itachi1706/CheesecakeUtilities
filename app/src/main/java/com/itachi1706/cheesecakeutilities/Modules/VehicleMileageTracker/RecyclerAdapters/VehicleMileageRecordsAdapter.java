@@ -133,7 +133,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
 
         VehicleMileageRecordsViewHolder(View v) {
             super(v);
-            defaultTextColor = ContextCompat.getColor(v.getContext(), R.color.default_text_color_sec);
+            defaultTextColor = ContextCompat.getColor(v.getContext(), (PrefHelper.isNightModeEnabled(v.getContext())) ? R.color.default_text_color_sec_dark : R.color.default_text_color_sec_light);
             location = v.findViewById(R.id.tvLocation);
             purpose = v.findViewById(R.id.tvPurpose);
             vehicle = v.findViewById(R.id.tvVehicle);

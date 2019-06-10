@@ -303,7 +303,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         tv.setId(id);
         tv.setText(title);
         if (bold) tv.setTypeface(null, Typeface.BOLD);
-        tv.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+        tv.setTextColor(ContextCompat.getColor(getApplicationContext(), (PrefHelper.isNightModeEnabled(this)) ? R.color.white : R.color.black));
         tv.setPadding(40, 5, 40, 5);
         tv.setLayoutParams(getLayoutParams());
         return tv;

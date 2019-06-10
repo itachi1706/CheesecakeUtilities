@@ -2,12 +2,15 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
@@ -158,6 +161,12 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
             lockToggle.setImageDrawable(isLocked ?
                     VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_lock, mContext.getTheme()) :
                     VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_lock_open, mContext.getTheme()));
+            if (PrefHelper.isNightModeEnabled(mContext)) {
+                // Set to white color
+                int white = ContextCompat.getColor(mContext, R.color.white);
+                ImageViewCompat.setImageTintList(visibleToggle, ColorStateList.valueOf(white));
+                ImageViewCompat.setImageTintList(lockToggle, ColorStateList.valueOf(white));
+            }
         }
 
         private boolean isHidden(String util) {
