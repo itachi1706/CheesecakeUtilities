@@ -133,13 +133,13 @@
         <item>No Restrictions</item>
     </string-array>
     <string-array name="dark_mode_selector">
-        <item>Light (Default)</item>
+        <item>Light</item>
         <item>Dark [BETA]</item>
-        <item>Set by Battery Saver</item>
+        <item>Set by Battery Saver (Default)</item>
     </string-array>
     <string-array name="dark_mode_selector_option">
         <item>light</item>
         <item>dark</item>
-        <item>battery</item>
+        <item>batterydefault</item>
     </string-array>
 </resources>
