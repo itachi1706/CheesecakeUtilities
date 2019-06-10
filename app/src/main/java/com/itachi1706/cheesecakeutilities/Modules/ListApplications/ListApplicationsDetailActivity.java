@@ -37,6 +37,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
@@ -408,7 +409,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
             labelView.setMaxWidth(350);
             labelView.setMinWidth(350);
             labelView.setPadding(0,0,10,0);
-            labelView.setTextColor(Color.BLACK);
+            labelView.setTextColor((PrefHelper.isNightModeEnabled(this)) ? Color.WHITE : Color.BLACK);
             detailView = new TextView(this);
 
             labelView.setText(lc.getLabel());

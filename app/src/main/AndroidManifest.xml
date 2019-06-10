@@ -56,7 +56,7 @@
             android:name=".StringToHexBin"
             android:exported="true"
             android:label="@string/bin_hex_title_full"
-            android:theme="@style/DarkTheme" />
+            android:theme="@style/LegacyDarkTheme" />
         <activity
             android:name=".SpamMessages"
             android:exported="true"
@@ -169,7 +169,7 @@
         <activity
             android:name=".Modules.SystemInformation.ParentFragmentActivity"
             android:label="System Information"
-            android:theme="@style/AppTheme.NoAppBar" />
+            android:theme="@style/LegacyLightThemeNoAppBar" />
 
         <service
             android:name=".Modules.NavbarCustomization.NavBarService"

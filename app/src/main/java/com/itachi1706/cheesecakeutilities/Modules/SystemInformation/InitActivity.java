@@ -18,6 +18,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class InitActivity extends AppCompatActivity {
     private static SharedPreferences prefs;
 
+    // TODO: Revamp this as it does not work well in dark mode. We are using a legacy theme to mitigate for now
+
     private class ClearRenderer implements Renderer {
         ClearRenderer() {
         }

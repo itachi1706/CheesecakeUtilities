@@ -17,7 +17,6 @@ import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.Authenticatio
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.BiometricCompatHelper;
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import de.psdev.licensesdialog.LicensesDialog;
 
@@ -91,30 +90,25 @@ public class GeneralSettingsActivity extends AppCompatActivity {
             findPreference("app_theme").setOnPreferenceChangeListener((preference, newValue) -> {
                 switch (String.valueOf(newValue)) {
                     case "light":
-                        changeTheme(AppCompatDelegate.MODE_NIGHT_NO, "Light");
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_NO, "Light");
                         break;
                     case "dark":
-                        changeTheme(AppCompatDelegate.MODE_NIGHT_YES, "Dark");
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_YES, "Dark");
                         break;
                     case "battery":
-                        changeTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, "Battery Saver");
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, "Battery Saver");
                         break;
                     case "default":
-                        changeTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, "System Default");
+                        PrefHelper.changeDarkModeTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, "System Default");
                         break;
                     default:
                         // Set as battery saver default if P and below
-                        changeTheme((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                        PrefHelper.changeDarkModeTheme((Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) ? AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
                                 "Unknown mode, falling back to default");
                         break;
                 }
                 return true;
             });
-        }
-
-        private void changeTheme(int newTheme, String themeName) {
-            LogHelper.i("AppThemeChanger", "Switching over to " + themeName + " mode");
-            AppCompatDelegate.setDefaultNightMode(newTheme);
         }
 
         @Override
