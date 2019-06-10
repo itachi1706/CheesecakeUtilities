@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
+import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.ColorUtils;
@@ -122,7 +123,7 @@ public class PsiActivity extends BaseModuleActivity {
 
     private void updateField(TextView view, int data) {
         view.setText(String.format(Locale.getDefault(), "%d", data));
-        view.setTextColor(ColorUtils.Companion.getColorFromVariable(this, tmp.getColor(data)));
+        view.setTextColor(ColorUtils.Companion.getColorFromVariable(this, tmp.getColor(data, PrefHelper.isNightModeEnabled(this))));
     }
 
     static class PsiDataHandler extends Handler {
