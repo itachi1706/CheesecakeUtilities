@@ -320,5 +320,6 @@
     <string name="clear">Clear</string>
     <string name="number">%1$d</string>
     <string name="label_firebase_sign_in">Sign in to Firebase</string>
+    <string name="error">Error</string>
 
 </resources>
