@@ -3,12 +3,13 @@ package com.itachi1706.cheesecakeutilities.Modules.CEPASReader;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.codebutler.farebot.app.feature.main.MainActivity;
+import com.itachi1706.cepaslib.CEPASLibBuilder;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
+import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity;
 
 public class CEPASActivity extends BaseModuleActivity {
 
@@ -24,7 +25,16 @@ public class CEPASActivity extends BaseModuleActivity {
             new AlertDialog.Builder(this).setTitle("NFC Unavailable").setMessage("NFC is not available on this device. This utility will now exit")
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> finish()).setCancelable(false).show();
         }
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("utility_preference_class", "com.itachi1706.cheesecakeutilities.UtilitySettingsActivity").apply();
+        CEPASLibBuilder.INSTANCE.setPreferenceClass(UtilitySettingsActivity.class);
+        CEPASLibBuilder.INSTANCE.shouldShowAboutMenuItem(true);
+        CEPASLibBuilder.INSTANCE.registerMenuHandler((item, context) -> {
+            if (item.getItemId() == com.codebutler.farebot.R.id.about) {
+                new android.app.AlertDialog.Builder(context)
+                        .setMessage(getHelpDescription())
+                        .setCancelable(false)
+                        .setPositiveButton(android.R.string.ok, null).show();
+            }
+        });
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
