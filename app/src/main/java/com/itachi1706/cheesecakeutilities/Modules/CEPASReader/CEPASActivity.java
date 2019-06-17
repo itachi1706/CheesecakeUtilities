@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.codebutler.farebot.app.feature.main.MainActivity;
 import com.itachi1706.cepaslib.CEPASLibBuilder;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity;
 
 public class CEPASActivity extends BaseModuleActivity {
@@ -27,6 +28,10 @@ public class CEPASActivity extends BaseModuleActivity {
         }
         CEPASLibBuilder.INSTANCE.setPreferenceClass(UtilitySettingsActivity.class);
         CEPASLibBuilder.INSTANCE.shouldShowAboutMenuItem(true);
+        CEPASLibBuilder.INSTANCE.updateTitleBarColor(R.color.colorPrimary);
+        CEPASLibBuilder.INSTANCE.updateAccentColor(R.color.colorAccent);
+        CEPASLibBuilder.INSTANCE.setCustomTitle("CEPAS Card Reader");
+        CEPASLibBuilder.INSTANCE.setHomeScreenWithBackButton(true);
         CEPASLibBuilder.INSTANCE.registerMenuHandler((item, context) -> {
             if (item.getItemId() == com.codebutler.farebot.R.id.about) {
                 new android.app.AlertDialog.Builder(context)

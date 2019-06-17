@@ -17,7 +17,7 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.itachi1706.cheesecakeutilities"
+        applicationId "com.itachi1706.cheesecakeutilities.dev"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 988
@@ -55,7 +55,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            proguardFile 'proguard-simple-xml.pro'
             proguardFile 'proguard-google-api-client.pro'
         }
         debug {
