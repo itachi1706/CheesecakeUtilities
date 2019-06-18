@@ -55,7 +55,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            proguardFile 'proguard-simple-xml.pro'
             proguardFile 'proguard-google-api-client.pro'
         }
         debug {
