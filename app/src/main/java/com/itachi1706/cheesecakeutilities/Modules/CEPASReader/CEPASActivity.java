@@ -30,6 +30,7 @@ public class CEPASActivity extends BaseModuleActivity {
         CEPASLibBuilder.INSTANCE.shouldShowAboutMenuItem(true);
         CEPASLibBuilder.INSTANCE.updateTitleBarColor(R.color.colorPrimary);
         CEPASLibBuilder.INSTANCE.updateAccentColor(R.color.colorAccent);
+        CEPASLibBuilder.INSTANCE.updateErrorColor(R.color.colorAccent);
         CEPASLibBuilder.INSTANCE.setCustomTitle("CEPAS Card Reader");
         CEPASLibBuilder.INSTANCE.setHomeScreenWithBackButton(true);
         CEPASLibBuilder.INSTANCE.registerMenuHandler((item, context) -> {
