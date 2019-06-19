@@ -45,35 +45,6 @@ class FileCacher(private val mContext: Context) {
         } else null
     }
 
-    fun writeToFile(fileData: String): Boolean {
-        val f = getFileObject()
-        if (f.exists() && !f.delete()) {
-            Log.e(TAG, "Unable to remove old file, exiting")
-            return false
-        }
-
-        try {
-            val fos = FileOutputStream(f)
-            fos.write(fileData.toByteArray())
-            fos.close()
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-            Log.e(TAG, "File not found. Something went wrong!")
-            return false
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.e(TAG, "Error writing file. Exiting prematurely")
-            return false
-        }
-        Log.i(TAG, "Wrote to $fileName")
-        return true
-    }
-
-    fun deleteFile(): Boolean {
-        val f = getFile() ?: return true
-        return f.delete()
-    }
-
     @Nullable
     fun getStringFromFile(): String? {
         val f = getFile() ?: return null
