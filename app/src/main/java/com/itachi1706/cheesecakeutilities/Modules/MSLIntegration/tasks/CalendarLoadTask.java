@@ -14,6 +14,7 @@ import java.io.IOException;
  * Created by Kenneth on 14/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks in CheesecakeUtilities
  */
+@Deprecated
 public class CalendarLoadTask extends CalendarAsyncTask {
 
     private String action;

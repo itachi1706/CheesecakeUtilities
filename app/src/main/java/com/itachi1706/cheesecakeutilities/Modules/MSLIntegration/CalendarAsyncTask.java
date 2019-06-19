@@ -18,13 +18,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.CalendarModel;
 
 import java.io.IOException;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Asynchronous task that also takes care of common needs, such as displaying progress,
@@ -32,6 +32,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
  *
  * @author Yaniv Inbar
  */
+@Deprecated
 public abstract class CalendarAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     public final Context context;

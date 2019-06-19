@@ -8,6 +8,7 @@ import java.util.*
  * Created by Kenneth on 13/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
  */
+@Deprecated("MSL Closing Down")
 class CalendarModel {
 
     private val calendars = HashMap<String, CalendarInfo>()

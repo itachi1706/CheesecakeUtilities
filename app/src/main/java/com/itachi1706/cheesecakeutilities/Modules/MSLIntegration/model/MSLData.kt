@@ -6,6 +6,7 @@ import androidx.annotation.Keep
  * Created by Kenneth on 14/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model in CheesecakeUtilities
  */
+@Deprecated("MSL Closing Down")
 class MSLData {
 
     val subjects: Array<Subjects>? = null

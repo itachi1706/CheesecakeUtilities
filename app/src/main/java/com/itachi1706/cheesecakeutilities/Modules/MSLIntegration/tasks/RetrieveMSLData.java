@@ -23,6 +23,7 @@ import static com.itachi1706.appupdater.Util.UpdaterHelper.HTTP_QUERY_TIMEOUT;
  * Created by Kenneth on 14/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks in CheesecakeUtilities
  */
+@Deprecated
 public class RetrieveMSLData extends AsyncTask<String, Void, Void> {
 
     public static final String BROADCAST_MSL_DATA_SYNC = "com.itachi1706.cheesecakeutilities.MSL_ASYNC_DATA_MSG";

@@ -19,6 +19,7 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import java.io.IOException;
 import java.io.InputStream;
 
+@Deprecated
 public class MslWebViewActivity extends AppCompatActivity {
 
     private static final String TAG = "MSL-WebView";

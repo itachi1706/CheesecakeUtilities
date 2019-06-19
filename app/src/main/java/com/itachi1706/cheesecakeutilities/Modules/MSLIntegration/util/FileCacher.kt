@@ -45,6 +45,7 @@ class FileCacher(private val mContext: Context) {
         } else null
     }
 
+    @Deprecated("MSL Closing Down")
     fun writeToFile(fileData: String): Boolean {
         val f = getFileObject()
         if (f.exists() && !f.delete()) {

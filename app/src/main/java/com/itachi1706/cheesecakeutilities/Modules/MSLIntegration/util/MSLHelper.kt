@@ -8,6 +8,7 @@ import com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.model.MSLData
  * Created by Kenneth on 17/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.util in CheesecakeUtilities
  */
+@Deprecated("MSL Closing Down")
 object MSLHelper {
 
     fun completeMatch(task: MSLData.Task, otherTask: MSLData.Task): Boolean {

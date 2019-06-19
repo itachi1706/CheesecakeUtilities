@@ -37,6 +37,7 @@ import java.util.Locale;
  * Created by Kenneth on 20/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.tasks in CheesecakeUtilities
  */
+@Deprecated
 public class MSLTaskSyncTask extends CalendarAsyncTask {
 
     private String action;

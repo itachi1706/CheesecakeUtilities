@@ -68,6 +68,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.MSLIntegration.MSLActiv
  * Created by Kenneth on 14/1/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.MSLIntegration in CheesecakeUtilities
  */
+@Deprecated
 public class SyncMSLService extends JobService {
 
     private static final String TAG = "SyncMSL-Svc";

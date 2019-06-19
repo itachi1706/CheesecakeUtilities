@@ -84,26 +84,26 @@ public class MSLActivity extends BaseModuleActivity {
     TextInputLayout til_accessToken;
     SharedPreferences sp;
 
-    MSLReceiver receiver;
+    @Deprecated MSLReceiver receiver;
     DualLineStringRecyclerAdapter adapter;
 
-    public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
-    public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
-    public static final String MSL_SP_TOGGLE_TASK = "msl-toggle-task";
-    public static final String MSL_SP_TOGGLE_CAL = "msl-toggle-cal";
-    public static final String MSL_SP_TOGGLE_NOTIF = "msl_notification_dismiss";
-    public static final String MSL_SP_METRIC_HIST = "msl-metric-history";
-    public static final String MSL_SP_TASK_CAL_ID = "msl-cal-task-id";
+    @Deprecated public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
+    @Deprecated public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
+    @Deprecated public static final String MSL_SP_TOGGLE_TASK = "msl-toggle-task";
+    @Deprecated public static final String MSL_SP_TOGGLE_CAL = "msl-toggle-cal";
+    @Deprecated public static final String MSL_SP_TOGGLE_NOTIF = "msl_notification_dismiss";
+    @Deprecated public static final String MSL_SP_METRIC_HIST = "msl-metric-history";
+    @Deprecated public static final String MSL_SP_TASK_CAL_ID = "msl-cal-task-id";
 
-    public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2, REQUEST_READ_FILE = 3, REQUEST_WRITE_FILE = 4;
+    @Deprecated public static final int REQUEST_GOOGLE_PLAY_SERVICES = 0, REQUEST_ACCOUNT_PICKER = 1, REQUEST_AUTHORIZATION = 2, REQUEST_READ_FILE = 3, REQUEST_WRITE_FILE = 4;
 
 
     private static final String TAG = "MSL-SYNC";
 
     // Google OAuth
-    GoogleAccountCredential credential;
-    Calendar client;
-    CalendarModel model = new CalendarModel();
+    @Deprecated GoogleAccountCredential credential;
+    @Deprecated Calendar client;
+    @Deprecated CalendarModel model = new CalendarModel();
 
     @Override
     public String getHelpDescription() {
@@ -168,8 +168,9 @@ public class MSLActivity extends BaseModuleActivity {
         updateHistory();
     }
 
-    private boolean isUpdatingState = false;
+    @Deprecated private boolean isUpdatingState = false;
 
+    @Deprecated
     private void updateState() {
         isUpdatingState = true;
         syncCal.setChecked(sp.getBoolean(MSL_SP_TOGGLE_CAL, false));
@@ -290,6 +291,7 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Deprecated
     private void importDataPre() {
         LogHelper.i(TAG, "Requestion file to read");
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -298,13 +300,14 @@ public class MSLActivity extends BaseModuleActivity {
         startActivityForResult(intent, REQUEST_READ_FILE);
     }
 
+    @Deprecated
     private void importData(Uri uri) {
         StringBuilder data = new StringBuilder();
         try {
             InputStream is = getContentResolver().openInputStream(uri);
             if (is == null) {
-                LogHelper.e(TAG, "Data export failed");
-                Toast.makeText(this, "Data export failed!", Toast.LENGTH_LONG).show();
+                LogHelper.e(TAG, "Data import failed");
+                Toast.makeText(this, "Data import failed!", Toast.LENGTH_LONG).show();
                 return;
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -374,15 +377,18 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     // Checks
+    @Deprecated
     private boolean hasToken() {
         return sp.contains(MSL_SP_ACCESS_TOKEN);
     }
 
+    @Deprecated
     private boolean hasGoogleOAuth() {
         return sp.contains(MSL_SP_GOOGLE_OAUTH);
     }
 
     // On Click Listeners
+    @Deprecated
     private void updateToggles() {
         // Only update if OAuth AND access token is found
         syncTask.setEnabled(false);
@@ -398,6 +404,7 @@ public class MSLActivity extends BaseModuleActivity {
         }
     }
 
+    @Deprecated
     private void btnSave() {
         if (isUpdatingState) return;
         til_accessToken.setErrorEnabled(false);
@@ -414,6 +421,7 @@ public class MSLActivity extends BaseModuleActivity {
         Toast.makeText(this, "Saved token", Toast.LENGTH_LONG).show();
     }
 
+    @Deprecated
     private void btnSync() {
         if (isUpdatingState) return;
         if (!hasToken()) {
@@ -444,10 +452,12 @@ public class MSLActivity extends BaseModuleActivity {
         }
     }
 
+    @Deprecated
     private void btnLogin() {
         if (checkGooglePlayServicesAvailable()) haveGooglePlayServices();
     }
 
+    @Deprecated
     private void toggleTask(boolean isChecked) {
         if (isUpdatingState) return;
         if (!hasToken()) {
@@ -468,6 +478,7 @@ public class MSLActivity extends BaseModuleActivity {
         }
     }
 
+    @Deprecated
     private void toggleCal(boolean isChecked) {
         if (isUpdatingState) return;
         if (!hasToken()) {
@@ -479,6 +490,7 @@ public class MSLActivity extends BaseModuleActivity {
         // TODO: Implement toggle calendar
     }
 
+    @Deprecated
     public void update(boolean success, String taskAction) {
         if (!success) {
             Toast.makeText(this, "Something went wrong, try again later", Toast.LENGTH_LONG).show();
@@ -514,7 +526,7 @@ public class MSLActivity extends BaseModuleActivity {
         }
     }
 
-
+    @Deprecated
     private void updateHistory() {
         LogHelper.i(TAG, "Updating Metric History...");
         String metrics = sp.getString(MSL_SP_METRIC_HIST, "");
@@ -545,6 +557,7 @@ public class MSLActivity extends BaseModuleActivity {
         }
     }
 
+    @Deprecated
     private void displayEmptyHistory() {
         String[] noHist = new String[1];
         noHist[0] = "No History";
@@ -554,6 +567,7 @@ public class MSLActivity extends BaseModuleActivity {
 
     // MSL Data Manipulation
     @SuppressWarnings("ConstantConditions")
+    @Deprecated
     private void parseTasks(MSLData data, AlertDialog.Builder builder) {
         HashMap<String, String> subjects = new HashMap<>();
         for (MSLData.Subjects s : data.getSubjects()) {
@@ -576,6 +590,7 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @Deprecated
     private void parseExams(MSLData data, AlertDialog.Builder builder) {
         HashMap<String, String> subjects = new HashMap<>();
         for (MSLData.Subjects s : data.getSubjects()) {
@@ -597,6 +612,7 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     // Receivers
+    @Deprecated
     private class MSLReceiver extends BaseBroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -617,6 +633,7 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     // GPS Stuff
+    @Deprecated
     private boolean checkGooglePlayServicesAvailable() {
         final int connectionStatusCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
         if (connectionStatusCode != ConnectionResult.SUCCESS && GoogleApiAvailability.getInstance().isUserResolvableError(connectionStatusCode)) {
@@ -626,14 +643,17 @@ public class MSLActivity extends BaseModuleActivity {
         return true;
     }
 
+    @Deprecated
     public void showGPSError(final int connectionStatusCode) {
         runOnUiThread(() -> GoogleApiAvailability.getInstance().getErrorDialog(this, connectionStatusCode, REQUEST_GOOGLE_PLAY_SERVICES).show());
     }
 
+    @Deprecated
     private void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
+    @Deprecated
     private void haveGooglePlayServices() {
         // check if there is already an account selected
         if (credential.getSelectedAccountName() == null) {
@@ -646,6 +666,7 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     @Override
+    @Deprecated
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:

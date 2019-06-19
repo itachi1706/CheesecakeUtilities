@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
+@Deprecated("MSL Closing Down")
 class MSLCancelNotification : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {

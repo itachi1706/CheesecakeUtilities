@@ -15,6 +15,7 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper;
  *
  * @author Yaniv Inbar
  */
+@Deprecated
 public class Utils {
 
     private Utils() { throw new IllegalStateException("Utility Class"); }
