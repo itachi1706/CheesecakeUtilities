@@ -117,7 +117,6 @@ public class MSLActivity extends BaseModuleActivity {
     }
 
     @Override
-    @Deprecated
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_WRITE_FILE) {
             if (resultCode == RESULT_OK && data != null) {
