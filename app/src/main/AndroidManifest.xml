@@ -329,20 +329,8 @@
             android:name=".Modules.MSLIntegration.MSLActivity"
             android:label="MSL Sync" />
         <activity
-            android:name=".Modules.MSLIntegration.MslWebViewActivity"
-            android:label="Attempting to retrieve key..." />
-
-        <service
-            android:name=".Modules.MSLIntegration.SyncMSLService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name=".Modules.MSLIntegration.MSLCancelNotification"
-            android:enabled="true" />
+            android:name=".Modules.MSLIntegration.MslWebViewWhyActivity"
+            android:label="MSL Sync" />
 
         <activity
             android:name=".Modules.CEPASReader.CEPASActivity"

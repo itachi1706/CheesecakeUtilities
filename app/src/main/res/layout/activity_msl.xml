@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,137 +10,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Modules.MSLIntegration.MSLActivity">
 
-
-    <!-- {@deprecated} -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_et_msl_AT"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_msl_AT"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="MSL Access Token" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- {@deprecated} -->
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?android:attr/buttonBarStyle"
-        android:orientation="horizontal">
+        android:text="@string/util_retired"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="?android:attr/buttonBarButtonStyle"
-            android:text="@string/save"
-            android:layout_weight="1"
-            android:id="@+id/btn_msl_save" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sync"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_weight="1"
-            android:id="@+id/btn_msl_sync" />
-    </LinearLayout>
-    <!-- {@deprecated} -->
-    <com.google.android.gms.common.SignInButton
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:text="Google OAuth"
-        android:id="@+id/btn_msl_google" />
-    <!-- {@deprecated} -->
-    <LinearLayout
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center"
+        android:text="@string/msl_goodbye" />
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/msl_why_button"
+        android:text="@string/msl_why" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sync Schedule (Coming Soon™)" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/msl_schedule_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-    </LinearLayout>
-    <!-- {@deprecated} -->
-    <LinearLayout
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sync Tasks/Exams" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/msl_task_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-    </LinearLayout>
-    <!-- {@deprecated} -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dismiss Notification when done" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/msl_notification_dismiss"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-    </LinearLayout>
-    <!-- {@deprecated} -->
-    <LinearLayout
-        android:id="@+id/msl_layout_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="Execution History"
-            android:textColor="@color/colorAccent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rv_msl_history" />
-    </LinearLayout>
+        android:id="@+id/msl_export_button"
+        android:enabled="false"
+        android:text="@string/msl_export" />
 
 </LinearLayout>
