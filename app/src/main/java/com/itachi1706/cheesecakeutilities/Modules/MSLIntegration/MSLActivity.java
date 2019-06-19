@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
@@ -33,13 +35,14 @@ public class MSLActivity extends BaseModuleActivity {
     SharedPreferences sp;
 
     public static final String MSL_SP_ACCESS_TOKEN = "msl_access_token";
-    public static final String MSL_SP_GOOGLE_OAUTH = "msl_google_oauth";
     public static final String MSL_SP_TOGGLE_NOTIF = "msl_notification_dismiss";
     public static final String MSL_SP_METRIC_HIST = "msl-metric-history";
     public static final String MSL_SP_TASK_CAL_ID = "msl-cal-task-id";
 
     public static final int REQUEST_WRITE_FILE = 4;
     private static final String TAG = "MSL-SYNC";
+
+    public static final String ACTION_SYNC_MSL = "msl-sync-task-svc";
 
     @Override
     @NotNull
@@ -65,6 +68,10 @@ public class MSLActivity extends BaseModuleActivity {
         }
 
         whyBtn.setOnClickListener(v -> startActivity(new Intent(this, MslWebViewWhyActivity.class)));
+
+        // Disable dispatching service
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+        dispatcher.cancel(ACTION_SYNC_MSL);
     }
 
     // Export

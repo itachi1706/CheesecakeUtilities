@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 class MslWebViewWhyActivity : AppCompatActivity() {
 
     companion object {
-        const val TAG = "MSL-WebViewWhy"
         const val URL = "file:///android_asset/msl/why.html"
     }
 
@@ -19,10 +18,6 @@ class MslWebViewWhyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val view = WebView(this)
         setContentView(view)
-
-        val ws = view.settings
-        ws.builtInZoomControls = true
-        ws.displayZoomControls = true
         view.loadUrl(URL)
     }
 }

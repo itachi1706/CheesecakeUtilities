@@ -328,6 +328,13 @@
         <activity
             android:name=".Modules.MSLIntegration.MSLActivity"
             android:label="MSL Sync" />
+        <service
+            android:name=".Modules.MSLIntegration.SyncMSLService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".Modules.MSLIntegration.MslWebViewWhyActivity"
             android:label="MSL Sync" />
