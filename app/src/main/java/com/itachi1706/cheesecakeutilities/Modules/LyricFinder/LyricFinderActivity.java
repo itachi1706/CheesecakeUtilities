@@ -36,7 +36,7 @@ import androidx.palette.graphics.Palette;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.Objects.ApiResult;
+import com.itachi1706.cheesecakeutilities.objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;

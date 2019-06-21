@@ -5,9 +5,4 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects in CheesecakeUtilities
  */
 
-class Vehicle {
-
-    var vehicleClass: String? = null // Refer to VehicleClass class
-    var name: String? = null
-    var shortname: String? = null
-}
+data class Vehicle (var vehicleClass: String? = null, var name: String? = null, var shortname: String? = null)

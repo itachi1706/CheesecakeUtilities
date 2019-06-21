@@ -8,7 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itachi1706.appupdater.Util.DeprecationHelper;
-import com.itachi1706.cheesecakeutilities.Objects.DualLineString;
+import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Arrays;

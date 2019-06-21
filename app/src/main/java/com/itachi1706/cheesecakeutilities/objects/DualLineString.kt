@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Objects
+package com.itachi1706.cheesecakeutilities.objects
 
 /**
  * Created by Kenneth on 29/4/2017.
@@ -6,4 +6,4 @@ package com.itachi1706.cheesecakeutilities.Objects
  * for com.itachi1706.cheesecakeutilities.Objects in CheesecakeUtilities
  */
 
-class DualLineString(var main: String?, var sub: String?)
+data class DualLineString(var main: String?, var sub: String?)
