@@ -5,20 +5,6 @@ package com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects
  * for com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects in CheesecakeUtilities
  */
 
-class LabelledColumn {
-
-    var label: String? = null
-        private set
-    var field: String? = null
-        private set
-
-    constructor(label: String, field: String) {
-        this.label = label
-        this.field = field
-    }
-
-    constructor(label: String, field: Int) {
-        this.label = label
-        this.field = field.toString() + ""
-    }
+data class LabelledColumn(var label: String? = null, var field: String? = null) {
+    constructor(label: String, field: Int) : this(label, field.toString() + "")
 }

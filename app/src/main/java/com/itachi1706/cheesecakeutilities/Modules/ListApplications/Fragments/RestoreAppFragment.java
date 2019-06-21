@@ -107,8 +107,7 @@ public class RestoreAppFragment extends Fragment {
                 // Group into specifics
                 if (!items.containsKey(info.packageName)) {
                     // Does not exist, create a new record
-                    RestoreAppsItemsBase header = new RestoreAppsItemsHeader(info.applicationInfo.loadLabel(pm).toString(),
-                            info.applicationInfo.loadIcon(pm));
+                    RestoreAppsItemsBase header = new RestoreAppsItemsHeader(info.applicationInfo.loadLabel(pm).toString(), info.applicationInfo.loadIcon(pm));
                     items.put(info.packageName, header);
                 }
 
