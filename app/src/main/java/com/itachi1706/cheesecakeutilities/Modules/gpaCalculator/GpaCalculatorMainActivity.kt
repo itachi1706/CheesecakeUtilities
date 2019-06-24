@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
@@ -31,7 +30,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.score_system -> Toast.makeText(this, "Unimplemented", Toast.LENGTH_SHORT).show()
+            R.id.score_system -> Snackbar.make(fab, "Unimplemented", Snackbar.LENGTH_SHORT).show()
             R.id.logout -> {
                 startActivity(Intent(this, GpaCalculatorInitActivity::class.java).apply { putExtra("logout", true) })
                 finish()

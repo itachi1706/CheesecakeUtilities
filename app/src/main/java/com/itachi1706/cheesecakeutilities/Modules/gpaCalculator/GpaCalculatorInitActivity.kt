@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.itachi1706.cheesecakeutilities.FirebaseLoginActivity
 
@@ -22,6 +23,7 @@ class GpaCalculatorInitActivity : AppCompatActivity() {
             putExtra(FirebaseLoginActivity.HELP_EXTRA, "An utility to help keep track of scores\n\nNote: This is the login screen where you have " +
                     "to login with a Google Account to continue as your scores will be saved based on your Google Account")
         }
+        Log.i("GpaCalculatorInit", "Redirecting login activity to VehicleMileageMainActivity")
         startActivity(i)
         finish()
     }
