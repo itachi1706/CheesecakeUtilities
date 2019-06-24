@@ -56,17 +56,20 @@ class GpaCalculatorScoringActivity : AppCompatActivity() {
                 adapter.setOnClickListener { view ->
                     val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
                     val pos = viewHolder.adapterPosition
-                    LogHelper.d(TAG, "DEBUG: Pos Clicked: $pos")
+                    LogHelper.d(TAG, "Score Item Clicked: $pos")
                     val score = scoreList[pos].extra as GpaScoring
 
                     val sb = StringBuilder()
                     sb.append("Description: ${score.description}\n\nGrade Tiers:\n")
                     if (score.gradetier.isEmpty()) sb.append("No Tiers Found")
-                    else { score.gradetier.forEach { sb.append("${it.name}: ${it.value} (${it.desc})\n") } }
+                    else { score.gradetier.forEach {
+                        if (score.type == "count") sb.append("${it.name}: ${it.value.toInt()} (${it.desc})\n")
+                        else sb.append("${it.name}: ${it.value} (${it.desc})\n")
+                    } }
 
                     if (!score.passtier.isNullOrEmpty()) {
                         sb.append("\nPass Tiers:\n")
-                        score.passtier.forEach { sb.append("${it.name}: ${it.value} (${it.desc})\n") }
+                        score.passtier.forEach { sb.append("${it.name}: ${if (it.value > 0) "Pass" else "Fail"} (${it.desc})\n") }
                     }
                     AlertDialog.Builder(view.context).setTitle(score.name).setMessage(sb.toString()).setPositiveButton(R.string.dialog_action_positive_close, null).show()
                 }
