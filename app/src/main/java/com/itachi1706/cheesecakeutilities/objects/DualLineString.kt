@@ -6,4 +6,6 @@ package com.itachi1706.cheesecakeutilities.objects
  * for com.itachi1706.cheesecakeutilities.Objects in CheesecakeUtilities
  */
 
-data class DualLineString(var main: String?, var sub: String?)
+data class DualLineString(var main: String?, var sub: String?, var extra: Any?) {
+    constructor(main: String?, sub: String?): this(main, sub, null)
+}

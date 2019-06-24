@@ -1,9 +1,11 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
@@ -16,9 +18,9 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         setContentView(R.layout.activity_gpa_calculator_main)
         setSupportActionBar(toolbar)
 
+        fab.drawable.setColorFilter(ResourcesCompat.getColor(resources, R.color.white, null), PorterDuff.Mode.SRC_ATOP)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            Snackbar.make(view, "Unimplemetned", Snackbar.LENGTH_LONG).show()
         }
     }
 
@@ -30,7 +32,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.score_system -> Snackbar.make(fab, "Unimplemented", Snackbar.LENGTH_SHORT).show()
+            R.id.score_system -> startActivity(Intent(this, GpaCalculatorScoringActivity::class.java)) //Snackbar.make(fab, "Unimplemented", Snackbar.LENGTH_SHORT).show()
             R.id.logout -> {
                 startActivity(Intent(this, GpaCalculatorInitActivity::class.java).apply { putExtra("logout", true) })
                 finish()
