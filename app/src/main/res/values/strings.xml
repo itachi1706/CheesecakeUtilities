@@ -327,5 +327,6 @@
     <string name="label_firebase_sign_in">Sign in to Firebase</string>
     <string name="error">Error</string>
     <string name="util_retired">Utility Retired</string>
+    <string name="title_activity_gpa_calculator_main">Score Calculator (WIP)</string>
 
 </resources>

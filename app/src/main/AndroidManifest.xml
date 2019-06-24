@@ -328,6 +328,7 @@
         <activity
             android:name=".Modules.MSLIntegration.MSLActivity"
             android:label="MSL Sync" />
+
         <service
             android:name=".Modules.MSLIntegration.SyncMSLService"
             android:exported="false">
@@ -335,6 +336,7 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".Modules.MSLIntegration.MslWebViewWhyActivity"
             android:label="MSL Sync" />
@@ -378,8 +380,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".Modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity" />
-        <activity android:name=".FirebaseLoginActivity" android:label="@string/label_firebase_sign_in" />
+        <activity
+            android:name=".FirebaseLoginActivity"
+            android:label="@string/label_firebase_sign_in" />
 
+        <activity
+            android:name=".Modules.gpaCalculator.GpaCalculatorMainActivity"
+            android:label="@string/title_activity_gpa_calculator_main"
+            android:theme="@style/AppTheme.NoAppBar" />
+
+        <activity
+            android:name=".Modules.gpaCalculator.GpaCalculatorInitActivity"
+            android:label="@string/title_activity_gpa_calculator_main" />
     </application>
 
 </manifest>

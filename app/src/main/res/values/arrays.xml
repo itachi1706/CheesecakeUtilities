@@ -24,6 +24,7 @@
         <item>MSL Calendar Sync</item>
         <item>Domain Whois Query</item>
         <item>APKMirror Downloader</item>
+        <item>@string/title_activity_gpa_calculator_main</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -49,6 +50,7 @@
         <item>.Modules.MSLIntegration.MSLActivity</item>
         <item>.Modules.WhoisLookup.WhoisLookupActivity</item>
         <item>.Modules.APKMirrorDownloader.APKMirrorActivity</item>
+        <item>.Modules.gpaCalculator.GpaCalculatorInitActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>

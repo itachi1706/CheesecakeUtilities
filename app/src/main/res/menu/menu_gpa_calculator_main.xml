@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalculatorMainActivity">
+    <item android:id="@+id/logout" android:title="Logout"
+        android:orderInCategory="50" app:showAsAction="never" />
+    <item android:id="@+id/score_system" android:orderInCategory="49"
+        android:title="View Score Systems" app:showAsAction="never" />
+</menu>
