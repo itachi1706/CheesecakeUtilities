@@ -31,7 +31,7 @@ public class ViewVehicleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_vehicle_activity);
+        setContentView(R.layout.activity_linear_recyclerview);
 
         if (getSupportActionBar() != null && getSupportActionBar().isShowing()) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
