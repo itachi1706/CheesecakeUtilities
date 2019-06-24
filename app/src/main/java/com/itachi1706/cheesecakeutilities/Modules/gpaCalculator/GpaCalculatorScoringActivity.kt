@@ -36,51 +36,43 @@ class GpaCalculatorScoringActivity : AppCompatActivity() {
         updateList()
     }
 
-    lateinit var adapter: DualLineStringRecyclerAdapter
-
     private fun updateList() {
-        val scoreList: ArrayList<DualLineString> = ArrayList()
-        adapter = DualLineStringRecyclerAdapter(scoreList, false)
-        GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING).addListenerForSingleValueEvent(object: ValueEventListener {
+        val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
+        db.keepSynced(true)
+        db.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
                 LogHelper.w(TAG, "loadScores:cancelled", databaseError.toException())
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return
+                val scoreList: ArrayList<DualLineString> = ArrayList()
                 dataSnapshot.children.forEach {
                     val gpa = it.getValue(GpaScoring::class.java) ?: return@forEach
                     scoreList.add(DualLineString(gpa.name, gpa.description, gpa))
                 }
-                adapter.update(scoreList)
+                val adapter = DualLineStringRecyclerAdapter(scoreList, false)
+
+                adapter.setOnClickListener { view ->
+                    val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+                    val pos = viewHolder.adapterPosition
+                    LogHelper.d(TAG, "DEBUG: Pos Clicked: $pos")
+                    val score = scoreList[pos].extra as GpaScoring
+
+                    val sb = StringBuilder()
+                    sb.append("Description: ${score.description}\n\nGrade Tiers:\n")
+                    if (score.gradetier.isEmpty()) sb.append("No Tiers Found")
+                    else { score.gradetier.forEach { sb.append("${it.name}: ${it.value} (${it.desc})\n") } }
+
+                    if (!score.passtier.isNullOrEmpty()) {
+                        sb.append("\nPass Tiers:\n")
+                        score.passtier.forEach { sb.append("${it.name}: ${it.value} (${it.desc})\n") }
+                    }
+                    AlertDialog.Builder(view.context).setTitle(score.name).setMessage(sb.toString()).setPositiveButton(R.string.dialog_action_positive_close, null).show()
+                }
                 recycler_view.adapter = adapter
             }
         })
-
-        adapter.setOnClickListener { view ->
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
-            val pos = viewHolder.adapterPosition
-            LogHelper.d(TAG, "DEBUG: Pos Clicked: $pos")
-            val score = scoreList[pos].extra as GpaScoring
-
-            val sb = StringBuilder()
-            sb.append("Description: ${score.description}\n\nGrade Tiers:\n")
-            if (score.gradetier.isEmpty()) sb.append("No Tiers Found")
-            else {
-                score.gradetier.forEach {
-                    sb.append("${it.name}: ${it.value} (${it.desc})\n")
-                }
-            }
-
-            if (!score.passtier.isNullOrEmpty()) {
-                sb.append("\nPass Tiers:\n")
-                score.passtier.forEach {
-                    sb.append("${it.name}: ${it.value} (${it.desc})\n")
-                }
-            }
-            AlertDialog.Builder(view.context).setTitle(score.name)
-                    .setMessage(sb.toString()).setPositiveButton(R.string.dialog_action_positive_close, null).show()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
