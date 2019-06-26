@@ -60,7 +60,7 @@ class GpaCalculatorScoringActivity : AppCompatActivity() {
                     val score = scoreList[pos].extra as GpaScoring
 
                     val sb = StringBuilder()
-                    sb.append("Description: ${score.description}\n\nGrade Tiers:\n")
+                    sb.append("Short Name: ${score.shortname}\nDescription: ${score.description}\n\nGrade Tiers:\n")
                     if (score.gradetier.isEmpty()) sb.append("No Tiers Found")
                     else { score.gradetier.forEach {
                         if (score.type == "count") sb.append("${it.name}: ${it.value.toInt()} (${it.desc})\n")
