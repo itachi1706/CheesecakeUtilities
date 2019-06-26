@@ -8,6 +8,5 @@ import com.google.firebase.database.DatabaseReference
  */
 interface StateSwitchListener {
     fun onStateSwitch(newState: Int)
-    fun getState(): Int
     fun getUserData(): DatabaseReference
 }

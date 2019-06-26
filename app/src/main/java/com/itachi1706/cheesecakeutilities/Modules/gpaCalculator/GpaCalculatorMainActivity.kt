@@ -76,10 +76,6 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         currentState = newState
     }
 
-    override fun getState(): Int {
-        return currentState
-    }
-
     override fun getUserData(): DatabaseReference {
         return userData
     }
