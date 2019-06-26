@@ -6,16 +6,17 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalculatorListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.R
 import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
-class GpaCalculatorMainActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), GpaCalculatorListFragment.StateSwitchListener {
+class GpaCalculatorMainActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
 
     var currentState: Int = STATE_INSTITUTION
     private lateinit var userData: DatabaseReference
@@ -38,11 +39,18 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
         fab.drawable.setColorFilter(ResourcesCompat.getColor(resources, R.color.white, null), PorterDuff.Mode.SRC_ATOP)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Unimplemetned", Snackbar.LENGTH_LONG).show()
+            addFabAction(view)
         }
 
         // Init Firebase
         userData = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_USER).child(userId)
+    }
+
+    private fun addFabAction(view: View) {
+        when (currentState) {
+            STATE_INSTITUTION -> TODO("startActivity(Intent(this, GpaCalculatorCreateInstitutionActivity::class.java))")
+            else -> Snackbar.make(view, "Unimplemetned", Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

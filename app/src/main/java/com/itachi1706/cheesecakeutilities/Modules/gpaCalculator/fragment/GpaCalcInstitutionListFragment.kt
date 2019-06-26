@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalculatorMainActivity
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.R
 
 /**
- * A placeholder fragment containing a simple view.
+ * Institution List View
  */
-class GpaCalculatorListFragment : Fragment() {
+class GpaCalcInstitutionListFragment : Fragment() {
 
     private var callback: StateSwitchListener? = null
+    private val state = GpaCalculatorMainActivity.STATE_INSTITUTION
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -28,8 +29,7 @@ class GpaCalculatorListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_recycler_view, container, false)
 
-        // By default we are loading institution
-        callback?.onStateSwitch(GpaCalculatorMainActivity.STATE_INSTITUTION)
+        callback?.onStateSwitch(state)
         return v
     }
 
@@ -38,9 +38,5 @@ class GpaCalculatorListFragment : Fragment() {
 
     }
 
-    interface StateSwitchListener {
-        fun onStateSwitch(newState: Int)
-        fun getState(): Int
-        fun getUserData(): DatabaseReference
-    }
+
 }
