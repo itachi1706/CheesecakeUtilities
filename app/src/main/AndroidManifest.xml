@@ -391,8 +391,11 @@
         <activity
             android:name=".Modules.gpaCalculator.GpaCalculatorInitActivity"
             android:label="@string/title_activity_gpa_calculator_main" />
-        <activity android:name=".Modules.gpaCalculator.GpaCalculatorScoringActivity"
-            android:label="View Scoring Tiers"/>
+        <activity
+            android:name=".Modules.gpaCalculator.GpaCalculatorScoringActivity"
+            android:label="View Scoring Tiers" />
+        <activity android:name=".Modules.gpaCalculator.GpaCalculatorAddInstitutionActivity"
+            android:label="Add an Institution" />
     </application>
 
 </manifest>

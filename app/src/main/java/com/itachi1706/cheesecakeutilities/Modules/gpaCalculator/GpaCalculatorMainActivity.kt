@@ -20,13 +20,14 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     var currentState: Int = STATE_INSTITUTION
     private lateinit var userData: DatabaseReference
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_main)
         setSupportActionBar(toolbar)
 
-        val userId = PreferenceManager.getDefaultSharedPreferences(this).getString("firebase_uid", "nien") ?: "nien"
+        userId = PreferenceManager.getDefaultSharedPreferences(this).getString("firebase_uid", "nien") ?: "nien"
         if (userId.equals("nien", ignoreCase = true)) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show()
@@ -43,12 +44,12 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         }
 
         // Init Firebase
-        userData = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_USER).child(userId)
+        userData = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
     }
 
     private fun addFabAction(view: View) {
         when (currentState) {
-            STATE_INSTITUTION -> TODO("startActivity(Intent(this, GpaCalculatorCreateInstitutionActivity::class.java))")
+            STATE_INSTITUTION -> startActivity(Intent(this, GpaCalculatorAddInstitutionActivity::class.java).apply { putExtra("userid", userId) })
             else -> Snackbar.make(view, "Unimplemetned", Snackbar.LENGTH_LONG).show()
         }
     }
@@ -61,7 +62,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.score_system -> startActivity(Intent(this, GpaCalculatorScoringActivity::class.java)) //Snackbar.make(fab, "Unimplemented", Snackbar.LENGTH_SHORT).show()
+            R.id.score_system -> startActivity(Intent(this, GpaCalculatorScoringActivity::class.java))
             R.id.logout -> {
                 startActivity(Intent(this, GpaCalculatorInitActivity::class.java).apply { putExtra("logout", true) })
                 finish()

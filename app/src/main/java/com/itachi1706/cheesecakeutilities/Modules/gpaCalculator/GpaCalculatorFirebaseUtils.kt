@@ -20,4 +20,8 @@ object GpaCalculatorFirebaseUtils: FirebaseUtils() {
         return if (database == null) Companion.getDatabaseReference("gpacalc")
             else Companion.getDatabaseReference("gpacalc", database)
     }
+
+    fun getGpaDatabaseUser(userId: String) : DatabaseReference {
+        return getGpaDatabase().child(FB_REC_USER).child(userId)
+    }
 }
