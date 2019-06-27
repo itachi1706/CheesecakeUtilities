@@ -28,6 +28,7 @@ env:
 matrix:
     allow_failures:
         - env: ESPRESSO=1
+    fast_finish: true
 android:
   components:
     - tools
