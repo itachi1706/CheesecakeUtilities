@@ -14,7 +14,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalculatorMainActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
@@ -109,9 +110,15 @@ class GpaCalcInstitutionListFragment : Fragment() {
         }
     }
 
+    private var retry = false
+
     private fun instituteProcessAndUpdate() {
         val list: ArrayList<DualLineString> = ArrayList()
         val scoring = callback?.getScoreMap()!!
+        if (scoring.isEmpty() && !retry) {
+            retry = true
+            callback?.updateScoreMap(object: GpaCalcCallback { override fun onCallback() { instituteProcessAndUpdate() } })
+        }
         institutions.forEach {
             val type = if (scoring.containsKey(it.type)) scoring[it.type]?.name else "Unknown"
             list.add(DualLineString("${it.name} (${it.shortName})", "Scoring Mode: $type"))

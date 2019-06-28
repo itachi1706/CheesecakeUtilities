@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalculatorFirebaseUtils
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalculatorMainActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester

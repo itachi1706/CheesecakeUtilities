@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,9 +17,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcInstitutionListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcSemesterListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
@@ -32,6 +34,8 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
     private lateinit var userData: DatabaseReference
     private lateinit var userId: String
     private var defaultActionBarText: String? = null
+
+    private var updateScoreOnCreate = false
 
     private val scoring: HashMap<String, GpaScoring> = HashMap()
 
@@ -60,6 +64,8 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
         // Init Firebase
         userData = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
+        updateScoring()
+        updateScoreOnCreate = true
 
         // Replace existing fragment
         val tmp = GpaCalcInstitutionListFragment().apply {
@@ -71,10 +77,11 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun onResume() {
         super.onResume()
-        updateScoring()
+        if (!updateScoreOnCreate) updateScoring() else updateScoreOnCreate = false
     }
 
-    private fun updateScoring() {
+    private fun updateScoring(callback: GpaCalcCallback? = null) {
+        Log.i(TAG, "Updating Scoring Objects Map")
         val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -89,6 +96,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
                         scoring[it.key!!] = it.getValue(GpaScoring::class.java)!!
                     }
                 }
+                callback?.onCallback()
             }
         })
     }
@@ -175,6 +183,11 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         if (title == null && defaultActionBarText!!.isNotEmpty()) supportActionBar?.title = defaultActionBarText
         else if (title != null) supportActionBar?.title = title
         supportActionBar?.subtitle = subtitle
+    }
+
+    override fun updateScoreMap(callback: GpaCalcCallback) {
+        Log.i(TAG, "Manually updating Scoring Objects")
+        updateScoring(callback)
     }
 
     override fun onBackPressed() {
