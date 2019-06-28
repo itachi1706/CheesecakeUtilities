@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`
 
 import com.google.firebase.database.DatabaseReference
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 
@@ -11,7 +12,9 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemes
 interface StateSwitchListener {
     fun onStateSwitch(newState: Int)
     fun getUserData(): DatabaseReference
-    fun selectInstitute(instituteKey: String, instituteType: String)
+    fun getInstitution(): GpaInstitution?
+    fun getSemester(): GpaSemester?
+    fun selectInstitute(instituteSelected: GpaInstitution)
     fun selectSemester(semester: GpaSemester)
     fun updateActionBar(title: String?, subtitle: String?)
     fun getScoreMap(): HashMap<String, GpaScoring>

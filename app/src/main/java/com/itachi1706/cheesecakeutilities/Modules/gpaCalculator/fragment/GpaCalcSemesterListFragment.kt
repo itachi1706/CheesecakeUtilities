@@ -85,16 +85,8 @@ class GpaCalcSemesterListFragment : Fragment() {
         }
 
         // Get institution name to update title
-        callback?.getUserData()?.child(selectedInstitutionString!!)?.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "getInstitution:onCancelled", p0.toException())
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                selectedInstitution = dataSnapshot.getValue(GpaInstitution::class.java)
-                updateActionBar()
-            }
-        })
+        selectedInstitution = callback?.getInstitution()
+        updateActionBar()
         return v
     }
 
@@ -109,6 +101,7 @@ class GpaCalcSemesterListFragment : Fragment() {
         }
 
         scoreObject = callback?.getScoreMap()!![selectedInstitutionType]
+        updateActionBar()
         LogHelper.i(TAG, "Registering Semester Firebase DB Listeners")
         listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalculatorFirebaseUtils.FB_REC_SEMESTER)?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {

@@ -67,7 +67,7 @@ class GpaCalcInstitutionListFragment : Fragment() {
             val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
             val pos = viewHolder.adapterPosition
             val instituteSelected = institutions[pos]
-            callback?.selectInstitute(instituteSelected.shortName, instituteSelected.type)
+            callback?.selectInstitute(instituteSelected)
         }
         return v
     }

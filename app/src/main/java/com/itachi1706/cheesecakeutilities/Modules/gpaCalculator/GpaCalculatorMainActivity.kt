@@ -19,6 +19,7 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcInstitutionListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcSemesterListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
@@ -117,28 +118,31 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         return super.onOptionsItemSelected(item)
     }
 
-    private var selInstitute: String? = null
-    private var selInstituteType: String? = null
-    private var selSemester: String? = null
+    private var selInstitute: GpaInstitution? = null
+    private var selSemester: GpaSemester? = null
 
     override fun onStateSwitch(newState: Int) {
         LogHelper.d(TAG, "State Switch: $newState")
         currentState = newState
+        // Special state changes
+        when (newState) {
+            STATE_INSTITUTION -> selInstitute = null
+            STATE_SEMESTER -> selSemester = null
+        }
     }
 
     override fun getUserData(): DatabaseReference {
         return userData
     }
 
-    override fun selectInstitute(instituteKey: String, instituteType: String) {
+    override fun selectInstitute(instituteSelected: GpaInstitution) {
         if (currentState != STATE_INSTITUTION) LogHelper.e(TAG, "Invalid State!!! Expected 0 but got $currentState")
-        selInstitute = instituteKey
-        selInstituteType = instituteType
+        selInstitute = instituteSelected
 
         val frag: Fragment = GpaCalcSemesterListFragment()
         val bundle = Bundle().apply {
-            putString("selection", selInstitute)
-            putString("type", selInstituteType)
+            putString("selection", instituteSelected.shortName)
+            putString("type", instituteSelected.type)
         }
         frag.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.fragment, frag)
@@ -148,6 +152,14 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun selectSemester(semester: GpaSemester) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getInstitution(): GpaInstitution? {
+        return selInstitute
+    }
+
+    override fun getSemester(): GpaSemester? {
+        return selSemester
     }
 
     override fun getScoreMap(): HashMap<String, GpaScoring> {
