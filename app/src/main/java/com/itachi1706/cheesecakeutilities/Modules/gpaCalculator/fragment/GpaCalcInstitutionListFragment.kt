@@ -35,20 +35,14 @@ class GpaCalcInstitutionListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (!toBoot()) return // Check if boot else dont boot
         if (context is GpaCalculatorMainActivity) {
             callback = context
         }
     }
 
-    private fun toBoot(): Boolean {
-        return arguments?.getBoolean("boot") ?: false
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_recycler_view, container, false)
-        if (!toBoot()) return v // Check if boot else dont boot
         val recyclerView = v.findViewById<RecyclerView>(R.id.main_menu_recycler_view)
 
         recyclerView.setHasFixedSize(true)
@@ -74,14 +68,12 @@ class GpaCalcInstitutionListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!toBoot()) return
         callback?.updateActionBar(null, null)
     }
 
     private var listener: ValueEventListener? = null
     override fun onStart() {
         super.onStart()
-        if (!toBoot()) return
         if (listener != null) {
             FirebaseUtils.removeListener(listener!!)
             listener = null
