@@ -56,7 +56,6 @@ class GpaCalculatorAddInstitutionActivity : AppCompatActivity() {
         }
 
         gpacalc_add.setOnClickListener { v ->
-            run {
                 when (val result = validate()) {
                     is String -> Snackbar.make(v, result, Snackbar.LENGTH_LONG).show()
                     is GpaInstitution -> {
@@ -69,7 +68,6 @@ class GpaCalculatorAddInstitutionActivity : AppCompatActivity() {
                         Snackbar.make(v, "An error occurred adding institution", Snackbar.LENGTH_LONG).show()
                     }
                 }
-            }
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -59,6 +60,14 @@ class GpaCalcInstitutionListFragment : Fragment() {
         recyclerView.adapter = adapter
 
         callback?.onStateSwitch(state)
+
+        adapter.setOnClickListener { view ->
+            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            val pos = viewHolder.adapterPosition
+            val instituteSelected = institutions[pos]
+            // TODO: Switch fragment with the selected institution
+            Snackbar.make(view, "Unimplemented. Selected: ${instituteSelected.name}", Snackbar.LENGTH_LONG).show()
+        }
 
         updateScoringTiers()
         return v
