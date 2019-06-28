@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
 class GpaCalculatorMainActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
 
-    var currentState: Int = STATE_INSTITUTION
+    private var currentState: Int = STATE_INSTITUTION
     private lateinit var userData: DatabaseReference
     private lateinit var userId: String
 
@@ -26,6 +26,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_main)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         userId = PreferenceManager.getDefaultSharedPreferences(this).getString("firebase_uid", "nien") ?: "nien"
         if (userId.equals("nien", ignoreCase = true)) {
