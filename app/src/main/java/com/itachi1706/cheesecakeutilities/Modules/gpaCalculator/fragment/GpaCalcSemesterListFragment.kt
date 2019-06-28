@@ -35,7 +35,7 @@ class GpaCalcSemesterListFragment : Fragment() {
     private val state = GpaCalculatorMainActivity.STATE_SEMESTER
 
     private val semesters: ArrayList<GpaSemester> = ArrayList()
-    private val scoring: HashMap<String, GpaScoring> = HashMap()
+
     private lateinit var adapter: DualLineStringRecyclerAdapter
     private var selectedInstitutionString: String? = null
     private var selectedInstitutionType: String? = null
@@ -108,39 +108,7 @@ class GpaCalcSemesterListFragment : Fragment() {
             LogHelper.e(TAG, "Firebase DB Listeners exists when it should not have, terminating it forcibly")
         }
 
-        LogHelper.i(TAG, "Updating Scoring Tiers")
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
-        db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "registerListener:onCancelled", p0.toException())
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                scoring.clear()
-                if (dataSnapshot.hasChildren()) {
-                    dataSnapshot.children.forEach{
-                        scoring[it.key!!] = it.getValue(GpaScoring::class.java)!!
-                    }
-                }
-                scoreObject = scoring[selectedInstitutionType]
-                updateActionBar()
-                registerListener()
-            }
-
-        })
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (listener != null) {
-            FirebaseUtils.removeListener(listener!!)
-            Log.i(TAG, "Firebase Listener Unregisted")
-            listener = null
-        }
-    }
-
-    private fun registerListener() {
+        scoreObject = callback?.getScoreMap()!![selectedInstitutionType]
         LogHelper.i(TAG, "Registering Semester Firebase DB Listeners")
         listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalculatorFirebaseUtils.FB_REC_SEMESTER)?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
@@ -159,6 +127,15 @@ class GpaCalcSemesterListFragment : Fragment() {
                 semestersProcessAndUpdate()
             }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (listener != null) {
+            FirebaseUtils.removeListener(listener!!)
+            Log.i(TAG, "Firebase Listener Unregisted")
+            listener = null
+        }
     }
 
     private fun semestersProcessAndUpdate() {

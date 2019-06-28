@@ -11,11 +11,15 @@ import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcInstitutionListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcSemesterListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
@@ -27,6 +31,8 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
     private lateinit var userData: DatabaseReference
     private lateinit var userId: String
     private var defaultActionBarText: String? = null
+
+    private val scoring: HashMap<String, GpaScoring> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +66,30 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
             arguments = bundle
         }
         supportFragmentManager.beginTransaction().replace(R.id.fragment, tmp).commit() // Force replace fragment?
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateScoring()
+    }
+
+    private fun updateScoring() {
+        val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
+        db.keepSynced(true)
+        db.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                LogHelper.w(TAG, "updateScoring:onCancelled", p0.toException())
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                scoring.clear()
+                if (dataSnapshot.hasChildren()) {
+                    dataSnapshot.children.forEach{
+                        scoring[it.key!!] = it.getValue(GpaScoring::class.java)!!
+                    }
+                }
+            }
+        })
     }
 
     private fun addFabAction(view: View) {
@@ -118,6 +148,10 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun selectSemester(semester: GpaSemester) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getScoreMap(): HashMap<String, GpaScoring> {
+        return scoring
     }
 
     override fun goBack() {
