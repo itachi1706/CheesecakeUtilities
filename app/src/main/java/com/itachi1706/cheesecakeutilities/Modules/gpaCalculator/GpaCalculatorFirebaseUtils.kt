@@ -11,6 +11,7 @@ import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 object GpaCalculatorFirebaseUtils: FirebaseUtils() {
     const val FB_REC_SCORING = "scoring"
     const val FB_REC_USER = "users"
+    const val FB_REC_SEMESTER = "semester"
 
     const val RECORDS_VER = 0
 

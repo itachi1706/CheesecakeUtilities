@@ -23,7 +23,7 @@ class GpaCalculatorInitActivity : AppCompatActivity() {
             putExtra(FirebaseLoginActivity.HELP_EXTRA, "An utility to help keep track of scores\n\nNote: This is the login screen where you have " +
                     "to login with a Google Account to continue as your scores will be saved based on your Google Account")
         }
-        Log.i("GpaCalculatorInit", "Redirecting login activity to VehicleMileageMainActivity")
+        Log.i("GpaCalculatorInit", "Redirecting login activity to GpaCalculatorMainActivity")
         startActivity(i)
         finish()
     }

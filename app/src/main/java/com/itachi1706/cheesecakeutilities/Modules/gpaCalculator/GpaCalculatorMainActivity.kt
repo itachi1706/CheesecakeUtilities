@@ -9,11 +9,16 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.`interface`.StateSwitchListener
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcInstitutionListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcSemesterListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
 class GpaCalculatorMainActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
@@ -21,12 +26,14 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
     private var currentState: Int = STATE_INSTITUTION
     private lateinit var userData: DatabaseReference
     private lateinit var userId: String
+    private var defaultActionBarText: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_main)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        defaultActionBarText = supportActionBar?.title.toString()
 
         userId = PreferenceManager.getDefaultSharedPreferences(this).getString("firebase_uid", "nien") ?: "nien"
         if (userId.equals("nien", ignoreCase = true)) {
@@ -46,6 +53,13 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
         // Init Firebase
         userData = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
+
+        // Replace existing fragment
+        val tmp = GpaCalcInstitutionListFragment().apply {
+            val bundle = Bundle().apply { putBoolean("boot", true) }
+            arguments = bundle
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, tmp).commit() // Force replace fragment?
     }
 
     private fun addFabAction(view: View) {
@@ -73,7 +87,12 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         return super.onOptionsItemSelected(item)
     }
 
+    private var selInstitute: String? = null
+    private var selInstituteType: String? = null
+    private var selSemester: String? = null
+
     override fun onStateSwitch(newState: Int) {
+        LogHelper.d(TAG, "State Switch: $newState")
         currentState = newState
     }
 
@@ -81,10 +100,47 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         return userData
     }
 
+    override fun selectInstitute(instituteKey: String, instituteType: String) {
+        if (currentState != STATE_INSTITUTION) LogHelper.e(TAG, "Invalid State!!! Expected 0 but got $currentState")
+        selInstitute = instituteKey
+        selInstituteType = instituteType
+
+        val frag: Fragment = GpaCalcSemesterListFragment()
+        val bundle = Bundle().apply {
+            putString("selection", selInstitute)
+            putString("type", selInstituteType)
+        }
+        frag.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, frag)
+                .addToBackStack("semester-view")
+                .commit()
+    }
+
+    override fun selectSemester(semester: GpaSemester) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun goBack() {
+        onBackPressed()
+    }
+
+    override fun updateActionBar(title: String?, subtitle: String?) {
+        if (defaultActionBarText == null) return // Not initialized yet
+        if (title == null && defaultActionBarText!!.isNotEmpty()) supportActionBar?.title = defaultActionBarText
+        else if (title != null) supportActionBar?.title = title
+        supportActionBar?.subtitle = subtitle
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack()
+        else super.onBackPressed()
+    }
+
     companion object {
         const val STATE_INSTITUTION = 0 // Institution selection screen
         const val STATE_SEMESTER = 1 // Semester selection screen
         const val STATE_MODULE = 2 // Module selection screen
+        private const val TAG = "GpaCalcMain"
     }
 
 }

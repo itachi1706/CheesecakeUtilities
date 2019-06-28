@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -39,14 +38,20 @@ class GpaCalcInstitutionListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        if (!toBoot()) return // Check if boot else dont boot
         if (context is GpaCalculatorMainActivity) {
             callback = context
         }
     }
 
+    private fun toBoot(): Boolean {
+        return arguments?.getBoolean("boot") ?: false
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_recycler_view, container, false)
+        if (!toBoot()) return v // Check if boot else dont boot
         val recyclerView = v.findViewById<RecyclerView>(R.id.main_menu_recycler_view)
 
         recyclerView.setHasFixedSize(true)
@@ -65,17 +70,21 @@ class GpaCalcInstitutionListFragment : Fragment() {
             val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
             val pos = viewHolder.adapterPosition
             val instituteSelected = institutions[pos]
-            // TODO: Switch fragment with the selected institution
-            Snackbar.make(view, "Unimplemented. Selected: ${instituteSelected.name}", Snackbar.LENGTH_LONG).show()
+            callback?.selectInstitute(instituteSelected.shortName, instituteSelected.type)
         }
-
-        updateScoringTiers()
         return v
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!toBoot()) return
+        callback?.updateActionBar(null, null)
     }
 
     private var listener: ValueEventListener? = null
     override fun onStart() {
         super.onStart()
+        if (!toBoot()) return
         if (listener != null) {
             FirebaseUtils.removeListener(listener!!)
             listener = null
