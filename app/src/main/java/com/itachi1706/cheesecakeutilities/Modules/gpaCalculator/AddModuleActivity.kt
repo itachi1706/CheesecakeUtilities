@@ -68,7 +68,15 @@ class AddModuleActivity : AddActivityBase() {
         til_etName.isErrorEnabled = name.isEmpty()
         til_etCourseCode.isErrorEnabled = courseCode.isEmpty()
 
+        // Make sure course code is unique
+        if (selectedInstitution == null) return "Invalid institution error"
+        if (selectedInstitution!!.semester[selectedSemesterKey]?.modules?.contains(courseCode)!!) {
+            til_etCourseCode.error = "Module Already Exists"
+            til_etCourseCode.isErrorEnabled = true
+        }
+        
         if (til_etName.isErrorEnabled || til_etCourseCode.isErrorEnabled) return "Please resolve the errors before continuing"
+
         return GpaModule(name, courseCode, grade, credits, passFail)
     }
 
