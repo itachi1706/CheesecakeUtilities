@@ -203,8 +203,8 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
     private fun startFragment(fragClass: Fragment, bundle: Bundle, tag: String) {
         val frag: Fragment = fragClass
         frag.arguments = bundle
-        supportFragmentManager.beginTransaction().replace(R.id.fragment, frag)
-                .addToBackStack(tag)
+        supportFragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.fragment, frag).addToBackStack(tag)
                 .commit()
     }
 
