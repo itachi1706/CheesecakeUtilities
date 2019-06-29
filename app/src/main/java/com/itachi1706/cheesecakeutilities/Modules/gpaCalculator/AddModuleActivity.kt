@@ -57,9 +57,10 @@ class AddModuleActivity : AddActivityBase() {
     override fun validate(): Any {
         val name = etName.text.toString()
         val courseCode = etCourseCode.text.toString()
-        val credits = etCredits.text.toString().toInt()
+        val creditsStr = etCredits.text.toString()
+        val credits = if (creditsStr.isEmpty()) -1 else creditsStr.toInt()
         val passFail = cbPassFail.isChecked
-        val grade = gradeTierList[spinnerGpaGrade.selectedItem]?.value?.toInt() ?: -1
+        val grade = spinnerGpaGrade.selectedItemPosition - 1
 
         til_etName.error = "Required field"
         til_etCourseCode.error = "Required field"

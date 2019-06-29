@@ -139,7 +139,13 @@ class ModuleListFragment : Fragment() {
         val list: ArrayList<DualLineString> = ArrayList()
         modules.forEach {
             var sub = if (scoreObject?.type == "gpa") "Credits: ${it.credits} ${selectedInstitution?.creditName} | " else ""
-            sub += "Grade: TODO"
+            sub += "Grade: "
+            sub += when {
+                it.gradeTier == -1 -> "-"
+                scoreObject == null -> "Unknown"
+                it.passFail ->  scoreObject!!.passtier!![it.gradeTier].name
+                else -> scoreObject!!.gradetier[it.gradeTier].name
+            }
             list.add(DualLineString("${it.name} [${it.courseCode}]", sub))
         }
         updateActionBar()
