@@ -112,6 +112,7 @@ class ModuleListFragment : Fragment() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (callback?.getCurrentState() != state) return
                 LogHelper.i(TAG, "Processing updated modules...")
                 modules.clear()
                 if (!dataSnapshot.hasChildren()) return
@@ -147,12 +148,13 @@ class ModuleListFragment : Fragment() {
     }
 
     private fun updateActionBar() {
+        LogHelper.d(TAG, "updateActionBar()")
         var subtitle: String? = null
         var title: String? = null
         if (scoreObject != null) {
             subtitle = if (selectedInstitution != null) "${selectedInstitution!!.semester[selectedSemesterKey]?.name} | " else "Unknown Semester | "
             subtitle += if (scoreObject!!.type == "count") "Score" else "GPA"
-            subtitle += ": TODO"
+            subtitle += ": ${if (selectedInstitution != null) selectedInstitution!!.semester[selectedSemesterKey]?.gpa else "Unknown"}"
         }
         if (selectedInstitution != null) title = "${selectedInstitution!!.name} (${selectedInstitution!!.shortName})"
         callback?.updateActionBar(title, subtitle)

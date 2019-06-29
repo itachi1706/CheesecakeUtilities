@@ -122,6 +122,10 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         })
     }
 
+    override fun getCurrentState(): Int {
+        return currentState
+    }
+
     private fun addFabAction(view: View) {
         when (currentState) {
             STATE_INSTITUTION -> startActivity(Intent(this, AddInstitutionActivity::class.java).apply { putExtra("userid", userId) })

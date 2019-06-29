@@ -5,4 +5,4 @@ package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects
  * for com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects in CheesecakeUtilities
  */
 data class GpaInstitution (val name: String = "", val shortName: String = "", val type: String = "", val creditName: String? = null,
-                           val order: Int = Integer.MAX_VALUE, val semester: HashMap<String, GpaSemester> = HashMap())
+                           val order: Int = Integer.MAX_VALUE, val semester: HashMap<String, GpaSemester> = HashMap(), val gpa: String = "Unknown")

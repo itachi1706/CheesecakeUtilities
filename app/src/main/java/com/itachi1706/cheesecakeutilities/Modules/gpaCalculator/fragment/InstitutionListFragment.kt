@@ -88,6 +88,7 @@ class InstitutionListFragment : Fragment() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (callback?.getCurrentState() != state) return
                 LogHelper.i(TAG, "Processing updated institutions...")
                 institutions.clear()
                 if (!dataSnapshot.hasChildren()) return
@@ -121,7 +122,8 @@ class InstitutionListFragment : Fragment() {
         }
         institutions.forEach {
             val type = if (scoring.containsKey(it.type)) scoring[it.type]?.name else "Unknown"
-            list.add(DualLineString("${it.name} (${it.shortName})", "Scoring Mode: $type"))
+            val scoreTitle = if (scoring[it.type]?.type == "count") "Score" else "GPA"
+            list.add(DualLineString("${it.name} (${it.shortName})", "Scoring Mode: $type\n$scoreTitle: ${it.gpa}"))
         }
         adapter.update(list)
         adapter.notifyDataSetChanged()

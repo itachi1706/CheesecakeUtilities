@@ -44,8 +44,6 @@ class SemesterListFragment : Fragment() {
     private var selectedInstitution: GpaInstitution? = null
     private var scoreObject: GpaScoring? = null
 
-    private var updateInstitute = true
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is MainViewActivity) {
@@ -105,7 +103,6 @@ class SemesterListFragment : Fragment() {
 
         scoreObject = callback?.getScoreMap()!![selectedInstitutionType]
         updateActionBar()
-        updateInstitute = false
         LogHelper.i(TAG, "Registering Semester Firebase DB Listener")
         listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
@@ -113,6 +110,7 @@ class SemesterListFragment : Fragment() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (callback?.getCurrentState() != state) return
                 LogHelper.i(TAG, "Processing updated semesters...")
                 val tmp: HashMap<String, GpaSemester> = HashMap()
                 if (!dataSnapshot.hasChildren()) return
@@ -140,21 +138,22 @@ class SemesterListFragment : Fragment() {
     private fun semestersProcessAndUpdate() {
         val list: ArrayList<DualLineString> = ArrayList()
         semesters.forEach {
-            list.add(DualLineString(it.name, (if (scoreObject?.type == "count") "Score" else "GPA") + ": TODO"))
+            list.add(DualLineString(it.name, (if (scoreObject?.type == "count") "Score" else "GPA") + ": ${it.gpa}"))
         }
         updateActionBar()
         adapter.update(list)
         adapter.notifyDataSetChanged()
-        if (updateInstitute) callback?.updateSelectedInstitution() else updateInstitute = true
+        callback?.updateSelectedInstitution()
 
     }
 
     private fun updateActionBar() {
+        LogHelper.d(TAG, "updateActionBar()")
         var subtitle: String? = null
         var title: String? = null
         if (scoreObject != null) {
             subtitle = if (scoreObject!!.type == "count") "Score" else "GPA"
-            subtitle += ": TODO"
+            subtitle += ": ${if (selectedInstitution != null) selectedInstitution!!.gpa else "Unknown"}"
         }
         if (selectedInstitution != null) title = "${selectedInstitution!!.name} (${selectedInstitution!!.shortName})"
         callback?.updateActionBar(title, subtitle)
