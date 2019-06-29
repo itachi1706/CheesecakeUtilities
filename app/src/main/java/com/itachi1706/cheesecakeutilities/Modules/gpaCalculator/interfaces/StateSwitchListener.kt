@@ -15,7 +15,7 @@ interface StateSwitchListener {
     fun getInstitution(): GpaInstitution?
     fun getSemester(): GpaSemester?
     fun selectInstitute(instituteSelected: GpaInstitution)
-    fun selectSemester(semester: GpaSemester)
+    fun selectSemester(semester: GpaSemester, key: String)
     fun updateActionBar(title: String?, subtitle: String?)
     fun getScoreMap(): HashMap<String, GpaScoring>
     fun updateScoreMap(callback: GpaCalcCallback)

@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.InstitutionListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.ModuleListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.SemesterListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
@@ -151,19 +152,29 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         if (currentState != STATE_INSTITUTION) LogHelper.e(TAG, "Invalid State!!! Expected 0 but got $currentState")
         selInstitute = instituteSelected
 
-        val frag: Fragment = SemesterListFragment()
-        val bundle = Bundle().apply {
+        startFragment(SemesterListFragment(), Bundle().apply {
             putString("selection", instituteSelected.shortName)
             putString("type", instituteSelected.type)
-        }
-        frag.arguments = bundle
-        supportFragmentManager.beginTransaction().replace(R.id.fragment, frag)
-                .addToBackStack("semester-view")
-                .commit()
+        }, "semester-view")
     }
 
-    override fun selectSemester(semester: GpaSemester) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun selectSemester(semester: GpaSemester, key: String) {
+        if (currentState != STATE_SEMESTER) LogHelper.e(TAG, "Invalid State!!! Expected 1 but got $currentState")
+        selSemester = semester
+
+        startFragment(ModuleListFragment(), Bundle().apply {
+            putString("selection", selInstitute?.shortName)
+            putString("type", selInstitute?.type)
+            putString("semester", key)
+        }, "module-view")
+    }
+
+    private fun startFragment(fragClass: Fragment, bundle: Bundle, tag: String) {
+        val frag: Fragment = fragClass
+        frag.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.fragment, frag)
+                .addToBackStack(tag)
+                .commit()
     }
 
     override fun getInstitution(): GpaInstitution? {

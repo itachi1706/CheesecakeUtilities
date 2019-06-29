@@ -18,8 +18,8 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseU
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModule
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
@@ -29,17 +29,17 @@ import com.itachi1706.cheesecakeutilities.objects.DualLineString
 /**
  * Semester List View
  */
-class SemesterListFragment : Fragment() {
+class ModuleListFragment : Fragment() {
 
     private var callback: StateSwitchListener? = null
-    private val state = MainViewActivity.STATE_SEMESTER
+    private val state = MainViewActivity.STATE_MODULE
 
-    private val semesters: ArrayList<GpaSemester> = ArrayList()
-    private val semesterKeys: ArrayList<String> = ArrayList()
+    private val modules: ArrayList<GpaModule> = ArrayList()
 
     private lateinit var adapter: DualLineStringRecyclerAdapter
     private var selectedInstitutionString: String? = null
     private var selectedInstitutionType: String? = null
+    private var selectedSemesterKey: String? = null
 
     private var selectedInstitution: GpaInstitution? = null
     private var scoreObject: GpaScoring? = null
@@ -57,9 +57,10 @@ class SemesterListFragment : Fragment() {
         val recyclerView = v.findViewById<RecyclerView>(R.id.main_menu_recycler_view)
 
         selectedInstitutionString = arguments?.getString("selection")
-        if (selectedInstitutionString == null) {
-            LogHelper.e(TAG, "Institution not selected!")
-            Snackbar.make(v, "An error has occurred. (Institution not found)", Snackbar.LENGTH_LONG).show()
+        selectedSemesterKey = arguments?.getString("semester")
+        if (selectedInstitutionString == null || selectedSemesterKey == null) {
+            LogHelper.e(TAG, "Institution/Semester not selected!")
+            Snackbar.make(v, "An error has occurred. (Institution/Semester not found)", Snackbar.LENGTH_LONG).show()
             callback?.goBack()
             return v
         }
@@ -80,9 +81,9 @@ class SemesterListFragment : Fragment() {
         adapter.setOnClickListener { view ->
             val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
             val pos = viewHolder.adapterPosition
-            val semesterSelected = semesters[pos]
-            val selectedSemesterKey = semesterKeys[pos]
-            callback?.selectSemester(semesterSelected, selectedSemesterKey)
+            val moduleSelected = modules[pos]
+            // TODO: Switch fragment with the selected module
+            Snackbar.make(view, "Unimplemented. Selected: ${moduleSelected.name}", Snackbar.LENGTH_LONG).show()
         }
 
         // Get institution name to update title
@@ -103,24 +104,23 @@ class SemesterListFragment : Fragment() {
 
         scoreObject = callback?.getScoreMap()!![selectedInstitutionType]
         updateActionBar()
-        LogHelper.i(TAG, "Registering Semester Firebase DB Listener")
-        listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)?.addValueEventListener(object: ValueEventListener{
+        LogHelper.i(TAG, "Registering Module Firebase DB Listener")
+        listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)?.child(selectedSemesterKey!!)?.
+                child(GpaCalcFirebaseUtils.FB_REC_MODULE)?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "loadSemestersList:onCancelled", p0.toException())
+                LogHelper.w(TAG, "loadModuleList:onCancelled", p0.toException())
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                LogHelper.i(TAG, "Processing updated semesters...")
-                semesters.clear()
-                semesterKeys.clear()
+                LogHelper.i(TAG, "Processing updated modules...")
+                modules.clear()
                 if (!dataSnapshot.hasChildren()) return
                 dataSnapshot.children.forEach {
-                    semesters.add(it.getValue(GpaSemester::class.java)!!)
-                    semesterKeys.add(it.key!!)
+                    modules.add(it.getValue(GpaModule::class.java)!!)
                 }
-                LogHelper.i(TAG, "Number of Semesters in Institution: ${semesters.size}")
-                semesters.sortBy { it.order }
-                semestersProcessAndUpdate()
+                LogHelper.i(TAG, "Number of Modules ($selectedInstitutionString:$selectedSemesterKey): ${modules.size}")
+                modules.sortBy { it.courseCode }
+                modulesProcessAndUpdate()
             }
         })
     }
@@ -134,10 +134,12 @@ class SemesterListFragment : Fragment() {
         }
     }
 
-    private fun semestersProcessAndUpdate() {
+    private fun modulesProcessAndUpdate() {
         val list: ArrayList<DualLineString> = ArrayList()
-        semesters.forEach {
-            list.add(DualLineString(it.name, (if (scoreObject?.type == "count") "Score" else "GPA") + ": TODO"))
+        modules.forEach {
+            var sub = if (scoreObject?.type == "gpa") "Credits: ${it.credits} ${selectedInstitution?.creditName} | " else ""
+            sub += "Grade: TODO"
+            list.add(DualLineString("${it.name} [${it.courseCode}]", sub))
         }
         updateActionBar()
         adapter.update(list)
@@ -148,7 +150,8 @@ class SemesterListFragment : Fragment() {
         var subtitle: String? = null
         var title: String? = null
         if (scoreObject != null) {
-            subtitle = if (scoreObject!!.type == "count") "Score" else "GPA"
+            subtitle = if (selectedInstitution != null) "${selectedInstitution!!.semester[selectedSemesterKey]?.name} | " else "Unknown Semester | "
+            subtitle += if (scoreObject!!.type == "count") "Score" else "GPA"
             subtitle += ": TODO"
         }
         if (selectedInstitution != null) title = "${selectedInstitution!!.name} (${selectedInstitution!!.shortName})"
@@ -156,6 +159,6 @@ class SemesterListFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "GpaCalcSemesterList"
+        private const val TAG = "GpaCalcModuleList"
     }
 }

@@ -81,7 +81,7 @@ class InstitutionListFragment : Fragment() {
             LogHelper.e(TAG, "Firebase DB Listeners exists when it should not have, terminating it forcibly")
         }
 
-        LogHelper.i(TAG, "Registering Institution Firebase DB Listeners")
+        LogHelper.i(TAG, "Registering Institution Firebase DB Listener")
         listener = callback?.getUserData()?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 LogHelper.w(TAG, "loadInstitutionsList:onCancelled", p0.toException())

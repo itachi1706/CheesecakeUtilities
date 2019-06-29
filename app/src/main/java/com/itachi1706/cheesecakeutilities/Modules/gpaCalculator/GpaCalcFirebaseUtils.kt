@@ -12,6 +12,7 @@ object GpaCalcFirebaseUtils: FirebaseUtils() {
     const val FB_REC_SCORING = "scoring"
     const val FB_REC_USER = "users"
     const val FB_REC_SEMESTER = "semester"
+    const val FB_REC_MODULE = "modules"
 
     const val RECORDS_VER = 0
 
