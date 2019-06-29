@@ -2,12 +2,10 @@ package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,25 +16,15 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_institution.*
 
-class AddInstitutionActivity : AppCompatActivity() {
+class AddInstitutionActivity : AddActivityBase() {
 
     val modes: HashMap<String, Pair<String, GpaScoring>> = HashMap()
     val selectionList: ArrayList<String> = ArrayList()
     val existingInstitutions: ArrayList<String> = ArrayList()
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_add_institution)
-
-        userId = intent?.extras!!.getString("userid", "nien")
-        if (userId == "nien") {
-            Toast.makeText(this, "Invalid User", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Get the calculation modes
         populateModes()
@@ -71,7 +59,7 @@ class AddInstitutionActivity : AppCompatActivity() {
         }
     }
 
-    private fun validate(): Any {
+    override fun validate(): Any {
         // Check that theres a mode to select
         if (modes.isEmpty() || selectionList.isEmpty()) return "No modes found! Unable to add institution"
 
@@ -147,13 +135,6 @@ class AddInstitutionActivity : AppCompatActivity() {
         modes.keys.toCollection(selectionList)
         val adapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, selectionList)
         spinnerGpaCalcMode.adapter = adapter
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home) {
-            finish()
-            true
-        } else super.onOptionsItemSelected(item)
     }
 
     companion object {

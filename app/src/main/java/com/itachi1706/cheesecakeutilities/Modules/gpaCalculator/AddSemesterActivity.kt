@@ -1,9 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,24 +12,20 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_semester.*
 
-class AddSemesterActivity : AppCompatActivity() {
+class AddSemesterActivity : AddActivityBase() {
 
     private var selectedInstitution: GpaInstitution? = null
-    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_add_semester)
 
-        userId = intent?.extras!!.getString("userid", "nien")
         val instituteString = intent?.extras!!.getString("institute", "-_-_-")
-        if (userId == "nien" || instituteString == "-_-_-") {
-            Toast.makeText(this, "Invalid User or Institution", Toast.LENGTH_SHORT).show()
+        if (instituteString == "-_-_-") {
+            Toast.makeText(this, "Invalid Institution", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Get the calculation modes
         getInstitution(instituteString)
@@ -51,7 +45,7 @@ class AddSemesterActivity : AppCompatActivity() {
         }
     }
 
-    private fun validate(): Any {
+    override fun validate(): Any {
         val name = etName.text.toString()
 
         // Ready error texts
@@ -83,13 +77,6 @@ class AddSemesterActivity : AppCompatActivity() {
                 LogHelper.w(TAG, "getInstitution:cancelled", p0.toException())
             }
         })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home) {
-            finish()
-            true
-        } else super.onOptionsItemSelected(item)
     }
 
     companion object {
