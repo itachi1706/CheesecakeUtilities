@@ -104,6 +104,10 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
     private fun addFabAction(view: View) {
         when (currentState) {
             STATE_INSTITUTION -> startActivity(Intent(this, GpaCalculatorAddInstitutionActivity::class.java).apply { putExtra("userid", userId) })
+            STATE_SEMESTER -> startActivity(Intent(this, GpaCalculatorAddSemesterActivity::class.java).apply {
+                putExtra("userid", userId)
+                putExtra("institute", selInstitute?.shortName)
+            })
             else -> Snackbar.make(view, "Unimplemetned", Snackbar.LENGTH_LONG).show()
         }
     }

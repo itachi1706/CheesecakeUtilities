@@ -396,6 +396,8 @@
             android:label="View Scoring Tiers" />
         <activity android:name=".Modules.gpaCalculator.GpaCalculatorAddInstitutionActivity"
             android:label="Add an Institution" />
+        <activity android:name=".Modules.gpaCalculator.GpaCalculatorAddSemesterActivity"
+            android:label="Add a Semester" />
     </application>
 
 </manifest>
