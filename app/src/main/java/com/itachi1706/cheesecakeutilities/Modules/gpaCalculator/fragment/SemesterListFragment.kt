@@ -114,15 +114,15 @@ class SemesterListFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 LogHelper.i(TAG, "Processing updated semesters...")
-                semesters.clear()
-                semesterKeys.clear()
+                val tmp: HashMap<String, GpaSemester> = HashMap()
                 if (!dataSnapshot.hasChildren()) return
-                dataSnapshot.children.forEach {
-                    semesters.add(it.getValue(GpaSemester::class.java)!!)
-                    semesterKeys.add(it.key!!)
-                }
-                LogHelper.i(TAG, "Number of Semesters in Institution: ${semesters.size}")
-                semesters.sortBy { it.order }
+                dataSnapshot.children.forEach { tmp[it.key!!] = it.getValue(GpaSemester::class.java)!! }
+                val sortedTmp = tmp.toList().sortedBy { it.second.order }.toMap()
+                LogHelper.i(TAG, "Number of Semesters in Institution: ${sortedTmp.size}")
+                semesterKeys.clear()
+                semesters.clear()
+                semesters.addAll(sortedTmp.values.toList())
+                semesterKeys.addAll(sortedTmp.keys.toList())
                 semestersProcessAndUpdate()
             }
         })
