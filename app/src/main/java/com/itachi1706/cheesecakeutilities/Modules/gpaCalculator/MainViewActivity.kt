@@ -102,6 +102,26 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         })
     }
 
+    override fun updateSelectedInstitution() {
+        if (selInstitute == null) {
+            Log.e(TAG, "Nothing to update in institution")
+            return
+        }
+        Log.i(TAG, "Updating Selected Institution")
+        val key = selInstitute!!.shortName
+        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(key)
+        db.keepSynced(true)
+        db.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                LogHelper.w(TAG, "updateSelectedInstitution:onCancelled", p0.toException())
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                selInstitute = dataSnapshot.getValue(GpaInstitution::class.java)
+            }
+        })
+    }
+
     private fun addFabAction(view: View) {
         when (currentState) {
             STATE_INSTITUTION -> startActivity(Intent(this, AddInstitutionActivity::class.java).apply { putExtra("userid", userId) })

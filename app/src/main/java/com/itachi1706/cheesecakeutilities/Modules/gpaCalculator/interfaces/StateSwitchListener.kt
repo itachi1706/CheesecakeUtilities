@@ -19,5 +19,6 @@ interface StateSwitchListener {
     fun updateActionBar(title: String?, subtitle: String?)
     fun getScoreMap(): HashMap<String, GpaScoring>
     fun updateScoreMap(callback: GpaCalcCallback)
+    fun updateSelectedInstitution()
     fun goBack()
 }

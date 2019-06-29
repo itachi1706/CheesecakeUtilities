@@ -44,6 +44,8 @@ class SemesterListFragment : Fragment() {
     private var selectedInstitution: GpaInstitution? = null
     private var scoreObject: GpaScoring? = null
 
+    private var updateInstitute = true
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is MainViewActivity) {
@@ -103,6 +105,7 @@ class SemesterListFragment : Fragment() {
 
         scoreObject = callback?.getScoreMap()!![selectedInstitutionType]
         updateActionBar()
+        updateInstitute = false
         LogHelper.i(TAG, "Registering Semester Firebase DB Listener")
         listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)?.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
@@ -142,6 +145,8 @@ class SemesterListFragment : Fragment() {
         updateActionBar()
         adapter.update(list)
         adapter.notifyDataSetChanged()
+        if (updateInstitute) callback?.updateSelectedInstitution() else updateInstitute = true
+
     }
 
     private fun updateActionBar() {
