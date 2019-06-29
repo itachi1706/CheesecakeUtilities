@@ -398,6 +398,8 @@
             android:label="Add an Institution" />
         <activity android:name=".Modules.gpaCalculator.AddSemesterActivity"
             android:label="Add a Semester" />
+        <activity android:name=".Modules.gpaCalculator.AddModuleActivity"
+            android:label="Add a Module" />
     </application>
 
 </manifest>

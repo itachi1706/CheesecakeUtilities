@@ -129,6 +129,11 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
                 putExtra("userid", userId)
                 putExtra("institute", selInstitute?.shortName)
             })
+            STATE_MODULE -> startActivity(Intent(this, AddModuleActivity::class.java).apply {
+                putExtra("userid", userId)
+                putExtra("institute", selInstitute?.shortName)
+                putExtra("key", selSemesterKey)
+            })
             else -> Snackbar.make(view, "Unimplemetned", Snackbar.LENGTH_LONG).show()
         }
     }
@@ -153,6 +158,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
 
     private var selInstitute: GpaInstitution? = null
     private var selSemester: GpaSemester? = null
+    private var selSemesterKey: String? = null
 
     override fun onStateSwitch(newState: Int) {
         LogHelper.d(TAG, "State Switch: $newState")
@@ -181,11 +187,12 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
     override fun selectSemester(semester: GpaSemester, key: String) {
         if (currentState != STATE_SEMESTER) LogHelper.e(TAG, "Invalid State!!! Expected 1 but got $currentState")
         selSemester = semester
+        selSemesterKey = key
 
         startFragment(ModuleListFragment(), Bundle().apply {
             putString("selection", selInstitute?.shortName)
             putString("type", selInstitute?.type)
-            putString("semester", key)
+            putString("semester", selSemesterKey)
         }, "module-view")
     }
 
