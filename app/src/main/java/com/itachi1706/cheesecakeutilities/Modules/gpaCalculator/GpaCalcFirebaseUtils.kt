@@ -8,7 +8,7 @@ import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
  * Created by Kenneth on 24/6/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.gpaCalculator in CheesecakeUtilities
  */
-object GpaCalculatorFirebaseUtils: FirebaseUtils() {
+object GpaCalcFirebaseUtils: FirebaseUtils() {
     const val FB_REC_SCORING = "scoring"
     const val FB_REC_USER = "users"
     const val FB_REC_SEMESTER = "semester"

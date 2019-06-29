@@ -50,7 +50,7 @@
         <item>.Modules.MSLIntegration.MSLActivity</item>
         <item>.Modules.WhoisLookup.WhoisLookupActivity</item>
         <item>.Modules.APKMirrorDownloader.APKMirrorActivity</item>
-        <item>.Modules.gpaCalculator.GpaCalculatorInitActivity</item>
+        <item>.Modules.gpaCalculator.InitActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>

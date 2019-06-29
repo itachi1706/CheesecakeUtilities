@@ -14,7 +14,7 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_semester.*
 
-class GpaCalculatorAddSemesterActivity : AppCompatActivity() {
+class AddSemesterActivity : AppCompatActivity() {
 
     private var selectedInstitution: GpaInstitution? = null
     private lateinit var userId: String
@@ -65,13 +65,13 @@ class GpaCalculatorAddSemesterActivity : AppCompatActivity() {
 
     private fun addToDb(newSemester: GpaSemester) {
         if (selectedInstitution == null) return // Don't try to add if you cannot add
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
-        val newRec = db.child(selectedInstitution!!.shortName).child(GpaCalculatorFirebaseUtils.FB_REC_SEMESTER).push()
+        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
+        val newRec = db.child(selectedInstitution!!.shortName).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER).push()
         newRec.setValue(newSemester)
     }
 
     private fun getInstitution(institute: String) {
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId).child(institute)
+        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(institute)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

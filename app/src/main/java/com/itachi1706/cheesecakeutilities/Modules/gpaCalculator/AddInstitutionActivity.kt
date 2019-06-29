@@ -18,7 +18,7 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_institution.*
 
-class GpaCalculatorAddInstitutionActivity : AppCompatActivity() {
+class AddInstitutionActivity : AppCompatActivity() {
 
     val modes: HashMap<String, Pair<String, GpaScoring>> = HashMap()
     val selectionList: ArrayList<String> = ArrayList()
@@ -102,12 +102,12 @@ class GpaCalculatorAddInstitutionActivity : AppCompatActivity() {
     }
 
     private fun addToDb(newInstitution: GpaInstitution) {
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
+        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
         db.child(newInstitution.shortName).setValue(newInstitution)
     }
 
     private fun populateModes() {
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
+        val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
         db.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return
@@ -127,7 +127,7 @@ class GpaCalculatorAddInstitutionActivity : AppCompatActivity() {
     }
 
     private fun populateInstitutions() {
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
+        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

@@ -17,8 +17,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcInstitutionListFragment
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.GpaCalcSemesterListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.InstitutionListFragment
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.SemesterListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
@@ -28,7 +28,7 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
-class GpaCalculatorMainActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
+class MainViewActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
 
     private var currentState: Int = STATE_INSTITUTION
     private lateinit var userData: DatabaseReference
@@ -50,7 +50,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         if (userId.equals("nien", ignoreCase = true)) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show()
-            val logoutIntent = Intent(this, GpaCalculatorInitActivity::class.java)
+            val logoutIntent = Intent(this, InitActivity::class.java)
             logoutIntent.putExtra("logout", true)
             startActivity(logoutIntent)
             finish()
@@ -63,12 +63,12 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         }
 
         // Init Firebase
-        userData = GpaCalculatorFirebaseUtils.getGpaDatabaseUser(userId)
+        userData = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
         updateScoring()
         updateScoreOnCreate = true
 
         // Replace existing fragment
-        val tmp = GpaCalcInstitutionListFragment().apply {
+        val tmp = InstitutionListFragment().apply {
             val bundle = Bundle().apply { putBoolean("boot", true) }
             arguments = bundle
         }
@@ -82,7 +82,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     private fun updateScoring(callback: GpaCalcCallback? = null) {
         Log.i(TAG, "Updating Scoring Objects Map")
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
+        val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -103,8 +103,8 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     private fun addFabAction(view: View) {
         when (currentState) {
-            STATE_INSTITUTION -> startActivity(Intent(this, GpaCalculatorAddInstitutionActivity::class.java).apply { putExtra("userid", userId) })
-            STATE_SEMESTER -> startActivity(Intent(this, GpaCalculatorAddSemesterActivity::class.java).apply {
+            STATE_INSTITUTION -> startActivity(Intent(this, AddInstitutionActivity::class.java).apply { putExtra("userid", userId) })
+            STATE_SEMESTER -> startActivity(Intent(this, AddSemesterActivity::class.java).apply {
                 putExtra("userid", userId)
                 putExtra("institute", selInstitute?.shortName)
             })
@@ -120,9 +120,9 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.score_system -> startActivity(Intent(this, GpaCalculatorScoringActivity::class.java))
+            R.id.score_system -> startActivity(Intent(this, ScoringActivity::class.java))
             R.id.logout -> {
-                startActivity(Intent(this, GpaCalculatorInitActivity::class.java).apply { putExtra("logout", true) })
+                startActivity(Intent(this, InitActivity::class.java).apply { putExtra("logout", true) })
                 finish()
                 return true
             }
@@ -151,7 +151,7 @@ class GpaCalculatorMainActivity(override val helpDescription: String = "A utilit
         if (currentState != STATE_INSTITUTION) LogHelper.e(TAG, "Invalid State!!! Expected 0 but got $currentState")
         selInstitute = instituteSelected
 
-        val frag: Fragment = GpaCalcSemesterListFragment()
+        val frag: Fragment = SemesterListFragment()
         val bundle = Bundle().apply {
             putString("selection", instituteSelected.shortName)
             putString("type", instituteSelected.type)

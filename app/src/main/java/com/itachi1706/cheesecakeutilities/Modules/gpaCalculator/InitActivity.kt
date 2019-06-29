@@ -11,7 +11,7 @@ import com.itachi1706.cheesecakeutilities.FirebaseLoginActivity
  * for com.itachi1706.cheesecakeutilities.Modules.gpaCalculator in CheesecakeUtilities
  */
 
-class GpaCalculatorInitActivity : AppCompatActivity() {
+class InitActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +19,7 @@ class GpaCalculatorInitActivity : AppCompatActivity() {
         val i = Intent(this, FirebaseLoginActivity::class.java).apply {
             if (intent.extras != null) putExtras(intent.extras!!)
 
-            putExtra(FirebaseLoginActivity.CONTINUE_INTENT, Intent(applicationContext, GpaCalculatorMainActivity::class.java))
+            putExtra(FirebaseLoginActivity.CONTINUE_INTENT, Intent(applicationContext, MainViewActivity::class.java))
             putExtra(FirebaseLoginActivity.HELP_EXTRA, "An utility to help keep track of scores\n\nNote: This is the login screen where you have " +
                     "to login with a Google Account to continue as your scores will be saved based on your Google Account")
         }

@@ -16,7 +16,7 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import com.itachi1706.cheesecakeutilities.objects.DualLineString
 import kotlinx.android.synthetic.main.activity_linear_recyclerview.*
 
-class GpaCalculatorScoringActivity : AppCompatActivity() {
+class ScoringActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class GpaCalculatorScoringActivity : AppCompatActivity() {
     }
 
     private fun updateList() {
-        val db = GpaCalculatorFirebaseUtils.getGpaDatabase().child(GpaCalculatorFirebaseUtils.FB_REC_SCORING)
+        val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {

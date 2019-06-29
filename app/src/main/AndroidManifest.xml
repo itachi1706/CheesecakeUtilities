@@ -385,18 +385,18 @@
             android:name=".FirebaseLoginActivity"
             android:label="@string/label_firebase_sign_in" />
         <activity
-            android:name=".Modules.gpaCalculator.GpaCalculatorMainActivity"
+            android:name=".Modules.gpaCalculator.MainViewActivity"
             android:label="@string/title_activity_gpa_calculator_main"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".Modules.gpaCalculator.GpaCalculatorInitActivity"
+            android:name=".Modules.gpaCalculator.InitActivity"
             android:label="@string/title_activity_gpa_calculator_main" />
         <activity
-            android:name=".Modules.gpaCalculator.GpaCalculatorScoringActivity"
+            android:name=".Modules.gpaCalculator.ScoringActivity"
             android:label="View Scoring Tiers" />
-        <activity android:name=".Modules.gpaCalculator.GpaCalculatorAddInstitutionActivity"
+        <activity android:name=".Modules.gpaCalculator.AddInstitutionActivity"
             android:label="Add an Institution" />
-        <activity android:name=".Modules.gpaCalculator.GpaCalculatorAddSemesterActivity"
+        <activity android:name=".Modules.gpaCalculator.AddSemesterActivity"
             android:label="Add a Semester" />
     </application>
 
