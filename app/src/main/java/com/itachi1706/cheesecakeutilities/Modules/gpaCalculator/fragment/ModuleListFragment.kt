@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
@@ -108,7 +110,12 @@ class ModuleListFragment : Fragment() {
         LogHelper.d(TAG, "Context Item Selected")
         if (moduleContextSel == null) return false
         when (item.itemId) {
-            R.id.menu_edit -> TODO("Edit Command")
+            R.id.menu_edit -> startActivity(Intent(context, AddModuleActivity::class.java).apply {
+                putExtra("userid", callback?.getUserId())
+                putExtra("institute", selectedInstitutionString)
+                putExtra("key", selectedSemesterKey)
+                putExtra("editmode", moduleContextSel!!.courseCode)
+            })
             R.id.menu_delete -> {
                 val moduleToDelete = moduleContextSel!!.copy()
                 val data = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)

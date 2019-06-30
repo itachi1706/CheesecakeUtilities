@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 abstract class AddActivityBase : AppCompatActivity() {
 
     lateinit var userId: String
+    var editKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +25,17 @@ abstract class AddActivityBase : AppCompatActivity() {
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
+
+    override fun onStart() {
+        super.onStart()
+        editKey = intent?.extras?.getString("editmode")
+        if (editKey != null) {
+            editModeEnabled(editKey!!)
+        }
+    }
+
+    abstract fun editModeEnabled(editKey: String)
 
     abstract fun validate(): Any
 

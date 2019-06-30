@@ -1,6 +1,7 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddInstitutionActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
@@ -83,7 +85,10 @@ class InstitutionListFragment : Fragment() {
         LogHelper.d(TAG, "Context Item Selected")
         if (institutionContextSel == null) return false
         when (item.itemId) {
-            R.id.menu_edit -> TODO("Edit Command")
+            R.id.menu_edit -> startActivity(Intent(context, AddInstitutionActivity::class.java).apply {
+                putExtra("userid", callback?.getUserId())
+                putExtra("editmode", institutionContextSel!!.shortName)
+            })
             R.id.menu_delete -> {
                 val instituteToDelete = institutionContextSel!!.copy()
                 val data = callback?.getUserData() ?: return false

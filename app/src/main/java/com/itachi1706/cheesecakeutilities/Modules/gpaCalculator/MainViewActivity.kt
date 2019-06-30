@@ -178,6 +178,10 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         return userData
     }
 
+    override fun getUserId(): String {
+        return userId
+    }
+
     override fun selectInstitute(instituteSelected: GpaInstitution) {
         if (currentState != STATE_INSTITUTION) LogHelper.e(TAG, "Invalid State!!! Expected 0 but got $currentState")
         selInstitute = instituteSelected

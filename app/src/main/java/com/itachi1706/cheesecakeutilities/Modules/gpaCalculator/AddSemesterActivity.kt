@@ -15,12 +15,13 @@ import kotlinx.android.synthetic.main.activity_gpa_calculator_add_semester.*
 class AddSemesterActivity : AddActivityBase() {
 
     private var selectedInstitution: GpaInstitution? = null
+    private lateinit var instituteString: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_add_semester)
 
-        val instituteString = intent?.extras!!.getString("institute", "-_-_-")
+        instituteString = intent?.extras!!.getString("institute", "-_-_-")
         if (instituteString == "-_-_-") {
             Toast.makeText(this, "Invalid Institution", Toast.LENGTH_SHORT).show()
             finish()
@@ -45,6 +46,26 @@ class AddSemesterActivity : AddActivityBase() {
         }
     }
 
+    private var semester: GpaSemester? = null
+
+    override fun editModeEnabled(editKey: String) {
+        GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(instituteString).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER).child(editKey).addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                LogHelper.e(TAG, "editMode:cancelled", p0.toException())
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Make user update scoring mode again
+                semester = dataSnapshot.getValue(GpaSemester::class.java)
+                etName.setText(semester?.name)
+                gpacalc_add.text = "Edit Semester"
+                supportActionBar?.title = "Edit aa Semester"
+                supportActionBar?.subtitle = etName.text.toString()
+            }
+
+        })
+    }
+
     override fun validate(): Any {
         val name = etName.text.toString()
 
@@ -59,9 +80,14 @@ class AddSemesterActivity : AddActivityBase() {
 
     private fun addToDb(newSemester: GpaSemester) {
         if (selectedInstitution == null) return // Don't try to add if you cannot add
-        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
-        val newRec = db.child(selectedInstitution!!.shortName).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER).push()
-        newRec.setValue(newSemester)
+        val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(selectedInstitution!!.shortName).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)
+        if (semester == null) {
+            val newRec = db.push()
+            newRec.setValue(newSemester)
+        } else {
+            val edited = semester!!.copy(name = newSemester.name)
+            db.child(editKey!!).setValue(edited)
+        }
     }
 
     private fun getInstitution(institute: String) {

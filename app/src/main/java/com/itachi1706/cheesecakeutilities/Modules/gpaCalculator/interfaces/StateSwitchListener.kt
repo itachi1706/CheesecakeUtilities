@@ -12,6 +12,7 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemes
 interface StateSwitchListener {
     fun onStateSwitch(newState: Int)
     fun getUserData(): DatabaseReference
+    fun getUserId(): String
     fun getInstitution(): GpaInstitution?
     fun getSemester(): GpaSemester?
     fun selectInstitute(instituteSelected: GpaInstitution)

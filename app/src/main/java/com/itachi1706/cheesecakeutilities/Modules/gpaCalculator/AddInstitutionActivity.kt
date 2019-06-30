@@ -59,6 +59,29 @@ class AddInstitutionActivity : AddActivityBase() {
         }
     }
 
+    private var institute: GpaInstitution? = null
+
+    override fun editModeEnabled(editKey: String) {
+        GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(editKey).addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                LogHelper.e(TAG, "editMode:cancelled", p0.toException())
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Make user update scoring mode again
+                institute = dataSnapshot.getValue(GpaInstitution::class.java)
+                Snackbar.make(findViewById(android.R.id.content), "Please update scoring mode agian", Snackbar.LENGTH_LONG).show()
+                etName.setText(institute?.name)
+                etShortName.setText(institute?.shortName)
+                etCreditsName.setText(institute?.creditName)
+                gpacalc_add.text = "Edit Institution"
+                supportActionBar?.title = "Edit an Institution"
+                supportActionBar?.subtitle = etName.text.toString()
+            }
+
+        })
+    }
+
     override fun validate(): Any {
         // Check that theres a mode to select
         if (modes.isEmpty() || selectionList.isEmpty()) return "No modes found! Unable to add institution"
@@ -79,7 +102,7 @@ class AddInstitutionActivity : AddActivityBase() {
 
         if (til_etCreditsName.visibility == View.VISIBLE && credits.isEmpty()) credits = "Credits"
 
-        if (existingInstitutions.contains(shortName)) {
+        if (existingInstitutions.contains(shortName) && institute == null) {
             til_etShortName.error = "Institution Already Exists"
             til_etShortName.isErrorEnabled = true
         }
@@ -91,7 +114,15 @@ class AddInstitutionActivity : AddActivityBase() {
 
     private fun addToDb(newInstitution: GpaInstitution) {
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
-        db.child(newInstitution.shortName).setValue(newInstitution)
+        if (institute == null) db.child(newInstitution.shortName).setValue(newInstitution)
+        else {
+            val edited = institute!!.copy(name = newInstitution.name, shortName = newInstitution.shortName, type = newInstitution.type, creditName = newInstitution.creditName)
+            if (edited.shortName != institute!!.shortName) {
+                // Change of shortname as well, delete old key
+                db.child(institute!!.shortName).removeValue()
+            }
+            db.child(edited.shortName).setValue(edited)
+        }
     }
 
     private fun populateModes() {
