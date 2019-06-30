@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -85,10 +86,42 @@ class SemesterListFragment : Fragment() {
             callback?.selectSemester(semesterSelected, selectedSemesterKey)
         }
 
+        adapter.setOnCreateContextMenuListener { menu, view, _ ->
+            // Get selected institution
+            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            semesterContextSel = semesters[viewHolder.adapterPosition]
+            semesterContextKeySel = semesterKeys[viewHolder.adapterPosition]
+            if (semesterContextSel == null) return@setOnCreateContextMenuListener // Do nothing
+            menu.setHeaderTitle(semesterContextSel!!.name)
+            activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
+        }
+
         // Get institution name to update title
         selectedInstitution = callback?.getInstitution()
         updateActionBar()
         return v
+    }
+
+    private var semesterContextKeySel: String? = null
+    private var semesterContextSel: GpaSemester? = null
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        LogHelper.d(TAG, "Context Item Selected")
+        if (semesterContextKeySel == null || semesterContextSel == null) return false
+        when (item.itemId) {
+            R.id.menu_edit -> TODO("Edit Command")
+            R.id.menu_delete -> {
+                val semesterToDelete = semesterContextSel!!.copy()
+                val data = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER) ?: return false
+                data.child(semesterContextKeySel!!).removeValue()
+                Snackbar.make(view!!, "Semester Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
+                    data.child(semesterContextKeySel!!).setValue(semesterToDelete)
+                    Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
+                }.show()
+            }
+            else -> return super.onContextItemSelected(item)
+        }
+        return true
     }
 
     private var listener: ValueEventListener? = null

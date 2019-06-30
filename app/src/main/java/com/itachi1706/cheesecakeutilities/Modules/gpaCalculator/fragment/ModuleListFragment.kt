@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -86,10 +87,41 @@ class ModuleListFragment : Fragment() {
             Snackbar.make(view, "Unimplemented. Selected: ${moduleSelected.name}", Snackbar.LENGTH_LONG).show()
         }
 
+        adapter.setOnCreateContextMenuListener { menu, view, _ ->
+            // Get selected institution
+            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            moduleContextSel = modules[viewHolder.adapterPosition]
+            if (moduleContextSel == null) return@setOnCreateContextMenuListener // Do nothing
+            menu.setHeaderTitle("${moduleContextSel!!.name} [${moduleContextSel!!.courseCode}]")
+            activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
+        }
+
         // Get institution name to update title
         selectedInstitution = callback?.getInstitution()
         updateActionBar()
         return v
+    }
+
+    private var moduleContextSel: GpaModule? = null
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        LogHelper.d(TAG, "Context Item Selected")
+        if (moduleContextSel == null) return false
+        when (item.itemId) {
+            R.id.menu_edit -> TODO("Edit Command")
+            R.id.menu_delete -> {
+                val moduleToDelete = moduleContextSel!!.copy()
+                val data = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)
+                        ?.child(selectedSemesterKey!!)?.child(GpaCalcFirebaseUtils.FB_REC_MODULE) ?: return false
+                data.child(moduleToDelete.courseCode).removeValue()
+                Snackbar.make(view!!, "Module Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
+                    data.child(moduleToDelete.courseCode).setValue(moduleToDelete)
+                    Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
+                }.show()
+            }
+            else -> return super.onContextItemSelected(item)
+        }
+        return true
     }
 
     private var listener: ValueEventListener? = null

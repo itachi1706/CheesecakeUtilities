@@ -4,12 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -64,7 +66,36 @@ class InstitutionListFragment : Fragment() {
             val instituteSelected = institutions[pos]
             callback?.selectInstitute(instituteSelected)
         }
+        adapter.setOnCreateContextMenuListener { menu, view, _ ->
+            // Get selected institution
+            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            institutionContextSel = institutions[viewHolder.adapterPosition]
+            if (institutionContextSel == null) return@setOnCreateContextMenuListener // Do nothing
+            menu.setHeaderTitle("${institutionContextSel!!.name} (${institutionContextSel!!.shortName})")
+            activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
+        }
         return v
+    }
+
+    private var institutionContextSel: GpaInstitution? = null
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        LogHelper.d(TAG, "Context Item Selected")
+        if (institutionContextSel == null) return false
+        when (item.itemId) {
+            R.id.menu_edit -> TODO("Edit Command")
+            R.id.menu_delete -> {
+                val instituteToDelete = institutionContextSel!!.copy()
+                val data = callback?.getUserData() ?: return false
+                data.child(instituteToDelete.shortName).removeValue()
+                Snackbar.make(view!!, "Institute Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
+                    data.child(instituteToDelete.shortName).setValue(instituteToDelete)
+                    Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
+                }.show()
+            }
+            else -> return super.onContextItemSelected(item)
+        }
+        return true
     }
 
     override fun onResume() {
