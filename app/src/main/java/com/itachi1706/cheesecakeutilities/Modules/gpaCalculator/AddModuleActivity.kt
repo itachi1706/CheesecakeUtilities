@@ -42,7 +42,7 @@ class AddModuleActivity : AddActivityBase() {
                     is String -> Snackbar.make(v, result, Snackbar.LENGTH_LONG).show()
                     is GpaModule -> {
                         addToDb(result)
-                        Toast.makeText(v.context, "Module Added", Toast.LENGTH_LONG).show()
+                        Toast.makeText(v.context, "Module ${if (module == null) "Added" else "Updated"}", Toast.LENGTH_LONG).show()
                         finish()
                     }
                     else -> {

@@ -35,7 +35,7 @@ class AddSemesterActivity : AddActivityBase() {
                     is String -> Snackbar.make(v, result, Snackbar.LENGTH_LONG).show()
                     is GpaSemester -> {
                         addToDb(result)
-                        Toast.makeText(v.context, "Semester Added", Toast.LENGTH_LONG).show()
+                        Toast.makeText(v.context, "Semester ${if (semester == null) "Added" else "Updated"}", Toast.LENGTH_LONG).show()
                         finish()
                     }
                     else -> {
