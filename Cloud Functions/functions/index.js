@@ -87,33 +87,35 @@ function calculateByClass(recordList) {
     return classMileage;
 }
 
-function setRecord(ref, record, context) {
+async function setRecord(ref, record, context) {
     const appOptions = JSON.parse(process.env.FIREBASE_CONFIG);
     appOptions.databaseAuthVariableOverride = context.auth;
     const app = admin.initializeApp(appOptions, 'app');
 
-    const deleteApp = () => app.delete().catch(() => null);
-    return app.database().ref(ref).set(record).then(res => {
-        // Deleting the app is necessary for preventing concurrency leaks
-        return deleteApp().then(() => res);
-      }).catch(err => {
-        return deleteApp().then(() => Promise.reject(err));
-      });
+    const deleteApp = () => app.delete().catch(() => null); // Deleting the app is necessary for preventing concurrency leaks
+    try {
+        const res = await app.database().ref(ref).set(record);
+        await deleteApp();
+        return res;
+    }
+    catch (err) {
+        await deleteApp();
+        return await Promise.reject(err);
+    }
 }
 
 // GPA Calculator Utility
 // Calculate GPA/Score (Also need to make sure it does not activate twice lol)
 exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}').onWrite(
     async (snapshot, context) => {
-        console.log("Function Version: beta-4-async");
+        console.log("Function Version: async_300620192338");
         console.log("Dep Versions listed below");
         console.log(process.versions);
         const records = snapshot.after.val();
         const dataSnapshot = await admin.database().ref('/gpacalc/scoring').once('value');
         var stats = records;
         var gradeTiers = dataSnapshot.val();
-        console.log('Processing User', context.params.userid);
-        console.log('Calculating GPA of the various institutions...');
+        console.log('Calculating User', context.params.userid, ' GPA of the various institutions...');
         Object.keys(records).forEach(key => {
             if (typeof records[key] === 'object') {
                 console.log("Processing ", records[key].name, " (", records[key].shortName, ")");
@@ -122,11 +124,17 @@ exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}').onWrite
         });
         console.log('Finished Processing User. Saving to Firebase DB');
         console.log(stats);
-        return setRecord(snapshot.after.ref, stats, context); // TODO: Update to point to ref only
+        return setRecord(snapshot.after.ref, stats, context);
     }
 )
 
 function processInstitution(institution, gradeTier) {
+    // Handle ordering
+    var currentTime = Date.now();
+    if (institution.startTimestamp == null) institution.startTimestamp = currentTime;
+    if (institution.endTimestamp == null) institution.endTimestamp = -1;
+    institution.order = (institution.endTimestamp == -1) ? institution.startTimestamp : institution.endTimestamp;
+
     // Process all the semesters first
     if (institution.semester == null) {
         institution.gpa = "Unknown"
@@ -167,6 +175,12 @@ function processInstitution(institution, gradeTier) {
 }
 
 function processSemester(semester, gradeTier) {
+    // Handle ordering
+    var currentTime = Date.now();
+    if (semester.startTimestamp == null) semester.startTimestamp = currentTime;
+    if (semester.endTimestamp == null) semester.endTimestamp = -1;
+    semester.order = (semester.endTimestamp == -1) ? semester.startTimestamp : semester.endTimestamp;
+
     // Calculate the various modules
     if (semester.modules == null) {
         semester.gpa = "Unknown"
