@@ -51,11 +51,12 @@ class AddSemesterActivity : AddActivityBase() {
             val calendar = Calendar.getInstance()
             if (endTime > 0) calendar.timeInMillis = endTime
             val dt = DatePickerDialog(this, endDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-            dt.setButton(DialogInterface.BUTTON_NEUTRAL, "Reset") { dialog: DialogInterface, _: Int ->
+            dt.setButton(DialogInterface.BUTTON_NEUTRAL, "Present Day") { dialog: DialogInterface, _: Int ->
                 endTime = -1
                 GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
                 dialog.dismiss()
             }
+            dt.datePicker.minDate = startTime
             dt.show()
         }
 
