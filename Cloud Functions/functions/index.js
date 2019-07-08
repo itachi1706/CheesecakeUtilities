@@ -108,7 +108,7 @@ async function setRecord(ref, record, context) {
 // Calculate GPA/Score (Also need to make sure it does not activate twice lol)
 exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}').onWrite(
     async (snapshot, context) => {
-        console.log("Function Version: async_300620192338");
+        console.log("Function Version: async_080720191820");
         console.log("Dep Versions listed below");
         console.log(process.versions);
         const records = snapshot.after.val();
@@ -199,8 +199,13 @@ function processSemester(semester, gradeTier) {
                 console.log("Ignoring module [", semester.modules[key].courseCode, "] ", semester.modules[key].name, " without grades");
                 return;
             }
-            var grade = gradeTier.gradetier[semester.modules[key].gradeTier].value; 
-            var mod_gpa = grade * semester.modules[key].credits; // GPA Calculation = (grade * credits) / total credits
+            var grade = gradeTier.gradetier[semester.modules[key].gradeTier].value;
+            var mod_gpa = 0;
+            if (gradeTier.type == "count") {
+                mod_gpa = grade; // Grade
+            } else {
+                mod_gpa = grade * semester.modules[key].credits; // GPA Calculation = (grade * credits) / total credits
+            }
             console.log("Grade Received for [", semester.modules[key].courseCode, "] ", semester.modules[key].name, ": ", grade, " | Module Grade with Credits: ", mod_gpa);
             count += mod_gpa; 
             totalCredits += semester.modules[key].credits;
