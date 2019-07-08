@@ -28,6 +28,9 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecycle
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import com.itachi1706.cheesecakeutilities.objects.DualLineString
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Semester List View
@@ -177,7 +180,16 @@ class SemesterListFragment : Fragment() {
     private fun semestersProcessAndUpdate() {
         val list: ArrayList<DualLineString> = ArrayList()
         semesters.forEach {
-            list.add(DualLineString(it.name, (if (scoreObject?.type == "count") "Score" else "GPA") + ": ${it.gpa}"))
+            val calendar = Calendar.getInstance()
+            val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
+            calendar.timeInMillis = it.startTimestamp
+            var timestamp = "${dateFormat.format(calendar.time)} - "
+            if (it.endTimestamp == (-1).toLong()) timestamp += "Present"
+            else {
+                calendar.timeInMillis = it.endTimestamp
+                timestamp += dateFormat.format(calendar.time)
+            }
+            list.add(DualLineString(it.name, (if (scoreObject?.type == "count") "Score" else "GPA") + ": ${it.gpa}\n$timestamp"))
         }
         updateActionBar()
         adapter.update(list)

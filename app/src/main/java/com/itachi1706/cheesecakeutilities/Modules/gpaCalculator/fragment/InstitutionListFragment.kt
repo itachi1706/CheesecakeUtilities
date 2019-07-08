@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddInstitutionActivity
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
@@ -26,6 +27,8 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecycle
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import com.itachi1706.cheesecakeutilities.objects.DualLineString
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Institution List View
@@ -159,7 +162,16 @@ class InstitutionListFragment : Fragment() {
         institutions.forEach {
             val type = if (scoring.containsKey(it.type)) scoring[it.type]?.name else "Unknown"
             val scoreTitle = if (scoring[it.type]?.type == "count") "Score" else "GPA"
-            list.add(DualLineString("${it.name} (${it.shortName})", "Scoring Mode: $type\n$scoreTitle: ${it.gpa}"))
+            val calendar = Calendar.getInstance()
+            val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
+            calendar.timeInMillis = it.startTimestamp
+            var timestamp = "${dateFormat.format(calendar.time)} - "
+            if (it.endTimestamp == (-1).toLong()) timestamp += "Present"
+            else {
+                calendar.timeInMillis = it.endTimestamp
+                timestamp += dateFormat.format(calendar.time)
+            }
+            list.add(DualLineString("${it.name} (${it.shortName})", "Scoring Mode: $type\n$scoreTitle: ${it.gpa}\n$timestamp"))
         }
         adapter.update(list)
         adapter.notifyDataSetChanged()
