@@ -3,6 +3,8 @@ package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Kenneth on 24/6/2019.
@@ -26,4 +28,6 @@ object GpaCalcFirebaseUtils: FirebaseUtils() {
     fun getGpaDatabaseUser(userId: String) : DatabaseReference {
         return getGpaDatabase().child(FB_REC_USER).child(userId)
     }
+
+    val DATE_FORMAT = SimpleDateFormat("dd MMM yyyy", Locale.US)
 }

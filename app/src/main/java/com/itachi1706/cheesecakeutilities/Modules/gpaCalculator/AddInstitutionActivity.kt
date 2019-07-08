@@ -15,12 +15,18 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScori
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_institution.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class AddInstitutionActivity : AddActivityBase() {
 
     val modes: HashMap<String, Pair<String, GpaScoring>> = HashMap()
     val selectionList: ArrayList<String> = ArrayList()
     val existingInstitutions: ArrayList<String> = ArrayList()
+
+    private var startTime: Long = System.currentTimeMillis()
+    private var endTime: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +83,21 @@ class AddInstitutionActivity : AddActivityBase() {
                 gpacalc_add.text = "Edit Institution"
                 supportActionBar?.title = "Edit an Institution"
                 supportActionBar?.subtitle = etName.text.toString()
-            }
 
+                // Handle start and end times
+                val calender = Calendar.getInstance()
+                val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
+                if (institute?.startTimestamp != null) {
+                    startTime = institute!!.startTimestamp
+                    calender.timeInMillis = startTime
+                    fromDate.setText(dateFormat.format(calender.time))
+                }
+                if (institute?.endTimestamp != null && institute?.endTimestamp != (-1).toLong()) {
+                    endTime = institute!!.endTimestamp
+                    calender.timeInMillis = endTime
+                    toDate.setText(dateFormat.format(calender.time))
+                }
+            }
         })
     }
 
@@ -109,7 +128,7 @@ class AddInstitutionActivity : AddActivityBase() {
 
         if (til_etName.isErrorEnabled || til_etShortName.isErrorEnabled) return "Please resolve the errors before continuing"
 
-        return GpaInstitution(name, shortName, mode.first, credits)
+        return GpaInstitution(name, shortName, mode.first, credits, startTimestamp = startTime, endTimestamp = endTime)
     }
 
     private fun addToDb(newInstitution: GpaInstitution) {

@@ -11,11 +11,15 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemes
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_semester.*
+import java.util.*
 
 class AddSemesterActivity : AddActivityBase() {
 
     private var selectedInstitution: GpaInstitution? = null
     private lateinit var instituteString: String
+
+    private var startTime: Long = System.currentTimeMillis()
+    private var endTime: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +65,20 @@ class AddSemesterActivity : AddActivityBase() {
                 gpacalc_add.text = "Edit Semester"
                 supportActionBar?.title = "Edit aa Semester"
                 supportActionBar?.subtitle = etName.text.toString()
+
+                // Handle start and end times
+                val calender = Calendar.getInstance()
+                val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
+                if (semester?.startTimestamp != null) {
+                    startTime = semester!!.startTimestamp
+                    calender.timeInMillis = startTime
+                    fromDate.setText(dateFormat.format(calender.time))
+                }
+                if (semester?.endTimestamp != null && semester?.endTimestamp != (-1).toLong()) {
+                    endTime = semester!!.endTimestamp
+                    calender.timeInMillis = endTime
+                    toDate.setText(dateFormat.format(calender.time))
+                }
             }
 
         })
