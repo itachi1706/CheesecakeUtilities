@@ -80,32 +80,32 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:id="@+id/til_fromDate">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fromDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:hint="Starts On"
-                android:inputType="text" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:id="@+id/til_toDate">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/toDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:hint="Graduate On"
-                android:inputType="text" />
+                android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 

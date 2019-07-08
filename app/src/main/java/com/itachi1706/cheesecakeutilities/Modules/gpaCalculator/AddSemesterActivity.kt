@@ -1,6 +1,9 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
+import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.widget.DatePicker
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
@@ -21,6 +24,9 @@ class AddSemesterActivity : AddActivityBase() {
     private var startTime: Long = System.currentTimeMillis()
     private var endTime: Long = -1
 
+    private lateinit var startDateListener: DatePickerDialog.OnDateSetListener
+    private lateinit var endDateListener: DatePickerDialog.OnDateSetListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_add_semester)
@@ -31,6 +37,28 @@ class AddSemesterActivity : AddActivityBase() {
             finish()
             return
         }
+
+        startDateListener = SemesterDateCallback(START_SEMESTER)
+        endDateListener = SemesterDateCallback(END_SEMESTER)
+        fromDate.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            if (startTime > 0) calendar.timeInMillis = startTime
+            DatePickerDialog(this, startDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        toDate.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            if (endTime > 0) calendar.timeInMillis = endTime
+            val dt = DatePickerDialog(this, endDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            dt.setButton(DialogInterface.BUTTON_NEUTRAL, "Reset") { dialog: DialogInterface, _: Int ->
+                endTime = -1
+                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+                dialog.dismiss()
+            }
+            dt.show()
+        }
+
 
         // Get the calculation modes
         getInstitution(instituteString)
@@ -67,18 +95,9 @@ class AddSemesterActivity : AddActivityBase() {
                 supportActionBar?.subtitle = etName.text.toString()
 
                 // Handle start and end times
-                val calender = Calendar.getInstance()
-                val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
-                if (semester?.startTimestamp != null) {
-                    startTime = semester!!.startTimestamp
-                    calender.timeInMillis = startTime
-                    fromDate.setText(dateFormat.format(calender.time))
-                }
-                if (semester?.endTimestamp != null && semester?.endTimestamp != (-1).toLong()) {
-                    endTime = semester!!.endTimestamp
-                    calender.timeInMillis = endTime
-                    toDate.setText(dateFormat.format(calender.time))
-                }
+                if (semester?.startTimestamp != null) startTime = semester!!.startTimestamp
+                if (semester?.endTimestamp != null && semester?.endTimestamp != (-1).toLong()) endTime = semester!!.endTimestamp
+                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
             }
 
         })
@@ -90,10 +109,17 @@ class AddSemesterActivity : AddActivityBase() {
         // Ready error texts
         til_etName.error = "Required field"
         til_etName.isErrorEnabled = name.isEmpty()
+        til_toDate.isErrorEnabled = false
 
         if (til_etName.isErrorEnabled) return "Please resolve the errors before continuing"
 
-        return GpaSemester(name)
+        if (endTime < startTime && endTime != (-1).toLong()) {
+            til_toDate.error = "Semester End Date cannot be before Start Date"
+            til_toDate.isErrorEnabled = true
+            return "Please resolve date errors before continuing"
+        }
+
+        return GpaSemester(name, startTimestamp = startTime, endTimestamp = endTime)
     }
 
     private fun addToDb(newSemester: GpaSemester) {
@@ -103,7 +129,7 @@ class AddSemesterActivity : AddActivityBase() {
             val newRec = db.push()
             newRec.setValue(newSemester)
         } else {
-            val edited = semester!!.copy(name = newSemester.name)
+            val edited = semester!!.copy(name = newSemester.name, startTimestamp = newSemester.startTimestamp, endTimestamp = newSemester.endTimestamp)
             db.child(editKey!!).setValue(edited)
         }
     }
@@ -123,7 +149,18 @@ class AddSemesterActivity : AddActivityBase() {
         })
     }
 
+    private inner class SemesterDateCallback(val type: Int): DatePickerDialog.OnDateSetListener {
+        override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+            val cal = GpaCalcFirebaseUtils.getCalendarWithNoTime(year, month, dayOfMonth)
+            if (type == START_SEMESTER) startTime = cal.timeInMillis
+            else endTime = cal.timeInMillis
+            GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+        }
+    }
+
     companion object {
         private const val TAG = "GpaCalcAddSemester"
+        private const val START_SEMESTER = 0
+        private const val END_SEMESTER = 1
     }
 }

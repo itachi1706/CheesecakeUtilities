@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
+import android.widget.EditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
@@ -27,6 +28,29 @@ object GpaCalcFirebaseUtils: FirebaseUtils() {
 
     fun getGpaDatabaseUser(userId: String) : DatabaseReference {
         return getGpaDatabase().child(FB_REC_USER).child(userId)
+    }
+
+    fun getCalendarWithNoTime(year: Int, month: Int, dayOfMonth: Int): Calendar {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        return cal
+    }
+
+    fun updateDateTimeViews(startView: EditText, endView: EditText, startTime: Long, endTime: Long) {
+        val calender = Calendar.getInstance()
+        val dateFormat = DATE_FORMAT
+        calender.timeInMillis = startTime
+        startView.setText(dateFormat.format(calender.time))
+        if (endTime != (-1).toLong()) {
+            calender.timeInMillis = endTime
+            endView.setText(dateFormat.format(calender.time))
+        } else endView.setText("")
     }
 
     val DATE_FORMAT = SimpleDateFormat("dd MMM yyyy", Locale.US)

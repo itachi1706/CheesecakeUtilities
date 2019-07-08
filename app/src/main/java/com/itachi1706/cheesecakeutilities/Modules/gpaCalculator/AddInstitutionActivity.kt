@@ -1,10 +1,13 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
 
+import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
@@ -28,9 +31,33 @@ class AddInstitutionActivity : AddActivityBase() {
     private var startTime: Long = System.currentTimeMillis()
     private var endTime: Long = -1
 
+    private lateinit var startListener: DatePickerDialog.OnDateSetListener
+    private lateinit var endListener: DatePickerDialog.OnDateSetListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpa_calculator_add_institution)
+
+        startListener = InstituteDateCallback(START_INSTITUTE)
+        endListener = InstituteDateCallback(END_INSTITUTE)
+        fromDate.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            if (startTime > 0) calendar.timeInMillis = startTime
+            DatePickerDialog(this, startListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        toDate.setOnClickListener{
+            val calendar = Calendar.getInstance()
+            if (endTime > 0) calendar.timeInMillis = endTime
+            val dt = DatePickerDialog(this, endListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            dt.setButton(DialogInterface.BUTTON_NEUTRAL, "Reset") { dialog: DialogInterface, _: Int ->
+                endTime = -1
+                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+                dialog.dismiss()
+            }
+            dt.show()
+        }
 
         // Get the calculation modes
         populateModes()
@@ -85,18 +112,9 @@ class AddInstitutionActivity : AddActivityBase() {
                 supportActionBar?.subtitle = etName.text.toString()
 
                 // Handle start and end times
-                val calender = Calendar.getInstance()
-                val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
-                if (institute?.startTimestamp != null) {
-                    startTime = institute!!.startTimestamp
-                    calender.timeInMillis = startTime
-                    fromDate.setText(dateFormat.format(calender.time))
-                }
-                if (institute?.endTimestamp != null && institute?.endTimestamp != (-1).toLong()) {
-                    endTime = institute!!.endTimestamp
-                    calender.timeInMillis = endTime
-                    toDate.setText(dateFormat.format(calender.time))
-                }
+                if (institute?.startTimestamp != null) startTime = institute!!.startTimestamp
+                if (institute?.endTimestamp != null && institute?.endTimestamp != (-1).toLong()) endTime = institute!!.endTimestamp
+                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
             }
         })
     }
@@ -116,6 +134,7 @@ class AddInstitutionActivity : AddActivityBase() {
 
         til_etName.isErrorEnabled = name.isEmpty()
         til_etShortName.isErrorEnabled = shortName.isEmpty()
+        til_toDate.isErrorEnabled = false
 
         if (mode == null) return "Unable to find mode, please attempt to readd!"
 
@@ -128,6 +147,12 @@ class AddInstitutionActivity : AddActivityBase() {
 
         if (til_etName.isErrorEnabled || til_etShortName.isErrorEnabled) return "Please resolve the errors before continuing"
 
+        if (endTime < startTime && endTime != (-1).toLong()) {
+            til_toDate.error = "Graduation Date cannot be before Start Date"
+            til_toDate.isErrorEnabled = true
+            return "Please resolve date errors before continuing"
+        }
+
         return GpaInstitution(name, shortName, mode.first, credits, startTimestamp = startTime, endTimestamp = endTime)
     }
 
@@ -135,7 +160,8 @@ class AddInstitutionActivity : AddActivityBase() {
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
         if (institute == null) db.child(newInstitution.shortName).setValue(newInstitution)
         else {
-            val edited = institute!!.copy(name = newInstitution.name, shortName = newInstitution.shortName, type = newInstitution.type, creditName = newInstitution.creditName)
+            val edited = institute!!.copy(name = newInstitution.name, shortName = newInstitution.shortName, type = newInstitution.type, creditName = newInstitution.creditName,
+                    startTimestamp = newInstitution.startTimestamp, endTimestamp = newInstitution.endTimestamp)
             if (edited.shortName != institute!!.shortName) {
                 // Change of shortname as well, delete old key
                 db.child(institute!!.shortName).removeValue()
@@ -187,7 +213,18 @@ class AddInstitutionActivity : AddActivityBase() {
         spinnerGpaCalcMode.adapter = adapter
     }
 
+    private inner class InstituteDateCallback(val type: Int): DatePickerDialog.OnDateSetListener {
+        override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+            val cal = GpaCalcFirebaseUtils.getCalendarWithNoTime(year, month, dayOfMonth)
+            if (type == START_INSTITUTE) startTime = cal.timeInMillis
+            else endTime = cal.timeInMillis
+            GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+        }
+    }
+
     companion object {
         private const val TAG = "GpaCalcAddInstitution"
+        private const val START_INSTITUTE = 0
+        private const val END_INSTITUTE = 1
     }
 }
