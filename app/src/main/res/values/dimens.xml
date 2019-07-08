@@ -15,4 +15,9 @@
     <dimen name="item_margin_top">16dp</dimen>
     <dimen name="item_padding">8dp</dimen>
     <dimen name="item_button_margin_top">8dp</dimen>
+
+    <!-- From Spectrum -->
+    <dimen name="color_item_small">48dp</dimen>
+    <dimen name="color_item_margins_small">4dp</dimen>
+    <dimen name="color_item_selected_check_margins">8dp</dimen>
 </resources>
