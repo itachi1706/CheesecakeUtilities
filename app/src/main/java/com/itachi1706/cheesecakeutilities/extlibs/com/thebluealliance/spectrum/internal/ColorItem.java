@@ -24,6 +24,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+@SuppressWarnings("unused")
 public class ColorItem extends FrameLayout implements View.OnClickListener {
 
     /**
@@ -59,11 +60,7 @@ public class ColorItem extends FrameLayout implements View.OnClickListener {
 
     private void updateDrawables() {
         setForeground(createForegroundDrawable());
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            setBackgroundDrawable(createBackgroundDrawable());
-        } else {
-            setBackground(createBackgroundDrawable());
-        }
+        setBackground(createBackgroundDrawable());
     }
 
     private void init() {
@@ -73,7 +70,7 @@ public class ColorItem extends FrameLayout implements View.OnClickListener {
         setOnClickListener(this);
 
         LayoutInflater.from(getContext()).inflate(R.layout.spectrum_color_item, this, true);
-        mItemCheckmark = (ImageView) findViewById(R.id.selected_checkmark);
+        mItemCheckmark = findViewById(R.id.selected_checkmark);
         mItemCheckmark.setColorFilter(ColorUtil.isColorDark(mColor) ? Color.WHITE : Color.BLACK);
     }
 

@@ -26,6 +26,7 @@ import java.util.List;
 /**
  * General-purpose class that displays colors in a grid.
  */
+@SuppressWarnings("unused")
 public class SpectrumPalette extends LinearLayout {
 
     private static final int DEFAULT_COLUMN_COUNT = 4;
@@ -39,7 +40,6 @@ public class SpectrumPalette extends LinearLayout {
     private boolean mHasFixedColumnCount = false;
     private int mFixedColumnCount = -1;
     private int mOutlineWidth = 0;
-    private int mComputedVerticalPadding = 0;
     private int mOriginalPaddingTop = 0;
     private int mOriginalPaddingBottom = 0;
     private boolean mSetPaddingCalledInternally = false;
@@ -147,7 +147,7 @@ public class SpectrumPalette extends LinearLayout {
             mNumColumns = mFixedColumnCount;
         }
 
-        mComputedVerticalPadding = (width - (computeWidthForNumColumns(mNumColumns) + getPaddingLeft() + getPaddingRight())) / 2;
+        int mComputedVerticalPadding = (width - (computeWidthForNumColumns(mNumColumns) + getPaddingLeft() + getPaddingRight())) / 2;
 
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
@@ -242,8 +242,8 @@ public class SpectrumPalette extends LinearLayout {
         int numItemsInRow = 0;
 
         LinearLayout row = createRow();
-        for (int i = 0; i < mColors.length; i++) {
-            View colorItem = createColorItem(mColors[i], mSelectedColor);
+        for (int mColor : mColors) {
+            View colorItem = createColorItem(mColor, mSelectedColor);
             row.addView(colorItem);
             numItemsInRow++;
 
