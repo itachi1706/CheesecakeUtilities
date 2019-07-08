@@ -97,6 +97,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/colorSelectorLbl"
+            android:gravity="center"
+            android:text="Module Color: "/>
+
+        <com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.SpectrumPalette
+            android:id="@+id/module_color_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:spectrum_autoPadding="false"
+            app:spectrum_outlineWidth="2dp"
+            app:spectrum_colors="@array/module_colors" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:orientation="horizontal">
         <Button
             android:id="@+id/gpacalc_add"

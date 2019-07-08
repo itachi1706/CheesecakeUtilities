@@ -14,7 +14,10 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModul
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
+import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.SpectrumPalette
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_module.*
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 class AddModuleActivity : AddActivityBase() {
 
@@ -53,6 +56,12 @@ class AddModuleActivity : AddActivityBase() {
         }
 
         cbPassFail.setOnCheckedChangeListener { _, _ -> updateGradeTierSpinner() }
+        module_color_selector.setOnColorSelectedListener(object: SpectrumPalette.OnColorSelectedListener {
+            override fun onColorSelected(color: Int) {
+                Snackbar.make(findViewById(android.R.id.content), "DEV: Color Selected: #${Integer.toHexString(color).toUpperCase(Locale.US)}", Snackbar.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private var module: GpaModule? = null
@@ -129,7 +138,7 @@ class AddModuleActivity : AddActivityBase() {
         updateGradeTierSpinner()
     }
 
-    val gradeTierList: LinkedHashMap<String, GpaScoring.GpaTier?> = LinkedHashMap()
+    private val gradeTierList: LinkedHashMap<String, GpaScoring.GpaTier?> = LinkedHashMap()
 
     private fun updateGradeTierSpinner() {
         gradeTierList.clear()

@@ -26,4 +26,16 @@
     <color name="apkmirrorPrimaryDark">#F47D20</color>
     <color name="apkmirrorAccent">#FF8B14</color>
     <color name="inactive_tabs">#747474</color>
+
+    <array name="module_colors">
+        <item>@color/red</item>
+        <item>@color/violet</item>
+        <item>@color/indigo</item>
+        <item>@color/blue</item>
+        <item>@color/dark_green</item>
+        <item>@color/green</item>
+        <item>@color/yellow</item>
+        <item>@color/orange</item>
+        <item>@color/white</item>
+    </array>
 </resources>
