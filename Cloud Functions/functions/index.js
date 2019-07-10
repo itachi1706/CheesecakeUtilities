@@ -106,22 +106,27 @@ async function setRecord(ref, record, context) {
 
 // GPA Calculator Utility
 // Calculate GPA/Score (Also need to make sure it does not activate twice lol)
-exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}').onWrite(
+exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}/{institutionid}').onWrite(
     async (snapshot, context) => {
-        console.log("Function Version: async_080720191820");
+        console.log("Async Function Version: 100720192006");
         console.log("Dep Versions listed below");
         console.log(process.versions);
+        const checkToContinue = await admin.database().ref('/gpacalc/update/' + context.params.userid).once('value');
+        if (checkToContinue.exists()) {
+            console.log("Second execution of function, preventing further execution");
+            await admin.database().ref('/gpacalc/update/' + context.params.userid).remove();
+            return;
+        }
         const records = snapshot.after.val();
         const dataSnapshot = await admin.database().ref('/gpacalc/scoring').once('value');
         var stats = records;
         var gradeTiers = dataSnapshot.val();
-        console.log('Calculating User', context.params.userid, ' GPA of the various institutions...');
-        Object.keys(records).forEach(key => {
-            if (typeof records[key] === 'object') {
-                console.log("Processing ", records[key].name, " (", records[key].shortName, ")");
-                stats[key] = processInstitution(records[key], gradeTiers[records[key].type]);
-            }
-        });
+        console.log('Calculating User ', context.params.userid, ' Grade for Institution ', context.params.institutionid);
+        if (typeof records === 'object') {
+            console.log("Processing ", records.name, " (", records.shortName, ")");
+            stats = processInstitution(records, gradeTiers[records.type]);
+            await admin.database().ref('/gpacalc/update/' + context.params.userid).set(true); // Update state to prevent second execution from doing the calculation again
+        }
         console.log('Finished Processing User. Saving to Firebase DB');
         console.log(stats);
         return setRecord(snapshot.after.ref, stats, context);
