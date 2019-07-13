@@ -17,6 +17,7 @@ import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.SpectrumPalette
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_module.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
 class AddModuleActivity : AddActivityBase() {
@@ -25,6 +26,8 @@ class AddModuleActivity : AddActivityBase() {
     private var scoringObject: GpaScoring? = null
     private lateinit var selectedSemesterKey: String
     private lateinit var instituteString: String
+
+    private var colorSelected: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,8 @@ class AddModuleActivity : AddActivityBase() {
             finish()
             return
         }
+
+        if (editKey == null) randomizeColor() // Randomly pick color if in add mode
 
         // Get the calculation modes
         getInstitution(instituteString)
@@ -58,10 +63,22 @@ class AddModuleActivity : AddActivityBase() {
         cbPassFail.setOnCheckedChangeListener { _, _ -> updateGradeTierSpinner() }
         module_color_selector.setOnColorSelectedListener(object: SpectrumPalette.OnColorSelectedListener {
             override fun onColorSelected(color: Int) {
+                colorSelected = color
                 Snackbar.make(findViewById(android.R.id.content), "DEV: Color Selected: #${Integer.toHexString(color).toUpperCase(Locale.US)}", Snackbar.LENGTH_SHORT).show()
             }
 
         })
+    }
+
+    private fun randomizeColor() {
+        val typeArrayTmp = resources.obtainTypedArray(R.array.module_colors)
+        val colorArray: ArrayList<Int> = ArrayList()
+        for (i in 0 until typeArrayTmp.length()) {
+            colorArray.add(typeArrayTmp.getColor(i, 0))
+        }
+        colorSelected = colorArray.shuffled().take(1)[0]
+        module_color_selector.setSelectedColor(colorSelected)
+        typeArrayTmp.recycle()
     }
 
     private var module: GpaModule? = null
@@ -82,6 +99,8 @@ class AddModuleActivity : AddActivityBase() {
                 etCredits.setText(module?.credits.toString())
                 cbPassFail.isChecked = module?.passFail ?: false
                 gpacalc_add.text = "Edit Module"
+                if (module?.color != 0) module_color_selector.setSelectedColor(module?.color!!)
+                else randomizeColor()
                 supportActionBar?.title = "Edit a Module"
                 supportActionBar?.subtitle = "${etName.text.toString()} [${etCourseCode.text.toString()}]"
             }
@@ -111,8 +130,9 @@ class AddModuleActivity : AddActivityBase() {
         }
         
         if (til_etName.isErrorEnabled || til_etCourseCode.isErrorEnabled) return "Please resolve the errors before continuing"
+        if (colorSelected == 0) return "Please select module color"
 
-        return GpaModule(name, courseCode, grade, credits, passFail)
+        return GpaModule(name, courseCode, grade, credits, passFail, colorSelected)
     }
 
     private fun addToDb(newModule: GpaModule) {
@@ -121,7 +141,8 @@ class AddModuleActivity : AddActivityBase() {
                 .child(selectedSemesterKey).child(GpaCalcFirebaseUtils.FB_REC_MODULE)
         if (module == null) db.child(newModule.courseCode).setValue(newModule)
         else {
-            val edited = module!!.copy(name = newModule.name, courseCode = newModule.courseCode, gradeTier = newModule.gradeTier, credits = newModule.credits, passFail = newModule.passFail)
+            val edited = module!!.copy(name = newModule.name, courseCode = newModule.courseCode, gradeTier = newModule.gradeTier, credits = newModule.credits, passFail = newModule.passFail,
+                    color = colorSelected)
             if (edited.courseCode != module!!.courseCode) {
                 // Change of shortname as well, delete old key
                 db.child(module!!.courseCode).removeValue()
