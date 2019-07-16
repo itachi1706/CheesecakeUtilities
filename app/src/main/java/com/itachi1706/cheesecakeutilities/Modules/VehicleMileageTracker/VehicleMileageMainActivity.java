@@ -8,13 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.appupdater.Util.PrefHelper;
@@ -22,6 +22,7 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.turingtechnologies.materialscrollbar.DateAndTimeIndicator;
 import com.turingtechnologies.materialscrollbar.TouchScrollBar;
@@ -120,9 +121,9 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
             LogHelper.i(TAG, "Firebase DB Listeners exist when it should not, force terminating it");
         }
         LogHelper.i(TAG, "Registering Firebase DB listeners");
-        listener = userdata.child(FB_REC_RECORDS).addValueEventListener(new ValueEventListener() {
+        listener = userdata.child(FB_REC_RECORDS).addValueEventListener(new FirebaseValueEventListener(TAG, "loadRecords") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LogHelper.i(TAG, "Records has been updated. Processing...");
                 final List<Record> records = new ArrayList<>();
                 final List<String> tags = new ArrayList<>();
@@ -146,25 +147,15 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
                 Collections.reverse(records);
                 Collections.reverse(tags);
                 if (tags.size() > 0) lastRecord = tags.get(0);
-                VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+                VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehMileageAdapter", "loadVehicles") {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         adapter.updateRecords(records, tags);
                         adapter.updateSnapshot(dataSnapshot);
                         adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
                         adapter.notifyDataSetChanged();
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        LogHelper.w("VehMileageAdapter", "loadVehicles:onCancelled", databaseError.toException());
-                    }
                 });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                LogHelper.w(TAG, "loadRecords:onCancelled", databaseError.toException());
             }
         });
     }

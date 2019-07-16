@@ -24,12 +24,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.text.SimpleDateFormat;
@@ -113,9 +112,9 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
         monthSel = (Spinner) menuItem.getActionView();
 
         VehMileageFirebaseUtils.getVehicleMileageDatabase().child("users").child(user_id).child("statistics")
-                .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new FirebaseValueEventListener(TAG, "loadMileageRecords") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 monthData = new LongSparseArray<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     long key = Long.parseLong(ds.getKey());
@@ -150,11 +149,6 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                     }
                 });
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Unused
-            }
         });
         return true;
     }
@@ -177,9 +171,9 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
         Query specificMonth = VehMileageFirebaseUtils.getVehicleMileageDatabase().child("users").child(user_id).child("records")
                 .orderByChild("datetimeFrom").startAt(startDate).endAt(endDate);
-        specificMonth.addListenerForSingleValueEvent(new ValueEventListener() {
+        specificMonth.addListenerForSingleValueEvent(new FirebaseValueEventListener(TAG, "getRecords") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final List<Record> records = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record recList = ds.getValue(Record.class);
@@ -189,11 +183,6 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
                 }
                 LogHelper.i(TAG, "Records: " + records.size());
                 processRecordsGeneral(records);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Unused
             }
         });
     }

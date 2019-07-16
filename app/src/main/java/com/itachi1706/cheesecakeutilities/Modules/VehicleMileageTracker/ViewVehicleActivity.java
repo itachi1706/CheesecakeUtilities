@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -13,13 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
-import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,9 +91,9 @@ public class ViewVehicleActivity extends AppCompatActivity {
     }
 
     private void updateRecords(RecyclerView recyclerView) {
-        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new FirebaseValueEventListener("ViewVehicleAct", "loadVehicles") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return;
                 List<DualLineString> vehicleList = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -120,11 +120,6 @@ public class ViewVehicleActivity extends AppCompatActivity {
                     menu.add("Delete");
                 });
                 recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                LogHelper.w("ViewVehicleAct", "loadVehicles:onCancelled", databaseError.toException());
             }
         });
     }

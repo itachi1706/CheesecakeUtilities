@@ -13,7 +13,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.InstitutionListFragment
@@ -25,6 +24,7 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInsti
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 

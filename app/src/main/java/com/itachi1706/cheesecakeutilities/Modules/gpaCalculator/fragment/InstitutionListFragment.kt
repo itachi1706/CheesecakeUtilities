@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.*
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
 /**

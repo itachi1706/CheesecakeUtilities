@@ -3,10 +3,11 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragmen
 
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.text.SimpleDateFormat;
@@ -36,9 +37,9 @@ public class VehicleMileageMonthStatsFragment extends VehicleMileageFragmentBase
         }
         refreshLayout.setRefreshing(true);
         VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
-                .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehMileageMthStats", "getStatisticsMonth") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Date d = new Date(Long.parseLong(ds.getKey()));
@@ -49,11 +50,6 @@ public class VehicleMileageMonthStatsFragment extends VehicleMileageFragmentBase
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

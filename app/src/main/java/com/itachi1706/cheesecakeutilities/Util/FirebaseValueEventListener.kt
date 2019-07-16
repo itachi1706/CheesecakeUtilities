@@ -1,8 +1,7 @@
-package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator
+package com.itachi1706.cheesecakeutilities.Util
 
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
 /**
  * Created by Kenneth on 16/7/2019.
