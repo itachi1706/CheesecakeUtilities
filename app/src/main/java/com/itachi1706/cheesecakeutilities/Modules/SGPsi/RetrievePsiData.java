@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.BufferedReader;
@@ -32,6 +33,7 @@ public class RetrievePsiData extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
+    @AddTrace(name = "get_psi_data")
     protected Void doInBackground(Void... voids) {
         String url = "http://api.itachi1706.com/api/dbToPSI.php?type=GEN";
         String tmp;

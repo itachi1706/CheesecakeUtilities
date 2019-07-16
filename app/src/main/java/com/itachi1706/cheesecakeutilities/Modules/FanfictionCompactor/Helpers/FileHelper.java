@@ -3,6 +3,7 @@ package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers;
 import android.os.Environment;
 import android.os.StatFs;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 
 import java.io.File;
@@ -113,6 +114,7 @@ public class FileHelper {
      * @param countFiles Whether to count the files or not
      * @return count size
      */
+    @AddTrace(name = "get_fanfic_folder_time")
     public static int getStoryFolderCount(final File file, boolean countFiles) {
         if (file == null || !file.exists() || !file.isDirectory())
             return 0;

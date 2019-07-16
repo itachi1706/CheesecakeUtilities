@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
@@ -32,8 +35,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
@@ -125,9 +126,12 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LogHelper.i(TAG, "Records has been updated. Processing...");
+                Trace vehMileageTrace = FirebasePerformance.getInstance().newTrace("veh_mileage_records_processing");
+                vehMileageTrace.start();
                 final List<Record> records = new ArrayList<>();
                 final List<String> tags = new ArrayList<>();
                 HashMap<String, Object> migratedRecords = null;
+                vehMileageTrace.putMetric("records_count", dataSnapshot.getChildrenCount());
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Record record = ds.getValue(Record.class);
                     // Update records
@@ -147,6 +151,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
                 Collections.reverse(records);
                 Collections.reverse(tags);
                 if (tags.size() > 0) lastRecord = tags.get(0);
+                vehMileageTrace.stop();
                 VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehMileageAdapter", "loadVehicles") {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

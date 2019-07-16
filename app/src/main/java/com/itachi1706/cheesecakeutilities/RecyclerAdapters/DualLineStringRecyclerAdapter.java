@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itachi1706.appupdater.Util.DeprecationHelper;
@@ -14,8 +15,6 @@ import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by itachi1706 on 2/20/2016.

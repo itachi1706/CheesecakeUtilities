@@ -25,6 +25,7 @@ import androidx.collection.ArrayMap;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
@@ -98,6 +99,7 @@ public class FanfictionCompactorActivity extends BaseModuleActivity {
         notifyService(false);
     }
 
+    @AddTrace(name = "read_fanfic_db")
     private void getStoryList() {
         FanfictionDatabase db = new FanfictionDatabase();
         ArrayList<FanficStories> stories = db.getAllStories();
