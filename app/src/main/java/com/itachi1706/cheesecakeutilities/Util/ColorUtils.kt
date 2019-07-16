@@ -14,17 +14,18 @@ class ColorUtils {
     companion object {
 
         fun getColorFromVariable(context: Context, color: Int): Int {
-            when (color) {
-                RED -> return ContextCompat.getColor(context, R.color.red)
-                ORANGE -> return ContextCompat.getColor(context, R.color.orange)
-                YELLOW -> return ContextCompat.getColor(context, R.color.yellow)
-                GREEN -> return ContextCompat.getColor(context, R.color.green)
-                BLUE -> return ContextCompat.getColor(context, R.color.blue)
-                INDIGO -> return ContextCompat.getColor(context, R.color.indigo)
-                VIOLET -> return ContextCompat.getColor(context, R.color.violet)
-                DARK_GREEN -> return ContextCompat.getColor(context, R.color.dark_green)
+            return when (color) {
+                RED -> ContextCompat.getColor(context, R.color.red)
+                ORANGE -> ContextCompat.getColor(context, R.color.orange)
+                YELLOW -> ContextCompat.getColor(context, R.color.yellow)
+                GREEN -> ContextCompat.getColor(context, R.color.green)
+                BLUE -> ContextCompat.getColor(context, R.color.blue)
+                INDIGO -> ContextCompat.getColor(context, R.color.indigo)
+                VIOLET -> ContextCompat.getColor(context, R.color.violet)
+                DARK_GREEN -> ContextCompat.getColor(context, R.color.dark_green)
+                DARK_YELLOW -> ContextCompat.getColor(context, R.color.dark_yellow)
+                else -> ContextCompat.getColor(context, R.color.black)
             }
-            return ContextCompat.getColor(context, R.color.black)
         }
 
         val RED = 0
@@ -35,5 +36,6 @@ class ColorUtils {
         val INDIGO = 5
         val VIOLET = 6
         val DARK_GREEN = 7
+        val DARK_YELLOW = 8
     }
 }
