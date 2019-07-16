@@ -18,16 +18,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModule
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
-import com.itachi1706.cheesecakeutilities.objects.DualLineString
 
 /**
  * Semester List View
@@ -39,7 +39,7 @@ class ModuleListFragment : Fragment() {
 
     private val modules: ArrayList<GpaModule> = ArrayList()
 
-    private lateinit var adapter: DualLineStringRecyclerAdapter
+    private lateinit var adapter: GpaRecyclerAdapter
     private var selectedInstitutionString: String? = null
     private var selectedInstitutionType: String? = null
     private var selectedSemesterKey: String? = null
@@ -76,27 +76,27 @@ class ModuleListFragment : Fragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
 
         // Update layout
-        adapter = DualLineStringRecyclerAdapter(arrayListOf(), false)
+        adapter = GpaRecyclerAdapter(arrayListOf(), false)
         recyclerView.adapter = adapter
 
         callback?.onStateSwitch(state)
 
-        adapter.setOnClickListener { view ->
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+        adapter.setOnClickListener(View.OnClickListener { view ->
+            val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             val pos = viewHolder.adapterPosition
             val moduleSelected = modules[pos]
             // TODO: Switch fragment with the selected module
             Snackbar.make(view, "Unimplemented. Selected: ${moduleSelected.name}", Snackbar.LENGTH_LONG).show()
-        }
+        })
 
-        adapter.setOnCreateContextMenuListener { menu, view, _ ->
+        adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener { menu, view, _ ->
             // Get selected institution
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             moduleContextSel = modules[viewHolder.adapterPosition]
-            if (moduleContextSel == null) return@setOnCreateContextMenuListener // Do nothing
+            if (moduleContextSel == null) return@OnCreateContextMenuListener // Do nothing
             menu.setHeaderTitle("${moduleContextSel!!.name} [${moduleContextSel!!.courseCode}]")
             activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
-        }
+        })
 
         // Get institution name to update title
         selectedInstitution = callback?.getInstitution()
@@ -175,17 +175,17 @@ class ModuleListFragment : Fragment() {
     }
 
     private fun modulesProcessAndUpdate() {
-        val list: ArrayList<DualLineString> = ArrayList()
+        val list: ArrayList<GpaRecycler> = ArrayList()
         modules.forEach {
-            var sub = if (scoreObject?.type == "gpa") "Credits: ${it.credits} ${selectedInstitution?.creditName} | " else ""
-            sub += "Grade: "
-            sub += when {
+            val score = when {
                 it.gradeTier == -1 -> "-"
-                scoreObject == null -> "Unknown"
+                scoreObject == null -> "???"
                 it.passFail ->  scoreObject!!.passtier!![it.gradeTier].name
                 else -> scoreObject!!.gradetier[it.gradeTier].name
             }
-            list.add(DualLineString("${it.name} [${it.courseCode}]", sub))
+            val finalGrade = if (!it.passFail) if (it.gradeTier == -1) "???" else scoreObject!!.gradetier[it.gradeTier].value.toString() else if (scoreObject!!.passtier!![it.gradeTier].value > 0) "P" else "F"
+            list.add(GpaRecycler("${it.name} [${it.courseCode}]", if (scoreObject?.type == "gpa") "Credits: ${it.credits} ${selectedInstitution?.creditName}" else "",
+                    grade=score, gradeColor = GpaCalcFirebaseUtils.getGpaColor(finalGrade, scoreObject, context), color = it.color))
         }
         updateActionBar()
         adapter.update(list)

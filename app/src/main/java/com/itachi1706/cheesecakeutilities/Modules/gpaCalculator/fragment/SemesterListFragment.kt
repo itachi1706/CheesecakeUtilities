@@ -18,16 +18,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddSemesterActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
-import com.itachi1706.cheesecakeutilities.objects.DualLineString
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -43,7 +43,7 @@ class SemesterListFragment : Fragment() {
     private val semesters: ArrayList<GpaSemester> = ArrayList()
     private val semesterKeys: ArrayList<String> = ArrayList()
 
-    private lateinit var adapter: DualLineStringRecyclerAdapter
+    private lateinit var adapter: GpaRecyclerAdapter
     private var selectedInstitutionString: String? = null
     private var selectedInstitutionType: String? = null
 
@@ -78,28 +78,28 @@ class SemesterListFragment : Fragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
 
         // Update layout
-        adapter = DualLineStringRecyclerAdapter(arrayListOf(), false)
+        adapter = GpaRecyclerAdapter(arrayListOf(), false)
         recyclerView.adapter = adapter
 
         callback?.onStateSwitch(state)
 
-        adapter.setOnClickListener { view ->
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+        adapter.setOnClickListener(View.OnClickListener { view ->
+            val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             val pos = viewHolder.adapterPosition
             val semesterSelected = semesters[pos]
             val selectedSemesterKey = semesterKeys[pos]
             callback?.selectSemester(semesterSelected, selectedSemesterKey)
-        }
+        })
 
-        adapter.setOnCreateContextMenuListener { menu, view, _ ->
+        adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener { menu, view, _ ->
             // Get selected institution
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             semesterContextSel = semesters[viewHolder.adapterPosition]
             semesterContextKeySel = semesterKeys[viewHolder.adapterPosition]
-            if (semesterContextSel == null) return@setOnCreateContextMenuListener // Do nothing
+            if (semesterContextSel == null) return@OnCreateContextMenuListener // Do nothing
             menu.setHeaderTitle(semesterContextSel!!.name)
             activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
-        }
+        })
 
         // Get institution name to update title
         selectedInstitution = callback?.getInstitution()
@@ -178,7 +178,7 @@ class SemesterListFragment : Fragment() {
     }
 
     private fun semestersProcessAndUpdate() {
-        val list: ArrayList<DualLineString> = ArrayList()
+        val list: ArrayList<GpaRecycler> = ArrayList()
         semesters.forEach {
             val calendar = Calendar.getInstance()
             val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
@@ -189,7 +189,8 @@ class SemesterListFragment : Fragment() {
                 calendar.timeInMillis = it.endTimestamp
                 timestamp += dateFormat.format(calendar.time)
             }
-            list.add(DualLineString(it.name, (if (scoreObject?.type == "count") "Score" else "GPA") + ": ${it.gpa}\n$timestamp"))
+            list.add(GpaRecycler(it.name, timestamp, grade = if (it.gpa == "Unknown") "???" else it.gpa,
+                    gradeColor = GpaCalcFirebaseUtils.getGpaColor(it.gpa, scoreObject, context)))
         }
         updateActionBar()
         adapter.update(list)

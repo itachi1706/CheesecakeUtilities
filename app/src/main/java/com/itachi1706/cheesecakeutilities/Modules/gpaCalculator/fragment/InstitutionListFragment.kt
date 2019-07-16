@@ -18,15 +18,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddInstitutionActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
-import com.itachi1706.cheesecakeutilities.objects.DualLineString
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -39,7 +39,7 @@ class InstitutionListFragment : Fragment() {
     private val state = MainViewActivity.STATE_INSTITUTION
 
     private val institutions: ArrayList<GpaInstitution> = ArrayList()
-    private lateinit var adapter: DualLineStringRecyclerAdapter
+    private lateinit var adapter: GpaRecyclerAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,25 +60,26 @@ class InstitutionListFragment : Fragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
 
         // Update layout
-        adapter = DualLineStringRecyclerAdapter(arrayListOf(), false)
+        adapter = GpaRecyclerAdapter(arrayListOf(), false)
         recyclerView.adapter = adapter
 
         callback?.onStateSwitch(state)
 
-        adapter.setOnClickListener { view ->
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+        adapter.setOnClickListener(View.OnClickListener { view ->
+            val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             val pos = viewHolder.adapterPosition
             val instituteSelected = institutions[pos]
             callback?.selectInstitute(instituteSelected)
-        }
-        adapter.setOnCreateContextMenuListener { menu, view, _ ->
+        })
+
+        adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener{menu, view, _ ->
             // Get selected institution
-            val viewHolder = view.tag as DualLineStringRecyclerAdapter.StringViewHolder
+            val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             institutionContextSel = institutions[viewHolder.adapterPosition]
-            if (institutionContextSel == null) return@setOnCreateContextMenuListener // Do nothing
+            if (institutionContextSel == null) return@OnCreateContextMenuListener // Do nothing
             menu.setHeaderTitle("${institutionContextSel!!.name} (${institutionContextSel!!.shortName})")
             activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
-        }
+        })
         return v
     }
 
@@ -153,7 +154,7 @@ class InstitutionListFragment : Fragment() {
     private var retry = false
 
     private fun instituteProcessAndUpdate() {
-        val list: ArrayList<DualLineString> = ArrayList()
+        val list: ArrayList<GpaRecycler> = ArrayList()
         val scoring = callback?.getScoreMap()!!
         if (scoring.isEmpty() && !retry) {
             retry = true
@@ -171,7 +172,8 @@ class InstitutionListFragment : Fragment() {
                 calendar.timeInMillis = it.endTimestamp
                 timestamp += dateFormat.format(calendar.time)
             }
-            list.add(DualLineString("${it.name} (${it.shortName})", "Scoring Mode: $type\n$scoreTitle: ${it.gpa}\n$timestamp"))
+            list.add(GpaRecycler("${it.name} (${it.shortName})", "$timestamp\nScoring: $type",
+                    grade = if (it.gpa == "Unknown") "???" else it.gpa, gradeColor = GpaCalcFirebaseUtils.getGpaColor(it.gpa, scoring[it.type], context)))
         }
         adapter.update(list)
         adapter.notifyDataSetChanged()
