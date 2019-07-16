@@ -12,7 +12,6 @@ import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
@@ -96,11 +95,7 @@ class AddInstitutionActivity : AddActivityBase() {
     private var institute: GpaInstitution? = null
 
     override fun editModeEnabled(editKey: String) {
-        GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(editKey).addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.e(TAG, "editMode:cancelled", p0.toException())
-            }
-
+        GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(editKey).addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "editMode") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Make user update scoring mode again
                 institute = dataSnapshot.getValue(GpaInstitution::class.java)
@@ -173,7 +168,7 @@ class AddInstitutionActivity : AddActivityBase() {
 
     private fun populateModes() {
         val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "populateModes") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return
                 modes.clear()
@@ -184,25 +179,17 @@ class AddInstitutionActivity : AddActivityBase() {
 
                 updateAdapter()
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                LogHelper.w(TAG, "populateModes:cancelled", databaseError.toException())
-            }
         })
     }
 
     private fun populateInstitutions() {
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "populateInstitutions") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return // Don't need do anything as we have no existing institutions
                 existingInstitutions.clear()
                 dataSnapshot.children.forEach{ existingInstitutions.add(it.key!!) }
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "populateInstitutions:cancelled", p0.toException())
             }
         })
     }

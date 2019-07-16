@@ -15,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.InstitutionListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.ModuleListFragment
@@ -85,11 +84,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         Log.i(TAG, "Updating Scoring Objects Map")
         val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "updateScoring:onCancelled", p0.toException())
-            }
-
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "updateScoring") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 scoring.clear()
                 if (dataSnapshot.hasChildren()) {
@@ -111,11 +106,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         val key = selInstitute!!.shortName
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(key)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "updateSelectedInstitution:onCancelled", p0.toException())
-            }
-
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "updateSelectedInstitution") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 selInstitute = dataSnapshot.getValue(GpaInstitution::class.java)
             }

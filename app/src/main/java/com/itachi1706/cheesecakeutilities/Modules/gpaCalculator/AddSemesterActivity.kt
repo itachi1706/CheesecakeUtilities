@@ -7,8 +7,6 @@ import android.widget.DatePicker
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
@@ -82,11 +80,8 @@ class AddSemesterActivity : AddActivityBase() {
     private var semester: GpaSemester? = null
 
     override fun editModeEnabled(editKey: String) {
-        GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(instituteString).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER).child(editKey).addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.e(TAG, "editMode:cancelled", p0.toException())
-            }
-
+        GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(instituteString).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)
+                .child(editKey).addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "editMode") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Make user update scoring mode again
                 semester = dataSnapshot.getValue(GpaSemester::class.java)
@@ -138,14 +133,10 @@ class AddSemesterActivity : AddActivityBase() {
     private fun getInstitution(institute: String) {
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(institute)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "getInstitution") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 selectedInstitution = dataSnapshot.getValue(GpaInstitution::class.java)
                 supportActionBar?.subtitle = if (selectedInstitution == null) "An error occurred" else selectedInstitution?.name
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "getInstitution:cancelled", p0.toException())
             }
         })
     }

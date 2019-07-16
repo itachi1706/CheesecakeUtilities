@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
@@ -39,11 +37,7 @@ class ScoringActivity : AppCompatActivity() {
     private fun updateList() {
         val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(databaseError: DatabaseError) {
-                LogHelper.w(TAG, "loadScores:cancelled", databaseError.toException())
-            }
-
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "loadScores") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.hasChildren()) return
                 val scoreList: ArrayList<DualLineString> = ArrayList()

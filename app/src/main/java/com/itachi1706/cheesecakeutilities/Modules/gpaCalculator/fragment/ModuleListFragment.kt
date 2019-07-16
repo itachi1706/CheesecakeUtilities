@@ -1,40 +1,30 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddModuleActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
+import com.google.firebase.database.DatabaseReference
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.*
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModule
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
 /**
  * Semester List View
  */
-class ModuleListFragment : Fragment() {
+class ModuleListFragment : BaseGpaFragment() {
 
-    private var callback: StateSwitchListener? = null
     private val state = MainViewActivity.STATE_MODULE
 
     private val modules: ArrayList<GpaModule> = ArrayList()
@@ -47,12 +37,7 @@ class ModuleListFragment : Fragment() {
     private var selectedInstitution: GpaInstitution? = null
     private var scoreObject: GpaScoring? = null
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is MainViewActivity) {
-            callback = context
-        }
-    }
+    override fun getLogTag(): String { return TAG }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -123,8 +108,7 @@ class ModuleListFragment : Fragment() {
             })
             R.id.menu_delete -> {
                 val moduleToDelete = moduleContextSel!!.copy()
-                val data = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)
-                        ?.child(selectedSemesterKey!!)?.child(GpaCalcFirebaseUtils.FB_REC_MODULE) ?: return false
+                val data = getPath() ?: return false
                 data.child(moduleToDelete.courseCode).removeValue()
                 Snackbar.make(view!!, "Module Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
                     data.child(moduleToDelete.courseCode).setValue(moduleToDelete)
@@ -136,25 +120,19 @@ class ModuleListFragment : Fragment() {
         return true
     }
 
-    private var listener: ValueEventListener? = null
+    private fun getPath(): DatabaseReference? {
+        return callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)
+                ?.child(selectedSemesterKey!!)?.child(GpaCalcFirebaseUtils.FB_REC_MODULE)
+    }
+
     override fun onStart() {
         super.onStart()
         if (selectedInstitutionString == null) return // Don't do anything, an error had occurred already
-        if (listener != null) {
-            FirebaseUtils.removeListener(listener!!)
-            listener = null
-            LogHelper.e(TAG, "Firebase DB Listeners exists when it should not have, terminating it forcibly")
-        }
 
         scoreObject = callback?.getScoreMap()!![selectedInstitutionType]
         updateActionBar()
         LogHelper.i(TAG, "Registering Module Firebase DB Listener")
-        listener = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER)?.child(selectedSemesterKey!!)?.
-                child(GpaCalcFirebaseUtils.FB_REC_MODULE)?.addValueEventListener(object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "loadModuleList:onCancelled", p0.toException())
-            }
-
+        listener = getPath()?.addValueEventListener(object: FirebaseValueEventListener(TAG, "loadModuleList"){
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (callback?.getCurrentState() != state) return
                 LogHelper.i(TAG, "Processing updated modules...")
@@ -168,15 +146,6 @@ class ModuleListFragment : Fragment() {
                 modulesProcessAndUpdate()
             }
         })
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (listener != null) {
-            FirebaseUtils.removeListener(listener!!)
-            Log.i(TAG, "Firebase Listener Unregisted")
-            listener = null
-        }
     }
 
     private fun modulesProcessAndUpdate() {

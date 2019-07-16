@@ -8,7 +8,6 @@ import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModule
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
@@ -84,11 +83,7 @@ class AddModuleActivity : AddActivityBase() {
 
     override fun editModeEnabled(editKey: String) {
         GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(instituteString).child(GpaCalcFirebaseUtils.FB_REC_SEMESTER).child(selectedSemesterKey)
-                .child(GpaCalcFirebaseUtils.FB_REC_MODULE).child(editKey).addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.e(TAG, "editMode:cancelled", p0.toException())
-            }
-
+                .child(GpaCalcFirebaseUtils.FB_REC_MODULE).child(editKey).addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "editMode"){
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Make user update scoring mode again
                 module = dataSnapshot.getValue(GpaModule::class.java)
@@ -177,14 +172,10 @@ class AddModuleActivity : AddActivityBase() {
         Log.i(TAG, "Retrieving Scoring Object for this institution")
         val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING).child(selectedInstitution!!.type)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "getScoringObject") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 scoringObject = dataSnapshot.getValue(GpaScoring::class.java)
                 updateScoringFeatures()
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "getScoringObject:cancelled", p0.toException())
             }
         })
     }
@@ -192,15 +183,11 @@ class AddModuleActivity : AddActivityBase() {
     private fun getInstitution(institute: String) {
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(institute)
         db.keepSynced(true)
-        db.addListenerForSingleValueEvent(object: ValueEventListener {
+        db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "getInstitution") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 selectedInstitution = dataSnapshot.getValue(GpaInstitution::class.java)
                 supportActionBar?.subtitle = if (selectedInstitution == null) "An error occurred" else "${selectedInstitution?.name} | ${selectedInstitution?.semester!![selectedSemesterKey]?.name}"
                 getScoringObject()
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "getInstitution:cancelled", p0.toException())
             }
         })
     }

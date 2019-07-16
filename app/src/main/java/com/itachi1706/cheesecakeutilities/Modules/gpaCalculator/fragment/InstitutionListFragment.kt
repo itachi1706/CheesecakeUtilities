@@ -1,52 +1,35 @@
 package com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddInstitutionActivity
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.*
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Institution List View
  */
-class InstitutionListFragment : Fragment() {
+class InstitutionListFragment : BaseGpaFragment() {
 
-    private var callback: StateSwitchListener? = null
     private val state = MainViewActivity.STATE_INSTITUTION
 
     private val institutions: ArrayList<GpaInstitution> = ArrayList()
     private lateinit var adapter: GpaRecyclerAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is MainViewActivity) {
-            callback = context
-        }
-    }
+    override fun getLogTag(): String { return TAG }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -112,21 +95,10 @@ class InstitutionListFragment : Fragment() {
         callback?.updateActionBar(null, null)
     }
 
-    private var listener: ValueEventListener? = null
     override fun onStart() {
         super.onStart()
-        if (listener != null) {
-            FirebaseUtils.removeListener(listener!!)
-            listener = null
-            LogHelper.e(TAG, "Firebase DB Listeners exists when it should not have, terminating it forcibly")
-        }
-
         LogHelper.i(TAG, "Registering Institution Firebase DB Listener")
-        listener = callback?.getUserData()?.addValueEventListener(object: ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-                LogHelper.w(TAG, "loadInstitutionsList:onCancelled", p0.toException())
-            }
-
+        listener = callback?.getUserData()?.addValueEventListener(object: FirebaseValueEventListener(TAG, "loadInstitutionsList") {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (callback?.getCurrentState() != state) return
                 LogHelper.i(TAG, "Processing updated institutions...")
@@ -142,15 +114,6 @@ class InstitutionListFragment : Fragment() {
         })
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (listener != null) {
-            FirebaseUtils.removeListener(listener!!)
-            Log.i(TAG, "Firebase Listener Unregisted")
-            listener = null
-        }
-    }
-
     private var retry = false
 
     private fun instituteProcessAndUpdate() {
@@ -162,17 +125,7 @@ class InstitutionListFragment : Fragment() {
         }
         institutions.forEach {
             val type = if (scoring.containsKey(it.type)) scoring[it.type]?.name else "Unknown"
-            val scoreTitle = if (scoring[it.type]?.type == "count") "Score" else "GPA"
-            val calendar = Calendar.getInstance()
-            val dateFormat = GpaCalcFirebaseUtils.DATE_FORMAT
-            calendar.timeInMillis = it.startTimestamp
-            var timestamp = "${dateFormat.format(calendar.time)} - "
-            if (it.endTimestamp == (-1).toLong()) timestamp += "Present"
-            else {
-                calendar.timeInMillis = it.endTimestamp
-                timestamp += dateFormat.format(calendar.time)
-            }
-            list.add(GpaRecycler("${it.name} (${it.shortName})", "$timestamp\nScoring: $type",
+            list.add(GpaRecycler("${it.name} (${it.shortName})", "${getTimestampString(it.startTimestamp, it.endTimestamp)}\nScoring: $type",
                     grade = if (it.gpa == "Unknown") "???" else it.gpa, gradeColor = GpaCalcFirebaseUtils.getGpaColor(it.gpa, scoring[it.type], context)))
         }
         adapter.update(list)
