@@ -6,7 +6,7 @@
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
         android:shortcutShortLabel="@string/featured_util_label"
-        android:shortcutLongLabel="@string/featured_util_long_label"
+        android:shortcutLongLabel="@string/featured_util_label"
         android:shortcutDisabledMessage="@string/featured_util_disabled_label"
         tools:ignore="UnusedAttribute">
         <intent
@@ -16,7 +16,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.itachi1706.cheesecakeutilities"
-            android:targetClass="com.itachi1706.cheesecakeutilities.Games.TicTacToe.TicTacToeActivity" >
+            android:targetClass="com.itachi1706.cheesecakeutilities.Modules.CEPASReader.CEPASActivity" >
             <extra android:name="globalcheck" android:value="true" />
         </intent>
     </shortcut>

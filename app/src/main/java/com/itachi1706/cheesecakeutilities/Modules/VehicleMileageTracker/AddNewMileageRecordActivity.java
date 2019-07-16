@@ -20,14 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.itachi1706.cheesecakeutilities.Util.TextInputAutoCompleteTextView;
 
@@ -115,15 +114,11 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
         addRecord.setOnClickListener(v -> addRecordToFirebase());
 
         // Handle autocomplete
-        VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child("autofill").addListenerForSingleValueEvent(new ValueEventListener() {
+        VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child("autofill")
+                .addListenerForSingleValueEvent(new FirebaseValueEventListener("AddNewRecord", "autocomplete") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 processAutoComplete(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -146,18 +141,14 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
 
     private void processEditOrCont(int type, @NonNull String record_id) {
         VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id)
-                .child(FB_REC_RECORDS).child(record_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                .child(FB_REC_RECORDS).child(record_id).addListenerForSingleValueEvent(new FirebaseValueEventListener("VehMileageAddRec", "loadMileageRecord") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 switch (type) {
                     case TYPE_EDIT: processEdit(dataSnapshot.getValue(Record.class)); break;
                     case TYPE_CONT: processContinuation(dataSnapshot.getValue(Record.class)); break;
                     default: LogHelper.e("AddNewRecord", "Not supposed to be here!"); break;
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
@@ -376,9 +367,9 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
     }
 
     private void refreshVehicles(final DatabaseReference vehicles) {
-        vehicles.addListenerForSingleValueEvent(new ValueEventListener() {
+        vehicles.addListenerForSingleValueEvent(new FirebaseValueEventListener("VehMileageAddRec", "loadVehicles:" + vehicles.getKey()) {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<String> vL = new ArrayList<>();
                 if (vehicleList == null) vehicleList = new HashMap<>();
                 else vehicleList.clear();
@@ -391,11 +382,6 @@ public class AddNewMileageRecordActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapter =
                         new ArrayAdapter<>(AddNewMileageRecordActivity.this, android.R.layout.simple_spinner_dropdown_item, vL);
                 vehicle.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                LogHelper.w("VehMileageAddRec", "loadVehicles:" + vehicles.getKey() + ":onCancelled", databaseError.toException());
             }
         });
     }

@@ -11,10 +11,10 @@ import android.widget.DatePicker
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_institution.*
 import java.util.*

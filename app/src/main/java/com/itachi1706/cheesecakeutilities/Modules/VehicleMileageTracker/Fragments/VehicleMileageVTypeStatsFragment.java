@@ -3,15 +3,14 @@ package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragmen
 
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +34,10 @@ public class VehicleMileageVTypeStatsFragment extends VehicleMileageFragmentBase
         super.onResume();
         if (vehicles == null) {
             refreshLayout.setRefreshing(true);
-            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles")
+                    .addListenerForSingleValueEvent(new FirebaseValueEventListener("VehicleMileageStats", "getStatisticsVehType-Legend") {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     vehicles = new ArrayMap<>();
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         if (ds.hasChildren()) {
@@ -50,11 +50,6 @@ public class VehicleMileageVTypeStatsFragment extends VehicleMileageFragmentBase
                     }
                     done = true;
                     updateStats();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    LogHelper.e("VehicleMileageStats", "Error in Firebase DB call (VType-Legend): " + databaseError.getDetails());
                 }
             });
         } else {
@@ -73,9 +68,9 @@ public class VehicleMileageVTypeStatsFragment extends VehicleMileageFragmentBase
         }
         if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
         VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
-                .child("vehicleTypes").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("vehicleTypes").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehicleMileageStats", "getStatisticsVehType-Data") {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (vehicles.containsKey(ds.getKey()))
@@ -84,11 +79,6 @@ public class VehicleMileageVTypeStatsFragment extends VehicleMileageFragmentBase
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                LogHelper.e("VehicleMileageStats", "Error in Firebase DB call (VType-Data): " + databaseError.getDetails());
             }
         });
     }

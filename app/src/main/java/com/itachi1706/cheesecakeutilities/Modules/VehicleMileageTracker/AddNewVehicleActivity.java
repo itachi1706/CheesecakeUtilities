@@ -13,12 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 
 public class AddNewVehicleActivity extends AppCompatActivity {
 
@@ -46,7 +45,7 @@ public class AddNewVehicleActivity extends AppCompatActivity {
             edit = true;
             String id = getIntent().getStringExtra("id");
             String selClass = getIntent().getStringExtra("class");
-            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").child(selClass).addListenerForSingleValueEvent(new ValueEventListener() {
+            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("vehicles").child(selClass).addListenerForSingleValueEvent(new FirebaseValueEventListener("AddNewVeh", "getVehicle") {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
@@ -63,11 +62,6 @@ public class AddNewVehicleActivity extends AppCompatActivity {
                     vehClass.setVisibility(View.INVISIBLE);
                     findViewById(R.id.spinnerVehLbl).setVisibility(View.INVISIBLE);
                     addVehicle.setText("Edit Vehicle");
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // Unused
                 }
             });
         }

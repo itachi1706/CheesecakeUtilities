@@ -93,20 +93,23 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':appupdater')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    implementation project(':appupdater')
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.preference:preference:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.google.firebase:firebase-config:17.0.0'
-    implementation 'com.google.firebase:firebase-perf:17.0.2'
-    implementation 'commons-io:commons-io:2.6' // 20030203 is NOT a newer version
-    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.1'
+    implementation 'com.google.firebase:firebase-config:18.0.0'
+    implementation 'com.google.firebase:firebase-perf:18.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.psdev.licensesdialog:licensesdialog:2.0.0'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // Specific Utility Dependencies
     // Navbar Utility
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -120,16 +123,16 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
     // SafetyNet Validator
-    implementation 'com.google.android.gms:play-services-safetynet:16.0.0'
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
-    implementation 'com.google.firebase:firebase-ml-vision:20.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision:22.0.0'
     implementation 'com.google.zxing:core:3.4.0'
     // Lyric Finder
-    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.palette:palette-ktx:1.0.0'
     // Vehicle Mileage Tracker
-    implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-database:17.0.0'
-    implementation 'com.google.firebase:firebase-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-auth:18.1.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
     implementation project(':cepaslib')
@@ -141,10 +144,7 @@ dependencies {
     // GPA Calculator
     implementation 'org.greenrobot:eventbus:3.1.1'
     // Others
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.core:core-ktx:1.0.2"
-    implementation 'androidx.preference:preference:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'androidx.biometric:biometric:1.0.0-alpha04'
     implementation 'com.google.guava:guava:27.1-android'
 }
