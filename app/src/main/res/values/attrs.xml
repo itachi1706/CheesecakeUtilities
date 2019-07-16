@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From Spectrum -->
+    <declare-styleable name="SpectrumPalette">
+        <attr name="spectrum_colors" />
+        <attr name="spectrum_outlineWidth" />
+        <attr name="spectrum_columnCount" />
+        <attr name="spectrum_autoPadding" format="boolean" />
+    </declare-styleable>
+</resources>

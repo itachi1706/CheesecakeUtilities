@@ -19,6 +19,7 @@
     <color name="yellow">#FFFF00</color>
     <color name="green">#00FF00</color>
     <color name="dark_green">#006400</color>
+    <color name="dark_yellow">#E3BE0E</color>
     <color name="blue">#0000FF</color>
     <color name="indigo">#4B0082</color>
     <color name="violet">#9400D3</color>
@@ -26,4 +27,38 @@
     <color name="apkmirrorPrimaryDark">#F47D20</color>
     <color name="apkmirrorAccent">#FF8B14</color>
     <color name="inactive_tabs">#747474</color>
+
+    <color name="gpa_green">#059373</color>
+    <color name="gpa_orange_dark">#FD5746</color>
+    <color name="gpa_orange">#F89407</color>
+    <color name="gpa_blue">#3B549B</color>
+    <color name="gpa_pink">#DC45B4</color>
+    <color name="gpa_yellow">#E3BE0E</color>
+    <color name="gpa_gray">#95A5A6</color>
+    <color name="gpa_turquoise">#1198A5</color>
+    <color name="gpa_purple_light">#7E5AB6</color>
+    <color name="gpa_blue_light">#39ACFA</color>
+    <color name="gpa_cyan_dark">#34495E</color>
+    <color name="gpa_cyan">#2574A8</color>
+    <color name="gpa_red">#C03A2C</color>
+    <color name="gpa_green_dark">#01644D</color>
+    <color name="gpa_purple">#684273</color>
+
+    <array name="module_colors">
+        <item>@color/gpa_green</item>
+        <item>@color/gpa_orange_dark</item>
+        <item>@color/gpa_orange</item>
+        <item>@color/gpa_blue</item>
+        <item>@color/gpa_pink</item>
+        <item>@color/gpa_yellow</item>
+        <item>@color/gpa_gray</item>
+        <item>@color/gpa_turquoise</item>
+        <item>@color/gpa_purple_light</item>
+        <item>@color/gpa_blue_light</item>
+        <item>@color/gpa_cyan_dark</item>
+        <item>@color/gpa_cyan</item>
+        <item>@color/gpa_red</item>
+        <item>@color/gpa_green_dark</item>
+        <item>@color/gpa_purple</item>
+    </array>
 </resources>

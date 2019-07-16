@@ -1,15 +1,16 @@
 package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.itachi1706.appupdater.Util.DeprecationHelper;
-import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -102,6 +103,7 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
             title = v.findViewById(android.R.id.text1);
             subtitle = v.findViewById(android.R.id.text2);
             v.setOnClickListener((listener == null) ? this : listener);
+            v.setTag(this);
             if (longClickListener != null) v.setOnLongClickListener(longClickListener);
             if (createContextMenuListener != null) v.setOnCreateContextMenuListener(createContextMenuListener);
         }

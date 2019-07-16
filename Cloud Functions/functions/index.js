@@ -5,6 +5,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+// Vehicle Mileage Utility
 // Calculate Statistics (non-training mileage only for now)
 exports.calculateStatistics = functions.database.ref('/vehmileage/users/{userid}/records').onWrite(
     (snapshot, context) => {
@@ -32,20 +33,6 @@ exports.calculateStatistics = functions.database.ref('/vehmileage/users/{userid}
         return setRecord(snapshot.after.ref.parent.child('statistics'), stats, context);
     }
 )
-
-function setRecord(ref, stats, context) {
-    const appOptions = JSON.parse(process.env.FIREBASE_CONFIG);
-    appOptions.databaseAuthVariableOverride = context.auth;
-    const app = admin.initializeApp(appOptions, 'app');
-
-    const deleteApp = () => app.delete().catch(() => null);
-    return app.database().ref(ref).set(stats).then(res => {
-        // Deleting the app is necessary for preventing concurrency leaks
-        return deleteApp().then(() => res);
-      }).catch(err => {
-        return deleteApp().then(() => Promise.reject(err));
-      });
-}
 
 function miscMileage(recordList) {
     var date = {};
@@ -98,4 +85,154 @@ function calculateByClass(recordList) {
         }
     });
     return classMileage;
+}
+
+async function setRecord(ref, record, context) {
+    const appOptions = JSON.parse(process.env.FIREBASE_CONFIG);
+    appOptions.databaseAuthVariableOverride = context.auth;
+    const app = admin.initializeApp(appOptions, 'app');
+
+    const deleteApp = () => app.delete().catch(() => null); // Deleting the app is necessary for preventing concurrency leaks
+    try {
+        const res = await app.database().ref(ref).set(record);
+        await deleteApp();
+        return res;
+    }
+    catch (err) {
+        await deleteApp();
+        return await Promise.reject(err);
+    }
+}
+
+// GPA Calculator Utility
+// Calculate GPA/Score (Also need to make sure it does not activate twice lol)
+exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}/{institutionid}').onWrite(
+    async (snapshot, context) => {
+        console.log("Async Function Version: 100720192006");
+        console.log("Dep Versions listed below");
+        console.log(process.versions);
+        const checkToContinue = await admin.database().ref('/gpacalc/update/' + context.params.userid).once('value');
+        if (checkToContinue.exists()) {
+            console.log("Second execution of function, preventing further execution");
+            await admin.database().ref('/gpacalc/update/' + context.params.userid).remove();
+            return;
+        }
+        const records = snapshot.after.val();
+        const dataSnapshot = await admin.database().ref('/gpacalc/scoring').once('value');
+        var stats = records;
+        var gradeTiers = dataSnapshot.val();
+        console.log('Calculating User ', context.params.userid, ' Grade for Institution ', context.params.institutionid);
+        if (typeof records === 'object') {
+            console.log("Processing ", records.name, " (", records.shortName, ")");
+            stats = processInstitution(records, gradeTiers[records.type]);
+            await admin.database().ref('/gpacalc/update/' + context.params.userid).set(true); // Update state to prevent second execution from doing the calculation again
+        }
+        console.log('Finished Processing User. Saving to Firebase DB');
+        console.log(stats);
+        return setRecord(snapshot.after.ref, stats, context);
+    }
+)
+
+function processInstitution(institution, gradeTier) {
+    // Handle ordering
+    var currentTime = Date.now();
+    if (institution.startTimestamp == null) institution.startTimestamp = currentTime;
+    if (institution.endTimestamp == null) institution.endTimestamp = -1;
+    institution.order = (institution.endTimestamp == -1) ? institution.startTimestamp : institution.endTimestamp;
+
+    // Process all the semesters first
+    if (institution.semester == null) {
+        institution.gpa = "Unknown"
+        if (gradeTier.type == "gpa") institution.totalCredits = 0 // Total Credits is only gradable credits
+        return institution; // Don't edit anything
+    }
+    var count = 0.0;
+    var totalCredits = 0.0;
+    Object.keys(institution.semester).forEach(key => {
+        if (typeof institution.semester[key] === 'object') {
+            console.log("Processing Semester: ", institution.semester[key].name)
+            institution.semester[key] = processSemester(institution.semester[key], gradeTier);
+            // Process count or semester
+            if (institution.semester[key].gpa == "Unknown") return; // Do not try and add unknown lol
+            if (gradeTier.type == "count") {
+                // Add all the semesters up
+                count += parseInt(institution.semester[key].gpa);
+            } else {
+                var sem_gpa = institution.semester[key].fullgpa * institution.semester[key].totalCredits;
+                count += sem_gpa; 
+                totalCredits += institution.semester[key].totalCredits;
+            }
+        }
+    });
+    console.log("Institution Count and Credits: ", count, " | ", totalCredits);
+    if (gradeTier.type == "count") {
+        institution.gpa = parseInt(count, 10) + "";
+    } else if (totalCredits != 0) {
+        var gpa = count / totalCredits;
+        institution.fullgpa = gpa;
+        institution.totalCredits = parseInt(totalCredits);
+        institution.gpa = toFixed(gpa, 4);
+    } else {
+        institution.gpa = "Unknown";
+        institution.totalCredits = 0;
+    }
+    return institution;
+}
+
+function processSemester(semester, gradeTier) {
+    // Handle ordering
+    var currentTime = Date.now();
+    if (semester.startTimestamp == null) semester.startTimestamp = currentTime;
+    if (semester.endTimestamp == null) semester.endTimestamp = -1;
+    semester.order = (semester.endTimestamp == -1) ? semester.startTimestamp : semester.endTimestamp;
+
+    // Calculate the various modules
+    if (semester.modules == null) {
+        semester.gpa = "Unknown"
+        if (gradeTier.type == "gpa") semester.totalCredits = 0 // Total Credits is only gradable credits
+        return semester;
+    }
+    var count = 0.0;
+    var totalCredits = 0.0;
+    Object.keys(semester.modules).forEach(key => {
+        if (typeof semester.modules[key] === 'object') {
+            if (semester.modules[key].passFail == true) {
+                console.log("Ignoring Pass/Fail Module [", semester.modules[key].courseCode, "] ", semester.modules[key].name);
+                return;
+            }
+            if (semester.modules[key].gradeTier == -1) {
+                console.log("Ignoring module [", semester.modules[key].courseCode, "] ", semester.modules[key].name, " without grades");
+                return;
+            }
+            var grade = gradeTier.gradetier[semester.modules[key].gradeTier].value;
+            var mod_gpa = 0;
+            if (gradeTier.type == "count") {
+                mod_gpa = grade; // Grade
+            } else {
+                mod_gpa = grade * semester.modules[key].credits; // GPA Calculation = (grade * credits) / total credits
+            }
+            console.log("Grade Received for [", semester.modules[key].courseCode, "] ", semester.modules[key].name, ": ", grade, " | Module Grade with Credits: ", mod_gpa);
+            count += mod_gpa; 
+            totalCredits += semester.modules[key].credits;
+        }
+    });
+    console.log("Semester Count and Credits: ", count, " | ", totalCredits);
+    if (gradeTier.type == "count") {
+        // Is count so we return the count only
+        semester.gpa = parseInt(count, 10) + "";
+    } else if (totalCredits != 0) {
+        var gpa = count / totalCredits; 
+        semester.fullgpa = gpa;
+        semester.gpa = toFixed(gpa, 4);
+        semester.totalCredits = parseInt(totalCredits);
+    } else {
+        semester.gpa = "Unknown";
+        semester.totalCredits = 0;
+    }
+    return semester;
+}
+
+function toFixed(num, fixed) {
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+    return num.toString().match(re)[0];
 }

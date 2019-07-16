@@ -22,6 +22,7 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/black</item>
     </style>
+
     <style name="AppBarLayoutOverflow" parent="AppTheme">
         <item name="android:textColorPrimary">@android:color/black</item>
     </style>
