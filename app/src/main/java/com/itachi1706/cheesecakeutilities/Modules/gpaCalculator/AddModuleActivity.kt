@@ -64,9 +64,8 @@ class AddModuleActivity : AddActivityBase() {
         module_color_selector.setOnColorSelectedListener(object: SpectrumPalette.OnColorSelectedListener {
             override fun onColorSelected(color: Int) {
                 colorSelected = color
-                Snackbar.make(findViewById(android.R.id.content), "DEV: Color Selected: #${Integer.toHexString(color).toUpperCase(Locale.US)}", Snackbar.LENGTH_SHORT).show()
+                Log.d(TAG, "Color Selected: #${Integer.toHexString(color).toUpperCase(Locale.US)}")
             }
-
         })
     }
 
@@ -163,6 +162,7 @@ class AddModuleActivity : AddActivityBase() {
 
     private fun updateGradeTierSpinner() {
         gradeTierList.clear()
+        if (scoringObject == null) return // Haven't init scoring object yet
         gradeTierList["- (Not Graded)"] = null
         val tier = if (cbPassFail.isChecked && scoringObject?.passtier != null) scoringObject?.passtier!! else scoringObject?.gradetier!!
         tier.forEach {
