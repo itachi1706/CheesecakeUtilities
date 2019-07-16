@@ -1,18 +1,18 @@
 package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by itachi1706 on 2/20/2016.
