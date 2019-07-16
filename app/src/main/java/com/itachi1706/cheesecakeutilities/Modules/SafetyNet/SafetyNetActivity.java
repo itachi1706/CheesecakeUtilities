@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
@@ -82,10 +84,13 @@ public class SafetyNetActivity extends BaseModuleActivity {
         LogHelper.d(TAG, "Package: " + this.getPackageName());
 
         LogHelper.d(TAG, "SafetyNet start request");
+        Trace safetyNetTrace = FirebasePerformance.getInstance().newTrace("safetynet_validation");
+        safetyNetTrace.start();
         safetyNetHelper.requestTest(this, new SafetyNetHelper.SafetyNetWrapperCallback() {
             @Override
             public void error(int errorCode, String errorMessage) {
                 showLoading(false);
+                safetyNetTrace.stop();
                 handleError(errorCode, errorMessage);
             }
 
@@ -94,7 +99,7 @@ public class SafetyNetActivity extends BaseModuleActivity {
                 LogHelper.d(TAG, "SafetyNet req success: ctsProfileMatch:" + ctsProfileMatch + " and basicIntegrity, " + basicIntegrity);
                 showLoading(false);
                 updateUIWithSuccessfulResult(safetyNetHelper.getLastResponse());
-
+                safetyNetTrace.stop();
             }
         });
     }

@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsApiGraphActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsDetailActivity;
@@ -389,9 +391,13 @@ public class ListApplicationFragment extends Fragment {
             final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
             finalStr = new ArrayList<>();
             appPackageNamesCleaned.clear();
+            Trace appTrace = FirebasePerformance.getInstance().newTrace("load_app_list");
+            appTrace.start();
+            appTrace.putMetric("app_item_count", pkgAppsList.size());
             for (ApplicationInfo i : pkgAppsList) {
                 appPackageNamesInstalled.add(i.packageName);
                 if (isSystemApp(i) && !system) continue;
+                appTrace.incrementMetric("app_item_count_actual", 1);
                 appPackageNamesCleaned.add(i.packageName);
                 String version = "Unknown";
                 try {
@@ -412,6 +418,7 @@ public class ListApplicationFragment extends Fragment {
                 item.setVersion(version);
                 finalStr.add(item);
             }
+            appTrace.stop();
 
             finalAdapter = new AppsAdapter(finalStr);
             finalAdapter.sort();
