@@ -85,8 +85,13 @@ class ModuleListFragment : Fragment() {
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
             val pos = viewHolder.adapterPosition
             val moduleSelected = modules[pos]
-            // TODO: Switch fragment with the selected module
-            Snackbar.make(view, "Unimplemented. Selected: ${moduleSelected.name}", Snackbar.LENGTH_LONG).show()
+            // FUTURE_TODO: Maybe swap edit to a screen with all the module information
+            startActivity(Intent(context, AddModuleActivity::class.java).apply {
+                putExtra("userid", callback?.getUserId())
+                putExtra("institute", selectedInstitutionString)
+                putExtra("key", selectedSemesterKey)
+                putExtra("editmode", moduleSelected.courseCode)
+            })
         })
 
         adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener { menu, view, _ ->
