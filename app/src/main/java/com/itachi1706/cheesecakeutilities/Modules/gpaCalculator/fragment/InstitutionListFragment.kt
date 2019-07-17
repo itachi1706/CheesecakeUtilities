@@ -6,10 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddInstitutionActivity
@@ -20,7 +16,6 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCa
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
@@ -32,28 +27,15 @@ class InstitutionListFragment : BaseGpaFragment() {
     private val state = MainViewActivity.STATE_INSTITUTION
 
     private val institutions: ArrayList<GpaInstitution> = ArrayList()
-    private lateinit var adapter: GpaRecyclerAdapter
 
     override fun getLogTag(): String { return TAG }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_recycler_view, container, false)
-        val recyclerView = v.findViewById<RecyclerView>(R.id.main_menu_recycler_view)
+    override fun getState(): Int { return state }
 
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        val itemTouchHelper = ItemTouchHelper(SwipeEditDeleteCallback(this, v.context))
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+    override fun evaluateToCont(v: View): Boolean { return true }
 
-        // Update layout
-        adapter = GpaRecyclerAdapter(arrayListOf(), false)
-        recyclerView.adapter = adapter
-
-        callback?.onStateSwitch(state)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
 
         adapter.setOnClickListener(View.OnClickListener { view ->
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder

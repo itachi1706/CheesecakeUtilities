@@ -6,10 +6,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddSemesterActivity
@@ -21,7 +17,6 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecyc
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
@@ -35,7 +30,6 @@ class SemesterListFragment : BaseGpaFragment() {
     private val semesters: ArrayList<GpaSemester> = ArrayList()
     private val semesterKeys: ArrayList<String> = ArrayList()
 
-    private lateinit var adapter: GpaRecyclerAdapter
     private var selectedInstitutionString: String? = null
     private var selectedInstitutionType: String? = null
 
@@ -44,33 +38,22 @@ class SemesterListFragment : BaseGpaFragment() {
 
     override fun getLogTag(): String { return TAG }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_recycler_view, container, false)
-        val recyclerView = v.findViewById<RecyclerView>(R.id.main_menu_recycler_view)
+    override fun getState(): Int { return state }
 
+    override fun evaluateToCont(v: View): Boolean {
         selectedInstitutionString = arguments?.getString("selection")
         if (selectedInstitutionString == null) {
             LogHelper.e(TAG, "Institution not selected!")
             Snackbar.make(v, "An error has occurred. (Institution not found)", Snackbar.LENGTH_LONG).show()
             callback?.goBack()
-            return v
+            return false
         }
         selectedInstitutionType = arguments?.getString("type")
+        return true
+    }
 
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        val itemTouchHelper = ItemTouchHelper(SwipeEditDeleteCallback(this, v.context))
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-
-        // Update layout
-        adapter = GpaRecyclerAdapter(arrayListOf(), false)
-        recyclerView.adapter = adapter
-
-        callback?.onStateSwitch(state)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
 
         adapter.setOnClickListener(View.OnClickListener { view ->
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
