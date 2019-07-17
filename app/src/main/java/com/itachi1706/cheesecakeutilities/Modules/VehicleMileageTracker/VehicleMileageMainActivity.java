@@ -11,10 +11,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
@@ -25,6 +27,7 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback;
 import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 import com.turingtechnologies.materialscrollbar.DateAndTimeIndicator;
@@ -40,7 +43,7 @@ import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.V
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
 
-public class VehicleMileageMainActivity extends BaseModuleActivity {
+public class VehicleMileageMainActivity extends BaseModuleActivity implements SwipeEditDeleteCallback.ISwipeCallback {
 
     private static final String TAG = "VehMileageMain";
 
@@ -94,6 +97,8 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
+            ItemTouchHelper helper = new ItemTouchHelper(new SwipeEditDeleteCallback(this, this, ItemTouchHelper.LEFT));
+            helper.attachToRecyclerView(recyclerView);
 
             // Set up layout
             adapter = new VehicleMileageRecordsAdapter(new ArrayList<>(), new ArrayList<>(), null, sp.getBoolean(MILEAGE_DEC, true));
@@ -233,5 +238,32 @@ public class VehicleMileageMainActivity extends BaseModuleActivity {
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean edit(@Nullable Integer position) {
+        if (position == null) return false;
+        String uid = sp.getString("firebase_uid", "");
+        Intent intent = new Intent(this, AddNewMileageRecordActivity.class);
+        intent.putExtra("edit", adapter.getItemTag(position));
+        if (!uid.isEmpty()) intent.putExtra("uid", uid);
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean delete(@Nullable Integer position) {
+        if (position == null) return false;
+        String tag = adapter.getItemTag(position);
+        Record r = adapter.getRecord(position);
+        DatabaseReference ref = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
+                .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
+                .child(tag);//.removeValue();
+        ref.removeValue();
+        Snackbar.make(findViewById(android.R.id.content), "Record Deleted", Snackbar.LENGTH_LONG).setAction("Undo", v -> {
+            ref.setValue(r);
+            Snackbar.make(v, "Delete Undone", Snackbar.LENGTH_SHORT).show();
+        }).show();
+        return false;
     }
 }

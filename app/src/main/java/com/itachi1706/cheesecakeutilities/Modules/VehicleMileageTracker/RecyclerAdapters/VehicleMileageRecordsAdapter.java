@@ -123,6 +123,14 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
         return new Date(recordsList.get(element).getDatetimeFrom());
     }
 
+    public String getItemTag(int position) {
+        return (this.hideTraining) ? hiddenTags.get(position) : tags.get(position);
+    }
+
+    public Record getRecord(int position) {
+        return (this.hideTraining) ? hidden.get(position) : recordsList.get(position);
+    }
+
 
     class VehicleMileageRecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
