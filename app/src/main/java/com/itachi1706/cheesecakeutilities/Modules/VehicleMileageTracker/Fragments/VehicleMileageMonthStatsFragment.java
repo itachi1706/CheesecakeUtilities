@@ -1,6 +1,5 @@
 package com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments;
 
-
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
