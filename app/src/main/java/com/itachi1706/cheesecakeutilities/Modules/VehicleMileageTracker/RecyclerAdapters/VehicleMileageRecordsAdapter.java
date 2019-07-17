@@ -7,13 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.AddNewMileageRecordActivity;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
@@ -81,7 +83,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     }
 
     @Override
-    public void onBindViewHolder(VehicleMileageRecordsViewHolder recordsViewHolder, int i) {
+    public void onBindViewHolder(@NonNull VehicleMileageRecordsViewHolder recordsViewHolder, int i) {
         Record s;
         if (this.hideTraining) s = hidden.get(i);
         else s = recordsList.get(i);
@@ -110,6 +112,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
     }
 
     @Override
+    @NonNull
     public VehicleMileageRecordsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
@@ -167,27 +170,25 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             message += "Mileage To: " + Companion.parseData(r.getMileageTo(), decimal) + " km\n";
             message += "Total Mileage: " + Companion.parseData(r.getTotalMileage(), decimal) + " km\n";
             message += "Training Mileage: " + ((r.getTrainingMileage()) ? "true" : "false") + "\n";
-            final View v1 = v;
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Mileage Record")
                     .setMessage(message).setPositiveButton(R.string.dialog_action_positive_close, null)
-                    .setNeutralButton("Delete", (dialog, which) -> new AlertDialog.Builder(v1.getContext()).setTitle("Deleting Mileage Record")
-                            .setMessage("Are you sure you want to delete this record? This cannot be reversed!" +
-                                    "\nID: " + tag)
-                            .setPositiveButton("Delete Anyway", (dialog1, which1) -> {
-                                SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v1.getContext());
-                                VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
-                                        .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
-                                        .child(tag).removeValue();
-                                Toast.makeText(v1.getContext(), "Deleted record", Toast.LENGTH_SHORT).show();
-
-                            }).setNegativeButton("No", null).show()).setNegativeButton("Edit", (dialogInterface, i) -> {
-                        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v1.getContext());
+                    .setNeutralButton("Delete", (dialog, which) -> {
+                                SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v.getContext());
+                                DatabaseReference ref = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
+                                        .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS).child(tag);
+                                ref.removeValue();
+                                Snackbar.make(v, "Record Deleted", Snackbar.LENGTH_LONG).setAction("Undo", v2 -> {
+                                    ref.setValue(r);
+                                    Snackbar.make(v2, "Delete Undone", Snackbar.LENGTH_SHORT).show();
+                                }).show();
+                            }).setNegativeButton("Edit", (dialogInterface, i) -> {
+                        SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v.getContext());
                         String uid = sp.getString("firebase_uid", "");
-                        Intent intent = new Intent(v1.getContext(), AddNewMileageRecordActivity.class);
+                        Intent intent = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
                         intent.putExtra("edit", tag);
                         if (!uid.isEmpty()) intent.putExtra("uid", uid);
-                        v1.getContext().startActivity(intent);
+                        v.getContext().startActivity(intent);
                     }).show();
         }
     }

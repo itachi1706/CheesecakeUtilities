@@ -257,8 +257,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity implements Sw
         String tag = adapter.getItemTag(position);
         Record r = adapter.getRecord(position);
         DatabaseReference ref = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
-                .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS)
-                .child(tag);//.removeValue();
+                .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS).child(tag);
         ref.removeValue();
         Snackbar.make(findViewById(android.R.id.content), "Record Deleted", Snackbar.LENGTH_LONG).setAction("Undo", v -> {
             ref.setValue(r);
