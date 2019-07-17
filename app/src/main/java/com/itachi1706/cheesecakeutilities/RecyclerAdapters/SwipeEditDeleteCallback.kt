@@ -2,8 +2,6 @@ package com.itachi1706.cheesecakeutilities.RecyclerAdapters
 
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.ColorDrawable
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.itachi1706.appupdater.Util.BitmapUtil
@@ -17,19 +15,13 @@ import com.itachi1706.cheesecakeutilities.Util.ColorUtils
 class SwipeEditDeleteCallback(var callback: ISwipeCallback, var context: Context, var editSwipeDirection: Int = ItemTouchHelper.LEFT) :
         ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-    private val editBackground: ColorDrawable = ColorDrawable(ColorUtils.getColorFromVariable(context, ColorUtils.DARK_YELLOW))
-    private val deleteBackground: ColorDrawable = ColorDrawable(Color.RED)
-    private val iconColor: Paint = Paint().apply {
-        val res = ResourcesCompat.getColor(context.resources, R.color.white, null)
-        color = res
-        colorFilter = PorterDuffColorFilter(res, PorterDuff.Mode.SRC_ATOP)
-    }
-    private val editBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_edit) //BitmapFactory.decodeResource(context.resources, R.drawable.ic_edit)
-    private val deleteBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_delete_24dp) //BitmapFactory.decodeResource(context.resources, R.drawable.ic_delete_24dp)
+    private val editBackground: Int = ColorUtils.getColorFromVariable(context, ColorUtils.DARK_YELLOW)
+    private val deleteBackground: Int = Color.RED
+    private val iconColor: Paint = Paint().apply { color = Color.WHITE; colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP) }
+    private val editBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_edit)
+    private val deleteBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_delete_24dp)
 
-    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        return false
-    }
+    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val pos = viewHolder.adapterPosition
@@ -48,7 +40,7 @@ class SwipeEditDeleteCallback(var callback: ISwipeCallback, var context: Context
 
             val height = itemView.bottom.toFloat() - itemView.top.toFloat()
             val width = height / 3
-            val p = Paint().apply { color = selectedBackground.color }
+            val p = Paint().apply { color = selectedBackground }
 
             when (swipeDirection) {
                 ItemTouchHelper.RIGHT -> {
