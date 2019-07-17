@@ -66,7 +66,7 @@ public class GenerateMileageRecordActivity extends AppCompatActivity {
 
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         maxPerRecord = Integer.parseInt(sp.getString("veh_mileage_report_rows", "38"));
-        user_id = sp.getString("firebase_uid", "nien");
+        user_id = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp);
         decimal = sp.getBoolean(MILEAGE_DEC, true);
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity

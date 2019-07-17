@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.*
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddInstitutionActivity
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCalcCallback
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
@@ -27,26 +27,15 @@ class InstitutionListFragment : BaseGpaFragment() {
     private val state = MainViewActivity.STATE_INSTITUTION
 
     private val institutions: ArrayList<GpaInstitution> = ArrayList()
-    private lateinit var adapter: GpaRecyclerAdapter
 
     override fun getLogTag(): String { return TAG }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_recycler_view, container, false)
-        val recyclerView = v.findViewById<RecyclerView>(R.id.main_menu_recycler_view)
+    override fun getState(): Int { return state }
 
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.itemAnimator = DefaultItemAnimator()
+    override fun evaluateToCont(v: View): Boolean { return true }
 
-        // Update layout
-        adapter = GpaRecyclerAdapter(arrayListOf(), false)
-        recyclerView.adapter = adapter
-
-        callback?.onStateSwitch(state)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
 
         adapter.setOnClickListener(View.OnClickListener { view ->
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
@@ -58,8 +47,7 @@ class InstitutionListFragment : BaseGpaFragment() {
         adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener{menu, view, _ ->
             // Get selected institution
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
-            institutionContextSel = institutions[viewHolder.adapterPosition]
-            if (institutionContextSel == null) return@OnCreateContextMenuListener // Do nothing
+            if (!initContextSelectMode(viewHolder.adapterPosition)) return@OnCreateContextMenuListener // Do nothing
             menu.setHeaderTitle("${institutionContextSel!!.name} (${institutionContextSel!!.shortName})")
             activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
         })
@@ -71,22 +59,39 @@ class InstitutionListFragment : BaseGpaFragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         LogHelper.d(TAG, "Context Item Selected")
         if (institutionContextSel == null) return false
-        when (item.itemId) {
-            R.id.menu_edit -> startActivity(Intent(context, AddInstitutionActivity::class.java).apply {
-                putExtra("userid", callback?.getUserId())
-                putExtra("editmode", institutionContextSel!!.shortName)
-            })
-            R.id.menu_delete -> {
-                val instituteToDelete = institutionContextSel!!.copy()
-                val data = callback?.getUserData() ?: return false
-                data.child(instituteToDelete.shortName).removeValue()
-                Snackbar.make(view!!, "Institute Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
-                    data.child(instituteToDelete.shortName).setValue(instituteToDelete)
-                    Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
-                }.show()
-            }
-            else -> return super.onContextItemSelected(item)
+        return when (item.itemId) {
+            R.id.menu_edit -> edit(null)
+            R.id.menu_delete -> delete(null)
+            else -> super.onContextItemSelected(item)
         }
+    }
+
+    override fun initContextSelectMode(position: Int): Boolean {
+        institutionContextSel = institutions[position]
+        if (institutionContextSel == null) return false
+        return true
+    }
+
+    override fun edit(position: Int?): Boolean {
+        if (position != null) if (!initContextSelectMode(position)) return false
+
+        startActivity(Intent(context, AddInstitutionActivity::class.java).apply {
+            putExtra("userid", callback?.getUserId())
+            putExtra("editmode", institutionContextSel!!.shortName)
+        })
+        return true
+    }
+
+    override fun delete(position: Int?): Boolean {
+        if (position != null) if (!initContextSelectMode(position)) return false
+
+        val instituteToDelete = institutionContextSel!!.copy()
+        val data = callback?.getUserData() ?: return false
+        data.child(instituteToDelete.shortName).removeValue()
+        Snackbar.make(view!!, "Institute Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
+            data.child(instituteToDelete.shortName).setValue(instituteToDelete)
+            Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
+        }.show()
         return true
     }
 

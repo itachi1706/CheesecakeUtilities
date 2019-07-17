@@ -54,7 +54,7 @@ public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBa
 
     public void updateStats() {
         if (!done) return;
-        final String user_id = sp.getString("firebase_uid", "nien");
+        final String user_id = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp);
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
