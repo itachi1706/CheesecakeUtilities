@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.InstitutionListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.ModuleListFragment
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment.SemesterListFragment
@@ -46,7 +47,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         defaultActionBarText = supportActionBar?.title.toString()
 
-        userId = PreferenceManager.getDefaultSharedPreferences(this).getString("firebase_uid", "nien") ?: "nien"
+        userId = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(PreferenceManager.getDefaultSharedPreferences(this)) ?: "nien"
         if (userId.equals("nien", ignoreCase = true)) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show()

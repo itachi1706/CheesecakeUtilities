@@ -67,7 +67,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity implements Sw
 
         // Do Firebase Setup
         sp = PrefHelper.getDefaultSharedPreferences(this);
-        final String user_id = sp.getString("firebase_uid", "nien");
+        final String user_id = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp);
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(this, "Invalid Login Token", Toast.LENGTH_SHORT).show();
@@ -243,7 +243,7 @@ public class VehicleMileageMainActivity extends BaseModuleActivity implements Sw
     @Override
     public boolean edit(@Nullable Integer position) {
         if (position == null) return false;
-        String uid = sp.getString("firebase_uid", "");
+        String uid = sp.getString(VehMileageFirebaseUtils.FB_UID, "");
         Intent intent = new Intent(this, AddNewMileageRecordActivity.class);
         intent.putExtra("edit", adapter.getItemTag(position));
         if (!uid.isEmpty()) intent.putExtra("uid", uid);
@@ -257,12 +257,12 @@ public class VehicleMileageMainActivity extends BaseModuleActivity implements Sw
         String tag = adapter.getItemTag(position);
         Record r = adapter.getRecord(position);
         DatabaseReference ref = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
-                .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS).child(tag);
+                .child(VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp)).child(FB_REC_RECORDS).child(tag);
         ref.removeValue();
         Snackbar.make(findViewById(android.R.id.content), "Record Deleted", Snackbar.LENGTH_LONG).setAction("Undo", v -> {
             ref.setValue(r);
             Snackbar.make(v, "Delete Undone", Snackbar.LENGTH_SHORT).show();
         }).show();
-        return false;
+        return true;
     }
 }

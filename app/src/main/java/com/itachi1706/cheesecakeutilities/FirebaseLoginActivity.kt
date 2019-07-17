@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.itachi1706.appupdater.Util.NotifyUserUtil
+import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
 class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnectionFailedListener {
@@ -31,7 +32,6 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
     companion object {
         private const val TAG: String = "FirebaseLoginActivity"
         private const val RC_SIGN_IN: Int = 9001
-        private const val FB_UID: String = "firebase_uid"
 
         /**
          * Intent to forward to after successful sign in
@@ -123,7 +123,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
 
     private fun signout(supress: Boolean) {
         mAuth.signOut()
-        if (sp.contains(FB_UID)) sp.edit().remove(FB_UID).apply()
+        if (sp.contains(VehMileageFirebaseUtils.FB_UID)) sp.edit().remove(VehMileageFirebaseUtils.FB_UID).apply()
         updateUI(null, supress)
     }
 
@@ -186,7 +186,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         progress.visibility = View.GONE
         if (user != null) { // There's a user
             if (!supress) NotifyUserUtil.createShortToast(this, "Signed in!")
-            sp.edit().putString(FB_UID, user.uid).apply()
+            sp.edit().putString(VehMileageFirebaseUtils.FB_UID, user.uid).apply()
             var login = user.displayName
             if (login == null) login = user.email
             tvSignInAs.text = "Signed in as $login"
@@ -201,7 +201,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
             }
         } else {
             if (!supress) NotifyUserUtil.createShortToast(this, "Currently Logged Out")
-            sp.edit().remove(FB_UID).apply()
+            sp.edit().remove(VehMileageFirebaseUtils.FB_UID).apply()
             tvSignInAs.text = "Currently Logged Out"
             showHideLogin(true)
         }

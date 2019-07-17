@@ -176,7 +176,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                     .setNeutralButton("Delete", (dialog, which) -> {
                                 SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v.getContext());
                                 DatabaseReference ref = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
-                                        .child(sp.getString("firebase_uid", "nien")).child(FB_REC_RECORDS).child(tag);
+                                        .child(VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp)).child(FB_REC_RECORDS).child(tag);
                                 ref.removeValue();
                                 Snackbar.make(v, "Record Deleted", Snackbar.LENGTH_LONG).setAction("Undo", v2 -> {
                                     ref.setValue(r);
@@ -184,7 +184,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
                                 }).show();
                             }).setNegativeButton("Edit", (dialogInterface, i) -> {
                         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v.getContext());
-                        String uid = sp.getString("firebase_uid", "");
+                        String uid = sp.getString(VehMileageFirebaseUtils.FB_UID, "");
                         Intent intent = new Intent(v.getContext(), AddNewMileageRecordActivity.class);
                         intent.putExtra("edit", tag);
                         if (!uid.isEmpty()) intent.putExtra("uid", uid);

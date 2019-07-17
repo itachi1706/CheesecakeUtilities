@@ -54,7 +54,7 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
 
         // Keep Firebase synced
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
-        String user_id = sp.getString("firebase_uid", "nien");
+        String user_id = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp);
         if (!user_id.equals("nien")) {
             DatabaseReference dbRef = VehMileageFirebaseUtils.getVehicleMileageDatabase();
             dbRef.child(FB_REC_USER).child(user_id).child(FB_REC_STATS).keepSynced(true);
