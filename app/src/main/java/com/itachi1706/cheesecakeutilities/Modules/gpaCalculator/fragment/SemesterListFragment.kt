@@ -7,16 +7,21 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.*
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddSemesterActivity
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
@@ -58,6 +63,8 @@ class SemesterListFragment : BaseGpaFragment() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
+        val itemTouchHelper = ItemTouchHelper(SwipeEditDeleteCallback(this, v.context))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
         // Update layout
         adapter = GpaRecyclerAdapter(arrayListOf(), false)
@@ -76,9 +83,7 @@ class SemesterListFragment : BaseGpaFragment() {
         adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener { menu, view, _ ->
             // Get selected institution
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
-            semesterContextSel = semesters[viewHolder.adapterPosition]
-            semesterContextKeySel = semesterKeys[viewHolder.adapterPosition]
-            if (semesterContextSel == null) return@OnCreateContextMenuListener // Do nothing
+            if (!initContextSelectMode(viewHolder.adapterPosition)) return@OnCreateContextMenuListener // Do nothing
             menu.setHeaderTitle(semesterContextSel!!.name)
             activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
         })
@@ -95,23 +100,41 @@ class SemesterListFragment : BaseGpaFragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         LogHelper.d(TAG, "Context Item Selected")
         if (semesterContextKeySel == null || semesterContextSel == null) return false
-        when (item.itemId) {
-            R.id.menu_edit -> startActivity(Intent(context, AddSemesterActivity::class.java).apply {
-                putExtra("userid", callback?.getUserId())
-                putExtra("institute", selectedInstitutionString)
-                putExtra("editmode", semesterContextKeySel)
-            })
-            R.id.menu_delete -> {
-                val semesterToDelete = semesterContextSel!!.copy()
-                val data = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER) ?: return false
-                data.child(semesterContextKeySel!!).removeValue()
-                Snackbar.make(view!!, "Semester Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
-                    data.child(semesterContextKeySel!!).setValue(semesterToDelete)
-                    Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
-                }.show()
-            }
-            else -> return super.onContextItemSelected(item)
+        return when (item.itemId) {
+            R.id.menu_edit -> edit(null)
+            R.id.menu_delete -> delete(null)
+            else -> super.onContextItemSelected(item)
         }
+    }
+
+    override fun initContextSelectMode(position: Int): Boolean {
+        semesterContextKeySel = semesterKeys[position]
+        semesterContextSel = semesters[position]
+        if (semesterContextSel == null) return false
+        return true
+    }
+
+    override fun edit(position: Int?): Boolean {
+        if (position != null) if (!initContextSelectMode(position)) return false
+
+        startActivity(Intent(context, AddSemesterActivity::class.java).apply {
+            putExtra("userid", callback?.getUserId())
+            putExtra("institute", selectedInstitutionString)
+            putExtra("editmode", semesterContextKeySel)
+        })
+        return true
+    }
+
+    override fun delete(position: Int?): Boolean {
+        if (position != null) if (!initContextSelectMode(position)) return false
+
+        val semesterToDelete = semesterContextSel!!.copy()
+        val data = callback?.getUserData()?.child(selectedInstitutionString!!)?.child(GpaCalcFirebaseUtils.FB_REC_SEMESTER) ?: return false
+        data.child(semesterContextKeySel!!).removeValue()
+        Snackbar.make(view!!, "Semester Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
+            data.child(semesterContextKeySel!!).setValue(semesterToDelete)
+            Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
+        }.show()
         return true
     }
 

@@ -7,6 +7,7 @@ import com.google.firebase.database.ValueEventListener
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 import java.util.*
@@ -15,7 +16,7 @@ import java.util.*
  * Created by Kenneth on 16/7/2019.
  * for com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.fragment in CheesecakeUtilities
  */
-abstract class BaseGpaFragment : Fragment() {
+abstract class BaseGpaFragment : Fragment(), SwipeEditDeleteCallback.ISwipeCallback {
     var callback: StateSwitchListener? = null
 
     override fun onAttach(context: Context) {
@@ -45,6 +46,7 @@ abstract class BaseGpaFragment : Fragment() {
     }
 
     abstract fun getLogTag(): String
+    abstract fun initContextSelectMode(position: Int): Boolean
 
     fun getTimestampString(startTimestamp: Long, endTimestamp: Long): String {
         val calendar = Calendar.getInstance()

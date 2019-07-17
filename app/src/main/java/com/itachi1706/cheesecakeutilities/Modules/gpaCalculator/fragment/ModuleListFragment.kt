@@ -7,17 +7,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
-import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.*
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.AddModuleActivity
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaCalcFirebaseUtils
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapter
+import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModule
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.Util.LogHelper
 
@@ -60,6 +65,8 @@ class ModuleListFragment : BaseGpaFragment() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
+        val itemTouchHelper = ItemTouchHelper(SwipeEditDeleteCallback(this, v.context))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
         // Update layout
         adapter = GpaRecyclerAdapter(arrayListOf(), false)
@@ -83,8 +90,7 @@ class ModuleListFragment : BaseGpaFragment() {
         adapter.setOnCreateContextMenuListener(View.OnCreateContextMenuListener { menu, view, _ ->
             // Get selected institution
             val viewHolder = view.tag as GpaRecyclerAdapter.GpaViewHolder
-            moduleContextSel = modules[viewHolder.adapterPosition]
-            if (moduleContextSel == null) return@OnCreateContextMenuListener // Do nothing
+            if (!initContextSelectMode(viewHolder.adapterPosition)) return@OnCreateContextMenuListener // Do nothing
             menu.setHeaderTitle("${moduleContextSel!!.name} [${moduleContextSel!!.courseCode}]")
             activity?.menuInflater?.inflate(R.menu.context_menu_editdelete, menu)
         })
@@ -100,24 +106,41 @@ class ModuleListFragment : BaseGpaFragment() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         LogHelper.d(TAG, "Context Item Selected")
         if (moduleContextSel == null) return false
-        when (item.itemId) {
-            R.id.menu_edit -> startActivity(Intent(context, AddModuleActivity::class.java).apply {
-                putExtra("userid", callback?.getUserId())
-                putExtra("institute", selectedInstitutionString)
-                putExtra("key", selectedSemesterKey)
-                putExtra("editmode", moduleContextSel!!.courseCode)
-            })
-            R.id.menu_delete -> {
-                val moduleToDelete = moduleContextSel!!.copy()
-                val data = getPath() ?: return false
-                data.child(moduleToDelete.courseCode).removeValue()
-                Snackbar.make(view!!, "Module Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
-                    data.child(moduleToDelete.courseCode).setValue(moduleToDelete)
-                    Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
-                }.show()
-            }
-            else -> return super.onContextItemSelected(item)
+        return when (item.itemId) {
+            R.id.menu_edit -> edit(null)
+            R.id.menu_delete -> delete(null)
+            else -> super.onContextItemSelected(item)
         }
+    }
+
+    override fun initContextSelectMode(position: Int): Boolean {
+        moduleContextSel = modules[position]
+        if (moduleContextSel == null) return false
+        return true
+    }
+
+    override fun edit(position: Int?): Boolean {
+        if (position != null) if (!initContextSelectMode(position)) return false
+
+        startActivity(Intent(context, AddModuleActivity::class.java).apply {
+            putExtra("userid", callback?.getUserId())
+            putExtra("institute", selectedInstitutionString)
+            putExtra("key", selectedSemesterKey)
+            putExtra("editmode", moduleContextSel!!.courseCode)
+        })
+        return true
+    }
+
+    override fun delete(position: Int?): Boolean {
+        if (position != null) if (!initContextSelectMode(position)) return false
+
+        val moduleToDelete = moduleContextSel!!.copy()
+        val data = getPath() ?: return false
+        data.child(moduleToDelete.courseCode).removeValue()
+        Snackbar.make(view!!, "Module Deleted", Snackbar.LENGTH_LONG).setAction("Undo") { v ->
+            data.child(moduleToDelete.courseCode).setValue(moduleToDelete)
+            Snackbar.make(v, "Delete undone", Snackbar.LENGTH_SHORT).show()
+        }.show()
         return true
     }
 
