@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -57,6 +58,7 @@ public class LyricFinderActivity extends BaseModuleActivity {
     private static final String TAG = "LyricFinder";
 
     @Override
+    @NonNull
     public String getHelpDescription() {
         String msg = "Shows the lyrics (if available) of the currently playing media";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)

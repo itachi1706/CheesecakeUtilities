@@ -5,16 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.Util.URLHelper;
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 
 /**
@@ -58,20 +53,8 @@ public class RetrieveLyricTask extends AsyncTask<String, Void, Void> {
         try {
             String url = CommonVariables.BASE_API_URL + "lyricget.php?title=" +
                     URLEncoder.encode(title, "UTF-8") + "&artist=" + URLEncoder.encode(artist, "UTF-8");
-            URL urlConn = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
-            conn.setConnectTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
-            conn.setReadTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
-            InputStream in = conn.getInputStream();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder str = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                str.append(line).append("\n");
-            }
-            in.close();
-            tmp = str.toString();
+            URLHelper urlHelper = new URLHelper(url);
+            tmp = urlHelper.executeString();
         } catch (IOException e) {
             e.printStackTrace();
         }

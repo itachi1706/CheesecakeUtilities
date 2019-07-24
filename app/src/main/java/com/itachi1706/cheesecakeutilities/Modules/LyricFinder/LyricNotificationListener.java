@@ -13,6 +13,7 @@ import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Build;
+import android.os.StrictMode;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
@@ -168,7 +169,9 @@ public class LyricNotificationListener extends NotificationListenerService {
     }
 
     private Uri saveImageTmpAndGetUri() {
-        //noinspection ConstantConditions
+        StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder(old)
+                .permitCustomSlowCalls().permitDiskWrites().permitDiskReads().build());
         File cache = new File(getExternalCacheDir(), "images_cache");
         //noinspection ResultOfMethodCallIgnored
         cache.mkdirs();
@@ -177,7 +180,7 @@ public class LyricNotificationListener extends NotificationListenerService {
             nowPlaying.getAlbumart().compress(Bitmap.CompressFormat.PNG, 100, s);
             s.close();
         } catch (IOException e) {
-            LogHelper.e(TAG, "Failed to create temp barcode file");
+            LogHelper.e(TAG, "Failed to create temp albumart file");
             e.printStackTrace();
             return null;
         }
@@ -189,6 +192,7 @@ public class LyricNotificationListener extends NotificationListenerService {
             LogHelper.e(TAG, "Failed to share file, invalid contentUri");
             return null;
         }
+        StrictMode.setThreadPolicy(old);
 
         return contentUri;
     }

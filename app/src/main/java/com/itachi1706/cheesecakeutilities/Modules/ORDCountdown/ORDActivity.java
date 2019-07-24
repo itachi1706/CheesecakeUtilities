@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.appupdater.Util.UpdaterHelper;
+import com.itachi1706.appupdater.Util.URLHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHolidayItem;
@@ -27,12 +27,7 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.JSONHelper;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -322,28 +317,13 @@ public class ORDActivity extends BaseModuleActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            String url = "http://api.itachi1706.com/api/gcal_sg_holidays.php";
+            String url = "https://api.itachi1706.com/api/gcal_sg_holidays.php";
             String tmp;
+            URLHelper urlHelper = new URLHelper(url);
             try {
-                URL urlConn = new URL(url);
-                HttpURLConnection conn = (HttpURLConnection) urlConn.openConnection();
-                conn.setConnectTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
-                conn.setReadTimeout(UpdaterHelper.HTTP_QUERY_TIMEOUT);
-                InputStream in = conn.getInputStream();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                StringBuilder str = new StringBuilder();
-                String line;
-                while((line = reader.readLine()) != null)
-                {
-                    str.append(line).append("\n");
-                }
-                in.close();
-                tmp = str.toString();
-
+                tmp = urlHelper.executeString();
                 SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(getApplicationContext());
                 sp.edit().putString(ORD_HOLIDAY_PREF, tmp).apply();
-
                 runOnUiThread(ORDActivity.this::repopulateAdapter);
             } catch (IOException e) {
                 e.printStackTrace();
