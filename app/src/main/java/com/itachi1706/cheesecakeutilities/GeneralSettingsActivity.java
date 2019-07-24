@@ -1,14 +1,13 @@
 package com.itachi1706.cheesecakeutilities;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.Preference;
 
 import com.itachi1706.appupdater.EasterEggResMusicPrefFragment;
 import com.itachi1706.appupdater.SettingsInitializer;
@@ -20,13 +19,13 @@ import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
 
 import de.psdev.licensesdialog.LicensesDialog;
 
-
+@SuppressWarnings("ConstantConditions")
 public class GeneralSettingsActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
     }
@@ -37,8 +36,7 @@ public class GeneralSettingsActivity extends AppCompatActivity {
      */
     public static class GeneralPreferenceFragment extends EasterEggResMusicPrefFragment {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.pref_general);
 
             new SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(getActivity(), R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL,
