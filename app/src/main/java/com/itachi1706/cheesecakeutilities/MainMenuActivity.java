@@ -65,7 +65,7 @@ public class MainMenuActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-        GeneralSettingsActivity.GeneralPreferenceFragment.updateDarkModeSetting(sp.getString("app_theme", "batterydefault"));
+        GeneralSettingsActivity.GeneralPreferenceFragment.Companion.updateDarkModeSetting(sp.getString("app_theme", "batterydefault"));
 
         // Do Authentication
         if (!this.getIntent().getBooleanExtra("authagain", true)) {
