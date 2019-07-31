@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Institution Name"
-            android:inputType="text" />
+            android:inputType="textCapWords|textAutoCorrect" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
