@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities.Modules.ORDCountdown;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.appupdater.Util.URLHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHolidayItem;
@@ -27,7 +25,6 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.JSONHelper;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -35,14 +32,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ORDActivity extends BaseModuleActivity {
+public class ORDActivity extends BaseModuleActivity implements CalendarHolidayTask.CalendarHolidayCallback {
 
     RecyclerView recyclerView;
     TextView ordCounter, ordDaysLabel, ordProgress;
     ArcProgress progressBar;
     long ordDays, ptpDays, popDays, milestoneDays, pdoption;
 
-    private static final String ORD_HOLIDAY_PREF = "ord_sg_holidays";
+    public static final String ORD_HOLIDAY_PREF = "ord_sg_holidays";
     private static final long ORD_HOLIDAY_TIMEOUT = 86400000; // 24 hours timeout
 
     @Override
@@ -236,14 +233,14 @@ public class ORDActivity extends BaseModuleActivity {
         SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(this);
         String t = sp.getString(ORD_HOLIDAY_PREF, "---");
         if (t.equals("---") || !JSONHelper.isJsonValid(t)) {
-            new CalendarHolidayTask().execute();
+            new CalendarHolidayTask(this, this).execute();
             return null;
         }
         // Retrieve from cache and determine if its viable
         GCalHoliday hol = new Gson().fromJson(t, GCalHoliday.class);
         long curTime = System.currentTimeMillis();
         if (curTime - hol.getTimestampLong() > ORD_HOLIDAY_TIMEOUT) { // Greater than timeout, invalidate it as well
-            new CalendarHolidayTask().execute();
+            new CalendarHolidayTask(this, this).execute();
         }
         return hol;
     }
@@ -304,7 +301,7 @@ public class ORDActivity extends BaseModuleActivity {
                 new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
                         .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)
                         .setNeutralButton("Refresh", (dialog, which) -> {
-                            new CalendarHolidayTask().execute();
+                            new CalendarHolidayTask(this, this).execute();
                             Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();
                         })
                         .show();
@@ -313,22 +310,8 @@ public class ORDActivity extends BaseModuleActivity {
         }
     }
 
-    private class CalendarHolidayTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            String url = "https://api.itachi1706.com/api/gcal_sg_holidays.php";
-            String tmp;
-            URLHelper urlHelper = new URLHelper(url);
-            try {
-                tmp = urlHelper.executeString();
-                SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(getApplicationContext());
-                sp.edit().putString(ORD_HOLIDAY_PREF, tmp).apply();
-                runOnUiThread(ORDActivity.this::repopulateAdapter);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+    @Override
+    public void callback() {
+        repopulateAdapter();
     }
 }

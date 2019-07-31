@@ -20,7 +20,6 @@ import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class IpptScoringActivity extends AppCompatActivity {
 
@@ -105,28 +104,11 @@ public class IpptScoringActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         bar.setVisibility(View.VISIBLE);
         label.setVisibility(View.VISIBLE);
-        new ScoringUpdateTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ageGroup, gender, exercise);
-    }
-
-    private class ScoringUpdateTask extends AsyncTask<Integer, Void, Void> {
-
-        private List<String> results;
-
-        @Override
-        protected Void doInBackground(Integer... params) {
-            int ageGroup = params[0];
-            int gender = params[1];
-            int exercise = params[2];
-
-            results = JsonHelper.getExerciseScores(ageGroup, exercise, gender, getApplicationContext());
-            runOnUiThread(() -> {
-                StringRecyclerAdapter adapter = new StringRecyclerAdapter(results);
-                recyclerView.setAdapter(adapter);
-                bar.setVisibility(View.GONE);
-                label.setVisibility(View.GONE);
-            });
-
-            return null;
-        }
+        new ScoringUpdateTask(this, results -> {
+            StringRecyclerAdapter adapter1 = new StringRecyclerAdapter(results);
+            recyclerView.setAdapter(adapter1);
+            bar.setVisibility(View.GONE);
+            label.setVisibility(View.GONE);
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ageGroup, gender, exercise);
     }
 }

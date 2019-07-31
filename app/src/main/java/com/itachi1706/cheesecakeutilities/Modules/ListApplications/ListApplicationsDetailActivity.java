@@ -39,14 +39,12 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
-import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -443,57 +441,8 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setMessage("Backing up " + appName + "...");
         dialog.show();
-        new BackupAppThread(dialog, shareApk).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
+        new BackupAppThread(dialog, shareApk, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, appName, appPath, filepath);
         LogHelper.i("Backup", "Stopping Backup Process for " + packageName);
-    }
-
-    private class BackupAppThread extends AsyncTask<String, Void, Void> {
-
-        private ProgressDialog dialog;
-        private boolean shareApk = false;
-
-        BackupAppThread(ProgressDialog dialog, boolean shareApk) {
-            this.dialog = dialog;
-            this.shareApk = shareApk;
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            final String appName = params[0];
-            final String appPath = params[1];
-            final String filepath = params[2];
-            // Init
-            try {
-                if (!BackupHelper.backupApk(appPath, filepath)) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(getApplicationContext(), "Unable to create folder! Backup failed", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        Toast.makeText(getApplicationContext(), "Backup of " + appName + " completed", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-
-                        // If Share APK share the APK itself
-                        if (shareApk) {
-                            File shareFile = new File(BackupHelper.getFolder().getAbsolutePath() + "/" + filepath);
-                            if (!shareFile.exists())
-                                Toast.makeText(getApplicationContext(), "Unable to share file. File does not exist", Toast.LENGTH_SHORT).show();
-                            else {
-                                BackupHelper.shareFile("ShareApp", getApplicationContext(), shareFile, "Share with", "*/*");
-                            }
-                        }
-                    });
-                }
-            } catch (final IOException e) {
-                runOnUiThread(() -> {
-                    Toast.makeText(getApplicationContext(), "Error backuping app (" + e.getLocalizedMessage() + ")", Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
-                });
-                e.printStackTrace();
-            }
-            return null;
-        }
     }
 
     private static final int RC_HANDLE_REQUEST_STORAGE = 3;
