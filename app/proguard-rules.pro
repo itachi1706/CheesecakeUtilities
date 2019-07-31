@@ -20,4 +20,9 @@
 -dontobfuscate
 -dontwarn com.squareup.okhttp.**
 -dontwarn javax.xml.stream.**
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
