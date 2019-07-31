@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -32,11 +31,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.firebase.perf.FirebasePerformance;
-import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsApiGraphActivity;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.ListApplicationsDetailActivity;
+import com.itachi1706.cheesecakeutilities.Modules.ListApplications.LoadAppListTask;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
@@ -51,7 +49,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
@@ -64,10 +61,9 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeCsv;
  */
 public class ListApplicationFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    ProgressBar bar;
-    TextView label;
-    TouchScrollBar scrollBar;
+    private RecyclerView recyclerView;
+    private ProgressBar bar;
+    private TextView label;
 
     public ListApplicationFragment() {
         // Required empty constructor
@@ -84,7 +80,7 @@ public class ListApplicationFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        scrollBar = v.findViewById(R.id.scrollBar);
+        TouchScrollBar scrollBar = v.findViewById(R.id.scrollBar);
         scrollBar.setIndicator(new CustomIndicator(getActivity()), true);
 
         bar = v.findViewById(R.id.list_app_pb);
@@ -106,15 +102,24 @@ public class ListApplicationFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         bar.setVisibility(View.VISIBLE);
         label.setVisibility(View.VISIBLE);
-        new LoadAppThread().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, system);
-    }
+        if (getActivity() == null) return;
+        new LoadAppListTask(getActivity(), (appCount, appPackageNameInstall, appPackageNameClean, finalAdapter) -> {
+            appCountString = appCount;
+            appPackageNamesCleaned = appPackageNameClean;
+            appPackageNamesInstalled = appPackageNameInstall;
 
-    private boolean isSystemApp(ApplicationInfo i) {
-        return (i.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM;
+            // Done
+            getActivity().runOnUiThread(() -> {
+                recyclerView.setAdapter(finalAdapter);
+                bar.setVisibility(View.GONE);
+                label.setVisibility(View.GONE);
+                getActivity().invalidateOptionsMenu();
+            });
+        }, sortByApi).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, system);
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (appPackageNamesInstalled.size() == 0) return;
 
@@ -122,7 +127,7 @@ public class ListApplicationFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.modules_applist, menu);
         menu.findItem(R.id.systemapp).setChecked(checkSystem);
         menu.findItem(R.id.sortapi).setChecked(sortByApi);
@@ -201,16 +206,14 @@ public class ListApplicationFragment extends Fragment {
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         assert getActivity() != null;
-        switch (requestCode) {
-            case RC_HANDLE_REQUEST_STORAGE:
-                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    LogHelper.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
-                    scanGhostDir();
-                    return;
-                }
-                displayPermErrorMessage("You have denied the app ability to access your storage. This app will not be able to scan" +
-                        " for ghost directories or perform ghost directories cleanup for you", grantResults, getActivity());
-                break;
+        if (requestCode == RC_HANDLE_REQUEST_STORAGE) {
+            if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                LogHelper.i(PERM_MAN_TAG, "Storage Permission Granted. Allowing Utility Access");
+                scanGhostDir();
+                return;
+            }
+            displayPermErrorMessage("You have denied the app ability to access your storage. This app will not be able to scan" +
+                    " for ghost directories or perform ghost directories cleanup for you", grantResults, getActivity());
         }
     }
 
@@ -374,88 +377,5 @@ public class ListApplicationFragment extends Fragment {
                 return true;
             }).positiveText("Clean Up").negativeText(android.R.string.cancel).show();
         }
-    }
-
-    private class LoadAppThread extends AsyncTask<Boolean, Void, Void> {
-
-        private ArrayList<AppsItem> finalStr;
-
-        @Override
-        protected Void doInBackground(Boolean... params) {
-            boolean system = params[0];
-            if (getContext() == null) {
-                LogHelper.e("LoadApp", "An error occurred loading app list");
-                return null;
-            }
-            PackageManager pm = getContext().getPackageManager();
-            final List<ApplicationInfo> pkgAppsList = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-            finalStr = new ArrayList<>();
-            appPackageNamesCleaned.clear();
-            Trace appTrace = FirebasePerformance.getInstance().newTrace("load_app_list");
-            appTrace.start();
-            appTrace.putMetric("app_item_count", pkgAppsList.size());
-            for (ApplicationInfo i : pkgAppsList) {
-                appPackageNamesInstalled.add(i.packageName);
-                if (isSystemApp(i) && !system) continue;
-                appTrace.incrementMetric("app_item_count_actual", 1);
-                appPackageNamesCleaned.add(i.packageName);
-                String version = "Unknown";
-                try {
-                    PackageInfo pInfo = getContext().getPackageManager().getPackageInfo(i.packageName, 0);
-                    version = pInfo.versionName;
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    LogHelper.e("PInfoQuery", "Null pointer encountered (" + e.getLocalizedMessage() + ")");
-                }
-
-                AppsItem item = new AppsItem(getContext());
-                item.setApiVersion(i.targetSdkVersion);
-                item.setAppName(i.loadLabel(pm).toString());
-                item.setPackageName(i.packageName);
-                item.setIcon(i.loadIcon(pm));
-                item.setVersion(version);
-                finalStr.add(item);
-            }
-            appTrace.stop();
-
-            finalAdapter = new AppsAdapter(finalStr);
-            finalAdapter.sort();
-            // Further sort if by API
-            if (sortByApi) finalAdapter.sort(AppsAdapter.SORT_API);
-
-            // Generate app count by API List
-            appCountString = generateApiAppCountList();
-
-            // Done
-            getActivity().runOnUiThread(() -> {
-                recyclerView.setAdapter(finalAdapter);
-                bar.setVisibility(View.GONE);
-                label.setVisibility(View.GONE);
-                getActivity().invalidateOptionsMenu();
-            });
-            return null;
-        }
-
-        private String generateApiAppCountList() {
-            ArrayMap<Integer, Integer> tmp = new ArrayMap<>();
-            for (AppsItem appsItem : finalStr) {
-                int count = 0;
-                if (tmp.containsKey(appsItem.getApiVersion())) {
-                    count = tmp.get(appsItem.getApiVersion());
-                }
-                count++;
-                tmp.put(appsItem.getApiVersion(), count);
-            }
-
-            StringBuilder appCount = new StringBuilder();
-            for (Map.Entry<Integer, Integer> object : tmp.entrySet()) {
-                appCount.append(object.getKey()).append(":").append(object.getValue()).append("-");
-            }
-            return appCount.substring(0, appCount.length() - 1);
-        }
-
-        private AppsAdapter finalAdapter;
     }
 }
