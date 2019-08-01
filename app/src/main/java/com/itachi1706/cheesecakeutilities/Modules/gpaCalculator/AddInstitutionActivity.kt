@@ -108,8 +108,10 @@ class AddInstitutionActivity : AddActivityBase() {
                 supportActionBar?.subtitle = etName.text.toString()
 
                 // Handle start and end times
-                if (institute?.startTimestamp != null) startTime = institute!!.startTimestamp
-                if (institute?.endTimestamp != null && institute?.endTimestamp != (-1).toLong()) endTime = institute!!.endTimestamp
+                institute?.let {
+                    startTime = it.startTimestamp
+                    if (it.endTimestamp != (-1).toLong()) endTime = it.endTimestamp
+                }
                 GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
             }
         })
