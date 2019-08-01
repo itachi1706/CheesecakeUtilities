@@ -20,7 +20,7 @@ class AddSemesterActivity : AddActivityBase() {
     private var selectedInstitution: GpaInstitution? = null
     private lateinit var instituteString: String
 
-    private var startTime: Long = System.currentTimeMillis()
+    private var startTime: Long = -1
     private var endTime: Long = -1
 
     private lateinit var startDateListener: DatePickerDialog.OnDateSetListener
@@ -42,8 +42,13 @@ class AddSemesterActivity : AddActivityBase() {
         fromDate.setOnClickListener{
             val calendar = Calendar.getInstance()
             if (startTime > 0) calendar.timeInMillis = startTime
-            DatePickerDialog(this, startDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+            val dt = DatePickerDialog(this, startDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH))
+            selectedInstitution?.let {
+                if (it.startTimestamp > 0) dt.datePicker.minDate = it.startTimestamp
+                if (it.endTimestamp > 0) dt.datePicker.maxDate = it.endTimestamp
+            }
+            dt.show()
         }
 
         toDate.setOnClickListener{
@@ -56,6 +61,10 @@ class AddSemesterActivity : AddActivityBase() {
                 dialog.dismiss()
             }
             dt.datePicker.minDate = startTime
+            selectedInstitution?.let {
+                if (it.startTimestamp > 0 && it.startTimestamp > startTime) dt.datePicker.minDate = it.startTimestamp
+                if (it.endTimestamp > 0) dt.datePicker.maxDate = it.endTimestamp
+            }
             dt.show()
         }
 
@@ -107,6 +116,7 @@ class AddSemesterActivity : AddActivityBase() {
         til_etName.error = "Required field"
         til_etName.isErrorEnabled = name.isEmpty()
         til_toDate.isErrorEnabled = false
+        if (startTime == (-1).toLong()) startTime = System.currentTimeMillis()
 
         if (til_etName.isErrorEnabled) return "Please resolve the errors before continuing"
 
