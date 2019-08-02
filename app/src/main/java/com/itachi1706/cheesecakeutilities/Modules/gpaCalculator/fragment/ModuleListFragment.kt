@@ -166,7 +166,7 @@ class ModuleListFragment : BaseGpaFragment() {
             }
             val finalGrade = if (it.gradeTier == -1) "???" else if (!it.passFail) scoreObject!!.gradetier[it.gradeTier].value.toString() else
                 if (scoreObject!!.passtier!![it.gradeTier].value > 0) "P" else "F"
-            list.add(GpaRecycler("${it.name} [${it.courseCode}]", if (scoreObject?.type == "gpa") "Credits: ${it.credits} ${selectedInstitution?.creditName}" else "",
+            list.add(GpaRecycler(it.name, if (scoreObject?.type == "gpa") "${it.courseCode} | Credits: ${it.credits} ${selectedInstitution?.creditName}" else it.courseCode,
                     grade=score, gradeColor = GpaCalcFirebaseUtils.getGpaColor(finalGrade, scoreObject, context), color = it.color))
         }
         updateActionBar()
