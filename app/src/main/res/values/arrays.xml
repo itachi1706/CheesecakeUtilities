@@ -4,7 +4,7 @@
         <item>String to Binary/Hex Converter</item>
         <item>Message Spam</item>
         <item>HTC Serial Number Identification</item>
-        <item>Fanfiction Compactor</item>
+        <item>Fanfiction Reader (External App)</item>
         <item>Disable Camera</item>
         <item>Application List</item>
         <item>ORD Countdown</item>
@@ -30,7 +30,7 @@
         <item>.StringToHexBin</item>
         <item>.SpamMessages</item>
         <item>.Modules.HtcSerialIdentification.HtcSerialIdentificationActivity</item>
-        <item>.Modules.FanfictionCompactor.FanfictionCompactorActivity</item>
+        <item>.redirectapp.fanfictionReader.FanfictionReaderRedirectApp</item>
         <item>.CameraDisablerActivity</item>
         <item>.Modules.ListApplications.ListApplicationsActivity</item>
         <item>.Modules.ORDCountdown.ORDActivity</item>

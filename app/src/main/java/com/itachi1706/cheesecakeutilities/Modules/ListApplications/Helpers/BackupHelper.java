@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 
 import androidx.core.content.FileProvider;
 
-import com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Helpers.FileHelper;
 import com.itachi1706.cheesecakeutilities.Util.LogHelper;
 
 import java.io.File;
@@ -52,8 +52,7 @@ public class BackupHelper {
     }
 
     public static File getFolder() {
-        String externalStorage = FileHelper.getExternalStorage();
-        return new File(externalStorage + "/AndroidAppBackup");
+        return new File(Environment.getExternalStorageDirectory(), "AndroidAppBackup");
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
