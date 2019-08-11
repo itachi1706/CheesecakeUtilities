@@ -81,7 +81,9 @@
             android:exported="true"
             android:label="HTC S/N Identification" />
 
-        <activity android:name=".redirectapp.fanfictionReader.FanfictionReaderRedirectApp" android:exported="true" />
+        <activity android:name=".redirectapp.fanfictionReader.FanfictionReaderRedirectApp"
+            android:theme="@style/AppTheme.Invisible"
+            android:exported="true" />
 
         <activity
             android:name=".CameraDisablerActivity"
