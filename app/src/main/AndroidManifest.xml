@@ -80,16 +80,6 @@
             android:name=".Modules.HtcSerialIdentification.HtcSerialIdentificationActivity"
             android:exported="true"
             android:label="HTC S/N Identification" />
-        <activity
-            android:name=".Modules.FanfictionCompactor.FanfictionCompactorActivity"
-            android:exported="true"
-            android:label="@string/ff_compat_title"
-            android:launchMode="singleTop" />
-
-        <service
-            android:name=".Modules.FanfictionCompactor.Services.FanficCompressionService"
-            android:exported="true"
-            tools:ignore="InnerclassSeparator" />
 
         <activity
             android:name=".CameraDisablerActivity"
