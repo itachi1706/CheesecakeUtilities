@@ -4,6 +4,7 @@ package com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcast
  * Created by Kenneth on 5/6/2016.
  * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Broadcasts in CheesecakeUtilities
  */
+@Deprecated
 public class FanficBroadcast {
     // Fanfic Test
     public static final String BROADCAST_ACTION = "com.itachi1706.cheesecakeutilities.FANFIC_BROADCAST";

@@ -14,6 +14,7 @@ import java.io.File;
  * Created by Kenneth on 8/6/2016.
  * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Tasks in CheesecakeUtilities
  */
+@Deprecated
 public class ScanStorageDetails extends AsyncTask<Void, Void, Void> {
 
     private Handler handler;

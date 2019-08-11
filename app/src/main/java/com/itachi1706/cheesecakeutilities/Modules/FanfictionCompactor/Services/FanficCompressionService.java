@@ -39,6 +39,7 @@ import java.util.zip.ZipOutputStream;
  * Created by Kenneth on 1/6/2016.
  * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Services in CheesecakeUtilities
  */
+@Deprecated
 public class FanficCompressionService extends IntentService{
 
     private static final int NOTIFY_ID = 201;

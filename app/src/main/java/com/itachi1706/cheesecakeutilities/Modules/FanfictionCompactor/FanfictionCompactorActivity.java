@@ -45,6 +45,7 @@ import java.util.ArrayList;
 
 import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
 
+@Deprecated
 public class FanfictionCompactorActivity extends BaseModuleActivity {
 
     TextView folder, database, folderSize, storyCount;

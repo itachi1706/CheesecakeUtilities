@@ -14,6 +14,7 @@ import java.util.List;
  * Created by Kenneth on 7/6/2016.
  * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor in CheesecakeUtilities
  */
+@Deprecated
 public class FileHelper {
 
     /**

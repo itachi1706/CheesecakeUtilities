@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * Created by Kenneth on 21/4/2016.
  * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor.Storage in CheesecakeUtilities
  */
+@Deprecated
 public class FanfictionDatabase {
     //Database Version
     @SuppressWarnings("unused")
