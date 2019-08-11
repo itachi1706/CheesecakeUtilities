@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
     <external-cache-path path="images_cache/" name="image" />
+    <external-cache-path path="redirect/" name="redirectapp" />
     <cache-path path="applist/" name="applist" />
     <external-path path="AndroidAppBackup/" name="backup" />
     <cache-path name="share" path="share"/>
