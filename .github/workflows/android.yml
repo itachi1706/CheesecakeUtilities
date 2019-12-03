@@ -25,7 +25,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v1
     - name: Checkout all submodules
-      uses: textbook/git-checkout-submodule-action@2.0.0
+      run: git submodule update --init --recursive
     - name: Make Gradle executable
       run: chmod +x gradlew
     - name: run tests
