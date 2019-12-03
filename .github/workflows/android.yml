@@ -17,7 +17,7 @@ jobs:
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json
-        echp $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
+        echo $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
       env:
         GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
         GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
@@ -36,7 +36,7 @@ jobs:
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json
-        echp $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
+        echo $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
       env:
         GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
         GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
