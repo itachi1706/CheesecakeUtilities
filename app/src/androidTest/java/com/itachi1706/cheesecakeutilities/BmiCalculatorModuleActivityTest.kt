@@ -37,7 +37,7 @@ class BmiCalculatorModuleActivityTest {
     fun bmiCalculatorModuleActivityTest() {
         val mainMenu = onView(allOf(withId(R.id.text1), withText("BMI Calculator"), childAtPosition(allOf(withId(R.id.main_menu_recycler_view),
                 childAtPosition(withClassName(Matchers.`is`("android.widget.LinearLayout")), 0)), 7), isDisplayed()))
-        mainMenu.perform(scrollTo(), click())
+        mainMenu.perform(click())
 
         val calculateButton = onView(allOf(withId(R.id.btnCalculate), withText("Calculate BMI"), isDisplayed()))
         val resultView = onView(allOf(withId(R.id.tvResults), isDisplayed()))
