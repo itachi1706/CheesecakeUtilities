@@ -42,6 +42,8 @@ jobs:
         GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
     - name: Make Gradle executable
       run: chmod +x gradlew
+    - name: List Available Android Devices
+      run: $ANDROID_HOME/tools/bin/avdmanager list
     - name: run tests
       uses: reactivecircus/android-emulator-runner@v1
       with:
