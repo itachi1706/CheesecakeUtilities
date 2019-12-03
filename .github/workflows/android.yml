@@ -15,9 +15,12 @@ jobs:
       with:
         java-version: 1.8
     - name: Copy secure values
-      run: echo $GOOGLE_SERVICES > ./app/google-services.json
+      run: |
+        echo $GOOGLE_SERVICES > ./app/google-services.json
+        echp $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
       env:
         GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
     - name: Make Gradle executable
       run: chmod +x gradlew
     - name: Build with Gradle
@@ -31,9 +34,12 @@ jobs:
     - name: Checkout all submodules
       run: git submodule update --init --recursive
     - name: Copy secure values
-      run: echo $GOOGLE_SERVICES > ./app/google-services.json
+      run: |
+        echo $GOOGLE_SERVICES > ./app/google-services.json
+        echp $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
       env:
         GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
     - name: Make Gradle executable
       run: chmod +x gradlew
     - name: run tests
