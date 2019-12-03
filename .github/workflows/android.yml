@@ -49,6 +49,6 @@ jobs:
       with:
         api-level: 28
         target: google_apis
-        profile: 'Pixel 3a'
+        profile: 'pixel_xl'
         arch: x86_64
         script: ./gradlew connectedAndroidTest
