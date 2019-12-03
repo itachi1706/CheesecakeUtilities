@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.StyleableRes
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
@@ -71,7 +72,7 @@ class AddModuleActivity : AddActivityBase() {
     private fun randomizeColor() {
         val typeArrayTmp = resources.obtainTypedArray(R.array.module_colors)
         val colorArray: ArrayList<Int> = ArrayList()
-        for (i in 0 until typeArrayTmp.length()) {
+        for (@StyleableRes i in 0 until typeArrayTmp.length()) {
             colorArray.add(typeArrayTmp.getColor(i, 0))
         }
         colorSelected = colorArray.shuffled().take(1)[0]
