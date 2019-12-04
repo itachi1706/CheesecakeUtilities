@@ -16,9 +16,6 @@ public class StringToHexBin extends BaseModuleActivity implements View.OnClickLi
 
     TextView input, result;
 
-    // TODO: Convert this such that it can adapt to both the light and dark theme modes
-    // TODO: Remove @style/LegacyDarkTheme when done
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
