@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.itachi1706.cheesecakeutilities.StringToHexBin">
     <ScrollView
         android:id="@+id/svBinHex"
@@ -48,12 +47,13 @@
                 android:id="@+id/input_binhex_string"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="#FFFFFFFF"
+                android:background="#ff000000"
                 android:hint="@string/bin_hex_hint_click_paste"
                 android:imeOptions="actionNone"
                 android:inputType="textCapSentences"
                 android:padding="5.0dip"
                 android:text=""
+                android:textColor="#ff00ff00"
                 android:typeface="monospace" />
 
             <TextView
@@ -83,17 +83,13 @@
                         android:layout_height="wrap_content">
 
                         <RadioButton
-                            android:theme="@style/BinHexLightRadio"
-                            android:textColor="@color/white"
                             android:id="@+id/rb_binhex_bin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
                             android:text="@string/bin_hex_opt_bin" />
 
-                        <androidx.appcompat.widget.AppCompatRadioButton
-                            android:theme="@style/BinHexLightRadio"
-                            android:textColor="@color/white"
+                        <RadioButton
                             android:id="@+id/rb_binhex_hex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -101,9 +97,6 @@
                     </RadioGroup>
 
                     <CheckBox
-                        android:theme="@style/BinHexLightRadio"
-                        android:textColor="@color/white"
-                        android:shadowColor="@color/white"
                         android:id="@+id/checkbox_binhex_delimit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -115,8 +108,6 @@
                         android:layout_height="wrap_content">
 
                         <RadioButton
-                            android:theme="@style/BinHexLightRadio"
-                            android:textColor="@color/white"
                             android:id="@+id/rb_binhex_encode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -124,8 +115,6 @@
                             android:text="@string/bin_hex_opt_encode" />
 
                         <RadioButton
-                            android:theme="@style/BinHexLightRadio"
-                            android:textColor="@color/white"
                             android:id="@+id/rb_binhex_decode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -155,11 +144,12 @@
                 android:id="@+id/tv_binhex_results"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="#FFFFFFFF"
+                android:background="#ff000000"
                 android:inputType="none"
                 android:focusable="false"
                 android:padding="5.0dip"
                 android:text=""
+                android:textColor="#ff00ff00"
                 android:typeface="monospace" />
 
             <TableLayout

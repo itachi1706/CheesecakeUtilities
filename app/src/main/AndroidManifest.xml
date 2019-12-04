@@ -58,8 +58,7 @@
         <activity
             android:name=".StringToHexBin"
             android:exported="true"
-            android:label="@string/bin_hex_title_full"
-            android:theme="@style/LegacyDarkTheme" />
+            android:label="@string/bin_hex_title_full" />
         <activity
             android:name=".SpamMessages"
             android:exported="true"

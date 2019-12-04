@@ -34,13 +34,6 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="LegacyDarkTheme" parent="Theme.AppCompat">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
     <style name="LegacyLightThemeNoAppBar" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -72,5 +65,9 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="BinHexLightRadio" parent="AppTheme">
+        <item name="colorControlNormal">@color/grey_300</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
 
 </resources>
