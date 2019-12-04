@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:textColor="@color/orange"
+                android:textColor="@color/dark_yellow"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="101-200"
@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             <TextView
-                android:textColor="@color/orange"
+                android:textColor="@color/dark_yellow"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Unhealthy"

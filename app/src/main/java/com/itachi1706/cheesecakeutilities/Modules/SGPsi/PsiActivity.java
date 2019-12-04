@@ -111,18 +111,18 @@ public class PsiActivity extends BaseModuleActivity {
     private void processData(PsiGeneral data) {
         tmp = data; // For updateField() method
         psiRange.setText(data.getPsirange());
-        updateField(psiNorth, data.getNorth());
-        updateField(psiSouth, data.getSouth());
-        updateField(psiEast, data.getEast());
-        updateField(psiWest, data.getWest());
-        updateField(psiCentral, data.getCentral());
-        updateField(psiNational, data.getGlobal());
+        updateField(psiNorth, data.getNorth(), PsiGeneral.TYPE_PSI);
+        updateField(psiSouth, data.getSouth(), PsiGeneral.TYPE_PSI);
+        updateField(psiEast, data.getEast(), PsiGeneral.TYPE_PSI);
+        updateField(psiWest, data.getWest(), PsiGeneral.TYPE_PSI);
+        updateField(psiCentral, data.getCentral(), PsiGeneral.TYPE_PSI);
+        updateField(psiNational, data.getGlobal(), PsiGeneral.TYPE_PSI);
         pmRange.setText(data.getParticlerange());
-        updateField(pmNorth, data.getParticlenorth());
-        updateField(pmSouth, data.getParticlesouth());
-        updateField(pmEast, data.getParticleeast());
-        updateField(pmWest, data.getParticlewest());
-        updateField(pmCentral, data.getParticlecentral());
+        updateField(pmNorth, data.getParticlenorth(), PsiGeneral.TYPE_PM);
+        updateField(pmSouth, data.getParticlesouth(), PsiGeneral.TYPE_PM);
+        updateField(pmEast, data.getParticleeast(), PsiGeneral.TYPE_PM);
+        updateField(pmWest, data.getParticlewest(), PsiGeneral.TYPE_PM);
+        updateField(pmCentral, data.getParticlecentral(), PsiGeneral.TYPE_PM);
         tmp = null; // Clear away the data to prevent memory leak
         lastUpdate.setText(data.getTime());
         refreshLayout.setRefreshing(false);
@@ -130,9 +130,9 @@ public class PsiActivity extends BaseModuleActivity {
 
     private PsiGeneral tmp;
 
-    private void updateField(TextView view, int data) {
+    private void updateField(TextView view, int data, int type) {
         view.setText(String.format(Locale.getDefault(), "%d", data));
-        view.setTextColor(ColorUtils.Companion.getColorFromVariable(this, tmp.getColor(data, PrefHelper.isNightModeEnabled(this))));
+        view.setTextColor(ColorUtils.Companion.getColorFromVariable(this, tmp.getColor(data, type, PrefHelper.isNightModeEnabled(this))));
     }
 
     static class PsiDataHandler extends Handler {
