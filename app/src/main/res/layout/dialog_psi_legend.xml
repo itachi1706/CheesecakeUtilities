@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="?attr/dialogPreferredPadding"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="24-hr PSI"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"/>
+
+    <TableLayout
+        android:stretchColumns="0,1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="PSI Range"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Descriptor"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/dark_green"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="0-50"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/dark_green"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Good"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/blue"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="51-100"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/blue"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Moderate"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/dark_yellow"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="101-200"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/dark_yellow"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Unhealthy"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/orange"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="201-300"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/orange"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Very Unhealthy"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/red"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Above 300"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/red"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Dangerous"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1-hr PM 2.5 (µg/m3)"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"/>
+
+    <TableLayout
+        android:stretchColumns="0,1,2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="PM 2.5 Range"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Band"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Descriptor"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/dark_green"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="0-55"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/dark_green"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="I"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/dark_green"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Normal"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/blue"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="56-150"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/blue"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="II"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/blue"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Elevated"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/orange"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="151-250"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/orange"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="III"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/orange"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="High"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/red"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Above 250"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/red"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="IV"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:textColor="@color/red"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="Very High"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+    </TableLayout>
+
+
+</LinearLayout>

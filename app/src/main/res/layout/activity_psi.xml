@@ -324,6 +324,12 @@
                     android:text="@string/camera_disable_retrieving_status"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/psi_legend"
+                android:text="Legend"
+                style="@style/ColourButtonAccentText" />
         </LinearLayout>
     </ScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
