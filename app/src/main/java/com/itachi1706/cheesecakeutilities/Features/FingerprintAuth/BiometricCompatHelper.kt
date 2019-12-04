@@ -1,17 +1,14 @@
 package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth
 
-import android.Manifest
 import android.annotation.TargetApi
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Build
 import android.preference.PreferenceManager
 import android.util.Log
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import java.util.concurrent.Executor
 
 /**
@@ -41,7 +38,7 @@ class BiometricCompatHelper private constructor() {
         @TargetApi(Build.VERSION_CODES.M)
         @Throws(NullPointerException::class)
         fun isBiometricFPRegistered(context: Context): Boolean {
-            if (!isBiometricAuthFPAvailable(context)) return false
+            if (!isBiometricAuthAvailable(context)) return false
 
 
             val km = context.getSystemService(KeyguardManager::class.java)
@@ -49,23 +46,18 @@ class BiometricCompatHelper private constructor() {
                 Log.e("BioCompat", "Keyguard died!")
                 return false
             }
-            // TODO: Replace with https://stackoverflow.com/questions/50968732/determine-if-biometric-hardware-is-present-and-the-user-has-enrolled-biometrics for Android Q when we target Q
-            // TODO: Replace deprecated method check if possible if the androidx library releases it, otherwise we will just ignore check for below Q
-            val fpCompat = FingerprintManagerCompat.from(context)
-            return km.isKeyguardSecure && fpCompat.hasEnrolledFingerprints()
+            val biometricManager = BiometricManager.from(context)
+            return km.isKeyguardSecure && biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
         }
 
         val biometricExecutor: Executor
             get() = Executor { it.run() }
 
-        private fun isBiometricAuthFPAvailable(context: Context): Boolean {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val granted2 = ContextCompat.checkSelfPermission(context, Manifest.permission.USE_BIOMETRIC)
-                if (granted2 != PackageManager.PERMISSION_GRANTED) return false
+        private fun isBiometricAuthAvailable(context: Context): Boolean {
+            return when (BiometricManager.from(context).canAuthenticate()) {
+                BiometricManager.BIOMETRIC_SUCCESS, BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED, BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> true
+                else -> false
             }
-
-            return context.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)
         }
 
         @JvmOverloads
