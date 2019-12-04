@@ -100,15 +100,15 @@ dependencies {
     implementation project(':appupdater')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.preference:preference-ktx:1.1.0-rc01'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.preference:preference-ktx:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.google.firebase:firebase-core:17.0.1'
-    implementation 'com.google.firebase:firebase-config:18.0.0'
-    implementation 'com.google.firebase:firebase-perf:18.0.1'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-config:19.0.3'
+    implementation 'com.google.firebase:firebase-perf:19.0.2'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.psdev.licensesdialog:licensesdialog:2.0.0'
     implementation 'commons-io:commons-io:2.6'
@@ -129,14 +129,14 @@ dependencies {
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
-    implementation 'com.google.firebase:firebase-ml-vision:22.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
     implementation 'com.google.zxing:core:3.4.0'
     // Lyric Finder
     implementation 'androidx.palette:palette-ktx:1.0.0'
     // Vehicle Mileage Tracker
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
-    implementation 'com.google.firebase:firebase-database:18.0.0'
-    implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
     implementation project(':cepaslib')
@@ -148,8 +148,8 @@ dependencies {
     // GPA Calculator
     implementation 'org.greenrobot:eventbus:3.1.1'
     // Others
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
-    implementation 'androidx.biometric:biometric:1.0.0-alpha04'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
+    implementation 'androidx.biometric:biometric:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
