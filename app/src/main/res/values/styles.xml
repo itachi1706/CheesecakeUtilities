@@ -13,6 +13,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AttribouterTheme" parent="AppTheme.NoAppBar" />
+
     <style name="AppTheme.Invisible" parent="AppTheme.NoAppBar" >
         <item name="android:colorBackground">@android:color/transparent</item>
     </style>
