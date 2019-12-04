@@ -109,7 +109,7 @@ public class ListApplicationFragment extends Fragment {
             appPackageNamesInstalled = appPackageNameInstall;
 
             // Done
-            getActivity().runOnUiThread(() -> {
+            if (getActivity() != null) getActivity().runOnUiThread(() -> {
                 recyclerView.setAdapter(finalAdapter);
                 bar.setVisibility(View.GONE);
                 label.setVisibility(View.GONE);
