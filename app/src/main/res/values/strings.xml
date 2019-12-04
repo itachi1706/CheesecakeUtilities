@@ -310,11 +310,6 @@
     <string name="apkmirror_copy_log">Copy log</string>
     <string name="apkmirror_search_error">Error while getting text from search dialog</string>
 
-    <!-- MSL Sync Activity -->
-    <string name="msl_goodbye">Due to recent decisions by the MSL Team to close down the service, this will no longer be operational and we have henceforth retired this utilty. To view the message from the developers click on the \"Why\" button\n\nYou can also export your existing data by clicking on the \"Export\" button (Android KitKat and above only)</string>
-    <string name="msl_why">Why Removed?</string>
-    <string name="msl_export">Export Data</string>
-
     <!-- Unsorted/Misc/General -->
     <string name="loading_label">Loading…</string>
     <string name="placeholder_text">Text Here</string>

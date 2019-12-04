@@ -21,7 +21,6 @@
         <item>Now Playing Lyrics</item>
         <item>SG Weather</item>
         <item>CEPAS Card Reader</item>
-        <item>MSL Calendar Sync</item>
         <item>Domain Whois Query</item>
         <item>APKMirror Downloader</item>
         <item>@string/title_activity_gpa_calculator_main</item>
@@ -47,7 +46,6 @@
         <item>.Modules.LyricFinder.LyricFinderActivity</item>
         <item>.Modules.SGPsi.PsiActivity</item>
         <item>.Modules.CEPASReader.CEPASActivity</item>
-        <item>.Modules.MSLIntegration.MSLActivity</item>
         <item>.Modules.WhoisLookup.WhoisLookupActivity</item>
         <item>.Modules.APKMirrorDownloader.APKMirrorActivity</item>
         <item>.Modules.gpaCalculator.InitActivity</item>
