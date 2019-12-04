@@ -14,11 +14,11 @@ data class PsiGeneral (val psirange: String? = null, val particlerange: String? 
     fun getColor(value: Int, type: Int = TYPE_PSI, nightMode: Boolean = false): Int {
         if (type == TYPE_PM) {
             if (value <= 55) return if (nightMode) ColorUtils.GREEN else ColorUtils.DARK_GREEN
-            if (value <= 150) return ColorUtils.BLUE
+            if (value <= 150) return if (nightMode) ColorUtils.LIGHT_BLUE else ColorUtils.BLUE
             if (value <= 250) return ColorUtils.ORANGE
         } else {
             if (value <= 50) return if (nightMode) ColorUtils.GREEN else ColorUtils.DARK_GREEN
-            if (value <= 100) return ColorUtils.BLUE
+            if (value <= 100) return if (nightMode) ColorUtils.LIGHT_BLUE else ColorUtils.BLUE
             if (value <= 200) return if (nightMode) ColorUtils.DARK_YELLOW else ColorUtils.YELLOW
             if (value <= 300) return ColorUtils.ORANGE
         }

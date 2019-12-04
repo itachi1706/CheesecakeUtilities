@@ -24,18 +24,20 @@ class ColorUtils {
                 VIOLET -> ContextCompat.getColor(context, R.color.violet)
                 DARK_GREEN -> ContextCompat.getColor(context, R.color.dark_green)
                 DARK_YELLOW -> ContextCompat.getColor(context, R.color.dark_yellow)
+                LIGHT_BLUE -> ContextCompat.getColor(context, R.color.gpa_blue_light)
                 else -> ContextCompat.getColor(context, R.color.black)
             }
         }
 
-        val RED = 0
-        val ORANGE = 1
-        val YELLOW = 2
-        val GREEN = 3
-        val BLUE = 4
-        val INDIGO = 5
-        val VIOLET = 6
-        val DARK_GREEN = 7
-        val DARK_YELLOW = 8
+        const val RED = 0
+        const val ORANGE = 1
+        const val YELLOW = 2
+        const val GREEN = 3
+        const val BLUE = 4
+        const val INDIGO = 5
+        const val VIOLET = 6
+        const val DARK_GREEN = 7
+        const val DARK_YELLOW = 8
+        const val LIGHT_BLUE = 9
     }
 }
