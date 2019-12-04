@@ -7,9 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
@@ -28,6 +30,7 @@ public class PsiActivity extends BaseModuleActivity {
     private TextView pmRange, pmNorth, pmSouth, pmEast, pmWest, pmCentral;
     private TextView lastUpdate;
     private SwipeRefreshLayout refreshLayout;
+    private Button legend;
 
     @Override
     public String getHelpDescription() {
@@ -57,11 +60,17 @@ public class PsiActivity extends BaseModuleActivity {
         pmCentral = findViewById(R.id.psi_pm_cen);
         lastUpdate = findViewById(R.id.psi_last_update);
         refreshLayout = findViewById(R.id.pull_to_refresh);
+        legend = findViewById(R.id.psi_legend);
 
         refreshLayout.setOnRefreshListener(this::retrieveData);
         refreshLayout.setColorSchemeResources(
                 R.color.refresh_progress_1,
                 R.color.refresh_progress_2);
+
+        legend.setOnClickListener(v -> {
+            new AlertDialog.Builder(this).setView(R.layout.dialog_psi_legend).setTitle("Legend")
+                    .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+        });
     }
 
     @Override
