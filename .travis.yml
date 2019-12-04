@@ -66,9 +66,9 @@ android:
     - extra-android-m2repository
     - addon-google_apis-google-$ANDROID_EMULATOR_API_LEVEL
     #- sys-img-armeabi-v7a-google_apis-$ANDROID_EMULATOR_API_LEVEL
-    - sys-img-arm64-v8a-google_apis-$ANDROID_EMULATOR_API_LEVEL
-    #- sys-img-x86-google_apis-$ANDROID_EMULATOR_API_LEVEL
-    #- sys-img-x86_64-google_apis-$ANDROID_EMULATOR_API_LEVEL
+    #- sys-img-arm64-v8a-google_apis-$ANDROID_EMULATOR_API_LEVEL
+    - sys-img-x86-google_apis-$ANDROID_EMULATOR_API_LEVEL
+    - sys-img-x86_64-google_apis-$ANDROID_EMULATOR_API_LEVEL
 before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
