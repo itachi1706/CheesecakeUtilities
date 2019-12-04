@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<about>
+    <me.jfenn.attribouter.wedges.AppWedge
+        repo="itachi1706/CheesecakeUtilities"
+        description="Loading Description..."
+        playStoreUrl="null"
+        icon="@mipmap/ic_launcher">
+    </me.jfenn.attribouter.wedges.AppWedge>
+
+    <me.jfenn.attribouter.wedges.ContributorsWedge
+        repo="itachi1706/CheesecakeUtilities"
+        showDefaults="false"
+        title="Developer">
+
+        <!-- Lead developer: itachi1706 -->
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            login="itachi1706"
+            name="Kenneth Soh"
+            avatar="https://avatars.githubusercontent.com/u/5357412"
+            bio="Cause I'm a potato"
+            blog="https://itachi1706.com"
+            email="kenneth@itachi1706.com"
+            position="1"
+            task="Lead Developer">
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Twitter"
+                icon="@drawable/ic_twitter"
+                url="https://twitter.com/itachi1706" />
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="GitLab"
+                icon="@drawable/ic_gitlab"
+                url="https://gitlab.com/itachi1706" />
+        </me.jfenn.attribouter.wedges.ContributorWedge>
+    </me.jfenn.attribouter.wedges.ContributorsWedge>
+
+    <me.jfenn.attribouter.wedges.LicensesWedge
+        showDefaults="false">
+
+        <!-- Apache Commons IO -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Apache Commons IO"
+            description="^The Apache Commons IO library contains utility classes, stream implementations, file filters, file comparators, endian transformation classes, and much more."
+            license="apache-2.0"
+            repo="apache/commons-io" />
+
+        <!-- Apache Commons Lang -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Apache Commons Lang"
+            description="^Apache Commons Lang, a package of Java utility classes for the classes that are in java.lang's hierarchy, or are considered to be so standard as to justify existence in java.lang."
+            license="apache-2.0"
+            repo="apache/commons-lang" />
+
+        <!-- Google Gson -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Google Gson"
+            license="apache-2.0"
+            repo="google/gson" />
+
+        <!-- Picasso -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Picasso"
+            license="apache-2.0"
+            repo="square/picasso" />
+
+        <!-- Firebase MLKit -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Firebase MLKit"
+            description="ML Kit beta brings Google’s machine learning expertise to mobile developers in a powerful and easy-to-use package."
+            website="https://developers.google.com/ml-kit"
+            licenseUrl="https://github.com/googlecodelabs/mlkit-android/blob/master/LICENSE"
+            license="apache-2.0" />
+
+        <!-- Tray -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Tray"
+            license="apache-2.0"
+            repo="grandcentrix/tray" />
+
+        <!-- Color Picker -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Color Picker"
+            repo="QuadFlask/colorpicker"
+            license="apache-2.0" />
+
+        <!-- Circle Progress Bar -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Circle Progress Bar"
+            repo="lzyzsd/CircleProgress"
+            license="mit" />
+
+        <!-- MPAndroidChart -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="MPAndroidChart"
+            license="apache-2.0"
+            repo="PhilJay/MPAndroidChart" />
+
+        <!-- Material Dialogs -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Material Dialogs"
+            license="apache-2.0"
+            repo="afollestad/material-dialogs" />
+
+        <!-- Material Scroll Bar -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Material Scroll Bar"
+            license="apache-2.0"
+            repo="turing-tech/MaterialScrollBar" />
+
+        <!-- SafetyNet Helper -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="SafetyNet Helper"
+            repo="scottyab/safetynethelper"
+            license="apache-2.0" />
+
+        <!-- Floating Action Button -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Floating Action Button"
+            repo="futuresimple/android-floating-action-button" />
+
+        <!-- Zxing -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Zxing"
+            license="apache-2.0"
+            repo="zxing/zxing" />
+
+        <!-- Farebot -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Farebot"
+            repo="codebutler/farebot" />
+
+        <!-- AdvancedWebView -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="AdvancedWebView"
+            license="mit"
+            repo="delight-im/Android-AdvancedWebView" />
+
+        <!-- jsoup -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="jsoup: Java HTML Parser"
+            license="mit"
+            repo="jhy/jsoup" />
+
+        <!-- Attribouter -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Attribouter"
+            repo="fennifith/Attribouter"
+            license="apache-2.0" />
+
+        <!-- AndroidX -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="AndroidX Jetpack Support Libraries"
+            description="AndroidX is the open-source project that the Android team uses to develop, test, package, version and release libraries within Jetpack."
+            website="https://developer.android.com/jetpack/androidx"
+            licenseUrl="https://android.googlesource.com/platform/frameworks/support/+/androidx-master-dev/LICENSE.txt"
+            license="apache-2.0" />
+
+        <!-- Kotlin (lol) -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Kotlin"
+            repo="JetBrains/kotlin"
+            license="apache-2.0" />
+
+        <!-- AOSP -->
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            title="Android Open Source Project"
+            description="Android is an open source software stack for a wide range of mobile devices and a corresponding open source project led by Google."
+            website="https://github.com/aosp-mirror"
+            licenseUrl="https://source.android.com/license"
+            license="apache-2.0" />
+
+    </me.jfenn.attribouter.wedges.LicensesWedge>
+</about>

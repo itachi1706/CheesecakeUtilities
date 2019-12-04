@@ -14,7 +14,7 @@ import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.Authenticatio
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.BiometricCompatHelper
 import com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity
 import com.itachi1706.cheesecakeutilities.Util.CommonVariables
-import de.psdev.licensesdialog.LicensesDialog
+import me.jfenn.attribouter.Attribouter
 
 /**
  * Created by Kenneth on 24/7/2019.
@@ -37,10 +37,7 @@ class GeneralSettingsActivity : AppCompatActivity() {
 
             SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(activity, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL,
                     resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
-            super.addEggMethods(true) {
-                LicensesDialog.Builder(activity).setNotices(R.raw.notices).setIncludeOwnLicense(true).build().show()
-                true
-            }
+            super.addEggMethods(false, null, true) { Attribouter.from(context).show(); true }
 
             val fpPw: Preference? = findPreference("password_fp")
             sp = PrefHelper.getDefaultSharedPreferences(activity)
