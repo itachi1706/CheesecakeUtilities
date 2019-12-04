@@ -11,6 +11,7 @@ repositories {
 
 
 def isTravis = System.getenv("TRAVIS")
+def isGHActions = System.getenv("GITHUB_ACTIONS") ?: false
 
 android {
     compileSdkVersion 28
@@ -72,8 +73,11 @@ android {
         timeOutInMs 10 * 60 * 1000  // Set the timeout to 10 minutes
         installOptions "-d", "-t"
     }
+    lintOptions {
+        abortOnError !isGHActions
+    }
     dexOptions {
-        preDexLibraries = !isTravis
+        preDexLibraries = !(isTravis || isGHActions)
     }
     kotlinOptions {
         jvmTarget = '1.8'
