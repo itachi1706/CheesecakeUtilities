@@ -215,7 +215,7 @@
             android:exported="true"
             android:label="Unicode Emoticons" />
         <activity
-            android:name=".games.ChromiumTRex.ChromiumTRexActivity"
+            android:name=".games.chromiumTRex.ChromiumTRexActivity"
             android:exported="true"
             android:label="Chrome T-Rex Game" />
         <activity
