@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.APKMirrorDownloader
+package com.itachi1706.cheesecakeutilities.modules.apkMirrorDownloader
 
 import android.Manifest
 import android.animation.*
@@ -33,7 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.itachi1706.appupdater.Util.NotifyUserUtil
 import com.itachi1706.cheesecakeutilities.BaseActivity
 import com.itachi1706.cheesecakeutilities.BuildConfig
-import com.itachi1706.cheesecakeutilities.modules.APKMirrorDownloader.`interface`.AsyncResponse
+import com.itachi1706.cheesecakeutilities.modules.apkMirrorDownloader.interfaces.AsyncResponse
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity
 import im.delight.android.webview.AdvancedWebView

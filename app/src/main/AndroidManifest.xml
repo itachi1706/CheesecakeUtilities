@@ -341,7 +341,7 @@
             android:name=".modules.WhoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
         <activity
-            android:name=".modules.APKMirrorDownloader.APKMirrorActivity"
+            android:name=".modules.apkMirrorDownloader.APKMirrorActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:label="APKMirror Downloader"

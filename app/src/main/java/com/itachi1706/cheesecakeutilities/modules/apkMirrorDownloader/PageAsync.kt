@@ -1,8 +1,8 @@
-package com.itachi1706.cheesecakeutilities.modules.APKMirrorDownloader
+package com.itachi1706.cheesecakeutilities.modules.apkMirrorDownloader
 
 import android.graphics.Color
 import android.os.AsyncTask
-import com.itachi1706.cheesecakeutilities.modules.APKMirrorDownloader.`interface`.AsyncResponse
+import com.itachi1706.cheesecakeutilities.modules.apkMirrorDownloader.interfaces.AsyncResponse
 import org.jsoup.Jsoup
 import java.io.IOException
 
