@@ -232,7 +232,7 @@
         <receiver
             android:name=".modules.connectivityQuietHours.receivers.WifiToggleReceiver"
             android:enabled="true" />
-        <receiver android:name=".modules.connectivityQuietHours.receivers.DeleteNotificationIntent">
+        <receiver android:name=".modules.connectivityQuietHours.temp.DeleteNotificationIntent">
             <intent-filter>
                 <action android:name="subitem_cancelled" />
                 <action android:name="summary_cancelled" />
