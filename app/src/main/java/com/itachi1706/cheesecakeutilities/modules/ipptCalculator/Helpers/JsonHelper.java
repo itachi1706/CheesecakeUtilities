@@ -1,12 +1,12 @@
-package com.itachi1706.cheesecakeutilities.modules.IPPTCalculator.Helpers;
+package com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers;
 
 import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.itachi1706.cheesecakeutilities.modules.IPPTCalculator.JsonObjects.Gender;
-import com.itachi1706.cheesecakeutilities.modules.IPPTCalculator.JsonObjects.Main;
+import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Gender;
+import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

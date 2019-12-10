@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.IPPTCalculator.JsonObjects
+package com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects
 
 import com.google.gson.JsonObject
 

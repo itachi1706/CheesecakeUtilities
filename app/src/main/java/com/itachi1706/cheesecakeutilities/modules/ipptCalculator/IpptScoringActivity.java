@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.IPPTCalculator;
+package com.itachi1706.cheesecakeutilities.modules.ipptCalculator;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itachi1706.cheesecakeutilities.modules.IPPTCalculator.Helpers.JsonHelper;
+import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;

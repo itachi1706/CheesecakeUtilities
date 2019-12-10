@@ -147,11 +147,11 @@
             android:exported="true"
             android:label="BMI Calculator" />
         <activity
-            android:name=".modules.IPPTCalculator.IpptCalculatorActivity"
+            android:name=".modules.ipptCalculator.IpptCalculatorActivity"
             android:exported="true"
             android:label="IPPT Calculator" />
         <activity
-            android:name=".modules.IPPTCalculator.IpptScoringActivity"
+            android:name=".modules.ipptCalculator.IpptScoringActivity"
             android:label="IPPT Scoreboard" />
         <activity
             android:name=".modules.ListApplications.ListApplicationsDetailActivity"
