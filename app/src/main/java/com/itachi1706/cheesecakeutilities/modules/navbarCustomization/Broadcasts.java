@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.NavbarCustomization;
+package com.itachi1706.cheesecakeutilities.modules.navbarCustomization;
 
 /**
  * Created by Kenneth on 21/10/2016.

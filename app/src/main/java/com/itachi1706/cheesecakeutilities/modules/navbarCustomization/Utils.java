@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.NavbarCustomization;
+package com.itachi1706.cheesecakeutilities.modules.navbarCustomization;
 
 import android.os.Build;
 

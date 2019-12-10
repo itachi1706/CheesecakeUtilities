@@ -168,7 +168,7 @@
             android:theme="@style/LegacyLightThemeNoAppBar" />
 
         <service
-            android:name=".modules.NavbarCustomization.NavBarService"
+            android:name=".modules.navbarCustomization.NavBarService"
             android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:process=":NavBarCustomizer">
@@ -182,7 +182,7 @@
         </service>
 
         <activity
-            android:name=".modules.NavbarCustomization.NavbarConfigurationActivity"
+            android:name=".modules.navbarCustomization.NavbarConfigurationActivity"
             android:exported="true"
             android:label="Navigation Bar Customizer" />
         <activity

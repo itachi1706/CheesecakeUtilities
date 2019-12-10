@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.NavbarCustomization;
+package com.itachi1706.cheesecakeutilities.modules.navbarCustomization;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -28,15 +28,15 @@ import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import net.grandcentrix.tray.AppPreferences;
 
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_SERVICE_ENABLED;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
-import static com.itachi1706.cheesecakeutilities.modules.NavbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_SERVICE_ENABLED;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_SHOW_APPNAME;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_SHOW_CLOCK;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_SHOW_IMAGE;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
+import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
 /**
  * Note: Deprecated past Android Oreo
