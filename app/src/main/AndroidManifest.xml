@@ -186,7 +186,7 @@
             android:exported="true"
             android:label="Navigation Bar Customizer" />
         <activity
-            android:name=".Games.TicTacToe.TicTacToeActivity"
+            android:name=".games.TicTacToe.TicTacToeActivity"
             android:exported="true"
             android:label="Tic Tac Toe" />
         <activity
@@ -215,7 +215,7 @@
             android:exported="true"
             android:label="Unicode Emoticons" />
         <activity
-            android:name=".Games.ChromiumTRex.ChromiumTRexActivity"
+            android:name=".games.ChromiumTRex.ChromiumTRexActivity"
             android:exported="true"
             android:label="Chrome T-Rex Game" />
         <activity

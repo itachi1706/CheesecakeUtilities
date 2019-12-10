@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Games.ChromiumTRex;
+package com.itachi1706.cheesecakeutilities.games.ChromiumTRex;
 
 import android.annotation.SuppressLint;
 import android.content.pm.ApplicationInfo;

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Games.TicTacToe;
+package com.itachi1706.cheesecakeutilities.games.TicTacToe;
 
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
