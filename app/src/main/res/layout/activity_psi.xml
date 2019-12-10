@@ -4,7 +4,7 @@
     android:id="@+id/pull_to_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.itachi1706.cheesecakeutilities.Modules.SGPsi.PsiActivity">
+    tools:context="com.itachi1706.cheesecakeutilities.modules.SGPsi.PsiActivity">
 
     <ScrollView
         android:layout_width="match_parent"

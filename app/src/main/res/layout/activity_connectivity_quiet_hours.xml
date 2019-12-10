@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity">
+    tools:context="com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity">
 
     <LinearLayout
         android:id="@+id/layout_configure_wifi"

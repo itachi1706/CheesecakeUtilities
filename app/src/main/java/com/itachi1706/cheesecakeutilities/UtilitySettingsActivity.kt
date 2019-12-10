@@ -8,7 +8,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.itachi1706.appupdater.Util.PrefHelper
 import com.itachi1706.cepaslib.SettingsHandler
-import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants
+import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants
 
 class UtilitySettingsActivity : AppCompatActivity() {
 
