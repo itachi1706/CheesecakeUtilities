@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.ConnectivityQuietHoursActivity
 import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.temp.DeleteNotificationIntent
 import java.text.DateFormat
 import java.util.*
 import kotlin.collections.ArrayList
