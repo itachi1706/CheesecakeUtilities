@@ -18,8 +18,8 @@ import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.ColorUtils;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.ColorUtils;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;

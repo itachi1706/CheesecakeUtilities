@@ -1,6 +1,6 @@
 package com.itachi1706.cheesecakeutilities.Modules.SGPsi
 
-import com.itachi1706.cheesecakeutilities.Util.ColorUtils
+import com.itachi1706.cheesecakeutilities.util.ColorUtils
 
 /**
  * Created by Kenneth on 18/2/2018.

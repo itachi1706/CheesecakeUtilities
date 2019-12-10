@@ -15,7 +15,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.MainMenuAdapter;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

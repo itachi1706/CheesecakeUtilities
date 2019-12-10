@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Util;
+package com.itachi1706.cheesecakeutilities.util;
 
 import android.util.JsonReader;
 import android.util.JsonToken;

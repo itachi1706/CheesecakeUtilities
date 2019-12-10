@@ -38,7 +38,7 @@ import com.crashlytics.android.Crashlytics;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.squareup.picasso.Picasso;
 
 import net.grandcentrix.tray.AppPreferences;

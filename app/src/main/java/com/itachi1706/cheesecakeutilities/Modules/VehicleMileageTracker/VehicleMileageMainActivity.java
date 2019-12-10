@@ -28,8 +28,8 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback;
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.turingtechnologies.materialscrollbar.DateAndTimeIndicator;
 import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 

@@ -22,7 +22,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
+import com.itachi1706.cheesecakeutilities.util.CommonVariables;
 
 import java.util.ArrayList;
 import java.util.List;

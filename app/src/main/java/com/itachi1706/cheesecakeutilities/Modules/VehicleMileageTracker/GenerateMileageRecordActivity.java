@@ -28,8 +28,8 @@ import com.google.firebase.database.Query;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
-import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
+import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 public class GenerateMileageRecordActivity extends AppCompatActivity {
 

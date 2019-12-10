@@ -16,8 +16,8 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.GpaCa
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.Util.LogHelper
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
+import com.itachi1706.cheesecakeutilities.util.LogHelper
 
 /**
  * Institution List View

@@ -6,8 +6,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.itachi1706.appupdater.Util.PrefHelper
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
-import com.itachi1706.cheesecakeutilities.Util.ColorUtils
-import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils
+import com.itachi1706.cheesecakeutilities.util.ColorUtils
+import com.itachi1706.cheesecakeutilities.util.FirebaseUtils
 import java.text.SimpleDateFormat
 import java.util.*
 

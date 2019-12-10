@@ -38,7 +38,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ListApplications.LoadAppListTa
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.turingtechnologies.materialscrollbar.CustomIndicator;
 import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 
@@ -51,8 +51,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
-import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+import static com.itachi1706.cheesecakeutilities.util.CommonMethods.displayPermErrorMessage;
+import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeCsv;
 
 /**

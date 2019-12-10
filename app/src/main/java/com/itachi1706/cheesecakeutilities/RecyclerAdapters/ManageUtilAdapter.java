@@ -16,7 +16,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

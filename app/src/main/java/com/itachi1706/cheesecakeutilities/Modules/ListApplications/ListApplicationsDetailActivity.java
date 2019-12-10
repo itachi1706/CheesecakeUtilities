@@ -42,7 +42,7 @@ import com.itachi1706.appupdater.Util.ValidationHelper;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.Objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.Modules.ListApplications.RecyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -56,8 +56,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.itachi1706.appupdater.Util.ValidationHelper.bytesToHex;
-import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
-import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+import static com.itachi1706.cheesecakeutilities.util.CommonMethods.logPermError;
+import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
 
 public class ListApplicationsDetailActivity extends AppCompatActivity {
 

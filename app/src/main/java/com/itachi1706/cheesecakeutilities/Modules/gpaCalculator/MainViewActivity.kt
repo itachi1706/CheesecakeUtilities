@@ -25,8 +25,8 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInsti
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.Util.LogHelper
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
+import com.itachi1706.cheesecakeutilities.util.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
 class MainViewActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {

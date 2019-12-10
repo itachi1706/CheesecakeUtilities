@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Util
+package com.itachi1706.cheesecakeutilities.util
 
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase

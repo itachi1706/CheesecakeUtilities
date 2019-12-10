@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.util.Base64;
 
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;

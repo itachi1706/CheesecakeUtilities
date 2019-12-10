@@ -32,7 +32,7 @@ import java.util.List;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
+import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 /**
  * Created by itachi1706 on 2/20/2016.

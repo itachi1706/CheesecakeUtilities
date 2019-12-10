@@ -39,8 +39,8 @@ import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.objects.ApiResult;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

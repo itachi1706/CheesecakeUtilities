@@ -29,7 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 
 import com.google.android.gms.common.images.Size;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.IOException;
 import java.lang.Thread.State;

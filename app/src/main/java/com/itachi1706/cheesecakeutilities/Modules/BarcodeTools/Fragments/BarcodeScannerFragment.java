@@ -26,7 +26,7 @@ import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
 

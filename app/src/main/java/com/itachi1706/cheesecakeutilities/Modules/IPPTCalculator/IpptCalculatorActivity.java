@@ -20,8 +20,8 @@ import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHel
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.JsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.FEMALE;
 import static com.itachi1706.cheesecakeutilities.Modules.IPPTCalculator.Helpers.JsonHelper.PUSHUP;

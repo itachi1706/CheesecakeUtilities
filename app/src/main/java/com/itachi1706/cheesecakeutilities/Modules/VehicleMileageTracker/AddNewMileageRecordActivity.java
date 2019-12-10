@@ -26,9 +26,9 @@ import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
-import com.itachi1706.cheesecakeutilities.Util.TextInputAutoCompleteTextView;
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.TextInputAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +39,7 @@ import java.util.TimeZone;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
+import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Util;
+package com.itachi1706.cheesecakeutilities.util;
 
 import static android.graphics.Color.rgb;
 

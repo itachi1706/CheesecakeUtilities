@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
 import static com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.Util.FirebaseUtils.Companion;
+import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 /**
  * Created by Kenneth on 31/8/2017.

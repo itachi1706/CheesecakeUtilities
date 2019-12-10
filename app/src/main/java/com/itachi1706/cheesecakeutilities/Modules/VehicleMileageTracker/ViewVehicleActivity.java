@@ -17,8 +17,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.util.ArrayList;

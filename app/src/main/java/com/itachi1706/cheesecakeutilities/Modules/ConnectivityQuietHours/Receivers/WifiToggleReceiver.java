@@ -9,7 +9,7 @@ import android.net.wifi.WifiManager;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 public class WifiToggleReceiver extends BaseBroadcastReceiver {
 

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.itachi1706.appupdater.Util.BitmapUtil
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.Util.ColorUtils
+import com.itachi1706.cheesecakeutilities.util.ColorUtils
 
 /**
  * Created by Kenneth on 17/7/2019.

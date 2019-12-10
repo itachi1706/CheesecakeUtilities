@@ -10,8 +10,8 @@ import com.google.firebase.database.DataSnapshot
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.Util.LogHelper
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
+import com.itachi1706.cheesecakeutilities.util.LogHelper
 import com.itachi1706.cheesecakeutilities.objects.DualLineString
 import kotlinx.android.synthetic.main.activity_linear_recyclerview.*
 

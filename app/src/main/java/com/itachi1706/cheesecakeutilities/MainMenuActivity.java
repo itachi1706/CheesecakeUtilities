@@ -21,8 +21,8 @@ import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.Fragments.GamesFragment;
 import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.Util.CommonVariables;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.CommonVariables;
 
 import io.fabric.sdk.android.Fabric;
 

@@ -35,7 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeScanningProcessor;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSource;
@@ -44,7 +44,7 @@ import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
 
 import java.io.IOException;
 
-import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.logPermError;
+import static com.itachi1706.cheesecakeutilities.util.CommonMethods.logPermError;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the

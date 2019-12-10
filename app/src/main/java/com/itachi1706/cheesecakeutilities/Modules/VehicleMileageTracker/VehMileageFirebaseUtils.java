@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.itachi1706.cheesecakeutilities.Util.FirebaseUtils;
+import com.itachi1706.cheesecakeutilities.util.FirebaseUtils;
 
 /**
  * Created by Kenneth on 28/7/2017.

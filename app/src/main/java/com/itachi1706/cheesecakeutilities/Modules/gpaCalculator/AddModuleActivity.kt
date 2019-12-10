@@ -11,8 +11,8 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaInsti
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaModule
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.Util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.Util.LogHelper
+import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
+import com.itachi1706.cheesecakeutilities.util.LogHelper
 import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.SpectrumPalette
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_module.*
 import java.util.*

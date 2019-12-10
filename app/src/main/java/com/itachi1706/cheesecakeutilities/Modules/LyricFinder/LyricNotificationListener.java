@@ -26,7 +26,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;

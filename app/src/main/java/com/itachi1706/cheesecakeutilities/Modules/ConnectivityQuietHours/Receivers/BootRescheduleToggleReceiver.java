@@ -15,7 +15,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Connect
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.text.DateFormat;
 import java.util.Calendar;

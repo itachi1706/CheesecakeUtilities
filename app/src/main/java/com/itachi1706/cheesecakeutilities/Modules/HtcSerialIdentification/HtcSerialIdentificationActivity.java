@@ -13,7 +13,7 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
 import com.itachi1706.cheesecakeutilities.Modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 
 public class HtcSerialIdentificationActivity extends BaseModuleActivity {
 

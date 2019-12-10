@@ -9,7 +9,7 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeGeneratorFragment;
 import com.itachi1706.cheesecakeutilities.Modules.BarcodeTools.Fragments.BarcodeScannerFragment;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
 /**

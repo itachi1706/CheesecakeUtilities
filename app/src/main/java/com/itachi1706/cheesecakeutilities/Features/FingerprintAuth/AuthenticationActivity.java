@@ -20,7 +20,7 @@ import androidx.biometric.BiometricPrompt;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.util.concurrent.Executor;
 

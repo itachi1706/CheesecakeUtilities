@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Util;
+package com.itachi1706.cheesecakeutilities.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
 
 /**
  * Created by Kenneth on 3/19/2016.

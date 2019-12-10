@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
