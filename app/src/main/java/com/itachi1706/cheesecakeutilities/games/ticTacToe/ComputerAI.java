@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.games.TicTacToe;
+package com.itachi1706.cheesecakeutilities.games.ticTacToe;
 
 import android.app.AlertDialog;
 import android.content.Context;

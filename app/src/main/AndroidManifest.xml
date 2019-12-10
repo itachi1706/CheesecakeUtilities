@@ -186,7 +186,7 @@
             android:exported="true"
             android:label="Navigation Bar Customizer" />
         <activity
-            android:name=".games.TicTacToe.TicTacToeActivity"
+            android:name=".games.ticTacToe.TicTacToeActivity"
             android:exported="true"
             android:label="Tic Tac Toe" />
         <activity

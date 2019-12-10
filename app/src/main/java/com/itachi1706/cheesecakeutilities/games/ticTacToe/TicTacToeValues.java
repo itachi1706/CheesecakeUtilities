@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.games.TicTacToe;
+package com.itachi1706.cheesecakeutilities.games.ticTacToe;
 
 /**
  * Created by Kenneth on 19/5/2015
