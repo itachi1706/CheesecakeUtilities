@@ -1,10 +1,10 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications
+package com.itachi1706.cheesecakeutilities.modules.listApplications
 
 import android.app.Activity
 import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.widget.Toast
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Helpers.BackupHelper
+import com.itachi1706.cheesecakeutilities.modules.listApplications.Helpers.BackupHelper
 import java.io.File
 import java.io.IOException
 import java.lang.ref.WeakReference

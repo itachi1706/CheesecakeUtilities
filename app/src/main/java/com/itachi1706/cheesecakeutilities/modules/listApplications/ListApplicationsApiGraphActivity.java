@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications;
+package com.itachi1706.cheesecakeutilities.modules.listApplications;
 
 import android.graphics.Color;
 import android.os.Bundle;

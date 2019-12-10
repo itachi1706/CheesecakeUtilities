@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications;
+package com.itachi1706.cheesecakeutilities.modules.listApplications;
 
 import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
@@ -7,8 +7,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
 
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Fragments.ListApplicationFragment;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Fragments.RestoreAppFragment;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments.ListApplicationFragment;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments.RestoreAppFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 

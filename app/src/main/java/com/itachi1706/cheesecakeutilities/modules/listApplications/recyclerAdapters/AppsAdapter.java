@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters;
 
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.ListApplicationsDetailActivity;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.AppsItem;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsDetailActivity;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.R;
 import com.turingtechnologies.materialscrollbar.ICustomAdapter;
 

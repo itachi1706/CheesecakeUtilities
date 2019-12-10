@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects
+package com.itachi1706.cheesecakeutilities.modules.listApplications.objects
 
 /**
  * Created by Kenneth on 1/10/2016.

@@ -1,12 +1,12 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters
+package com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters
 
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.AsyncTask
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Helpers.BackupHelper
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsBase
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsFooter
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsHeader
+import com.itachi1706.cheesecakeutilities.modules.listApplications.Helpers.BackupHelper
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsBase
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsFooter
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsHeader
 import com.itachi1706.cheesecakeutilities.util.LogHelper
 import org.apache.commons.io.FileUtils
 import java.lang.ref.WeakReference

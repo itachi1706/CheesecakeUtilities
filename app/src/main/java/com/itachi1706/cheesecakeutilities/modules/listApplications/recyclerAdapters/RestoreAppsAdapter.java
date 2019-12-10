@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,9 +12,9 @@ import android.widget.TextView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsBase;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsFooter;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsHeader;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsBase;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsFooter;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsHeader;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

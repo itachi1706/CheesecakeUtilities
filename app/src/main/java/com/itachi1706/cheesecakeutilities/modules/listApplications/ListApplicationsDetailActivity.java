@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications;
+package com.itachi1706.cheesecakeutilities.modules.listApplications;
 
 import android.Manifest;
 import android.app.Activity;
@@ -39,8 +39,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.appupdater.Util.ValidationHelper;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.LabelledColumn;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters.AppsAdapter;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.LabelledColumn;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

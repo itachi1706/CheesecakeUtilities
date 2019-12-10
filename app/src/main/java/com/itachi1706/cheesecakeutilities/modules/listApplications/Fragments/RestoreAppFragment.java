@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.RestoreAppsItemsBase;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters.LoadAppsRestoreTask;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters.RestoreAppsAdapter;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsBase;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.LoadAppsRestoreTask;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.RestoreAppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
 /**

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications
+package com.itachi1706.cheesecakeutilities.modules.listApplications
 
 import android.app.Activity
 import android.content.pm.ApplicationInfo
@@ -6,8 +6,8 @@ import android.content.pm.PackageManager
 import android.os.AsyncTask
 import androidx.collection.ArrayMap
 import com.google.firebase.perf.FirebasePerformance
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.AppsItem
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters.AppsAdapter
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.AppsItem
+import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter
 import com.itachi1706.cheesecakeutilities.util.LogHelper
 import java.lang.ref.WeakReference
 

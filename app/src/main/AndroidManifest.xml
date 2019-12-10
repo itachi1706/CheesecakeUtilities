@@ -104,7 +104,7 @@
         </receiver>
 
         <activity
-            android:name=".modules.ListApplications.ListApplicationsActivity"
+            android:name=".modules.listApplications.ListApplicationsActivity"
             android:exported="true"
             android:label="Application List"
             android:theme="@style/AppTheme.NoAppBar" />
@@ -154,7 +154,7 @@
             android:name=".modules.ipptCalculator.IpptScoringActivity"
             android:label="IPPT Scoreboard" />
         <activity
-            android:name=".modules.ListApplications.ListApplicationsDetailActivity"
+            android:name=".modules.listApplications.ListApplicationsDetailActivity"
             android:label="App Information" />
         <activity
             android:name=".features.biometricAuth.AuthenticationActivity"
@@ -204,7 +204,7 @@
         </provider>
 
         <activity
-            android:name=".modules.ListApplications.ListApplicationsApiGraphActivity"
+            android:name=".modules.listApplications.ListApplicationsApiGraphActivity"
             android:label="Graph by API Level" />
         <activity
             android:name=".modules.SafetyNet.SafetyNetActivity"

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -31,12 +31,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Helpers.BackupHelper;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.ListApplicationsApiGraphActivity;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.ListApplicationsDetailActivity;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.LoadAppListTask;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects.AppsItem;
-import com.itachi1706.cheesecakeutilities.modules.ListApplications.RecyclerAdapters.AppsAdapter;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.Helpers.BackupHelper;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsApiGraphActivity;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsDetailActivity;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.LoadAppListTask;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.AppsItem;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.turingtechnologies.materialscrollbar.CustomIndicator;

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ListApplications.Objects
+package com.itachi1706.cheesecakeutilities.modules.listApplications.objects
 
 import android.content.Context
 import android.graphics.drawable.Drawable
