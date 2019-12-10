@@ -190,7 +190,7 @@
             android:exported="true"
             android:label="Tic Tac Toe" />
         <activity
-            android:name=".features.UtilityManagement.ManageUtilityActivity"
+            android:name=".features.utilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
 
         <provider
