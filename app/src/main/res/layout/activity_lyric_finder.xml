@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/main_lyrics_layout"
-    tools:context="com.itachi1706.cheesecakeutilities.modules.lyricFinder.LyricFinderActivity">
+    tools:context=".huh.modules.lyricFinder.LyricFinderActivity">
 
     <ScrollView
         android:layout_width="match_parent"

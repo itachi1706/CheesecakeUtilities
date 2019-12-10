@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.cheesecakeutilities.huh.util.LogHelper;
 
 public class CameraDisablerActivity extends BaseModuleActivity {
 

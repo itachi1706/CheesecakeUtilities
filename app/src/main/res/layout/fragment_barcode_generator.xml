@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments.BarcodeGeneratorFragment">
+    tools:context=".huh.modules.barcodeTools.fragments.BarcodeGeneratorFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

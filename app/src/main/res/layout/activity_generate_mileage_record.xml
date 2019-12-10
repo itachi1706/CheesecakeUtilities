@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.GenerateMileageRecordActivity">
-    <com.itachi1706.cheesecakeutilities.views.VScroll
+    tools:context=".huh.modules.vehicleMileageTracker.GenerateMileageRecordActivity">
+    <com.itachi1706.cheesecakeutilities.huh.views.VScroll
         android:id="@+id/vscroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.itachi1706.cheesecakeutilities.views.HScroll
+        <com.itachi1706.cheesecakeutilities.huh.views.HScroll
             android:id="@+id/hscroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -18,6 +18,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/veh_mileage_table"
                 android:stretchColumns="*" />
-        </com.itachi1706.cheesecakeutilities.views.HScroll>
-    </com.itachi1706.cheesecakeutilities.views.VScroll>
+        </com.itachi1706.cheesecakeutilities.huh.views.HScroll>
+    </com.itachi1706.cheesecakeutilities.huh.views.VScroll>
 </LinearLayout>

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".modules.vehicleMileageTracker.AddNewVehicleActivity">
+    tools:context=".huh.modules.vehicleMileageTracker.AddNewVehicleActivity">
 
     <LinearLayout
         android:id="@+id/veh_mileage_add_veh_layout"
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.itachi1706.cheesecakeutilities.util.TextInputAutoCompleteTextView
+            <com.itachi1706.cheesecakeutilities.huh.util.TextInputAutoCompleteTextView
                 android:id="@+id/veh_mileage_add_location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="5dp">
 
-            <com.itachi1706.cheesecakeutilities.util.TextInputAutoCompleteTextView
+            <com.itachi1706.cheesecakeutilities.huh.util.TextInputAutoCompleteTextView
                 android:id="@+id/veh_mileage_add_purpose"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="5dp">
 
-            <com.itachi1706.cheesecakeutilities.util.TextInputAutoCompleteTextView
+            <com.itachi1706.cheesecakeutilities.huh.util.TextInputAutoCompleteTextView
                 android:id="@+id/veh_mileage_add_veh_num"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

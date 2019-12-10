@@ -10,7 +10,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itachi1706.cheesecakeutilities.util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.huh.util.CommonMethods;
 
 public class StringToHexBin extends BaseModuleActivity implements View.OnClickListener {
 

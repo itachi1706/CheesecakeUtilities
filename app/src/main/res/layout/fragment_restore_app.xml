@@ -4,7 +4,7 @@
     android:id="@+id/activity_restore_app"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.listApplications.ListApplicationsActivity">
+    tools:context=".huh.modules.listApplications.ListApplicationsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="wrap_content"

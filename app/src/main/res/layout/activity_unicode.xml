@@ -4,7 +4,7 @@
     android:id="@+id/activity_games"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard.UnicodeActivity">
+    tools:context=".huh.modules.unicodeKeyboard.UnicodeActivity">
 
     <include layout="@layout/fragment_recycler_view" />
 
