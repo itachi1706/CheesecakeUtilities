@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Views;
+package com.itachi1706.cheesecakeutilities.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
