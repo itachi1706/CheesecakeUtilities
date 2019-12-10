@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.UnicodeKeyboard;
+package com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.UnicodeKeyboard.RecyclerAdapters.UnicodeMenuAdapter;
+import com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard.recyclerAdapters.UnicodeMenuAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 
 public class UnicodeActivity extends BaseModuleActivity {

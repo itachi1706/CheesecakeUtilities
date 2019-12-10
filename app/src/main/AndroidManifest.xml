@@ -211,7 +211,7 @@
             android:exported="true"
             android:label="SafetyNet Validator" />
         <activity
-            android:name=".modules.UnicodeKeyboard.UnicodeActivity"
+            android:name=".modules.unicodeKeyboard.UnicodeActivity"
             android:exported="true"
             android:label="Unicode Emoticons" />
         <activity

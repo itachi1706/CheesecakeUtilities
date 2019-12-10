@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.UnicodeKeyboard.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard.recyclerAdapters;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
