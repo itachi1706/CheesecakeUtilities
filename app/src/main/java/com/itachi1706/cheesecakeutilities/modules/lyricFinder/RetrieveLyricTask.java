@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.LyricFinder;
+package com.itachi1706.cheesecakeutilities.modules.lyricFinder;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

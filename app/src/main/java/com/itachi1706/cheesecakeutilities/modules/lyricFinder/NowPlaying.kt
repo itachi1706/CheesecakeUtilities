@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.LyricFinder
+package com.itachi1706.cheesecakeutilities.modules.lyricFinder
 
 import android.content.Intent
 import android.graphics.Bitmap

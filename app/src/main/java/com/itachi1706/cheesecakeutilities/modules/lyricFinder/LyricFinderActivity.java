@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.LyricFinder;
+package com.itachi1706.cheesecakeutilities.modules.lyricFinder;
 
 import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
