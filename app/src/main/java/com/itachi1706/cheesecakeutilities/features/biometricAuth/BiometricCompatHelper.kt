@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Features.FingerprintAuth
+package com.itachi1706.cheesecakeutilities.features.biometricAuth
 
 import android.annotation.TargetApi
 import android.app.KeyguardManager

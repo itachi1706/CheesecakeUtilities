@@ -157,7 +157,7 @@
             android:name=".Modules.ListApplications.ListApplicationsDetailActivity"
             android:label="App Information" />
         <activity
-            android:name=".Features.FingerprintAuth.AuthenticationActivity"
+            android:name=".features.biometricAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Modules.SystemInformation.InitActivity"
@@ -190,7 +190,7 @@
             android:exported="true"
             android:label="Tic Tac Toe" />
         <activity
-            android:name=".Features.UtilityManagement.ManageUtilityActivity"
+            android:name=".features.UtilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
 
         <provider

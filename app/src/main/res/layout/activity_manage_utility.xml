@@ -4,7 +4,7 @@
     android:id="@+id/activity_hide_utility"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.itachi1706.cheesecakeutilities.Features.UtilityManagement.ManageUtilityActivity">
+    tools:context="com.itachi1706.cheesecakeutilities.features.UtilityManagement.ManageUtilityActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
