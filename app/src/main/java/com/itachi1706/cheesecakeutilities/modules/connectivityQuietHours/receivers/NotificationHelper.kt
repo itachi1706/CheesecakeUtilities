@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.Nullable
 import androidx.core.app.NotificationCompat
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.ConnectivityQuietHoursActivity
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants
 import com.itachi1706.cheesecakeutilities.R
 import java.text.DateFormat
 import java.util.*

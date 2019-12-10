@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers;
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -11,9 +11,9 @@ import androidx.core.app.NotificationCompat;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.ConnectivityQuietHoursActivity;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.ConnectivityQuietHoursActivity;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.objects.ConnectivityPeriod;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
@@ -22,16 +22,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.BT_START_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_BT_TIME;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_NOTIFICATION_CHANNEL;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_WIFI_TIME;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.WIFI_END_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers.NotificationHelper.NOTIFICATION_CANCEL;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.BT_END_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.BT_START_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_BT_TIME;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_NOTIFICATION_CHANNEL;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_WIFI_TIME;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.WIFI_END_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.WIFI_START_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.NotificationHelper.NOTIFICATION_CANCEL;
 
 public class BootRescheduleToggleReceiver extends BaseBroadcastReceiver {
 

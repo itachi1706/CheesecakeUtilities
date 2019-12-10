@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers;
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 public class BluetoothToggleReceiver extends BaseBroadcastReceiver {

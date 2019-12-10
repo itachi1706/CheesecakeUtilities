@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Objects
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.objects
 
 /**
  * Created by Kenneth on 28/4/2017.

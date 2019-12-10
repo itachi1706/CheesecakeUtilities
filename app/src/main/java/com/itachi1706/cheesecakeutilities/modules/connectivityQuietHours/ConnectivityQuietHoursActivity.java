@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours;
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -24,10 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Objects.ConnectivityPeriod;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers.BluetoothToggleReceiver;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers.BootRescheduleToggleReceiver;
-import com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.objects.ConnectivityPeriod;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.BluetoothToggleReceiver;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.BootRescheduleToggleReceiver;
+import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.WifiToggleReceiver;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter;
@@ -41,18 +41,18 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.BT_END_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.BT_START_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_BT_STATE;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_BT_TIME;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_NOTIFY_ALWAYS;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_NOTIFY_DEBUG;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_WIFI_STATE;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.QH_WIFI_TIME;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.WIFI_END_INTENT;
-import static com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.QHConstants.WIFI_START_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.BT_END_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.BT_START_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_BT_NOTIFICATION;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_BT_STATE;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_BT_TIME;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_NOTIFY_ALWAYS;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_NOTIFY_DEBUG;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_WIFI_NOTIFICATION;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_WIFI_STATE;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.QH_WIFI_TIME;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.WIFI_END_INTENT;
+import static com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants.WIFI_START_INTENT;
 
 public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
 

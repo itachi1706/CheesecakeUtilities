@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours;
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

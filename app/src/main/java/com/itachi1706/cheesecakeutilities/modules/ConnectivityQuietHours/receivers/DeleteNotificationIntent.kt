@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ConnectivityQuietHours.Receivers
+package com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers
 
 import android.app.NotificationManager
 import android.content.Context
