@@ -10,10 +10,10 @@ import androidx.preference.Preference
 import com.itachi1706.appupdater.EasterEggResMultiMusicPrefFragment
 import com.itachi1706.appupdater.SettingsInitializer
 import com.itachi1706.appupdater.Util.PrefHelper
-import com.itachi1706.cheesecakeutilities.huh.features.biometricAuth.AuthenticationActivity
-import com.itachi1706.cheesecakeutilities.huh.features.biometricAuth.BiometricCompatHelper
-import com.itachi1706.cheesecakeutilities.huh.features.utilityManagement.ManageUtilityActivity
-import com.itachi1706.cheesecakeutilities.huh.util.CommonVariables
+import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity
+import com.itachi1706.cheesecakeutilities.features.biometricAuth.BiometricCompatHelper
+import com.itachi1706.cheesecakeutilities.features.utilityManagement.ManageUtilityActivity
+import com.itachi1706.cheesecakeutilities.util.CommonVariables
 import me.jfenn.attribouter.Attribouter
 
 /**

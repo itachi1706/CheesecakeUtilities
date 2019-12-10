@@ -76,11 +76,11 @@
             android:value="4a76e5bed29f3c6bc0d8e90c16212c07cb8efbc0" />
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.htcSerialIdentification.HtcSerialIdentificationActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.htcSerialIdentification.HtcSerialIdentificationActivity"
             android:exported="true"
             android:label="HTC S/N Identification" />
 
-        <activity android:name="com.itachi1706.cheesecakeutilities.huh.redirectapp.fanfictionReader.FanfictionReaderRedirectApp"
+        <activity android:name="com.itachi1706.cheesecakeutilities.redirectapp.fanfictionReader.FanfictionReaderRedirectApp"
             android:theme="@style/AppTheme.Invisible"
             android:exported="true" />
 
@@ -104,19 +104,19 @@
         </receiver>
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.listApplications.ListApplicationsActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsActivity"
             android:exported="true"
             android:label="Application List"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ordCountdown.ORDActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ordCountdown.ORDActivity"
             android:exported="true"
             android:label="ORD Countdown" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ordCountdown.ORDSettingsActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ordCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
             android:label="Configure ORD Event Countdown Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -124,13 +124,13 @@
         </activity>
 
         <service
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
             android:exported="true"
             android:label="Update ORD Widgets"
             tools:ignore="InnerclassSeparator" />
 
         <receiver
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider"
             android:label="ORD Event Countdown"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
@@ -147,28 +147,28 @@
             android:exported="true"
             android:label="BMI Calculator" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ipptCalculator.IpptCalculatorActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ipptCalculator.IpptCalculatorActivity"
             android:exported="true"
             android:label="IPPT Calculator" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.ipptCalculator.IpptScoringActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.ipptCalculator.IpptScoringActivity"
             android:label="IPPT Scoreboard" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.listApplications.ListApplicationsDetailActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsDetailActivity"
             android:label="App Information" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.features.biometricAuth.AuthenticationActivity"
+            android:name="com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.systemInformation.InitActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.systemInformation.InitActivity"
             android:exported="true" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.systemInformation.ParentFragmentActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.systemInformation.ParentFragmentActivity"
             android:label="System Information"
             android:theme="@style/LegacyLightThemeNoAppBar" />
 
         <service
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.navbarCustomization.NavBarService"
+            android:name="com.itachi1706.cheesecakeutilities.modules.navbarCustomization.NavBarService"
             android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:process=":NavBarCustomizer">
@@ -182,15 +182,15 @@
         </service>
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.navbarCustomization.NavbarConfigurationActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.navbarCustomization.NavbarConfigurationActivity"
             android:exported="true"
             android:label="Navigation Bar Customizer" />
         <activity
-            android:name=".huh.games.ticTacToe.TicTacToeActivity"
+            android:name=".games.ticTacToe.TicTacToeActivity"
             android:exported="true"
             android:label="Tic Tac Toe" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.features.utilityManagement.ManageUtilityActivity"
+            android:name="com.itachi1706.cheesecakeutilities.features.utilityManagement.ManageUtilityActivity"
             android:label="Utilities Management" />
 
         <provider
@@ -204,42 +204,42 @@
         </provider>
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.listApplications.ListApplicationsApiGraphActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsApiGraphActivity"
             android:label="Graph by API Level" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.safetyNet.SafetyNetActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.safetyNet.SafetyNetActivity"
             android:exported="true"
             android:label="SafetyNet Validator" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.unicodeKeyboard.UnicodeActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard.UnicodeActivity"
             android:exported="true"
             android:label="Unicode Emoticons" />
         <activity
-            android:name=".huh.games.chromiumTRex.ChromiumTRexActivity"
+            android:name=".games.chromiumTRex.ChromiumTRexActivity"
             android:exported="true"
             android:label="Chrome T-Rex Game" />
         <activity
             android:name=".LaunchTileSettingsActivity"
             android:exported="true" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.connectivityQuietHours.ConnectivityQuietHoursActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.ConnectivityQuietHoursActivity"
             android:exported="true"
             android:label="Connectivity Quiet Hours Configuration" />
 
         <receiver
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.connectivityQuietHours.receivers.BluetoothToggleReceiver"
+            android:name="com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.BluetoothToggleReceiver"
             android:enabled="true" />
         <receiver
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.connectivityQuietHours.receivers.WifiToggleReceiver"
+            android:name="com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.WifiToggleReceiver"
             android:enabled="true" />
-        <receiver android:name="com.itachi1706.cheesecakeutilities.huh.modules.connectivityQuietHours.receivers.DeleteNotificationIntent">
+        <receiver android:name="com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.DeleteNotificationIntent">
             <intent-filter>
                 <action android:name="subitem_cancelled" />
                 <action android:name="summary_cancelled" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.connectivityQuietHours.receivers.BootRescheduleToggleReceiver"
+            android:name="com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.receivers.BootRescheduleToggleReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -254,19 +254,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.VehicleMileageMainActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.AddNewVehicleActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.AddNewVehicleActivity"
             android:label="Add a new Vehicle" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.AddNewMileageRecordActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.AddNewMileageRecordActivity"
             android:label="Add a new Mileage Record" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.ViewVehicleActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.ViewVehicleActivity"
             android:label="View All Vehicles" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.VehicleMileageStatisticsActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehicleMileageStatisticsActivity"
             android:label="Mileage Statistics"
             android:theme="@style/AppTheme.NoAppBar" />
 
@@ -275,20 +275,20 @@
             android:value="barcode" />
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.barcodeTools.BarcodeParentActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeParentActivity"
             android:exported="true"
             android:label="Barcode Tools"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.barcodeTools.BarcodeCaptureActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity"
             android:label="Scan Barcode" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.lyricFinder.LyricFinderActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.lyricFinder.LyricFinderActivity"
             android:exported="true"
             android:label="Now Playing Lyrics" />
 
         <service
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.lyricFinder.LyricNotificationListener"
+            android:name="com.itachi1706.cheesecakeutilities.modules.lyricFinder.LyricNotificationListener"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
@@ -299,14 +299,14 @@
         </service>
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.GenerateMileageRecordActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.GenerateMileageRecordActivity"
             android:label="Generate Mileage Report" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.sgPsi.PsiActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.sgPsi.PsiActivity"
             android:exported="true"
             android:label="SG Weather (PSI Only)" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.sgPsi.PsiGraphActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.sgPsi.PsiGraphActivity"
             android:label="SG PSI Graphs"
             android:theme="@style/AppTheme.NoAppBar" />
         <!--
@@ -322,7 +322,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.cepasReader.CEPASActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.cepasReader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="CEPAS Reader"
             android:screenOrientation="sensorPortrait"
@@ -338,10 +338,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.whoisLookup.WhoisLookupActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.whoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.apkMirrorDownloader.APKMirrorActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.apkMirrorDownloader.APKMirrorActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:label="APKMirror Downloader"
@@ -359,25 +359,25 @@
                 <data android:host="www.apkmirror.com" />
             </intent-filter>
         </activity>
-        <activity android:name="com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.VehicleMileageTrackerInitActivity" />
+        <activity android:name="com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehicleMileageTrackerInitActivity" />
         <activity
             android:name=".FirebaseLoginActivity"
             android:label="@string/label_firebase_sign_in" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.gpaCalculator.MainViewActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.gpaCalculator.MainViewActivity"
             android:label="@string/title_activity_gpa_calculator_main"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.gpaCalculator.InitActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.gpaCalculator.InitActivity"
             android:label="@string/title_activity_gpa_calculator_main" />
         <activity
-            android:name="com.itachi1706.cheesecakeutilities.huh.modules.gpaCalculator.ScoringActivity"
+            android:name="com.itachi1706.cheesecakeutilities.modules.gpaCalculator.ScoringActivity"
             android:label="View Scoring Tiers" />
-        <activity android:name="com.itachi1706.cheesecakeutilities.huh.modules.gpaCalculator.AddInstitutionActivity"
+        <activity android:name="com.itachi1706.cheesecakeutilities.modules.gpaCalculator.AddInstitutionActivity"
             android:label="Add an Institution" />
-        <activity android:name="com.itachi1706.cheesecakeutilities.huh.modules.gpaCalculator.AddSemesterActivity"
+        <activity android:name="com.itachi1706.cheesecakeutilities.modules.gpaCalculator.AddSemesterActivity"
             android:label="Add a Semester" />
-        <activity android:name="com.itachi1706.cheesecakeutilities.huh.modules.gpaCalculator.AddModuleActivity"
+        <activity android:name="com.itachi1706.cheesecakeutilities.modules.gpaCalculator.AddModuleActivity"
             android:label="Add a Module" />
     </application>
 

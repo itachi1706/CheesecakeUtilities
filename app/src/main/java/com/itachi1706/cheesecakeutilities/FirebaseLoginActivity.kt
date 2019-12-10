@@ -24,8 +24,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.itachi1706.appupdater.Util.NotifyUserUtil
-import com.itachi1706.cheesecakeutilities.huh.modules.vehicleMileageTracker.VehMileageFirebaseUtils
-import com.itachi1706.cheesecakeutilities.huh.util.LogHelper
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
+import com.itachi1706.cheesecakeutilities.util.LogHelper
 
 class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnectionFailedListener {
 

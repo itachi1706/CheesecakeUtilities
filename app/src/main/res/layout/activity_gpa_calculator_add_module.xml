@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context=".huh.modules.gpaCalculator.AddModuleActivity">
+    tools:context=".modules.gpaCalculator.AddModuleActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -106,7 +106,7 @@
             android:gravity="center"
             android:text="Module Color: "/>
 
-        <com.itachi1706.cheesecakeutilities.huh.com.thebluealliance.spectrum.SpectrumPalette
+        <com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.SpectrumPalette
             android:id="@+id/module_color_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

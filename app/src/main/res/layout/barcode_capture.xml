@@ -6,16 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.itachi1706.cheesecakeutilities.huh.mlkit.camera.CameraSourcePreview
+    <com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.itachi1706.cheesecakeutilities.huh.mlkit.camera.GraphicOverlay
+        <com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.itachi1706.cheesecakeutilities.huh.mlkit.camera.CameraSourcePreview>
+    </com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSourcePreview>
 
 </LinearLayout>

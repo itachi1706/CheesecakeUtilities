@@ -2,7 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/eventcountdown_widget_provider"
     android:initialLayout="@layout/eventcountdown_widget_provider"
-    android:configure="com.itachi1706.cheesecakeutilities.huh.modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
+    android:configure="com.itachi1706.cheesecakeutilities.modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
     android:minHeight="40dp"
     android:minWidth="110dp"
     android:previewImage="@drawable/event_widget_preview"

@@ -8,8 +8,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics
 import com.itachi1706.appupdater.Util.PrefHelper
-import com.itachi1706.cheesecakeutilities.huh.features.biometricAuth.AuthenticationActivity
-import com.itachi1706.cheesecakeutilities.huh.util.CommonMethods
+import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity
+import com.itachi1706.cheesecakeutilities.util.CommonMethods
 import io.fabric.sdk.android.Fabric
 
 /**
