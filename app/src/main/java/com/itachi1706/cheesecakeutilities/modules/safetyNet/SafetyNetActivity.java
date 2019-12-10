@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SafetyNet;
+package com.itachi1706.cheesecakeutilities.modules.safetyNet;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
