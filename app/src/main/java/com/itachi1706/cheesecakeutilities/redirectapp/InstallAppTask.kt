@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.itachi1706.appupdater.Util.URLHelper
-import com.itachi1706.cheesecakeutilities.Util.CommonVariables
+import com.itachi1706.cheesecakeutilities.util.CommonVariables
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -18,7 +18,7 @@ import java.net.URL
 
 /**
  * Created by Kenneth on 11/8/2019.
- * for com.itachi1706.cheesecakeutilities.Modules.FanfictionCompactor in CheesecakeUtilities
+ * for com.itachi1706.cheesecakeutilities.modules.FanfictionCompactor in CheesecakeUtilities
  */
 class InstallAppTask(activity: Activity) : AsyncTask<Void, Void, File>() {
 

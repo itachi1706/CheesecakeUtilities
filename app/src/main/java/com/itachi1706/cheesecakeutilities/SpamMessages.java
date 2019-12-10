@@ -17,11 +17,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.Util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
-import static com.itachi1706.cheesecakeutilities.Util.CommonMethods.displayPermErrorMessage;
-import static com.itachi1706.cheesecakeutilities.Util.CommonVariables.PERM_MAN_TAG;
+import static com.itachi1706.cheesecakeutilities.util.CommonMethods.displayPermErrorMessage;
+import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
 
 public class SpamMessages extends BaseModuleActivity implements View.OnClickListener {
 

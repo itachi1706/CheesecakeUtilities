@@ -16,7 +16,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.itachi1706.cheesecakeutilities"
-            android:targetClass="com.itachi1706.cheesecakeutilities.Modules.CEPASReader.CEPASActivity" >
+            android:targetClass="com.itachi1706.cheesecakeutilities.modules.cepasReader.CEPASActivity" >
             <extra android:name="globalcheck" android:value="true" />
         </intent>
     </shortcut>

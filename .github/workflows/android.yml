@@ -23,6 +23,8 @@ jobs:
         GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
     - name: Make Gradle executable
       run: chmod +x gradlew
+    #- name: Clean Gradle (DO NOT USE ALL THE TIME)
+    #  run: ./gradlew clean
     - name: Build with Gradle
       run: ./gradlew build
   device-test:
@@ -44,6 +46,8 @@ jobs:
       run: chmod +x gradlew
     - name: List Available Android Devices
       run: $ANDROID_HOME/tools/bin/avdmanager list
+    #- name: Clean Gradle (DO NOT USE ALL THE TIME)
+    #  run: ./gradlew clean
     - name: run tests
       uses: reactivecircus/android-emulator-runner@v1
       with:
@@ -77,6 +81,8 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    #- name: Clean Gradle (DO NOT USE ALL THE TIME)
+    #  run: ./gradlew clean
     - name: Move APK file to main folder
       run: mv ./app/build/outputs/apk/debug/app-debug.apk ./CheesecakeUtilities-debug-gha.apk
     - name: Release

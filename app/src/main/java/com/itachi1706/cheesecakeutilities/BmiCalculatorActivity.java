@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.itachi1706.cheesecakeutilities.Util.CommonMethods;
+import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 
 public class BmiCalculatorActivity extends BaseModuleActivity {
 

@@ -28,7 +28,7 @@ import java.io.IOException
 
 /**
  * Created by Kenneth on 17/9/2018.
- * for com.itachi1706.cheesecakeutilities.Modules.BarcodeTools in CheesecakeUtilities
+ * for com.itachi1706.cheesecakeutilities.modules.BarcodeTools in CheesecakeUtilities
  */
 class BarcodeScanningProcessor : VisionProcessorBase<List<FirebaseVisionBarcode>>() {
 
