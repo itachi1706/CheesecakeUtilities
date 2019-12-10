@@ -16,18 +16,18 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper;
+import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
-import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper.FEMALE;
-import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper.PUSHUP;
-import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper.RUN;
-import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper.SITUP;
-import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper.UNKNOWN;
+import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.FEMALE;
+import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.PUSHUP;
+import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.RUN;
+import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.SITUP;
+import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.UNKNOWN;
 
 public class IpptCalculatorActivity extends BaseModuleActivity {
 

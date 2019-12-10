@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers;
+package com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers;
 
 import android.content.Context;
 

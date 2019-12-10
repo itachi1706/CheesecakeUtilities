@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeutilities.modules.ipptCalculator
 
 import android.app.Activity
 import android.os.AsyncTask
-import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.Helpers.JsonHelper
+import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper
 import java.lang.ref.WeakReference
 
 /**
