@@ -19,7 +19,7 @@ import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.modules.ordCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.modules.ordCountdown.json.GCalHolidayItem;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.JSONHelper;

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects
 
 import java.util.ArrayList
 

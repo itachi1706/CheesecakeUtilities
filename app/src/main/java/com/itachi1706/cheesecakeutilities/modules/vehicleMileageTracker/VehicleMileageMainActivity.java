@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +24,8 @@ import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Record;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.SwipeEditDeleteCallback;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
@@ -39,9 +39,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
 
 public class VehicleMileageMainActivity extends BaseModuleActivity implements SwipeEditDeleteCallback.ISwipeCallback {
 

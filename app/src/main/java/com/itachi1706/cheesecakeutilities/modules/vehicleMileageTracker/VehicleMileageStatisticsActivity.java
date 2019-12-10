@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,16 +14,16 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments.VehicleMileageGeneralStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments.VehicleMileageMonthStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments.VehicleMileageVNumberStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments.VehicleMileageVTypeStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageGeneralStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageMonthStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageVNumberStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageVTypeStatsFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 
 public class VehicleMileageStatisticsActivity extends AppCompatActivity {
 

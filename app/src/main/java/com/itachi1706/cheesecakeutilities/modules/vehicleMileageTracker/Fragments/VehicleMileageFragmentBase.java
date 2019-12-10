@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecycle
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
 
 /**
  * Created by Kenneth on 18/4/2018.

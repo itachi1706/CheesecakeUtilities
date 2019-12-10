@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker;
 
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Vehicle;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.VehicleClass;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Vehicle;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
 

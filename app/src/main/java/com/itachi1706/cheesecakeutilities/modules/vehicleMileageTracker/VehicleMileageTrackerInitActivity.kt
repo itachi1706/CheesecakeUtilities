@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker
 
 import android.content.Intent
 import android.os.Bundle

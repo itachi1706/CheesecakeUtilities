@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.RecyclerAdapters;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,10 +17,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.AddNewMileageRecordActivity;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Record;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Vehicle;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.AddNewMileageRecordActivity;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Vehicle;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
 import com.turingtechnologies.materialscrollbar.IDateableAdapter;
 
@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 /**

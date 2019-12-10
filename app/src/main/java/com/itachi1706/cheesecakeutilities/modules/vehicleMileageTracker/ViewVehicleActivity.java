@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Vehicle;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Vehicle;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;

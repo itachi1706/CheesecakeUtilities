@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments;
 
 
 import android.widget.Toast;
@@ -7,16 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 
 import com.google.firebase.database.DataSnapshot;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Vehicle;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Vehicle;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 /**

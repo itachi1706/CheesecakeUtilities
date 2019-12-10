@@ -254,19 +254,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.VehicleMileageTracker.VehicleMileageMainActivity"
+            android:name=".modules.vehicleMileageTracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
         <activity
-            android:name=".modules.VehicleMileageTracker.AddNewVehicleActivity"
+            android:name=".modules.vehicleMileageTracker.AddNewVehicleActivity"
             android:label="Add a new Vehicle" />
         <activity
-            android:name=".modules.VehicleMileageTracker.AddNewMileageRecordActivity"
+            android:name=".modules.vehicleMileageTracker.AddNewMileageRecordActivity"
             android:label="Add a new Mileage Record" />
         <activity
-            android:name=".modules.VehicleMileageTracker.ViewVehicleActivity"
+            android:name=".modules.vehicleMileageTracker.ViewVehicleActivity"
             android:label="View All Vehicles" />
         <activity
-            android:name=".modules.VehicleMileageTracker.VehicleMileageStatisticsActivity"
+            android:name=".modules.vehicleMileageTracker.VehicleMileageStatisticsActivity"
             android:label="Mileage Statistics"
             android:theme="@style/AppTheme.NoAppBar" />
 
@@ -299,7 +299,7 @@
         </service>
 
         <activity
-            android:name=".modules.VehicleMileageTracker.GenerateMileageRecordActivity"
+            android:name=".modules.vehicleMileageTracker.GenerateMileageRecordActivity"
             android:label="Generate Mileage Report" />
         <activity
             android:name=".modules.sgPsi.PsiActivity"
@@ -359,7 +359,7 @@
                 <data android:host="www.apkmirror.com" />
             </intent-filter>
         </activity>
-        <activity android:name=".modules.VehicleMileageTracker.VehicleMileageTrackerInitActivity" />
+        <activity android:name=".modules.vehicleMileageTracker.VehicleMileageTrackerInitActivity" />
         <activity
             android:name=".FirebaseLoginActivity"
             android:label="@string/label_firebase_sign_in" />

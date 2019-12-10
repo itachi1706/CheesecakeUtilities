@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker;
 
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -26,7 +26,7 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Query;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Record;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.MILEAGE_DEC;
 import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 public class GenerateMileageRecordActivity extends AppCompatActivity {

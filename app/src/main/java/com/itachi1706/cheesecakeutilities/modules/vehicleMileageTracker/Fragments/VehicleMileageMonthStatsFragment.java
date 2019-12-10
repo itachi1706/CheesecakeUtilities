@@ -1,20 +1,23 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Fragments;
-
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments;
 
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 /**
@@ -22,7 +25,7 @@ import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments in CheesecakeUtilities
  */
 
-public class VehicleMileageVNumberStatsFragment extends VehicleMileageFragmentBase {
+public class VehicleMileageMonthStatsFragment extends VehicleMileageFragmentBase {
 
     public void updateStats() {
         final String user_id = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp);
@@ -33,13 +36,16 @@ public class VehicleMileageVNumberStatsFragment extends VehicleMileageFragmentBa
         }
         refreshLayout.setRefreshing(true);
         VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
-                .child("vehicleNumberRecords").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehicleMileageStats", "loadStatisticsVehNumber") {
+                .child("timeRecords").child("perMonth").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehMileageMthStats", "getStatisticsMonth") {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    stats.add(new DualLineString("Total Mileage with " + ds.getKey(), Companion.parseData(ds.getValue(Double.class), decimal) + " km"));
+                    Date d = new Date(Long.parseLong(ds.getKey()));
+                    SimpleDateFormat sd = new SimpleDateFormat("MMMM yyyy", Locale.US);
+                    stats.add(new DualLineString("Total Mileage for " + sd.format(d), Companion.parseData(ds.getValue(Double.class), decimal) + " km"));
                 }
+                Collections.reverse(stats);
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);
                 adapter.notifyDataSetChanged();

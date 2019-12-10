@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -22,9 +22,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Record;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.Vehicle;
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.Objects.VehicleClass;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Vehicle;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.VehicleClass;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
@@ -37,8 +37,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
-import static com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_RECORDS;
+import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
 import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
 
 public class AddNewMileageRecordActivity extends AppCompatActivity {

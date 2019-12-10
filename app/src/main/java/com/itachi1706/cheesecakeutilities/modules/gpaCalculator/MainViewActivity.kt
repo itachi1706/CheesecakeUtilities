@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
-import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.fragment.InstitutionListFragment
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.fragment.ModuleListFragment
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.fragment.SemesterListFragment
