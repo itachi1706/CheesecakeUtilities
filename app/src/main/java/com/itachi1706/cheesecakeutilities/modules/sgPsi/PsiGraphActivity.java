@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SGPsi;
+package com.itachi1706.cheesecakeutilities.modules.sgPsi;
 
 import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;

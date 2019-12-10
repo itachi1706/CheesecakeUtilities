@@ -302,11 +302,11 @@
             android:name=".modules.VehicleMileageTracker.GenerateMileageRecordActivity"
             android:label="Generate Mileage Report" />
         <activity
-            android:name=".modules.SGPsi.PsiActivity"
+            android:name=".modules.sgPsi.PsiActivity"
             android:exported="true"
             android:label="SG Weather (PSI Only)" />
         <activity
-            android:name=".modules.SGPsi.PsiGraphActivity"
+            android:name=".modules.sgPsi.PsiGraphActivity"
             android:label="SG PSI Graphs"
             android:theme="@style/AppTheme.NoAppBar" />
         <!--

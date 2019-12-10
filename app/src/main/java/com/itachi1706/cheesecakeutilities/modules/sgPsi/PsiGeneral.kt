@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SGPsi
+package com.itachi1706.cheesecakeutilities.modules.sgPsi
 
 import com.itachi1706.cheesecakeutilities.util.ColorUtils
 
