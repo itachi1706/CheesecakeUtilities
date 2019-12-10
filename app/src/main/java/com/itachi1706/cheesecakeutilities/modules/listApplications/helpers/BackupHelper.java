@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.listApplications.Helpers;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.helpers;
 
 import android.content.Context;
 import android.content.Intent;

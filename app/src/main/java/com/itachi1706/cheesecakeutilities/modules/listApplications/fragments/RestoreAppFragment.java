@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

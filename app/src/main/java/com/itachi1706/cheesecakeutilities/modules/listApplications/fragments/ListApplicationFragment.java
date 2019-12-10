@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.listApplications.fragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.itachi1706.cheesecakeutilities.modules.listApplications.Helpers.BackupHelper;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.helpers.BackupHelper;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsApiGraphActivity;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.ListApplicationsDetailActivity;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.LoadAppListTask;

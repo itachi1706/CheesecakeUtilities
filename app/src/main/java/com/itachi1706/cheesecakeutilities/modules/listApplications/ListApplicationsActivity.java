@@ -7,8 +7,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
 
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments.ListApplicationFragment;
-import com.itachi1706.cheesecakeutilities.modules.listApplications.Fragments.RestoreAppFragment;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.fragments.ListApplicationFragment;
+import com.itachi1706.cheesecakeutilities.modules.listApplications.fragments.RestoreAppFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 
