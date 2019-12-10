@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.HtcSerialIdentification;
+package com.itachi1706.cheesecakeutilities.modules.htcSerialIdentification;
 
 import android.app.AlertDialog;
 import android.os.Build;
@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.HtcSerialIdentification.Util.HtcSerialNumberDates;
-import com.itachi1706.cheesecakeutilities.modules.HtcSerialIdentification.Util.HtcSerialNumberManufacturingLocations;
+import com.itachi1706.cheesecakeutilities.modules.htcSerialIdentification.util.HtcSerialNumberDates;
+import com.itachi1706.cheesecakeutilities.modules.htcSerialIdentification.util.HtcSerialNumberManufacturingLocations;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 

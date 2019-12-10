@@ -76,7 +76,7 @@
             android:value="4a76e5bed29f3c6bc0d8e90c16212c07cb8efbc0" />
 
         <activity
-            android:name=".modules.HtcSerialIdentification.HtcSerialIdentificationActivity"
+            android:name=".modules.htcSerialIdentification.HtcSerialIdentificationActivity"
             android:exported="true"
             android:label="HTC S/N Identification" />
 
