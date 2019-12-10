@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments;
 
 import android.widget.Toast;
 

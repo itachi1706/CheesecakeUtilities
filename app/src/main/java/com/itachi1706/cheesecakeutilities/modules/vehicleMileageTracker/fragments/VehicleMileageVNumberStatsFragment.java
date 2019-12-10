@@ -1,10 +1,9 @@
-package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments;
 
 
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.collection.ArrayMap;
 
 import com.google.firebase.database.DataSnapshot;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils;
@@ -13,7 +12,6 @@ import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_STATS;
 import static com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils.FB_REC_USER;
@@ -24,51 +22,23 @@ import static com.itachi1706.cheesecakeutilities.util.FirebaseUtils.Companion;
  * for com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.Fragments in CheesecakeUtilities
  */
 
-public class VehicleMileageGeneralStatsFragment extends VehicleMileageFragmentBase {
-
-    private ArrayMap<String, String> legend;
-    private boolean done = false;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (legend == null) {
-            refreshLayout.setRefreshing(true);
-            VehMileageFirebaseUtils.getVehicleMileageDatabase().child("stat-legend")
-                    .addListenerForSingleValueEvent(new FirebaseValueEventListener("VehicleMileageStats", "loadStatisticsGeneral-Legend") {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    legend = new ArrayMap<>();
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        legend.put(ds.getKey(), ds.getValue(String.class));
-                    }
-                    done = true;
-                    updateStats();
-                }
-            });
-        } else {
-            done = true;
-            updateStats();
-        }
-    }
+public class VehicleMileageVNumberStatsFragment extends VehicleMileageFragmentBase {
 
     public void updateStats() {
-        if (!done) return;
         final String user_id = VehMileageFirebaseUtils.getFirebaseUIDFromSharedPref(sp);
         if (user_id.equalsIgnoreCase("nien")) {
             // Fail, return to login activity
             Toast.makeText(getActivity(), "Invalid Login Token, please re-login", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!refreshLayout.isRefreshing()) refreshLayout.setRefreshing(true);
+        refreshLayout.setRefreshing(true);
         VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER).child(user_id).child(FB_REC_STATS)
-                .addListenerForSingleValueEvent(new FirebaseValueEventListener("VehicleMileageStats", "loadStatisticsGeneral-Data") {
+                .child("vehicleNumberRecords").addListenerForSingleValueEvent(new FirebaseValueEventListener("VehicleMileageStats", "loadStatisticsVehNumber") {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<DualLineString> stats = new ArrayList<>();
-                for (Map.Entry<String, String> i : legend.entrySet()) {
-                    if (!dataSnapshot.hasChild(i.getKey())) continue;
-                    stats.add(new DualLineString(i.getValue(), Companion.parseData(dataSnapshot.child(i.getKey()).getValue(Double.class), decimal) + " km"));
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    stats.add(new DualLineString("Total Mileage with " + ds.getKey(), Companion.parseData(ds.getValue(Double.class), decimal) + " km"));
                 }
                 if (refreshLayout.isRefreshing()) refreshLayout.setRefreshing(false);
                 adapter.update(stats);

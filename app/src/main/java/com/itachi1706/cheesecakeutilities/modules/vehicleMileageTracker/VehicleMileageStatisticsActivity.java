@@ -14,11 +14,11 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageDateStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageGeneralStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageMonthStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageVNumberStatsFragment;
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.Fragments.VehicleMileageVTypeStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageDateStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageGeneralStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageMonthStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageVNumberStatsFragment;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageVTypeStatsFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;
 

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.recyclerAdapters;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

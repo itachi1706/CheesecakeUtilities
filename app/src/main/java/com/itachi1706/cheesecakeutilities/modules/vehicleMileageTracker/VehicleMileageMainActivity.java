@@ -25,7 +25,7 @@ import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.RecyclerAdapters.VehicleMileageRecordsAdapter;
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.recyclerAdapters.VehicleMileageRecordsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.SwipeEditDeleteCallback;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
