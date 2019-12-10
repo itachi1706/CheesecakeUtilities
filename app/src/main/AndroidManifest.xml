@@ -338,7 +338,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.WhoisLookup.WhoisLookupActivity"
+            android:name=".modules.whoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
         <activity
             android:name=".modules.apkMirrorDownloader.APKMirrorActivity"

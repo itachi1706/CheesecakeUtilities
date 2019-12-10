@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.WhoisLookup;
+package com.itachi1706.cheesecakeutilities.modules.whoisLookup;
 
 import android.os.Bundle;
 import android.os.Handler;
