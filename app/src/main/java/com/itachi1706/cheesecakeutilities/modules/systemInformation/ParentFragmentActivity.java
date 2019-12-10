@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SystemInformation;
+package com.itachi1706.cheesecakeutilities.modules.systemInformation;
 
 import android.graphics.Color;
 import android.os.Build.VERSION;
@@ -12,13 +12,13 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.WindowManager;
 
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.BatteryFragment;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.DeviceFragment;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.GpuFragment;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.NetworkFragment;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.SensorsFragment;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.StorageFragment;
-import com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments.SystemFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.BatteryFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.DeviceFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.GpuFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.NetworkFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.SensorsFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.StorageFragment;
+import com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments.SystemFragment;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.Locale;

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SystemInformation.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.systemInformation.fragments;
 
 import android.content.Context;
 import android.hardware.Sensor;

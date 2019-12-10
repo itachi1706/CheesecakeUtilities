@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.SystemInformation;
+package com.itachi1706.cheesecakeutilities.modules.systemInformation;
 
 import android.app.ActivityManager;
 import android.content.Intent;

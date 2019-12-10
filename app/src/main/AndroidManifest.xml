@@ -160,10 +160,10 @@
             android:name=".features.biometricAuth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".modules.SystemInformation.InitActivity"
+            android:name=".modules.systemInformation.InitActivity"
             android:exported="true" />
         <activity
-            android:name=".modules.SystemInformation.ParentFragmentActivity"
+            android:name=".modules.systemInformation.ParentFragmentActivity"
             android:label="System Information"
             android:theme="@style/LegacyLightThemeNoAppBar" />
 
