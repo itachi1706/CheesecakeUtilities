@@ -322,7 +322,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".modules.CEPASReader.CEPASActivity"
+            android:name=".modules.cepasReader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="CEPAS Reader"
             android:screenOrientation="sensorPortrait"

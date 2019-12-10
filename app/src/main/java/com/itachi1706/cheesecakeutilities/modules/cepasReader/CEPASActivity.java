@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.CEPASReader;
+package com.itachi1706.cheesecakeutilities.modules.cepasReader;
 
 import android.content.Intent;
 import android.nfc.NfcAdapter;
