@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ordCountdown.WidgetProviders;
+package com.itachi1706.cheesecakeutilities.modules.ordCountdown.widgetProviders;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
