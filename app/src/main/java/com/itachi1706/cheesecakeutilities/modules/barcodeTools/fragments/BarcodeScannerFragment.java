@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.BarcodeTools.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ClipData;
@@ -23,8 +23,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.gson.Gson;
-import com.itachi1706.cheesecakeutilities.modules.BarcodeTools.BarcodeCaptureActivity;
-import com.itachi1706.cheesecakeutilities.modules.BarcodeTools.BarcodeHelper;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.BarcodeTools.Fragments;
+package com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -30,7 +30,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.itachi1706.cheesecakeutilities.modules.BarcodeTools.BarcodeHelper;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

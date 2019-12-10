@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.BarcodeTools;
+package com.itachi1706.cheesecakeutilities.modules.barcodeTools;
 
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
@@ -6,8 +6,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.widget.Toolbar;
 
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.BarcodeTools.Fragments.BarcodeGeneratorFragment;
-import com.itachi1706.cheesecakeutilities.modules.BarcodeTools.Fragments.BarcodeScannerFragment;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments.BarcodeGeneratorFragment;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments.BarcodeScannerFragment;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.ViewPagerAdapter;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.itachi1706.cheesecakeutilities.modules.BarcodeTools;
+package com.itachi1706.cheesecakeutilities.modules.barcodeTools;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

@@ -275,12 +275,12 @@
             android:value="barcode" />
 
         <activity
-            android:name=".modules.BarcodeTools.BarcodeParentActivity"
+            android:name=".modules.barcodeTools.BarcodeParentActivity"
             android:exported="true"
             android:label="Barcode Tools"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".modules.BarcodeTools.BarcodeCaptureActivity"
+            android:name=".modules.barcodeTools.BarcodeCaptureActivity"
             android:label="Scan Barcode" />
         <activity
             android:name=".modules.lyricFinder.LyricFinderActivity"

@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.BarcodeTools;
+package com.itachi1706.cheesecakeutilities.modules.barcodeTools;
 
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.zxing.BarcodeFormat;
