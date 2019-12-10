@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ORDCountdown.WidgetProviders;
+package com.itachi1706.cheesecakeutilities.modules.ordCountdown.WidgetProviders;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -11,8 +11,8 @@ import android.widget.RemoteViews;
 
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.MainMenuActivity;
-import com.itachi1706.cheesecakeutilities.modules.ORDCountdown.ORDActivity;
-import com.itachi1706.cheesecakeutilities.modules.ORDCountdown.ORDSettingsActivity;
+import com.itachi1706.cheesecakeutilities.modules.ordCountdown.ORDActivity;
+import com.itachi1706.cheesecakeutilities.modules.ordCountdown.ORDSettingsActivity;
 import com.itachi1706.cheesecakeutilities.R;
 
 import java.util.concurrent.TimeUnit;

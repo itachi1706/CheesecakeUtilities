@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ORDCountdown;
+package com.itachi1706.cheesecakeutilities.modules.ordCountdown;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +17,8 @@ import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.gson.Gson;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
-import com.itachi1706.cheesecakeutilities.modules.ORDCountdown.json.GCalHoliday;
-import com.itachi1706.cheesecakeutilities.modules.ORDCountdown.json.GCalHolidayItem;
+import com.itachi1706.cheesecakeutilities.modules.ordCountdown.json.GCalHoliday;
+import com.itachi1706.cheesecakeutilities.modules.ordCountdown.json.GCalHolidayItem;
 import com.itachi1706.cheesecakeutilities.modules.VehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;

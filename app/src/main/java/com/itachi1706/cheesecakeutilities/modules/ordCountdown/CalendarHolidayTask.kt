@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ORDCountdown
+package com.itachi1706.cheesecakeutilities.modules.ordCountdown
 
 import android.os.AsyncTask
 import com.itachi1706.appupdater.Util.PrefHelper

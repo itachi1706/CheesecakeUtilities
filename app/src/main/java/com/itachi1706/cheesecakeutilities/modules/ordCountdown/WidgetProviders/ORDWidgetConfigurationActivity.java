@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ORDCountdown.WidgetProviders;
+package com.itachi1706.cheesecakeutilities.modules.ordCountdown.WidgetProviders;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;

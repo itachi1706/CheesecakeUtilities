@@ -109,14 +109,14 @@
             android:label="Application List"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".modules.ORDCountdown.ORDActivity"
+            android:name=".modules.ordCountdown.ORDActivity"
             android:exported="true"
             android:label="ORD Countdown" />
         <activity
-            android:name=".modules.ORDCountdown.ORDSettingsActivity"
+            android:name=".modules.ordCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
         <activity
-            android:name=".modules.ORDCountdown.WidgetProviders.ORDWidgetConfigurationActivity"
+            android:name=".modules.ordCountdown.WidgetProviders.ORDWidgetConfigurationActivity"
             android:label="Configure ORD Event Countdown Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -124,13 +124,13 @@
         </activity>
 
         <service
-            android:name=".modules.ORDCountdown.WidgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
+            android:name=".modules.ordCountdown.WidgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
             android:exported="true"
             android:label="Update ORD Widgets"
             tools:ignore="InnerclassSeparator" />
 
         <receiver
-            android:name=".modules.ORDCountdown.WidgetProviders.EventCountdownWidgetProvider"
+            android:name=".modules.ordCountdown.WidgetProviders.EventCountdownWidgetProvider"
             android:label="ORD Event Countdown"
             tools:ignore="InnerclassSeparator">
             <intent-filter>

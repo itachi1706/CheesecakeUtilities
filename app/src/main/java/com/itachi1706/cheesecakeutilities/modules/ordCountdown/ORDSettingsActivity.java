@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.ORDCountdown;
+package com.itachi1706.cheesecakeutilities.modules.ordCountdown;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
