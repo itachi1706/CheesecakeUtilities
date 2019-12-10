@@ -15,7 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

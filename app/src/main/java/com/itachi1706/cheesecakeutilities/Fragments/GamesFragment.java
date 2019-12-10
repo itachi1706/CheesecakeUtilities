@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.GamesMenuAdapter;
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.GamesMenuAdapter;
 
 /**
  * Created by Kenneth on 31/1/2017.

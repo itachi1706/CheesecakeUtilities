@@ -21,7 +21,7 @@ import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.Modules.ORDCountdown.json.GCalHolidayItem;
 import com.itachi1706.cheesecakeutilities.Modules.VehicleMileageTracker.VehMileageFirebaseUtils;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.JSONHelper;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

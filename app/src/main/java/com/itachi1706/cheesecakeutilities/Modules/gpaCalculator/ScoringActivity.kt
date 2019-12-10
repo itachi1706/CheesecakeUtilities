@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
 import com.itachi1706.cheesecakeutilities.util.LogHelper
 import com.itachi1706.cheesecakeutilities.objects.DualLineString

@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeutilities.Features.UtilityManagement;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +13,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.Features.FingerprintAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.ManageUtilAdapter;
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.ManageUtilAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;

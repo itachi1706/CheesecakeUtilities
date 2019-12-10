@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.recyclerAdapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

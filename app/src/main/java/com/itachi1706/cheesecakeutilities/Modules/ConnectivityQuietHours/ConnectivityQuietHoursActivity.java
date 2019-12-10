@@ -30,8 +30,8 @@ import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receive
 import com.itachi1706.cheesecakeutilities.Modules.ConnectivityQuietHours.Receivers.WifiToggleReceiver;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.DualLineStringRecyclerAdapter;
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.StringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter;
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 

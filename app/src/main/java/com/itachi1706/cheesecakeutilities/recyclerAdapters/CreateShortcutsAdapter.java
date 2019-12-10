@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.RecyclerAdapters;
+package com.itachi1706.cheesecakeutilities.recyclerAdapters;
 
 import android.os.Bundle;
 import android.os.Handler;

@@ -17,7 +17,7 @@ import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.GpaRecyclerAdapt
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.MainViewActivity
 import com.itachi1706.cheesecakeutilities.Modules.gpaCalculator.interfaces.StateSwitchListener
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.RecyclerAdapters.SwipeEditDeleteCallback
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.util.FirebaseUtils
 import com.itachi1706.cheesecakeutilities.util.LogHelper
 import java.util.*
