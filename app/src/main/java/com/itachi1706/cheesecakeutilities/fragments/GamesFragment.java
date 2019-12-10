@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.Fragments;
+package com.itachi1706.cheesecakeutilities.fragments;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;

@@ -19,8 +19,8 @@ import com.itachi1706.appupdater.Objects.CAAnalytics;
 import com.itachi1706.appupdater.Util.AnalyticsHelper;
 import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity;
-import com.itachi1706.cheesecakeutilities.Fragments.GamesFragment;
-import com.itachi1706.cheesecakeutilities.Fragments.UtilityFragment;
+import com.itachi1706.cheesecakeutilities.fragments.GamesFragment;
+import com.itachi1706.cheesecakeutilities.fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.CommonVariables;
 
