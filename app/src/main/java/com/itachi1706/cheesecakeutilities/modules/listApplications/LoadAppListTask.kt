@@ -50,7 +50,7 @@ class LoadAppListTask(activity: Activity, private val callback: LoadAppCallback,
             var version = "Unknown"
             try {
                 val pInfo = activity.packageManager.getPackageInfo(i.packageName, 0)
-                version = pInfo.versionName
+                version = pInfo?.versionName ?: "Unknown"
             } catch (e: PackageManager.NameNotFoundException) {
                 e.printStackTrace()
             } catch (e: NullPointerException) {
