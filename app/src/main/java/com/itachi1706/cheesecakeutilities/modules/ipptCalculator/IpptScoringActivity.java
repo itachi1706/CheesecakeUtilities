@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.modules.ipptCalculator;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,7 @@ public class IpptScoringActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ippt_scoring);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         genderSpinner = findViewById(R.id.spinnerGender);
         ageSpinner = findViewById(R.id.spinnerAge);
@@ -110,5 +112,14 @@ public class IpptScoringActivity extends AppCompatActivity {
             bar.setVisibility(View.GONE);
             label.setVisibility(View.GONE);
         }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ageGroup, gender, exercise);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
