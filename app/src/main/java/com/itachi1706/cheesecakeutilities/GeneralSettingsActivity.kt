@@ -39,9 +39,9 @@ class GeneralSettingsActivity : AppCompatActivity() {
                     resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
             super.addEggMethods(false, null, true) { Attribouter.from(context).show(); true }
 
-            val fpPw: Preference? = findPreference("password_fp")
+            val bioPw: Preference? = findPreference("password_fp")
             sp = PrefHelper.getDefaultSharedPreferences(activity)
-            updatePasswordViews(fpPw)
+            updatePasswordViews(bioPw)
 
             findPreference<Preference>("testpw")?.setOnPreferenceClickListener {
                 startActivity(Intent(activity, AuthenticationActivity::class.java))
@@ -59,12 +59,12 @@ class GeneralSettingsActivity : AppCompatActivity() {
             }
 
             findPreference<Preference>(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED)?.setOnPreferenceChangeListener { _, newValue ->
-                updatePasswordViews(fpPw, newValue as Boolean, 0)
+                updatePasswordViews(bioPw, newValue as Boolean, 0)
                 true
             }
 
             findPreference<Preference>(BiometricCompatHelper.SCREEN_LOCK_ENABLED)?.setOnPreferenceChangeListener { _, newValue ->
-                updatePasswordViews(fpPw, newValue as Boolean, 1)
+                updatePasswordViews(bioPw, newValue as Boolean, 1)
                 true
             }
 
@@ -105,30 +105,30 @@ class GeneralSettingsActivity : AppCompatActivity() {
             findPreference<Preference>(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED)?.isEnabled = hasSL
         }
 
-        private fun updatePasswordViews(fpPw: Preference?, value: Boolean = BiometricCompatHelper.requireFPAuth(sp), type: Int = -1) {
+        private fun updatePasswordViews(bioPw: Preference?, value: Boolean = BiometricCompatHelper.requireBiometricAuth(sp), type: Int = -1) {
             var isScreenLock = BiometricCompatHelper.isScreenLockProtectionEnabled(activity!!)
-            var isFP = BiometricCompatHelper.requireFPAuth(sp)
+            var isBiometric = BiometricCompatHelper.requireBiometricAuth(sp)
 
             when (type) {
-                0 -> isFP = value
+                0 -> isBiometric = value
                 1 -> isScreenLock = value
             }
             var summary = "Unprotected"
             if (isScreenLock) {
                 if (BiometricCompatHelper.isScreenLockEnabled(activity!!)) {
                     summary = "Protected with device screen lock"
-                    if (isFP) {
-                        if (BiometricCompatHelper.isBiometricFPRegistered(activity!!)) summary = "Protected with fingerprint + screen lock"
-                        else summary += " (No fingerprint found on device)"
+                    if (isBiometric) {
+                        if (BiometricCompatHelper.isBiometricRegistered(activity!!)) summary = "Protected with biometrics + screen lock"
+                        else summary += " (No biometric data found on device)"
                     }
                 } else summary = "Unprotected (No screen lock found)"
-            } else if (isFP) {
-                summary = if (!BiometricCompatHelper.isScreenLockEnabled(activity!!)) "Unprotected (No screen lock found)" // No FP without a screen lock
-                else if (BiometricCompatHelper.isBiometricFPRegistered(activity!!)) "Protected with fingerprint"
-                else "Unprotected (No fingerprint found on device)"
+            } else if (isBiometric) {
+                summary = if (!BiometricCompatHelper.isScreenLockEnabled(activity!!)) "Unprotected (No screen lock found)" // No Biometrics without a screen lock
+                else if (BiometricCompatHelper.isBiometricRegistered(activity!!)) "Protected with biometrics"
+                else "Unprotected (No biometric data found on device)"
             }
 
-            fpPw?.summary = summary
+            bioPw?.summary = summary
         }
 
         override fun getMusicResource(): Int {

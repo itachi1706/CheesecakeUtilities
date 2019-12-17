@@ -43,8 +43,8 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         sp = PrefHelper.getDefaultSharedPreferences(this);
         migrateToBiometric();
-        if (BiometricCompatHelper.Companion.isBiometricFPRegistered(this) && BiometricCompatHelper.Companion.requireFPAuth(sp)) {
-            // Has Fingerprint and requested for fingerprint auth
+        if (BiometricCompatHelper.Companion.isBiometricRegistered(this) && BiometricCompatHelper.Companion.requireBiometricAuth(sp)) {
+            // Has Biometrics and requested for biometric auth
             Executor executor = BiometricCompatHelper.Companion.getBiometricExecutor();
             BiometricPrompt p = new BiometricPrompt(this, executor, callback);
             BiometricPrompt.PromptInfo promptInfo = BiometricCompatHelper.Companion.createPromptObject();
@@ -110,9 +110,9 @@ public class AuthenticationActivity extends AppCompatActivity {
                             Toast.makeText(mContext, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show();
                             LogHelper.i(TAG, "User Lock out");
                             intent.putExtra(INTENT_MSG, "Lockout");
-                            new AlertDialog.Builder(mContext).setTitle("Fingerprint sensor disabled (Locked out)")
-                                    .setMessage("You have scanned an invalid fingerprint too many times and your fingerprint sensor has been disabled. \n\n" +
-                                            "Please re-authenticate by unlocking or rebooting your phone again or disable fingerprints on your device")
+                            new AlertDialog.Builder(mContext).setTitle("Biometric sensors disabled (Locked out)")
+                                    .setMessage("You have attempted and failed biometric authentication too many times and your biometric sensors has been disabled. \n\n" +
+                                            "Please re-authenticate by unlocking or rebooting your phone again or disable biometric authentication on your device")
                                     .setCancelable(false).setPositiveButton(R.string.dialog_action_positive_close, (dialog, which) -> {
                                 setResult(RESULT_CANCELED, intent);
                                 finish();
