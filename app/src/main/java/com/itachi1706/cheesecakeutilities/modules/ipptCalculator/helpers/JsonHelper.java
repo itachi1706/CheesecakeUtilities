@@ -183,13 +183,12 @@ public class JsonHelper {
         return "Fail";
     }
 
-    public static int getSitUpScore(int situp, int ageGroup, Gender object) {
-        if (situp == 0) return 0; // Don't need check lol
-        JsonObject obj = object.getSitups();
+    private static int getElementScore(int score, int ageGroup, JsonObject obj) {
+        if (score == 0) return 0; // Don't need check lol
         JsonElement element = null;
         for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
             String key = entry.getKey();
-            if (key.equals(situp + "")) {
+            if (key.equals(score + "")) {
                 element = entry.getValue();
                 break;
             }
@@ -199,20 +198,12 @@ public class JsonHelper {
         return el.get(ageGroup + "").getAsInt();
     }
 
+    public static int getSitUpScore(int situp, int ageGroup, Gender object) {
+        return getElementScore(situp, ageGroup, object.getSitups());
+    }
+
     public static int getPushUpScore(int pushup, int ageGroup, Gender object) {
-        if (pushup == 0) return 0; // Don't need check lol
-        JsonObject obj = object.getPushups();
-        JsonElement element = null;
-        for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
-            String key = entry.getKey();
-            if (key.equals(pushup + "")) {
-                element = entry.getValue();
-                break;
-            }
-        }
-        if (element == null) return 25; // Presume full marks
-        JsonObject el = element.getAsJsonObject();
-        return el.get(ageGroup + "").getAsInt();
+        return getElementScore(pushup, ageGroup, object.getPushups());
     }
 
     public static int getRunScore(int runMin, int runSec, int ageGroup, Gender object) {
