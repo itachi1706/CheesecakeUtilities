@@ -184,6 +184,7 @@ public class JsonHelper {
     }
 
     public static int getSitUpScore(int situp, int ageGroup, Gender object) {
+        if (situp == 0) return 0; // Don't need check lol
         JsonObject obj = object.getSitups();
         JsonElement element = null;
         for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
@@ -199,6 +200,7 @@ public class JsonHelper {
     }
 
     public static int getPushUpScore(int pushup, int ageGroup, Gender object) {
+        if (pushup == 0) return 0; // Don't need check lol
         JsonObject obj = object.getPushups();
         JsonElement element = null;
         for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
@@ -214,6 +216,7 @@ public class JsonHelper {
     }
 
     public static int getRunScore(int runMin, int runSec, int ageGroup, Gender object) {
+        if (runMin == 0 && runSec == 0) return 0; // Don't need check lol
         int totalSecs = (runMin * 60) + runSec;
         JsonObject obj = object.getRun();
         JsonElement element = null;

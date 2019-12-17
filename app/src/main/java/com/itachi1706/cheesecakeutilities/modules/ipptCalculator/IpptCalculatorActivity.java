@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,10 +17,10 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Main;
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
@@ -68,11 +69,11 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
             }
         });
         ageSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, JsonHelper.getAgeRangeText(this)));
-        calculate.setOnClickListener(v -> calculate());
+        calculate.setOnClickListener(this::calculate);
         scores.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), IpptScoringActivity.class)));
     }
 
-    private void calculate() {
+    private void calculate(View v) {
         int rm = (runMin.getText().toString().isEmpty()) ? -1 : Integer.parseInt(runMin.getText().toString());
         int rs = (runSec.getText().toString().isEmpty()) ? 0 : Integer.parseInt(runSec.getText().toString());
         int su = (situp.getText().toString().isEmpty()) ? -1 : Integer.parseInt(situp.getText().toString());
@@ -151,6 +152,9 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
                 }
             }
         }
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if(imm != null && imm.isAcceptingText()) imm.hideSoftInputFromWindow(v.getWindowToken(), 0); // verify if the soft keyboard is open
+
         new AlertDialog.Builder(this).setTitle("IPPT Score")
                 .setMessage(message.toString())
                 .setPositiveButton(R.string.dialog_action_positive_close, null).show();
