@@ -5,9 +5,9 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Main;
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -188,7 +188,7 @@ public class JsonHelper {
         JsonElement element = null;
         for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
             String key = entry.getKey();
-            if (key.equals(score + "")) {
+            if (key.equals(Integer.toString(score))) {
                 element = entry.getValue();
                 break;
             }
