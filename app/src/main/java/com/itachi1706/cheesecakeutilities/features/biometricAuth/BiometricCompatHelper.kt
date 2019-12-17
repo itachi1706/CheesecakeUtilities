@@ -13,7 +13,7 @@ import java.util.concurrent.Executor
 
 /**
  * Created by Kenneth on 14/12/2018.
- * for com.itachi1706.appupdater.extlib.fingerprint in CheesecakeUtilities
+ * for com.itachi1706.features.biometricAuth in CheesecakeUtilities
  */
 class BiometricCompatHelper private constructor() {
 
@@ -27,17 +27,17 @@ class BiometricCompatHelper private constructor() {
         const val SCREEN_LOCK_ENABLED = "app_screen_lock_protection"
 
         /**
-         * Check if we need to authenticate with Fingerprint through the BiometricPromptCompat API
+         * Check if we need to authenticate with Biometrics through the BiometricPromptCompat API
          * @param sp Shared Preference Object
-         * @return true if require fingerprint, false otherwise
+         * @return true if require biometrics, false otherwise
          */
-        fun requireFPAuth(sp: SharedPreferences): Boolean {
+        fun requireBiometricAuth(sp: SharedPreferences): Boolean {
             return sp.getBoolean(APP_BIOMETRIC_COMPAT_ENABLED, false)
         }
 
         @TargetApi(Build.VERSION_CODES.M)
         @Throws(NullPointerException::class)
-        fun isBiometricFPRegistered(context: Context): Boolean {
+        fun isBiometricRegistered(context: Context): Boolean {
             if (!isBiometricAuthAvailable(context)) return false
 
 
@@ -61,7 +61,7 @@ class BiometricCompatHelper private constructor() {
         }
 
         @JvmOverloads
-        fun createPromptObject(title: String = "Sign In", subtitle: String? = null, description: String = "Confirm fingerprint to continue", negativeBtn: String = "Cancel"): BiometricPrompt.PromptInfo {
+        fun createPromptObject(title: String = "Sign In", subtitle: String? = null, description: String = "Confirm biometrics to continue", negativeBtn: String = "Cancel"): BiometricPrompt.PromptInfo {
             return BiometricPrompt.PromptInfo.Builder().setTitle(title).setSubtitle(subtitle).setDescription(description).setNegativeButtonText(negativeBtn).build()
         }
 
