@@ -26,6 +26,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val sp = PrefHelper.getDefaultSharedPreferences(this)
+        PrefHelper.handleDefaultThemeSwitch(sp.getString("app_theme", "batterydefault"))
         super.onCreate(savedInstanceState)
 
         val fabric = Fabric.Builder(this).kits(Crashlytics()).debuggable(BuildConfig.DEBUG).build()
@@ -34,8 +36,6 @@ abstract class BaseActivity : AppCompatActivity() {
         val checkGlobal = this.intent.hasExtra("globalcheck") && this.intent.extras!!.getBoolean("globalcheck")
         val authagain = !this.intent.hasExtra("authagain") || this.intent.extras!!.getBoolean("authagain")
         if (!authagain) return
-        val sp = PrefHelper.getDefaultSharedPreferences(this)
-        GeneralSettingsActivity.GeneralPreferenceFragment.updateDarkModeSetting(sp.getString("app_theme", "batterydefault")!!)
         if (!(menuitem == null || menuitem.isEmpty() || menuitem == "")) {
             if (!CommonMethods.isGlobalLocked(sp) && CommonMethods.isUtilityLocked(sp, menuitem)) {
                 Log.i("Authentication", "Requesting Utility Authentication for $menuitem")

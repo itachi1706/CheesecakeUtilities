@@ -35,6 +35,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sp = PrefHelper.getDefaultSharedPreferences(this);
+        PrefHelper.handleDefaultThemeSwitch(sp.getString("app_theme", "batterydefault"));
         super.onCreate(savedInstanceState);
 
         // Error Handling
@@ -55,7 +57,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        sp = PrefHelper.getDefaultSharedPreferences(this);
 
         pager = findViewById(R.id.main_viewpager);
         tabLayout = findViewById(R.id.main_tablayout);
@@ -64,8 +65,6 @@ public class MainMenuActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-
-        GeneralSettingsActivity.GeneralPreferenceFragment.Companion.updateDarkModeSetting(sp.getString("app_theme", "batterydefault"));
 
         // Do Authentication
         if (!this.getIntent().getBooleanExtra("authagain", true)) {
