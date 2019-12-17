@@ -36,7 +36,7 @@ class HtcSerialIdentificationTest {
     @Test
     fun htcSerialIdentificationTest() {
         val mainMenu = onView(allOf(withId(R.id.text1), withText("HTC Serial Number Identification"), childAtPosition(allOf(withId(R.id.main_menu_recycler_view),
-                childAtPosition(withClassName(Matchers.`is`("android.widget.LinearLayout")), 0)), 2), isDisplayed()))
+                childAtPosition(withClassName(Matchers.`is`("android.widget.LinearLayout")), 0)), 1), isDisplayed()))
         mainMenu.perform(click())
 
         val inputEditText = onView(allOf(withId(R.id.htc_sn_serialField), isDisplayed()))

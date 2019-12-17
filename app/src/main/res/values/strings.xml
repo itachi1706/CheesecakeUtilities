@@ -18,14 +18,6 @@
     <string name="bin_hex_btn_send_caps">SEND</string>
     <string name="bin_hex_btn_clear">CLEAR</string>
 
-    <!-- Spam Messages -->
-    <string name="msg_spam_title">Message Spam</string>
-    <string name="msg_spam_btn_send">Send</string>
-    <string name="msg_spam_btn_contacts">Contacts</string>
-    <string name="msg_spam_hint_number_times">Number of Times to Send:</string>
-    <string name="msg_spam_hint_message">Message:</string>
-    <string name="msg_spam_hint_contact_number">Contact Phone Number:</string>
-
     <!-- HTC Serial ID -->
     <string name="htc_sn_id_serial_field_hint">Enter Serial Number</string>
     <string name="htc_sn_id_button_phone_serial">Use Phone Serial</string>
