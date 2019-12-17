@@ -60,11 +60,6 @@
             android:exported="true"
             android:label="@string/bin_hex_title_full" />
         <activity
-            android:name=".SpamMessages"
-            android:exported="true"
-            android:label="@string/msg_spam_title"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".GeneralSettingsActivity"
             android:label="@string/title_activity_general_settings" />
         <activity

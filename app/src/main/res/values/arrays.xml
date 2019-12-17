@@ -2,7 +2,6 @@
 <resources>
     <string-array name="mainmenu">
         <item>String to Binary/Hex Converter</item>
-        <item>Message Spam</item>
         <item>HTC Serial Number Identification</item>
         <item>Fanfiction Reader (External App)</item>
         <item>Disable Camera</item>
@@ -27,7 +26,6 @@
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
-        <item>.SpamMessages</item>
         <item>.modules.htcSerialIdentification.HtcSerialIdentificationActivity</item>
         <item>.redirectapp.fanfictionReader.FanfictionReaderRedirectApp</item>
         <item>.CameraDisablerActivity</item>
