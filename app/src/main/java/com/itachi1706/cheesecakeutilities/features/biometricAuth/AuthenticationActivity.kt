@@ -34,7 +34,7 @@ class AuthenticationActivity : AppCompatActivity() {
             // Has Biometrics and requested for biometric auth
             val executor = BiometricCompatHelper.biometricExecutor
             val p = BiometricPrompt(this, executor, callback)
-            val promptInfo = BiometricCompatHelper.createPromptObject()
+            val promptInfo = BiometricCompatHelper.createPromptObject(requireConfirmation = false)
             p.authenticate(promptInfo)
         } else if (BiometricCompatHelper.isScreenLockProtectionEnabled(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) authWithScreenLock()
         else {
