@@ -7,7 +7,7 @@ then
     EMU_COMMAND="emulator"
     sudo -E sudo -u $USER -E bash -c "${ANDROID_HOME}/emulator/${EMU_COMMAND} -avd test ${AUDIO} ${EMU_PARAMS} &"
 
-    android-wait-for-emulator
+    ./travisscript/android-wait-for-emulator
     adb shell input keyevent 82 &
 
     # Old Code

@@ -65,8 +65,9 @@ install:
   - sudo adduser $USER kvm
 
   # Launch Android Emulator
-  - android list targets
+  - avdmanager list target -c
   - chmod +x ./travisscript/startemu.sh
+  - chmod +x ./travisscript/android-wait-for-emulator.sh
   - ./travisscript/startemu.sh
 
   # Switch back to target JDK
