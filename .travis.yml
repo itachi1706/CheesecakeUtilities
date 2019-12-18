@@ -65,14 +65,14 @@ install:
   - sudo adduser $USER kvm
 
   # Launch Android Emulator
-  - avdmanager list target -c
+  - avdmanager list
   - chmod +x ./travisscript/startemu.sh
   - chmod +x ./travisscript/android-wait-for-emulator.sh
   - ./travisscript/startemu.sh
 
   # Switch back to target JDK
   - JDK="${TARGET_JDK}"
-  - source ~/.install-jdk-travis.sh
+  - source ./travisscript/install-jdk-travis.sh
 before_script:
   # Original Steps continued
   #- mkdir "$ANDROID_HOME/licenses" || true
