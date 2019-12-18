@@ -52,10 +52,10 @@ before_install:
   - yes | sdkmanager "platform-tools"
   - yes | sdkmanager "tools"
   - yes | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
-  - yes | sdkmanager "platform;android-$API_LEVEL" # Current Android compileSDK
+  - yes | sdkmanager "platforms;android-$API_LEVEL" # Current Android compileSDK
 install:
   # Download Emulator Files
-  - yes | sdkmanager "platform;android-$ANDROID_EMULATOR_API_LEVEL" # Android Emulator Platform
+  - yes | sdkmanager "platforms;android-$ANDROID_EMULATOR_API_LEVEL" # Android Emulator Platform
   - yes | sdkmanager "emulator"
   - yes | sdkmanager "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" # Android Emulator Image
 
