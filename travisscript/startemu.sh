@@ -2,12 +2,12 @@
 
 if [ $ESPRESSO -eq 1 ]
 then
-    echo no | avdmanager create avd --force -n test -k "system-images;android-$API;$EMU_FLAVOR;$ABI" -c 10M
+    echo no | avdmanager create avd --force -n test -k "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" -c 10M
     EMU_PARAMS="-verbose -no-snapshot -no-window -camera-back none -camera-front none -selinux permissive -qemu -m 2048"
     EMU_COMMAND="emulator"
     sudo -E sudo -u $USER -E bash -c "${ANDROID_HOME}/emulator/${EMU_COMMAND} -avd test ${AUDIO} ${EMU_PARAMS} &"
 
-    ./travisscript/android-wait-for-emulator
+    ./travisscript/android-wait-for-emulator.sh
     adb shell input keyevent 82 &
 
     # Old Code
