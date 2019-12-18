@@ -14,7 +14,7 @@ cache:
 env:
   global:
     - API_LEVEL=28
-    - ANDROID_EMULATOR_API_LEVEL=28 # Try on 28 first for emulator, if it works we can go 29
+    - ANDROID_EMULATOR_API_LEVEL=29
     - ANDROID_BUILD_TOOLS_VERSION=28.0.3
     - ANDROID_ABI=x86_64
     - ANDROID_FLAVOUR=google_apis # Use default for non-google
@@ -74,7 +74,6 @@ install:
   - JDK="${TARGET_JDK}"
   - source ./travisscript/install-jdk-travis.sh
 before_script:
-  # Original Steps continued
   - openssl aes-256-cbc -K $encrypted_2969307dece5_key -iv $encrypted_2969307dece5_iv -in secrets.tar.enc -out secrets.tar -d
   - tar xvf secrets.tar
   - chmod +x gradlew
