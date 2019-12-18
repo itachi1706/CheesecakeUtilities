@@ -55,17 +55,17 @@ before_install:
   - yes | sdkmanager "platforms;android-$API_LEVEL" >/dev/null # Current Android compileSDK
 install:
   # Download Emulator Files
-  - yes | sdkmanager "platforms;android-$ANDROID_EMULATOR_API_LEVEL" >/dev/null # Android Emulator Platform
-  - yes | sdkmanager "emulator" >/dev/null
-  - yes | sdkmanager "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" >/dev/null # Android Emulator Image
+  - if [ $ESPRESSO -eq 1 ]; then yes | sdkmanager "platforms;android-$ANDROID_EMULATOR_API_LEVEL" >/dev/null; fi # Android Emulator Platform
+  - if [ $ESPRESSO -eq 1 ]; then yes | sdkmanager "emulator" >/dev/null; fi
+  - if [ $ESPRESSO -eq 1 ]; then yes | sdkmanager "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" >/dev/null; fi # Android Emulator Image
 
   # Setup Linux KVM
-  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
+  - then sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
   - sudo adduser $USER libvirt
   - sudo adduser $USER kvm
 
   # Launch Android Emulator
-  - avdmanager list
+  - if [ $ESPRESSO -eq 1 ]; then avdmanager list; fi
   - chmod +x ./travisscript/startemu.sh
   - chmod +x ./travisscript/android-wait-for-emulator.sh
   - ./travisscript/startemu.sh
@@ -75,20 +75,15 @@ install:
   - source ./travisscript/install-jdk-travis.sh
 before_script:
   # Original Steps continued
-  #- mkdir "$ANDROID_HOME/licenses" || true
-  #- echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  #- echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-  #- yes | sdkmanager "platforms;android-28" # Temporary fix for checksum mismatch (travis-ci/#8874)
   - openssl aes-256-cbc -K $encrypted_2969307dece5_key -iv $encrypted_2969307dece5_iv -in secrets.tar.enc -out secrets.tar -d
   - tar xvf secrets.tar
-  #- android list targets
   - chmod +x gradlew
-  #- chmod +x ./travisscript/startemu.sh
-  #- ./travisscript/startemu.sh
   #- ./gradlew clean # Uncomment to clean cache
   - travis_retry ./gradlew assembleDebug
   - travis_retry ./gradlew assembleDebugAndroidTest
-script: if [ $ESPRESSO -eq 1 ]; then travis_retry travis_wait ./gradlew connectedAndroidTest -x assembleDebug -x assembleDebugAndroidTest; else travis_retry travis_wait ./gradlew test -x assembleDebug -x assembleDebugAndroidTest; fi
+# Disable wait as it seems fast enough now
+#script: if [ $ESPRESSO -eq 1 ]; then travis_retry travis_wait ./gradlew connectedAndroidTest -x assembleDebug -x assembleDebugAndroidTest; else travis_retry travis_wait ./gradlew test -x assembleDebug -x assembleDebugAndroidTest; fi
+script: if [ $ESPRESSO -eq 1 ]; then travis_retry ./gradlew connectedAndroidTest -x assembleDebug -x assembleDebugAndroidTest; else travis_retry ./gradlew test -x assembleDebug -x assembleDebugAndroidTest; fi
 after_success:
   - mv ./app/build/outputs/apk/debug/app-debug.apk ./app/build/outputs/apk/debug/CheesecakeUtilities-debug.apk
   - ls ./app/build/outputs/apk/
