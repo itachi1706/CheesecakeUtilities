@@ -60,7 +60,7 @@ install:
   - if [ $ESPRESSO -eq 1 ]; then yes | sdkmanager "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" >/dev/null; fi # Android Emulator Image
 
   # Setup Linux KVM
-  - then sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
+  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
   - sudo adduser $USER libvirt
   - sudo adduser $USER kvm
 
