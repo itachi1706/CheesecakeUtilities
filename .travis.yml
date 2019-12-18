@@ -49,15 +49,15 @@ before_install:
   - mkdir -p ~/.android
   - echo 'count=0' > ~/.android/repositories.cfg
   - yes | sdkmanager --licenses >/dev/null
-  - yes | sdkmanager "platform-tools"
-  - yes | sdkmanager "tools"
-  - yes | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION"
-  - yes | sdkmanager "platforms;android-$API_LEVEL" # Current Android compileSDK
+  - yes | sdkmanager "platform-tools" >/dev/null
+  - yes | sdkmanager "tools" >/dev/null
+  - yes | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION" >/dev/null
+  - yes | sdkmanager "platforms;android-$API_LEVEL" >/dev/null # Current Android compileSDK
 install:
   # Download Emulator Files
-  - yes | sdkmanager "platforms;android-$ANDROID_EMULATOR_API_LEVEL" # Android Emulator Platform
-  - yes | sdkmanager "emulator"
-  - yes | sdkmanager "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" # Android Emulator Image
+  - yes | sdkmanager "platforms;android-$ANDROID_EMULATOR_API_LEVEL" >/dev/null # Android Emulator Platform
+  - yes | sdkmanager "emulator" >/dev/null
+  - yes | sdkmanager "system-images;android-$ANDROID_EMULATOR_API_LEVEL;$ANDROID_FLAVOUR;$ANDROID_ABI" >/dev/null # Android Emulator Image
 
   # Setup Linux KVM
   - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install bridge-utils libpulse0 libvirt-bin qemu-kvm virtinst ubuntu-vm-builder
