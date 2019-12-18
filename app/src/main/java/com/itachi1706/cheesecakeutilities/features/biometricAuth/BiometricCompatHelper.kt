@@ -60,9 +60,10 @@ class BiometricCompatHelper private constructor() {
             }
         }
 
-        @JvmOverloads
-        fun createPromptObject(title: String = "Sign In", subtitle: String? = null, description: String = "Confirm biometrics to continue", negativeBtn: String = "Cancel"): BiometricPrompt.PromptInfo {
-            return BiometricPrompt.PromptInfo.Builder().setTitle(title).setSubtitle(subtitle).setDescription(description).setNegativeButtonText(negativeBtn).build()
+        fun createPromptObject(title: String = "Application Locked", subtitle: String? = null, description: String = "Confirm biometrics to continue",
+                               requireConfirmation: Boolean = true, negativeBtn: String = "Cancel"): BiometricPrompt.PromptInfo {
+            return BiometricPrompt.PromptInfo.Builder().setTitle(title).setSubtitle(subtitle).setConfirmationRequired(requireConfirmation)
+                    .setDescription(description).setNegativeButtonText(negativeBtn).build()
         }
 
         fun isScreenLockEnabled(context: Context): Boolean {

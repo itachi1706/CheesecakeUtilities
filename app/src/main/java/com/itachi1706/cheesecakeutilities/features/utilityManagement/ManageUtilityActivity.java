@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.ManageUtilAdapter;
 
 import java.util.ArrayList;
