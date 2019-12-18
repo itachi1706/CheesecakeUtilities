@@ -60,6 +60,8 @@ class AuthenticationActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun authWithScreenLock() {
+        // TODO (CUTILAND-402): Seems like it could also be caused by an android bug on Android 10 devices. See a/145231213 and a/142740104
+        // TODO (CUTILAND-389): Deprecate with Android 10 targetSDK and compileSDK. See CUTILAND-402
         val km  = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
         if (km == null) {
             Toast.makeText(this, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show()
@@ -69,7 +71,7 @@ class AuthenticationActivity : AppCompatActivity() {
             finish()
             return
         }
-        val s1Intent = km.createConfirmDeviceCredentialIntent("Sign In", "Unlock your screen again to continue")
+        val s1Intent = km.createConfirmDeviceCredentialIntent("Application Locked", "Unlock your screen again to continue")
         startActivityForResult(s1Intent, INTENT_AUTH_SL)
     }
 
@@ -94,6 +96,7 @@ class AuthenticationActivity : AppCompatActivity() {
     private val callback = object: BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
+            LogHelper.d(TAG, "onAuthenticationError: $errorCode ($errString)")
             runOnUiThread {
                 val intent = Intent()
                 when (errorCode) {
@@ -135,6 +138,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
+            LogHelper.d(TAG, "onAuthenticationSucceeded")
             runOnUiThread { authenticatedMessage() }
         }
 

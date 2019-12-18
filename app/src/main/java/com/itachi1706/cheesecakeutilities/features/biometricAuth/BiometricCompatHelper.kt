@@ -60,7 +60,7 @@ class BiometricCompatHelper private constructor() {
             }
         }
 
-        fun createPromptObject(title: String = "Sign In", subtitle: String? = null, description: String = "Confirm biometrics to continue",
+        fun createPromptObject(title: String = "Application Locked", subtitle: String? = null, description: String = "Confirm biometrics to continue",
                                requireConfirmation: Boolean = true, negativeBtn: String = "Cancel"): BiometricPrompt.PromptInfo {
             return BiometricPrompt.PromptInfo.Builder().setTitle(title).setSubtitle(subtitle).setConfirmationRequired(requireConfirmation)
                     .setDescription(description).setNegativeButtonText(negativeBtn).build()
