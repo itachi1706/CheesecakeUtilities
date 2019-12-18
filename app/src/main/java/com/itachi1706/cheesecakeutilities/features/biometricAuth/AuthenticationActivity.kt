@@ -93,28 +93,32 @@ class AuthenticationActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun throwError(intent: Intent, message: String, logMessage: String, toFinish: Boolean = true): Intent {
+        Toast.makeText(this@AuthenticationActivity, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show()
+        LogHelper.i(TAG, logMessage)
+        intent.putExtra(INTENT_MSG, message)
+        if (toFinish) {
+            setResult(Activity.RESULT_CANCELED, intent)
+            finish()
+        }
+        return intent
+    }
+
     private val callback = object: BiometricPrompt.AuthenticationCallback() {
         override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
             super.onAuthenticationError(errorCode, errString)
-            LogHelper.d(TAG, "onAuthenticationError: $errorCode ($errString)")
+            LogHelper.d(TAG, "onAuthenticationError(): $errorCode ($errString)")
             runOnUiThread {
-                val intent = Intent()
+                var intent = Intent()
                 when (errorCode) {
                     ERROR_NEGATIVE_BUTTON, ERROR_USER_CANCELED, ERROR_CANCELED -> {
-                        Toast.makeText(this@AuthenticationActivity, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show()
-                        LogHelper.i(TAG, "User Cancelled Authentication")
-                        intent.putExtra(INTENT_MSG, "Dialog Cancelled")
-                        setResult(Activity.RESULT_CANCELED, intent)
-                        finish()
-                        return@runOnUiThread
+                        throwError(intent, "Dialog Cancelled", "User Cancelled Authentication")
                     }
                     ERROR_LOCKOUT, ERROR_LOCKOUT_PERMANENT -> {
                         if (BiometricCompatHelper.isScreenLockProtectionEnabled(this@AuthenticationActivity) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                             authWithScreenLock()
                         else {
-                            Toast.makeText(this@AuthenticationActivity, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show()
-                            LogHelper.i(TAG, "User Lock out")
-                            intent.putExtra(INTENT_MSG, "Lockout")
+                            intent = throwError(intent, "Lockout", "User Lock out", false)
                             AlertDialog.Builder(this@AuthenticationActivity).setTitle("Biometric sensors disabled (Locked out)")
                                     .setMessage("You have attempted and failed biometric authentication too many times and your biometric sensors has been disabled. \n\n" +
                                             "Please re-authenticate by unlocking or rebooting your phone again or disable biometric authentication on your device")
@@ -123,14 +127,9 @@ class AuthenticationActivity : AppCompatActivity() {
                                         finish()
                                     }.show()
                         }
-                        return@runOnUiThread
                     }
                     else -> {
-                        Toast.makeText(this@AuthenticationActivity, R.string.dialog_cancelled, Toast.LENGTH_SHORT).show()
-                        LogHelper.e(TAG, "Authentication Error ($errorCode): $errString")
-                        intent.putExtra(INTENT_MSG, "Authentication Error: $errString")
-                        setResult(Activity.RESULT_CANCELED, intent)
-                        finish()
+                        throwError(intent, "Authentication Error: $errString", "Authentication Error ($errorCode): $errString")
                     }
                 }
             }
@@ -138,7 +137,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
             super.onAuthenticationSucceeded(result)
-            LogHelper.d(TAG, "onAuthenticationSucceeded")
+            LogHelper.d(TAG, "onAuthenticationSucceeded()")
             runOnUiThread { authenticatedMessage() }
         }
 
