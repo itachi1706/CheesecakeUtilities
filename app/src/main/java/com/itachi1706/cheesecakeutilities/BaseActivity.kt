@@ -27,7 +27,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val sp = PrefHelper.getDefaultSharedPreferences(this)
-        PrefHelper.handleDefaultThemeSwitch(sp.getString("app_theme", "batterydefault"))
+        PrefHelper.handleDefaultThemeSwitch(sp.getString("app_theme", "batterydefault")!!)
         super.onCreate(savedInstanceState)
 
         val fabric = Fabric.Builder(this).kits(Crashlytics()).debuggable(BuildConfig.DEBUG).build()
