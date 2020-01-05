@@ -11,3 +11,5 @@ Here are some miscellaneous statistics :D
  
 
 Because of this, this has been licensed under the MIT License
+
+This application is also available on [my personal F-Droid repository](https://fdroid.itachi1706.com/) for alternative downloads.
