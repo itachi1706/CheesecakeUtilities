@@ -22,10 +22,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-import com.google.gson.Gson;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
-import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHolder;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
@@ -34,7 +34,6 @@ import static android.content.Context.DEVICE_POLICY_SERVICE;
  * Created by Kenneth on 24/12/2017.
  * for com.itachi1706.cheesecakeutilities.modules.BarcodeTools.Fragments in CheesecakeUtilities
  */
-
 public class BarcodeScannerFragment extends Fragment {
 
     // use a compound button so either checkbox or switch widgets work.
@@ -89,10 +88,8 @@ public class BarcodeScannerFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
-                if (data != null) {
-                    Gson gson = new Gson();
-                    String json = data.getStringExtra(BarcodeCaptureActivity.BARCODE_OBJECT);
-                    FirebaseVisionBarcode barcode = gson.fromJson(json, FirebaseVisionBarcode.class);
+                FirebaseVisionBarcode barcode = BarcodeHolder.getInstance().getBarcode(); // Get barcode
+                if (barcode != null) {
                     statusMessage.setText(R.string.barcode_success);
                     StringBuilder result = new StringBuilder();
                     result.append("Format: ").append(BarcodeHelper.getFormatName(barcode.getFormat())).append("\n");
@@ -123,11 +120,10 @@ public class BarcodeScannerFragment extends Fragment {
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     barcodeValue.setClickable(false);
-                    LogHelper.d(TAG, "No barcode captured, intent data is null");
+                    LogHelper.d(TAG, "No barcode captured and retrieved from BarcodeHolder");
                 }
             } else {
-                statusMessage.setText(String.format(getString(R.string.barcode_error),
-                        CommonStatusCodes.getStatusCodeString(resultCode)));
+                statusMessage.setText(String.format(getString(R.string.barcode_error), CommonStatusCodes.getStatusCodeString(resultCode)));
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

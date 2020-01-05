@@ -19,7 +19,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -33,14 +32,13 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
-import com.google.gson.Gson;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeGraphic;
 import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeScanningProcessor;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSource;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSourcePreview;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
+import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.IOException;
 
@@ -58,7 +56,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     private static final int RC_CAMERA_PERMISSION = 1;
 
     // constants used to pass extra data in the intent
-    public static final String BARCODE_OBJECT = "Barcode";
     public static final String USE_FLASH = "UseFlash";
 
     private CameraSource mCameraSource;
@@ -233,6 +230,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             if (!(mGraphic instanceof BarcodeGraphic)) continue;
             BarcodeGraphic graphic = (BarcodeGraphic) mGraphic;
             FirebaseVisionBarcode barcode = graphic.getBarcode();
+            if (barcode == null || barcode.getBoundingBox() == null) continue; // Ignore if no barcode or bounding box
             if (barcode.getBoundingBox().contains((int) x, (int) y)) {
                 // Exact hit, no need to keep looking.
                 best = barcode;
@@ -248,11 +246,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         }
 
         if (best != null) {
-            Gson gson = new Gson();
-            String json = gson.toJson(best);
-            Intent data = new Intent();
-            data.putExtra(BARCODE_OBJECT, json);
-            setResult(CommonStatusCodes.SUCCESS, data);
+            BarcodeHolder.getInstance().setBarcode(best); // Save barcode
+            setResult(CommonStatusCodes.SUCCESS);
             finish();
             return true;
         }
