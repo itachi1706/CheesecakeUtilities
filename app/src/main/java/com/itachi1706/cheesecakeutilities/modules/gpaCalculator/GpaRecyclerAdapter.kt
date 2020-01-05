@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.itachi1706.appupdater.Util.PrefHelper
+import com.itachi1706.helperlib.helpers.PrefHelper
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaRecycler
 import com.itachi1706.cheesecakeutilities.R
 

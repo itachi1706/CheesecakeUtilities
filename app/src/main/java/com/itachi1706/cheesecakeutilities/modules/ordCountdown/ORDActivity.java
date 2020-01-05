@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.google.gson.Gson;
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.modules.ordCountdown.json.GCalHoliday;
 import com.itachi1706.cheesecakeutilities.modules.ordCountdown.json.GCalHolidayItem;

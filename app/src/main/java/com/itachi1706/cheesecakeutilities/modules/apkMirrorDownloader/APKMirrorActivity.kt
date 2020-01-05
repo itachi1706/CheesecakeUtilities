@@ -30,12 +30,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.itachi1706.appupdater.Util.NotifyUserUtil
 import com.itachi1706.cheesecakeutilities.BaseActivity
 import com.itachi1706.cheesecakeutilities.BuildConfig
 import com.itachi1706.cheesecakeutilities.modules.apkMirrorDownloader.interfaces.AsyncResponse
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.UtilitySettingsActivity
+import com.itachi1706.helperlib.utils.NotifyUserUtil
 import im.delight.android.webview.AdvancedWebView
 
 class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncResponse {

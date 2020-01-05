@@ -36,13 +36,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.itachi1706.appupdater.Util.DeprecationHelper;
-import com.itachi1706.appupdater.Util.PrefHelper;
-import com.itachi1706.appupdater.Util.ValidationHelper;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter;
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.deprecation.TextViewDep;
+import com.itachi1706.helperlib.helpers.PrefHelper;
+import com.itachi1706.helperlib.helpers.ValidationHelper;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -55,9 +55,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.itachi1706.appupdater.Util.ValidationHelper.bytesToHex;
 import static com.itachi1706.cheesecakeutilities.util.CommonMethods.logPermError;
 import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
+import static com.itachi1706.helperlib.helpers.ValidationHelper.bytesToHex;
 
 public class ListApplicationsDetailActivity extends AppCompatActivity {
 
@@ -375,7 +375,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        DeprecationHelper.TextView.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
+        TextViewDep.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView detailView;
@@ -393,7 +393,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
         l.setOrientation(LinearLayout.VERTICAL);
         TextView titleView = new TextView(this);
         titleView.setText(title);
-        DeprecationHelper.TextView.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
+        TextViewDep.setTextAppearance(titleView, this, android.R.style.TextAppearance_Medium);
         titleView.setPadding(0,20,0,20);
         l.addView(titleView);
         TextView labelView;

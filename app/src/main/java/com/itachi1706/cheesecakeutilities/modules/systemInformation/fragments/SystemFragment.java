@@ -8,16 +8,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
 import android.os.SystemClock;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.itachi1706.appupdater.Util.DeprecationHelper;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.helperlib.deprecation.StatFsDep;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -153,9 +154,9 @@ public class SystemFragment extends Fragment {
 
     public String getIntMem() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
-        double totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
-        double availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
+        long blockSize = StatFsDep.getBlockSize(statFs);
+        double totalSize = (double) ((StatFsDep.getBlockCount(statFs) * blockSize) / 1048576);
+        double availableSize = (double) ((StatFsDep.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";

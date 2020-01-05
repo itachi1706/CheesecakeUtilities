@@ -98,6 +98,7 @@ dependencies {
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':appupdater')
+    implementation 'com.itachi1706.helpers:helperlib:1.0.2'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'

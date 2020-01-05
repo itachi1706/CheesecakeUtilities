@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
-import com.itachi1706.appupdater.Util.URLHelper;
+import com.itachi1706.helperlib.helpers.URLHelper;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
 
 import java.io.IOException;

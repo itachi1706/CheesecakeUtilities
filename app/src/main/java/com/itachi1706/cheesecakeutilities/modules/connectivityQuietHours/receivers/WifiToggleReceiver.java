@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiManager;
 
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;

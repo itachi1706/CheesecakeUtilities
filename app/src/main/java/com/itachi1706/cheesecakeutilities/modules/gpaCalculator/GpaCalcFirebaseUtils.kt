@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.EditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.itachi1706.appupdater.Util.PrefHelper
+import com.itachi1706.helperlib.helpers.PrefHelper
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.util.ColorUtils
 import com.itachi1706.cheesecakeutilities.util.FirebaseUtils
