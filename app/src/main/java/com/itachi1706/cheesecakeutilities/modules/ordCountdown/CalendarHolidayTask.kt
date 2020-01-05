@@ -1,8 +1,8 @@
 package com.itachi1706.cheesecakeutilities.modules.ordCountdown
 
 import android.os.AsyncTask
-import com.itachi1706.appupdater.Util.PrefHelper
-import com.itachi1706.appupdater.Util.URLHelper
+import com.itachi1706.helperlib.helpers.PrefHelper
+import com.itachi1706.helperlib.helpers.URLHelper
 import java.io.IOException
 import java.lang.ref.WeakReference
 

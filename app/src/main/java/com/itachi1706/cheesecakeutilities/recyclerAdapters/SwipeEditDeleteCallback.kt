@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.itachi1706.appupdater.Util.BitmapUtil
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.ColorUtils
+import com.itachi1706.helperlib.utils.BitmapUtil
 
 /**
  * Created by Kenneth on 17/7/2019.
@@ -18,8 +18,8 @@ class SwipeEditDeleteCallback(var callback: ISwipeCallback, var context: Context
     private val editBackground: Int = ColorUtils.getColorFromVariable(context, ColorUtils.DARK_YELLOW)
     private val deleteBackground: Int = Color.RED
     private val iconColor: Paint = Paint().apply { color = Color.WHITE; colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP) }
-    private val editBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_edit)
-    private val deleteBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_delete_24dp)
+    private val editBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_edit)!!
+    private val deleteBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_delete_24dp)!!
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
 

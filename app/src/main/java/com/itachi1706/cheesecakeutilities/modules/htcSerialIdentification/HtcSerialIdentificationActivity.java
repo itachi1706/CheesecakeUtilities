@@ -8,12 +8,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
+import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.htcSerialIdentification.util.HtcSerialNumberDates;
 import com.itachi1706.cheesecakeutilities.modules.htcSerialIdentification.util.HtcSerialNumberManufacturingLocations;
-import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
+import com.itachi1706.helperlib.deprecation.HtmlDep;
 
 public class HtcSerialIdentificationActivity extends BaseModuleActivity {
 
@@ -50,7 +50,7 @@ public class HtcSerialIdentificationActivity extends BaseModuleActivity {
             }
 
             String htmlFormattedSN = parseSerialNumber(serialNumber.getText().toString());
-            resultList.setText(DeprecationHelper.Html.fromHtml(htmlFormattedSN));
+            resultList.setText(HtmlDep.fromHtml(htmlFormattedSN));
         });
 
         serial.setOnClickListener(v -> {

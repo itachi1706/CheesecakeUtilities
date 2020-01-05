@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.ColorUtils;

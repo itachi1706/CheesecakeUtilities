@@ -12,10 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.deprecation.StatFsDep;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -121,9 +121,9 @@ public class StorageFragment extends Fragment {
 
     public String getIntMem() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
-        double totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
-        double availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
+        long blockSize = StatFsDep.getBlockSize(statFs);
+        double totalSize = (double) ((StatFsDep.getBlockCount(statFs) * blockSize) / 1048576);
+        double availableSize = (double) ((StatFsDep.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";
@@ -158,9 +158,9 @@ public class StorageFragment extends Fragment {
         StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
         double totalSize;
         double availableSize;
-        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
-        totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
-        availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
+        long blockSize = StatFsDep.getBlockSize(statFs);
+        totalSize = (double) ((StatFsDep.getBlockCount(statFs) * blockSize) / 1048576);
+        availableSize = (double) ((StatFsDep.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";
@@ -232,9 +232,9 @@ public class StorageFragment extends Fragment {
             return null;
         }
         StatFs statFs = new StatFs(extRemovablePath());
-        long blockSize = DeprecationHelper.StatFs.getBlockSize(statFs);
-        double totalSize = (double) ((DeprecationHelper.StatFs.getBlockCount(statFs) * blockSize) / 1048576);
-        double availableSize = (double) ((DeprecationHelper.StatFs.getAvailableBlocks(statFs) * blockSize) / 1048576);
+        long blockSize = StatFsDep.getBlockSize(statFs);
+        double totalSize = (double) ((StatFsDep.getBlockCount(statFs) * blockSize) / 1048576);
+        double availableSize = (double) ((StatFsDep.getAvailableBlocks(statFs) * blockSize) / 1048576);
         double usedSize = totalSize - availableSize;
         String unitTotal = " MB";
         String unitAvail = " MB";

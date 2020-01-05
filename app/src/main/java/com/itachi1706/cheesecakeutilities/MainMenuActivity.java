@@ -17,12 +17,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.appupdater.Objects.CAAnalytics;
 import com.itachi1706.appupdater.Util.AnalyticsHelper;
-import com.itachi1706.appupdater.Util.PrefHelper;
 import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity;
 import com.itachi1706.cheesecakeutilities.fragments.GamesFragment;
 import com.itachi1706.cheesecakeutilities.fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.CommonVariables;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import io.fabric.sdk.android.Fabric;
 

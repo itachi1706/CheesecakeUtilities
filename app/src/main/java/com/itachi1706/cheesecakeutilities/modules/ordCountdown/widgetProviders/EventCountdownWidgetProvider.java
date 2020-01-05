@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.MainMenuActivity;
 import com.itachi1706.cheesecakeutilities.modules.ordCountdown.ORDActivity;
 import com.itachi1706.cheesecakeutilities.modules.ordCountdown.ORDSettingsActivity;

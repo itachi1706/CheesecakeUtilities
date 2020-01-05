@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics
-import com.itachi1706.appupdater.Util.PrefHelper
 import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity
 import com.itachi1706.cheesecakeutilities.util.CommonMethods
+import com.itachi1706.helperlib.helpers.PrefHelper
 import io.fabric.sdk.android.Fabric
 
 /**

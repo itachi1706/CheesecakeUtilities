@@ -13,7 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageDateStatsFragment;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageGeneralStatsFragment;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.fragments.VehicleMileageMonthStatsFragment;

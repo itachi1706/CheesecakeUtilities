@@ -9,9 +9,9 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itachi1706.appupdater.Util.DeprecationHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.objects.DualLineString;
+import com.itachi1706.helperlib.deprecation.HtmlDep;
 
 import java.util.Arrays;
 import java.util.List;
@@ -78,8 +78,8 @@ public class DualLineStringRecyclerAdapter extends RecyclerView.Adapter<DualLine
     public void onBindViewHolder(StringViewHolder stringViewHolder, int i)
     {
         DualLineString s  = stringList.get(i);
-        stringViewHolder.title.setText((htmlformat) ? DeprecationHelper.Html.fromHtml(s.getMain()) : s.getMain());
-        stringViewHolder.subtitle.setText((htmlformat) ? DeprecationHelper.Html.fromHtml(s.getSub()) : s.getSub());
+        stringViewHolder.title.setText((htmlformat) ? HtmlDep.fromHtml(s.getMain()) : s.getMain());
+        stringViewHolder.subtitle.setText((htmlformat) ? HtmlDep.fromHtml(s.getSub()) : s.getSub());
     }
 
     @Override

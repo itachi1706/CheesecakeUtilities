@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.recyclerAdapters.VehicleMileageRecordsAdapter;

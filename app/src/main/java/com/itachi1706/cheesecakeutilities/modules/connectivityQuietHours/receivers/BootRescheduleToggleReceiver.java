@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 
 import androidx.core.app.NotificationCompat;
 
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.ConnectivityQuietHoursActivity;
 import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.objects.ConnectivityPeriod;

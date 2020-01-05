@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.itachi1706.appupdater.Util.PrefHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.AddNewMileageRecordActivity;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Vehicle;

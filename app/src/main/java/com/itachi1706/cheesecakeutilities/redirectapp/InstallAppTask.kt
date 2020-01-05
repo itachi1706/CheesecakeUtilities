@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
-import com.itachi1706.appupdater.Util.URLHelper
+import com.itachi1706.helperlib.helpers.URLHelper
 import com.itachi1706.cheesecakeutilities.util.CommonVariables
 import java.io.File
 import java.io.FileOutputStream
