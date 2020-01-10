@@ -20,4 +20,8 @@
     <dimen name="color_item_small">48dp</dimen>
     <dimen name="color_item_margins_small">4dp</dimen>
     <dimen name="color_item_selected_check_margins">8dp</dimen>
+
+    <!-- Camera Viewer Utility -->
+    <dimen name="frame_height">112dp</dimen>
+    <dimen name="image_button_padding">20dp</dimen>
 </resources>

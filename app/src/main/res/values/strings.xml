@@ -302,6 +302,11 @@
     <string name="apkmirror_copy_log">Copy log</string>
     <string name="apkmirror_search_error">Error while getting text from search dialog</string>
 
+    <!-- Camera Viewer -->
+    <string name="description_info">Info</string>
+    <string name="request_permission">To use this viewer, we need the camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+
     <!-- Unsorted/Misc/General -->
     <string name="loading_label">Loading…</string>
     <string name="placeholder_text">Text Here</string>
