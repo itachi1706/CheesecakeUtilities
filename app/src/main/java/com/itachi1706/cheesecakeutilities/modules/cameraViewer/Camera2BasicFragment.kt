@@ -345,7 +345,6 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
         string.append("Hardware Level Support: ${c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)} (${getHardwareLevelName(c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL))})\n")
         string.append("Optical Image Stabilization: ${isStateAvailable(CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION, c, CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON)}\n")
         string.append("Electronic Image Stabilization: ${isStateAvailable(CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES, c, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON)}\n")
-        //string.append("Optical Image Stabilization: $ois\nElectronic Image Stabilization: $eis\n")
         val mp = String.format("%.1f", (largest.width * largest.height) / 1024.0 / 1024.0).toDouble()
         val mpRound = round((largest.width * largest.height) / 1024.0 / 1024.0)
         string.append("Resolution: ${largest.width}x${largest.height} (${if (mpRound <=0) mp else mpRound} Megapixels)\n")
