@@ -23,6 +23,7 @@
         <item>Domain Whois Query</item>
         <item>APKMirror Downloader</item>
         <item>@string/title_activity_gpa_calculator_main</item>
+        <item>Camera Viewer (API >=21)</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -47,6 +48,7 @@
         <item>.modules.whoisLookup.WhoisLookupActivity</item>
         <item>.modules.apkMirrorDownloader.APKMirrorActivity</item>
         <item>.modules.gpaCalculator.InitActivity</item>
+        <item>.modules.cameraViewer.CameraActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
