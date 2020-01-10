@@ -36,9 +36,12 @@ matrix:
         - env: ESPRESSO=1
     fast_finish: true
 before_install:
+  - mkdir travisscript
+
   # Setup Android SDK JDK
   - export TARGET_JDK="${JDK}"
   - JDK="1.8"
+  - wget -q "https://raw.githubusercontent.com/itachi1706/Travis-CI-Scripts/master/install-jdk-travis.sh" -O travisscript/install-jdk-travis.sh
   - chmod +x ./travisscript/install-jdk-travis.sh
   - source ./travisscript/install-jdk-travis.sh
 
@@ -66,6 +69,8 @@ install:
 
   # Launch Android Emulator
   - if [ $ESPRESSO -eq 1 ]; then avdmanager list; fi
+  - wget -q "https://raw.githubusercontent.com/itachi1706/Travis-CI-Scripts/master/android-wait-for-emulator.sh" -O travisscript/android-wait-for-emulator.sh
+  - wget -q "https://raw.githubusercontent.com/itachi1706/Travis-CI-Scripts/master/startemu.sh" -O travisscript/startemu.sh
   - chmod +x ./travisscript/startemu.sh
   - chmod +x ./travisscript/android-wait-for-emulator.sh
   - ./travisscript/startemu.sh
