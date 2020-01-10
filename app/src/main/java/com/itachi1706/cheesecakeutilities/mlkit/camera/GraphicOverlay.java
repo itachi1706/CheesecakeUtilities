@@ -196,6 +196,7 @@ public class GraphicOverlay extends View {
      * Returns a copy (as a list) of the set of all active graphics.
      * @return list of all active graphics.
      */
+    @SuppressWarnings("unchecked")
     public Vector getGraphics() {
         synchronized (lock) {
             return new Vector(graphics);

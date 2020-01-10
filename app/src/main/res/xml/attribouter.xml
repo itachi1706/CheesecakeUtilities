@@ -21,7 +21,7 @@
             blog="https://itachi1706.com"
             email="kenneth@itachi1706.com"
             position="1"
-            task="Lead Developer">
+            task="^Lead Developer">
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Twitter"
                 icon="@drawable/ic_twitter"

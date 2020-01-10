@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
@@ -23,11 +24,14 @@ import me.jfenn.attribouter.Attribouter
 class GeneralSettingsActivity : AppCompatActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         supportFragmentManager.beginTransaction()
                 .replace(android.R.id.content, GeneralPreferenceFragment())
                 .commit()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean { return if (item?.itemId == android.R.id.home) { finish(); true } else super.onOptionsItemSelected(item); }
 
     class GeneralPreferenceFragment : EasterEggResMultiMusicPrefFragment() {
 
@@ -37,7 +41,11 @@ class GeneralSettingsActivity : AppCompatActivity() {
 
             SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(activity, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL,
                     resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
-            super.addEggMethods(false, null, true) { Attribouter.from(context).show(); true }
+                    .setAboutApp(true) { Attribouter.from(context).show(); true }
+                    .setIssueTracking(true, "https://itachi1706.atlassian.net/browse/CUTILAND")
+                    .setBugReporting(true, "https://itachi1706.atlassian.net/servicedesk/customer/portal/3")
+                    .explodeInfoSettings(this)
+            super.init()
 
             val bioPw: Preference? = findPreference("password_fp")
             sp = PrefHelper.getDefaultSharedPreferences(activity)
