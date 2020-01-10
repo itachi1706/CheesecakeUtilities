@@ -343,15 +343,9 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
         string.append("Is Front Facing: ${c.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT}\n")
         string.append("Has Flash: $flashSupported\n")
         string.append("Hardware Level Support: ${c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)} (${getHardwareLevelName(c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL))})\n")
-        // OIS
-        var tmp = c.get(CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION)
-        var ois = false
-        tmp?.let { it.forEach { o -> if (o == CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON) { ois = true; } } }
-        // EIS
-        tmp = c.get(CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES)
-        var eis = false
-        tmp?.let { it.forEach { o -> if (o == CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON) { eis = true; } } }
-        string.append("Optical Image Stabilization: $ois\nElectronic Image Stabilization: $eis\n")
+        string.append("Optical Image Stabilization: ${isStateAvailable(CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION, c, CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON)}\n")
+        string.append("Electronic Image Stabilization: ${isStateAvailable(CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES, c, CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON)}\n")
+        //string.append("Optical Image Stabilization: $ois\nElectronic Image Stabilization: $eis\n")
         val mp = String.format("%.1f", (largest.width * largest.height) / 1024.0 / 1024.0).toDouble()
         val mpRound = round((largest.width * largest.height) / 1024.0 / 1024.0)
         string.append("Resolution: ${largest.width}x${largest.height} (${if (mpRound <=0) mp else mpRound} Megapixels)\n")
@@ -359,6 +353,12 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
         val aperatureString = aperature?.joinToString(",", "f/", " ") ?: "None"
         string.append("Aperature Sizes: $aperatureString")
         return string.toString()
+    }
+
+    private fun isStateAvailable(char: CameraCharacteristics.Key<IntArray>, c: CameraCharacteristics, target: Int): Boolean {
+        val tmp = c.get(char)
+        tmp?.let { it.forEach { o -> if (o == target) return true } }
+        return false
     }
 
     private fun getHardwareLevelName(level: Int?): String {
