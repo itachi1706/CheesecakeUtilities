@@ -29,6 +29,11 @@
         <item name="actionMenuTextColor">@android:color/black</item>
     </style>
 
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
     <style name="AppBarLayoutOverflow" parent="AppTheme">
         <item name="android:textColorPrimary">@android:color/black</item>
     </style>
