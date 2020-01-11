@@ -11,7 +11,7 @@
     tools:context="com.itachi1706.cheesecakeutilities.FirebaseLoginActivity">
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/email_sign_in_button"
+        android:id="@+id/google_sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
