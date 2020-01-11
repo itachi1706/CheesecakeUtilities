@@ -8,13 +8,11 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -26,7 +24,7 @@ import com.itachi1706.cheesecakeutilities.util.LogHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
 import kotlinx.android.synthetic.main.activity_firebase_login.*
 
-class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnectionFailedListener {
+class FirebaseLoginActivity : BaseModuleActivity() {
 
     companion object {
         private const val TAG: String = "FirebaseLoginActivity"
@@ -46,7 +44,6 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
     private var message: String = "This is a place to manage Firebase Logins\n\nSome utilities make use of Firebase to persist your user data"
 
     private lateinit var progress: ProgressBar
-    private lateinit var mGoogleApiClient: GoogleApiClient
     private val mAuth = FirebaseAuth.getInstance()
     private lateinit var sp: SharedPreferences
 
@@ -66,19 +63,18 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         progress.isIndeterminate = true
         progress.visibility = View.GONE
 
+        // Setup Google Signin
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
+        val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
         google_sign_in_button.setSize(SignInButton.SIZE_WIDE)
         google_sign_in_button.setOnClickListener {
             // Attempts to sign in with Google
             Log.d(TAG, "Signing in with Google")
-            val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+            val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
         sp = PreferenceManager.getDefaultSharedPreferences(this)
-
-        // Setup Google Signin
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail().build()
-        mGoogleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build()
 
         if (intent.hasExtra("logout") && intent.getBooleanExtra("logout", false)) signout(true)
         if (intent.hasExtra(CONTINUE_INTENT)) continueIntent = intent.getParcelableExtra(CONTINUE_INTENT)
@@ -91,10 +87,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         showHideLogin(true)
 
         sign_out.setOnClickListener { signout(false) }
-
-        test_account.setOnClickListener {
-            mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task -> processSignIn("signInTestEmail", task) }
-        }
+        test_account.setOnClickListener { mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task -> processSignIn("signInTestEmail", task) } }
     }
 
     private fun processSignIn(log: String, task: Task<AuthResult>) {
@@ -144,14 +137,13 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            LogHelper.d(TAG, "Sign In Result: " + result.isSuccess)
-            if (result.isSuccess) {
-                // Signed in successfully, show authenticated UI
-                val acct = result.signInAccount
-                firebaseAuthWithGoogle(acct!!)
-            } else {
-                // Signed out, show unauthenticated UI
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                Log.i(TAG, "Sign in successful")
+                firebaseAuthWithGoogle(account!!)
+            } catch (e: ApiException) {
+                Log.e(TAG, "Sign in failed")
                 updateUI(null)
             }
         }
@@ -195,14 +187,5 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
             sign_in_as.text = "Currently Logged Out"
             showHideLogin(true)
         }
-    }
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In will not be available.
-        LogHelper.d(TAG, "onConnectionFailed: $connectionResult")
-        if (mAuth.currentUser == null)
-            AlertDialog.Builder(this).setTitle("Unable to connect to Google Servers")
-                    .setMessage("We are unable to connect to Google Servers to sign you in, therefore login cannot be conducted")
-                    .setCancelable(false).setPositiveButton(android.R.string.ok) { _, _ -> finish() }.show()
     }
 }
