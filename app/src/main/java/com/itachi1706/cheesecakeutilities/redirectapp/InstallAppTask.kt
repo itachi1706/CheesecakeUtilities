@@ -2,13 +2,15 @@ package com.itachi1706.cheesecakeutilities.redirectapp
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
-import com.itachi1706.helperlib.helpers.URLHelper
 import com.itachi1706.cheesecakeutilities.util.CommonVariables
+import com.itachi1706.helperlib.helpers.URLHelper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -82,7 +84,8 @@ class InstallAppTask(activity: Activity) : AsyncTask<Void, Void, File>() {
         } else {
             Log.i(TAG, "Retrieved file ${result.absolutePath}. Launching installer")
             val intent = Intent(Intent.ACTION_INSTALL_PACKAGE)
-            val contentUri = FileProvider.getUriForFile(activity.baseContext, activity.applicationContext.packageName + ".provider", result)
+            val postNougat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+            val contentUri = if (postNougat) FileProvider.getUriForFile(activity.baseContext, activity.applicationContext.packageName + ".provider", result) else Uri.fromFile(result)
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
             activity.startActivity(intent)
