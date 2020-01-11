@@ -85,7 +85,7 @@ class FirebaseLoginActivity : BaseModuleActivity(), GoogleApiClient.OnConnection
         if (intent.hasExtra(HELP_EXTRA)) message = intent.getStringExtra(HELP_EXTRA)
 
         val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
-        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults)
+        firebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         if (firebaseRemoteConfig.getBoolean("firebase_login_debug")) showDebug = true
 
         showHideLogin(true)

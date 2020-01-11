@@ -43,7 +43,7 @@ public class CreateShortcuts extends AppCompatActivity {
 
     private List<String> generateList() {
         FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
 
         List<String> menuitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
         List<String> gameitems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.gamesmenu)));
