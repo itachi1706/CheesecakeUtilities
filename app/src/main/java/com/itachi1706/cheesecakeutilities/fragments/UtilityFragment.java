@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.MainMenuAdapter;
@@ -55,11 +56,11 @@ public class UtilityFragment extends Fragment {
         }
 
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        mFirebaseRemoteConfig.fetch(FIREBASE_REFRESH_TIME).addOnCompleteListener(task -> {
+        mFirebaseRemoteConfig.setConfigSettingsAsync(new FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(FIREBASE_REFRESH_TIME).build());
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        mFirebaseRemoteConfig.fetchAndActivate().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 LogHelper.i("RemoteConfig", "Values Updated from server");
-                mFirebaseRemoteConfig.activateFetched();
                 updateAdapter();
             } else
                 LogHelper.i("RemoteConfig", "Values failed to update");

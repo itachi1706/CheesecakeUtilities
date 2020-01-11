@@ -43,7 +43,7 @@ public class ManageUtilityActivity extends AppCompatActivity {
 
         // Set up layout
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
         List<String> menuitemsList = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.mainmenu)));
         List<String> firebaseHidden = new ArrayList<>(Arrays.asList(mFirebaseRemoteConfig.getString("serverHide").split("\\|\\|\\|")));
         menuitemsList.removeAll(firebaseHidden);

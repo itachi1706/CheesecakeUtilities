@@ -230,7 +230,7 @@ public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
         // Update to Always from Always (VERBOSE) if Firebase disables it
         // Firebase key: quiethour_debug_mode
         FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        firebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
         if (!firebaseRemoteConfig.getBoolean("quiethour_debug_mode")) {
             if (btNotification.getSelectedItemPosition() == QH_NOTIFY_DEBUG) {
                 btNotification.setSelection(QH_NOTIFY_ALWAYS);
