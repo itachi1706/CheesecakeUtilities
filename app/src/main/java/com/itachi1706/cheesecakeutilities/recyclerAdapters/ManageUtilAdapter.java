@@ -3,20 +3,25 @@ package com.itachi1706.cheesecakeutilities.recyclerAdapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
-import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +65,7 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
         stringViewHolder.updateIcon();
     }
 
+    @NonNull
     @Override
     public ManageUtilHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
@@ -70,10 +76,12 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
     }
 
 
-    class ManageUtilHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ManageUtilHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
         protected TextView title;
-        ImageButton visibleToggle, lockToggle;
+        ImageButton lockToggle;
+        CheckBox enabledToggle;
+        LinearLayout linearLayout;
         protected SharedPreferences sp;
         Context mContext;
         boolean isVisible = true, isLocked = false;
@@ -84,36 +92,18 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
             mContext = v.getContext();
             sp = PrefHelper.getDefaultSharedPreferences(v.getContext());
             title = v.findViewById(R.id.text1);
-            visibleToggle = v.findViewById(R.id.checkbox);
-            visibleToggle.setOnClickListener(this);
+            enabledToggle = v.findViewById(R.id.enabled);
+            enabledToggle.setOnCheckedChangeListener(this);
             lockToggle = v.findViewById(R.id.lockutilbutton);
             lockToggle.setOnClickListener(this);
+            linearLayout = v.findViewById(R.id.recycler_layout);
+            linearLayout.setOnClickListener(this);
             if (sp.getBoolean("global_applock", true)) lockToggle.setVisibility(View.GONE);
         }
 
         @Override
         public void onClick(View view) {
-            if (view.getId() == R.id.checkbox) {
-                String link = title.getText().toString();
-
-                if (isVisible) {
-                    // Hide Utility
-                    List<String> utils = getHiddenAsArray();
-                    if (!utils.contains(link)) utils.add(link);
-                    hiddenUtil = convertHiddenOrLockedArrayToString(utils);
-                    sp.edit().putString("utilHidden", hiddenUtil).apply();
-                    isVisible = false;
-                    LogHelper.i("ManageUtilAdapter", link + " hidden");
-                } else {
-                    List<String> utils = getHiddenAsArray();
-                    utils.remove(link);
-                    hiddenUtil = convertHiddenOrLockedArrayToString(utils);
-                    sp.edit().putString("utilHidden", hiddenUtil).apply();
-                    LogHelper.i("ManageUtilAdapter", link + " shown");
-                    isVisible = true;
-                }
-                updateIcon();
-            } else if (view.getId() == R.id.lockutilbutton) {
+            if (view.getId() == R.id.lockutilbutton) {
                 String link = title.getText().toString();
 
                 if (!isLocked) {
@@ -133,8 +123,35 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
                     isLocked = false;
                 }
                 updateIcon();
+            } else if (view.getId() == R.id.recycler_layout) {
+                enabledToggle.setChecked(!enabledToggle.isChecked());
             }
 
+        }
+
+        private boolean ignoreChanges = false;
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (ignoreChanges) return;
+            String link = title.getText().toString();
+            if (!isChecked) {
+                // Hide Utility
+                List<String> utils = getHiddenAsArray();
+                if (!utils.contains(link)) utils.add(link);
+                hiddenUtil = convertHiddenOrLockedArrayToString(utils);
+                sp.edit().putString("utilHidden", hiddenUtil).apply();
+                isVisible = false;
+                LogHelper.i("ManageUtilAdapter", link + " hidden");
+            } else {
+                List<String> utils = getHiddenAsArray();
+                utils.remove(link);
+                hiddenUtil = convertHiddenOrLockedArrayToString(utils);
+                sp.edit().putString("utilHidden", hiddenUtil).apply();
+                LogHelper.i("ManageUtilAdapter", link + " shown");
+                isVisible = true;
+            }
+            updateIcon();
         }
 
         private List<String> getHiddenAsArray() {
@@ -155,16 +172,15 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
         }
 
         private void updateIcon() {
-            visibleToggle.setImageDrawable(isVisible ?
-                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_eye, mContext.getTheme()) :
-                    VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_eye_off, mContext.getTheme()));
             lockToggle.setImageDrawable(isLocked ?
                     VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_lock, mContext.getTheme()) :
                     VectorDrawableCompat.create(mContext.getResources(), R.drawable.ic_lock_open, mContext.getTheme()));
+            ignoreChanges = true;
+            enabledToggle.setChecked(isVisible);
+            ignoreChanges = false;
             if (PrefHelper.isNightModeEnabled(mContext)) {
                 // Set to white color
                 int white = ContextCompat.getColor(mContext, R.color.white);
-                ImageViewCompat.setImageTintList(visibleToggle, ColorStateList.valueOf(white));
                 ImageViewCompat.setImageTintList(lockToggle, ColorStateList.valueOf(white));
             }
         }
