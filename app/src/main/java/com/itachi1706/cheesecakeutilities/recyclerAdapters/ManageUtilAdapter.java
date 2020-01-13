@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities.recyclerAdapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ import java.util.List;
 public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.ManageUtilHolder> {
     private List<String> stringList;
     private String hiddenUtil, lockedUtil;
+    private static final String TAG = "ManageUtilAdapter";
 
     public ManageUtilAdapter(List<String> strings, String hiddenUtil, String lockedUtil)
     {
@@ -106,27 +106,23 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
             if (view.getId() == R.id.lockutilbutton) {
                 String link = title.getText().toString();
 
+                List<String> utils = getLockedAsArray();
                 if (!isLocked) {
-                    // Hide Utility
-                    List<String> utils = getLockedAsArray();
+                    // Protect Utility
                     if (!utils.contains(link)) utils.add(link);
-                    lockedUtil = convertHiddenOrLockedArrayToString(utils);
-                    sp.edit().putString("utilLocked", lockedUtil).apply();
+                    LogHelper.i(TAG, link + " protected");
                     isLocked = true;
-                    LogHelper.i("ManageUtilAdapter", link + " protected");
                 } else {
-                    List<String> utils = getLockedAsArray();
                     utils.remove(link);
-                    lockedUtil = convertHiddenOrLockedArrayToString(utils);
-                    sp.edit().putString("utilLocked", lockedUtil).apply();
-                    LogHelper.i("ManageUtilAdapter", link + " unprotected");
+                    LogHelper.i(TAG, link + " unprotected");
                     isLocked = false;
                 }
+                lockedUtil = convertHiddenOrLockedArrayToString(utils);
+                sp.edit().putString("utilLocked", lockedUtil).apply();
                 updateIcon();
             } else if (view.getId() == R.id.recycler_layout) {
                 enabledToggle.setChecked(!enabledToggle.isChecked());
             }
-
         }
 
         private boolean ignoreChanges = false;
@@ -135,22 +131,19 @@ public class ManageUtilAdapter extends RecyclerView.Adapter<ManageUtilAdapter.Ma
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (ignoreChanges) return;
             String link = title.getText().toString();
+            List<String> utils = getHiddenAsArray();
             if (!isChecked) {
                 // Hide Utility
-                List<String> utils = getHiddenAsArray();
                 if (!utils.contains(link)) utils.add(link);
-                hiddenUtil = convertHiddenOrLockedArrayToString(utils);
-                sp.edit().putString("utilHidden", hiddenUtil).apply();
                 isVisible = false;
-                LogHelper.i("ManageUtilAdapter", link + " hidden");
+                LogHelper.i(TAG, link + " hidden");
             } else {
-                List<String> utils = getHiddenAsArray();
                 utils.remove(link);
-                hiddenUtil = convertHiddenOrLockedArrayToString(utils);
-                sp.edit().putString("utilHidden", hiddenUtil).apply();
-                LogHelper.i("ManageUtilAdapter", link + " shown");
                 isVisible = true;
+                LogHelper.i(TAG, link + " shown");
             }
+            hiddenUtil = convertHiddenOrLockedArrayToString(utils);
+            sp.edit().putString("utilHidden", hiddenUtil).apply();
             updateIcon();
         }
 
