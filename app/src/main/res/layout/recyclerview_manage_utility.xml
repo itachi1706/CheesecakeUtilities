@@ -5,15 +5,19 @@
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
     android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:paddingTop="10dp"
+    android:paddingBottom="5dp"
+    android:clickable="true"
+    android:id="@+id/recycler_layout"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp"
-        android:orientation="horizontal">
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/enabled" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,22 +34,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:contentDescription="@string/pref_hint_util_visibility"
-            android:id="@+id/checkbox"
-            app:srcCompat="@drawable/ic_eye"
-            android:background="@android:color/transparent" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:contentDescription="@string/pref_hint_util_lock"
             android:id="@+id/lockutilbutton"
             app:srcCompat="@drawable/ic_lock_open"
             android:background="@android:color/transparent" />
-    </LinearLayout>
-
 
 </LinearLayout>
