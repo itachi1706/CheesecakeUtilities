@@ -21,16 +21,11 @@ import com.itachi1706.cheesecakeutilities.R
 class UnicodeMenuAdapter(strings: List<String>) : RecyclerView.Adapter<UnicodeMenuAdapter.UnicodeMenuHolder>() {
 
     private var stringList: List<String> = ArrayList()
-
-    init {
-        stringList = strings
-    }
+    init { stringList = strings }
 
     constructor(string: Array<String>): this(string.toList())
 
-    override fun getItemCount(): Int {
-        return stringList.size
-    }
+    override fun getItemCount(): Int { return stringList.size }
 
     override fun onBindViewHolder(holder: UnicodeMenuHolder, position: Int) {
         val s = stringList[position]
@@ -64,14 +59,10 @@ class UnicodeMenuAdapter(strings: List<String>) : RecyclerView.Adapter<UnicodeMe
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onLongClick(v: View): Boolean {
             val dragShadowBuilder = View.DragShadowBuilder(v)
-            v.startDragAndDrop(getClip(), dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ or
-                    View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION)
+            v.startDragAndDrop(getClip(), dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ or View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION)
             return true
         }
 
-        private fun getClip(): ClipData {
-            val emoji = title.text.toString()
-            return ClipData.newPlainText("unicode", emoji)
-        }
+        private fun getClip(): ClipData { return ClipData.newPlainText("unicode", title.text.toString()) }
     }
 }

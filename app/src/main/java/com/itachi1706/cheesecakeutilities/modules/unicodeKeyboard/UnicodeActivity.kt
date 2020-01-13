@@ -2,12 +2,13 @@ package com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard
 
 import android.os.Build
 import android.os.Bundle
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.modules.unicodeKeyboard.recyclerAdapters.UnicodeMenuAdapter
-import kotlinx.android.synthetic.main.fragment_recycler_view.*
+import kotlinx.android.synthetic.main.activity_unicode.*
 
 class UnicodeActivity : BaseModuleActivity() {
     override val helpDescription: String
@@ -20,48 +21,59 @@ class UnicodeActivity : BaseModuleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unicode)
-        main_menu_recycler_view.setHasFixedSize(true)
-        val gridLayoutManager = GridLayoutManager(this, 2)
-        main_menu_recycler_view.layoutManager = gridLayoutManager
-        main_menu_recycler_view.itemAnimator = DefaultItemAnimator()
-        // Set up layout
-        val menuitems = unicodeItems()
-        val adapter = UnicodeMenuAdapter(menuitems)
-        main_menu_recycler_view.adapter = adapter
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        view_pager.adapter = UnicodeTabAdapter(this)
+
+        val tabs = arrayOf("Emojis", "Kaomojis", "Flip Table", "Misc")
+        TabLayoutMediator(tab_layout, view_pager) { tab, position -> tab.text = tabs[position] }.attach()
     }
 
-    // Format: "", "", "", "",
-
-    @Deprecated("This is used for the full list, and should be replaced by the respective specialized versions eventually")
-    private fun unicodeItems(): Array<String> { return unicodeEmojis() + unicodeKaomoji() + unicodeFliptable() + unicodeMisc() }
-
-    private fun unicodeEmojis(): Array<String> {
-        return arrayOf("☻", "☹", "♡", "♥", "❤", "⚘", "❀", "❃", "❁", "✼", "♫", "♪", "☃", "❄", "❅", "❆", "☕", "☂", "★")
+    class UnicodeTabAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        override fun getItemCount(): Int { return 4 } // 4 tabs
+        override fun createFragment(position: Int): Fragment { return UnicodeFragment.newInstance(getUnicodeStringList(position)) }
     }
 
-    private fun unicodeKaomoji(): Array<String> {
-        return arrayOf(
-                "◕‿◕", "｡◕‿◕｡", "｡◕‿‿◕｡", "^̮^",
-                "(◕‿◕)", "(｡◕‿◕｡)", "(｡◕‿‿◕｡)", "(^̮^)",
-                "ʘ‿ʘ", "ಠ_ಠ", "ಠ⌣ಠ", "ಠ‿ಠ",
-                "(ʘ‿ʘ)", "(ಠ_ಠ)", "(ಠ⌣ಠ)", "(ಠ‿ಠ)",
-                "♥‿♥", "◔̯◔", "٩◔̯◔۶", "⊙﹏⊙", "(¬_¬)", "(；一_一)",
-                "(･.◤)", "◕‿↼", "(¬‿¬)", "(づ￣ ³￣)づ",
-                "ب_ب", "(ಥ_ಥ)", "(ಥ﹏ಥ)", "ლ(ಠ益ಠლ)",
-                "ʕ•ᴥ•ʔ", "°Д°", "﴾͡๏̯͡๏﴿ O'RLY?", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
-                "(ᵔᴥᵔ)", "(•ω•)", "☜(⌒▽⌒)☞", "〆(・∀・＠)",
-                "◔ ⌣ ◔", "ლ(´ڡ`ლ)", "ლ,ᔑ•ﺪ͟͠•ᔐ.ლ", "ᕙ(⇀‸↼‶)ᕗ",
-                "(づ｡◕‿‿◕｡)づ", "ᄽὁȍ ̪ őὀᄿ", "╭∩╮(-_-)╭∩╮", "凸(-_-)凸",
-                " ̿ ̿'̿'\\̵͇̿̿\\з=(•_•)=ε/̵͇̿̿/'̿'̿ ̿", "(´・ω・)っ由", "（´・ω・ `）",
-                "٩(⁎❛ᴗ❛⁎)۶", "(͡° ͜ʖ ͡°)", "¯\\_(ツ)_/¯", "(° ͜ʖ °)",
-                "¯\\(°_o)/¯", "( ﾟヮﾟ)", "ヽ༼ຈل͜ຈ༽ﾉ", "(︺︹︺)", "／人 ◕ ‿‿ ◕ 人＼")
-    }
+    companion object {
+        // Format: "", "", "", "",
+        fun getUnicodeStringList(position: Int): Array<String> {
+            return when (position) {
+                0 -> unicodeEmojis()
+                1 -> unicodeKaomoji()
+                2 -> unicodeFliptable()
+                3 -> unicodeMisc()
+                else -> arrayOf()
+            }
+        }
 
-    private fun unicodeFliptable(): Array<String> {
-        return arrayOf("(╯°□°）╯︵ ┻━┻", "┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻", "┬──┬ ノ( ゜-゜ノ)", "(ノಠ益ಠ)ノ彡┻━┻", "（╯°□°）╯︵(\\ .o.)\\", "┬─┬\uFEFF ︵ /(.□. \\）")
-    }
+        private fun unicodeEmojis(): Array<String> {
+            return arrayOf("☻", "☹", "♡", "♥", "❤", "⚘", "❀", "❃", "❁", "✼", "♫", "♪", "☃", "❄", "❅", "❆", "☕", "☂", "★")
+        }
 
-    private fun unicodeMisc(): Array<String> {
-        return arrayOf(" ̳ ̳ ̳ ̳ ͙ ڪ ", "Ƹ̵̡Ӝ̵̨̄Ʒ", "[̲̅$̲̅(̲̅5̲̅)̲̅$̲̅]", "▄︻̷̿┻̿═━一", "⌐╦╦═─", "┌─┐\n┴─┴\nಠ_ರೃ", "~~~ ╔͎═͓═͙╗\n~~~ ╚̨̈́═̈́﴾ ̥̂˖̫˖̥  ̂ )", "•_•)\n( •_•)>⌐■-■\n(⌐■_■)")
+        private fun unicodeKaomoji(): Array<String> {
+            return arrayOf(
+                    "◕‿◕", "｡◕‿◕｡", "｡◕‿‿◕｡", "^̮^",
+                    "(◕‿◕)", "(｡◕‿◕｡)", "(｡◕‿‿◕｡)", "(^̮^)",
+                    "ʘ‿ʘ", "ಠ_ಠ", "ಠ⌣ಠ", "ಠ‿ಠ",
+                    "(ʘ‿ʘ)", "(ಠ_ಠ)", "(ಠ⌣ಠ)", "(ಠ‿ಠ)",
+                    "♥‿♥", "◔̯◔", "٩◔̯◔۶", "⊙﹏⊙", "(¬_¬)", "(；一_一)",
+                    "(･.◤)", "◕‿↼", "(¬‿¬)", "(づ￣ ³￣)づ",
+                    "ب_ب", "(ಥ_ಥ)", "(ಥ﹏ಥ)", "ლ(ಠ益ಠლ)",
+                    "ʕ•ᴥ•ʔ", "°Д°", "﴾͡๏̯͡๏﴿ O'RLY?", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
+                    "(ᵔᴥᵔ)", "(•ω•)", "☜(⌒▽⌒)☞", "〆(・∀・＠)",
+                    "◔ ⌣ ◔", "ლ(´ڡ`ლ)", "ლ,ᔑ•ﺪ͟͠•ᔐ.ლ", "ᕙ(⇀‸↼‶)ᕗ",
+                    "(づ｡◕‿‿◕｡)づ", "ᄽὁȍ ̪ őὀᄿ", "╭∩╮(-_-)╭∩╮", "凸(-_-)凸",
+                    " ̿ ̿'̿'\\̵͇̿̿\\з=(•_•)=ε/̵͇̿̿/'̿'̿ ̿", "(´・ω・)っ由", "（´・ω・ `）",
+                    "٩(⁎❛ᴗ❛⁎)۶", "(͡° ͜ʖ ͡°)", "¯\\_(ツ)_/¯", "(° ͜ʖ °)",
+                    "¯\\(°_o)/¯", "( ﾟヮﾟ)", "ヽ༼ຈل͜ຈ༽ﾉ", "(︺︹︺)", "／人 ◕ ‿‿ ◕ 人＼")
+        }
+
+        private fun unicodeFliptable(): Array<String> {
+            return arrayOf("(╯°□°）╯︵ ┻━┻", "┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻", "┬──┬ ノ( ゜-゜ノ)", "(ノಠ益ಠ)ノ彡┻━┻", "（╯°□°）╯︵(\\ .o.)\\", "┬─┬\uFEFF ︵ /(.□. \\）")
+        }
+
+        private fun unicodeMisc(): Array<String> {
+            return arrayOf(" ̳ ̳ ̳ ̳ ͙ ڪ ", "Ƹ̵̡Ӝ̵̨̄Ʒ", "[̲̅$̲̅(̲̅5̲̅)̲̅$̲̅]", "▄︻̷̿┻̿═━一", "⌐╦╦═─", "┌─┐\n┴─┴\nಠ_ರೃ", "~~~ ╔͎═͓═͙╗\n~~~ ╚̨̈́═̈́﴾ ̥̂˖̫˖̥  ̂ )", "•_•)\n( •_•)>⌐■-■\n(⌐■_■)")
+        }
     }
 }
