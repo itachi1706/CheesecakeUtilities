@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.itachi1706.cheesecakeutilities.CreateShortcuts;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.util.Arrays;
 import java.util.List;

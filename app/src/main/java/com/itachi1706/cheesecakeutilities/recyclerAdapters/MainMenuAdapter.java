@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.util.Arrays;
 import java.util.LinkedList;

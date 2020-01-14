@@ -29,7 +29,7 @@ import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.objects.Record;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

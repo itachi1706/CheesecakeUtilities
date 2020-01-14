@@ -8,7 +8,7 @@ import android.os.Environment;
 
 import androidx.core.content.FileProvider;
 
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.File;
 import java.io.FileInputStream;

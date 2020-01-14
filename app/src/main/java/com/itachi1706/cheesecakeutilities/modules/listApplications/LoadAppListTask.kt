@@ -8,7 +8,7 @@ import androidx.collection.ArrayMap
 import com.google.firebase.perf.FirebasePerformance
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.AppsItem
 import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import java.lang.ref.WeakReference
 
 /**

@@ -4,7 +4,6 @@ package com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,6 +13,7 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.internal.ColorItem
 import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.internal.ColorUtil
 import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.internal.SelectedColorChangedEvent
+import com.itachi1706.helperlib.helpers.LogHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.util.*
@@ -321,7 +321,7 @@ open class SpectrumPalette : LinearLayout {
      */
     fun setFixedColumnCount(columnCount: Int) {
         if (columnCount > 0) {
-            Log.d("spectrum", "set column count to $columnCount")
+            LogHelper.d("spectrum", "set column count to $columnCount")
             mHasFixedColumnCount = true
             mFixedColumnCount = columnCount
             requestLayout()

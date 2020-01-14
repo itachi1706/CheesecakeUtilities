@@ -13,8 +13,6 @@
 // limitations under the License.
 package com.itachi1706.cheesecakeutilities.mlkit.barcode
 
-import android.util.Log
-
 import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
@@ -23,7 +21,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.itachi1706.cheesecakeutilities.mlkit.VisionProcessorBase
 import com.itachi1706.cheesecakeutilities.mlkit.camera.FrameMetadata
 import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay
-
+import com.itachi1706.helperlib.helpers.LogHelper
 import java.io.IOException
 
 /**
@@ -47,7 +45,7 @@ class BarcodeScanningProcessor : VisionProcessorBase<List<FirebaseVisionBarcode>
         try {
             detector.close()
         } catch (e: IOException) {
-            Log.e(TAG, "Exception thrown while trying to close Barcode Detector: $e")
+            LogHelper.e(TAG, "Exception thrown while trying to close Barcode Detector: $e")
         }
 
     }
@@ -70,7 +68,7 @@ class BarcodeScanningProcessor : VisionProcessorBase<List<FirebaseVisionBarcode>
     }
 
     override fun onFailure(e: Exception) {
-        Log.e(TAG, "Barcode detection failed $e")
+        LogHelper.e(TAG, "Barcode detection failed $e")
     }
 
     companion object {

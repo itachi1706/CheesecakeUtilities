@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Main;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

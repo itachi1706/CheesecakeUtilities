@@ -12,6 +12,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.itachi1706.helperlib.helpers.LogHelper;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;

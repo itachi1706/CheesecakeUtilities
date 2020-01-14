@@ -39,7 +39,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.deprecation.TextViewDep;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;

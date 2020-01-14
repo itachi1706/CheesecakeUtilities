@@ -32,7 +32,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;

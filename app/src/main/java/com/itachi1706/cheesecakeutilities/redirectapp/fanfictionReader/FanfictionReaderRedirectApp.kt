@@ -1,12 +1,12 @@
 package com.itachi1706.cheesecakeutilities.redirectapp.fanfictionReader
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.redirectapp.InstallAppTask
+import com.itachi1706.helperlib.helpers.LogHelper
 
 
 /**
@@ -19,9 +19,9 @@ class FanfictionReaderRedirectApp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val data = packageManager.getLaunchIntentForPackage("com.itachi1706.fanfictionnetreader")
-        Log.d(TAG, "Has Data: ${data == null}")
+        LogHelper.d(TAG, "Has Data: ${data == null}")
         if (data == null) {
-            Log.i(TAG, "App Not Installed")
+            LogHelper.i(TAG, "App Not Installed")
             notInstalled()
             return
         }

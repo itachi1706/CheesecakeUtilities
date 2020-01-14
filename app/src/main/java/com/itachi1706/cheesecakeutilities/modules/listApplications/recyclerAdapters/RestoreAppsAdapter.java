@@ -16,7 +16,7 @@ import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.Resto
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsFooter;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsHeader;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.File;
 import java.util.Arrays;

@@ -15,7 +15,7 @@ import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaInsti
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_institution.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -64,10 +64,10 @@ class AddInstitutionActivity : AddActivityBase() {
         populateInstitutions()
         spinnerGpaCalcMode.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.d(TAG, "spinnerGpaCalcMode:onItemSelected")
+                LogHelper.d(TAG, "spinnerGpaCalcMode:onItemSelected")
                 if (modes.isEmpty() || selectionList.isEmpty()) return // Simply not do anything
                 val mode = modes[selectionList[position]]
-                Log.i(TAG, "Selected Mode: ${mode?.second?.name ?: "Unknown"}")
+                LogHelper.i(TAG, "Selected Mode: ${mode?.second?.name ?: "Unknown"}")
                 til_etCreditsName.visibility = if (mode?.second?.type == "count") View.GONE else View.VISIBLE
             }
 

@@ -38,7 +38,8 @@ import com.crashlytics.android.Crashlytics;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.cheesecakeutilities.util.LogInit;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.squareup.picasso.Picasso;
 
 import net.grandcentrix.tray.AppPreferences;
@@ -291,6 +292,7 @@ public class NavBarService extends AccessibilityService {
         if (!Utils.IS_OREO_AND_ABOVE) {
             Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
             if (!BuildConfig.DEBUG) Fabric.with(fabric);
+            LogInit.initLogger();
         }
     }
 

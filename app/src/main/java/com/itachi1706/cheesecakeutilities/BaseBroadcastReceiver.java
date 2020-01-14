@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.crashlytics.android.Crashlytics;
+import com.itachi1706.cheesecakeutilities.util.LogInit;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -18,5 +19,6 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Fabric fabric = new Fabric.Builder(context).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        LogInit.initLogger();
     }
 }

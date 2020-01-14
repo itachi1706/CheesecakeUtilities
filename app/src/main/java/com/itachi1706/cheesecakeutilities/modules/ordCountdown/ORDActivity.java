@@ -23,7 +23,7 @@ import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMilea
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.JSONHelper;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

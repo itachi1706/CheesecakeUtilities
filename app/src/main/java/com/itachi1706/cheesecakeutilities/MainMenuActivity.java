@@ -22,6 +22,7 @@ import com.itachi1706.cheesecakeutilities.fragments.GamesFragment;
 import com.itachi1706.cheesecakeutilities.fragments.UtilityFragment;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.CommonVariables;
+import com.itachi1706.cheesecakeutilities.util.LogInit;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import io.fabric.sdk.android.Fabric;
@@ -42,6 +43,7 @@ public class MainMenuActivity extends AppCompatActivity {
         // Error Handling
         Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
         if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        LogInit.initLogger();
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         AnalyticsHelper helper = new AnalyticsHelper(this, true);

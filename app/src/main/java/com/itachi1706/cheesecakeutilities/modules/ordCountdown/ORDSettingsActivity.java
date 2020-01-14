@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

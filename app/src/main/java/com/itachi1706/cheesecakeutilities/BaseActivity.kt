@@ -4,11 +4,12 @@ import android.app.Activity
 import android.app.TaskStackBuilder
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics
 import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity
 import com.itachi1706.cheesecakeutilities.util.CommonMethods
+import com.itachi1706.cheesecakeutilities.util.LogInit.initLogger
+import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
 import io.fabric.sdk.android.Fabric
 
@@ -32,19 +33,20 @@ abstract class BaseActivity : AppCompatActivity() {
 
         val fabric = Fabric.Builder(this).kits(Crashlytics()).debuggable(BuildConfig.DEBUG).build()
         if (!BuildConfig.DEBUG) Fabric.with(fabric)
+        initLogger()
         val menuitem = if (this.intent.hasExtra("menuitem")) this.intent.extras!!.getString("menuitem", "") else ""
         val checkGlobal = this.intent.hasExtra("globalcheck") && this.intent.extras!!.getBoolean("globalcheck")
         val authagain = !this.intent.hasExtra("authagain") || this.intent.extras!!.getBoolean("authagain")
         if (!authagain) return
         if (!(menuitem == null || menuitem.isEmpty() || menuitem == "")) {
             if (!CommonMethods.isGlobalLocked(sp) && CommonMethods.isUtilityLocked(sp, menuitem)) {
-                Log.i("Authentication", "Requesting Utility Authentication for $menuitem")
+                LogHelper.i("Authentication", "Requesting Utility Authentication for $menuitem")
                 startActivityForResult(Intent(this, AuthenticationActivity::class.java), REQUEST_AUTH)
             }
         }
         if (checkGlobal) {
             if (CommonMethods.isGlobalLocked(sp)) {
-                Log.i("Authentication", "Requesting Authentication as app is locked globally")
+                LogHelper.i("Authentication", "Requesting Authentication as app is locked globally")
                 startActivityForResult(Intent(this, AuthenticationActivity::class.java), REQUEST_AUTH_GLOBAL)
             }
         }

@@ -22,7 +22,7 @@ import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHel
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Gender;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.jsonObjects.Main;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.FEMALE;
 import static com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper.PUSHUP;
