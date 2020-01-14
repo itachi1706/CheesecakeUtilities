@@ -38,7 +38,7 @@ import com.itachi1706.cheesecakeutilities.modules.listApplications.LoadAppListTa
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.AppsItem;
 import com.itachi1706.cheesecakeutilities.modules.listApplications.recyclerAdapters.AppsAdapter;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.turingtechnologies.materialscrollbar.CustomIndicator;
 import com.turingtechnologies.materialscrollbar.TouchScrollBar;
 

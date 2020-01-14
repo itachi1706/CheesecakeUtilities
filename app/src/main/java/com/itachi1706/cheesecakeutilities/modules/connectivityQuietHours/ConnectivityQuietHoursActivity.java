@@ -33,7 +33,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
 import com.itachi1706.cheesecakeutilities.util.CommonMethods;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

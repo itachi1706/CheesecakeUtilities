@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
 import kotlinx.android.synthetic.main.activity_firebase_login.*
 
@@ -70,7 +70,7 @@ class FirebaseLoginActivity : BaseModuleActivity() {
         google_sign_in_button.setSize(SignInButton.SIZE_WIDE)
         google_sign_in_button.setOnClickListener {
             // Attempts to sign in with Google
-            Log.d(TAG, "Signing in with Google")
+            LogHelper.d(TAG, "Signing in with Google")
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
@@ -140,10 +140,10 @@ class FirebaseLoginActivity : BaseModuleActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                Log.i(TAG, "Sign in successful")
+                LogHelper.i(TAG, "Sign in successful")
                 firebaseAuthWithGoogle(account!!)
             } catch (e: ApiException) {
-                Log.e(TAG, "Sign in failed")
+                LogHelper.e(TAG, "Sign in failed")
                 updateUI(null)
             }
         }
@@ -177,7 +177,7 @@ class FirebaseLoginActivity : BaseModuleActivity() {
                 startActivity(continueIntent!!)
                 finish()
             } else {
-                Log.e(TAG, "No continue intent found. Exiting by default unless specified not to")
+                LogHelper.e(TAG, "No continue intent found. Exiting by default unless specified not to")
                 if (!intent.getBooleanExtra("persist", false)) finish()
                 showHideLogin(false)
             }

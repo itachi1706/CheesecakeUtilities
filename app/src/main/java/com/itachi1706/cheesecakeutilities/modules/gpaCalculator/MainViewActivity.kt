@@ -26,7 +26,7 @@ import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScori
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaSemester
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
 class MainViewActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
@@ -82,7 +82,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
     }
 
     private fun updateScoring(callback: GpaCalcCallback? = null) {
-        Log.i(TAG, "Updating Scoring Objects Map")
+        LogHelper.i(TAG, "Updating Scoring Objects Map")
         val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "updateScoring") {
@@ -100,10 +100,10 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
 
     override fun updateSelectedInstitution() {
         if (selInstitute == null) {
-            Log.e(TAG, "Nothing to update in institution")
+            LogHelper.e(TAG, "Nothing to update in institution")
             return
         }
-        Log.i(TAG, "Updating Selected Institution")
+        LogHelper.i(TAG, "Updating Selected Institution")
         val key = selInstitute!!.shortName
         val db = GpaCalcFirebaseUtils.getGpaDatabaseUser(userId).child(key)
         db.keepSynced(true)
@@ -228,7 +228,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
     }
 
     override fun updateScoreMap(callback: GpaCalcCallback) {
-        Log.i(TAG, "Manually updating Scoring Objects")
+        LogHelper.i(TAG, "Manually updating Scoring Objects")
         updateScoring(callback)
     }
 

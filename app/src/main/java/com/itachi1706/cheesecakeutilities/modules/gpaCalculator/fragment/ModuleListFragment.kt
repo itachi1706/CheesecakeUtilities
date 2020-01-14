@@ -19,7 +19,7 @@ import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaRecyc
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 
 /**
  * Semester List View

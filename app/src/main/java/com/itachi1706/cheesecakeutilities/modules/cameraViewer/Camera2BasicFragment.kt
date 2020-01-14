@@ -28,7 +28,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.Log
 import android.util.Size
 import android.util.SparseIntArray
 import android.view.*
@@ -38,6 +37,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.helperlib.helpers.LogHelper
 import kotlinx.android.synthetic.main.fragment_camera2_basic.*
 import java.util.*
 import java.util.concurrent.Semaphore
@@ -138,7 +138,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
                 return // We've found a viable camera and finished setting up member variables so we don't need to iterate through other available cameras.
             }
         } catch (e: CameraAccessException) {
-            Log.e(TAG, e.toString())
+            LogHelper.e(TAG, e.toString())
         } catch (e: NullPointerException) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
@@ -200,7 +200,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
         when (displayRotation) {
             Surface.ROTATION_0, Surface.ROTATION_180 -> if (sensorOrientation == 90 || sensorOrientation == 270) swappedDimensions = true
             Surface.ROTATION_90, Surface.ROTATION_270 -> if (sensorOrientation == 0 || sensorOrientation == 180) swappedDimensions = true
-            else -> Log.e(TAG, "Display rotation is invalid: $displayRotation")
+            else -> LogHelper.e(TAG, "Display rotation is invalid: $displayRotation")
         }
         return swappedDimensions
     }
@@ -223,7 +223,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) throw RuntimeException("Time out waiting to lock camera opening.")
             manager.openCamera(cameraId, stateCallback, backgroundHandler)
         } catch (e: CameraAccessException) {
-            Log.e(TAG, e.toString())
+            LogHelper.e(TAG, e.toString())
         } catch (e: InterruptedException) {
             throw RuntimeException("Interrupted while trying to lock camera opening.", e)
         }
@@ -256,7 +256,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
             backgroundThread = null
             backgroundHandler = null
         } catch (e: InterruptedException) {
-            Log.e(TAG, e.toString())
+            LogHelper.e(TAG, e.toString())
         }
 
     }
@@ -285,11 +285,11 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
                             previewRequest = previewRequestBuilder.build()
                             captureSession?.setRepeatingRequest(previewRequest, captureCallback, backgroundHandler)
                         } catch (e: CameraAccessException) {
-                            Log.e(TAG, e.toString())
+                            LogHelper.e(TAG, e.toString())
                         }
                     }
                     override fun onConfigureFailed(session: CameraCaptureSession) { activity!!.runOnUiThread { Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show() } } }, null)
-        } catch (e: CameraAccessException) { Log.e(TAG, e.toString()) }
+        } catch (e: CameraAccessException) { LogHelper.e(TAG, e.toString()) }
 
     }
 
@@ -318,9 +318,9 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
 
     private fun toggleFlash() {
         if (activity == null) return
-        Log.d(TAG, "toggleFlash()")
+        LogHelper.d(TAG, "toggleFlash()")
         val flashState = previewRequestBuilder.get(CaptureRequest.FLASH_MODE) ?: CaptureRequest.FLASH_MODE_OFF
-        Log.d(TAG, "Flash State: $flashState")
+        LogHelper.d(TAG, "Flash State: $flashState")
         if (flashState != CaptureRequest.FLASH_MODE_OFF) {
             previewRequestBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF)
             setAutoFlash(previewRequestBuilder)
@@ -387,7 +387,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
                         dialog.dismiss()
                         val selPos = (dialog as AlertDialog).listView.checkedItemPosition
                         val selString = manager.cameraIdList[selPos]
-                        Log.d(TAG, "Sel new camera: $selPos ($selString)")
+                        LogHelper.d(TAG, "Sel new camera: $selPos ($selString)")
                         switchCam(selString.toString())
                     }.setNegativeButton(android.R.string.cancel, null).show()
             }
@@ -395,7 +395,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
     }
 
     private fun switchCam(newCam: String) {
-        Log.i(TAG, "Switching Camera View from ${this.cameraId} to $newCam")
+        LogHelper.i(TAG, "Switching Camera View from ${this.cameraId} to $newCam")
         closeCamera()
         openCamera(texture.width, texture.height, newCam)
     }
@@ -444,7 +444,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
                 bigEnough.size > 0 -> Collections.min(bigEnough, CompareSizesByArea())
                 notBigEnough.size > 0 -> Collections.max(notBigEnough, CompareSizesByArea())
                 else -> {
-                    Log.e(TAG, "Couldn't find any suitable preview size")
+                    LogHelper.e(TAG, "Couldn't find any suitable preview size")
                     choices[0]
                 }
             }

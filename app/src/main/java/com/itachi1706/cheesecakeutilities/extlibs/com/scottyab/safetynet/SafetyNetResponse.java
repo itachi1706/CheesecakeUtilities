@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

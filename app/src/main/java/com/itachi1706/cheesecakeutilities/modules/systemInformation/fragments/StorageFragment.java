@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.deprecation.StatFsDep;
 
 import org.apache.commons.lang3.StringUtils;

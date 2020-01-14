@@ -19,7 +19,7 @@ import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.interfaces.State
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.SwipeEditDeleteCallback
 import com.itachi1706.cheesecakeutilities.util.FirebaseUtils
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import java.util.*
 
 /**
@@ -51,7 +51,7 @@ abstract class BaseGpaFragment : Fragment(), SwipeEditDeleteCallback.ISwipeCallb
         super.onStop()
         if (listener != null) {
             FirebaseUtils.removeListener(listener!!)
-            Log.i(getLogTag(), "Firebase Listener Unregisted")
+            LogHelper.i(getLogTag(), "Firebase Listener Unregisted")
             listener = null
         }
     }

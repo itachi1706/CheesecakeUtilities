@@ -26,7 +26,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHolder;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
 

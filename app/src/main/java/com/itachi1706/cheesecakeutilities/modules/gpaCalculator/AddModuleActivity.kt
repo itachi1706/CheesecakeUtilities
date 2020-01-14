@@ -12,7 +12,7 @@ import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaModul
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.cheesecakeutilities.extlibs.com.thebluealliance.spectrum.SpectrumPalette
 import kotlinx.android.synthetic.main.activity_gpa_calculator_add_module.*
 import java.util.*
@@ -63,7 +63,7 @@ class AddModuleActivity : AddActivityBase() {
         module_color_selector.setOnColorSelectedListener(object: SpectrumPalette.OnColorSelectedListener {
             override fun onColorSelected(color: Int) {
                 colorSelected = color
-                Log.d(TAG, "Color Selected: #${Integer.toHexString(color).toUpperCase(Locale.US)}")
+                LogHelper.d(TAG, "Color Selected: #${Integer.toHexString(color).toUpperCase(Locale.US)}")
             }
         })
     }
@@ -169,7 +169,7 @@ class AddModuleActivity : AddActivityBase() {
     }
 
     private fun getScoringObject() {
-        Log.i(TAG, "Retrieving Scoring Object for this institution")
+        LogHelper.i(TAG, "Retrieving Scoring Object for this institution")
         val db = GpaCalcFirebaseUtils.getGpaDatabase().child(GpaCalcFirebaseUtils.FB_REC_SCORING).child(selectedInstitution!!.type)
         db.keepSynced(true)
         db.addListenerForSingleValueEvent(object: FirebaseValueEventListener(TAG, "getScoringObject") {

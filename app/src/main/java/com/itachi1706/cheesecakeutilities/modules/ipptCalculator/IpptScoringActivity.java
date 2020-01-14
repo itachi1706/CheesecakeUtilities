@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.itachi1706.cheesecakeutilities.modules.ipptCalculator.helpers.JsonHelper;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.util.Arrays;
 

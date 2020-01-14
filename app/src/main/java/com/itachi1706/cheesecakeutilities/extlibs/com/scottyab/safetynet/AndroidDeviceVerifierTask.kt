@@ -1,7 +1,7 @@
 package com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet
 
 import android.os.AsyncTask
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader

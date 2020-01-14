@@ -16,7 +16,7 @@ import androidx.biometric.BiometricConstants.*
 import androidx.biometric.BiometricPrompt
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.itachi1706.cheesecakeutilities.R
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 
 /**
  * Created by Kenneth on 18/12/2019.

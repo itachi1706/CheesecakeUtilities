@@ -5,11 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.itachi1706.cheesecakeutilities.util.CommonVariables
+import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.URLHelper
 import java.io.File
 import java.io.FileOutputStream
@@ -30,20 +30,20 @@ class InstallAppTask(activity: Activity) : AsyncTask<Void, Void, File>() {
         val activity = activityRef.get() ?: return null
         val url = "${CommonVariables.BASE_API_URL}appupdatechecker.php?action=androidgetlatesturl&packagename=com.itachi1706.fanfictionnetreader"
         val urlHelper = URLHelper(url)
-        Log.d(TAG, "Querying $url")
+        LogHelper.d(TAG, "Querying $url")
         val data = urlHelper.executeString()
-        Log.d(TAG, "Data Obj: $data")
+        LogHelper.d(TAG, "Data Obj: $data")
 
         val gson = Gson()
         val obj = gson.fromJson(data, RedirectAppUrlObject::class.java)
         if (obj.error != 21) {
-            Log.e(TAG, "Error occurred retrieving URL for app")
+            LogHelper.e(TAG, "Error occurred retrieving URL for app")
             return null
         }
 
         val urlLink = obj.msg.url
         if (urlLink.isEmpty()) {
-            Log.e(TAG, "No URL")
+            LogHelper.e(TAG, "No URL")
             return null
         }
 
@@ -55,21 +55,21 @@ class InstallAppTask(activity: Activity) : AsyncTask<Void, Void, File>() {
             conn.readTimeout = 60000
             conn.requestMethod = "GET"
             conn.connect()
-            Log.d(TAG, "Starting Download to cache...")
+            LogHelper.d(TAG, "Starting Download to cache...")
             val cacheFolder = File(activity.externalCacheDir, "redirect")
             cacheFolder.mkdirs()
             val downloadFile = File(cacheFolder, "redirect.apk")
             if (downloadFile.exists()) downloadFile.delete()
 
-            Log.i(TAG, "Downloading to ${downloadFile.absolutePath}")
+            LogHelper.i(TAG, "Downloading to ${downloadFile.absolutePath}")
             val fos = FileOutputStream(downloadFile)
-            Log.d(TAG, "Connection done, File Obtained")
-            Log.d(TAG, "Writing to file")
+            LogHelper.d(TAG, "Connection done, File Obtained")
+            LogHelper.d(TAG, "Writing to file")
             val inputStream = conn.inputStream
             inputStream.copyTo(fos, 1024)
             fos.close()
             inputStream.close()
-            Log.d(TAG, "Download Complete...")
+            LogHelper.d(TAG, "Download Complete...")
             return downloadFile
         } catch (e: IOException) {
             e.printStackTrace()
@@ -82,7 +82,7 @@ class InstallAppTask(activity: Activity) : AsyncTask<Void, Void, File>() {
         if (result == null) {
             Toast.makeText(activity, "An error occurred installing app", Toast.LENGTH_LONG).show()
         } else {
-            Log.i(TAG, "Retrieved file ${result.absolutePath}. Launching installer")
+            LogHelper.i(TAG, "Retrieved file ${result.absolutePath}. Launching installer")
             val intent = Intent(Intent.ACTION_INSTALL_PACKAGE)
             val postNougat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
             val contentUri = if (postNougat) FileProvider.getUriForFile(activity.baseContext, activity.applicationContext.packageName + ".provider", result) else Uri.fromFile(result)

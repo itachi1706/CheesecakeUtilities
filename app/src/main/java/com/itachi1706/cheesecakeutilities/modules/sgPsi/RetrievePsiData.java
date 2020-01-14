@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.google.firebase.perf.metrics.AddTrace;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.helpers.URLHelper;
 
 import java.io.IOException;

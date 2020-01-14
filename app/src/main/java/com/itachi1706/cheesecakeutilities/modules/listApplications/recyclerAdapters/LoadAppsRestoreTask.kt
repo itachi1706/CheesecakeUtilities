@@ -7,7 +7,7 @@ import com.itachi1706.cheesecakeutilities.modules.listApplications.helpers.Backu
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsBase
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsFooter
 import com.itachi1706.cheesecakeutilities.modules.listApplications.objects.RestoreAppsItemsHeader
-import com.itachi1706.cheesecakeutilities.util.LogHelper
+import com.itachi1706.helperlib.helpers.LogHelper
 import org.apache.commons.io.FileUtils
 import java.lang.ref.WeakReference
 

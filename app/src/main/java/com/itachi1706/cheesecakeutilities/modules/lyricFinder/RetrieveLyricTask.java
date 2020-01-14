@@ -7,7 +7,7 @@ import android.os.Message;
 
 import com.itachi1706.helperlib.helpers.URLHelper;
 import com.itachi1706.cheesecakeutilities.util.CommonVariables;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.IOException;
 import java.net.URLEncoder;

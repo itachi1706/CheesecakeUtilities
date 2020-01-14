@@ -6,9 +6,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.preference.PreferenceManager
-import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import com.itachi1706.helperlib.helpers.LogHelper
 import java.util.concurrent.Executor
 
 /**
@@ -43,7 +43,7 @@ class BiometricCompatHelper private constructor() {
 
             val km = context.getSystemService(KeyguardManager::class.java)
             if (km == null) {
-                Log.e("BioCompat", "Keyguard died!")
+                LogHelper.e("BioCompat", "Keyguard died!")
                 return false
             }
             val biometricManager = BiometricManager.from(context)

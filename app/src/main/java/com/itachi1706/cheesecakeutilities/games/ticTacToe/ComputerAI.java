@@ -3,7 +3,7 @@ package com.itachi1706.cheesecakeutilities.games.ticTacToe;
 import android.app.AlertDialog;
 import android.content.Context;
 
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.util.Random;
 

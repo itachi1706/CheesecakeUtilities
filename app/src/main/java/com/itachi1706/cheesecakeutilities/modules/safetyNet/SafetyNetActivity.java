@@ -21,7 +21,7 @@ import com.google.firebase.perf.metrics.Trace;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.util.LogHelper;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetHelper;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.SafetyNetResponse;
 import com.itachi1706.cheesecakeutilities.extlibs.com.scottyab.safetynet.Utils;

@@ -2,9 +2,9 @@ package com.itachi1706.cheesecakeutilities.modules.gpaCalculator
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.itachi1706.cheesecakeutilities.FirebaseLoginActivity
+import com.itachi1706.helperlib.helpers.LogHelper
 
 /**
  * Created by Kenneth on 24/6/2019.
@@ -23,7 +23,7 @@ class InitActivity : AppCompatActivity() {
             putExtra(FirebaseLoginActivity.HELP_EXTRA, "An utility to help keep track of scores\n\nNote: This is the login screen where you have " +
                     "to login with a Google Account to continue as your scores will be saved based on your Google Account")
         }
-        Log.i("GpaCalculatorInit", "Redirecting login activity to GpaCalculatorMainActivity")
+        LogHelper.i("GpaCalculatorInit", "Redirecting login activity to GpaCalculatorMainActivity")
         startActivity(i)
         finish()
     }
