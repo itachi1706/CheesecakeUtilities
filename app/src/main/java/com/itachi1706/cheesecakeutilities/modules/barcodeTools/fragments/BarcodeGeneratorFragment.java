@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
@@ -35,24 +38,26 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.EnumMap;
 import java.util.Map;
 
 public class BarcodeGeneratorFragment extends Fragment {
 
-    LinearLayout barcodeActions;
-    Button generate, share;
-    ImageView result;
-    TextView restrictions;
-    TextInputEditText textToConvert;
-    TextInputLayout convertTextError;
-    Spinner barcodeType;
+    private LinearLayout barcodeActions;
+    private Button generate, share, save;
+    private ImageView result;
+    private TextView restrictions;
+    private TextInputEditText textToConvert;
+    private TextInputLayout convertTextError;
+    private Spinner barcodeType;
 
-    String[] restrictionString;
+    private String[] restrictionString;
 
-    Bitmap bitmap = null;
+    private Bitmap bitmap = null;
 
     private static final String TAG = "BarcodeGenerator";
 
@@ -70,6 +75,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         barcodeType = v.findViewById(R.id.barcode_types);
         restrictions = v.findViewById(R.id.barcode_restrictions);
         convertTextError = v.findViewById(R.id.til_etBarcode);
+        save = v.findViewById(R.id.barcode_save);
 
         //noinspection ConstantConditions
         restrictionString = getActivity().getResources().getStringArray(R.array.barcode_types_restrictions);
@@ -95,6 +101,13 @@ public class BarcodeGeneratorFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Not used. Code stub
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bitmap == null) return; // No barcode to save
+                requestSaveBarcode();
             }
         });
 
@@ -125,6 +138,55 @@ public class BarcodeGeneratorFragment extends Fragment {
         }
 
         return contentUri;
+    }
+
+    private static final int RC_SAVE_BARCODE = 2;
+
+    private void requestSaveBarcode() {
+        String filename = "barcode.png";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // SAF
+            Intent saveIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            saveIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            saveIntent.setType("image/png");
+            saveIntent.putExtra(Intent.EXTRA_TITLE, filename);
+            startActivityForResult(saveIntent, RC_SAVE_BARCODE);
+        } else {
+            // File
+            File f = new File(Environment.getExternalStorageDirectory(), filename);
+            try {
+                saveBarcode(new FileOutputStream(f.getAbsolutePath()));
+            } catch (FileNotFoundException e) {
+                LogHelper.e(TAG, "Failed to save barcode (legacy)");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveBarcode(OutputStream os) {
+        if (os == null) return;
+        if (bitmap == null) {
+            LogHelper.e(TAG, "No barcode found");
+            Toast.makeText(getContext(), "Failed to save barcode", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        Toast.makeText(getContext(), "Saved barcode to SD Card", Toast.LENGTH_LONG).show();
+        LogHelper.i(TAG, "Saved barcode to location");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == RC_SAVE_BARCODE && data != null && data.getData() != null) {
+            try {
+                saveBarcode(getContext().getContentResolver().openOutputStream(data.getData()));
+            } catch (FileNotFoundException e) {
+                LogHelper.e(TAG, "Failed to save barcode (SAF)");
+                e.printStackTrace();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void share() {
