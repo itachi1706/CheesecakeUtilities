@@ -14,6 +14,7 @@ public class BarcodeHelper {
     }
 
     public static final String SP_BARCODE_GENERATED = "barcode_generate_list";
+    public static final String SP_BARCODE_SCANNED = "barcode_scanned_list";
 
     public static String getFormatName(int format) {
         switch (format) {

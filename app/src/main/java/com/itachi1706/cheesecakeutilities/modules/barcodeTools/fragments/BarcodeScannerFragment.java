@@ -5,9 +5,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +24,17 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHolder;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan;
 import com.itachi1706.helperlib.helpers.LogHelper;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
 
@@ -71,7 +79,7 @@ public class BarcodeScannerFragment extends Fragment {
         // Check for camera source
         //noinspection ConstantConditions
         DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getActivity().getSystemService(DEVICE_POLICY_SERVICE);
-        if (!this.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
+        if (!this.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) ||
                 (devicePolicyManager != null && devicePolicyManager.getCameraDisabled(null))) {
             // Disables stuff
             scan.setEnabled(false);
@@ -81,6 +89,20 @@ public class BarcodeScannerFragment extends Fragment {
             scan.setEnabled(true);
             statusMessage.setText(getString(R.string.barcode_header));
         }
+    }
+
+    private void updateHistory(BarcodeHistoryScan bc) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String bcString = sp.getString(BarcodeHelper.SP_BARCODE_SCANNED, "");
+        ArrayList<BarcodeHistoryScan> array;
+        Gson gson = new Gson();
+        if (!bcString.isEmpty()) {
+            Type listType = new TypeToken<ArrayList<BarcodeHistoryScan>>(){}.getType();
+            array = gson.fromJson(bcString, listType);
+        } else array = new ArrayList<>();
+        array.add(bc);
+        String newString = gson.toJson(array);
+        sp.edit().putString(BarcodeHelper.SP_BARCODE_SCANNED, newString).apply();
     }
 
     // Returning barcode activity
@@ -117,6 +139,13 @@ public class BarcodeScannerFragment extends Fragment {
                         });
                     }
                     LogHelper.d(TAG, "Barcode read: " + barcode.getDisplayValue());
+
+                    // Save Barcode
+                    BarcodeHistoryScan scanBc = new BarcodeHistoryScan(barcode.getDisplayValue(), barcode.getRawValue(), barcode.getFormat(), barcode.getValueType(),
+                            barcode.getEmail(), barcode.getPhone(), barcode.getSms(), barcode.getWifi(), barcode.getUrl(), barcode.getGeoPoint(), barcode.getCalendarEvent(),
+                            barcode.getContactInfo(), barcode.getDriverLicense());
+                    updateHistory(scanBc);
+                    LogHelper.i(TAG, "Saved barcode to history: " + barcode.getDisplayValue());
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     barcodeValue.setClickable(false);
