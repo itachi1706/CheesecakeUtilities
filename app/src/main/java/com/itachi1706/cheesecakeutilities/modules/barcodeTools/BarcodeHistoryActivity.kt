@@ -1,6 +1,8 @@
 package com.itachi1706.cheesecakeutilities.modules.barcodeTools
 
+import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -32,10 +34,19 @@ class BarcodeHistoryActivity : AppCompatActivity() {
         else super.onOptionsItemSelected(item)
     }
 
-    class BarcodeHistoryTabAdapter(activity: FragmentActivity): FragmentStateAdapter(activity) {
+    class BarcodeHistoryTabAdapter(val activity: FragmentActivity): FragmentStateAdapter(activity) {
         override fun getItemCount(): Int { return 2 }
         override fun createFragment(position: Int): Fragment {
-            return BarcodeHistoryFragment.newInstance("") // TODO: Provide History String
+            return BarcodeHistoryFragment.newInstance(getBarcodeString(activity.applicationContext, position), if (position == 0) BarcodeHelper.SP_BARCODE_SCANNED else BarcodeHelper.SP_BARCODE_GENERATED)
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun getBarcodeString(context: Context, pos: Int): String {
+            val sp = PreferenceManager.getDefaultSharedPreferences(context)
+            return if (pos == 0) sp.getString(BarcodeHelper.SP_BARCODE_SCANNED, "")!!
+            else sp.getString(BarcodeHelper.SP_BARCODE_GENERATED, "")!!
         }
     }
 }
