@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +30,16 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen;
 import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.File;
@@ -42,6 +47,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -248,6 +255,24 @@ public class BarcodeGeneratorFragment extends Fragment {
             barcodeActions.setVisibility(View.GONE);
             e.printStackTrace();
         }
+
+        // Save to history
+        updateHistory(new BarcodeHistoryGen(text, format));
+        LogHelper.d(TAG, "Saved to history: " + text + " in format " + format.toString());
+    }
+
+    private void updateHistory(BarcodeHistoryGen bc) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String bcString = sp.getString(BarcodeHelper.SP_BARCODE_GENERATED, "");
+        ArrayList<BarcodeHistoryGen> array;
+        Gson gson = new Gson();
+        if (!bcString.isEmpty()) {
+            Type listType = new TypeToken<ArrayList<BarcodeHistoryGen>>(){}.getType();
+            array = gson.fromJson(bcString, listType);
+        } else array = new ArrayList<>();
+        array.add(bc);
+        String newString = gson.toJson(array);
+        sp.edit().putString(BarcodeHelper.SP_BARCODE_GENERATED, newString).apply();
     }
 
 

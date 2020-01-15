@@ -13,6 +13,8 @@ public class BarcodeHelper {
         throw new IllegalStateException("Utility class");
     }
 
+    public static final String SP_BARCODE_GENERATED = "barcode_generate_list";
+
     public static String getFormatName(int format) {
         switch (format) {
             case FirebaseVisionBarcode.FORMAT_CODE_128:
