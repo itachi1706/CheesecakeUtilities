@@ -15,6 +15,7 @@ import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHistoryRec
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistory
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan
+import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter
 import com.itachi1706.helperlib.helpers.LogHelper
 import kotlinx.android.synthetic.main.fragment_recycler_view.*
 
@@ -48,8 +49,8 @@ class BarcodeHistoryFragment : Fragment() {
         val gson = Gson()
         val listType = if (type == BarcodeHelper.SP_BARCODE_SCANNED) object : TypeToken<java.util.ArrayList<BarcodeHistoryScan>>() {}.type
             else object : TypeToken<java.util.ArrayList<BarcodeHistoryGen>>() {}.type
-        val list: ArrayList<BarcodeHistory> = gson.fromJson(historyString, listType)
-        val adapter = BarcodeHistoryRecyclerAdapter(list)
+        val list: ArrayList<BarcodeHistory> = if (historyString.isNotEmpty()) gson.fromJson(historyString, listType) else ArrayList()
+        val adapter = if (list.isNotEmpty()) BarcodeHistoryRecyclerAdapter(list) else StringRecyclerAdapter(arrayOf("No barcodes in history"))
         main_menu_recycler_view.adapter = adapter
     }
 

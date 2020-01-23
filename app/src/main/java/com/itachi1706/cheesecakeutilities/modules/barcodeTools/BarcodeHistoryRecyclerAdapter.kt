@@ -2,7 +2,7 @@ package com.itachi1706.cheesecakeutilities.modules.barcodeTools
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
+import android.graphics.drawable.Drawable
 import android.view.*
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -13,6 +13,7 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistory
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan
+import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
 
 /**
@@ -54,13 +55,14 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
 
     // Multiselect handling
     private var multiMode = false
+    private var multiActionMode: ActionMode? = null
     private var multiSelection = ArrayList<BarcodeHistory>()
 
     inner class BarcodeHistoryViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener, View.OnLongClickListener {
         var title: TextView = v.findViewById(android.R.id.text1)
         var subtitle: TextView = v.findViewById(android.R.id.text2)
         var layout: RelativeLayout = v.findViewById(R.id.layout_two_line)
-        var origBackground = layout.background
+        var origBackground: Drawable = layout.background
         lateinit var barcode: BarcodeHistory
 
         init {
@@ -82,7 +84,7 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
             NotifyUserUtil.createShortToast(v.context, subtitle.text)
             if (!::barcode.isInitialized) return false
             if (multiMode) return true // Do not reinit
-            (v.context as AppCompatActivity).startSupportActionMode(actionModeCallback)
+            multiActionMode = (v.context as AppCompatActivity).startSupportActionMode(actionModeCallback)
             selectItem(barcode, v.context)
             return true
         }
@@ -98,6 +100,7 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
                 multiSelection.add(item)
                 layout.setBackgroundColor(Color.LTGRAY)
             }
+            multiActionMode?.title = multiSelection.size.toString()
         }
 
         private val actionModeCallback: ActionMode.Callback = object: ActionMode.Callback {
@@ -111,21 +114,23 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
                 }
                 when (item.itemId) {
                     R.id.menu_select_all -> {
-                        Log.d("BCH", "SELECT ALL: $dbgSelection")
+                        LogHelper.d(TAG, "SELECT ALL: $dbgSelection")
                         multiSelection.clear()
                         multiSelection.addAll(barcodeList)
                         notifyDataSetChanged()
+                        mode.title = multiSelection.size.toString()
                     }
                     R.id.menu_select_invert -> {
-                        Log.d("BCH", "INVERSE: $dbgSelection")
+                        LogHelper.d(TAG, "INVERSE: $dbgSelection")
                         val tmp = ArrayList<BarcodeHistory>()
                         barcodeList.forEach { if (!multiSelection.contains(it)) tmp.add(it) }
                         multiSelection.clear()
                         multiSelection.addAll(tmp)
                         notifyDataSetChanged()
+                        mode.title = multiSelection.size.toString()
                     }
                     R.id.menu_delete -> {
-                        Log.d("BCH", "DELETE: $dbgSelection")
+                        LogHelper.d(TAG, "DELETE: $dbgSelection")
                         mode.finish()
                     }
                     else -> mode.finish()
@@ -144,11 +149,16 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
             }
 
             override fun onDestroyActionMode(mode: ActionMode?) {
-                Log.d("BCH", "Remove")
+                LogHelper.d(TAG, "Remove")
                 multiMode = false
                 multiSelection.clear()
+                multiActionMode = null
                 notifyDataSetChanged()
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "BarcodeHistAdapter"
     }
 }
