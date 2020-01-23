@@ -14,21 +14,20 @@ import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHi
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan
 import com.itachi1706.helperlib.helpers.LogHelper
-import com.itachi1706.helperlib.utils.NotifyUserUtil
 
 /**
  * Created by Kenneth on 23/1/2020.
  * for com.itachi1706.cheesecakeutilities.modules.barcodeTools in CheesecakeUtilities
  */
-class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerView.Adapter<BarcodeHistoryRecyclerAdapter.BarcodeHistoryViewHolder>() {
+class BarcodeHistoryRecyclerAdapter(barcodes: ArrayList<BarcodeHistory>, val callback: Callbacks) : RecyclerView.Adapter<BarcodeHistoryRecyclerAdapter.BarcodeHistoryViewHolder>() {
 
-    private var barcodeList: List<BarcodeHistory> = ArrayList()
+    private var barcodeList: ArrayList<BarcodeHistory> = ArrayList()
 
     init {
         barcodeList = barcodes
     }
 
-    fun update(updatedBarcodes: List<BarcodeHistory>) { barcodeList = updatedBarcodes }
+    fun update(updatedBarcodes: ArrayList<BarcodeHistory>) { barcodeList = updatedBarcodes }
 
     override fun getItemCount(): Int { return barcodeList.size }
 
@@ -72,16 +71,14 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
         }
 
         override fun onClick(v: View) {
-            NotifyUserUtil.createShortToast(v.context, title.text)
             if (multiMode) {
                 selectItem(barcode, v.context)
             } else {
-                // TODO: Clicked an object
+                callback.itemSelected(barcode)
             }
         }
 
         override fun onLongClick(v: View): Boolean {
-            NotifyUserUtil.createShortToast(v.context, subtitle.text)
             if (!::barcode.isInitialized) return false
             if (multiMode) return true // Do not reinit
             multiActionMode = (v.context as AppCompatActivity).startSupportActionMode(actionModeCallback)
@@ -131,6 +128,9 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
                     }
                     R.id.menu_delete -> {
                         LogHelper.d(TAG, "DELETE: $dbgSelection")
+                        multiSelection.forEach {
+                            barcodeList.remove(it)
+                        }
                         mode.finish()
                     }
                     else -> mode.finish()
@@ -149,13 +149,19 @@ class BarcodeHistoryRecyclerAdapter(barcodes: List<BarcodeHistory>) : RecyclerVi
             }
 
             override fun onDestroyActionMode(mode: ActionMode?) {
-                LogHelper.d(TAG, "Remove")
+                LogHelper.d(TAG, "Clearing CAB state. Updating")
                 multiMode = false
                 multiSelection.clear()
                 multiActionMode = null
                 notifyDataSetChanged()
+                callback.updateHistory(barcodeList)
             }
         }
+    }
+
+    interface Callbacks {
+        fun updateHistory(list: List<BarcodeHistory>)
+        fun itemSelected(item: BarcodeHistory)
     }
 
     companion object {
