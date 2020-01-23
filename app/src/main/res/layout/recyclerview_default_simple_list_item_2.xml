@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/layout_two_line"
     android:mode="twoLine"
     >
 
