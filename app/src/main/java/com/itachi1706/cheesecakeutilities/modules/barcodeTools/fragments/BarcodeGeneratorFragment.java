@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen;
 import com.itachi1706.helperlib.helpers.LogHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -262,7 +262,8 @@ public class BarcodeGeneratorFragment extends Fragment {
     }
 
     private void updateHistory(BarcodeHistoryGen bc) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (getContext() == null) return;
+        SharedPreferences sp = PrefHelper.getSharedPreferences(getContext(), "BarcodeHistory");
         String bcString = sp.getString(BarcodeHelper.SP_BARCODE_GENERATED, "");
         ArrayList<BarcodeHistoryGen> array;
         Gson gson = new Gson();

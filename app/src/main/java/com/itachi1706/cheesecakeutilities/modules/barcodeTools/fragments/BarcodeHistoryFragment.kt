@@ -58,6 +58,7 @@ class BarcodeHistoryFragment : Fragment() {
 
     private val rvCallback = object:BarcodeHistoryRecyclerAdapter.Callbacks {
         override fun updateHistory(list: List<BarcodeHistory>) {
+            if (context == null) return
             // Convert based on type of barcode
             val updateHistScan = ArrayList<BarcodeHistoryScan>()
             val updateHistGen = ArrayList<BarcodeHistoryGen>()
@@ -65,7 +66,7 @@ class BarcodeHistoryFragment : Fragment() {
                 if (it is BarcodeHistoryScan) updateHistScan.add(it)
                 else if (it is BarcodeHistoryGen) updateHistGen.add(it)
             }
-            val sp = PrefHelper.getDefaultSharedPreferences(context)
+            val sp = PrefHelper.getSharedPreferences(context!!, "BarcodeHistory")
             val gson = Gson()
             val string = if (type == BarcodeHelper.SP_BARCODE_SCANNED) gson.toJson(updateHistScan) else gson.toJson(updateHistGen)
             sp.edit().putString(type, string).apply()

@@ -2,7 +2,6 @@ package com.itachi1706.cheesecakeutilities.modules.barcodeTools
 
 import android.content.Context
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,6 +11,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments.BarcodeHistoryFragment
+import com.itachi1706.helperlib.helpers.PrefHelper
 import kotlinx.android.synthetic.main.activity_viewpager_frag.*
 
 class BarcodeHistoryActivity : AppCompatActivity() {
@@ -44,7 +44,7 @@ class BarcodeHistoryActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getBarcodeString(context: Context, pos: Int): String {
-            val sp = PreferenceManager.getDefaultSharedPreferences(context)
+            val sp = PrefHelper.getSharedPreferences(context, "BarcodeHistory")
             return if (pos == 0) sp.getString(BarcodeHelper.SP_BARCODE_SCANNED, "")!!
             else sp.getString(BarcodeHelper.SP_BARCODE_GENERATED, "")!!
         }

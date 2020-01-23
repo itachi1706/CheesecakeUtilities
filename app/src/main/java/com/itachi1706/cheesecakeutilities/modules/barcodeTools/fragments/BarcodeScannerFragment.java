@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,7 @@ import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHolder;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan;
 import com.itachi1706.helperlib.helpers.LogHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -92,7 +92,8 @@ public class BarcodeScannerFragment extends Fragment {
     }
 
     private void updateHistory(BarcodeHistoryScan bc) {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (getContext() == null) return;
+        SharedPreferences sp = PrefHelper.getSharedPreferences(getContext(), "BarcodeHistory");
         String bcString = sp.getString(BarcodeHelper.SP_BARCODE_SCANNED, "");
         ArrayList<BarcodeHistoryScan> array;
         Gson gson = new Gson();
