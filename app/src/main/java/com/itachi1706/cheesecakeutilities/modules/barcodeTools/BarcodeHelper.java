@@ -2,6 +2,7 @@ package com.itachi1706.cheesecakeutilities.modules.barcodeTools;
 
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
 import com.google.zxing.BarcodeFormat;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan;
 
 /**
  * Created by Kenneth on 24/12/2017.
@@ -158,7 +159,7 @@ public class BarcodeHelper {
         return type;
     }
 
-    public static String handleSpecialBarcodes(FirebaseVisionBarcode barcode) {
+    public static String handleSpecialBarcodes(BarcodeHistoryScan barcode) {
         StringBuilder result = new StringBuilder();
         // Get all special stuff that may be null if its invalid
         FirebaseVisionBarcode.CalendarEvent calendarEvent = barcode.getCalendarEvent();

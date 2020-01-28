@@ -29,8 +29,8 @@ import com.google.gson.reflect.TypeToken;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
-import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHolder;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHolder;
 import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 
@@ -116,39 +116,12 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 FirebaseVisionBarcode barcode = BarcodeHolder.getInstance().getBarcode(); // Get barcode
                 if (barcode != null) {
-                    statusMessage.setText(R.string.barcode_success);
-                    StringBuilder result = new StringBuilder();
-                    result.append("Format: ").append(BarcodeHelper.getFormatName(barcode.getFormat())).append("\n");
-                    result.append("Type: ").append(BarcodeHelper.getValueFormat(barcode.getValueType())).append("\n\n");
-                    result.append("Content: ").append(barcode.getDisplayValue()).append("\n\n");
-                    result.append("Raw Value: ").append(barcode.getRawValue()).append("\n");
-                    result.append(BarcodeHelper.handleSpecialBarcodes(barcode)).append("\n");
-                    barcodeValue.setText(result);
-                    barcodeValue.setClickable(true);
-                    barcodeValue.setOnClickListener(v -> {
-                        ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                        if (clipboard != null) {
-                            ClipData clip = ClipData.newPlainText("barcode", barcode.getDisplayValue());
-                            clipboard.setPrimaryClip(clip);
-                            Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        barcodeValue.setOnLongClickListener(v1 -> {
-                            ClipData clip = ClipData.newPlainText("barcode", barcode.getDisplayValue());
-                            View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v1);
-                            v1.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL | View.DRAG_FLAG_GLOBAL_URI_READ |
-                                    View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
-                            return true;
-                        });
-                    }
-                    LogHelper.d(TAG, "Barcode read: " + barcode.getDisplayValue());
-
                     // Save Barcode
                     BarcodeHistoryScan scanBc = new BarcodeHistoryScan(barcode.getDisplayValue(), barcode.getRawValue(), barcode.getFormat(), barcode.getValueType(),
                             barcode.getEmail(), barcode.getPhone(), barcode.getSms(), barcode.getWifi(), barcode.getUrl(), barcode.getGeoPoint(), barcode.getCalendarEvent(),
                             barcode.getContactInfo(), barcode.getDriverLicense());
                     updateHistory(scanBc);
+                    updateBarcode(scanBc);
                     LogHelper.i(TAG, "Saved barcode to history: " + barcode.getDisplayValue());
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
@@ -163,9 +136,41 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
         }
     }
 
+    private void updateBarcode(BarcodeHistoryScan barcode) {
+        statusMessage.setText(R.string.barcode_success);
+        StringBuilder result = new StringBuilder();
+        result.append("Format: ").append(BarcodeHelper.getFormatName(barcode.getFormat())).append("\n");
+        result.append("Type: ").append(BarcodeHelper.getValueFormat(barcode.getValueType())).append("\n\n");
+        result.append("Content: ").append(barcode.getBarcodeValue()).append("\n\n");
+        result.append("Raw Value: ").append(barcode.getRawBarcodeValue()).append("\n");
+        result.append(BarcodeHelper.handleSpecialBarcodes(barcode)).append("\n");
+        barcodeValue.setText(result);
+        barcodeValue.setClickable(true);
+        barcodeValue.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null) {
+                ClipData clip = ClipData.newPlainText("barcode", barcode.getBarcodeValue());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
+            }
+        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            barcodeValue.setOnLongClickListener(v1 -> {
+                ClipData clip = ClipData.newPlainText("barcode", barcode.getBarcodeValue());
+                View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(v1);
+                v1.startDragAndDrop(clip, dragShadowBuilder, true, View.DRAG_FLAG_GLOBAL | View.DRAG_FLAG_GLOBAL_URI_READ |
+                        View.DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION);
+                return true;
+            });
+        }
+        LogHelper.d(TAG, "Barcode read: " + barcode.getBarcodeValue());
+    }
+
     @Override
     public void setHistoryBarcode(@NotNull String barcodeString) {
-        // TODO: Code Stub
         Log.i(TAG, "Received Barcode String to process: " + barcodeString);
+        Gson gson = new Gson();
+        BarcodeHistoryScan bc = gson.fromJson(barcodeString, BarcodeHistoryScan.class);
+        if (bc != null) updateBarcode(bc);
     }
 }
