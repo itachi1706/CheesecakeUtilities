@@ -38,6 +38,7 @@ import com.itachi1706.cheesecakeutilities.mlkit.barcode.BarcodeScanningProcessor
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSource;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.CameraSourcePreview;
 import com.itachi1706.cheesecakeutilities.mlkit.camera.GraphicOverlay;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHolder;
 import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.io.IOException;

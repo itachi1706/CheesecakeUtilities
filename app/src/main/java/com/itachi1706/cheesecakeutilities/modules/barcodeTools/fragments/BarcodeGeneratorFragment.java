@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,8 @@ import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHi
 import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -52,7 +55,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class BarcodeGeneratorFragment extends Fragment {
+public class BarcodeGeneratorFragment extends Fragment implements BarcodeFragInterface {
 
     private LinearLayout barcodeActions;
     private Button generate, share, save;
@@ -324,5 +327,21 @@ public class BarcodeGeneratorFragment extends Fragment {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setHistoryBarcode(@NotNull String barcodeString) {
+        Log.i(TAG, "Received Barcode String to process: " + barcodeString);
+        Gson gson = new Gson();
+        BarcodeHistoryGen bc = gson.fromJson(barcodeString, BarcodeHistoryGen.class);
+        try {
+            bitmap = encodeAsBitmap(bc.getText(), bc.getFormat());
+            result.setImageBitmap(bitmap);
+            textToConvert.setText(bc.getText());
+            barcodeActions.setVisibility(View.VISIBLE);
+        } catch (WriterException e) {
+            e.printStackTrace();
+            LogHelper.e(TAG, "Failed to generate barcode: Text: " + bc.getText() + " | Format: " + bc.getFormat());
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,12 @@ import com.google.gson.reflect.TypeToken;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeCaptureActivity;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
-import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHolder;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHolder;
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan;
 import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -42,7 +45,7 @@ import static android.content.Context.DEVICE_POLICY_SERVICE;
  * Created by Kenneth on 24/12/2017.
  * for com.itachi1706.cheesecakeutilities.modules.BarcodeTools.Fragments in CheesecakeUtilities
  */
-public class BarcodeScannerFragment extends Fragment {
+public class BarcodeScannerFragment extends Fragment implements BarcodeFragInterface {
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton useFlash;
@@ -158,5 +161,11 @@ public class BarcodeScannerFragment extends Fragment {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void setHistoryBarcode(@NotNull String barcodeString) {
+        // TODO: Code Stub
+        Log.i(TAG, "Received Barcode String to process: " + barcodeString);
     }
 }
