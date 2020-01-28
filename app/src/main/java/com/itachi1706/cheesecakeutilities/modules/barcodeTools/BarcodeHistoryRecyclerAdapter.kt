@@ -13,6 +13,7 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistory
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryScan
+import com.itachi1706.cheesecakeutilities.util.FirebaseUtils
 import com.itachi1706.helperlib.helpers.LogHelper
 
 /**
@@ -35,15 +36,17 @@ class BarcodeHistoryRecyclerAdapter(barcodes: ArrayList<BarcodeHistory>, val cal
         val barcode = barcodeList[position]
         holder.barcode = barcode
         holder.layout.background = holder.origBackground
+        val time = barcode.time
+        val timeString = FirebaseUtils.formatTime(time)
         if (multiSelection.contains(barcode)) holder.layout.setBackgroundColor(Color.LTGRAY)
         if (barcode is BarcodeHistoryGen) {
             // Generated Barcode
             holder.title.text = barcode.text
-            holder.subtitle.text = barcode.format.name
+            holder.subtitle.text = "${barcode.format.name} | $timeString"
         } else if (barcode is BarcodeHistoryScan) {
             // Scanned Barcode
             holder.title.text = barcode.barcodeValue
-            holder.subtitle.text = "${BarcodeHelper.getFormatName(barcode.format)} | ${BarcodeHelper.getValueFormat(barcode.valueType)}"
+            holder.subtitle.text = "${BarcodeHelper.getFormatName(barcode.format)} | ${BarcodeHelper.getValueFormat(barcode.valueType)} | $timeString"
         }
     }
 
