@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.modules.barcodeTools
 
+import android.app.SearchManager
 import android.content.*
 import android.net.Uri
 import android.net.wifi.WifiConfiguration
@@ -305,14 +306,10 @@ object BarcodeHelper {
             }
             FirebaseVisionBarcode.TYPE_UNKNOWN, FirebaseVisionBarcode.TYPE_TEXT -> {
                 // Copy barcode value
-                button.text = "Copy Text" // TODO: Remove when we use context menu instead of button
-                button.setOnClickListener { v ->
-                    val clipboardManager = v.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-                    clipboardManager?.let {
-                        val clip = ClipData.newPlainText("newText", barcode.barcodeValue)
-                        it.primaryClip = clip
-                        Toast.makeText(v.context, "Text copied to clipboard", Toast.LENGTH_LONG).show()
-                    }
+                button.text = "Web Search" // TODO: Remove when we use context menu instead of button
+                button.setOnClickListener {
+                    val searchIntent = Intent(Intent.ACTION_WEB_SEARCH).apply { putExtra(SearchManager.QUERY, barcode.barcodeValue) }
+                    launchBarcodeActivity(context, searchIntent)
                 }
             }
             else -> {
