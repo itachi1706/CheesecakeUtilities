@@ -49,7 +49,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton useFlash;
-    private Button scan;
+    private Button scan, open;
     private TextView statusMessage;
     private TextView barcodeValue;
 
@@ -67,6 +67,8 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
         barcodeValue.setMovementMethod(new ScrollingMovementMethod());
         useFlash = v.findViewById(R.id.use_flash);
         scan = v.findViewById(R.id.read_barcode);
+        open = v.findViewById(R.id.open_with);
+
         scan.setOnClickListener(view -> {
             // launch barcode activity.
             Intent intent = new Intent(getActivity(), BarcodeCaptureActivity.class);
@@ -126,6 +128,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     barcodeValue.setClickable(false);
+                    open.setEnabled(false);
                     LogHelper.d(TAG, "No barcode captured and retrieved from BarcodeHolder");
                 }
             } else {
@@ -154,6 +157,8 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
                 Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
             }
         });
+        open.setEnabled(true);
+        BarcodeHelper.handleSpecialBarcodeHandling(barcode, open, getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             barcodeValue.setOnLongClickListener(v1 -> {
                 ClipData clip = ClipData.newPlainText("barcode", barcode.getBarcodeValue());
