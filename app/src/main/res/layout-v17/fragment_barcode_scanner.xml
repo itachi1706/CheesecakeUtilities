@@ -39,20 +39,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/open_with"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/read_barcode"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="38dp"
-        android:layout_marginLeft="38dp"
-        android:layout_marginBottom="21dp"
-        android:layout_toEndOf="@+id/use_flash"
-        android:layout_toRightOf="@+id/use_flash"
-        android:enabled="false"
-        android:text="Open With" />
-
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -38,20 +38,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/open_with"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/barcode_value"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="185dp"
-        android:layout_marginLeft="185dp"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/use_flash"
-        android:layout_toRightOf="@+id/use_flash"
-        android:enabled="false"
-        android:text="Open With" />
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

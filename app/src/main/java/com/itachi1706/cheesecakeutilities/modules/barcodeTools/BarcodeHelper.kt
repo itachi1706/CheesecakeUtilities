@@ -7,7 +7,6 @@ import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.zxing.BarcodeFormat
@@ -148,9 +147,8 @@ object BarcodeHelper {
     }
 
     @JvmStatic
-    fun handleSpecialBarcodeHandling(barcode: BarcodeHistoryScan, button: Button, context: Context?) {
-        LogHelper.d(TAG, "Handle: Barcode received of format: ${barcode.format}")
-        button.text = when (barcode.valueType) {
+    fun specialBarcodeHandlingText(barcode: BarcodeHistoryScan): String {
+        return when (barcode.valueType) {
             FirebaseVisionBarcode.TYPE_CONTACT_INFO -> "Add Contact"
             FirebaseVisionBarcode.TYPE_EMAIL -> "Send Email"
             FirebaseVisionBarcode.TYPE_PHONE -> "Call"
@@ -160,140 +158,141 @@ object BarcodeHelper {
             FirebaseVisionBarcode.TYPE_DRIVER_LICENSE -> "Copy License No"
             FirebaseVisionBarcode.TYPE_UNKNOWN, FirebaseVisionBarcode.TYPE_TEXT -> "Web Search"
             FirebaseVisionBarcode.TYPE_GEO -> "Open with Maps"
-            else -> "Open with"
+            else -> "Open with..."
         }
-        button.setOnClickListener { v ->
-            when (barcode.valueType) {
-                FirebaseVisionBarcode.TYPE_CONTACT_INFO -> {
-                    val contactIntent = Intent(Intent.ACTION_INSERT).apply {
-                        type = ContactsContract.Contacts.CONTENT_TYPE
-                        putExtra(ContactsContract.Intents.Insert.NAME, barcode.contactInfo?.name!!.formattedName)
-                        if (!barcode.contactInfo.organization.isNullOrEmpty()) putExtra(ContactsContract.Intents.Insert.COMPANY, barcode.contactInfo.organization)
-                        if (!barcode.contactInfo.title.isNullOrEmpty()) putExtra(ContactsContract.Intents.Insert.JOB_TITLE, barcode.contactInfo.title)
-                        if (!barcode.contactInfo.addresses.isNullOrEmpty()) {
-                            putExtra(ContactsContract.Intents.Insert.POSTAL, barcode.contactInfo.addresses[0].addressLines.joinToString(" "))
-                            putExtra(ContactsContract.Intents.Insert.POSTAL_TYPE, when (barcode.contactInfo.addresses[0].type) {
-                                FirebaseVisionBarcode.Address.TYPE_HOME -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_HOME
-                                FirebaseVisionBarcode.Address.TYPE_WORK -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK
-                                else -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_OTHER
-                            })
+    }
 
-                            val data = ArrayList<ContentValues>()
-                            if (!barcode.contactInfo.phones.isNullOrEmpty()) {
-                                barcode.contactInfo.phones.forEach{ phone -> val r = ContentValues()
-                                    r.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                    r.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone.number)
-                                    r.put(ContactsContract.CommonDataKinds.Phone.TYPE, when (phone.type) {
-                                        FirebaseVisionBarcode.Phone.TYPE_HOME -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
-                                        FirebaseVisionBarcode.Phone.TYPE_FAX -> ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME
-                                        FirebaseVisionBarcode.Phone.TYPE_MOBILE -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
-                                        FirebaseVisionBarcode.Phone.TYPE_WORK -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
-                                        else -> ContactsContract.CommonDataKinds.Phone.TYPE_OTHER
-                                    })
-                                    data.add(r)
-                                }
-                            }
-                            if (!barcode.contactInfo.emails.isNullOrEmpty()) {
-                                barcode.contactInfo.emails.forEach{ email -> val r = ContentValues()
-                                    r.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
-                                    r.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email.address)
-                                    r.put(ContactsContract.CommonDataKinds.Email.TYPE, when (email.type) {
-                                        FirebaseVisionBarcode.Email.TYPE_HOME -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
-                                        FirebaseVisionBarcode.Email.TYPE_WORK -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
-                                        else -> ContactsContract.CommonDataKinds.Email.TYPE_OTHER
-                                    })
-                                    data.add(r)
-                                }
-                            }
-                            if (!barcode.contactInfo.urls.isNullOrEmpty()) {
-                                barcode.contactInfo.urls?.forEach { url -> val r = ContentValues()
-                                    r.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE)
-                                    r.put(ContactsContract.CommonDataKinds.Website.URL, url)
-                                    data.add(r)
-                                }
-                            }
-                            if (data.isNotEmpty()) putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data)
-                        }
-                    }
-                    Toast.makeText(v.context, "Adding ${barcode.contactInfo?.name!!.formattedName} to contacts", Toast.LENGTH_LONG).show()
-                    LogHelper.i(TAG, "Adding to contacts: ${barcode.contactInfo.name!!.formattedName}")
-                    launchBarcodeActivity(context, contactIntent)
-                }
-                FirebaseVisionBarcode.TYPE_EMAIL -> {
-                    val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:")
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf(barcode.email?.address))
-                        if (!barcode.email?.body.isNullOrEmpty()) putExtra(Intent.EXTRA_TEXT, barcode.email?.body)
-                        if (!barcode.email?.subject.isNullOrEmpty()) putExtra(Intent.EXTRA_SUBJECT, barcode.email?.subject)
-                    }
-                    Toast.makeText(v.context, "Sending you to your email client to send email to ${barcode.email?.address}", Toast.LENGTH_LONG).show()
-                    LogHelper.i(TAG, "Sending email to ${barcode.email?.address}")
-                    launchBarcodeActivity(context, emailIntent)
-                }
-                FirebaseVisionBarcode.TYPE_PHONE -> {
-                    val callIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", barcode.phone?.number, null))
-                    Toast.makeText(v.context, "Sending you to your dialer to call ${barcode.phone?.number}", Toast.LENGTH_LONG).show()
-                    LogHelper.i(TAG, "Calling ${barcode.phone?.number}")
-                    launchBarcodeActivity(context, callIntent)
-                }
-                FirebaseVisionBarcode.TYPE_SMS -> {
-                    val smsIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("sms", barcode.sms?.phoneNumber, null)).apply { putExtra("sms_body", barcode.sms?.message) }
-                    launchBarcodeActivity(context, smsIntent)
-                    Toast.makeText(v.context, "Launching SMS application to send to ${barcode.sms?.phoneNumber}", Toast.LENGTH_LONG).show()
-                }
-                FirebaseVisionBarcode.TYPE_WIFI -> {
-                    // Add WiFi Network and auto connect
-                    val wifiConfiguration = WifiConfiguration()
-                    wifiConfiguration.SSID = "\"${barcode.wifi?.ssid}\""
-                    wifiConfiguration.preSharedKey = "\"${barcode.wifi?.password}\""
-                    val wifiManager = v.context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                    val netId = wifiManager.addNetwork(wifiConfiguration)
-                    LogHelper.i(TAG, "BC-Wifi: Attempting connection to ${barcode.wifi?.ssid} with ${barcode.wifi?.password} as encryption type ${barcode.wifi?.encryptionType}")
-                    wifiManager.disconnect()
-                    wifiManager.enableNetwork(netId, true)
-                    wifiManager.reconnect()
-                    Toast.makeText(v.context, "Connecting to ${barcode.wifi?.ssid}", Toast.LENGTH_LONG).show()
-                }
-                FirebaseVisionBarcode.TYPE_CALENDAR_EVENT -> {
-                    barcode.calendarEvent?.let {
-                        val dateFormat = SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault())
-                        val startDate: Date? = if (it.start != null) dateFormat.parse(it.start?.rawValue) else null
-                        val endDate: Date? = if (it.start != null) dateFormat.parse(it.end?.rawValue) else null
+    @JvmStatic
+    fun specialBarcodeHandlingAction(barcode: BarcodeHistoryScan, context: Context?) {
+        when (barcode.valueType) {
+            FirebaseVisionBarcode.TYPE_CONTACT_INFO -> {
+                val contactIntent = Intent(Intent.ACTION_INSERT).apply {
+                    type = ContactsContract.Contacts.CONTENT_TYPE
+                    putExtra(ContactsContract.Intents.Insert.NAME, barcode.contactInfo?.name!!.formattedName)
+                    if (!barcode.contactInfo.organization.isNullOrEmpty()) putExtra(ContactsContract.Intents.Insert.COMPANY, barcode.contactInfo.organization)
+                    if (!barcode.contactInfo.title.isNullOrEmpty()) putExtra(ContactsContract.Intents.Insert.JOB_TITLE, barcode.contactInfo.title)
+                    if (!barcode.contactInfo.addresses.isNullOrEmpty()) {
+                        putExtra(ContactsContract.Intents.Insert.POSTAL, barcode.contactInfo.addresses[0].addressLines.joinToString(" "))
+                        putExtra(ContactsContract.Intents.Insert.POSTAL_TYPE, when (barcode.contactInfo.addresses[0].type) {
+                            FirebaseVisionBarcode.Address.TYPE_HOME -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_HOME
+                            FirebaseVisionBarcode.Address.TYPE_WORK -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK
+                            else -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_OTHER
+                        })
 
-                        val intent = Intent(Intent.ACTION_INSERT).apply {
-                            data = CalendarContract.Events.CONTENT_URI
-                            if (!it.summary.isNullOrEmpty()) putExtra(CalendarContract.Events.TITLE, it.summary)
-                            if (!it.description.isNullOrEmpty()) putExtra(CalendarContract.Events.DESCRIPTION, it.description)
-                            if (!it.location.isNullOrEmpty()) putExtra(CalendarContract.Events.EVENT_LOCATION, it.location)
-                            if (!it.organizer.isNullOrEmpty()) putExtra(CalendarContract.Events.ORGANIZER, it.organizer)
-                            if (!it.status.isNullOrEmpty()) putExtra(CalendarContract.Events.AVAILABILITY, it.status)
-                            val cal = Calendar.getInstance()
-                            if (startDate != null) { cal.time = startDate; putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal) }
-                            if (endDate != null) { cal.time = endDate; putExtra(CalendarContract.EXTRA_EVENT_END_TIME, cal) }
+                        val data = ArrayList<ContentValues>()
+                        if (!barcode.contactInfo.phones.isNullOrEmpty()) {
+                            barcode.contactInfo.phones.forEach{ phone -> val r = ContentValues()
+                                r.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                r.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone.number)
+                                r.put(ContactsContract.CommonDataKinds.Phone.TYPE, when (phone.type) {
+                                    FirebaseVisionBarcode.Phone.TYPE_HOME -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
+                                    FirebaseVisionBarcode.Phone.TYPE_FAX -> ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME
+                                    FirebaseVisionBarcode.Phone.TYPE_MOBILE -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
+                                    FirebaseVisionBarcode.Phone.TYPE_WORK -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
+                                    else -> ContactsContract.CommonDataKinds.Phone.TYPE_OTHER
+                                })
+                                data.add(r)
+                            }
                         }
-                        launchBarcodeActivity(context, intent)
+                        if (!barcode.contactInfo.emails.isNullOrEmpty()) {
+                            barcode.contactInfo.emails.forEach{ email -> val r = ContentValues()
+                                r.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
+                                r.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email.address)
+                                r.put(ContactsContract.CommonDataKinds.Email.TYPE, when (email.type) {
+                                    FirebaseVisionBarcode.Email.TYPE_HOME -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
+                                    FirebaseVisionBarcode.Email.TYPE_WORK -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
+                                    else -> ContactsContract.CommonDataKinds.Email.TYPE_OTHER
+                                })
+                                data.add(r)
+                            }
+                        }
+                        if (!barcode.contactInfo.urls.isNullOrEmpty()) {
+                            barcode.contactInfo.urls?.forEach { url -> val r = ContentValues()
+                                r.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE)
+                                r.put(ContactsContract.CommonDataKinds.Website.URL, url)
+                                data.add(r)
+                            }
+                        }
+                        if (data.isNotEmpty()) putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, data)
                     }
                 }
-                FirebaseVisionBarcode.TYPE_DRIVER_LICENSE -> {
-                    // Copy Driver License No
-                    val clipboard = v.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-                    clipboard?.let {
-                        val clip = ClipData.newPlainText("driverLicense", barcode.driverLicense?.licenseNumber)
-                        it.primaryClip = clip
-                        Toast.makeText(v.context, "Driver License copied to clipboard", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Adding ${barcode.contactInfo?.name!!.formattedName} to contacts", Toast.LENGTH_LONG).show()
+                LogHelper.i(TAG, "Adding to contacts: ${barcode.contactInfo.name!!.formattedName}")
+                launchBarcodeActivity(context, contactIntent)
+            }
+            FirebaseVisionBarcode.TYPE_EMAIL -> {
+                val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:")
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(barcode.email?.address))
+                    if (!barcode.email?.body.isNullOrEmpty()) putExtra(Intent.EXTRA_TEXT, barcode.email?.body)
+                    if (!barcode.email?.subject.isNullOrEmpty()) putExtra(Intent.EXTRA_SUBJECT, barcode.email?.subject)
+                }
+                Toast.makeText(context, "Sending you to your email client to send email to ${barcode.email?.address}", Toast.LENGTH_LONG).show()
+                LogHelper.i(TAG, "Sending email to ${barcode.email?.address}")
+                launchBarcodeActivity(context, emailIntent)
+            }
+            FirebaseVisionBarcode.TYPE_PHONE -> {
+                val callIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", barcode.phone?.number, null))
+                Toast.makeText(context, "Sending you to your dialer to call ${barcode.phone?.number}", Toast.LENGTH_LONG).show()
+                LogHelper.i(TAG, "Calling ${barcode.phone?.number}")
+                launchBarcodeActivity(context, callIntent)
+            }
+            FirebaseVisionBarcode.TYPE_SMS -> {
+                val smsIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("sms", barcode.sms?.phoneNumber, null)).apply { putExtra("sms_body", barcode.sms?.message) }
+                launchBarcodeActivity(context, smsIntent)
+                Toast.makeText(context, "Launching SMS application to send to ${barcode.sms?.phoneNumber}", Toast.LENGTH_LONG).show()
+            }
+            FirebaseVisionBarcode.TYPE_WIFI -> {
+                // Add WiFi Network and auto connect
+                val wifiConfiguration = WifiConfiguration()
+                wifiConfiguration.SSID = "\"${barcode.wifi?.ssid}\""
+                wifiConfiguration.preSharedKey = "\"${barcode.wifi?.password}\""
+                val wifiManager = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val netId = wifiManager.addNetwork(wifiConfiguration)
+                LogHelper.i(TAG, "BC-Wifi: Attempting connection to ${barcode.wifi?.ssid} with ${barcode.wifi?.password} as encryption type ${barcode.wifi?.encryptionType}")
+                wifiManager.disconnect()
+                wifiManager.enableNetwork(netId, true)
+                wifiManager.reconnect()
+                Toast.makeText(context, "Connecting to ${barcode.wifi?.ssid}", Toast.LENGTH_LONG).show()
+            }
+            FirebaseVisionBarcode.TYPE_CALENDAR_EVENT -> {
+                barcode.calendarEvent?.let {
+                    val dateFormat = SimpleDateFormat("yyyyMMdd'T'HHmmss", Locale.getDefault())
+                    val startDate: Date? = if (it.start != null) dateFormat.parse(it.start?.rawValue) else null
+                    val endDate: Date? = if (it.start != null) dateFormat.parse(it.end?.rawValue) else null
+
+                    val intent = Intent(Intent.ACTION_INSERT).apply {
+                        data = CalendarContract.Events.CONTENT_URI
+                        if (!it.summary.isNullOrEmpty()) putExtra(CalendarContract.Events.TITLE, it.summary)
+                        if (!it.description.isNullOrEmpty()) putExtra(CalendarContract.Events.DESCRIPTION, it.description)
+                        if (!it.location.isNullOrEmpty()) putExtra(CalendarContract.Events.EVENT_LOCATION, it.location)
+                        if (!it.organizer.isNullOrEmpty()) putExtra(CalendarContract.Events.ORGANIZER, it.organizer)
+                        if (!it.status.isNullOrEmpty()) putExtra(CalendarContract.Events.AVAILABILITY, it.status)
+                        val cal = Calendar.getInstance()
+                        if (startDate != null) { cal.time = startDate; putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal) }
+                        if (endDate != null) { cal.time = endDate; putExtra(CalendarContract.EXTRA_EVENT_END_TIME, cal) }
                     }
-                }
-                FirebaseVisionBarcode.TYPE_UNKNOWN, FirebaseVisionBarcode.TYPE_TEXT -> {
-                    // Copy barcode value
-                    // TODO: Remove when we use context menu instead of button
-                    val searchIntent = Intent(Intent.ACTION_WEB_SEARCH).apply { putExtra(SearchManager.QUERY, barcode.barcodeValue) }
-                    launchBarcodeActivity(context, searchIntent)
-                }
-                else -> {
-                    // FirebaseVisionBarcode.TYPE_URL, FirebaseVisionBarcode.TYPE_GEO is part of else statement
-                    val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(barcode.rawBarcodeValue) }
                     launchBarcodeActivity(context, intent)
                 }
+            }
+            FirebaseVisionBarcode.TYPE_DRIVER_LICENSE -> {
+                // Copy Driver License No
+                val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                clipboard?.let {
+                    val clip = ClipData.newPlainText("driverLicense", barcode.driverLicense?.licenseNumber)
+                    it.primaryClip = clip
+                    Toast.makeText(context, "Driver License copied to clipboard", Toast.LENGTH_LONG).show()
+                }
+            }
+            FirebaseVisionBarcode.TYPE_UNKNOWN, FirebaseVisionBarcode.TYPE_TEXT -> {
+                // Copy barcode value
+                val searchIntent = Intent(Intent.ACTION_WEB_SEARCH).apply { putExtra(SearchManager.QUERY, barcode.barcodeValue) }
+                launchBarcodeActivity(context, searchIntent)
+            }
+            else -> {
+                // FirebaseVisionBarcode.TYPE_URL, FirebaseVisionBarcode.TYPE_GEO is part of else statement
+                val intent = Intent(Intent.ACTION_VIEW).apply { data = Uri.parse(barcode.rawBarcodeValue) }
+                launchBarcodeActivity(context, intent)
             }
         }
     }

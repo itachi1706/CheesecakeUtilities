@@ -11,7 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -49,7 +53,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
 
     // use a compound button so either checkbox or switch widgets work.
     private CompoundButton useFlash;
-    private Button scan, open;
+    private Button scan;
     private TextView statusMessage;
     private TextView barcodeValue;
 
@@ -67,7 +71,6 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
         barcodeValue.setMovementMethod(new ScrollingMovementMethod());
         useFlash = v.findViewById(R.id.use_flash);
         scan = v.findViewById(R.id.read_barcode);
-        open = v.findViewById(R.id.open_with);
 
         scan.setOnClickListener(view -> {
             // launch barcode activity.
@@ -128,7 +131,6 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     barcodeValue.setClickable(false);
-                    open.setEnabled(false);
                     LogHelper.d(TAG, "No barcode captured and retrieved from BarcodeHolder");
                 }
             } else {
@@ -150,15 +152,11 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
         barcodeValue.setText(result);
         barcodeValue.setClickable(true);
         barcodeValue.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            if (clipboard != null) {
-                ClipData clip = ClipData.newPlainText("barcode", barcode.getBarcodeValue());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(v.getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
-            }
+            barcodeContext = barcode;
+            registerForContextMenu(barcodeValue);
+            barcodeValue.showContextMenu();
+            unregisterForContextMenu(barcodeValue);
         });
-        open.setEnabled(true);
-        BarcodeHelper.handleSpecialBarcodeHandling(barcode, open, getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             barcodeValue.setOnLongClickListener(v1 -> {
                 ClipData clip = ClipData.newPlainText("barcode", barcode.getBarcodeValue());
@@ -169,6 +167,35 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
             });
         }
         LogHelper.d(TAG, "Barcode read: " + barcode.getBarcodeValue());
+    }
+
+    private static BarcodeHistoryScan barcodeContext = null;
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (getActivity() == null || barcodeContext == null) return;
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.modules_barcode_export_options, menu);
+        menu.findItem(R.id.barcode_action_extra).setTitle(BarcodeHelper.specialBarcodeHandlingText(barcodeContext)).setEnabled(true);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        boolean result = true;
+        if (barcodeContext == null || getContext() == null) return true; // Error, just close
+        switch (item.getItemId()) {
+            case R.id.barcode_action_extra: BarcodeHelper.specialBarcodeHandlingAction(barcodeContext, getContext()); break;
+            case R.id.barcode_action_clipboard:
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                if (clipboard != null) {
+                    ClipData clip = ClipData.newPlainText("barcode", barcodeContext.getBarcodeValue());
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
+                }
+            default: result = super.onContextItemSelected(item);
+        }
+        return result;
     }
 
     @Override
