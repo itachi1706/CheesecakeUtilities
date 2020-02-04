@@ -14,7 +14,7 @@ object ToggleHelper {
 
     @JvmStatic
     fun checkWriteSecurePermission(context: Context): Boolean {
-        val requiredPermission = Manifest.permission.WRITE_SECURE_SETTINGS;
+        val requiredPermission = Manifest.permission.WRITE_SECURE_SETTINGS
         return when (context.checkCallingOrSelfPermission(requiredPermission)) {
             PackageManager.PERMISSION_GRANTED -> true
             PackageManager.PERMISSION_DENIED -> false
