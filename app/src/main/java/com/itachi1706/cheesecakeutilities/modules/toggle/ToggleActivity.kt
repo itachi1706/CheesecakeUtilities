@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities.modules.toggle
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -14,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.PRIVATE_DNS_SETTING
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
 import kotlinx.android.synthetic.main.activity_toggle.*
@@ -85,7 +85,7 @@ class ToggleActivity : BaseModuleActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     private fun checkPrivateDns() {
         // Check permission granted
-        val isAllowed = checkWriteSecurePermission()
+        val isAllowed = ToggleHelper.checkWriteSecurePermission(this)
         toggle_status_private_dns.setTextColor(ContextCompat.getColor(this, if (isAllowed)
             if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
         toggle_status_private_dns.text = if (isAllowed) "Granted" else "Not Granted"
@@ -105,17 +105,8 @@ class ToggleActivity : BaseModuleActivity() {
         toggle_switch_private_dns.isChecked = option == selection // check if match
     }
 
-    private fun checkWriteSecurePermission(): Boolean {
-        val requiredPermission = Manifest.permission.WRITE_SECURE_SETTINGS;
-        return when (checkCallingOrSelfPermission(requiredPermission)) {
-            PackageManager.PERMISSION_GRANTED -> true
-            PackageManager.PERMISSION_DENIED -> false
-            else -> false
-        }
-    }
-
     companion object {
         private const val TAG = "ToggleActivity"
-        private const val PRIVATE_DNS_SETTING = "private_dns_mode" // Settings.Global.PRIVATE_DNS_MODE
+
     }
 }
