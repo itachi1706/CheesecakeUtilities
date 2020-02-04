@@ -4,7 +4,8 @@
     package="com.itachi1706.cheesecakeutilities">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- TODO: Remove the tools tag here when we officially no longer uses the storage permission with the migration to SAF -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- TODO: Remove the tools tag here when we officially no longer uses the storage permission with the migration to SAF -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:remove="android:maxSdkVersion" />
@@ -18,6 +19,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.NFC" />
 
     <uses-feature android:name="android.hardware.nfc" />
