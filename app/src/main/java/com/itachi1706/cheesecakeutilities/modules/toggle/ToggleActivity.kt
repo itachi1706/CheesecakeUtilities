@@ -83,7 +83,6 @@ class ToggleActivity : BaseModuleActivity() {
     private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
 
     private var privateDnsUpdater: Boolean = false
-    private var privateDnsUpdaterStatus: Boolean = false
 
     override fun onResume() {
         super.onResume()
