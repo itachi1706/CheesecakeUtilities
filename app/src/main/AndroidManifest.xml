@@ -39,7 +39,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".SplashActivity" android:theme="@style/AppTheme.Launcher">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -212,9 +214,9 @@
             android:label="SafetyNet Validator" />
         <activity
             android:name=".modules.unicodeKeyboard.UnicodeActivity"
-            android:theme="@style/AppTheme.NoAppBar"
             android:exported="true"
-            android:label="Unicode Emoticons" />
+            android:label="Unicode Emoticons"
+            android:theme="@style/AppTheme.NoAppBar" />
         <activity
             android:name=".games.chromiumTRex.ChromiumTRexActivity"
             android:exported="true"
@@ -320,9 +322,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <!-- Used to fix the error of no launchMode override -->
+            android:value="@string/google_maps_key" /> <!-- Used to fix the error of no launchMode override -->
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             android:excludeFromRecents="true"
@@ -331,7 +331,6 @@
             android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:launchMode" />
-
         <activity
             android:name=".modules.cepasReader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -396,6 +395,10 @@
         <activity
             android:name=".modules.cameraViewer.CameraActivity"
             android:label="Camera Viewer" />
+        <activity
+            android:name=".modules.barcodeTools.BarcodeHistoryActivity"
+            android:label="View Barcode History"
+            android:theme="@style/AppTheme.NoAppBar" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -19,6 +20,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public ViewPagerAdapter(FragmentManager manager){ super(manager); }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         return fragmentList.get(position);

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/barcode_action_extra" android:title="Open With..." android:enabled="false" />
+    <item android:id="@+id/barcode_action_clipboard" android:title="Copy to Clipboard" />
+    <item android:id="@+id/barcode_action_share" android:title="Share Barcode Value" />
+    <item android:id="@+id/barcode_action_share_raw" android:title="Share Barcode Raw Value" />
+    <item android:id="@+id/barcode_action_save_file_raw" android:title="Save Barcode Raw Value" />
+    <item android:id="@+id/barcode_action_save_file" android:title="Save Barcode Value" />
+</menu>

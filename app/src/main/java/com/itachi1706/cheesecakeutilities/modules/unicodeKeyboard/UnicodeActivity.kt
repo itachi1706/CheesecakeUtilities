@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
-import kotlinx.android.synthetic.main.activity_unicode.*
+import kotlinx.android.synthetic.main.activity_viewpager_frag.*
 
 class UnicodeActivity : BaseModuleActivity() {
     override val helpDescription: String
@@ -20,7 +20,7 @@ class UnicodeActivity : BaseModuleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_unicode)
+        setContentView(R.layout.activity_viewpager_frag)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         view_pager.adapter = UnicodeTabAdapter(this)

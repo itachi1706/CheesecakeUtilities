@@ -1,4 +1,4 @@
-package com.itachi1706.cheesecakeutilities.modules.barcodeTools
+package com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects
 
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 
@@ -19,7 +19,7 @@ class BarcodeHolder {
 
         @JvmStatic
         fun getInstance(): BarcodeHolder {
-            if (!::instance.isInitialized) instance = BarcodeHolder()
+            if (!Companion::instance.isInitialized) instance = BarcodeHolder()
             return instance
         }
     }

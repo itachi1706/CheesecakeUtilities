@@ -1,12 +1,16 @@
 package com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,39 +24,50 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
 import com.itachi1706.cheesecakeutilities.R;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper;
+import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistoryGen;
 import com.itachi1706.helperlib.helpers.LogHelper;
+import com.itachi1706.helperlib.helpers.PrefHelper;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class BarcodeGeneratorFragment extends Fragment {
+public class BarcodeGeneratorFragment extends Fragment implements BarcodeFragInterface {
 
-    LinearLayout barcodeActions;
-    Button generate, share;
-    ImageView result;
-    TextView restrictions;
-    TextInputEditText textToConvert;
-    TextInputLayout convertTextError;
-    Spinner barcodeType;
+    private LinearLayout barcodeActions;
+    private Button generate, share, save;
+    private ImageView result;
+    private TextView restrictions;
+    private TextInputEditText textToConvert;
+    private TextInputLayout convertTextError;
+    private Spinner barcodeType;
 
-    String[] restrictionString;
+    private String[] restrictionString;
 
-    Bitmap bitmap = null;
+    private Bitmap bitmap = null;
 
     private static final String TAG = "BarcodeGenerator";
 
@@ -70,6 +85,7 @@ public class BarcodeGeneratorFragment extends Fragment {
         barcodeType = v.findViewById(R.id.barcode_types);
         restrictions = v.findViewById(R.id.barcode_restrictions);
         convertTextError = v.findViewById(R.id.til_etBarcode);
+        save = v.findViewById(R.id.barcode_save);
 
         //noinspection ConstantConditions
         restrictionString = getActivity().getResources().getStringArray(R.array.barcode_types_restrictions);
@@ -95,6 +111,13 @@ public class BarcodeGeneratorFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Not used. Code stub
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bitmap == null) return; // No barcode to save
+                requestSaveBarcode();
             }
         });
 
@@ -125,6 +148,55 @@ public class BarcodeGeneratorFragment extends Fragment {
         }
 
         return contentUri;
+    }
+
+    private static final int RC_SAVE_BARCODE = 2;
+
+    private void requestSaveBarcode() {
+        String filename = "barcode.png";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // SAF
+            Intent saveIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            saveIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            saveIntent.setType("image/png");
+            saveIntent.putExtra(Intent.EXTRA_TITLE, filename);
+            startActivityForResult(saveIntent, RC_SAVE_BARCODE);
+        } else {
+            // File
+            File f = new File(Environment.getExternalStorageDirectory(), filename);
+            try {
+                saveBarcode(new FileOutputStream(f.getAbsolutePath()));
+            } catch (FileNotFoundException e) {
+                LogHelper.e(TAG, "Failed to save barcode (legacy)");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void saveBarcode(OutputStream os) {
+        if (os == null) return;
+        if (bitmap == null) {
+            LogHelper.e(TAG, "No barcode found");
+            Toast.makeText(getContext(), "Failed to save barcode", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        Toast.makeText(getContext(), "Saved barcode to SD Card", Toast.LENGTH_LONG).show();
+        LogHelper.i(TAG, "Saved barcode to location");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == RC_SAVE_BARCODE && data != null && data.getData() != null) {
+            try {
+                saveBarcode(getContext().getContentResolver().openOutputStream(data.getData()));
+            } catch (FileNotFoundException e) {
+                LogHelper.e(TAG, "Failed to save barcode (SAF)");
+                e.printStackTrace();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void share() {
@@ -186,6 +258,25 @@ public class BarcodeGeneratorFragment extends Fragment {
             barcodeActions.setVisibility(View.GONE);
             e.printStackTrace();
         }
+
+        // Save to history
+        updateHistory(new BarcodeHistoryGen(text, format));
+        LogHelper.d(TAG, "Saved to history: " + text + " in format " + format.toString());
+    }
+
+    private void updateHistory(BarcodeHistoryGen bc) {
+        if (getContext() == null) return;
+        SharedPreferences sp = PrefHelper.getSharedPreferences(getContext(), "BarcodeHistory");
+        String bcString = sp.getString(BarcodeHelper.SP_BARCODE_GENERATED, "");
+        ArrayList<BarcodeHistoryGen> array;
+        Gson gson = new Gson();
+        if (!bcString.isEmpty()) {
+            Type listType = new TypeToken<ArrayList<BarcodeHistoryGen>>(){}.getType();
+            array = gson.fromJson(bcString, listType);
+        } else array = new ArrayList<>();
+        array.add(bc);
+        String newString = gson.toJson(array);
+        sp.edit().putString(BarcodeHelper.SP_BARCODE_GENERATED, newString).apply();
     }
 
 
@@ -236,5 +327,21 @@ public class BarcodeGeneratorFragment extends Fragment {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setHistoryBarcode(@NotNull String barcodeString) {
+        Log.i(TAG, "Received Barcode String to process: " + barcodeString);
+        Gson gson = new Gson();
+        BarcodeHistoryGen bc = gson.fromJson(barcodeString, BarcodeHistoryGen.class);
+        try {
+            bitmap = encodeAsBitmap(bc.getText(), bc.getFormat());
+            result.setImageBitmap(bitmap);
+            textToConvert.setText(bc.getText());
+            barcodeActions.setVisibility(View.VISIBLE);
+        } catch (WriterException e) {
+            e.printStackTrace();
+            LogHelper.e(TAG, "Failed to generate barcode: Text: " + bc.getText() + " | Format: " + bc.getFormat());
+        }
     }
 }
