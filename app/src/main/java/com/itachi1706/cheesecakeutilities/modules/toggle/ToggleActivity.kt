@@ -6,10 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
 import kotlinx.android.synthetic.main.activity_toggle.*
 
@@ -45,28 +50,59 @@ class ToggleActivity : BaseModuleActivity() {
                     .setCancelable(false).setPositiveButton(R.string.dialog_action_positive_close) { _, _ -> finish() }.show()
             return // Do not process anything else
         }
+
+        val sp = PrefHelper.getDefaultSharedPreferences(this)
+
+        toggle_spinner_private_dns.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
+                if (privateDnsUpdater) { privateDnsUpdater = false; return }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) checkPrivateDns()
+                sp.edit().putInt(PRIVATE_DNS_SETTING, position).apply()
+            }
+        }
+        privateDnsUpdater = true
+        toggle_spinner_private_dns.setSelection(sp.getInt(PRIVATE_DNS_SETTING, 0))
+        toggle_switch_private_dns.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (privateDnsUpdater) { privateDnsUpdater = false; return@setOnCheckedChangeListener }
+            Toast.makeText(buttonView.context, "${if (isChecked) "Enabling" else "Disabling"} Private DNS", Toast.LENGTH_LONG).show()
+            val onState = resources.getStringArray(R.array.private_dns_entries_option)[toggle_spinner_private_dns.selectedItemPosition]
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) Settings.Global.putString(contentResolver, PRIVATE_DNS_SETTING, if (isChecked) onState else "off")
+            LogHelper.i(TAG, "Toggled Private DNS to ${if (isChecked) onState else "off"}")
+        }
     }
 
-    private fun hasStuffOnScreen(): Boolean {
-        return toggle_private_dns.visibility != View.GONE
-    }
+    private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
+
+    private var privateDnsUpdater: Boolean = false
 
     override fun onResume() {
         super.onResume()
         if (!hasStuffOnScreen()) return // Do not continue
-        checkPrivateDns()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) checkPrivateDns()
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun checkPrivateDns() {
         // Check permission granted
         val isAllowed = checkWriteSecurePermission()
-        toggle_status_private_dns.setTextColor(ContextCompat.getColor(this,
-                if (isAllowed) if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
+        toggle_status_private_dns.setTextColor(ContextCompat.getColor(this, if (isAllowed)
+            if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
         toggle_status_private_dns.text = if (isAllowed) "Granted" else "Not Granted"
         toggle_spinner_private_dns.isEnabled = isAllowed
         toggle_statusbar_private_dns.isEnabled = isAllowed
         toggle_switch_private_dns.isEnabled = isAllowed
-        if (!isAllowed) return // End here as we should not continue further
+
+        // Check Setting
+        val option = Settings.Global.getString(contentResolver, PRIVATE_DNS_SETTING)
+        LogHelper.d(TAG, "Current Private DNS: $option")
+
+        // Get selected option
+        val pos = toggle_spinner_private_dns.selectedItemPosition
+        val selection = resources.getStringArray(R.array.private_dns_entries_option)[pos]
+
+        privateDnsUpdater = true
+        toggle_switch_private_dns.isChecked = option == selection // check if match
     }
 
     private fun checkWriteSecurePermission(): Boolean {
@@ -76,5 +112,10 @@ class ToggleActivity : BaseModuleActivity() {
             PackageManager.PERMISSION_DENIED -> false
             else -> false
         }
+    }
+
+    companion object {
+        private const val TAG = "ToggleActivity"
+        private const val PRIVATE_DNS_SETTING = "private_dns_mode" // Settings.Global.PRIVATE_DNS_MODE
     }
 }
