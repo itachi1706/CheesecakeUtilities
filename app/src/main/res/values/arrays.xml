@@ -24,6 +24,7 @@
         <item>APKMirror Downloader</item>
         <item>@string/title_activity_gpa_calculator_main</item>
         <item>Camera Viewer (API >=21)</item>
+        <item>System Toggles (Pie and Above)</item>
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
@@ -49,6 +50,7 @@
         <item>.modules.apkMirrorDownloader.APKMirrorActivity</item>
         <item>.modules.gpaCalculator.InitActivity</item>
         <item>.modules.cameraViewer.CameraActivity</item>
+        <item>.modules.toggle.ToggleActivity</item>
     </string-array>
     <string-array name="gamesmenu">
         <item>Tic Tac Toe</item>
@@ -141,5 +143,15 @@
         <item>light</item>
         <item>dark</item>
         <item>batterydefault</item>
+    </string-array>
+    <string-array name="private_dns_entries">
+        <item>Off</item>
+        <item>Automatic</item>
+        <item>Custom Hostname</item>
+    </string-array>
+    <string-array name="private_dns_entries_option">
+        <item>off</item>
+        <item>opportunistic</item>
+        <item>hostname</item>
     </string-array>
 </resources>
