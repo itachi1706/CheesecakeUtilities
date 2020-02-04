@@ -39,6 +39,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        <activity android:name=".modules.toggle.ToggleActivity"
+            android:label="System Toggles" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.Launcher">
