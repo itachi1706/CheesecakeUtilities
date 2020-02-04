@@ -92,21 +92,14 @@ object BarcodeHelper {
     @JvmStatic
     fun checkValidation(generatedCode: Int, value: String): String? {
         return when (generatedCode) {
-            GEN_UPC_A -> {
-                if (value.length != 11) "Must be 11 characters long" else if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else null
-            }
+            GEN_UPC_A -> if (value.length != 11) "Must be 11 characters long" else if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else null
             GEN_EAN_13 -> if (value.length != 12) "Must be 12 characters long" else if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else null
             GEN_CODE_39, GEN_CODE_93 -> if (value.matches(REGEX_NUM_CAPS_ALPHA)) null else "Can only contain 0–9, A-Z, -.$/+% and space ONLY"
-            GEN_CODABAR -> {
-                if (value.matches(REGEX_NUM_SYMBOL)) null
-                else if (value[0].toString().matches(REGEX_ABCD) && value[value.length - 1].toString().matches(REGEX_ABCD)) null
+            GEN_CODABAR -> if (value.matches(REGEX_NUM_SYMBOL)) null else if (value[0].toString().matches(REGEX_ABCD) && value[value.length - 1].toString().matches(REGEX_ABCD)) null
                 else "0–9, –$:/.+ only, ABCD can be used at start and end of input"
-            }
             GEN_ITF -> if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else if (value.length % 2 != 0) "Input must be of even length" else null
             GEN_UPC_E -> if (value.length != 5) "Must be 5 characters long" else if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else null
-            GEN_EAN_8 -> {
-                if (value.length != 7) "Must be 7 characters long" else if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else null
-            }
+            GEN_EAN_8 -> if (value.length != 7) "Must be 7 characters long" else if (!value.matches(REGEX_NUM)) ERROR_NUM_ONLY else null
             GEN_AZTEC, GEN_DATA_MATRIX, GEN_PDF_417, GEN_CODE_128, GEN_QR -> null
             else -> null
         }
@@ -312,151 +305,135 @@ object BarcodeHelper {
         val wiFi = barcode.wifi
         if (calendarEvent != null) {
             result.append("\nCalendar Event\n")
-            result.append("Summary: ").append(calendarEvent.summary).append("\n")
-            result.append("Description: ").append(calendarEvent.description).append("\n")
-            result.append("Organizer: ").append(calendarEvent.organizer).append("\n")
-            result.append("Location: ").append(calendarEvent.location).append("\n")
-            result.append("Status: ").append(calendarEvent.status).append("\n")
-            if (calendarEvent.start != null) result.append("Start: ").append(getCalString(calendarEvent.start)).append("\n")
-            if (calendarEvent.end != null) result.append("End: ").append(getCalString(calendarEvent.end)).append("\n")
+            result.append("Summary: ${calendarEvent.summary}\n")
+            result.append("Description: ${calendarEvent.description}\n")
+            result.append("Organizer: ${calendarEvent.organizer}\n")
+            result.append("Location: ${calendarEvent.location}\n")
+            result.append("Status: ${calendarEvent.status}\n")
+            if (calendarEvent.start != null) result.append("Start: ${getCalString(calendarEvent.start)}\n")
+            if (calendarEvent.end != null) result.append("End: ${getCalString(calendarEvent.end)}\n")
         }
         if (contactInfo != null) {
             result.append("\nContact Info\n")
-            result.append("Title: ").append(contactInfo.title).append("\n")
-            result.append("Name: ").append(contactInfo.name?.formattedName).append("\n")
-            result.append("Organization: ").append(contactInfo.organization).append("\n")
+            result.append("Title: ${contactInfo.title}\n")
+            result.append("Name: ${contactInfo.name?.formattedName}\n")
+            result.append("Organization: ${contactInfo.organization}\n")
             if (contactInfo.phones.size > 0) {
                 result.append("Phone Numbers: \n")
                 for (p in contactInfo.phones) {
-                    result.append("Number: ").append(p.number).append(" | Type: ")
-                    when (p.type) {
-                        FirebaseVisionBarcode.Phone.TYPE_FAX -> result.append("Fax\n")
-                        FirebaseVisionBarcode.Phone.TYPE_HOME -> result.append("Home\n")
-                        FirebaseVisionBarcode.Phone.TYPE_WORK -> result.append("Work\n")
-                        FirebaseVisionBarcode.Phone.TYPE_MOBILE -> result.append("Mobile\n")
-                        FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> result.append("Unknown Type\n")
-                        else -> result.append("Unknown Type\n")
-                    }
+                    result.append("Number: ${p.number} | Type: ${when (p.type) {
+                        FirebaseVisionBarcode.Phone.TYPE_FAX -> "Fax"
+                        FirebaseVisionBarcode.Phone.TYPE_HOME -> "Home"
+                        FirebaseVisionBarcode.Phone.TYPE_WORK -> "Work"
+                        FirebaseVisionBarcode.Phone.TYPE_MOBILE -> "Mobile"
+                        FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> "Unknown Type"
+                        else -> "Unknown Type"
+                    }}\n")
                 }
             }
             if (contactInfo.addresses.size > 0) {
                 result.append("Addresses: \n")
                 for (a in contactInfo.addresses) {
-                    when (a.type) {
-                        FirebaseVisionBarcode.Address.TYPE_WORK -> result.append("Work: ")
-                        FirebaseVisionBarcode.Address.TYPE_HOME -> result.append("Home: ")
-                        FirebaseVisionBarcode.Address.TYPE_UNKNOWN -> result.append("Unknown: ")
-                        else -> result.append("Unknown: ")
-                    }
-                    if (a.addressLines.isNotEmpty()) {
-                        for (s in a.addressLines) {
-                            result.append(s).append(" ")
-                        }
-                    } else {
-                        result.append("Empty")
-                    }
+                    result.append(when (a.type) {
+                        FirebaseVisionBarcode.Address.TYPE_WORK -> "Work: "
+                        FirebaseVisionBarcode.Address.TYPE_HOME -> "Home: "
+                        FirebaseVisionBarcode.Address.TYPE_UNKNOWN -> "Unknown: "
+                        else -> "Unknown: "
+                    })
+                    if (a.addressLines.isNotEmpty()) for (s in a.addressLines) result.append("$s ")
+                    else result.append("Empty")
                     result.append("\n")
                 }
             }
             if (contactInfo.emails.size > 0) {
                 result.append("Emails: \n")
                 for (e in contactInfo.emails) {
-                    result.append("Type: ")
-                    when (e.type) {
-                        FirebaseVisionBarcode.Email.TYPE_HOME -> result.append("Home\n")
-                        FirebaseVisionBarcode.Email.TYPE_WORK -> result.append("Work\n")
-                        FirebaseVisionBarcode.Email.TYPE_UNKNOWN -> result.append("Unknown\n")
-                        else -> result.append("Unknown\n")
-                    }
-                    result.append("From: ").append(e.address).append("\n")
-                    result.append("Title: ").append(e.subject).append("\n")
-                    result.append("Message: ").append(e.body).append("\n")
+                    result.append("Type: ${when (e.type) {
+                        FirebaseVisionBarcode.Email.TYPE_HOME -> "Home"
+                        FirebaseVisionBarcode.Email.TYPE_WORK -> "Work"
+                        FirebaseVisionBarcode.Email.TYPE_UNKNOWN -> "Unknown"
+                        else -> "Unknown"
+                    }}\n")
+                    result.append("From: ${e.address}\n")
+                    result.append("Title: ${e.subject}\n")
+                    result.append("Message: ${e.body}\n")
                     result.append("\n")
                 }
             }
             if (contactInfo.urls != null && contactInfo.urls!!.isNotEmpty()) {
                 result.append("Websites: \n")
-                for (s in contactInfo.urls!!) {
-                    result.append(s).append("\n")
-                }
+                for (s in contactInfo.urls!!) result.append("$s\n")
             }
         }
         if (driverLicense != null) {
             result.append("\nDriver License\n")
-            result.append("License No: ").append(driverLicense.licenseNumber).append("\n")
-            result.append("First Name: ").append(driverLicense.firstName).append("\n")
-            result.append("Middle Name: ").append(driverLicense.middleName).append("\n")
-            result.append("Last Name: ").append(driverLicense.lastName).append("\n")
-            result.append("Gender: ").append(driverLicense.gender).append("\n")
-            result.append("Date of Birth: ").append(driverLicense.birthDate).append("\n")
-            result.append("Address: ").append(driverLicense.addressStreet).append("\n")
-            result.append("City: ").append(driverLicense.addressCity).append("\n")
-            result.append("State: ").append(driverLicense.addressState).append("\n")
-            result.append("Zip: ").append(driverLicense.addressZip).append("\n")
-            result.append("Document Type: ").append(driverLicense.documentType).append("\n")
-            result.append("Date of Issue: ").append(driverLicense.issueDate).append("\n")
-            result.append("Issued By: ").append(driverLicense.issuingCountry).append("\n")
-            result.append("Expiry: ").append(driverLicense.expiryDate).append("\n")
+            result.append("License No: ${driverLicense.licenseNumber}\n")
+            result.append("First Name: ${driverLicense.firstName}\n")
+            result.append("Middle Name: ${driverLicense.middleName}\n")
+            result.append("Last Name: ${driverLicense.lastName}\n")
+            result.append("Gender: ${driverLicense.gender}\n")
+            result.append("Date of Birth: ${driverLicense.birthDate}\n")
+            result.append("Address: ${driverLicense.addressStreet}\n")
+            result.append("City: ${driverLicense.addressCity}\n")
+            result.append("State: ${driverLicense.addressState}\n")
+            result.append("Zip: ${driverLicense.addressZip}\n")
+            result.append("Document Type: ${driverLicense.documentType}\n")
+            result.append("Date of Issue: ${driverLicense.issueDate}\n")
+            result.append("Issued By: ${driverLicense.issuingCountry}\n")
+            result.append("Expiry: ${driverLicense.expiryDate}\n")
         }
         if (email != null) {
             result.append("\nEmail Message\n")
-            result.append("Type: ")
-            when (email.type) {
-                FirebaseVisionBarcode.Email.TYPE_HOME -> result.append("Home\n")
-                FirebaseVisionBarcode.Email.TYPE_WORK -> result.append("Work\n")
-                FirebaseVisionBarcode.Email.TYPE_UNKNOWN -> result.append("Unknown\n")
-                else -> result.append("Unknown\n")
-            }
-            result.append("To: ").append(email.address).append("\n")
-            result.append("Title: ").append(email.subject).append("\n")
-            result.append("Message: ").append(email.body).append("\n")
+            result.append("Type: ${when (email.type) {
+                FirebaseVisionBarcode.Email.TYPE_HOME -> "Home"
+                FirebaseVisionBarcode.Email.TYPE_WORK -> "Work"
+                FirebaseVisionBarcode.Email.TYPE_UNKNOWN -> "Unknown"
+                else -> "Unknown" }}\n")
+
+            result.append("To: ${email.address}\n")
+            result.append("Title: ${email.subject}\n")
+            result.append("Message: ${email.body}\n")
         }
         if (geoPoint != null) {
             result.append("\nGeolocation Point\n")
-            result.append("Latitude: ").append(geoPoint.lat).append("\n")
-            result.append("Longitude: ").append(geoPoint.lng).append("\n")
+            result.append("Latitude: ${geoPoint.lat}\n")
+            result.append("Longitude: ${geoPoint.lng}\n")
         }
         if (phone != null) {
             result.append("\nPhone Number\n")
-            result.append("Phone Number: ").append(phone.number).append("\n")
-            result.append("Type: ")
-            when (phone.type) {
-                FirebaseVisionBarcode.Phone.TYPE_FAX -> result.append("Fax\n")
-                FirebaseVisionBarcode.Phone.TYPE_HOME -> result.append("Home\n")
-                FirebaseVisionBarcode.Phone.TYPE_WORK -> result.append("Work\n")
-                FirebaseVisionBarcode.Phone.TYPE_MOBILE -> result.append("Mobile\n")
-                FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> result.append("Unknown Type\n")
-                else -> result.append("Unknown Type\n")
-            }
+            result.append("Phone Number: ${phone.number}\n")
+            result.append("Type: ${when (phone.type) {
+                FirebaseVisionBarcode.Phone.TYPE_FAX -> "Fax"
+                FirebaseVisionBarcode.Phone.TYPE_HOME -> "Home"
+                FirebaseVisionBarcode.Phone.TYPE_WORK -> "Work"
+                FirebaseVisionBarcode.Phone.TYPE_MOBILE -> "Mobile"
+                FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> "Unknown Type"
+                else -> "Unknown Type" }}\n")
         }
         if (sms != null) {
             result.append("\nSMS Message\n")
-            result.append("Phone Number: ").append(sms.phoneNumber).append("\n")
-            result.append("Message: ").append(sms.message).append("\n")
+            result.append("Phone Number: ${sms.phoneNumber}\n")
+            result.append("Message: ${sms.message}\n")
         }
         if (urlBookmark != null) {
             result.append("\nURL Bookmarks\n")
-            result.append("Title: ").append(urlBookmark.title).append("\n")
-            result.append("URL: ").append(urlBookmark.url).append("\n")
+            result.append("Title: ${urlBookmark.title}\n")
+            result.append("URL: ${urlBookmark.url}\n")
         }
         if (wiFi != null) {
             result.append("\nWIFI Details\n")
-            result.append("SSID: ").append(wiFi.ssid).append("\n")
-            result.append("Password: ").append(wiFi.password).append("\n")
-            result.append("Encryption Type: ")
-            when (wiFi.encryptionType) {
-                FirebaseVisionBarcode.WiFi.TYPE_OPEN -> result.append("Open")
-                FirebaseVisionBarcode.WiFi.TYPE_WEP -> result.append("WEP")
-                FirebaseVisionBarcode.WiFi.TYPE_WPA -> result.append("WPA2")
-                else -> result.append("Unknown")
-            }
-            result.append("\n")
+            result.append("SSID: ${wiFi.ssid}\n")
+            result.append("Password: ${wiFi.password}\n")
+            result.append("Encryption Type: ${when (wiFi.encryptionType) {
+                FirebaseVisionBarcode.WiFi.TYPE_OPEN -> "Open"
+                FirebaseVisionBarcode.WiFi.TYPE_WEP -> "WEP"
+                FirebaseVisionBarcode.WiFi.TYPE_WPA -> "WPA2"
+                else -> "Unknown" }}\n")
         }
         return result.toString()
     }
 
     private fun getCalString(dateTime: FirebaseVisionBarcode.CalendarDateTime?): String {
-        return (dateTime!!.day.toString() + "/" + dateTime.month + "/" + dateTime.year + " " + dateTime.hours
-                + ":" + dateTime.minutes + ":" + dateTime.seconds)
+        return "${dateTime!!.day}/${dateTime.month}/${dateTime.year} ${dateTime.hours}:${dateTime.minutes}:${dateTime.seconds}"
     }
 }
