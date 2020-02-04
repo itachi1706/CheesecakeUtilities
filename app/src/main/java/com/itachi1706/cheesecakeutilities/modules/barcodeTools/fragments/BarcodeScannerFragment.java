@@ -1,5 +1,6 @@
 package com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments;
 
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -37,11 +39,19 @@ import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHi
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHolder;
 import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
+import com.itachi1706.helperlib.utils.NotifyUserUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
 
@@ -136,6 +146,33 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
             } else {
                 statusMessage.setText(String.format(getString(R.string.barcode_error), CommonStatusCodes.getStatusCodeString(resultCode)));
             }
+        } else if (requestCode == EXPORT_BARCODES && resultCode == Activity.RESULT_OK && data != null && data.getData() != null && getContext() != null) {
+            Uri uri = data.getData();
+            try {
+                OutputStream os = getContext().getContentResolver().openOutputStream(uri);
+                if (os == null) {
+                    Toast.makeText(getContext(), "Error obtaining output stream to save to file", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (barcodeSaveContext == null) {
+                    LogHelper.e(TAG, "Invalid save file, no barcode");
+                    Toast.makeText(getContext(), "An error occurred writing barcodes to file (No Barcode Found)", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                PrintWriter pw = new PrintWriter(os);
+                pw.print(barcodeSaveContext);
+                barcodeSaveContext = null;
+                pw.close();
+                os.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Failed to save to file");
+                Toast.makeText(getContext(), "An error occurred saving to file (FileNotFound)", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Failed to close output");
+                Toast.makeText(getContext(), "An error occurred saving to file (IOException)", Toast.LENGTH_LONG).show();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
@@ -170,6 +207,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
     }
 
     private static BarcodeHistoryScan barcodeContext = null;
+    private static String barcodeSaveContext = null;
 
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
@@ -183,7 +221,11 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         boolean result = true;
-        if (barcodeContext == null || getContext() == null) return true; // Error, just close
+        if (barcodeContext == null || getContext() == null) {
+            if (barcodeContext == null) LogHelper.e(TAG, "Error processing menu (barcodeContext empty)");
+            else LogHelper.e(TAG, "Error processing menu (no Context object)");
+            return true; // Error, just close
+        }
         switch (item.getItemId()) {
             case R.id.barcode_action_extra: BarcodeHelper.specialBarcodeHandlingAction(barcodeContext, getContext()); break;
             case R.id.barcode_action_clipboard:
@@ -193,10 +235,35 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
                 }
+                break;
+            case R.id.barcode_action_share:
+            case R.id.barcode_action_share_raw:
+                String textToShare = (item.getItemId() == R.id.barcode_action_share) ? barcodeContext.getBarcodeValue() : barcodeContext.getRawBarcodeValue();
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+                startActivity(Intent.createChooser(shareIntent, "Share barcode"));
+                break;
+            case R.id.barcode_action_save_file:
+            case R.id.barcode_action_save_file_raw:
+                barcodeSaveContext = (item.getItemId() == R.id.barcode_action_save_file) ? barcodeContext.getBarcodeValue() : barcodeContext.getRawBarcodeValue();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS", Locale.US);
+                String defaultFileName = "scanned-barcode-" + sdf.format(new Date()) + ".txt";
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                    Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                    exportIntent.setType("text/plain");
+                    exportIntent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
+                    startActivityForResult(exportIntent, EXPORT_BARCODES);
+                } else {
+                    NotifyUserUtil.showShortDismissSnackbar(getView(), "Action not supported for devices before Android KitKat");
+                }
             default: result = super.onContextItemSelected(item);
         }
         return result;
     }
+
+    private static final int EXPORT_BARCODES = 2;
 
     @Override
     public void setHistoryBarcode(@NotNull String barcodeString) {
