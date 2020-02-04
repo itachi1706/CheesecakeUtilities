@@ -62,7 +62,5 @@ class QSPrivateDNSTileService : TileService() {
         LogHelper.w(TAG, "Unavailable. WRITE_SECURE_SETTINGS permission has not been granted")
     }
 
-    companion object {
-        private const val TAG = "QSPrivDNSTile"
-    }
+    companion object { private const val TAG = "QSPrivDNSTile" }
 }

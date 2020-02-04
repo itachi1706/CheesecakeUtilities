@@ -27,13 +27,13 @@ class ToggleActivity : BaseModuleActivity() {
         get() = "Basic System Toggles that is also available on the tiles menu as well"
 
     private lateinit var permissionStr: String
+    private var privateDnsUpdater: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_toggle)
 
         permissionStr = "adb shell pm grant $packageName ${Manifest.permission.WRITE_SECURE_SETTINGS}"
-
         toggle_how_private_dns.setOnClickListener {
             AlertDialog.Builder(this).setTitle("How to grant permission")
                     .setMessage("To toggle Private DNS, we require the WRITE_SECURE_SETTINGS permission. Hence we need to execute the following command to be ran on ADB\n\n$permissionStr")
@@ -78,17 +78,14 @@ class ToggleActivity : BaseModuleActivity() {
                 if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }
     }
 
-    private fun checkComponentEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
-
-    private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
-
-    private var privateDnsUpdater: Boolean = false
-
     override fun onResume() {
         super.onResume()
         if (!hasStuffOnScreen()) return // Do not continue
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) checkPrivateDns()
     }
+
+    private fun checkComponentEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
+    private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun checkPrivateDns() {
@@ -113,8 +110,5 @@ class ToggleActivity : BaseModuleActivity() {
         toggle_switch_private_dns.isChecked = option == selection // check if match
     }
 
-    companion object {
-        private const val TAG = "ToggleActivity"
-
-    }
+    companion object { private const val TAG = "ToggleActivity" }
 }
