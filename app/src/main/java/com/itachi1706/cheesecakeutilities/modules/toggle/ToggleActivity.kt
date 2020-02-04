@@ -2,7 +2,9 @@ package com.itachi1706.cheesecakeutilities.modules.toggle
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -14,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.PRIVATE_DNS_SETTING
+import com.itachi1706.cheesecakeutilities.modules.toggle.services.QSPrivateDNSTileService
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
 import kotlinx.android.synthetic.main.activity_toggle.*
@@ -70,11 +73,17 @@ class ToggleActivity : BaseModuleActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) Settings.Global.putString(contentResolver, PRIVATE_DNS_SETTING, if (isChecked) onState else "off")
             LogHelper.i(TAG, "Toggled Private DNS to ${if (isChecked) onState else "off"}")
         }
+        toggle_statusbar_private_dns.isChecked = checkComponentEnabled()
+        toggle_statusbar_private_dns.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java),
+                if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }
     }
+
+    private fun checkComponentEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
 
     private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
 
     private var privateDnsUpdater: Boolean = false
+    private var privateDnsUpdaterStatus: Boolean = false
 
     override fun onResume() {
         super.onResume()

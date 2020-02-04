@@ -47,7 +47,7 @@
             android:icon="@drawable/ic_dns"
             android:label="Private DNS"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
