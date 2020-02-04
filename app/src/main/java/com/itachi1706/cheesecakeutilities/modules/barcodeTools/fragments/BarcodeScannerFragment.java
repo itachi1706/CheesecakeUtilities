@@ -206,8 +206,8 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
         LogHelper.d(TAG, "Barcode read: " + barcode.getBarcodeValue());
     }
 
-    private static BarcodeHistoryScan barcodeContext = null;
-    private static String barcodeSaveContext = null;
+    private BarcodeHistoryScan barcodeContext = null;
+    private String barcodeSaveContext = null;
 
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
@@ -258,6 +258,7 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
                 } else {
                     NotifyUserUtil.showShortDismissSnackbar(getView(), "Action not supported for devices before Android KitKat");
                 }
+                break;
             default: result = super.onContextItemSelected(item);
         }
         return result;

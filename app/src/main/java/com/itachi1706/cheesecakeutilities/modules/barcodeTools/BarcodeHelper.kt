@@ -291,6 +291,18 @@ object BarcodeHelper {
     }
 
     @JvmStatic
+    fun getPhoneType(phone: FirebaseVisionBarcode.Phone): String {
+        return when (phone.type) {
+            FirebaseVisionBarcode.Phone.TYPE_FAX -> "Fax"
+            FirebaseVisionBarcode.Phone.TYPE_HOME -> "Home"
+            FirebaseVisionBarcode.Phone.TYPE_WORK -> "Work"
+            FirebaseVisionBarcode.Phone.TYPE_MOBILE -> "Mobile"
+            FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> "Unknown Type"
+            else -> "Unknown Type"
+        }
+    }
+
+    @JvmStatic
     fun handleSpecialBarcodes(barcode: BarcodeHistoryScan): String {
         val result = StringBuilder()
         // Get all special stuff that may be null if its invalid
@@ -321,14 +333,7 @@ object BarcodeHelper {
             if (contactInfo.phones.size > 0) {
                 result.append("Phone Numbers: \n")
                 for (p in contactInfo.phones) {
-                    result.append("Number: ${p.number} | Type: ${when (p.type) {
-                        FirebaseVisionBarcode.Phone.TYPE_FAX -> "Fax"
-                        FirebaseVisionBarcode.Phone.TYPE_HOME -> "Home"
-                        FirebaseVisionBarcode.Phone.TYPE_WORK -> "Work"
-                        FirebaseVisionBarcode.Phone.TYPE_MOBILE -> "Mobile"
-                        FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> "Unknown Type"
-                        else -> "Unknown Type"
-                    }}\n")
+                    result.append("Number: ${p.number} | Type: ${getPhoneType(p)}\n")
                 }
             }
             if (contactInfo.addresses.size > 0) {
@@ -402,13 +407,7 @@ object BarcodeHelper {
         if (phone != null) {
             result.append("\nPhone Number\n")
             result.append("Phone Number: ${phone.number}\n")
-            result.append("Type: ${when (phone.type) {
-                FirebaseVisionBarcode.Phone.TYPE_FAX -> "Fax"
-                FirebaseVisionBarcode.Phone.TYPE_HOME -> "Home"
-                FirebaseVisionBarcode.Phone.TYPE_WORK -> "Work"
-                FirebaseVisionBarcode.Phone.TYPE_MOBILE -> "Mobile"
-                FirebaseVisionBarcode.Phone.TYPE_UNKNOWN -> "Unknown Type"
-                else -> "Unknown Type" }}\n")
+            result.append("Type: ${getPhoneType(phone)}}\n")
         }
         if (sms != null) {
             result.append("\nSMS Message\n")
