@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -15,10 +16,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.FORCE_90HZ_SETTING
 import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.PRIVATE_DNS_SETTING
 import com.itachi1706.cheesecakeutilities.modules.toggle.services.QSPrivateDNSTileService
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
+import com.itachi1706.helperlib.utils.NotifyUserUtil
 import kotlinx.android.synthetic.main.activity_toggle.*
 
 class ToggleActivity : BaseModuleActivity() {
@@ -28,6 +31,7 @@ class ToggleActivity : BaseModuleActivity() {
 
     private lateinit var permissionStr: String
     private var privateDnsUpdater: Boolean = false
+    private var force90HzUpdater: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,12 +80,15 @@ class ToggleActivity : BaseModuleActivity() {
         toggle_statusbar_private_dns.isChecked = checkComponentEnabled()
         toggle_statusbar_private_dns.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java),
                 if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) checkPixelForce90Hz() else disablePixelMode("Android Version must be Marshmallow and above")
     }
 
     override fun onResume() {
         super.onResume()
         if (!hasStuffOnScreen()) return // Do not continue
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) checkPrivateDns()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) refreshPixelForce90Hz()
     }
 
     private fun checkComponentEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
@@ -108,6 +115,61 @@ class ToggleActivity : BaseModuleActivity() {
 
         privateDnsUpdater = true
         toggle_switch_private_dns.isChecked = option == selection // check if match
+    }
+
+    /**
+     * Only supported for Pixel 4 (Flame) and Pixel 4 XL (Flame)
+     */
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun checkPixelForce90Hz() {
+        // Only for Pixel. If non Pixel series device do not continue
+        LogHelper.i(TAG, "Checking device to see if it is a Google Pixel device")
+        if (!ToggleHelper.checkGooglePhone()) { disablePixelMode("Google Phone Check failed. Disabling Pixel Exclusive Features"); return }
+        if (!ToggleHelper.checkSupportedPixelPhone()) { disablePixelMode("Unsupported Pixel device. Disabling unsupported features. Current Device: ${Build.MODEL}"); return }
+        LogHelper.i(TAG, "Found supported Pixel Device (${Build.MODEL}). Enabling feature")
+
+        toggle_grant_force_90hz.setOnClickListener {
+            NotifyUserUtil.createShortToast(this, "Granting ability to toggle 90Hz Mode")
+            startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:$packageName")))
+        }
+
+        toggle_switch_force_90hz.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (force90HzUpdater) { force90HzUpdater = false; return@setOnCheckedChangeListener }
+            Toast.makeText(buttonView.context, "${if (isChecked) "Enabling" else "Disabling"} Force 90Hz", Toast.LENGTH_LONG).show()
+            val onState = 90.0f
+            Settings.System.putString(contentResolver, FORCE_90HZ_SETTING, if (isChecked) "90" else "0")
+            LogHelper.i(TAG, "Toggled Force 90Hz (min refresh rate) to ${if (isChecked) onState.toString() else "0"}")
+        }
+        /*toggle_statusbar_force_90hz.isChecked = checkComponentEnabled()
+        toggle_statusbar_force_90hz.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java),
+                if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }*/
+
+        refreshPixelForce90Hz()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun refreshPixelForce90Hz() {
+        if (toggle_force_90hz.visibility == View.GONE) return // Not doing anything
+        // Check Settings
+        val option = Settings.System.getFloat(contentResolver, FORCE_90HZ_SETTING)
+        LogHelper.d(TAG, "Current Min Refresh Rate: $option")
+
+        if (toggle_switch_force_90hz.isChecked != (option == 90.0f)) force90HzUpdater = true
+        toggle_switch_force_90hz.isChecked = option == 90.0f // 90Hz display
+
+        // Check if we can toggle
+        val isAllowed = Settings.System.canWrite(this)
+        toggle_status_force_90hz.setTextColor(ContextCompat.getColor(this, if (isAllowed)
+            if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
+        toggle_status_force_90hz.text = if (isAllowed) "Granted" else "Not Granted"
+        toggle_switch_force_90hz.isEnabled = isAllowed
+        toggle_statusbar_force_90hz.isEnabled = isAllowed
+        toggle_grant_force_90hz.isEnabled = !isAllowed
+    }
+
+    private fun disablePixelMode(msg: String) {
+        LogHelper.w(TAG, msg)
+        toggle_force_90hz.visibility = View.GONE
     }
 
     companion object { private const val TAG = "ToggleActivity" }
