@@ -2,13 +2,13 @@ package com.itachi1706.cheesecakeutilities.modules.toggle
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.ComponentName
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
@@ -19,10 +19,12 @@ import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.FORCE_90HZ_SETTING
 import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.PRIVATE_DNS_SETTING
 import com.itachi1706.cheesecakeutilities.modules.toggle.services.QSPrivateDNSTileService
+import com.itachi1706.cheesecakeutilities.redirectapp.InstallAppTask
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
 import kotlinx.android.synthetic.main.activity_toggle.*
+import kotlinx.android.synthetic.main.fragment_tab_device.*
 
 class ToggleActivity : BaseModuleActivity() {
 
@@ -88,7 +90,26 @@ class ToggleActivity : BaseModuleActivity() {
         super.onResume()
         if (!hasStuffOnScreen()) return // Do not continue
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) checkPrivateDns()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) refreshPixelForce90Hz()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val filter = IntentFilter(ToggleHelper.ACTION_REPLY)
+            if (pixelReceiver == null) {
+                pixelReceiver = PixelReceiver(object: PixelReceiver.Action {
+                    override fun doAction(message: String, success: Boolean) {
+                        Log.i(TAG, "Received Success State $success with message: $message")
+                        if (message.contains("Ping Check")) {
+                            // Check
+                            val version = message.split("|")[1].trim()
+                            isAllowedPixel(success, version)
+                        } else {
+                            // Status Change
+                            TODO("Status Change")
+                        }
+                    }
+                })
+                registerReceiver(pixelReceiver, filter)
+            }
+            refreshPixelForce90Hz()
+        }
     }
 
     private fun checkComponentEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
@@ -129,8 +150,8 @@ class ToggleActivity : BaseModuleActivity() {
         LogHelper.i(TAG, "Found supported Pixel Device (${Build.MODEL}). Enabling feature")
 
         toggle_grant_force_90hz.setOnClickListener {
-            NotifyUserUtil.createShortToast(this, "Granting ability to toggle 90Hz Mode")
-            startActivity(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:$packageName")))
+            NotifyUserUtil.createShortToast(this, "Installing Companion App to toggle Force 90Hz. Please open app at least once when its done")
+            InstallAppTask(this, "com.itachi1706.cheesecakeutilitiessettingscompanion").execute()
         }
 
         toggle_switch_force_90hz.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -157,14 +178,32 @@ class ToggleActivity : BaseModuleActivity() {
         if (toggle_switch_force_90hz.isChecked != (option == 90.0f)) force90HzUpdater = true
         toggle_switch_force_90hz.isChecked = option == 90.0f // 90Hz display
 
-        // Check if we can toggle
-        val isAllowed = Settings.System.canWrite(this)
+        // Check if we can toggle (App Instaalled anot)
+        val checkAppInstalled = Intent().apply {
+            action = ToggleHelper.ACTION_CHECK
+            addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+            component = ToggleHelper.COMPONENT_NAME
+        }
+        sendBroadcast(checkAppInstalled)
+    }
+
+    private fun isAllowedPixel(isAllowed: Boolean, version: String) {
         toggle_status_force_90hz.setTextColor(ContextCompat.getColor(this, if (isAllowed)
             if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
-        toggle_status_force_90hz.text = if (isAllowed) "Granted" else "Not Granted"
+        toggle_status_force_90hz.text = if (isAllowed) "Installed ($version)" else "Not Installed"
         toggle_switch_force_90hz.isEnabled = isAllowed
         toggle_statusbar_force_90hz.isEnabled = isAllowed
-        toggle_grant_force_90hz.isEnabled = !isAllowed
+        toggle_grant_force_90hz.text = if (isAllowed) "Update Companion App" else "Install Companion App"
+    }
+
+    private var pixelReceiver: BroadcastReceiver? = null
+
+    override fun onPause() {
+        super.onPause()
+        if (pixelReceiver != null) {
+            unregisterReceiver(pixelReceiver)
+            pixelReceiver = null
+        }
     }
 
     private fun disablePixelMode(msg: String) {

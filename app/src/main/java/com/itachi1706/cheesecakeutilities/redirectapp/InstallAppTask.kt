@@ -22,13 +22,13 @@ import java.net.URL
  * Created by Kenneth on 11/8/2019.
  * for com.itachi1706.cheesecakeutilities.modules.FanfictionCompactor in CheesecakeUtilities
  */
-class InstallAppTask(activity: Activity) : AsyncTask<Void, Void, File>() {
+class InstallAppTask(activity: Activity, val packageName: String) : AsyncTask<Void, Void, File>() {
 
     private val activityRef = WeakReference(activity)
 
     override fun doInBackground(vararg params: Void?): File? {
         val activity = activityRef.get() ?: return null
-        val url = "${CommonVariables.BASE_API_URL}appupdatechecker.php?action=androidgetlatesturl&packagename=com.itachi1706.fanfictionnetreader"
+        val url = "${CommonVariables.BASE_API_URL}appupdatechecker.php?action=androidgetlatesturl&packagename=$packageName"
         val urlHelper = URLHelper(url)
         LogHelper.d(TAG, "Querying $url")
         val data = urlHelper.executeString()
