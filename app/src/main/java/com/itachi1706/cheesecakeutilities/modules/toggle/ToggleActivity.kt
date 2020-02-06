@@ -100,9 +100,7 @@ class ToggleActivity : BaseModuleActivity() {
                             // Check
                             val version = message.split("|")[1].trim()
                             isAllowedPixel(success, version)
-                        } else {
-                            // Status Change
-                            TODO("Status Change")
+                            return
                         }
                     }
                 })
@@ -158,8 +156,16 @@ class ToggleActivity : BaseModuleActivity() {
             if (force90HzUpdater) { force90HzUpdater = false; return@setOnCheckedChangeListener }
             Toast.makeText(buttonView.context, "${if (isChecked) "Enabling" else "Disabling"} Force 90Hz", Toast.LENGTH_LONG).show()
             val onState = 90.0f
-            Settings.System.putString(contentResolver, FORCE_90HZ_SETTING, if (isChecked) "90" else "0")
-            LogHelper.i(TAG, "Toggled Force 90Hz (min refresh rate) to ${if (isChecked) onState.toString() else "0"}")
+            val toggleIntent = Intent().apply {
+                action = ToggleHelper.ACTION_CHANGE
+                putExtra(ToggleHelper.DATA_SETTING_TYPE, ToggleHelper.DATA_CONST_SYSTEM)
+                putExtra(ToggleHelper.DATA_SETTING_NAME, FORCE_90HZ_SETTING)
+                putExtra(ToggleHelper.DATA_SETTING_VAL, if (isChecked) "90.0" else "0.0")
+                addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+                component = ToggleHelper.COMPONENT_NAME
+            }
+            sendBroadcast(toggleIntent)
+            LogHelper.i(TAG, "Attempting to toggle Force 90Hz (min refresh rate) to ${if (isChecked) onState.toString() else "0"}")
         }
         /*toggle_statusbar_force_90hz.isChecked = checkComponentEnabled()
         toggle_statusbar_force_90hz.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java),
