@@ -57,6 +57,18 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".modules.toggle.services.QSForce90HzTileService"
+            android:icon="@drawable/ic_force_90hz"
+            android:label="Force 90Hz Display"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".modules.toggle.ToggleActivity"
             android:label="System Toggles">

@@ -56,4 +56,9 @@ object ToggleHelper {
         return (Build.BOARD == Build.DEVICE && Build.DEVICE == Build.HARDWARE && Build.HARDWARE == Build.PRODUCT && Build.PRODUCT == "coral") ||
                 (Build.BOARD == Build.DEVICE && Build.DEVICE == Build.HARDWARE && Build.HARDWARE == Build.PRODUCT && Build.PRODUCT == "flame")
     }
+
+    @JvmStatic
+    fun checkForce90HzSupport(): Boolean {
+        return checkGooglePhone() && checkSupportedPixelPhone()
+    }
 }

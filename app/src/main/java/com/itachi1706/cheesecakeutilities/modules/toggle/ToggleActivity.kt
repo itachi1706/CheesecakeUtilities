@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.*
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -18,13 +17,13 @@ import com.itachi1706.cheesecakeutilities.BaseModuleActivity
 import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.FORCE_90HZ_SETTING
 import com.itachi1706.cheesecakeutilities.modules.toggle.ToggleHelper.PRIVATE_DNS_SETTING
+import com.itachi1706.cheesecakeutilities.modules.toggle.services.QSForce90HzTileService
 import com.itachi1706.cheesecakeutilities.modules.toggle.services.QSPrivateDNSTileService
 import com.itachi1706.cheesecakeutilities.redirectapp.InstallAppTask
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
 import kotlinx.android.synthetic.main.activity_toggle.*
-import kotlinx.android.synthetic.main.fragment_tab_device.*
 
 class ToggleActivity : BaseModuleActivity() {
 
@@ -79,7 +78,7 @@ class ToggleActivity : BaseModuleActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) Settings.Global.putString(contentResolver, PRIVATE_DNS_SETTING, if (isChecked) onState else "off")
             LogHelper.i(TAG, "Toggled Private DNS to ${if (isChecked) onState else "off"}")
         }
-        toggle_statusbar_private_dns.isChecked = checkComponentEnabled()
+        toggle_statusbar_private_dns.isChecked = checkPrivDNSTileEnabled()
         toggle_statusbar_private_dns.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java),
                 if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }
 
@@ -110,7 +109,8 @@ class ToggleActivity : BaseModuleActivity() {
         }
     }
 
-    private fun checkComponentEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
+    private fun checkPrivDNSTileEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
+    private fun checkForce90HzTileEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSForce90HzTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
     private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -167,9 +167,9 @@ class ToggleActivity : BaseModuleActivity() {
             sendBroadcast(toggleIntent)
             LogHelper.i(TAG, "Attempting to toggle Force 90Hz (min refresh rate) to ${if (isChecked) onState.toString() else "0"}")
         }
-        /*toggle_statusbar_force_90hz.isChecked = checkComponentEnabled()
-        toggle_statusbar_force_90hz.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java),
-                if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }*/
+        toggle_statusbar_force_90hz.isChecked = checkForce90HzTileEnabled()
+        toggle_statusbar_force_90hz.setOnCheckedChangeListener { _, isChecked -> packageManager.setComponentEnabledSetting(ComponentName(this, QSForce90HzTileService::class.java),
+                if (isChecked) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP) }
 
         refreshPixelForce90Hz()
     }
