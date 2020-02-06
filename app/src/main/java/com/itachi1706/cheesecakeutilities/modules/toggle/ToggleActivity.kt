@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -73,7 +74,7 @@ class ToggleActivity : BaseModuleActivity() {
         toggle_spinner_private_dns.setSelection(sp.getInt(PRIVATE_DNS_SETTING, 0))
         toggle_switch_private_dns.setOnCheckedChangeListener { buttonView, isChecked ->
             if (privateDnsUpdater) { privateDnsUpdater = false; return@setOnCheckedChangeListener }
-            Toast.makeText(buttonView.context, "${if (isChecked) "Enabling" else "Disabling"} Private DNS", Toast.LENGTH_LONG).show()
+            showEnableToast("Private DNS", isChecked, buttonView.context)
             val onState = resources.getStringArray(R.array.private_dns_entries_option)[toggle_spinner_private_dns.selectedItemPosition]
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) Settings.Global.putString(contentResolver, PRIVATE_DNS_SETTING, if (isChecked) onState else "off")
             LogHelper.i(TAG, "Toggled Private DNS to ${if (isChecked) onState else "off"}")
@@ -112,13 +113,14 @@ class ToggleActivity : BaseModuleActivity() {
     private fun checkPrivDNSTileEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSPrivateDNSTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
     private fun checkForce90HzTileEnabled(): Boolean { return packageManager.getComponentEnabledSetting(ComponentName(this, QSForce90HzTileService::class.java)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED }
     private fun hasStuffOnScreen(): Boolean { return toggle_private_dns.visibility != View.GONE }
+    private fun showEnableToast(type: String, isChecked: Boolean, context: Context) { Toast.makeText(context, "${if (isChecked) "Enabling" else "Disabling"} $type", Toast.LENGTH_LONG).show() }
+    private fun setTextColor(view: TextView, isAllowed: Boolean) { view.setTextColor(ContextCompat.getColor(this, if (isAllowed) if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red)) }
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun checkPrivateDns() {
         // Check permission granted
         val isAllowed = ToggleHelper.checkWriteSecurePermission(this)
-        toggle_status_private_dns.setTextColor(ContextCompat.getColor(this, if (isAllowed)
-            if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
+        setTextColor(toggle_status_private_dns, isAllowed)
         toggle_status_private_dns.text = if (isAllowed) "Granted" else "Not Granted"
         toggle_spinner_private_dns.isEnabled = isAllowed
         toggle_statusbar_private_dns.isEnabled = isAllowed
@@ -154,7 +156,7 @@ class ToggleActivity : BaseModuleActivity() {
 
         toggle_switch_force_90hz.setOnCheckedChangeListener { buttonView, isChecked ->
             if (force90HzUpdater) { force90HzUpdater = false; return@setOnCheckedChangeListener }
-            Toast.makeText(buttonView.context, "${if (isChecked) "Enabling" else "Disabling"} Force 90Hz", Toast.LENGTH_LONG).show()
+            showEnableToast("Force 90Hz", isChecked, buttonView.context)
             val onState = 90.0f
             val toggleIntent = Intent().apply {
                 action = ToggleHelper.ACTION_CHANGE
@@ -194,8 +196,7 @@ class ToggleActivity : BaseModuleActivity() {
     }
 
     private fun isAllowedPixel(isAllowed: Boolean, version: String) {
-        toggle_status_force_90hz.setTextColor(ContextCompat.getColor(this, if (isAllowed)
-            if (PrefHelper.isNightModeEnabled(this)) R.color.green else R.color.dark_green else R.color.red))
+        setTextColor(toggle_status_force_90hz, isAllowed)
         toggle_status_force_90hz.text = if (isAllowed) "Installed ($version)" else "Not Installed"
         toggle_switch_force_90hz.isEnabled = isAllowed
         toggle_statusbar_force_90hz.isEnabled = isAllowed

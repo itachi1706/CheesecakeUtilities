@@ -53,8 +53,11 @@ object ToggleHelper {
     fun checkSupportedPixelPhone(): Boolean {
         LogHelper.d(PIXEL_TAG, "Supported Devices: Pixel 4 (flame), Pixel 4XL (coral)")
         LogHelper.i(PIXEL_TAG, "Supported Pixel Phone Check. Board: ${Build.BOARD}, Device: ${Build.DEVICE}, Hardware: ${Build.HARDWARE}, Product: ${Build.PRODUCT}")
-        return (Build.BOARD == Build.DEVICE && Build.DEVICE == Build.HARDWARE && Build.HARDWARE == Build.PRODUCT && Build.PRODUCT == "coral") ||
-                (Build.BOARD == Build.DEVICE && Build.DEVICE == Build.HARDWARE && Build.HARDWARE == Build.PRODUCT && Build.PRODUCT == "flame")
+        return checkProdMatch("coral") || checkProdMatch("flame")
+    }
+
+    private fun checkProdMatch(name: String): Boolean {
+        return Build.BOARD == Build.DEVICE && Build.DEVICE == Build.HARDWARE && Build.HARDWARE == Build.PRODUCT && Build.PRODUCT == name
     }
 
     @JvmStatic
