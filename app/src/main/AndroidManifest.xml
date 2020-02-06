@@ -21,6 +21,9 @@
     <uses-permission
         android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.NFC" />
 
     <uses-feature android:name="android.hardware.nfc" />
@@ -46,6 +49,18 @@
             android:name=".modules.toggle.services.QSPrivateDNSTileService"
             android:icon="@drawable/ic_dns"
             android:label="Private DNS"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".modules.toggle.services.QSForce90HzTileService"
+            android:icon="@drawable/ic_force_90hz"
+            android:label="Force 90Hz Display"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:enabled="false"
             android:exported="true">

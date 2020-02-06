@@ -36,7 +36,7 @@ class FanfictionReaderRedirectApp : AppCompatActivity() {
                 .setNegativeButton(android.R.string.cancel) { _,_ -> finish() }
                 .setPositiveButton(R.string.install) { _, _ ->
                     Toast.makeText(this, "Downloading app... This may take a while...", Toast.LENGTH_LONG).show()
-                    InstallAppTask(this).execute()
+                    InstallAppTask(this, "com.itachi1706.fanfictionnetreader").execute()
                 }.show()
     }
 
