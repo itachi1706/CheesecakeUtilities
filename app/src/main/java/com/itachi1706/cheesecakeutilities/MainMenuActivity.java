@@ -10,10 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.itachi1706.appupdater.AppUpdateInitializer;
 import com.itachi1706.appupdater.object.CAAnalytics;
 import com.itachi1706.appupdater.utils.AnalyticsHelper;
@@ -24,8 +23,6 @@ import com.itachi1706.cheesecakeutilities.util.CommonMethods;
 import com.itachi1706.cheesecakeutilities.util.CommonVariables;
 import com.itachi1706.cheesecakeutilities.util.LogInit;
 import com.itachi1706.helperlib.helpers.PrefHelper;
-
-import io.fabric.sdk.android.Fabric;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -41,8 +38,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Error Handling
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
-        if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
         LogInit.initLogger();
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -77,7 +73,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void setAnalyticsData(boolean enabled, FirebaseAnalytics firebaseAnalytics, CAAnalytics analytics) {
-        if (!BuildConfig.DEBUG) Crashlytics.setUserIdentifier(FirebaseInstanceId.getInstance().getId());
         firebaseAnalytics.setUserProperty("debug_mode", (enabled) ? analytics.isDebug() + "" : null);
         firebaseAnalytics.setUserProperty("device_manufacturer", (enabled) ? analytics.getdManufacturer() : null);
         firebaseAnalytics.setUserProperty("device_codename", (enabled) ? analytics.getdCodename() : null);
