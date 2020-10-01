@@ -34,7 +34,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.R;
@@ -43,8 +43,6 @@ import com.itachi1706.helperlib.helpers.LogHelper;
 import com.squareup.picasso.Picasso;
 
 import net.grandcentrix.tray.AppPreferences;
-
-import io.fabric.sdk.android.Fabric;
 
 import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
 import static com.itachi1706.cheesecakeutilities.modules.navbarCustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
@@ -290,8 +288,7 @@ public class NavBarService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         if (!Utils.IS_OREO_AND_ABOVE) {
-            Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
-            if (!BuildConfig.DEBUG) Fabric.with(fabric);
+            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
             LogInit.initLogger();
         }
     }

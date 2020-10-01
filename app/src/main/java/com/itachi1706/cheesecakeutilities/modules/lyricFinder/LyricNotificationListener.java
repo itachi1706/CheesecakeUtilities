@@ -22,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
 import com.itachi1706.cheesecakeutilities.BuildConfig;
 import com.itachi1706.cheesecakeutilities.util.LogInit;
@@ -33,8 +33,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-
-import io.fabric.sdk.android.Fabric;
 
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -52,8 +50,7 @@ public class LyricNotificationListener extends NotificationListenerService {
     public void onCreate() {
         super.onCreate();
         FirebaseApp.initializeApp(this);
-        Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics()).debuggable(BuildConfig.DEBUG).build();
-        if (!BuildConfig.DEBUG) Fabric.with(fabric);
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
         LogInit.initLogger();
         mm = (MediaSessionManager) this.getSystemService(Context.MEDIA_SESSION_SERVICE);
 

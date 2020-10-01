@@ -5,13 +5,12 @@ import android.app.TaskStackBuilder
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity
 import com.itachi1706.cheesecakeutilities.util.CommonMethods
 import com.itachi1706.cheesecakeutilities.util.LogInit.initLogger
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
-import io.fabric.sdk.android.Fabric
 
 /**
  * Created by Kenneth on 12/5/2019.
@@ -31,8 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
         PrefHelper.handleDefaultThemeSwitch(sp.getString("app_theme", "batterydefault")!!)
         super.onCreate(savedInstanceState)
 
-        val fabric = Fabric.Builder(this).kits(Crashlytics()).debuggable(BuildConfig.DEBUG).build()
-        if (!BuildConfig.DEBUG) Fabric.with(fabric)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
         initLogger()
         val menuitem = if (this.intent.hasExtra("menuitem")) this.intent.extras!!.getString("menuitem", "") else ""
         val checkGlobal = this.intent.hasExtra("globalcheck") && this.intent.extras!!.getBoolean("globalcheck")
