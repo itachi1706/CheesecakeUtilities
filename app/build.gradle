@@ -139,7 +139,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
-    implementation 'com.itachi1706.cepaslib:cepaslib:1.0.0'
+    implementation 'com.itachi1706.cepaslib:cepaslib:2.0.0'
     // APKMirror Downloader
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0' //WebView
     implementation 'org.jsoup:jsoup:1.12.1' //HTML Parser
