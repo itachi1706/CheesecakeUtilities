@@ -91,7 +91,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test:rules:1.3.0'
     // JUnit Test Dependencies
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.itachi1706.appupdater:appupdater:2.2.1'
@@ -129,7 +129,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
     implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
-    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.google.zxing:core:3.4.1'
     // Lyric Finder
     implementation 'androidx.palette:palette-ktx:1.0.0'
     // Vehicle Mileage Tracker
