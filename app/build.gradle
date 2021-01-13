@@ -116,7 +116,7 @@ dependencies {
     // Specific Utility Dependencies
     // Navbar Utility
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'net.grandcentrix.tray:tray:0.11.0'
+    implementation 'net.grandcentrix.tray:tray:0.12.0'
     implementation 'com.github.QuadFlask:colorpicker:0.0.12'
     // ORD Countdown Utility
     implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar'
