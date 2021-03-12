@@ -134,7 +134,7 @@ dependencies {
     implementation 'androidx.palette:palette-ktx:1.0.0'
     // Vehicle Mileage Tracker
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-database-ktx:19.5.0'
+    implementation 'com.google.firebase:firebase-database-ktx:19.7.0'
     implementation 'com.google.firebase:firebase-auth-ktx:19.4.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
