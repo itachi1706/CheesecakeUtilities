@@ -119,7 +119,7 @@ dependencies {
     implementation 'net.grandcentrix.tray:tray:0.12.0'
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     // ORD Countdown Utility
-    implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1@aar'
     // Application List Utility
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     // TODO: material-dialogs 2.0.0 breaks a lot of stuff, find time to migrate shit over
