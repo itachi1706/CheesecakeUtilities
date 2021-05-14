@@ -124,7 +124,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     // TODO: material-dialogs 2.0.0 breaks a lot of stuff, find time to migrate shit over
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.4'
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
