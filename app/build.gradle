@@ -124,7 +124,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     // TODO: material-dialogs 2.0.0 breaks a lot of stuff, find time to migrate shit over
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.github.turing-tech:MaterialScrollBar:13.0.1'
+    implementation 'com.github.turing-tech:MaterialScrollBar:13.3.4'
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
@@ -138,9 +138,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:19.4.0'
     implementation 'com.getbase:floatingactionbutton:1.10.1'
     // CEPAS Reader
-    implementation 'com.itachi1706.cepaslib:cepaslib:2.0.0'
+    implementation 'com.itachi1706.cepaslib:cepaslib:2.1.0'
     // APKMirror Downloader
-    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0' //WebView
+    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1' //WebView
     implementation 'org.jsoup:jsoup:1.13.1' //HTML Parser
     // GPA Calculator
     implementation 'org.greenrobot:eventbus:3.2.0'
