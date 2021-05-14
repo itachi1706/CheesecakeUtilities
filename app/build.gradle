@@ -94,7 +94,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.itachi1706.appupdater:appupdater:2.2.1'
+    implementation 'com.itachi1706.appupdater:appupdater:2.3.0'
     implementation 'com.itachi1706.helpers:helperlib:1.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -119,7 +119,7 @@ dependencies {
     implementation 'net.grandcentrix.tray:tray:0.12.0'
     implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     // ORD Countdown Utility
-    implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1@aar'
     // Application List Utility
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     // TODO: material-dialogs 2.0.0 breaks a lot of stuff, find time to migrate shit over
