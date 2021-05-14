@@ -117,7 +117,7 @@ dependencies {
     // Navbar Utility
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'net.grandcentrix.tray:tray:0.12.0'
-    implementation 'com.github.QuadFlask:colorpicker:0.0.12'
+    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
     // ORD Countdown Utility
     implementation 'com.github.lzyzsd:circleprogress:1.2.0@aar'
     // Application List Utility
@@ -140,7 +140,7 @@ dependencies {
     // CEPAS Reader
     implementation 'com.itachi1706.cepaslib:cepaslib:2.0.0'
     // APKMirror Downloader
-    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0' //WebView
+    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1' //WebView
     implementation 'org.jsoup:jsoup:1.13.1' //HTML Parser
     // GPA Calculator
     implementation 'org.greenrobot:eventbus:3.2.0'
