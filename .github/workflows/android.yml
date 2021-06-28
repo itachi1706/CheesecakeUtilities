@@ -61,7 +61,7 @@ jobs:
     #- name: Clean Gradle (DO NOT USE ALL THE TIME)
     #  run: ./gradlew clean
     - name: run tests
-      uses: reactivecircus/android-emulator-runner@v2.16.0
+      uses: reactivecircus/android-emulator-runner@v2.19.0
       with:
         api-level: 28
         target: google_apis
