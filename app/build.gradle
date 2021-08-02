@@ -147,7 +147,7 @@ dependencies {
     // Unicode Emoticon
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     // Others
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.biometric:biometric:1.0.1'
     implementation 'me.jfenn:Attribouter:0.1.5'
 }
