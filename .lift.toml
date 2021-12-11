@@ -1,0 +1,4 @@
+build          = "gradlew"
+jdk11          = false
+androidVersion = 28
+customTools = [ "https://docs.muse.dev/scripts/pmd.sh rulesets/java/quickstart.xml", "https://docs.lift.dev/scripts/check-common-comments.sh" ]
