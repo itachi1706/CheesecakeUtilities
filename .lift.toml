@@ -1,4 +1,5 @@
 build          = "gradlew"
+arguments      = [ "assembleAndroidTest" ]
 jdk11          = false
 androidVersion = 28
 customTools = [ "https://docs.lift.dev/scripts/pmd.sh rulesets/java/quickstart.xml", "https://docs.lift.dev/scripts/check-common-comments.sh" ]
