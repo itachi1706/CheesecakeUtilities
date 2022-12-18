@@ -149,7 +149,7 @@ dependencies {
     // Others
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.biometric:biometric:1.0.1'
-    implementation 'me.jfenn:Attribouter:0.1.5'
+    implementation 'me.jfenn:Attribouter:0.1.9'
 }
 
 // Trying something
