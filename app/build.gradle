@@ -152,5 +152,12 @@ dependencies {
     implementation 'me.jfenn:Attribouter:0.1.5'
 }
 
+// Trying something
+sonarqube {
+    properties {
+        property "sonar.androidLint.reportPaths", "build/reports/lint-results.xml"
+    }
+}
+
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android-extensions'
