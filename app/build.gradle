@@ -94,7 +94,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     // Global Dependencies
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.itachi1706.appupdater:appupdater:2.2.1'
+    implementation 'com.itachi1706.appupdater:appupdater:3.0.0'
     implementation 'com.itachi1706.helpers:helperlib:1.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
