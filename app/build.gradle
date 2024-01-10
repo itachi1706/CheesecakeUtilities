@@ -25,8 +25,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resValue "string", "tray__authority", "${applicationId}.tray"
-        // add this to set a unique tray authority based on your applicationId
-        resConfigs "en"
+        resConfigs 'en'
+// add this to set a unique tray authority based on your applicationId
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -66,19 +66,23 @@ android {
         }
     }
     // This enables long timeouts required on slow environments, e.g. Travis
-    adbOptions {
-        timeOutInMs 10 * 60 * 1000  // Set the timeout to 10 minutes
-        installOptions "-d", "-t"
-    }
-    lintOptions {
-        abortOnError !isGHActions
-    }
     dexOptions {
         preDexLibraries = !(isTravis || isGHActions)
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
+    namespace 'com.itachi1706.cheesecakeutilities'
+//    installation {
+//        installOptions '-d', '-t'
+//        timeOutInMs '10 * 60 * 1000'
+//    }
+//    lint {
+//        abortOnError '!isGHActions'
+//    }
 }
 
 ext {

@@ -201,6 +201,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
         super.onStop()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         webView!!.onActivityResult(requestCode, resultCode, data)
