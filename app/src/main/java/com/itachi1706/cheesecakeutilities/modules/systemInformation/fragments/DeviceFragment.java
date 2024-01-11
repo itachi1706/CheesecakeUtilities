@@ -124,7 +124,7 @@ public class DeviceFragment extends Fragment {
         if (cpu1 == null) {
             return "CPU Type: unknown";
         }
-        if (cpu.replaceAll("[^\\d.]", BuildConfig.FLAVOR).equals("0")) {
+        if (cpu.replaceAll("[^\\d.]", "").equals("0")) {
             return String.valueOf(cpu1);
         }
         return String.valueOf(cpu);
@@ -140,7 +140,7 @@ public class DeviceFragment extends Fragment {
         if (load == null) {
             return "Minimum Frequency: unknown";
         }
-        return "Minimum Frequency: " + String.valueOf(Integer.parseInt(load.replace("\n", BuildConfig.FLAVOR)) /
+        return "Minimum Frequency: " + String.valueOf(Integer.parseInt(load.replace("\n", "")) /
                 PointerIconCompat.TYPE_DEFAULT) + " MHz";
     }
 
@@ -158,7 +158,7 @@ public class DeviceFragment extends Fragment {
         if (load == null) {
             return "Maximum Frequency: unknown";
         }
-        return "Maximum Frequency: " + String.valueOf(Integer.parseInt(load.replace("\n", BuildConfig.FLAVOR)) /
+        return "Maximum Frequency: " + String.valueOf(Integer.parseInt(load.replace("\n", "")) /
                 PointerIconCompat.TYPE_DEFAULT) + " MHz";
     }
 
@@ -198,7 +198,7 @@ public class DeviceFragment extends Fragment {
         if (freq == null) {
             return "GONE";
         }
-        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) /
+        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", "")) /
                 AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT))) + " MHz";
     }
 
@@ -224,12 +224,12 @@ public class DeviceFragment extends Fragment {
         if (load3 == null) {
             return "Free RAM: unknown";
         }
-        long megabytes1 = (long) Math.round((float) (Integer.parseInt(load1.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) /
+        long megabytes1 = (long) Math.round((float) (Integer.parseInt(load1.replaceAll("[^\\d.]", "")) /
                 AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT));
-        long megabytes2 = (long) Math.round((float) (Integer.parseInt(load2.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) /
+        long megabytes2 = (long) Math.round((float) (Integer.parseInt(load2.replaceAll("[^\\d.]", "")) /
                 AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT));
         long j = megabytes1 + megabytes2;
-        long totalfree = j + ((long) Math.round((float) (Integer.parseInt(load3.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) /
+        long totalfree = j + ((long) Math.round((float) (Integer.parseInt(load3.replaceAll("[^\\d.]", "")) /
                 AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT)));
         return "Free RAM: " + String.valueOf(totalfree) + " MB";
     }
@@ -245,7 +245,7 @@ public class DeviceFragment extends Fragment {
             return "Total RAM: unknown";
         }
         return "Total RAM: " + String.valueOf((long) Math.round((float) (Integer.parseInt(load.replaceAll("[^\\d.]",
-                BuildConfig.FLAVOR)) / AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT))) + " MB";
+                "")) / AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT))) + " MB";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

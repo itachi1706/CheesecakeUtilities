@@ -15,6 +15,7 @@ def isGHActions = System.getenv("GITHUB_ACTIONS") ?: false
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
+    namespace 'com.itachi1706.cheesecakeutilities'
 
     defaultConfig {
         applicationId "com.itachi1706.cheesecakeutilities"
@@ -24,19 +25,33 @@ android {
         versionName "4.10.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resValue "string", "tray__authority", "${applicationId}.tray"
+        resValue "string", "tray__authority", "${applicationId}.tray" // add this to set a unique tray authority based on your applicationId
         resConfigs 'en'
-// add this to set a unique tray authority based on your applicationId
     }
+
+    installation {
+        installOptions '-d', '-t'
+        timeOutInMs 10 * 60 * 1000
+    }
+    lint {
+//        abortOnError !isGHActions
+        abortOnError false
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     packagingOptions {
         resources {
             excludes += ['META-INF/DEPENDENCIES', 'META-INF/NOTICE', 'META-INF/LICENSE']
         }
     }
+
     Properties props = new Properties()
     def propFile = file('key.properties')
     //check if SAFETY_NET_DEVICE_VERIFICATION_API_KEY is defined in gradle.properties (this is so the key is not in github)
@@ -49,6 +64,7 @@ android {
             }
         }
     }
+
     buildTypes {
         release {
             buildConfigField("String", "GOOGLE_VERIFICATION_API_KEY", "\"" + GOOGLE_VERIFICATION_API_KEY + "\"")
@@ -65,24 +81,15 @@ android {
             multiDexEnabled true
         }
     }
+
     // This enables long timeouts required on slow environments, e.g. Travis
     dexOptions {
         preDexLibraries = !(isTravis || isGHActions)
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+
     buildFeatures {
         viewBinding true
     }
-    namespace 'com.itachi1706.cheesecakeutilities'
-//    installation {
-//        installOptions '-d', '-t'
-//        timeOutInMs '10 * 60 * 1000'
-//    }
-//    lint {
-//        abortOnError '!isGHActions'
-//    }
 }
 
 ext {
