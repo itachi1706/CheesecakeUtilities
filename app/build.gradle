@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
@@ -169,5 +170,3 @@ sonarqube {
         property "sonar.androidLint.reportPaths", "build/reports/lint-results.xml"
     }
 }
-
-apply plugin: 'com.google.gms.google-services'
