@@ -264,7 +264,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
     private fun createCameraPreviewSession() {
         try {
             val texture = texture.surfaceTexture
-            texture.setDefaultBufferSize(previewSize.width, previewSize.height) // We configure the size of default buffer to be the size of camera preview we want.
+            texture?.setDefaultBufferSize(previewSize.width, previewSize.height) // We configure the size of default buffer to be the size of camera preview we want.
             val surface = Surface(texture) // This is the output Surface we need to start preview.
 
             // We set up a CaptureRequest.Builder with the output Surface.

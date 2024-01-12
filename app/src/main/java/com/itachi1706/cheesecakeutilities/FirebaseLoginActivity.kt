@@ -78,7 +78,7 @@ class FirebaseLoginActivity : BaseModuleActivity() {
 
         if (intent.hasExtra("logout") && intent.getBooleanExtra("logout", false)) signout(true)
         if (intent.hasExtra(CONTINUE_INTENT)) continueIntent = intent.getParcelableExtra(CONTINUE_INTENT)
-        if (intent.hasExtra(HELP_EXTRA)) message = intent.getStringExtra(HELP_EXTRA)
+        if (intent.hasExtra(HELP_EXTRA)) message = intent.getStringExtra(HELP_EXTRA).toString()
 
         val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
         firebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
