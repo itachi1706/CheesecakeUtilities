@@ -54,5 +54,6 @@
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
+-dontwarn com.ryanharter.auto.value.gson.GsonTypeAdapterFactory
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 

@@ -21,6 +21,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: 11
+        cache: 'gradle'
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json
@@ -81,6 +82,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: 11
+        cache: 'gradle'
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json
