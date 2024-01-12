@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- TODO: Verify if this actually need -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- TODO: Remove after BackupHelper no longer use -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:remove="android:maxSdkVersion" /> <!-- TODO: Remove the tools tag here when we officially no longer uses the storage permission with the migration to SAF -->
@@ -37,6 +41,8 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
+    <!-- TODO: We have requestLegacyExternalStorage for now until we migrate to SAF -->
+<!--    android:preserveLegacyExternalStorage="true"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,6 +50,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+
+        android:requestLegacyExternalStorage="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <service
             android:name=".modules.toggle.services.QSPrivateDNSTileService"
@@ -388,7 +396,6 @@
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:label="APKMirror Downloader"
-            android:resizeableActivity="false"
             android:supportsPictureInPicture="false"
             android:theme="@style/ApkMirrorSplashTheme">
             <intent-filter>

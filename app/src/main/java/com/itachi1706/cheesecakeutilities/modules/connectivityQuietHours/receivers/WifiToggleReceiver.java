@@ -15,6 +15,8 @@ public class WifiToggleReceiver extends BaseBroadcastReceiver {
 
     private static final String TAG = "QuietHour-Wifi";
 
+    // TODO: No longer possible to do so since SDK 29 (Android 10). Migrate this to companion app if possible
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);

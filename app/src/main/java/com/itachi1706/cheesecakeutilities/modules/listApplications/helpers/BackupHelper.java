@@ -22,6 +22,8 @@ import java.io.OutputStream;
  * for com.itachi1706.cheesecakeutilities.modules.ListApplications in CheesecakeUtilities
  */
 public class BackupHelper {
+    // TODO: Migrate to SAF
+    // TODO: Get user to select folder to backup to basically
 
     public static boolean backupApk(String fileLocation, String apkFileName) throws IOException {
         if (!createFolder()) {

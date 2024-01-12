@@ -52,7 +52,7 @@ class UnicodeMenuAdapter(strings: List<String>) : RecyclerView.Adapter<UnicodeMe
         override fun onClick(v: View) {
             val clipboard = v.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = getClip()
-            clipboard.primaryClip = clip
+            clipboard.setPrimaryClip(clip)
             Toast.makeText(v.context, "${clip.getItemAt(0).text}\ncopied to clipboard", Toast.LENGTH_LONG).show()
         }
 

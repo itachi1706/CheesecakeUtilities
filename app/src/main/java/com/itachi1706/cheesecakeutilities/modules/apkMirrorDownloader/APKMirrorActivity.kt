@@ -151,7 +151,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
                         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         // Creates a new text clip to put on the clipboard
                         val clip = ClipData.newPlainText("log", e.toString())
-                        clipboard.primaryClip = clip
+                        clipboard.setPrimaryClip(clip)
                     }.show()
         }
     }
