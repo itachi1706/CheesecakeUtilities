@@ -69,7 +69,7 @@ jobs:
         GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
 
     - name: Build (Manual)
-      if: matrix.language.java
+      if: matrix.language == 'java'
       run: |
        chmod +x ./gradlew
        ./gradlew assemble
