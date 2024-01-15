@@ -28,7 +28,7 @@ updates:
       interval: "daily"
   # Maintain dependencies for Firebase
   - package-ecosystem: "npm"
-    directory: "/Cloud Functions/functions"
+    directory: "/firebase/functions"
     commit-message:
       prefix: "build"
       prefix-development: "chore"
