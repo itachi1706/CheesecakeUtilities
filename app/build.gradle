@@ -136,7 +136,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
     implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.google.zxing:core:3.5.2'
     // Lyric Finder
     implementation 'androidx.palette:palette-ktx:1.0.0'
     // Vehicle Mileage Tracker
