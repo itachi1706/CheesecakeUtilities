@@ -108,7 +108,7 @@ async function setRecord(ref, record, context) {
 // Calculate GPA/Score (Also need to make sure it does not activate twice lol)
 exports.calculateGpa = functions.database.ref('/gpacalc/users/{userid}/{institutionid}').onWrite(
     async (snapshot, context) => {
-        console.log("Async Function Version: 100720192006");
+        console.log("Async Function Version: 160120230058");
         console.log("Dep Versions listed below");
         console.log(process.versions);
         const checkToContinue = await admin.database().ref('/gpacalc/update/' + context.params.userid).once('value');
@@ -166,7 +166,7 @@ function processInstitution(institution, gradeTier) {
     });
     console.log("Institution Count and Credits: ", count, " | ", totalCredits);
     if (gradeTier.type == "count") {
-        institution.gpa = parseInt(count, 10) + "";
+        institution.gpa = String(parseInt(count, 10));
     } else if (totalCredits != 0) {
         var gpa = count / totalCredits;
         institution.fullgpa = gpa;
@@ -219,7 +219,7 @@ function processSemester(semester, gradeTier) {
     console.log("Semester Count and Credits: ", count, " | ", totalCredits);
     if (gradeTier.type == "count") {
         // Is count so we return the count only
-        semester.gpa = parseInt(count, 10) + "";
+        semester.gpa = String(parseInt(count, 10));
     } else if (totalCredits != 0) {
         var gpa = count / totalCredits; 
         semester.fullgpa = gpa;

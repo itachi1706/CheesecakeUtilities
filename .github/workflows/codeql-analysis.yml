@@ -21,7 +21,7 @@ jobs:
       matrix:
         # Override automatic language detection by changing the below list
         # Supported options are ['csharp', 'cpp', 'go', 'java', 'javascript', 'python']
-        language: [ 'java' ]
+        language: [ 'java', 'javascript' ]
         # Learn more...
         # https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#overriding-automatic-language-detection
 
@@ -69,6 +69,7 @@ jobs:
         GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
 
     - name: Build (Manual)
+      if: matrix.language == 'java'
       run: |
        chmod +x ./gradlew
        ./gradlew assemble
