@@ -53,6 +53,7 @@
         android:theme="@style/AppTheme"
 
         android:requestLegacyExternalStorage="true"
+        android:preserveLegacyExternalStorage="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <service
             android:name=".modules.toggle.services.QSPrivateDNSTileService"
