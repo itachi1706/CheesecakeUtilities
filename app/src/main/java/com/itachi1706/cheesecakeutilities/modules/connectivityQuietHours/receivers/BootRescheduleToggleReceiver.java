@@ -61,8 +61,8 @@ public class BootRescheduleToggleReceiver extends BaseBroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent connSI = new Intent(context, BluetoothToggleReceiver.class).putExtra("status", true);
         Intent connEI = new Intent(context, BluetoothToggleReceiver.class).putExtra("status", false);
-        PendingIntent connStartIntent = PendingIntent.getBroadcast(context, startIntent, connSI, 0);
-        PendingIntent connEndIntent = PendingIntent.getBroadcast(context, endIntent, connEI, 0);
+        PendingIntent connStartIntent = PendingIntent.getBroadcast(context, startIntent, connSI, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent connEndIntent = PendingIntent.getBroadcast(context, endIntent, connEI, PendingIntent.FLAG_IMMUTABLE);
         // Cancel all possible pending intents
         alarmManager.cancel(connStartIntent);
         alarmManager.cancel(connEndIntent);
@@ -134,7 +134,7 @@ public class BootRescheduleToggleReceiver extends BaseBroadcastReceiver {
                 .setAutoCancel(true)
                 .setGroup(NotificationHelper.NOTIFICATION_GROUP)
                 .setDeleteIntent(NotificationHelper.Companion.createDeleteIntent(context, NOTIFICATION_CANCEL, contentTitle))
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), 0));
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, ConnectivityQuietHoursActivity.class), PendingIntent.FLAG_IMMUTABLE));
         if (prefire) {
             mBuilder.setContentText("Pre-Fired " + state + " trigger on " + time);
         } else {

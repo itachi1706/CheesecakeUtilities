@@ -17,8 +17,9 @@
     <uses-permission
         android:name="android.permission.SYSTEM_ALERT_WINDOW"
         android:maxSdkVersion="25" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
@@ -78,6 +79,7 @@
         </service>
 
         <activity
+            android:exported="true"
             android:name=".modules.toggle.ToggleActivity"
             android:label="System Toggles">
             <intent-filter>
@@ -85,6 +87,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:exported="true"
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
@@ -133,6 +136,7 @@
             android:label="Disable Camera" />
 
         <receiver
+            android:exported="false"
             android:name=".CameraDisablerActivity$DeviceAdminReceiver"
             android:description="@string/camera_disable_desc"
             android:label="@string/camera_disable_device_admin_label"
@@ -159,6 +163,7 @@
             android:name=".modules.ordCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
         <activity
+            android:exported="false"
             android:name=".modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
             android:label="Configure ORD Event Countdown Widget">
             <intent-filter>
@@ -173,6 +178,7 @@
             tools:ignore="InnerclassSeparator" />
 
         <receiver
+            android:exported="false"
             android:name=".modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider"
             android:label="ORD Event Countdown"
             tools:ignore="InnerclassSeparator">
@@ -211,6 +217,7 @@
             android:theme="@style/LegacyLightThemeNoAppBar" />
 
         <service
+            android:exported="false"
             android:name=".modules.navbarCustomization.NavBarService"
             android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
@@ -276,13 +283,14 @@
         <receiver
             android:name=".modules.connectivityQuietHours.receivers.WifiToggleReceiver"
             android:enabled="true" />
-        <receiver android:name=".modules.connectivityQuietHours.receivers.DeleteNotificationIntent">
+        <receiver android:name=".modules.connectivityQuietHours.receivers.DeleteNotificationIntent" android:exported="false">
             <intent-filter>
                 <action android:name="subitem_cancelled" />
                 <action android:name="summary_cancelled" />
             </intent-filter>
         </receiver>
         <receiver
+            android:exported="false"
             android:name=".modules.connectivityQuietHours.receivers.BootRescheduleToggleReceiver"
             android:enabled="false">
             <intent-filter>
@@ -290,7 +298,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".CreateShortcuts">
+        <activity android:name=".CreateShortcuts" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -373,6 +381,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:launchMode" />
         <activity
+            android:exported="true"
             android:name=".modules.cepasReader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="CEPAS Reader"
@@ -392,6 +401,7 @@
             android:name=".modules.whoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
         <activity
+            android:exported="true"
             android:name=".modules.apkMirrorDownloader.APKMirrorActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
