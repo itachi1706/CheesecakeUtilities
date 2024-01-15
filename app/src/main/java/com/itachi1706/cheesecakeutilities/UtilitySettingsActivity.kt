@@ -19,7 +19,7 @@ class UtilitySettingsActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(android.R.id.content, UtilitySettingsFragment()).commit()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean { return if (item?.itemId == android.R.id.home) { finish(); true } else super.onOptionsItemSelected(item); }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean { return if (item?.itemId == android.R.id.home) { finish(); true } else super.onOptionsItemSelected(item); }
 
     /**
      * This fragment shows general preferences only. It is used when the

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.itachi1706.cheesecakeutilities">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- TODO: Verify if this actually need -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- TODO: Remove after BackupHelper no longer use -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:remove="android:maxSdkVersion" /> <!-- TODO: Remove the tools tag here when we officially no longer uses the storage permission with the migration to SAF -->
@@ -14,8 +17,9 @@
     <uses-permission
         android:name="android.permission.SYSTEM_ALERT_WINDOW"
         android:maxSdkVersion="25" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
@@ -38,6 +42,8 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
 
+    <!-- TODO: We have requestLegacyExternalStorage for now until we migrate to SAF -->
+<!--    android:preserveLegacyExternalStorage="true"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -45,6 +51,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+
+        android:requestLegacyExternalStorage="true"
+        android:preserveLegacyExternalStorage="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <service
             android:name=".modules.toggle.services.QSPrivateDNSTileService"
@@ -71,6 +80,7 @@
         </service>
 
         <activity
+            android:exported="true"
             android:name=".modules.toggle.ToggleActivity"
             android:label="System Toggles">
             <intent-filter>
@@ -78,6 +88,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:exported="true"
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
@@ -126,6 +137,7 @@
             android:label="Disable Camera" />
 
         <receiver
+            android:exported="false"
             android:name=".CameraDisablerActivity$DeviceAdminReceiver"
             android:description="@string/camera_disable_desc"
             android:label="@string/camera_disable_device_admin_label"
@@ -152,6 +164,7 @@
             android:name=".modules.ordCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
         <activity
+            android:exported="false"
             android:name=".modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
             android:label="Configure ORD Event Countdown Widget">
             <intent-filter>
@@ -166,6 +179,7 @@
             tools:ignore="InnerclassSeparator" />
 
         <receiver
+            android:exported="false"
             android:name=".modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider"
             android:label="ORD Event Countdown"
             tools:ignore="InnerclassSeparator">
@@ -204,6 +218,7 @@
             android:theme="@style/LegacyLightThemeNoAppBar" />
 
         <service
+            android:exported="false"
             android:name=".modules.navbarCustomization.NavBarService"
             android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
@@ -269,13 +284,14 @@
         <receiver
             android:name=".modules.connectivityQuietHours.receivers.WifiToggleReceiver"
             android:enabled="true" />
-        <receiver android:name=".modules.connectivityQuietHours.receivers.DeleteNotificationIntent">
+        <receiver android:name=".modules.connectivityQuietHours.receivers.DeleteNotificationIntent" android:exported="false">
             <intent-filter>
                 <action android:name="subitem_cancelled" />
                 <action android:name="summary_cancelled" />
             </intent-filter>
         </receiver>
         <receiver
+            android:exported="false"
             android:name=".modules.connectivityQuietHours.receivers.BootRescheduleToggleReceiver"
             android:enabled="false">
             <intent-filter>
@@ -283,7 +299,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".CreateShortcuts">
+        <activity android:name=".CreateShortcuts" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -366,6 +382,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:launchMode" />
         <activity
+            android:exported="true"
             android:name=".modules.cepasReader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="CEPAS Reader"
@@ -385,11 +402,11 @@
             android:name=".modules.whoisLookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
         <activity
+            android:exported="true"
             android:name=".modules.apkMirrorDownloader.APKMirrorActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:label="APKMirror Downloader"
-            android:resizeableActivity="false"
             android:supportsPictureInPicture="false"
             android:theme="@style/ApkMirrorSplashTheme">
             <intent-filter>

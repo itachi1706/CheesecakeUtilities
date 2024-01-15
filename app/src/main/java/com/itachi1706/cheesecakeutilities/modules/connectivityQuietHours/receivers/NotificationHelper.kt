@@ -41,7 +41,7 @@ internal class NotificationHelper private constructor() {
                     .setAutoCancel(true)
                     .setGroup(NOTIFICATION_GROUP)
                     .setDeleteIntent(createDeleteIntent(context, NOTIFICATION_CANCEL, contentTitle))
-                    .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, ConnectivityQuietHoursActivity::class.java), 0))
+                    .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, ConnectivityQuietHoursActivity::class.java), PendingIntent.FLAG_IMMUTABLE))
             val random = Random()
             if (lines == null) lines = ArrayList()
             if (summaryId == -9999) summaryId = random.nextInt()
@@ -84,7 +84,7 @@ internal class NotificationHelper private constructor() {
             del.action = action
             if (content != null) del.putExtra("data", content)
             val random = Random()
-            return PendingIntent.getBroadcast(context, random.nextInt(5000), del, PendingIntent.FLAG_CANCEL_CURRENT)
+            return PendingIntent.getBroadcast(context, random.nextInt(5000), del, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
     }
 }

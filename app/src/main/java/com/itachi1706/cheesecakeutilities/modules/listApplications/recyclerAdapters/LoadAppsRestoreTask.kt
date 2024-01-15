@@ -25,6 +25,7 @@ class LoadAppsRestoreTask(context: Context, private val callback: LoadAppsCallba
         fun complete(finalAdapter: RestoreAppsAdapter?)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
         val context = contextRef.get() ?: return null
         if (!BackupHelper.createFolder()) {
@@ -45,7 +46,8 @@ class LoadAppsRestoreTask(context: Context, private val callback: LoadAppsCallba
             LogHelper.d(TAG, "File: ${f.name}")
 
             val info = pm.getPackageArchiveInfo(f.absolutePath, PackageManager.GET_META_DATA)
-            info.applicationInfo.sourceDir = f.absolutePath
+            // TODO: Look into this (!!) and improve it as we cannot assure that the package name is not null
+            info!!.applicationInfo.sourceDir = f.absolutePath
             info.applicationInfo.publicSourceDir = f.absolutePath
 
             // Group into specifics
@@ -80,6 +82,7 @@ class LoadAppsRestoreTask(context: Context, private val callback: LoadAppsCallba
         return null
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPostExecute(result: Void?) {
         callback.complete(finalAdapter)
     }

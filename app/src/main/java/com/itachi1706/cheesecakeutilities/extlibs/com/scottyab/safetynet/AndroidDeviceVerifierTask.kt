@@ -23,6 +23,7 @@ class AndroidDeviceVerifierTask(private val apiKey: String, private val signatur
 
     private var error: Exception? = null
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Boolean {
 
         //LogHelper.d(TAG, "signatureToVerify:" + signatureToVerify)
@@ -69,6 +70,7 @@ class AndroidDeviceVerifierTask(private val apiKey: String, private val signatur
         return false
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPostExecute(aBoolean: Boolean) {
         if (error != null)
             callback.error(error!!.message)

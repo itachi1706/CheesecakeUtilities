@@ -141,8 +141,8 @@ public class ConnectivityQuietHoursActivity extends BaseModuleActivity {
     }
 
     private void toggleConnectivitySwitch(int startIntent, int endIntent, String name, SwitchCompat mSwitch, ConnectivityPeriod period, Class className) {
-        PendingIntent connStartIntent = PendingIntent.getBroadcast(this, startIntent, new Intent(this, className).putExtra("status", true), 0);
-        PendingIntent connEndIntent = PendingIntent.getBroadcast(this, endIntent, new Intent(this, className).putExtra("status", false), 0);
+        PendingIntent connStartIntent = PendingIntent.getBroadcast(this, startIntent, new Intent(this, className).putExtra("status", true), PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent connEndIntent = PendingIntent.getBroadcast(this, endIntent, new Intent(this, className).putExtra("status", false), PendingIntent.FLAG_IMMUTABLE);
         // Cancel all possible pending intents
         if (alarmManager == null) alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         assert alarmManager != null;

@@ -62,7 +62,7 @@ class BarcodeGraphic internal constructor(overlay: GraphicOverlay, // EXTRA METH
 
         // Renders the barcode at the bottom of the box.
         @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-        canvas.drawText(barcode.rawValue, rect.left, rect.bottom, barcodePaint)
+        canvas.drawText(barcode.rawValue.toString(), rect.left, rect.bottom, barcodePaint)
     }
 
     companion object {

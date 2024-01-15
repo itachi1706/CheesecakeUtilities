@@ -18,6 +18,7 @@ class CalendarHolidayTask(activity: ORDActivity, private val callback: CalendarH
         fun callback()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
         val activity = activityRef.get() ?: return null
         val url = "https://api.itachi1706.com/api/gcal_sg_holidays.php"

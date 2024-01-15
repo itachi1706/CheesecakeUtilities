@@ -1,26 +1,24 @@
 name: Android CI
 
-on: [push,pull_request,pull_request_target]
+on: [push,pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     name: Android Compilation Test
     runs-on: ubuntu-latest
-    if: (github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]') || (github.event_name != 'pull_request_target' && github.actor != 'dependabot[bot]')
     steps:
     - name: Checkout Repository
-      if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v3
-    - name: Checkout Repository PR
-      if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - name: set up JDK 8
+      uses: actions/checkout@v4.1.1
+    - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
-        distribution: 'adopt'
-        java-version: 8
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'gradle'
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json
@@ -34,30 +32,36 @@ jobs:
     #  run: ./gradlew clean
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Move APK file to main folder
+      run: mv ./app/build/outputs/apk/debug/app-debug.apk ./CheesecakeUtilities-debug.apk
+    - uses: actions/upload-artifact@v4
+      with:
+        name: CheesecakeUtilities-debug-apk
+        path: ./CheesecakeUtilities-debug.apk
   device-test:
     runs-on: macos-latest
     name: Android Device Test Runner
-    if: (github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]') || (github.event_name != 'pull_request_target' && github.actor != 'dependabot[bot]')
+    if: github.event_name != 'pull_request' && github.ref != 'refs/heads/master' && !startsWith(github.ref, 'refs/tags/') && github.actor != 'dependabot[bot]'
     steps:
     - name: Checkout Repository
-      if: ${{ github.event_name != 'pull_request_target' }}
-      uses: actions/checkout@v3
-    - name: Checkout Repository PR
-      if: ${{ github.event_name == 'pull_request_target' }}
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
+      uses: actions/checkout@v4.1.1
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json
         echo $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
       env:
         GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
-        GMAPS_KEY: ${{ secrets.GMAPS_KEY }} 
+        GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
     - name: Make Gradle executable
       run: chmod +x gradlew
     - name: List Available Android Devices
       run: $ANDROID_HOME/tools/bin/avdmanager list
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'gradle'
     #- name: Clean Gradle (DO NOT USE ALL THE TIME)
     #  run: ./gradlew clean
     - name: run tests
@@ -68,6 +72,42 @@ jobs:
         profile: 'pixel_xl'
         arch: x86_64
         script: ./gradlew connectedAndroidTest
+  device-test-full:
+    runs-on: macos-latest
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
+    name: Test run on all Android Devices
+    strategy:
+      fail-fast: true
+      matrix:
+        api-level: [ 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33 ]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+      - name: Copy secure values
+        run: |
+          echo $GOOGLE_SERVICES > ./app/google-services.json
+          echo $GMAPS_KEY > ./app/src/main/res/values/google_maps_api.xml
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+          GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+      - name: List Available Android Devices
+        run: $ANDROID_HOME/tools/bin/avdmanager list
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'gradle'
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2.23.0
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          profile: 'pixel_xl'
+          arch: x86_64
+          script: ./gradlew connectedAndroidTest
   release:
     name: Release APK file
     if: startsWith(github.ref, 'refs/tags/')
@@ -76,11 +116,12 @@ jobs:
     - uses: actions/checkout@v3
       with:
         token: ${{ secrets.GH_PAT }}
-    - name: set up JDK 8
+    - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
-        distribution: 'adopt'
-        java-version: 8
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'gradle'
     - name: Copy secure values
       run: |
         echo $GOOGLE_SERVICES > ./app/google-services.json

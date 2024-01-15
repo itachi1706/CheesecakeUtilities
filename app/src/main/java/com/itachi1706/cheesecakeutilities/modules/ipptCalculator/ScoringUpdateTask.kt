@@ -18,6 +18,7 @@ class ScoringUpdateTask(activity: Activity, private var callback: ScoringCallbac
         fun updateResults(results: List<String>)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Int?): Void? {
         if (params.size < 3) return null
         val ageGroup = params[0]!!

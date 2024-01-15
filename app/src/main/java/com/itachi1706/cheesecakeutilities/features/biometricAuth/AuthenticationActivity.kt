@@ -45,6 +45,7 @@ class AuthenticationActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == INTENT_AUTH_SL) {
             if (resultCode == Activity.RESULT_OK) authenticatedMessage()

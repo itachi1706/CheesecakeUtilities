@@ -24,6 +24,7 @@ class LoadAppListTask(activity: Activity, private val callback: LoadAppCallback,
         fun complete(appCount: String = "", appPackageNameInstall: List<String>, appPackageNameClean: List<String>, finalAdapter: AppsAdapter)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Boolean?): Void? {
         if (params.isEmpty()) return null
         val system = params[0]!!

@@ -28,7 +28,7 @@ public class SensorsFragment extends Fragment {
         ArrayList<String> items = new ArrayList<>();
         for (Sensor s : sensorList) {
             String item = s.getName() + ": " + s.getVendor();
-            if (!item.equals(BuildConfig.FLAVOR)) {
+            if (!item.equals("")) {
                 items.add(item);
             }
         }

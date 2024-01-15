@@ -10,6 +10,7 @@ class PageAsync : AsyncTask<String, Int, Int>() {
 
     var response: AsyncResponse? = null
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg url: String): Int? {
         return try {
             val doc = Jsoup.connect(url[0]).get()
@@ -22,6 +23,7 @@ class PageAsync : AsyncTask<String, Int, Int>() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPostExecute(result: Int?) {
         if (result != null)
             response!!.onProcessFinish(result)

@@ -236,6 +236,7 @@ object BarcodeHelper {
                 Toast.makeText(context, "Launching SMS application to send to ${barcode.sms?.phoneNumber}", Toast.LENGTH_LONG).show()
             }
             FirebaseVisionBarcode.TYPE_WIFI -> {
+                // TODO: To migrate https://developer.android.com/about/versions/10/privacy/changes#configure-wifi
                 // Add WiFi Network and auto connect
                 val wifiConfiguration = WifiConfiguration()
                 wifiConfiguration.SSID = "\"${barcode.wifi?.ssid}\""
@@ -273,7 +274,7 @@ object BarcodeHelper {
                 val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
                 clipboard?.let {
                     val clip = ClipData.newPlainText("driverLicense", barcode.driverLicense?.licenseNumber)
-                    it.primaryClip = clip
+                    it.setPrimaryClip(clip)
                     Toast.makeText(context, "Driver License copied to clipboard", Toast.LENGTH_LONG).show()
                 }
             }

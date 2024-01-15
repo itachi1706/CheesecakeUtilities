@@ -59,13 +59,13 @@ public class GpuFragment extends Fragment {
         ((TextView) view.findViewById(R.id.gpuInfoTxt)).setText(getGpuInfo());
         ((TextView) view.findViewById(R.id.gpuExtensionsTxt)).setText(getGpuExtensions());
         TextView getMaxGPUClock = view.findViewById(R.id.getMaxGPUClock);
-        if (getMaxGPUClock().equalsIgnoreCase(BuildConfig.FLAVOR)) {
+        if (getMaxGPUClock().equalsIgnoreCase("")) {
             getMaxGPUClock.setVisibility(View.GONE);
         } else {
             getMaxGPUClock.setText(getString(R.string.sys_info_gpu_clock_max_adreno, getMaxGPUClock()));
         }
         TextView getMaxGPUClock1 = view.findViewById(R.id.getMaxGPUClock1);
-        if (getMaxGPUClock1().equalsIgnoreCase(BuildConfig.FLAVOR)) {
+        if (getMaxGPUClock1().equalsIgnoreCase("")) {
             getMaxGPUClock1.setVisibility(View.GONE);
         } else {
             getMaxGPUClock1.setText(getString(R.string.sys_info_gpu_clock_max_mali, getMaxGPUClock1()));
@@ -82,11 +82,11 @@ public class GpuFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getGPUClock = getActivity().findViewById(R.id.getGPUClock);
-        if (getGPUClock().equalsIgnoreCase(BuildConfig.FLAVOR)) {
+        if (getGPUClock().equalsIgnoreCase("")) {
             getGPUClock.setVisibility(View.GONE);
         }
         getGPUClock1 = getActivity().findViewById(R.id.getGPUClock1);
-        if (getGPUClock1().equalsIgnoreCase(BuildConfig.FLAVOR)) {
+        if (getGPUClock1().equalsIgnoreCase("")) {
             getGPUClock1.setVisibility(View.GONE);
         }
         this.mHandler.sendEmptyMessageDelayed(EVENT_TICK, 1000);
@@ -122,9 +122,9 @@ public class GpuFragment extends Fragment {
             err_gpu_clock_count++;
         }
         if (freq == null) {
-            return BuildConfig.FLAVOR;
+            return "";
         }
-        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) / 1000000))) + getString(R.string.sys_info_gpu_mhz);
+        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", "")) / 1000000))) + getString(R.string.sys_info_gpu_mhz);
     }
 
     private String getMaxGPUClock() {
@@ -135,9 +135,9 @@ public class GpuFragment extends Fragment {
             LogHelper.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
         }
         if (freq == null) {
-            return BuildConfig.FLAVOR;
+            return "";
         }
-        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)) / 1000000))) + getString(R.string.sys_info_gpu_mhz);
+        return String.valueOf((long) Math.round((float) (Integer.parseInt(freq.replaceAll("[^\\d.]", "")) / 1000000))) + getString(R.string.sys_info_gpu_mhz);
     }
 
     private String getGPUClock1() {
@@ -152,9 +152,9 @@ public class GpuFragment extends Fragment {
             err_gpu_clock1_count++;
         }
         if (freq == null) {
-            return BuildConfig.FLAVOR;
+            return "";
         }
-        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)))) + getString(R.string.sys_info_gpu_mhz);
+        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", "")))) + getString(R.string.sys_info_gpu_mhz);
     }
 
     private String getMaxGPUClock1() {
@@ -165,8 +165,8 @@ public class GpuFragment extends Fragment {
             LogHelper.e("GPU-READ", "Error reading file: " + ex.getLocalizedMessage());
         }
         if (freq == null) {
-            return BuildConfig.FLAVOR;
+            return "";
         }
-        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", BuildConfig.FLAVOR)))) + getString(R.string.sys_info_gpu_mhz);
+        return String.valueOf((long) Math.round((float) Integer.parseInt(freq.replaceAll("[^\\d.]", "")))) + getString(R.string.sys_info_gpu_mhz);
     }
 }

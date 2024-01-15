@@ -151,7 +151,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
                         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         // Creates a new text clip to put on the clipboard
                         val clip = ClipData.newPlainText("log", e.toString())
-                        clipboard.primaryClip = clip
+                        clipboard.setPrimaryClip(clip)
                     }.show()
         }
     }
@@ -201,6 +201,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
         super.onStop()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         webView!!.onActivityResult(requestCode, resultCode, data)
@@ -216,6 +217,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
         webView!!.restoreState(savedInstanceState)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (webView != null && webView!!.url == APKMIRROR_UPLOAD_URL) navigation!!.selectedItemId = R.id.navigation_home // Go back to main
         else if (webView != null && webView!!.url == APKMIRROR_URL) super.onBackPressed() // Base URL so lets exit
@@ -321,16 +323,16 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
 
     private fun setupNFC(url: String) {
         if (nfcAdapter != null) { // in case there is no NFC
-            try {
-                // create an NDEF message containing the current URL:
-                val rec = NdefRecord.createUri(url) // url: current URL (String or Uri)
-                val ndef = NdefMessage(rec)
-                // make it available via Android Beam:
-                nfcAdapter!!.setNdefPushMessage(ndef, this, this)
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
-            }
-
+            // TODO: NDEF is removed in API 34, remove functionality
+//            try {
+//                // create an NDEF message containing the current URL:
+//                val rec = NdefRecord.createUri(url) // url: current URL (String or Uri)
+//                val ndef = NdefMessage(rec)
+//                // make it available via Android Beam:
+//                nfcAdapter!!.setNdefPushMessage(ndef, this, this)
+//            } catch (e: IllegalStateException) {
+//                e.printStackTrace()
+//            }
         }
     }
 

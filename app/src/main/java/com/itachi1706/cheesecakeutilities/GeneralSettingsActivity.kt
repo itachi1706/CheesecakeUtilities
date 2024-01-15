@@ -31,7 +31,7 @@ class GeneralSettingsActivity : AppCompatActivity() {
                 .commit()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean { return if (item?.itemId == android.R.id.home) { finish(); true } else super.onOptionsItemSelected(item); }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean { return if (item?.itemId == android.R.id.home) { finish(); true } else super.onOptionsItemSelected(item); }
 
     class GeneralPreferenceFragment : EasterEggResMultiMusicPrefFragment() {
 

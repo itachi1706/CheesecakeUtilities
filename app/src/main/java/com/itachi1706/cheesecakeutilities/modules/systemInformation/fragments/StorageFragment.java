@@ -193,7 +193,7 @@ public class StorageFragment extends Fragment {
     }
 
     private static String extRemovablePath() {
-        String sdcardPath = BuildConfig.FLAVOR;
+        String sdcardPath = "";
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("mount").getInputStream()));
             while (true) {

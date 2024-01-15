@@ -96,7 +96,7 @@ public class NetworkFragment extends Fragment {
                     if (intf.getName().equalsIgnoreCase(interfaceName)) {
                         byte[] mac = intf.getHardwareAddress();
                         if (mac == null) {
-                            return BuildConfig.FLAVOR;
+                            return "";
                         }
                         StringBuilder buf = new StringBuilder();
                         for (byte aMac : mac) {
