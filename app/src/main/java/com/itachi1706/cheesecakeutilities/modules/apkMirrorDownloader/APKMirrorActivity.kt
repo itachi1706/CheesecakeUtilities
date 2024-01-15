@@ -217,6 +217,7 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
         webView!!.restoreState(savedInstanceState)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (webView != null && webView!!.url == APKMIRROR_UPLOAD_URL) navigation!!.selectedItemId = R.id.navigation_home // Go back to main
         else if (webView != null && webView!!.url == APKMIRROR_URL) super.onBackPressed() // Base URL so lets exit

@@ -26,6 +26,7 @@ class InstallAppTask(activity: Activity, val packageName: String) : AsyncTask<Vo
 
     private val activityRef = WeakReference(activity)
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): File? {
         val activity = activityRef.get() ?: return null
         val url = "${CommonVariables.BASE_API_URL}appupdatechecker.php?action=androidgetlatesturl&packagename=$packageName"
@@ -77,6 +78,7 @@ class InstallAppTask(activity: Activity, val packageName: String) : AsyncTask<Vo
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPostExecute(result: File?) {
         val activity = activityRef.get() ?: return
         if (result == null) {

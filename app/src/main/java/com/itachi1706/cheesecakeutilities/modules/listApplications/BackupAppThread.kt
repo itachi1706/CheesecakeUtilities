@@ -17,6 +17,7 @@ class BackupAppThread(private val dialog: ProgressDialog, private val shareApk: 
 
     val activityRef = WeakReference(activity)
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: String?): Void? {
         if (params.size < 3) return null
         val appName = params[0]

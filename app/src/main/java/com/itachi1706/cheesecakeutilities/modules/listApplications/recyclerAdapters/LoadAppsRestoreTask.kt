@@ -25,6 +25,7 @@ class LoadAppsRestoreTask(context: Context, private val callback: LoadAppsCallba
         fun complete(finalAdapter: RestoreAppsAdapter?)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Void?): Void? {
         val context = contextRef.get() ?: return null
         if (!BackupHelper.createFolder()) {
@@ -81,6 +82,7 @@ class LoadAppsRestoreTask(context: Context, private val callback: LoadAppsCallba
         return null
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPostExecute(result: Void?) {
         callback.complete(finalAdapter)
     }

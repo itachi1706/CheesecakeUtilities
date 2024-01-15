@@ -232,6 +232,7 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
         updateScoring(callback)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack()
         else super.onBackPressed()
