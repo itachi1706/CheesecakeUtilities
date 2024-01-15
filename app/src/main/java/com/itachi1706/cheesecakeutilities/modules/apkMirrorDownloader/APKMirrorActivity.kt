@@ -322,16 +322,16 @@ class APKMirrorActivity : BaseActivity(), AdvancedWebView.Listener, AsyncRespons
 
     private fun setupNFC(url: String) {
         if (nfcAdapter != null) { // in case there is no NFC
-            try {
-                // create an NDEF message containing the current URL:
-                val rec = NdefRecord.createUri(url) // url: current URL (String or Uri)
-                val ndef = NdefMessage(rec)
-                // make it available via Android Beam:
-                nfcAdapter!!.setNdefPushMessage(ndef, this, this)
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
-            }
-
+            // TODO: NDEF is removed in API 34, remove functionality
+//            try {
+//                // create an NDEF message containing the current URL:
+//                val rec = NdefRecord.createUri(url) // url: current URL (String or Uri)
+//                val ndef = NdefMessage(rec)
+//                // make it available via Android Beam:
+//                nfcAdapter!!.setNdefPushMessage(ndef, this, this)
+//            } catch (e: IllegalStateException) {
+//                e.printStackTrace()
+//            }
         }
     }
 

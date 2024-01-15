@@ -14,13 +14,13 @@ def isTravis = System.getenv("TRAVIS")
 def isGHActions = System.getenv("GITHUB_ACTIONS") ?: false
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     namespace 'com.itachi1706.cheesecakeutilities'
 
     defaultConfig {
         applicationId "com.itachi1706.cheesecakeutilities"
         minSdkVersion 19
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1291
         versionName "4.10.0"
         vectorDrawables.useSupportLibrary = true
