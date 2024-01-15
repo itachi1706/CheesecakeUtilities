@@ -148,7 +148,7 @@ dependencies {
     implementation 'com.itachi1706.cepaslib:cepaslib:2.2.0'
     // APKMirror Downloader
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1' //WebView
-    implementation 'org.jsoup:jsoup:1.13.1' //HTML Parser
+    implementation 'org.jsoup:jsoup:1.17.2' //HTML Parser
     // GPA Calculator
     implementation 'org.greenrobot:eventbus:3.2.0'
     // Unicode Emoticon
