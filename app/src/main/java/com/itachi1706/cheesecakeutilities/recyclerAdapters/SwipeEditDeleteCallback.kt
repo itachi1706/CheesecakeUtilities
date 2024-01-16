@@ -19,7 +19,7 @@ class SwipeEditDeleteCallback(var callback: ISwipeCallback, var context: Context
     private val deleteBackground: Int = Color.RED
     private val iconColor: Paint = Paint().apply { color = Color.WHITE; colorFilter = PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP) }
     private val editBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_edit)!!
-    private val deleteBitmap: Bitmap = BitmapUtil.getBitmap(context, R.drawable.ic_delete_24dp)!!
+    private val deleteBitmap: Bitmap = BitmapUtil.getBitmap(context, com.itachi1706.cepaslib.R.drawable.ic_delete_24dp)!!
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { return false }
 

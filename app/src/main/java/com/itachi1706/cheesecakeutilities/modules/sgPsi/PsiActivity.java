@@ -69,7 +69,7 @@ public class PsiActivity extends BaseModuleActivity {
 
         legend.setOnClickListener(v -> {
             new AlertDialog.Builder(this).setView(R.layout.dialog_psi_legend).setTitle("Legend")
-                    .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                    .setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
         });
     }
 

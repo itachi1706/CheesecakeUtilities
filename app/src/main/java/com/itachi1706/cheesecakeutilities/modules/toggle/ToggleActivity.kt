@@ -46,7 +46,7 @@ class ToggleActivity : BaseModuleActivity() {
         binding.toggleHowPrivateDns.setOnClickListener {
             AlertDialog.Builder(this).setTitle("How to grant permission")
                     .setMessage("To toggle Private DNS, we require the WRITE_SECURE_SETTINGS permission. Hence we need to execute the following command to be ran on ADB\n\n$permissionStr")
-                    .setPositiveButton(android.R.string.ok, null).setNegativeButton(R.string.share) { _,_ ->
+                    .setPositiveButton(android.R.string.ok, null).setNegativeButton(com.itachi1706.cepaslib.R.string.share) { _, _ ->
                         val shareIntent = Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_TEXT, permissionStr) }
                         startActivity(Intent.createChooser(shareIntent, "Share Command"))
                     }.show()
@@ -59,7 +59,7 @@ class ToggleActivity : BaseModuleActivity() {
         if (!hasStuffOnScreen()) {
             AlertDialog.Builder(this).setTitle("Incompatible Android Version")
                     .setMessage("System Toggles are only available for devices on Android 9.0 Pie and above and is currently incompatible compatible with your device")
-                    .setCancelable(false).setPositiveButton(R.string.dialog_action_positive_close) { _, _ -> finish() }.show()
+                    .setCancelable(false).setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close) { _, _ -> finish() }.show()
             return // Do not process anything else
         }
 

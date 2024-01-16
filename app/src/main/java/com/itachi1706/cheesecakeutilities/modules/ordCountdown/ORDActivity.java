@@ -299,7 +299,7 @@ public class ORDActivity extends BaseModuleActivity implements CalendarHolidayTa
                 b.append("\nLast Updated: ").append(VehMileageFirebaseUtils.Companion.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
                 b.append("\nServer Cached Data: ").append(holiday.isCache());
                 new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
-                        .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)
+                        .setMessage(b.toString().trim()).setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null)
                         .setNeutralButton("Refresh", (dialog, which) -> {
                             new CalendarHolidayTask(this, this).execute();
                             Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();

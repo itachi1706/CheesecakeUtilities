@@ -34,7 +34,7 @@ class FanfictionReaderRedirectApp : AppCompatActivity() {
         AlertDialog.Builder(this).setTitle("Fanfiction Reader App not installed")
                 .setMessage("The Fanfiction Reader app is not installed on this device")
                 .setNegativeButton(android.R.string.cancel) { _,_ -> finish() }
-                .setPositiveButton(R.string.install) { _, _ ->
+                .setPositiveButton(com.itachi1706.appupdater.R.string.install) { _, _ ->
                     Toast.makeText(this, "Downloading app... This may take a while...", Toast.LENGTH_LONG).show()
                     InstallAppTask(this, "com.itachi1706.fanfictionnetreader").execute()
                 }.show()

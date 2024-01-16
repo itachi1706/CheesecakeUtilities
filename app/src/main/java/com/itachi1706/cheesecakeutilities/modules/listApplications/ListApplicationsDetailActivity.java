@@ -520,7 +520,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                             + "\n\nCertificate Fingerprints:\nMD5: "
                             + bytesToHex(MessageDigest.getInstance("MD5").digest(sigCert)) + "\nSHA1: " + this.signature
                             + "\nSHA256: " + bytesToHex(MessageDigest.getInstance("SHA256").digest(sigCert)))
-                    .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                    .setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
         } catch (CertificateException e) {
             Toast.makeText(this, "Unable to create certificate information screen", Toast.LENGTH_SHORT).show();
         } catch (NoSuchAlgorithmException e) {

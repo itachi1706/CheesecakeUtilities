@@ -157,7 +157,7 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
 
         new AlertDialog.Builder(this).setTitle("IPPT Score")
                 .setMessage(message.toString())
-                .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                .setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
 
     }
 

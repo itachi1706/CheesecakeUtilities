@@ -258,7 +258,7 @@ public class ListApplicationFragment extends Fragment {
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle("Application List")
-                    .setMessage(fileOrCsv).setNeutralButton(R.string.dialog_action_positive_close, null)
+                    .setMessage(fileOrCsv).setNeutralButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null)
                     .setNegativeButton("Copy", (dialog12, which12) -> {
                         assert getActivity() != null;
                         ClipboardManager manager = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);

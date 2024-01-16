@@ -172,7 +172,7 @@ public class VehicleMileageRecordsAdapter extends RecyclerView.Adapter<VehicleMi
             message += "Training Mileage: " + ((r.getTrainingMileage()) ? "true" : "false") + "\n";
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Mileage Record")
-                    .setMessage(message).setPositiveButton(R.string.dialog_action_positive_close, null)
+                    .setMessage(message).setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null)
                     .setNeutralButton("Delete", (dialog, which) -> {
                                 SharedPreferences sp = PrefHelper.getDefaultSharedPreferences(v.getContext());
                                 DatabaseReference ref = VehMileageFirebaseUtils.getVehicleMileageDatabase().child(FB_REC_USER)
