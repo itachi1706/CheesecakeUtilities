@@ -5,7 +5,6 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
-def isTravis = System.getenv("TRAVIS")
 def isGHActions = System.getenv("GITHUB_ACTIONS") ?: false
 
 android {
@@ -30,12 +29,10 @@ android {
     }
 
     installation {
-        installOptions '-d', '-t'
         timeOutInMs 10 * 60 * 1000
     }
     lint {
-//        abortOnError !isGHActions
-        abortOnError false
+        abortOnError !isGHActions
     }
 
     compileOptions {
@@ -80,15 +77,6 @@ android {
             firebaseCrashlytics { mappingFileUploadEnabled false } // Disabled mapping file uploading for DEBUG builds
             multiDexEnabled true
         }
-    }
-
-    // This enables long timeouts required on slow environments, e.g. Travis
-    dexOptions {
-        preDexLibraries = !(isTravis || isGHActions)
-    }
-
-    buildFeatures {
-        viewBinding true
     }
 }
 
