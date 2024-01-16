@@ -37,8 +37,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.databinding.FragmentCamera2BasicBinding
 import com.itachi1706.helperlib.helpers.LogHelper
-import kotlinx.android.synthetic.main.fragment_camera2_basic.*
 import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
@@ -96,20 +96,30 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
         override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) { process() }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_camera2_basic, container, false)
+    private var _binding: FragmentCamera2BasicBinding? = null
+    private val binding get() = _binding!!
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentCamera2BasicBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        flash.setOnClickListener(this)
-        info.setOnClickListener(this)
-        switch_cam.setOnClickListener(this)
+        binding.flash.setOnClickListener(this)
+        binding.info.setOnClickListener(this)
+        binding.switchCam.setOnClickListener(this)
     }
 
     override fun onResume() {
         super.onResume()
         startBackgroundThread()
 
-        if (texture.isAvailable) openCamera(texture.width, texture.height)
-        else texture.surfaceTextureListener = surfaceTextureListener
+        if (binding.texture.isAvailable) openCamera(binding.texture.width, binding.texture.height)
+        else binding.texture.surfaceTextureListener = surfaceTextureListener
     }
 
     override fun onPause() {
@@ -185,9 +195,9 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
 
         // We fit the aspect ratio of TextureView to the size of preview we picked.
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            texture.setAspectRatio(previewSize.width, previewSize.height)
+            binding.texture.setAspectRatio(previewSize.width, previewSize.height)
         } else {
-            texture.setAspectRatio(previewSize.height, previewSize.width)
+            binding.texture.setAspectRatio(previewSize.height, previewSize.width)
         }
 
         // Check if the flash is supported.
@@ -216,7 +226,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
             setupCam(manager, cid, width, height, false)
             this.cameraId = cid
         }
-        flash.isEnabled = flashSupported // If camera has flash
+        binding.flash.isEnabled = flashSupported // If camera has flash
         configureTransform(width, height)
         try {
             // Wait for camera to open - 2.5 seconds is sufficient
@@ -263,7 +273,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
 
     private fun createCameraPreviewSession() {
         try {
-            val texture = texture.surfaceTexture
+            val texture = binding.texture.surfaceTexture
             texture?.setDefaultBufferSize(previewSize.width, previewSize.height) // We configure the size of default buffer to be the size of camera preview we want.
             val surface = Surface(texture) // This is the output Surface we need to start preview.
 
@@ -313,7 +323,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
         } else if (Surface.ROTATION_180 == rotation) {
             matrix.postRotate(180f, centerX, centerY)
         }
-        texture.setTransform(matrix)
+        binding.texture.setTransform(matrix)
     }
 
     private fun toggleFlash() {
@@ -397,7 +407,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.On
     private fun switchCam(newCam: String) {
         LogHelper.i(TAG, "Switching Camera View from ${this.cameraId} to $newCam")
         closeCamera()
-        openCamera(texture.width, texture.height, newCam)
+        openCamera(binding.texture.width, binding.texture.height, newCam)
     }
 
     private fun setAutoFlash(requestBuilder: CaptureRequest.Builder) {

@@ -9,24 +9,26 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.databinding.ActivityViewpagerFragBinding
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.fragments.BarcodeHistoryFragment
 import com.itachi1706.helperlib.helpers.PrefHelper
-import kotlinx.android.synthetic.main.activity_viewpager_frag.*
 
 class BarcodeHistoryActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityViewpagerFragBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_viewpager_frag)
-        setSupportActionBar(toolbar)
+        binding = ActivityViewpagerFragBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        tab_layout.tabMode = TabLayout.MODE_FIXED
-        tab_layout.tabGravity = TabLayout.GRAVITY_FILL
-        view_pager.adapter = BarcodeHistoryTabAdapter(this)
+        binding.tabLayout.tabMode = TabLayout.MODE_FIXED
+        binding.tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        binding.viewPager.adapter = BarcodeHistoryTabAdapter(this)
 
         val tabs = arrayOf("Scanned", "Generated")
-        TabLayoutMediator(tab_layout, view_pager) { tab, position -> tab.text = tabs[position] }.attach()
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position -> tab.text = tabs[position] }.attach()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

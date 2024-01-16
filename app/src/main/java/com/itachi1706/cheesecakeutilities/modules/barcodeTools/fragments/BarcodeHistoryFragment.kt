@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.databinding.FragmentRecyclerViewBinding
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHelper
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.BarcodeHistoryRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHistory
@@ -20,7 +20,6 @@ import com.itachi1706.cheesecakeutilities.modules.barcodeTools.objects.BarcodeHi
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.StringRecyclerAdapter
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.helpers.PrefHelper
-import kotlinx.android.synthetic.main.fragment_recycler_view.*
 
 /**
  * Created by Kenneth on 15/1/2020.
@@ -38,23 +37,32 @@ class BarcodeHistoryFragment : Fragment() {
         LogHelper.d(TAG, "History Str: $historyString")
     }
 
+    private var _binding: FragmentRecyclerViewBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_recycler_view, container, false)
+        _binding = FragmentRecyclerViewBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        main_menu_recycler_view.setHasFixedSize(true)
+        binding.mainMenuRecyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(context)
-        main_menu_recycler_view.layoutManager = linearLayoutManager
-        main_menu_recycler_view.itemAnimator = DefaultItemAnimator()
+        binding.mainMenuRecyclerView.layoutManager = linearLayoutManager
+        binding.mainMenuRecyclerView.itemAnimator = DefaultItemAnimator()
 
         val gson = Gson()
         val listType = if (bcType == BarcodeHelper.SP_BARCODE_SCANNED) object : TypeToken<java.util.ArrayList<BarcodeHistoryScan>>() {}.type
             else object : TypeToken<java.util.ArrayList<BarcodeHistoryGen>>() {}.type
         val list: ArrayList<BarcodeHistory> = if (historyString.isNotEmpty()) gson.fromJson(historyString, listType) else ArrayList()
         val adapter = if (list.isNotEmpty()) BarcodeHistoryRecyclerAdapter(list, rvCallback) else StringRecyclerAdapter(arrayOf("No barcodes in history"), false)
-        main_menu_recycler_view.adapter = adapter
+        binding.mainMenuRecyclerView.adapter = adapter
     }
 
     private val rvCallback = object:BarcodeHistoryRecyclerAdapter.Callbacks {

@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
 }
@@ -26,9 +25,9 @@ android {
         resValue "string", "tray__authority", "${applicationId}.tray"
         resourceConfigurations += ['en']
     }
-//    buildFeatures {
-//        viewBinding true
-//    }
+    buildFeatures {
+        viewBinding true
+    }
 
     installation {
         installOptions '-d', '-t'

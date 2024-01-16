@@ -7,27 +7,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
-import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.databinding.ActivityLinearRecyclerviewBinding
+import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
+import com.itachi1706.cheesecakeutilities.objects.DualLineString
 import com.itachi1706.cheesecakeutilities.recyclerAdapters.DualLineStringRecyclerAdapter
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
 import com.itachi1706.helperlib.helpers.LogHelper
-import com.itachi1706.cheesecakeutilities.objects.DualLineString
-import kotlinx.android.synthetic.main.activity_linear_recyclerview.*
 
 class ScoringActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityLinearRecyclerviewBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_linear_recyclerview)
+        binding = ActivityLinearRecyclerviewBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        recycler_view.setHasFixedSize(true)
+        binding.recyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        recycler_view.layoutManager = linearLayoutManager
-        recycler_view.itemAnimator = DefaultItemAnimator()
+        binding.recyclerView.layoutManager = linearLayoutManager
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
     }
 
     override fun onResume() {
@@ -68,7 +72,7 @@ class ScoringActivity : AppCompatActivity() {
                     }
                     AlertDialog.Builder(view.context).setTitle(score.name).setMessage(sb.toString()).setPositiveButton(R.string.dialog_action_positive_close, null).show()
                 }
-                recycler_view.adapter = adapter
+                binding.recyclerView.adapter = adapter
             }
         })
     }

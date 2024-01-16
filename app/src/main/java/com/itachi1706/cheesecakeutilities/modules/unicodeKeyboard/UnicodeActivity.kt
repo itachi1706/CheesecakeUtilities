@@ -7,8 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
-import com.itachi1706.cheesecakeutilities.R
-import kotlinx.android.synthetic.main.activity_viewpager_frag.*
+import com.itachi1706.cheesecakeutilities.databinding.ActivityViewpagerFragBinding
 
 class UnicodeActivity : BaseModuleActivity() {
     override val helpDescription: String
@@ -18,14 +17,17 @@ class UnicodeActivity : BaseModuleActivity() {
             return message
         }
 
+    private lateinit var binding: ActivityViewpagerFragBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_viewpager_frag)
-        setSupportActionBar(toolbar)
+        binding = ActivityViewpagerFragBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        view_pager.adapter = UnicodeTabAdapter(this)
+        binding.viewPager.adapter = UnicodeTabAdapter(this)
 
-        TabLayoutMediator(tab_layout, view_pager) { tab, position -> tab.text = tabs[position] }.attach()
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position -> tab.text = tabs[position] }.attach()
     }
 
     class UnicodeTabAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
