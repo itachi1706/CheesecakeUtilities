@@ -3,7 +3,6 @@ package com.itachi1706.cheesecakeutilities.modules.gpaCalculator
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -11,15 +10,12 @@ import android.widget.DatePicker
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
+import com.itachi1706.cheesecakeutilities.databinding.ActivityGpaCalculatorAddInstitutionBinding
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
-import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
 import com.itachi1706.helperlib.helpers.LogHelper
-import kotlinx.android.synthetic.main.activity_gpa_calculator_add_institution.*
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.util.Calendar
 
 class AddInstitutionActivity : AddActivityBase() {
 
@@ -32,27 +28,31 @@ class AddInstitutionActivity : AddActivityBase() {
 
     private lateinit var startListener: DatePickerDialog.OnDateSetListener
     private lateinit var endListener: DatePickerDialog.OnDateSetListener
+    
+    private lateinit var binding: ActivityGpaCalculatorAddInstitutionBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gpa_calculator_add_institution)
+        binding = ActivityGpaCalculatorAddInstitutionBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         startListener = InstituteDateCallback(START_INSTITUTE)
         endListener = InstituteDateCallback(END_INSTITUTE)
-        fromDate.setOnClickListener{
+        binding.fromDate.setOnClickListener{
             val calendar = Calendar.getInstance()
             if (startTime > 0) calendar.timeInMillis = startTime
             DatePickerDialog(this, startListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        toDate.setOnClickListener{
+        binding.toDate.setOnClickListener{
             val calendar = Calendar.getInstance()
             if (endTime > 0) calendar.timeInMillis = endTime
             val dt = DatePickerDialog(this, endListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             dt.setButton(DialogInterface.BUTTON_NEUTRAL, "Present Day") { dialog: DialogInterface, _: Int ->
                 endTime = -1
-                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+                GpaCalcFirebaseUtils.updateDateTimeViews(binding.fromDate, binding.toDate, startTime, endTime)
                 dialog.dismiss()
             }
             dt.datePicker.minDate = startTime
@@ -62,13 +62,13 @@ class AddInstitutionActivity : AddActivityBase() {
         // Get the calculation modes
         populateModes()
         populateInstitutions()
-        spinnerGpaCalcMode.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        binding.spinnerGpaCalcMode.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 LogHelper.d(TAG, "spinnerGpaCalcMode:onItemSelected")
                 if (modes.isEmpty() || selectionList.isEmpty()) return // Simply not do anything
                 val mode = modes[selectionList[position]]
                 LogHelper.i(TAG, "Selected Mode: ${mode?.second?.name ?: "Unknown"}")
-                til_etCreditsName.visibility = if (mode?.second?.type == "count") View.GONE else View.VISIBLE
+                binding.tilEtCreditsName.visibility = if (mode?.second?.type == "count") View.GONE else View.VISIBLE
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -76,7 +76,7 @@ class AddInstitutionActivity : AddActivityBase() {
             }
         }
 
-        gpacalc_add.setOnClickListener { v ->
+        binding.gpacalcAdd.setOnClickListener { v ->
                 when (val result = validate()) {
                     is String -> Snackbar.make(v, result, Snackbar.LENGTH_LONG).show()
                     is GpaInstitution -> {
@@ -100,19 +100,19 @@ class AddInstitutionActivity : AddActivityBase() {
                 // Make user update scoring mode again
                 institute = dataSnapshot.getValue(GpaInstitution::class.java)
                 Snackbar.make(findViewById(android.R.id.content), "Please update scoring mode agian", Snackbar.LENGTH_LONG).show()
-                etName.setText(institute?.name)
-                etShortName.setText(institute?.shortName)
-                etCreditsName.setText(institute?.creditName)
-                gpacalc_add.text = "Edit Institution"
+                binding.etName.setText(institute?.name)
+                binding.etShortName.setText(institute?.shortName)
+                binding.etCreditsName.setText(institute?.creditName)
+                binding.gpacalcAdd.text = "Edit Institution"
                 supportActionBar?.title = "Edit an Institution"
-                supportActionBar?.subtitle = etName.text.toString()
+                supportActionBar?.subtitle = binding.etName.text.toString()
 
                 // Handle start and end times
                 institute?.let {
                     startTime = it.startTimestamp
                     if (it.endTimestamp != (-1).toLong()) endTime = it.endTimestamp
                 }
-                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+                GpaCalcFirebaseUtils.updateDateTimeViews(binding.fromDate, binding.toDate, startTime, endTime)
             }
         })
     }
@@ -121,33 +121,33 @@ class AddInstitutionActivity : AddActivityBase() {
         // Check that theres a mode to select
         if (modes.isEmpty() || selectionList.isEmpty()) return "No modes found! Unable to add institution"
 
-        val name = etName.text.toString()
-        val shortName = etShortName.text.toString()
-        val mode = modes[spinnerGpaCalcMode.selectedItem]
-        var credits = etCreditsName.text.toString()
+        val name = binding.etName.text.toString()
+        val shortName = binding.etShortName.text.toString()
+        val mode = modes[binding.spinnerGpaCalcMode.selectedItem]
+        var credits = binding.etCreditsName.text.toString()
 
         // Ready error texts
-        til_etName.error = "Required field"
-        til_etShortName.error = "Required field"
+        binding.tilEtName.error = "Required field"
+        binding.tilEtShortName.error = "Required field"
 
-        til_etName.isErrorEnabled = name.isEmpty()
-        til_etShortName.isErrorEnabled = shortName.isEmpty()
-        til_toDate.isErrorEnabled = false
+        binding.tilEtName.isErrorEnabled = name.isEmpty()
+        binding.tilEtShortName.isErrorEnabled = shortName.isEmpty()
+        binding.tilToDate.isErrorEnabled = false
 
         if (mode == null) return "Unable to find mode, please attempt to readd!"
 
-        if (til_etCreditsName.visibility == View.VISIBLE && credits.isEmpty()) credits = "Credits"
+        if (binding.tilEtCreditsName.visibility == View.VISIBLE && credits.isEmpty()) credits = "Credits"
 
         if (existingInstitutions.contains(shortName) && institute == null) {
-            til_etShortName.error = "Institution Already Exists"
-            til_etShortName.isErrorEnabled = true
+            binding.tilEtShortName.error = "Institution Already Exists"
+            binding.tilEtShortName.isErrorEnabled = true
         }
 
-        if (til_etName.isErrorEnabled || til_etShortName.isErrorEnabled) return "Please resolve the errors before continuing"
+        if (binding.tilEtName.isErrorEnabled || binding.tilEtShortName.isErrorEnabled) return "Please resolve the errors before continuing"
 
         if (endTime < startTime && endTime != (-1).toLong()) {
-            til_toDate.error = "Graduation Date cannot be before Start Date"
-            til_toDate.isErrorEnabled = true
+            binding.tilToDate.error = "Graduation Date cannot be before Start Date"
+            binding.tilToDate.isErrorEnabled = true
             return "Please resolve date errors before continuing"
         }
 
@@ -200,7 +200,7 @@ class AddInstitutionActivity : AddActivityBase() {
         selectionList.clear()
         modes.keys.toCollection(selectionList)
         val adapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, selectionList)
-        spinnerGpaCalcMode.adapter = adapter
+        binding.spinnerGpaCalcMode.adapter = adapter
     }
 
     private inner class InstituteDateCallback(val type: Int): DatePickerDialog.OnDateSetListener {
@@ -208,7 +208,7 @@ class AddInstitutionActivity : AddActivityBase() {
             val cal = GpaCalcFirebaseUtils.getCalendarWithNoTime(year, month, dayOfMonth)
             if (type == START_INSTITUTE) startTime = cal.timeInMillis
             else endTime = cal.timeInMillis
-            GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+            GpaCalcFirebaseUtils.updateDateTimeViews(binding.fromDate, binding.toDate, startTime, endTime)
         }
     }
 

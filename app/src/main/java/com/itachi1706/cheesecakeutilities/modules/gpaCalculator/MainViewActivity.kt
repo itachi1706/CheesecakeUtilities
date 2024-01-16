@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,7 +14,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
+import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.databinding.ActivityGpaCalculatorMainBinding
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.fragment.InstitutionListFragment
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.fragment.ModuleListFragment
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.fragment.SemesterListFragment
@@ -24,10 +24,9 @@ import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.interfaces.State
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaScoring
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaSemester
-import com.itachi1706.cheesecakeutilities.R
+import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
 import com.itachi1706.helperlib.helpers.LogHelper
-import kotlinx.android.synthetic.main.activity_gpa_calculator_main.*
 
 class MainViewActivity(override val helpDescription: String = "A utility for handling keeping track of scores such as Grade Point Averages (GPA)") : BaseModuleActivity(), StateSwitchListener {
 
@@ -40,10 +39,14 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
 
     private val scoring: HashMap<String, GpaScoring> = HashMap()
 
+    private lateinit var binding: ActivityGpaCalculatorMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gpa_calculator_main)
-        setSupportActionBar(toolbar)
+        binding = ActivityGpaCalculatorMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         defaultActionBarText = supportActionBar?.title.toString()
 
@@ -58,8 +61,8 @@ class MainViewActivity(override val helpDescription: String = "A utility for han
             return
         }
 
-        fab.drawable.setColorFilter(ResourcesCompat.getColor(resources, R.color.white, null), PorterDuff.Mode.SRC_ATOP)
-        fab.setOnClickListener { view ->
+        binding.fab.drawable.setColorFilter(ResourcesCompat.getColor(resources, R.color.white, null), PorterDuff.Mode.SRC_ATOP)
+        binding.fab.setOnClickListener { view ->
             addFabAction(view)
         }
 

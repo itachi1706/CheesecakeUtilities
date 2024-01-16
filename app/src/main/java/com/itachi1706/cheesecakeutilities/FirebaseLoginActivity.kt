@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -19,10 +18,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.itachi1706.cheesecakeutilities.databinding.ActivityFirebaseLoginBinding
 import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
-import kotlinx.android.synthetic.main.activity_firebase_login.*
 
 class FirebaseLoginActivity : BaseModuleActivity() {
 
@@ -54,9 +53,13 @@ class FirebaseLoginActivity : BaseModuleActivity() {
     override val helpDescription: String
         get() = message
 
+    private lateinit var binding: ActivityFirebaseLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_firebase_login)
+        binding = ActivityFirebaseLoginBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         // Setup login form
         progress = findViewById(R.id.sign_in_progress)
@@ -67,8 +70,8 @@ class FirebaseLoginActivity : BaseModuleActivity() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
         val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        google_sign_in_button.setSize(SignInButton.SIZE_WIDE)
-        google_sign_in_button.setOnClickListener {
+        binding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
+        binding.googleSignInButton.setOnClickListener {
             // Attempts to sign in with Google
             LogHelper.d(TAG, "Signing in with Google")
             val signInIntent = mGoogleSignInClient.signInIntent
@@ -86,8 +89,8 @@ class FirebaseLoginActivity : BaseModuleActivity() {
 
         showHideLogin(true)
 
-        sign_out.setOnClickListener { signout(false) }
-        test_account.setOnClickListener { mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task -> processSignIn("signInTestEmail", task) } }
+        binding.signOut.setOnClickListener { signout(false) }
+        binding.testAccount.setOnClickListener { mAuth.signInWithEmailAndPassword("test@test.com", "test123").addOnCompleteListener { task -> processSignIn("signInTestEmail", task) } }
     }
 
     private fun processSignIn(log: String, task: Task<AuthResult>) {
@@ -112,15 +115,15 @@ class FirebaseLoginActivity : BaseModuleActivity() {
 
     private fun showHideLogin(show: Boolean) {
         if (show) {
-            google_sign_in_button.visibility = View.VISIBLE
-            if (showDebug) test_account.visibility = View.VISIBLE
-            sign_in_as.visibility = View.GONE
-            sign_out.visibility = View.GONE
+            binding.googleSignInButton.visibility = View.VISIBLE
+            if (showDebug) binding.testAccount.visibility = View.VISIBLE
+            binding.signInAs.visibility = View.GONE
+            binding.signOut.visibility = View.GONE
         } else {
-            google_sign_in_button.visibility = View.GONE
-            test_account.visibility = View.GONE
-            sign_in_as.visibility = View.VISIBLE
-            sign_out.visibility = View.VISIBLE
+            binding.googleSignInButton.visibility = View.GONE
+            binding.testAccount.visibility = View.GONE
+            binding.signInAs.visibility = View.VISIBLE
+            binding.signOut.visibility = View.VISIBLE
         }
     }
 
@@ -172,7 +175,7 @@ class FirebaseLoginActivity : BaseModuleActivity() {
             sp.edit().putString(VehMileageFirebaseUtils.FB_UID, user.uid).apply()
             var login = user.displayName
             if (login == null) login = user.email
-            sign_in_as.text = "Signed in as $login"
+            binding.signInAs.text = "Signed in as $login"
             if (continueIntent != null) {
                 if (intent.hasExtra("globalcheck")) continueIntent!!.putExtra("globalcheck", intent.getBooleanExtra("globalcheck", false))
                 startActivity(continueIntent!!)
@@ -185,7 +188,7 @@ class FirebaseLoginActivity : BaseModuleActivity() {
         } else {
             if (!supress) NotifyUserUtil.createShortToast(this, "Currently Logged Out")
             sp.edit().remove(VehMileageFirebaseUtils.FB_UID).apply()
-            sign_in_as.text = "Currently Logged Out"
+            binding.signInAs.text = "Currently Logged Out"
             showHideLogin(true)
         }
     }

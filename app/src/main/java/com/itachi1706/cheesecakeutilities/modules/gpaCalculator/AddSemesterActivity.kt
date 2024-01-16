@@ -7,13 +7,12 @@ import android.widget.DatePicker
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
+import com.itachi1706.cheesecakeutilities.databinding.ActivityGpaCalculatorAddSemesterBinding
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaInstitution
 import com.itachi1706.cheesecakeutilities.modules.gpaCalculator.objects.GpaSemester
-import com.itachi1706.cheesecakeutilities.R
 import com.itachi1706.cheesecakeutilities.util.FirebaseValueEventListener
 import com.itachi1706.helperlib.helpers.LogHelper
-import kotlinx.android.synthetic.main.activity_gpa_calculator_add_semester.*
-import java.util.*
+import java.util.Calendar
 
 class AddSemesterActivity : AddActivityBase() {
 
@@ -26,9 +25,12 @@ class AddSemesterActivity : AddActivityBase() {
     private lateinit var startDateListener: DatePickerDialog.OnDateSetListener
     private lateinit var endDateListener: DatePickerDialog.OnDateSetListener
 
+    private lateinit var binding: ActivityGpaCalculatorAddSemesterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gpa_calculator_add_semester)
+        binding = ActivityGpaCalculatorAddSemesterBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         instituteString = intent?.extras!!.getString("institute", "-_-_-")
         if (instituteString == "-_-_-") {
@@ -39,7 +41,7 @@ class AddSemesterActivity : AddActivityBase() {
 
         startDateListener = SemesterDateCallback(START_SEMESTER)
         endDateListener = SemesterDateCallback(END_SEMESTER)
-        fromDate.setOnClickListener{
+        binding.fromDate.setOnClickListener{
             val calendar = Calendar.getInstance()
             if (startTime > 0) calendar.timeInMillis = startTime
             val dt = DatePickerDialog(this, startDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -51,14 +53,14 @@ class AddSemesterActivity : AddActivityBase() {
             dt.show()
         }
 
-        toDate.setOnClickListener{
+        binding.toDate.setOnClickListener{
             val calendar = Calendar.getInstance()
             if (endTime > 0) calendar.timeInMillis = endTime
             val dt = DatePickerDialog(this, endDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             dt.setButton(DialogInterface.BUTTON_NEUTRAL, "Present Day") { dialog: DialogInterface, _: Int ->
                 endTime = -1
                 if (startTime == (-1).toLong()) startTime = selectedInstitution?.startTimestamp ?: System.currentTimeMillis()
-                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+                GpaCalcFirebaseUtils.updateDateTimeViews(binding.fromDate, binding.toDate, startTime, endTime)
                 dialog.dismiss()
             }
             dt.datePicker.minDate = startTime
@@ -72,7 +74,7 @@ class AddSemesterActivity : AddActivityBase() {
 
         // Get the calculation modes
         getInstitution(instituteString)
-        gpacalc_add.setOnClickListener { v ->
+        binding.gpacalcAdd.setOnClickListener { v ->
                 when (val result = validate()) {
                     is String -> Snackbar.make(v, result, Snackbar.LENGTH_LONG).show()
                     is GpaSemester -> {
@@ -96,34 +98,34 @@ class AddSemesterActivity : AddActivityBase() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Make user update scoring mode again
                 semester = dataSnapshot.getValue(GpaSemester::class.java)
-                etName.setText(semester?.name)
-                gpacalc_add.text = "Edit Semester"
+                binding.etName.setText(semester?.name)
+                binding.gpacalcAdd.text = "Edit Semester"
                 supportActionBar?.title = "Edit aa Semester"
-                supportActionBar?.subtitle = etName.text.toString()
+                supportActionBar?.subtitle = binding.etName.text.toString()
 
                 // Handle start and end times
                 if (semester?.startTimestamp != null) startTime = semester!!.startTimestamp
                 if (semester?.endTimestamp != null && semester?.endTimestamp != (-1).toLong()) endTime = semester!!.endTimestamp
-                GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+                GpaCalcFirebaseUtils.updateDateTimeViews(binding.fromDate, binding.toDate, startTime, endTime)
             }
 
         })
     }
 
     override fun validate(): Any {
-        val name = etName.text.toString()
+        val name = binding.etName.text.toString()
 
         // Ready error texts
-        til_etName.error = "Required field"
-        til_etName.isErrorEnabled = name.isEmpty()
-        til_toDate.isErrorEnabled = false
+        binding.tilEtName.error = "Required field"
+        binding.tilEtName.isErrorEnabled = name.isEmpty()
+        binding.tilToDate.isErrorEnabled = false
         if (startTime == (-1).toLong()) startTime = System.currentTimeMillis()
 
-        if (til_etName.isErrorEnabled) return "Please resolve the errors before continuing"
+        if (binding.tilEtName.isErrorEnabled) return "Please resolve the errors before continuing"
 
         if (endTime < startTime && endTime != (-1).toLong()) {
-            til_toDate.error = "Semester End Date cannot be before Start Date"
-            til_toDate.isErrorEnabled = true
+            binding.tilToDate.error = "Semester End Date cannot be before Start Date"
+            binding.tilToDate.isErrorEnabled = true
             return "Please resolve date errors before continuing"
         }
 
@@ -158,7 +160,7 @@ class AddSemesterActivity : AddActivityBase() {
             val cal = GpaCalcFirebaseUtils.getCalendarWithNoTime(year, month, dayOfMonth)
             if (type == START_SEMESTER) startTime = cal.timeInMillis
             else endTime = cal.timeInMillis
-            GpaCalcFirebaseUtils.updateDateTimeViews(fromDate, toDate, startTime, endTime)
+            GpaCalcFirebaseUtils.updateDateTimeViews(binding.fromDate, binding.toDate, startTime, endTime)
         }
     }
 
