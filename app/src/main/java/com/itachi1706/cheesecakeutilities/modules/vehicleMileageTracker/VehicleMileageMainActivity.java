@@ -216,28 +216,29 @@ public class VehicleMileageMainActivity extends BaseModuleActivity implements Sw
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout:
-                Intent logoutIntent = new Intent(this, VehicleMileageTrackerInitActivity.class);
-                logoutIntent.putExtra("logout", true);
-                startActivity(logoutIntent);
-                finish();
-                return true;
-            case R.id.hide_training:
-                item.setChecked(!item.isChecked());
-                if (item.isChecked()) sp.edit().putBoolean(HIDE_TRAINING, true).apply();
-                else sp.edit().putBoolean(HIDE_TRAINING, false).apply();
-                adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
-                adapter.notifyDataSetChanged();
-                return true;
-            case R.id.view_vehicles:
-                startActivity(new Intent(this, ViewVehicleActivity.class));
-                return true;
-            case R.id.view_statistics:
-                startActivity(new Intent(this, VehicleMileageStatisticsActivity.class));
-                return true;
-            default: return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            Intent logoutIntent = new Intent(this, VehicleMileageTrackerInitActivity.class);
+            logoutIntent.putExtra("logout", true);
+            startActivity(logoutIntent);
+            finish();
+            return true;
+        } else if (id == R.id.hide_training) {
+            item.setChecked(!item.isChecked());
+            sp.edit().putBoolean(HIDE_TRAINING, item.isChecked()).apply();
+            adapter.setHideTraining(sp.getBoolean(HIDE_TRAINING, false));
+            adapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.view_vehicles) {
+            startActivity(new Intent(this, ViewVehicleActivity.class));
+            return true;
+        } else if (id == R.id.view_statistics) {
+            startActivity(new Intent(this, VehicleMileageStatisticsActivity.class));
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

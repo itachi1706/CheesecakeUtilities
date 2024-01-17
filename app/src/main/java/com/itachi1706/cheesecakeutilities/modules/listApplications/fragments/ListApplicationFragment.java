@@ -142,33 +142,33 @@ public class ListApplicationFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.systemapp: item.setChecked(!item.isChecked()); checkSystem = item.isChecked();
-                eval(checkSystem); break;
-            case R.id.sortapi: item.setChecked(!item.isChecked()); sortByApi = item.isChecked();
-                eval(checkSystem); break;
-            case R.id.graph:
-                Intent i = new Intent(getActivity(), ListApplicationsApiGraphActivity.class);
-                i.putExtra("appCount", appCountString);
-                startActivity(i);
-                break;
-            case R.id.scan_ghost:
-                new AlertDialog.Builder(getActivity()).setTitle("Scan Ghost Directories")
-                        .setMessage("This will scan your external application data folder (/sdcard/Android) for any ghost directories " +
-                                "left behind by applications no longer installed on your device")
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton("Scan", (dialog, which) -> hasStoragePermissionCheck()).show();
-                break;
-            case R.id.generate_package_list:
-                generatePackageList();
-                break;
-            case R.id.view_gps:
-                Intent gpsIntent = new Intent(getActivity(), ListApplicationsDetailActivity.class);
-                gpsIntent.putExtra("packageName", "com.google.android.gms");
-                startActivity(gpsIntent);
-                break;
-            default: return super.onOptionsItemSelected(item);
-        }
+        int id = item.getItemId();
+        if (id == R.id.systemapp) {
+            item.setChecked(!item.isChecked());
+            checkSystem = item.isChecked();
+            eval(checkSystem);
+        } else if (id == R.id.sortapi) {
+            item.setChecked(!item.isChecked());
+            sortByApi = item.isChecked();
+            eval(checkSystem);
+        } else if (id == R.id.graph) {
+            Intent i = new Intent(getActivity(), ListApplicationsApiGraphActivity.class);
+            i.putExtra("appCount", appCountString);
+            startActivity(i);
+        } else if (id == R.id.scan_ghost) {
+            new AlertDialog.Builder(getActivity()).setTitle("Scan Ghost Directories")
+                    .setMessage("This will scan your external application data folder (/sdcard/Android) for any ghost directories " +
+                            "left behind by applications no longer installed on your device")
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton("Scan", (dialog, which) -> hasStoragePermissionCheck()).show();
+        } else if (id == R.id.generate_package_list) {
+            generatePackageList();
+        } else if (id == R.id.view_gps) {
+            Intent gpsIntent = new Intent(getActivity(), ListApplicationsDetailActivity.class);
+            gpsIntent.putExtra("packageName", "com.google.android.gms");
+            startActivity(gpsIntent);
+        } else return super.onOptionsItemSelected(item);
+
         return true;
     }
 

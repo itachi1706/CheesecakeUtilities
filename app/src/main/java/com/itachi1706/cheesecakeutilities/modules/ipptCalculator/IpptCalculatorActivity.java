@@ -180,9 +180,11 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.view_ippt: startActivity(new Intent(this, IpptScoringActivity.class)); return true;
-            default: return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.view_ippt) {
+            startActivity(new Intent(this, IpptScoringActivity.class));
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }
