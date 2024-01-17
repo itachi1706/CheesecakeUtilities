@@ -91,7 +91,7 @@ public class CameraDisablerActivity extends BaseModuleActivity {
             requestAdmin = false;
             if (requestCode == DEVICE_ADMIN_REQUEST && resultCode == RESULT_OK) {
                 new AlertDialog.Builder(this).setTitle(R.string.camera_disable_enabled_toast)
-                        .setMessage(R.string.camera_disable_enabled_message).setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                        .setMessage(R.string.camera_disable_enabled_message).setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

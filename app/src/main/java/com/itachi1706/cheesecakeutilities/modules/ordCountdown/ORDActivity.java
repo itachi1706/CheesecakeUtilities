@@ -280,34 +280,37 @@ public class ORDActivity extends BaseModuleActivity implements CalendarHolidayTa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.modify_settings: startActivity(new Intent(getApplicationContext(), ORDSettingsActivity.class)); return true;
-            case R.id.holiday:
-                GCalHoliday holiday = getHolidays();
-                if (holiday == null) {
-                    Toast.makeText(this, "Retrieving holiday list, try again later", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                ArrayList<GCalHolidayItem> holidayList = new ArrayList<>(Arrays.asList(holiday.getOutput()));
-                Collections.sort(holidayList, (o1, o2) -> Long.compare(o1.getDateInMillis(), o2.getDateInMillis()));
-                StringBuilder b = new StringBuilder();
-                for (GCalHolidayItem h : holidayList) {
-                    String[] tmp = h.getDate().split("-");
-                    b.append(h.getName()).append(": ").append(tmp[2]).append("-").append(tmp[1]).append("-").append(tmp[0]).append("\n");
-                }
-
-                b.append("\nLast Updated: ").append(VehMileageFirebaseUtils.Companion.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
-                b.append("\nServer Cached Data: ").append(holiday.isCache());
-                new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
-                        .setMessage(b.toString().trim()).setPositiveButton(R.string.dialog_action_positive_close, null)
-                        .setNeutralButton("Refresh", (dialog, which) -> {
-                            new CalendarHolidayTask(this, this).execute();
-                            Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();
-                        })
-                        .show();
+        int id = item.getItemId();
+        if (id == R.id.modify_settings) {
+            startActivity(new Intent(getApplicationContext(), ORDSettingsActivity.class));
+            return true;
+        } else if (id == R.id.holiday) {
+            GCalHoliday holiday = getHolidays();
+            if (holiday == null) {
+                Toast.makeText(this, "Retrieving holiday list, try again later", Toast.LENGTH_SHORT).show();
                 return true;
-            default: return super.onOptionsItemSelected(item);
+            }
+            ArrayList<GCalHolidayItem> holidayList = new ArrayList<>(Arrays.asList(holiday.getOutput()));
+            Collections.sort(holidayList, (o1, o2) -> Long.compare(o1.getDateInMillis(), o2.getDateInMillis()));
+            StringBuilder b = new StringBuilder();
+            for (GCalHolidayItem h : holidayList) {
+                String[] tmp = h.getDate().split("-");
+                b.append(h.getName()).append(": ").append(tmp[2]).append("-").append(tmp[1]).append("-").append(tmp[0]).append("\n");
+            }
+
+            b.append("\nLast Updated: ").append(VehMileageFirebaseUtils.Companion.formatTime(holiday.getTimestampLong(), "dd MMMM yyyy HH:mm:ss"));
+            b.append("\nServer Cached Data: ").append(holiday.isCache());
+            new AlertDialog.Builder(this).setTitle("Holiday List (" + holiday.getYearRange() + ")")
+                    .setMessage(b.toString().trim()).setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null)
+                    .setNeutralButton("Refresh", (dialog, which) -> {
+                        new CalendarHolidayTask(this, this).execute();
+                        Toast.makeText(getApplicationContext(), "Refreshing holiday list...", Toast.LENGTH_SHORT).show();
+                    })
+                    .show();
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

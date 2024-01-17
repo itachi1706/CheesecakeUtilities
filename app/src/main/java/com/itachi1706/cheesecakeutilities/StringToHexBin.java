@@ -91,25 +91,22 @@ public class StringToHexBin extends BaseModuleActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_binhex_clear:
-                result.setText("");
-                input.setText("");
-                break;
-            case R.id.btn_binhex_copy:
-                ClipboardManager manager = (ClipboardManager) this.getSystemService(CLIPBOARD_SERVICE);
-                ClipData data = ClipData.newPlainText("binhex", (result.getText().toString()));
-                manager.setPrimaryClip(data);
-                Toast.makeText(this.getApplicationContext(), "Successfully copied!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btn_binhex_send:
-                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.setType("text/plain");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, result.getText().toString());
-                startActivity(Intent.createChooser(sendIntent, "Send to"));
-                break;
-            case R.id.btn_binhex_translate:
-                result.setText(translate());
+        int id = v.getId();
+        if (id == R.id.btn_binhex_clear) {
+            result.setText("");
+            input.setText("");
+        } else if (id == R.id.btn_binhex_copy) {
+            ClipboardManager manager = (ClipboardManager) this.getSystemService(CLIPBOARD_SERVICE);
+            ClipData data = ClipData.newPlainText("binhex", (result.getText().toString()));
+            manager.setPrimaryClip(data);
+            Toast.makeText(this.getApplicationContext(), "Successfully copied!", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.btn_binhex_send) {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, result.getText().toString());
+            startActivity(Intent.createChooser(sendIntent, "Send to"));
+        } else if (id == R.id.btn_binhex_translate) {
+            result.setText(translate());
         }
     }
 

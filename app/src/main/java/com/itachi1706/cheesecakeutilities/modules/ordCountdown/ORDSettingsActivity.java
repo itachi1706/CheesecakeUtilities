@@ -355,17 +355,18 @@ public class ORDSettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.save:
-                saveAndExit();
-                return true;
-            case R.id.clear:
-                new AlertDialog.Builder(this).setTitle("Clearing options")
-                        .setMessage("This will clear all of your settings. Are you sure you want to continue?")
-                        .setPositiveButton(android.R.string.yes, (dialog, which) -> clearSettings()).setNegativeButton(android.R.string.no, null).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.save) {
+            saveAndExit();
+            return true;
         }
+        else if (id == R.id.clear) {
+            new AlertDialog.Builder(this).setTitle("Clearing options")
+                    .setMessage("This will clear all of your settings. Are you sure you want to continue?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> clearSettings()).setNegativeButton(android.R.string.no, null).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

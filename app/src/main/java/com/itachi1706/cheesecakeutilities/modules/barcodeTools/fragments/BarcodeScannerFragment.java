@@ -226,41 +226,38 @@ public class BarcodeScannerFragment extends Fragment implements BarcodeFragInter
             else LogHelper.e(TAG, "Error processing menu (no Context object)");
             return true; // Error, just close
         }
-        switch (item.getItemId()) {
-            case R.id.barcode_action_extra: BarcodeHelper.specialBarcodeHandlingAction(barcodeContext, getContext()); break;
-            case R.id.barcode_action_clipboard:
-                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                if (clipboard != null) {
-                    ClipData clip = ClipData.newPlainText("barcode", barcodeContext.getBarcodeValue());
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.barcode_action_share:
-            case R.id.barcode_action_share_raw:
-                String textToShare = (item.getItemId() == R.id.barcode_action_share) ? barcodeContext.getBarcodeValue() : barcodeContext.getRawBarcodeValue();
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
-                startActivity(Intent.createChooser(shareIntent, "Share barcode"));
-                break;
-            case R.id.barcode_action_save_file:
-            case R.id.barcode_action_save_file_raw:
-                barcodeSaveContext = (item.getItemId() == R.id.barcode_action_save_file) ? barcodeContext.getBarcodeValue() : barcodeContext.getRawBarcodeValue();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS", Locale.US);
-                String defaultFileName = "scanned-barcode-" + sdf.format(new Date()) + ".txt";
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                    Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    exportIntent.setType("text/plain");
-                    exportIntent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
-                    startActivityForResult(exportIntent, EXPORT_BARCODES);
-                } else {
-                    NotifyUserUtil.showShortDismissSnackbar(getView(), "Action not supported for devices before Android KitKat");
-                }
-                break;
-            default: result = super.onContextItemSelected(item);
-        }
+
+        int id = item.getItemId();
+        if (id == R.id.barcode_action_extra) {
+            BarcodeHelper.specialBarcodeHandlingAction(barcodeContext, getContext());
+        } else if (id == R.id.barcode_action_clipboard) {
+            ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null) {
+                ClipData clip = ClipData.newPlainText("barcode", barcodeContext.getBarcodeValue());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Barcode copied to clipboard", Toast.LENGTH_LONG).show();
+            }
+        } else if (id == R.id.barcode_action_share || id == R.id.barcode_action_share_raw) {
+            String textToShare = (id == R.id.barcode_action_share) ? barcodeContext.getBarcodeValue() : barcodeContext.getRawBarcodeValue();
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+            startActivity(Intent.createChooser(shareIntent, "Share barcode"));
+        } else if (id == R.id.barcode_action_save_file || id == R.id.barcode_action_save_file_raw) {
+            barcodeSaveContext = (id == R.id.barcode_action_save_file) ? barcodeContext.getBarcodeValue() : barcodeContext.getRawBarcodeValue();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.SSS", Locale.US);
+            String defaultFileName = "scanned-barcode-" + sdf.format(new Date()) + ".txt";
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                exportIntent.setType("text/plain");
+                exportIntent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
+                startActivityForResult(exportIntent, EXPORT_BARCODES);
+            } else {
+                NotifyUserUtil.showShortDismissSnackbar(getView(), "Action not supported for devices before Android KitKat");
+            }
+        } else result = super.onContextItemSelected(item);
+
         return result;
     }
 

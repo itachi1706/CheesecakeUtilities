@@ -27,22 +27,21 @@ public abstract class BaseModuleActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                new AlertDialog.Builder(this)
-                        .setMessage(getHelpDescription())
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.ok, null).show();
-                return true;
-            case R.id.settings:
-                startActivity(new Intent(this, GeneralSettingsActivity.class));
-                return true;
-            case android.R.id.home:
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.about) {
+            new AlertDialog.Builder(this)
+                    .setMessage(getHelpDescription())
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.ok, null).show();
+            return true;
+        } else if (id == R.id.settings) {
+            startActivity(new Intent(this, GeneralSettingsActivity.class));
+            return true;
+        } else if (id == android.R.id.home || id == R.id.exit) {
+            finish();
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

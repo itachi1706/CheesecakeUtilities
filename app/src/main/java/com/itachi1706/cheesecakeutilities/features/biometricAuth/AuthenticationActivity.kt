@@ -123,7 +123,7 @@ class AuthenticationActivity : AppCompatActivity() {
                             AlertDialog.Builder(this@AuthenticationActivity).setTitle("Biometric sensors disabled (Locked out)")
                                     .setMessage("You have attempted and failed biometric authentication too many times and your biometric sensors has been disabled. \n\n" +
                                             "Please re-authenticate by unlocking or rebooting your phone again or disable biometric authentication on your device")
-                                    .setCancelable(false).setPositiveButton(R.string.dialog_action_positive_close) { _, _ ->
+                                    .setCancelable(false).setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close) { _, _ ->
                                         setResult(Activity.RESULT_CANCELED, intent)
                                         finish()
                                     }.show()

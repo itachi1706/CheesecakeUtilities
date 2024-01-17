@@ -84,16 +84,15 @@ public class VehicleMileageStatisticsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.generateReport:
-                startActivity(new Intent(this, GenerateMileageRecordActivity.class));
-                return true;
-            case android.R.id.home:
-            case R.id.exit:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.generateReport) {
+            startActivity(new Intent(this, GenerateMileageRecordActivity.class));
+            return true;
+        } else if (id == android.R.id.home || id == R.id.exit) {
+            finish();
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

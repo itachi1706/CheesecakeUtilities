@@ -70,7 +70,8 @@ class ScoringActivity : AppCompatActivity() {
                         sb.append("\nPass Tiers:\n")
                         score.passtier.forEach { sb.append("${it.name}: ${if (it.value > 0) "Pass" else "Fail"} (${it.desc})\n") }
                     }
-                    AlertDialog.Builder(view.context).setTitle(score.name).setMessage(sb.toString()).setPositiveButton(R.string.dialog_action_positive_close, null).show()
+                    AlertDialog.Builder(view.context).setTitle(score.name).setMessage(sb.toString()).setPositiveButton(
+                        com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show()
                 }
                 binding.recyclerView.adapter = adapter
             }

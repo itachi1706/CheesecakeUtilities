@@ -520,7 +520,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                             + "\n\nCertificate Fingerprints:\nMD5: "
                             + bytesToHex(MessageDigest.getInstance("MD5").digest(sigCert)) + "\nSHA1: " + this.signature
                             + "\nSHA256: " + bytesToHex(MessageDigest.getInstance("SHA256").digest(sigCert)))
-                    .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                    .setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
         } catch (CertificateException e) {
             Toast.makeText(this, "Unable to create certificate information screen", Toast.LENGTH_SHORT).show();
         } catch (NoSuchAlgorithmException e) {
@@ -545,35 +545,40 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Uri uri = Uri.fromParts("package", info.packageName, null);
-        switch (item.getItemId()) {
-            case R.id.appsettings: Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(uri);
-                LogHelper.v(AppsAdapter.TAG, "Attempting to launch for " + appName.getText());
-                startActivity(intent); return true;
-            case R.id.playstore:
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=" + info.packageName)));
-                return true;
-            case R.id.copysig:
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Signature", signature);
-                clipboard.setPrimaryClip(clip); Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_LONG).show(); return true;
-            case R.id.viewcert:
-                if (signatures.length < 1) Toast.makeText(this, "No signature found!", Toast.LENGTH_SHORT).show();
-                else viewCertificate(signatures[0]);
-                return true;
-            case R.id.share_apk:
-                hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version, true);
-                return true;
-            case R.id.uninstall:
-                Intent uninstallIntent = new Intent();
-                uninstallIntent.setAction(Intent.ACTION_UNINSTALL_PACKAGE);
-                uninstallIntent.setData(uri);
-                LogHelper.v(AppsAdapter.TAG, "Attempting to uninstall " + appName.getText());
-                startActivity(uninstallIntent);
-                return true;
-            default: return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.appsettings) {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.setData(uri);
+            LogHelper.v(AppsAdapter.TAG, "Attempting to launch for " + appName.getText());
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.playstore) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + info.packageName)));
+            return true;
+        } else if (id == R.id.copysig) {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Signature", signature);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.viewcert) {
+            if (signatures.length < 1) Toast.makeText(this, "No signature found!", Toast.LENGTH_SHORT).show();
+            else viewCertificate(signatures[0]);
+            return true;
+        } else if (id == R.id.share_apk) {
+            hasStoragePermissionCheck(appName.getText().toString(), info.sourceDir, info.packageName, version, true);
+            return true;
+        } else if (id == R.id.uninstall) {
+            Intent uninstallIntent = new Intent();
+            uninstallIntent.setAction(Intent.ACTION_UNINSTALL_PACKAGE);
+            uninstallIntent.setData(uri);
+            LogHelper.v(AppsAdapter.TAG, "Attempting to uninstall " + appName.getText());
+            startActivity(uninstallIntent);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

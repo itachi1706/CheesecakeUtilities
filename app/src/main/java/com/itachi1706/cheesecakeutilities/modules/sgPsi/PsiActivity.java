@@ -69,7 +69,7 @@ public class PsiActivity extends BaseModuleActivity {
 
         legend.setOnClickListener(v -> {
             new AlertDialog.Builder(this).setView(R.layout.dialog_psi_legend).setTitle("Legend")
-                    .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                    .setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
         });
     }
 
@@ -90,17 +90,17 @@ public class PsiActivity extends BaseModuleActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.refresh:
-                Toast.makeText(this, "Refreshing", Toast.LENGTH_SHORT).show();
-                retrieveData();
-                return true;
-            case R.id.view_graph:
-                startActivity(new Intent(this, PsiGraphActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.refresh) {
+            Toast.makeText(this, "Refreshing", Toast.LENGTH_SHORT).show();
+            retrieveData();
+            return true;
+        } else if (id == R.id.view_graph) {
+            startActivity(new Intent(this, PsiGraphActivity.class));
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void retrieveData() {

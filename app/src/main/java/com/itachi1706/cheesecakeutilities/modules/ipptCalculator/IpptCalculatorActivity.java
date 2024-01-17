@@ -157,7 +157,7 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
 
         new AlertDialog.Builder(this).setTitle("IPPT Score")
                 .setMessage(message.toString())
-                .setPositiveButton(R.string.dialog_action_positive_close, null).show();
+                .setPositiveButton(com.itachi1706.appupdater.R.string.dialog_action_positive_close, null).show();
 
     }
 
@@ -180,9 +180,11 @@ public class IpptCalculatorActivity extends BaseModuleActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.view_ippt: startActivity(new Intent(this, IpptScoringActivity.class)); return true;
-            default: return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.view_ippt) {
+            startActivity(new Intent(this, IpptScoringActivity.class));
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }
