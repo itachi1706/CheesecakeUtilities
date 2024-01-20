@@ -62,7 +62,13 @@ jobs:
     - name: Make Gradle executable
       run: chmod +x gradlew
     - name: Debug
-      run: ls $ANDROID_HOME/tools/bin/
+      run: |
+        echo HOME
+        ls $ANDROID_HOME
+        echo Tools
+        ls $ANDROID_HOME/tools
+        echo Bin
+        ls $ANDROID_HOME/tools/bin/
     - name: List Available Android Devices
       run: $ANDROID_HOME/tools/bin/avdmanager list
     - name: set up JDK 17
