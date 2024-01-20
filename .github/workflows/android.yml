@@ -63,12 +63,7 @@ jobs:
       run: chmod +x gradlew
     - name: Debug
       run: |
-        echo HOME
-        ls $ANDROID_HOME
-        echo Tools
-        ls $ANDROID_HOME/cmdline-tools/latest/tools/bin
-        echo Bin
-        ls $ANDROID_HOME/tools/bin/
+        ls $ANDROID_HOME/cmdline-tools/latest/bin
     - name: List Available Android Devices
       run: $ANDROID_HOME/tools/bin/avdmanager list
     - name: set up JDK 17
