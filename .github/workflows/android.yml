@@ -76,7 +76,7 @@ jobs:
       with:
         api-level: 28
         target: google_apis
-        profile: 'pixel_xl'
+        profile: 'pixel_6_pro'
         arch: x86_64
         script: ./gradlew connectedAndroidTest
   device-test-full:
@@ -119,7 +119,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis
-          profile: 'pixel_xl'
+          profile: 'pixel_6_pro'
           arch: x86_64
           script: ./gradlew connectedAndroidTest
   release:
