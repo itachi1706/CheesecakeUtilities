@@ -4,6 +4,7 @@
 
     <!-- TODO: Verify if this actually need -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -11,7 +12,8 @@
     <!-- TODO: Remove after BackupHelper no longer use -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:remove="android:maxSdkVersion" /> <!-- TODO: Remove the tools tag here when we officially no longer uses the storage permission with the migration to SAF -->
+        tools:replace="android:maxSdkVersion"
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission
@@ -43,7 +45,6 @@
         android:required="false" />
 
     <!-- TODO: We have requestLegacyExternalStorage for now until we migrate to SAF -->
-<!--    android:preserveLegacyExternalStorage="true"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -80,7 +81,7 @@
         </service>
 
         <activity
-            android:exported="true"
+            android:exported="false"
             android:name=".modules.toggle.ToggleActivity"
             android:label="System Toggles">
             <intent-filter>
@@ -114,7 +115,7 @@
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
             android:name=".StringToHexBin"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/bin_hex_title_full" />
         <activity
             android:name=".GeneralSettingsActivity"
@@ -125,15 +126,15 @@
 
         <activity
             android:name=".modules.htcSerialIdentification.HtcSerialIdentificationActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="HTC S/N Identification" />
         <activity
             android:name=".redirectapp.fanfictionReader.FanfictionReaderRedirectApp"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/AppTheme.Invisible" />
         <activity
             android:name=".CameraDisablerActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Disable Camera" />
 
         <receiver
@@ -153,18 +154,18 @@
 
         <activity
             android:name=".modules.listApplications.ListApplicationsActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Application List"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
             android:name=".modules.ordCountdown.ORDActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="ORD Countdown" />
         <activity
             android:name=".modules.ordCountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
         <activity
-            android:exported="false"
+            android:exported="true"
             android:name=".modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
             android:label="Configure ORD Event Countdown Widget">
             <intent-filter>
@@ -174,7 +175,7 @@
 
         <service
             android:name=".modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
-            android:exported="true"
+            android:exported="false"
             android:label="Update ORD Widgets"
             tools:ignore="InnerclassSeparator" />
 
@@ -194,11 +195,11 @@
 
         <activity
             android:name=".BmiCalculatorActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="BMI Calculator" />
         <activity
             android:name=".modules.ipptCalculator.IpptCalculatorActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="IPPT Calculator" />
         <activity
             android:name=".modules.ipptCalculator.IpptScoringActivity"
@@ -211,7 +212,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".modules.systemInformation.InitActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".modules.systemInformation.ParentFragmentActivity"
             android:label="System Information"
@@ -234,11 +235,11 @@
 
         <activity
             android:name=".modules.navbarCustomization.NavbarConfigurationActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Navigation Bar Customizer" />
         <activity
             android:name=".games.ticTacToe.TicTacToeActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Tic Tac Toe" />
         <activity
             android:name=".features.utilityManagement.ManageUtilityActivity"
@@ -259,23 +260,23 @@
             android:label="Graph by API Level" />
         <activity
             android:name=".modules.safetyNet.SafetyNetActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="SafetyNet Validator" />
         <activity
             android:name=".modules.unicodeKeyboard.UnicodeActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Unicode Emoticons"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
             android:name=".games.chromiumTRex.ChromiumTRexActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Chrome T-Rex Game" />
         <activity
             android:name=".LaunchTileSettingsActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".modules.connectivityQuietHours.ConnectivityQuietHoursActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Connectivity Quiet Hours Configuration" />
 
         <receiver
@@ -329,7 +330,7 @@
 
         <activity
             android:name=".modules.barcodeTools.BarcodeParentActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Barcode Tools"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
@@ -337,7 +338,7 @@
             android:label="Scan Barcode" />
         <activity
             android:name=".modules.lyricFinder.LyricFinderActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="Now Playing Lyrics" />
 
         <service
@@ -356,7 +357,7 @@
             android:label="Generate Mileage Report" />
         <activity
             android:name=".modules.sgPsi.PsiActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="SG Weather (PSI Only)" />
         <activity
             android:name=".modules.sgPsi.PsiGraphActivity"

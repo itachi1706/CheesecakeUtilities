@@ -85,7 +85,7 @@ public class EventCountdownWidgetProvider extends AppWidgetProvider {
         backStack.addParentStack(MainMenuActivity.class);
         backStack.addNextIntent(new Intent(context, MainMenuActivity.class));
         backStack.addNextIntent(ordIntent);
-        PendingIntent intent = backStack.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent intent = backStack.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.wid_ord_main, intent);
 
         // Instruct the widget manager to update the widget
