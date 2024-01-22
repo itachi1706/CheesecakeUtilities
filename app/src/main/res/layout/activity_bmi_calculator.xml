@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.itachi1706.cheesecakeutilities.BmiCalculatorActivity">
+    tools:context="com.itachi1706.cheesecakeutilities.modules.BmiCalculatorActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_etHeight"

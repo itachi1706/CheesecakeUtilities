@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.itachi1706.cheesecakeutilities.features.biometricAuth.AuthenticationActivity
+import com.itachi1706.cheesecakeutilities.features.biometric_auth.AuthenticationActivity
 import com.itachi1706.cheesecakeutilities.util.CommonMethods
 import com.itachi1706.cheesecakeutilities.util.LogInit.initLogger
 import com.itachi1706.helperlib.helpers.LogHelper

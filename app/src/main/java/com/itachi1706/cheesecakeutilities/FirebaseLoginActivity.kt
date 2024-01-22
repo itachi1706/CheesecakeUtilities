@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.itachi1706.cheesecakeutilities.databinding.ActivityFirebaseLoginBinding
-import com.itachi1706.cheesecakeutilities.modules.vehicleMileageTracker.VehMileageFirebaseUtils
+import com.itachi1706.cheesecakeutilities.modules.vehiclemileagetracker.VehMileageFirebaseUtils
 import com.itachi1706.helperlib.helpers.LogHelper
 import com.itachi1706.helperlib.utils.NotifyUserUtil
 
