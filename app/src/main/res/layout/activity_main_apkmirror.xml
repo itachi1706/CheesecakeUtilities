@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.apkMirrorDownloader.APKMirrorActivity">
+    tools:context=".modules.apkmirrordownloader.APKMirrorActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"

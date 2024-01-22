@@ -4,7 +4,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import kotlin.math.roundToLong
 
 /**
  * Created by Kenneth on 3/6/2019.
@@ -60,7 +62,8 @@ abstract class FirebaseUtils {
         }
 
         fun parseData(d: Double, decimal: Boolean): String {
-            return if (decimal) String.format(Locale.getDefault(), "%.1f", d) else String.format(Locale.getDefault(), "%d", Math.round(d))
+            return if (decimal) String.format(Locale.getDefault(), "%.1f", d) else
+                String.format(Locale.getDefault(), "%d", d.roundToLong())
         }
     }
 }

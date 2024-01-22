@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.itachi1706.cheesecakeutilities.recyclerAdapters.CreateShortcutsAdapter;
+import com.itachi1706.cheesecakeutilities.recycleradapters.CreateShortcutsAdapter;
 import com.itachi1706.helperlib.helpers.LogHelper;
 
 import java.lang.ref.WeakReference;

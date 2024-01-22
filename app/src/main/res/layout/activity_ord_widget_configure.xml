@@ -9,5 +9,5 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:id="@+id/config_recycler_view"
-    tools:context=".modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity">
+    tools:context=".modules.ordcountdown.widgetProviders.ORDWidgetConfigurationActivity">
 </androidx.recyclerview.widget.RecyclerView>

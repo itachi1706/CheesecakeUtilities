@@ -16,6 +16,10 @@ import static android.util.JsonToken.END_DOCUMENT;
  */
 
 public class JSONHelper {
+    private JSONHelper() {
+        throw new UnsupportedOperationException("Should not create instance of utility classes. Please use static variables and methods instead");
+    }
+
     public static boolean isJsonValid(final String json) {
         try {
             return isJsonValid(new StringReader(json));
@@ -34,38 +38,19 @@ public class JSONHelper {
             throws IOException {
         try {
             JsonToken token;
-            loop:
-            while ( (token = jsonReader.peek()) != END_DOCUMENT && token != null ) {
-                switch ( token ) {
-                    case BEGIN_ARRAY:
-                        jsonReader.beginArray();
-                        break;
-                    case END_ARRAY:
-                        jsonReader.endArray();
-                        break;
-                    case BEGIN_OBJECT:
-                        jsonReader.beginObject();
-                        break;
-                    case END_OBJECT:
-                        jsonReader.endObject();
-                        break;
-                    case NAME:
-                        jsonReader.nextName();
-                        break;
-                    case STRING:
-                    case NUMBER:
-                    case BOOLEAN:
-                    case NULL:
-                        jsonReader.skipValue();
-                        break;
-                    case END_DOCUMENT:
-                        break loop;
-                    default:
-                        throw new AssertionError(token);
+            while ((token = jsonReader.peek()) != END_DOCUMENT && token != null) {
+                switch (token) {
+                    case BEGIN_ARRAY -> jsonReader.beginArray();
+                    case END_ARRAY -> jsonReader.endArray();
+                    case BEGIN_OBJECT -> jsonReader.beginObject();
+                    case END_OBJECT -> jsonReader.endObject();
+                    case NAME -> jsonReader.nextName();
+                    case STRING, NUMBER, BOOLEAN, NULL -> jsonReader.skipValue();
+                    default -> throw new AssertionError(token);
                 }
             }
             return true;
-        } catch ( final MalformedJsonException ignored ) {
+        } catch (final MalformedJsonException ignored) {
             return false;
         }
     }

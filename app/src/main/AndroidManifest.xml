@@ -114,7 +114,7 @@
             android:name=".MainMenuActivity"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".StringToHexBin"
+            android:name=".modules.StringToHexBin"
             android:exported="false"
             android:label="@string/bin_hex_title_full" />
         <activity
@@ -125,7 +125,7 @@
             android:label="Utility Specific Settings" />
 
         <activity
-            android:name=".modules.htcSerialIdentification.HtcSerialIdentificationActivity"
+            android:name=".modules.htcserialidentification.HtcSerialIdentificationActivity"
             android:exported="false"
             android:label="HTC S/N Identification" />
         <activity
@@ -133,13 +133,13 @@
             android:exported="false"
             android:theme="@style/AppTheme.Invisible" />
         <activity
-            android:name=".CameraDisablerActivity"
+            android:name=".modules.CameraDisablerActivity"
             android:exported="false"
             android:label="Disable Camera" />
 
         <receiver
             android:exported="false"
-            android:name=".CameraDisablerActivity$DeviceAdminReceiver"
+            android:name=".modules.CameraDisablerActivity$DeviceAdminReceiver"
             android:description="@string/camera_disable_desc"
             android:label="@string/camera_disable_device_admin_label"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -153,20 +153,20 @@
         </receiver>
 
         <activity
-            android:name=".modules.listApplications.ListApplicationsActivity"
+            android:name=".modules.listapplications.ListApplicationsActivity"
             android:exported="false"
             android:label="Application List"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".modules.ordCountdown.ORDActivity"
+            android:name=".modules.ordcountdown.ORDActivity"
             android:exported="false"
             android:label="ORD Countdown" />
         <activity
-            android:name=".modules.ordCountdown.ORDSettingsActivity"
+            android:name=".modules.ordcountdown.ORDSettingsActivity"
             android:label="@string/ord_settings_label" />
         <activity
             android:exported="true"
-            android:name=".modules.ordCountdown.widgetProviders.ORDWidgetConfigurationActivity"
+            android:name=".modules.ordcountdown.widgetProviders.ORDWidgetConfigurationActivity"
             android:label="Configure ORD Event Countdown Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -174,14 +174,14 @@
         </activity>
 
         <service
-            android:name=".modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
+            android:name=".modules.ordcountdown.widgetProviders.EventCountdownWidgetProvider$UpdateWidgetService"
             android:exported="false"
             android:label="Update ORD Widgets"
             tools:ignore="InnerclassSeparator" />
 
         <receiver
             android:exported="false"
-            android:name=".modules.ordCountdown.widgetProviders.EventCountdownWidgetProvider"
+            android:name=".modules.ordcountdown.widgetProviders.EventCountdownWidgetProvider"
             android:label="ORD Event Countdown"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
@@ -194,33 +194,33 @@
         </receiver>
 
         <activity
-            android:name=".BmiCalculatorActivity"
+            android:name=".modules.BmiCalculatorActivity"
             android:exported="false"
             android:label="BMI Calculator" />
         <activity
-            android:name=".modules.ipptCalculator.IpptCalculatorActivity"
+            android:name=".modules.ipptcalculator.IpptCalculatorActivity"
             android:exported="false"
             android:label="IPPT Calculator" />
         <activity
-            android:name=".modules.ipptCalculator.IpptScoringActivity"
+            android:name=".modules.ipptcalculator.IpptScoringActivity"
             android:label="IPPT Scoreboard" />
         <activity
-            android:name=".modules.listApplications.ListApplicationsDetailActivity"
+            android:name=".modules.listapplications.ListApplicationsDetailActivity"
             android:label="App Information" />
         <activity
-            android:name=".features.biometricAuth.AuthenticationActivity"
+            android:name=".features.biometric_auth.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".modules.systemInformation.InitActivity"
+            android:name=".modules.systeminformation.InitActivity"
             android:exported="false" />
         <activity
-            android:name=".modules.systemInformation.ParentFragmentActivity"
+            android:name=".modules.systeminformation.ParentFragmentActivity"
             android:label="System Information"
             android:theme="@style/LegacyLightThemeNoAppBar" />
 
         <service
             android:exported="false"
-            android:name=".modules.navbarCustomization.NavBarService"
+            android:name=".modules.navbarcustomization.NavBarService"
             android:label="Customize Navigation Bar"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:process=":NavBarCustomizer">
@@ -234,15 +234,15 @@
         </service>
 
         <activity
-            android:name=".modules.navbarCustomization.NavbarConfigurationActivity"
+            android:name=".modules.navbarcustomization.NavbarConfigurationActivity"
             android:exported="false"
             android:label="Navigation Bar Customizer" />
         <activity
-            android:name=".games.ticTacToe.TicTacToeActivity"
+            android:name=".games.tictactoe.TicTacToeActivity"
             android:exported="false"
             android:label="Tic Tac Toe" />
         <activity
-            android:name=".features.utilityManagement.ManageUtilityActivity"
+            android:name=".features.utility_management.ManageUtilityActivity"
             android:label="Utilities Management" />
 
         <provider
@@ -256,36 +256,36 @@
         </provider>
 
         <activity
-            android:name=".modules.listApplications.ListApplicationsApiGraphActivity"
+            android:name=".modules.listapplications.ListApplicationsApiGraphActivity"
             android:label="Graph by API Level" />
         <activity
-            android:name=".modules.safetyNet.SafetyNetActivity"
+            android:name=".modules.safetynet.SafetyNetActivity"
             android:exported="false"
             android:label="SafetyNet Validator" />
         <activity
-            android:name=".modules.unicodeKeyboard.UnicodeActivity"
+            android:name=".modules.unicodekeyboard.UnicodeActivity"
             android:exported="false"
             android:label="Unicode Emoticons"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".games.chromiumTRex.ChromiumTRexActivity"
+            android:name=".games.chromiumtrex.ChromiumTRexActivity"
             android:exported="false"
             android:label="Chrome T-Rex Game" />
         <activity
             android:name=".LaunchTileSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".modules.connectivityQuietHours.ConnectivityQuietHoursActivity"
+            android:name=".modules.connectivityquiethours.ConnectivityQuietHoursActivity"
             android:exported="false"
             android:label="Connectivity Quiet Hours Configuration" />
 
         <receiver
-            android:name=".modules.connectivityQuietHours.receivers.BluetoothToggleReceiver"
+            android:name=".modules.connectivityquiethours.receivers.BluetoothToggleReceiver"
             android:enabled="true" />
         <receiver
-            android:name=".modules.connectivityQuietHours.receivers.WifiToggleReceiver"
+            android:name=".modules.connectivityquiethours.receivers.WifiToggleReceiver"
             android:enabled="true" />
-        <receiver android:name=".modules.connectivityQuietHours.receivers.DeleteNotificationIntent" android:exported="false">
+        <receiver android:name=".modules.connectivityquiethours.receivers.DeleteNotificationIntent" android:exported="false">
             <intent-filter>
                 <action android:name="subitem_cancelled" />
                 <action android:name="summary_cancelled" />
@@ -293,7 +293,7 @@
         </receiver>
         <receiver
             android:exported="false"
-            android:name=".modules.connectivityQuietHours.receivers.BootRescheduleToggleReceiver"
+            android:name=".modules.connectivityquiethours.receivers.BootRescheduleToggleReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -308,19 +308,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.vehicleMileageTracker.VehicleMileageMainActivity"
+            android:name=".modules.vehiclemileagetracker.VehicleMileageMainActivity"
             android:label="Vehicle Mileage Tracker" />
         <activity
-            android:name=".modules.vehicleMileageTracker.AddNewVehicleActivity"
+            android:name=".modules.vehiclemileagetracker.AddNewVehicleActivity"
             android:label="Add a new Vehicle" />
         <activity
-            android:name=".modules.vehicleMileageTracker.AddNewMileageRecordActivity"
+            android:name=".modules.vehiclemileagetracker.AddNewMileageRecordActivity"
             android:label="Add a new Mileage Record" />
         <activity
-            android:name=".modules.vehicleMileageTracker.ViewVehicleActivity"
+            android:name=".modules.vehiclemileagetracker.ViewVehicleActivity"
             android:label="View All Vehicles" />
         <activity
-            android:name=".modules.vehicleMileageTracker.VehicleMileageStatisticsActivity"
+            android:name=".modules.vehiclemileagetracker.VehicleMileageStatisticsActivity"
             android:label="Mileage Statistics"
             android:theme="@style/AppTheme.NoAppBar" />
 
@@ -329,20 +329,20 @@
             android:value="barcode" />
 
         <activity
-            android:name=".modules.barcodeTools.BarcodeParentActivity"
+            android:name=".modules.barcodetools.BarcodeParentActivity"
             android:exported="false"
             android:label="Barcode Tools"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".modules.barcodeTools.BarcodeCaptureActivity"
+            android:name=".modules.barcodetools.BarcodeCaptureActivity"
             android:label="Scan Barcode" />
         <activity
-            android:name=".modules.lyricFinder.LyricFinderActivity"
+            android:name=".modules.lyricfinder.LyricFinderActivity"
             android:exported="false"
             android:label="Now Playing Lyrics" />
 
         <service
-            android:name=".modules.lyricFinder.LyricNotificationListener"
+            android:name=".modules.lyricfinder.LyricNotificationListener"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
@@ -353,14 +353,14 @@
         </service>
 
         <activity
-            android:name=".modules.vehicleMileageTracker.GenerateMileageRecordActivity"
+            android:name=".modules.vehiclemileagetracker.GenerateMileageRecordActivity"
             android:label="Generate Mileage Report" />
         <activity
-            android:name=".modules.sgPsi.PsiActivity"
+            android:name=".modules.sgpsi.PsiActivity"
             android:exported="false"
             android:label="SG Weather (PSI Only)" />
         <activity
-            android:name=".modules.sgPsi.PsiGraphActivity"
+            android:name=".modules.sgpsi.PsiGraphActivity"
             android:label="SG PSI Graphs"
             android:theme="@style/AppTheme.NoAppBar" />
         <!--
@@ -384,7 +384,7 @@
             tools:replace="android:launchMode" />
         <activity
             android:exported="true"
-            android:name=".modules.cepasReader.CEPASActivity"
+            android:name=".modules.cepasreader.CEPASActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="CEPAS Reader"
             android:screenOrientation="sensorPortrait"
@@ -400,11 +400,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.whoisLookup.WhoisLookupActivity"
+            android:name=".modules.whoislookup.WhoisLookupActivity"
             android:label="Domain Whois Query" />
         <activity
             android:exported="true"
-            android:name=".modules.apkMirrorDownloader.APKMirrorActivity"
+            android:name=".modules.apkmirrordownloader.APKMirrorActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:label="APKMirror Downloader"
@@ -421,34 +421,34 @@
                 <data android:host="www.apkmirror.com" />
             </intent-filter>
         </activity>
-        <activity android:name=".modules.vehicleMileageTracker.VehicleMileageTrackerInitActivity" />
+        <activity android:name=".modules.vehiclemileagetracker.VehicleMileageTrackerInitActivity" />
         <activity
             android:name=".FirebaseLoginActivity"
             android:label="@string/label_firebase_sign_in" />
         <activity
-            android:name=".modules.gpaCalculator.MainViewActivity"
+            android:name=".modules.gpacalculator.MainViewActivity"
             android:label="@string/title_activity_gpa_calculator_main"
             android:theme="@style/AppTheme.NoAppBar" />
         <activity
-            android:name=".modules.gpaCalculator.InitActivity"
+            android:name=".modules.gpacalculator.InitActivity"
             android:label="@string/title_activity_gpa_calculator_main" />
         <activity
-            android:name=".modules.gpaCalculator.ScoringActivity"
+            android:name=".modules.gpacalculator.ScoringActivity"
             android:label="View Scoring Tiers" />
         <activity
-            android:name=".modules.gpaCalculator.AddInstitutionActivity"
+            android:name=".modules.gpacalculator.AddInstitutionActivity"
             android:label="Add an Institution" />
         <activity
-            android:name=".modules.gpaCalculator.AddSemesterActivity"
+            android:name=".modules.gpacalculator.AddSemesterActivity"
             android:label="Add a Semester" />
         <activity
-            android:name=".modules.gpaCalculator.AddModuleActivity"
+            android:name=".modules.gpacalculator.AddModuleActivity"
             android:label="Add a Module" />
         <activity
-            android:name=".modules.cameraViewer.CameraActivity"
+            android:name=".modules.cameraviewer.CameraActivity"
             android:label="Camera Viewer" />
         <activity
-            android:name=".modules.barcodeTools.BarcodeHistoryActivity"
+            android:name=".modules.barcodetools.BarcodeHistoryActivity"
             android:label="View Barcode History"
             android:theme="@style/AppTheme.NoAppBar" />
     </application>

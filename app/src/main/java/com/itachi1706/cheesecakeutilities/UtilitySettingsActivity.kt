@@ -8,7 +8,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.itachi1706.cepaslib.SettingsHandler
-import com.itachi1706.cheesecakeutilities.modules.connectivityQuietHours.QHConstants
+import com.itachi1706.cheesecakeutilities.modules.connectivityquiethours.QHConstants
 import com.itachi1706.helperlib.helpers.PrefHelper
 
 class UtilitySettingsActivity : AppCompatActivity() {

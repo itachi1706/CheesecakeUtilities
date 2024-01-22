@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itachi1706.cheesecakeutilities.R;
-import com.itachi1706.cheesecakeutilities.recyclerAdapters.GamesMenuAdapter;
+import com.itachi1706.cheesecakeutilities.recycleradapters.GamesMenuAdapter;
 
 /**
  * Created by Kenneth on 31/1/2017.

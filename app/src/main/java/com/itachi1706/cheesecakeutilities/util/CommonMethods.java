@@ -24,8 +24,14 @@ import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_T
 /**
  * Created by Kenneth on 3/19/2016.
  * for com.itachi1706.cheesecakeutilities.Util in CheesecakeUtilities
+ *
+ * @noinspection unused
  */
 public class CommonMethods {
+
+    private CommonMethods() {
+        throw new UnsupportedOperationException("Should not create instance of utility classes. Please use static variables and methods instead");
+    }
 
     public static void betaInfo(Activity mActivity, String title) {
         new AlertDialog.Builder(mActivity).setTitle("BETA Utility")
@@ -36,10 +42,10 @@ public class CommonMethods {
     }
 
     public static String readableFileSize(long size) {
-        if(size <= 0) return "0";
-        final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
-        int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
-        return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+        if (size <= 0) return "0";
+        final String[] units = new String[]{"B", "kB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     public static boolean isGlobalLocked(SharedPreferences sp) {
@@ -48,14 +54,14 @@ public class CommonMethods {
 
     public static boolean isUtilityLocked(SharedPreferences sp, String utilityName) {
         String lockedUtil = sp.getString("utilLocked", "");
-        if (lockedUtil.isEmpty() || lockedUtil.equals("")) return false;
+        if (lockedUtil.isEmpty()) return false;
         List<String> locked = new ArrayList<>(Arrays.asList(lockedUtil.split("\\|\\|\\|")));
         return locked.contains(utilityName);
     }
 
-    public static boolean isColorDark(int color){
-        double darkness = 1-(0.299* Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
-        return !(darkness < 0.5);
+    public static boolean isColorDark(int color) {
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+        return darkness >= 0.5;
     }
 
     public static void disableAutofill(View v) {

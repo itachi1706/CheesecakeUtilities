@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".modules.vehicleMileageTracker.GenerateMileageRecordActivity">
+    tools:context=".modules.vehiclemileagetracker.GenerateMileageRecordActivity">
     <com.itachi1706.cheesecakeutilities.views.VScroll
         android:id="@+id/vscroll"
         android:layout_width="match_parent"
