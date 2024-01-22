@@ -15,7 +15,8 @@ object LogInit {
         LogHelper.addExternalLog(object : LogHandler {
             override fun handleExtraLogging(logLevel: Int, tag: String, message: String) {
                 if (!BuildConfig.DEBUG)
-                    FirebaseCrashlytics.getInstance().log(LogHelper.getGenericLogString(logLevel, tag, message))
+                    FirebaseCrashlytics.getInstance()
+                        .log(LogHelper.getGenericLogString(logLevel, tag, message))
             }
         })
     }

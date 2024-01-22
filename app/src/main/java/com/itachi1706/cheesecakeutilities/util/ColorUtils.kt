@@ -9,6 +9,7 @@ import com.itachi1706.cheesecakeutilities.R
  * Created by Kenneth on 5/7/2018.
  * for com.itachi1706.cheesecakeutilities.Util in CheesecakeUtilities
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class ColorUtils {
 
     companion object {
