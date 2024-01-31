@@ -135,7 +135,7 @@ dependencies {
     // SafetyNet Validator
     implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
     // Barcode Tools
-    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'com.google.zxing:core:3.5.3'
     // Lyric Finder
     implementation 'androidx.palette:palette-ktx:1.0.0'
     // Vehicle Mileage Tracker
