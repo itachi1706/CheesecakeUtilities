@@ -10,7 +10,7 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "firebase-admin": "^12.0.0",
+    "firebase-admin": "^12.1.1",
     "firebase-functions": "^4.8.0"
   },
   "main": "index.js",
