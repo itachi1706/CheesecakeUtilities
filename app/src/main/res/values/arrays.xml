@@ -28,28 +28,28 @@
     </string-array>
     <string-array name="mainmenulink">
         <item>.StringToHexBin</item>
-        <item>.modules.htcSerialIdentification.HtcSerialIdentificationActivity</item>
-        <item>.redirectapp.fanfictionReader.FanfictionReaderRedirectApp</item>
+        <item>.modules.htcserialidentification.HtcSerialIdentificationActivity</item>
+        <item>.redirectapp.fanfictionreader.FanfictionReaderRedirectApp</item>
         <item>.CameraDisablerActivity</item>
-        <item>.modules.listApplications.ListApplicationsActivity</item>
-        <item>.modules.ordCountdown.ORDActivity</item>
+        <item>.modules.listapplications.ListApplicationsActivity</item>
+        <item>.modules.ordcountdown.ORDActivity</item>
         <item>.BmiCalculatorActivity</item>
-        <item>.modules.ipptCalculator.IpptCalculatorActivity</item>
-        <item>.modules.vehicleMileageTracker.VehicleMileageTrackerInitActivity</item>
-        <item>.modules.systemInformation.InitActivity</item>
-        <item>.modules.unicodeKeyboard.UnicodeActivity</item>
-        <item>.modules.navbarCustomization.NavbarConfigurationActivity</item>
-        <item>.modules.safetyNet.SafetyNetActivity</item>
+        <item>.modules.ipptcalculator.IpptCalculatorActivity</item>
+        <item>.modules.vehiclemileagetracker.VehicleMileageTrackerInitActivity</item>
+        <item>.modules.systeminformation.InitActivity</item>
+        <item>.modules.unicodekeyboard.UnicodeActivity</item>
+        <item>.modules.navbarcustomization.NavbarConfigurationActivity</item>
+        <item>.modules.safetynet.SafetyNetActivity</item>
         <item>.LaunchTileSettingsActivity</item>
-        <item>.modules.connectivityQuietHours.ConnectivityQuietHoursActivity</item>
-        <item>.modules.barcodeTools.BarcodeParentActivity</item>
-        <item>.modules.lyricFinder.LyricFinderActivity</item>
-        <item>.modules.sgPsi.PsiActivity</item>
-        <item>.modules.cepasReader.CEPASActivity</item>
-        <item>.modules.whoisLookup.WhoisLookupActivity</item>
-        <item>.modules.apkMirrorDownloader.APKMirrorActivity</item>
-        <item>.modules.gpaCalculator.InitActivity</item>
-        <item>.modules.cameraViewer.CameraActivity</item>
+        <item>.modules.connectivityquiethours.ConnectivityQuietHoursActivity</item>
+        <item>.modules.barcodetools.BarcodeParentActivity</item>
+        <item>.modules.lyricfinder.LyricFinderActivity</item>
+        <item>.modules.sgpsi.PsiActivity</item>
+        <item>.modules.cepasreader.CEPASActivity</item>
+        <item>.modules.whoislookup.WhoisLookupActivity</item>
+        <item>.modules.apkmirrordownloader.APKMirrorActivity</item>
+        <item>.modules.gpacalculator.InitActivity</item>
+        <item>.modules.cameraviewer.CameraActivity</item>
         <item>.modules.toggle.ToggleActivity</item>
     </string-array>
     <string-array name="gamesmenu">
@@ -57,8 +57,8 @@
         <item>Chrome T-Rex Game</item>
     </string-array>
     <string-array name="gamesmenulink">
-        <item>.games.ticTacToe.TicTacToeActivity</item>
-        <item>.games.chromiumTRex.ChromiumTRexActivity</item>
+        <item>.games.tictactoe.TicTacToeActivity</item>
+        <item>.games.chromiumtrex.ChromiumTRexActivity</item>
     </string-array>
     <string-array name="ord_pes">
         <item>A/B</item>
