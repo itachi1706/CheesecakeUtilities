@@ -8,12 +8,12 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url "https://jitpack.io" }
+        maven { url = uri("https://jitpack.io") }
         google()
         mavenCentral()
-        maven {url "https://plugins.gradle.org/m2/"}
+        maven { url = uri("https://plugins.gradle.org/m2/") }
     }
 }
 
-rootProject.name='Cheesecake Utilities'
-include ':app'
+rootProject.name = "Cheesecake Utilities"
+include(":app")
