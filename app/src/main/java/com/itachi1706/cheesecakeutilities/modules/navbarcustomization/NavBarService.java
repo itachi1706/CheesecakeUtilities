@@ -1,5 +1,15 @@
 package com.itachi1706.cheesecakeutilities.modules.navbarcustomization;
 
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SERVICE_ENABLED;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_APPNAME;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_CLOCK;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
+
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
@@ -8,6 +18,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -33,6 +44,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.itachi1706.cheesecakeutilities.BaseBroadcastReceiver;
@@ -42,18 +54,6 @@ import com.itachi1706.cheesecakeutilities.util.LogInit;
 import com.itachi1706.helperlib.helpers.LogHelper;
 import com.squareup.picasso.Picasso;
 
-import net.grandcentrix.tray.AppPreferences;
-
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SERVICE_ENABLED;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_APPNAME;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_CLOCK;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
-
 /**
  * Note: Deprecated past Android Oreo
  */
@@ -62,7 +62,7 @@ public class NavBarService extends AccessibilityService {
     private static final String TAG = "NavBarService";
 
     private WindowManager mWindowManager;
-    private static AppPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences;
 
     private View mNavBarView;
     private TextView tvAppName;
@@ -111,7 +111,7 @@ public class NavBarService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (tvAppName == null) return; // Can't proceed
-        if (sharedPreferences == null) sharedPreferences = new AppPreferences(getApplicationContext());
+        if (sharedPreferences == null) sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!sharedPreferences.getBoolean(NAVBAR_SERVICE_ENABLED, true)) return; // Service not enabled
 
         if (transparent == null) transparent = new ColorDrawable(ContextCompat.getColor(this, android.R.color.transparent));
@@ -186,7 +186,7 @@ public class NavBarService extends AccessibilityService {
     @TargetApi(Build.VERSION_CODES.M)
     private void addNavView() {
         if (sharedPreferences == null)
-            sharedPreferences = new AppPreferences(getApplicationContext());
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (Utils.IS_AT_LEAST_MARSHMALLOW && !Settings.canDrawOverlays(this)) return; // Cannot draw overlay, exiting
         if (!sharedPreferences.getBoolean(NAVBAR_SERVICE_ENABLED, true)) return; // Service not enabled
