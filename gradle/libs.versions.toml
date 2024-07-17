@@ -20,6 +20,7 @@ espressoCore = "3.3.0"
 eventbus = "3.3.1"
 firebaseBom = "25.9.0"
 firebaseCrashlytics = "2.9.9"
+flexbox = "3.0.0"
 floatingactionbutton = "1.10.1"
 fragmentKtx = "1.3.4"
 googleServices = "4.4.0"
@@ -43,7 +44,6 @@ preferenceKtx = "1.1.1"
 rules = "1.3.0"
 sonarqube = "4.4.1.3373"
 sqldelight = "2.0.1"
-tray = "0.12.0"
 viewpager2 = "1.0.0"
 
 [libraries]
@@ -79,6 +79,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { module = "junit:junit", version.ref = "junit" }
 junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "junitKtx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref = "legacySupportV4" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 materialscrollbar = { module = "com.github.turing-tech:MaterialScrollBar", version.ref = "materialscrollbar" }
@@ -91,7 +92,6 @@ play-services-safetynet = { module = "com.google.android.gms:play-services-safet
 play-services-vision = { module = "com.google.android.gms:play-services-vision", version.ref = "playServicesVision" }
 preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 rules = { module = "androidx.test:rules", version.ref = "rules" }
-tray = { module = "net.grandcentrix.tray:tray", version.ref = "tray" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 zxing-core = { module = "com.google.zxing:core", version.ref = "coreVersion" }
 

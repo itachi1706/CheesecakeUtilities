@@ -23,8 +23,6 @@ android {
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        // add this to set a unique tray authority based on your applicationId
-        resValue("string", "tray__authority", "${applicationId}.tray")
         resourceConfigurations.add("en")
     }
     buildFeatures {
@@ -93,7 +91,7 @@ android {
 
 dependencies {
     // Firebase BoM
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
 
     // Espresso Test Dependencies
     androidTestImplementation(libs.junit.ktx)
@@ -133,7 +131,6 @@ dependencies {
     // Specific Utility Dependencies
     // Navbar Utility
     implementation(libs.picasso)
-    implementation(libs.tray)
     implementation(libs.colorpicker)
     // ORD Countdown Utility
     implementation(libs.circleprogress)
@@ -163,7 +160,10 @@ dependencies {
     // Others
     implementation(libs.constraintlayout)
     implementation(libs.biometric)
-    implementation(libs.attribouter)
+    implementation(libs.attribouter) {
+        exclude(group = "com.google.android", module = "flexbox")
+    }
+    implementation(libs.flexbox)
 }
 
 apply(plugin = libs.plugins.google.services.get().pluginId)

@@ -1,8 +1,19 @@
 package com.itachi1706.cheesecakeutilities.modules.navbarcustomization;
 
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SERVICE_ENABLED;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_APPNAME;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_CLOCK;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
+import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -19,24 +30,13 @@ import android.widget.Spinner;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.preference.PreferenceManager;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.itachi1706.cheesecakeutilities.BaseModuleActivity;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.helperlib.helpers.LogHelper;
-
-import net.grandcentrix.tray.AppPreferences;
-
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_APP;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_RANDOM_IMG;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_IMAGE_TYPE_STATIC;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SERVICE_ENABLED;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_APPNAME;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_CLOCK;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_IMAGE_TYPE;
-import static com.itachi1706.cheesecakeutilities.modules.navbarcustomization.Utils.NAVBAR_SHOW_STATIC_COLOR;
 
 /**
  * Note: Deprecated past Android Oreo
@@ -60,7 +60,7 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navbar_config);
-        final AppPreferences sp = new AppPreferences(this);
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
         navbarToggle = findViewById(R.id.navbar_service_toggle);
         navbarToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -98,22 +98,22 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
         showImage.setChecked(sp.getBoolean(NAVBAR_SHOW_IMAGE, true));
 
         enableServiceToggle.setOnCheckedChangeListener((compoundButton, b) -> {
-            sp.put(NAVBAR_SERVICE_ENABLED, b);
+            sp.edit().putBoolean(NAVBAR_SERVICE_ENABLED, b).apply();
             getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
         showClock.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sp.put(NAVBAR_SHOW_CLOCK, isChecked);
+            sp.edit().putBoolean(NAVBAR_SHOW_CLOCK, isChecked).apply();
             getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
         showImage.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sp.put(NAVBAR_SHOW_IMAGE, isChecked);
+            sp.edit().putBoolean(NAVBAR_SHOW_IMAGE, isChecked).apply();
             getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
         showAppName.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sp.put(NAVBAR_SHOW_APPNAME, isChecked);
+            sp.edit().putBoolean(NAVBAR_SHOW_APPNAME, isChecked).apply();
             getApplicationContext().sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
         });
 
@@ -141,14 +141,14 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
                 String type = imageType.getSelectedItem().toString();
                 switch (type) {
                     case "Random Image":
-                        sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG);
+                        sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_RANDOM_IMG).apply();
                         break;
                     case "Static Color":
-                        sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC);
+                        sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_STATIC).apply();
                         break;
                     case "Current App Color":
                     default:
-                        sp.put(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP);
+                        sp.edit().putString(NAVBAR_SHOW_IMAGE_TYPE, NAVBAR_IMAGE_TYPE_APP).apply();
                         break;
                 }
                 imageType.setTag(null);
@@ -168,13 +168,13 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
         staticColor.setImageDrawable(new ColorDrawable(getColorFromPref(sp)));
     }
 
-    private void updateColorPref(int newColor, AppPreferences sp) {
+    private void updateColorPref(int newColor, SharedPreferences sp) {
         staticColor.setImageDrawable(new ColorDrawable(newColor));
-        sp.put(NAVBAR_SHOW_STATIC_COLOR, newColor);
+        sp.edit().putInt(NAVBAR_SHOW_STATIC_COLOR, newColor).apply();
         this.sendBroadcast(new Intent(Broadcasts.BROADCAST_ACTION));
     }
 
-    private int getColorFromPref(AppPreferences sp) {
+    private int getColorFromPref(SharedPreferences sp) {
         return sp.getInt(NAVBAR_SHOW_STATIC_COLOR, Color.BLUE);
     }
 
@@ -187,13 +187,13 @@ public class NavbarConfigurationActivity extends BaseModuleActivity {
                     .setMessage("API changes since Android Oreo makes in unfeasible to continue supporting this utility. Therefore this feature has been removed on those versions of Android")
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> finish()).show();
 
-        AppPreferences sp = new AppPreferences(this);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         navbarToggle.setChecked(accessibilityServiceEnabled(this));
         if (accessibilityServiceEnabled(this))
             enableServiceLayout.setVisibility(View.VISIBLE);
         else {
             enableServiceLayout.setVisibility(View.GONE);
-            sp.put(NAVBAR_SERVICE_ENABLED, true);
+            sp.edit().putBoolean(NAVBAR_SERVICE_ENABLED, true).apply();
         }
         enableServiceToggle.setChecked(sp.getBoolean(NAVBAR_SERVICE_ENABLED, true));
     }
