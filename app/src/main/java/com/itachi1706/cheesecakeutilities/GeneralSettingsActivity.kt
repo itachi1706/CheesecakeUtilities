@@ -41,7 +41,7 @@ class GeneralSettingsActivity : AppCompatActivity() {
 
             SettingsInitializer().setFullscreen(true).explodeUpdaterSettings(activity, R.drawable.notification_icon, CommonVariables.BASE_SERVER_URL,
                     resources.getString(R.string.link_legacy), resources.getString(R.string.link_updates), this)
-                    .setAboutApp(true) { Attribouter.from(context).show(); true }
+                    .setAboutApp(true) { Attribouter.from(requireContext()).show(); true }
                     .setIssueTracking(true, "https://itachi1706.atlassian.net/browse/CUTILAND")
                     .setBugReporting(true, "https://itachi1706.atlassian.net/servicedesk/customer/portal/3")
                     .setFDroidRepo(true, "fdroidrepos://fdroid.itachi1706.com/repo?fingerprint=B321F84BCAC7C296CF50923FF98965B11019BB5FD30C8B8F3A39F2F649AF9691")
@@ -109,13 +109,13 @@ class GeneralSettingsActivity : AppCompatActivity() {
             super.onResume()
 
             updatePasswordViews(findPreference("password_fp"))
-            val hasSL = BiometricCompatHelper.isScreenLockEnabled(activity!!)
+            val hasSL = BiometricCompatHelper.isScreenLockEnabled(requireActivity())
             findPreference<Preference>(BiometricCompatHelper.SCREEN_LOCK_ENABLED)?.isEnabled = hasSL
             findPreference<Preference>(BiometricCompatHelper.APP_BIOMETRIC_COMPAT_ENABLED)?.isEnabled = hasSL
         }
 
         private fun updatePasswordViews(bioPw: Preference?, value: Boolean = BiometricCompatHelper.requireBiometricAuth(sp), type: Int = -1) {
-            var isScreenLock = BiometricCompatHelper.isScreenLockProtectionEnabled(activity!!)
+            var isScreenLock = BiometricCompatHelper.isScreenLockProtectionEnabled(requireActivity())
             var isBiometric = BiometricCompatHelper.requireBiometricAuth(sp)
 
             when (type) {
@@ -124,16 +124,16 @@ class GeneralSettingsActivity : AppCompatActivity() {
             }
             var summary = "Unprotected"
             if (isScreenLock) {
-                if (BiometricCompatHelper.isScreenLockEnabled(activity!!)) {
+                if (BiometricCompatHelper.isScreenLockEnabled(requireActivity())) {
                     summary = "Protected with device screen lock"
                     if (isBiometric) {
-                        if (BiometricCompatHelper.isBiometricRegistered(activity!!)) summary = "Protected with biometrics + screen lock"
+                        if (BiometricCompatHelper.isBiometricRegistered(requireActivity())) summary = "Protected with biometrics + screen lock"
                         else summary += " (No biometric data found on device)"
                     }
                 } else summary = "Unprotected (No screen lock found)"
             } else if (isBiometric) {
-                summary = if (!BiometricCompatHelper.isScreenLockEnabled(activity!!)) "Unprotected (No screen lock found)" // No Biometrics without a screen lock
-                else if (BiometricCompatHelper.isBiometricRegistered(activity!!)) "Protected with biometrics"
+                summary = if (!BiometricCompatHelper.isScreenLockEnabled(requireActivity())) "Unprotected (No screen lock found)" // No Biometrics without a screen lock
+                else if (BiometricCompatHelper.isBiometricRegistered(requireActivity())) "Protected with biometrics"
                 else "Unprotected (No biometric data found on device)"
             }
 
