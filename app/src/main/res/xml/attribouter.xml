@@ -3,7 +3,6 @@
     <me.jfenn.attribouter.wedges.AppWedge
         repo="itachi1706/CheesecakeUtilities"
         description="Loading Description..."
-        playStoreUrl="null"
         icon="@mipmap/ic_launcher">
     </me.jfenn.attribouter.wedges.AppWedge>
 
