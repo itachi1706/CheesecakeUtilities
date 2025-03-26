@@ -1,5 +1,9 @@
 package com.itachi1706.cheesecakeutilities.modules.listapplications;
 
+import static com.itachi1706.cheesecakeutilities.util.CommonMethods.logPermError;
+import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
+import static com.itachi1706.helperlib.helpers.ValidationHelper.bytesToHex;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -39,8 +43,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.itachi1706.cheesecakeutilities.R;
 import com.itachi1706.cheesecakeutilities.modules.listapplications.objects.LabelledColumn;
 import com.itachi1706.cheesecakeutilities.modules.listapplications.recyclerAdapters.AppsAdapter;
-import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.deprecation.TextViewDep;
+import com.itachi1706.helperlib.helpers.LogHelper;
 import com.itachi1706.helperlib.helpers.PrefHelper;
 import com.itachi1706.helperlib.helpers.ValidationHelper;
 
@@ -54,10 +58,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static com.itachi1706.cheesecakeutilities.util.CommonMethods.logPermError;
-import static com.itachi1706.cheesecakeutilities.util.CommonVariables.PERM_MAN_TAG;
-import static com.itachi1706.helperlib.helpers.ValidationHelper.bytesToHex;
 
 public class ListApplicationsDetailActivity extends AppCompatActivity {
 
@@ -506,6 +506,7 @@ public class ListApplicationsDetailActivity extends AppCompatActivity {
                             finish();
                         }).show();
                 break;
+            default: super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
