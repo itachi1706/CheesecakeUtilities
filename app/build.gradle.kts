@@ -23,7 +23,9 @@ android {
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        resourceConfigurations.add("en")
+    }
+    androidResources {
+        localeFilters += listOf("en")
     }
     buildFeatures {
         viewBinding = true
@@ -55,13 +57,11 @@ android {
     val props = Properties()
     val propFile = file("key.properties")
     // check if SAFETY_NET_DEVICE_VERIFICATION_API_KEY is defined in gradle.properties (this is so the key is not in github)
-    var GOOGLE_VERIFICATION_API_KEY = ""
+    var googleVerificationApiKey = ""
     if (propFile.canRead()) {
         props.load(FileInputStream(propFile))
-        if (props != null) {
-            if (props.containsKey("key.safetynet")) {
-                GOOGLE_VERIFICATION_API_KEY = props.getProperty("key.safetynet")
-            }
+        if (props.containsKey("key.safetynet")) {
+            googleVerificationApiKey = props.getProperty("key.safetynet")
         }
     }
     buildTypes {
@@ -69,7 +69,7 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_VERIFICATION_API_KEY",
-                "\"" + GOOGLE_VERIFICATION_API_KEY + "\""
+                "\"" + googleVerificationApiKey + "\""
             )
             isMinifyEnabled = true
             isShrinkResources = true
@@ -81,7 +81,7 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_VERIFICATION_API_KEY",
-                "\"" + GOOGLE_VERIFICATION_API_KEY + "\""
+                "\"" + googleVerificationApiKey + "\""
             )
             the<CrashlyticsExtension>().mappingFileUploadEnabled = false
             multiDexEnabled = true
@@ -90,16 +90,15 @@ android {
 }
 
 dependencies {
-    // Firebase BoM
-    implementation(platform(libs.firebase.bom))
-
     // Espresso Test Dependencies
     androidTestImplementation(libs.junit.ktx)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.rules)
     // JUnit Test Dependencies
     testImplementation(libs.junit)
-    // Firebase Dependencies (Global/App)
+
+    // Firebase Dependencies (Global/App) + BoM
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.crashlytics.ktx)
     implementation(libs.firebase.analytics.ktx)
